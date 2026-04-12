@@ -533,6 +533,31 @@ function AuralisSection() {
           />
         </RevealSection>
 
+        {/* AURALIS Group Image Banner */}
+        <RevealSection>
+          <div className="glass-card rounded-xl overflow-hidden mb-8">
+            <div className="relative">
+              <img
+                src="/edu-aurali.png"
+                alt="AURALIS Collective"
+                className="w-full h-64 sm:h-80 object-cover object-top"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-cosmic-dark via-cosmic-dark/20 to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-electric-blue/20 backdrop-blur-sm flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-electric-blue" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-bold text-cosmic-text">AURALIS Collective</p>
+                    <p className="text-xs text-cosmic-muted">第二世代 — E522〜現在</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </RevealSection>
+
         <RevealSection>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* First Generation */}
@@ -610,40 +635,49 @@ function AuralisSection() {
                       name: "Kate Patton（新代）",
                       desc: "大地の豊かさ・安定",
                       color: "bg-green-500/20 border-green-500/40",
+                      img: "/edu-kate.png",
                     },
                     {
                       name: "Lillie Ardent（新代）",
                       desc: "情熱的で大胆",
                       color: "bg-red-500/20 border-red-500/40",
+                      img: "/edu-lillie.png",
                     },
                     {
                       name: "Layla Virell Nova",
                       desc: "Pink Voltage — 冷凍保存から復活、ミナたちと同年代",
                       color: "bg-pink-500/20 border-pink-500/40",
+                      img: "/edu-layla.png",
                     },
                     {
                       name: "Mina Eureka Ernst",
                       desc: "celestial × avant-garde, AI研究員",
                       color: "bg-blue-500/20 border-electric-blue/40",
+                      img: "/edu-mina.png",
                     },
                     {
                       name: "Ninny Offenbach",
                       desc: "無邪気で爆発的な活力 — 原初個体はAlpha Kane時代に別惑星へ、クローン技術で遺伝子継承ののちGigapolisに再帰還",
                       color: "bg-yellow-500/20 border-gold-accent/40",
+                      img: "/edu-ninny.png",
                     },
                   ].map((m) => (
                     <div
                       key={m.name}
-                      className={`flex items-center gap-3 p-2.5 rounded-lg border ${m.color}`}
+                      className={`flex items-center gap-3 p-2.5 rounded-lg border ${m.color} group hover:scale-[1.02] transition-all duration-200 cursor-default`}
                     >
-                      <div className="w-8 h-8 rounded-full bg-cosmic-dark flex items-center justify-center text-xs font-bold">
-                        {m.name[0]}
+                      <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-cosmic-border/50 shrink-0 group-hover:border-electric-blue/50 transition-colors">
+                        <img
+                          src={m.img}
+                          alt={m.name}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-cosmic-text">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-cosmic-text truncate">
                           {m.name}
                         </p>
-                        <p className="text-xs text-cosmic-muted">{m.desc}</p>
+                        <p className="text-xs text-cosmic-muted line-clamp-2">{m.desc}</p>
                       </div>
                     </div>
                   ))}
