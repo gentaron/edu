@@ -421,10 +421,11 @@ const TIMELINE_DATA = [
     borderColor: "border-green-400/30",
     events: [
       "E319: 新ZAMLT期、Jen台頭（Valoria）",
-      "E325: Layla Virell Nova覚醒、弦太郎登場",
-      "E335〜E370: セリア・ドミニクスがSelinopolis改名、黄金時代",
-      "E340: Slime Woman出現",
-      "E370〜E400: ドミニオン崩壊",
+      "E325: Layla Virell Nova覚醒、弦太郎（Lv569）登場",
+      "Ninny Offenbachの原初個体 — Alpha Kane時代のGigapolisに存在。のちにKaneと袂を分かち別惑星へ離脱（クローン技術で遺伝子が世代を超えて継承される）",
+      "E335〜E370: セリア・ドミニクスがAlpha Kaneを倒しSelinopolis改名。フェルミ音楽・nトークン経済・AURALISすべての頂点",
+      "E340: Slime Woman出現（ペルセポネ仮想宇宙実験の事故で高次元世界から顕現）",
+      "E390〜E400: アポロ・ドミニオン戦争でセリア体制崩壊。Tina/Gueが地下街最深部を実効支配",
     ],
   },
   {
@@ -433,9 +434,11 @@ const TIMELINE_DATA = [
     color: "text-red-400",
     borderColor: "border-red-400/30",
     events: [
-      "E400〜E450: エヴァトロン支配 — 暗黒時代",
-      "E420: Σ-Unit設立（Alpha Venom起源）",
-      "E450〜E475: エヴァポリス崩壊、支配終焉",
+      "E400〜E450: エヴァトロンがGigapolisを支配しエヴァポリスに改名（ただしこの名称はエヴァトロン側の一方的なもの）",
+      "AURALISは地下活動へ — Kate初代・Lillie初代は逮捕・消息不明",
+      "Laylaはその実力ゆえの特別措置で冷凍保存される（サイバネティクスによる長命ではない）",
+      "E420: エヴァトロン軍極秘Σ-Unit設立（のちのAlpha Venomの起源）",
+      "E450〜E475: エヴァポリス経済崩壊、エリオス処刑（E470）、廃墟化。東大陸クレセント大地方が事実上独立",
     ],
   },
   {
@@ -568,7 +571,11 @@ function AuralisSection() {
                   </p>
                   <p>
                     <span className="text-cosmic-text">E400:</span>{" "}
-                    エヴァトロン弾圧で解体
+                    エヴァトロン弾圧で解体。Kate初代・Lillie初代は逮捕・消息不明
+                  </p>
+                  <p>
+                    <span className="text-cosmic-text">Layla:</span>{" "}
+                    冷凍保存（サイバネティクスによる長命ではない）
                   </p>
                 </div>
               </div>
@@ -600,7 +607,7 @@ function AuralisSection() {
                     },
                     {
                       name: "Layla Virell Nova",
-                      desc: "Pink Voltage（第一世代から連続）",
+                      desc: "Pink Voltage — 冷凍保存から復活、ミナたちと同年代",
                       color: "bg-pink-500/20 border-pink-500/40",
                     },
                     {
@@ -610,7 +617,7 @@ function AuralisSection() {
                     },
                     {
                       name: "Ninny Offenbach",
-                      desc: "無邪気で爆発的な活力",
+                      desc: "無邪気で爆発的な活力 — 原初個体はAlpha Kane時代に別惑星へ、クローン技術で遺伝子継承ののちGigapolisに再帰還",
                       color: "bg-yellow-500/20 border-gold-accent/40",
                     },
                   ].map((m) => (
@@ -629,6 +636,22 @@ function AuralisSection() {
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Ninny's Special Lineage */}
+                <div className="mt-4 bg-cosmic-dark/50 border border-gold-accent/20 rounded-lg p-4">
+                  <h4 className="text-xs font-bold text-gold-accent mb-2 flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3" />
+                    ニニーの特別な来歴
+                  </h4>
+                  <div className="space-y-2 text-xs text-cosmic-muted leading-relaxed">
+                    <p>
+                      ニニーの<span className="text-cosmic-text font-medium">原初個体</span>はAlpha Kane時代のGigapolisに存在していたが、Kaneと袂を分かち別惑星へ離脱した。
+                    </p>
+                    <p>
+                      そこから<span className="text-electric-blue font-medium">クローン技術</span>で遺伝子が世代を超えて継承され、現代のNinnyがGigapolisに<span className="text-gold-accent font-medium">再帰還</span>してミナと出会い、第二世代に加入した。
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1013,6 +1036,42 @@ function ConsistencySection() {
                     <p className="text-green-400 text-xs font-medium">
                       ✓ 結論:
                       第二世代の5人体制は「復興期の新たな形」であり、初代をそのまま模倣したものではない
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Point 3 */}
+            <div className="relative rounded-xl p-6 sm:p-8 bg-cosmic-surface consistency-border overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-pink-400/5 rounded-full blur-3xl" />
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 rounded-full bg-pink-400/20 flex items-center justify-center text-sm font-bold text-pink-400">
+                    3
+                  </div>
+                  <h3 className="text-lg font-bold text-pink-400">
+                    Laylaは冷凍保存から復活 — ミナたちと同年代
+                  </h3>
+                </div>
+                <div className="space-y-3 text-sm text-cosmic-muted leading-relaxed">
+                  <p>
+                    これまでの記述ではLaylaが「サイバネティクス強化による200年以上の現役」とされていたが、
+                    <span className="text-red-400 font-medium">これは誤り</span>。
+                  </p>
+                  <p>
+                    実際にはエヴァトロン時代の弾圧の中で、その実力ゆえに{" "}
+                    <span className="text-cosmic-text font-medium">特別措置として冷凍保存</span>{" "}
+                    されていた。サイバネティクスによる寿命延伸ではない。
+                  </p>
+                  <p>
+                    復活後のLaylaはミナ・Kate新代・Lillie新代と
+                    <span className="text-electric-blue font-medium">同年代</span>
+                    であり、「E325からの200年現役」という説明は当てはまらない。
+                  </p>
+                  <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
+                    <p className="text-green-400 text-xs font-medium">
+                      ✓ 結論: Laylaは冷凍保存からの復活であり、現在は第二世代の他メンバーと同年代
                     </p>
                   </div>
                 </div>
