@@ -74,19 +74,30 @@ function RevealSection({
   );
 }
 
+/* ─── Simple seeded PRNG (avoids SSR hydration mismatch) ─── */
+function seededRandom(seed: number) {
+  let s = seed;
+  return () => {
+    s = (s * 16807 + 0) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
 /* ─── Floating Stars Background ─── */
 function StarField() {
-  const stars = useRef(
-    Array.from({ length: 120 }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      size: Math.random() * 2.5 + 0.5,
-      delay: Math.random() * 5,
-      duration: Math.random() * 3 + 2,
-      opacity: Math.random() * 0.7 + 0.3,
-    }))
-  ).current;
+  const stars = React.useMemo(
+    () =>
+      Array.from({ length: 120 }, (_, i) => ({
+        id: i,
+        left: seededRandom(i * 7 + 1)() * 100,
+        top: seededRandom(i * 13 + 3)() * 100,
+        size: seededRandom(i * 17 + 5)() * 2.5 + 0.5,
+        delay: seededRandom(i * 23 + 7)() * 5,
+        duration: seededRandom(i * 29 + 11)() * 3 + 2,
+        opacity: seededRandom(i * 31 + 13)() * 0.7 + 0.3,
+      })),
+    []
+  );
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
