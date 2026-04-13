@@ -9,6 +9,16 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+} from "recharts";
+import {
   Star,
   ChevronDown,
   Globe2,
@@ -24,6 +34,7 @@ import {
   ArrowDown,
   Menu,
   X,
+  TrendingUp,
 } from "lucide-react";
 
 /* ─── Section IDs ─── */
@@ -387,84 +398,148 @@ function UniverseSection() {
 /* ═══════════════════════════════════════════
    INTEGRATED TIMELINE
    ═══════════════════════════════════════════ */
-const TIMELINE_DATA = [
+/* location helper — each event: { text, loc? } */
+type TlEv = { text: string; loc?: string };
+const locColor: Record<string,string> = {
+  "シンフォニー・オブ・スターズ": "bg-blue-500/20 text-blue-300 border-blue-500/30",
+  "Gigapolis": "bg-purple-500/20 text-purple-300 border-purple-500/30",
+  "Eros-7": "bg-amber-500/20 text-amber-300 border-amber-500/30",
+  "惑星Solaris": "bg-orange-500/20 text-orange-300 border-orange-500/30",
+  "惑星ビブリオ": "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
+  "ノスタルジア・コロニー": "bg-rose-500/20 text-rose-300 border-rose-500/30",
+  "西大陸": "bg-purple-500/20 text-purple-300 border-purple-500/30",
+  "東大陸・クレセント": "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
+  "M104銀河": "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
+  "E16星系": "bg-slate-500/20 text-slate-300 border-slate-500/30",
+  "地球": "bg-green-500/20 text-green-300 border-green-500/30",
+  "AD2026地球": "bg-green-500/20 text-green-300 border-green-500/30",
+};
+const e = (text: string, loc?: string): TlEv => ({ text, loc });
+
+const TIMELINE_DATA: { period: string; range: string; color: string; borderColor: string; events: TlEv[] }[] = [
   {
     period: "前史 (Pre-E1)",
-    range: "AD 3500以前",
+    range: "AD 3500以前 — 宇宙的文脈",
     color: "text-gold-accent",
     borderColor: "border-gold-accent/30",
     events: [
-      "銀河間移民期 — 地球からE16連星系への大規模移住が始まる",
-      "E0: 第一陣1,000名がシンフォニー・オブ・スターズに到着",
+      e("【天文背景】E16連星系はM104銀河（ソンブレロ銀河）のハロー領域に位置。主星Ea16（スペクトル型K2、質量1.2太陽質量）と伴星Eb16（スペクトル型M3、質量0.4太陽質量）が0.8AUの楕円軌道で安定した重力場を形成", "E16星系"),
+      e("【星系構造】E16星系には中心惑星「星々の交響曲（Symphony of Stars）」を含む7惑星と数十の小惑星帯が存在。Symphony of StarsはEa16のハビタブルゾーン内に位置し、平均表面温度15℃、重力0.92G、自転周期44時間4分", "E16星系"),
+      e("【Eros-7】E16外縁惑星。重力1.1G、薄い酸素大気（酸素濃度12%）、頻繁な電磁嵐。初期植民の試練の地。のちに搾取生物（Squeezing Organisms）流入により女性主導のマトリカル社会が形成される", "Eros-7"),
+      e("【大移民ルート】地球は人口過剰と資源枯渇に直面。曲率航法と量子テレポーテーションにより、アンドロメダ → レオ → セクスタンス → さんかく → E16連星系の中継ルートを経由して移住開始", "地球"),
+      e("【3移民集団】フェンドラ人（技術志向の北欧系）、アーキアン（環境適応に優れたアジア系）、ポロンポロ（文化保存を重視するオセアニア系）からなる多様な移民団"),
+      e("E0 (AD3500): 第一陣1,000名がシンフォニー・オブ・スターズに到着", "シンフォニー・オブ・スターズ"),
+      e("【ティムール・シャー】移民団のリーダー。10次元ホラズム理論の提唱者。仮想多元宇宙「ペルセポネ」を設計 — ニューロリンク・インターフェースと量子演算コアで移民が意識をアップロードし過酷環境を克服", "シンフォニー・オブ・スターズ"),
     ],
   },
   {
     period: "第一期 E1〜E200",
-    range: "入植・帝国・革命",
+    range: "入植・帝国・繁栄・革命",
     color: "text-nebula-purple",
     borderColor: "border-nebula-purple/30",
     events: [
-      "E1: 定住開始、A-Registry（先祖登録制度）の萌芽",
-      "E14: エルトナ戦争",
-      "E15〜E61: バーズ帝国 — 星系統一の時代",
-      "E62〜E77: アフター戦争・チョンクォン戦争",
-      "E108〜E114: クワンナラ革命",
-      "E153〜E201: 第四繁栄期、Gigapolis GDP14京ドルに達する",
+      e("E1: 定住開始。Clan（Gig-community）組織。A-Registry（旅券）の萌芽", "シンフォニー・オブ・スターズ"),
+      e("E6: 第一繁栄期。パラトン等の初期都市圏形成", "シンフォニー・オブ・スターズ"),
+      e("【Eros-7】E0年以降: 星間貿易で搾取生物（Squeezing Organisms）流入 — 性的エネルギーを吸収し男性の生殖機能を抑制。女性リーダー・リリス・ヴェインが制御技術を開発しバイオリアクターでエネルギー化", "Eros-7"),
+      e("E14: エルトナ戦争 — 前衛意識 vs 原始意識。人種的緊張の起源", "シンフォニー・オブ・スターズ"),
+      e("E15〜E61: バーズ帝国成立 — 軍閥ファランクス（のちのテクロサスの前身）が星系統一", "シンフォニー・オブ・スターズ"),
+      e("E62〜E77: アフター戦争・チョンクォン戦争 → テラン朝共和制へ移行", "シンフォニー・オブ・スターズ"),
+      e("E78〜E80: 第二繁栄期。人口4,000万。A-Registry 155階層整備", "Gigapolis"),
+      e("【技術啓蒙時代 E80〜E90】バイオエンジニアリング爆発的進化。ナノセル・インプラント（放射線耐性・長寿命化）一般化。人口約5,000万人に達し、ギガポリスの原型形成", "Gigapolis"),
+      e("【次元極地平】ブラックホール理論を応用した「Dimension Horizon」開発 — 量子重力場で高次元空間にアクセス。空間ホール（安定した次元間ポータル）を通じ仮想多元宇宙を構築", "Gigapolis"),
+      e("【テクノ宗教運動】次元極地平を「宇宙の意志」と神聖視。テンプル・オブ・ホライゾン建設。物理学者テミルタロンがサイケデリック・コスモロジーを提唱し次元ピラミッドの原型を構想", "Gigapolis"),
+      e("【ペルセポネ進化】テミルタロン指導の下、プライマリー・フィールドとして再構築 — クオリア・コア（感情のデジタル化）により仮想空間で実体験に近い感覚を獲得", "Gigapolis"),
+      e("E88〜E98: ロンバルディア戦争", "M104銀河"),
+      e("【Eros-7 E97〜E101】搾取生物の異常増殖による危機 — 男性労働者の80%感染、エネルギー枯渇症蔓延。女性リーダー・シルヴィア・クロウがエスパー能力（テレパシー・エネルギー操作）で収束", "Eros-7"),
+      e("E97〜E101: 第三繁栄期（第一文化主義）— 人口1億2,000万。コーポラタムパブリカ（企業国家）とA籍制度誕生。nトークン経済確立。ネオンコロシアムで戦士決定戦開始", "Gigapolis"),
+      e("【Eros-7】シルヴィア・クロウが男性指令省を設立し精子レジストリ運用開始。ネオンクレーター宮殿（高さ800m、100階建て）建設", "Eros-7"),
+      e("E108〜E114: クワンナラ革命 — 分権化・Clan復権", "シンフォニー・オブ・スターズ"),
+      e("E150: マーストリヒト革命 — エル・フォルハウス（通称「新時代のルーキー」）がギガポリスのセントラル・タワーを占拠。完全自由経済確立。コーポラタムパブリカ正式成立", "Gigapolis"),
+      e("E151: 新ヘルシンキ宣言 — 惑星連邦構想提案。アリア・ソルが次元極地平を活用した星間議会を構想", "Gigapolis"),
+      e("E153〜E201: 第四繁栄期 — 人口3億突破。ギガポリスGDP14京nトークン。次元技術で星間通信遅延0.01秒未満。平均寿命150年に延長", "Gigapolis"),
+      e("E208: コーラの疫病 — アンドロメダ系移民の遺伝子に特異的に作用するウイルス。人口の15%（約4,500万人）死亡。シャドウ・リベリオン（低階層反乱組織）結成の契機", "Gigapolis"),
     ],
   },
   {
     period: "第二期 E200〜E320",
-    range: "ロンバルディア帝国・Diana台頭",
+    range: "パクス・ロンバルディカ・ZAMLT・アルファ・ケイン",
     color: "text-electric-blue",
     borderColor: "border-electric-blue/30",
     events: [
-      "E205〜E278: ロンバルディア帝国 — 西大陸覇権",
-      "E260〜E280: Diana（初代Wonder Woman）台頭",
-      "E270: AURALIS Proto創設（Diana時代の前身組織）",
-      "E290: AURALIS Collective第一世代正式組織化",
-      "E285〜E304: ZAMLT連合 — 東西協調体制",
+      e("【パクス・ロンバルディカ E205〜E278】コーポラタムパブリカが経済と政治を完全掌握。ギガポリス経済規模は年間5京nトークンに達するも、A籍制度の硬直化で格差が極端化。シャドウ・リベリオン活発化", "Gigapolis"),
+      e("E260〜E280: Diana（初代Wonder Woman）台頭", "西大陸"),
+      e("E270: AURALIS Proto創設（Diana時代の文化的恩恵の下で前身組織発足）", "西大陸"),
+      e("E275〜E288: メルディア戦争 — ロンバルディア帝国 vs セクスタス連合（M104銀河周辺勢力）。次元兵器投入でロンバルディア勝利。第五次繁栄を招く", "M104銀河"),
+      e("E289〜E300: 第五次繁栄 — 人口4億に達し、メガタワーは高さ3kmに拡張。ディメンション・ブリッジ（恒久的星間ポータル）でM104銀河全体との貿易を10倍に拡大", "Gigapolis"),
+      e("【Eros-7】ZAMLTと戦略的提携を結び搾取技術が企業化。搾取触手・搾取ヒル・搾取バクテリアを標準化。ネオンクレーター宮殿は1.5km・200階に拡張。年間1兆nトークンの経済規模に", "Eros-7"),
+      e("E290: AURALIS Collective第一世代正式組織化 — Kate Patton初代・Lillie Ardent初代を中心とする少人数集団", "西大陸"),
+      e("【ZAMLT E301〜E318】5超巨大企業国家の統合体として誕生。企業数1億超。量子ファイナンス・コアでnトークン取引の95%を掌握。A籍制度をZ1〜Z50に再編、非従業員は事実上奴隷階級へ", "Gigapolis"),
+      e("【Eros-7 ZAMLT期】男性指令省とZAMLT量子バイオバンク統合。搾取セッション1日3回に増加。シャドウ・ユニオンがナノハッキング技術でバイオリアクター妨害活動を展開", "Eros-7"),
+      e("E318: アルファ・ケイン覚醒 — 戦士決定戦の元チャンピオン。シャドウ・リベリオンのリーダーとしてZAMLT量子ファイナンス・コアにハッキング。ギガポリス解放戦でメガタワーを占拠、資産30%を地域コミュニティに譲渡", "Gigapolis"),
+      e("E318 (同時): Eros-7のアビス・チェンバーでシャドウ・ユニオンによる小規模反乱発生。搾取ヒル1,000体破壊事件", "Eros-7"),
     ],
   },
   {
     period: "第三期 E319〜E400",
-    range: "新ZAMLT・セリア黄金期・Jen/Layla台頭",
+    range: "セリア黄金期・ネオクラン同盟・スライム危機",
     color: "text-green-400",
     borderColor: "border-green-400/30",
     events: [
-      "E319: 新ZAMLT期、Jen台頭（Valoria）",
-      "E325: Layla Virell Nova覚醒、弦太郎（Lv569）登場",
-      "Ninny Offenbachの原初個体 — Alpha Kane時代のGigapolisに存在。のちにKaneと袂を分かち別惑星へ離脱（クローン技術で遺伝子が世代を超えて継承される）",
-      "E335〜E370: セリア・ドミニクスがAlpha Kaneを倒しSelinopolis改名。フェルミ音楽・nトークン経済・AURALISすべての頂点",
-      "E340: Slime Woman出現（ペルセポネ仮想宇宙実験の事故で高次元世界から顕現）",
-      "E390〜E400: アポロ・ドミニオン戦争でセリア体制崩壊。Tina/Gueが地下街最深部を実効支配",
+      e("E319: 新ZAMLT期の余波。Jen（Lv938+）がValoria宮殿を掌握。現在もValoria連合圏を主導", "西大陸"),
+      e("E320〜E340: ネオクラン同盟が分散統治モデルを拡大。地域クラン結成、量子ファイナンス・コアのローカル版でnトークンの地域内循環開始。クラン・フォーラム（E325年設立）で低階層の声を可視化", "Gigapolis"),
+      e("E325: レイラ・ヴィレル・ノヴァ（Pink Voltage）がAURALISに参加。弦太郎（Lv569）登場", "西大陸"),
+      e("Ninny Offenbach原初個体 — Alpha Kane時代のGigapolisに存在。のちにKaneと袂を分かち別惑星（惑星Solaris）へ離脱 → クローン継承で遺伝子が世代を超えて継承", "惑星Solaris"),
+      e("【Eros-7】ガロ（後のアヤカ・リンの盟友）がシャドウ・ユニオンの指導者に。E330年のヒル破壊事件（搾取ヒル1,000体破壊）後、マトリカル・カウンシルが搾取抑制剤で鎮圧", "Eros-7"),
+      e("E335〜E370: セリア・ドミニクスがAlpha Kaneを倒しSelinopolis改名。セリア黄金期 — フェルミ音楽・nトークン経済・AURALISすべての頂点に到達", "Gigapolis"),
+      e("E340: Slime Woman出現（ペルセポネ仮想宇宙実験の事故で高次元世界から顕現）", "Gigapolis"),
+      e("E350: 第五次繁栄フェスティバル開催 — 戦士決定戦とホロアート融合。ネオンコロシアム視聴率95%。シャドウ・リベリオンの反体制ホログラムがアンダーグリッドで話題に", "Gigapolis"),
+      e("E370: アポロン-ドミニオン戦争勃発 — 次元エネルギー鉱脈の支配権を巡るE16 vs M104銀河軍事国家集団。E16の次元兵器（空間ホール質量破壊兵器）が勝利", "M104銀河"),
+      e("【スライム危機 E380〜E400】ZAMLT時代の過剰バイオエンジニアリング実験が原因で搾取生物が遺伝子変異しスライム形態に進化。ギガポリスの地下インフラに侵入、エネルギー供給70%停止、人口20%（約8,000万人）避難", "Gigapolis"),
+      e("【レイラの英雄的活躍】レイラ・ヴィレル・ノヴァ — 低階層（A120）出身のサイバネティック強化戦士。ナノファイバーブーツ・強化グローブ（100tパンチ力）装備。オアシス・ハウスを拠点にプラズマカノンでスライム焼却、感染拡大30%抑制。認知度96%・勝率92%", "Gigapolis"),
+      e("【アヤカ・リンの活躍】Lv.842の搾精生物専門ハンター。ビキニバリア・カウパー波を駆使しアンダーグリッド深部でスライムの巣を破壊。プライマリー・フィールド経由で全市民に戦闘記録中継", "Gigapolis"),
+      e("E400: スライム危機終息。AURALISはエヴァトロンの文化弾圧により解体 — Kate初代・Lillie初代は逆捕・消息不明。レイラは冷凍保存（実力による特別措置。サイバネティクスによる長命ではない）", "Gigapolis"),
+      e("E400 (同時): エヴァトロンがGigapolisを支配しエヴァポリスに改名（エヴァトロン側の一方的名称に過ぎない）。Tina/Gueが地下街最深部を実効支配開始", "Gigapolis"),
+      e("【Eros-7 E380〜E400】スライム危機がEros-7にも波及。カーラ・ヴェルムがスクイーズ・アビス（560階地下搾取施設）を建設。搾取プラズマ弾（スライムエネルギー凝縮破壊兵器）を生産", "Eros-7"),
     ],
   },
   {
     period: "第四期 E400〜E475",
-    range: "エヴァトロン支配",
+    range: "エヴァトロン支配・テリアン反乱",
     color: "text-red-400",
     borderColor: "border-red-400/30",
     events: [
-      "E400〜E450: エヴァトロンがGigapolisを支配しエヴァポリスに改名（ただしこの名称はエヴァトロン側の一方的なもの）",
-      "AURALISは地下活動へ — Kate初代・Lillie初代は逮捕・消息不明",
-      "Laylaはその実力ゆえの特別措置で冷凍保存される（サイバネティクスによる長命ではない）",
-      "E420: エヴァトロン軍極秘Σ-Unit設立（のちのAlpha Venomの起源）",
-      "E450〜E475: エヴァポリス経済崩壊、エリオス処刑（E470）、廃墟化。東大陸クレセント大地方が事実上独立",
+      e("E400〜E450: エヴァトロンがGigapolisを支配しエヴァポリスに改名（ただしこの名称はエヴァトロン側の一方的なものに過ぎない）。AURALISは地下活動へ", "Gigapolis"),
+      e("Kate初代・Lillie初代は逆捕・消息不明。レイラはその実力ゆえの特別措置で冷凍保存", "Gigapolis"),
+      e("E420: エヴァトロン軍極秘Σ-Unit設立 — 精神操作・生体改造技術。のちのAlpha Venomの起源（整合性原則③）", "Gigapolis"),
+      e("【テリアン反乱】テリアン反乱軍の指導者エリオス・ウォルドがエヴァトロンに抵抗", "Gigapolis"),
+      e("E470: エリオス・ウォルド処刑。テクロサス東方支隊がクレセント大地方に常駐開始", "東大陸・クレセント"),
+      e("E475: エヴァポリス廃墟化。エヴァトロン崩壊", "Gigapolis"),
+      e("【Eros-7】E475年: カーラ・ヴェルムのスクイーズ・アビスが搾取プラズマ弾を大量生産しEros-7の軍事力を強化。シャドウ・ユニオンの抵抗がさらに激化", "Eros-7"),
+      e("E475 (同時): エヴァトロン崩壊後、Σ-Unit残党が「シルバー・ヴェノム」として独立 → のち「アルファ・ヴェノム」と「ゴールデン・ヴェノム」に分派", "M104銀河"),
+      e("テクロサス系譜: E15ファランクス → E295三頭政治改編 → E470東方支隊クレセント常駐 → E490頃ボグダス・ジャベリン（セバスチャン・ヴァレリウス率、IRIS 4位）がヴァーミリオンに恒久駐在", "東大陸・クレセント"),
+      e("東大陸クレセント大地方の主要国家体制確立 — ヴァーミリオン(アイリス/IRIS1位)・ブルーローズ(フィオナ/V7/2位)・ミエルテンガ(マリーナ/3位)・テクロサス(BJ/4位)・クロセヴィア(カスチーナ/5位)", "東大陸・クレセント"),
     ],
   },
   {
     period: "第五期 E475〜E528",
-    range: "ポスト・エヴァトロン・現代",
+    range: "テクノ文化ルネサンス・現代",
     color: "text-cyan-400",
     borderColor: "border-cyan-400/30",
     events: [
-      "E499: ミナ誕生（ノスタルジア・コロニー）",
-      "E509: Alpha Venom攻撃、ミナ難民船脱出",
-      "E514: ミナ大学入学",
-      "E522: AURALIS第二世代発足",
-      "E524: 諸世界連邦サミット",
-      "E525: リミナル・フォージ立ち上げ",
-      "E528: 現在",
+      e("【テクノ文化ルネサンス E475〜E500】次元極地平技術の民主化と文化融合。ネオンコロシアムがアートと技術の祭典に進化。レイラの戦績がホログラム展示で不朽の名声を獲得", "Gigapolis"),
+      e("E490頃: ボグダス・ジャベリンがヴァーミリオンに恒久駐在", "東大陸・クレセント"),
+      e("E495〜E500: ネオクラン同盟がUECO（星間経済協同組合）・ヒーローエージェンシーと統合し銀河系コンソーシアム設立。トゥキディデスの罠回避を志向", "M104銀河"),
+      e("E499: ミナ・エウレカ・アーネスト誕生（ノスタルジア・コロニー。父:エンジニア、母:歴史記録官）", "ノスタルジア・コロニー"),
+      e("E505: Eros-7でスクイーズ・アビス解体。搾取技術を医療・クリーンエネルギー用途に転換。搾取バクテリアがナノメディシン（遺伝子修復剤）として再設計", "Eros-7"),
+      e("E509: Alpha Venomのノスタルジア・コロニー攻撃 — 「重力崩壊弾頭」の閃光が10歳のミナに「戦略への目覚め」をもたらす。難民船で脱出", "ノスタルジア・コロニー"),
+      e("E514: ミナ、学術都市惑星「ビブリオ」のロレンツィオ国際大学AI学部入学（15歳）。文明崩壊予測モデルを研究", "惑星ビブリオ"),
+      e("E521: ミナ卒業（22歳）。放浪開始。Genesis Vault前身ブログ開設。ボグダス・ジャベリンに参加", "惑星ビブリオ"),
+      e("【次元ピラミッド全4層構造】Tier Ω（高次元世界: フン8次元/ササン9次元/ホラズム10次元/ティムール11次元）→ Tier Σ（ペルセポネ仮想宇宙）→ Tier Ε（E16通常次元）→ Tier Δ（AD2026地球）", "E16星系"),
+      e("E522: AURALIS第二世代正式発足 — Kate Patton(新代)・Lillie Ardent(新代)・レイラ（冷凍保存から復活・ミナと同年齢外見）・ミナ・Ninny Offenbachの5名", "西大陸"),
+      e("E524: 諸世界連邦サミット — ギガポリスのセントラル・タワーで開催。星間平和協定締結。ミナ参加。地球AD2026情報に初接触。ナシゴレン初体験（サミット会場屋台）", "Gigapolis"),
+      e("【Eros-7 E525】アヤカ・リンの介入 — ガロ（シャドウ・ユニオン男性リーダー）・ゼナ（女性商人）と同盟を結びマトリカル・リフォーム運動を組織。労働時間短縮・精子レジストリ男女平等化", "Eros-7"),
+      e("E525: リミナル・フォージ立ち上げ — ApoloniumとDimension Horizon技術を組み合わせた時相放送（Temporal Broadcast）。E528年の芸術を地球AD2026年のインターネット上に放送開始", "西大陸"),
+      e("E528: 現在 — Genesis Vault 2,000本突破。EDU統合版Wiki（整合性5原則・確定修正3点）準拠", "E16星系"),
     ],
   },
 ];
@@ -502,9 +577,14 @@ function TimelineSection() {
                 <AccordionContent className="px-6 pb-4">
                   <div className="space-y-2.5 ml-2 border-l-2 border-cosmic-border pl-4">
                     {period.events.map((ev, evIdx) => (
-                      <div key={evIdx} className="flex gap-3 text-sm">
+                      <div key={evIdx} className="flex flex-wrap gap-2 text-sm items-start">
                         <span className="text-cosmic-muted mt-0.5 shrink-0">▸</span>
-                        <span className="text-cosmic-text/90">{ev}</span>
+                        {ev.loc && (
+                          <span className={`inline-flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${locColor[ev.loc] || "bg-gray-500/20 text-gray-300 border-gray-500/30"}`}>
+                            {ev.loc}
+                          </span>
+                        )}
+                        <span className="text-cosmic-text/90">{ev.text}</span>
                       </div>
                     ))}
                   </div>
@@ -855,13 +935,15 @@ const PLATFORMS = [
     type: "PORTAL",
     color: "text-nebula-purple border-nebula-purple/30",
     bg: "bg-nebula-purple/10",
+    url: "https://auralis-eternal-light.lovable.app/",
   },
   {
-    name: "bsky.app/minaeurekaernst",
+    name: "bsky.app/profile/minaeurekaernst.bsky.social",
     desc: "ミナの直接放送",
     type: "SOCIAL",
     color: "text-electric-blue border-electric-blue/30",
     bg: "bg-electric-blue/10",
+    url: "https://bsky.app/profile/minaeurekaernst.bsky.social",
   },
   {
     name: "note.com/gensnotes",
@@ -869,6 +951,7 @@ const PLATFORMS = [
     type: "ARCHIVE",
     color: "text-green-400 border-green-400/30",
     bg: "bg-green-400/10",
+    url: "https://note.com/gensnotes",
   },
   {
     name: "suno.com/@liminalforge",
@@ -876,13 +959,15 @@ const PLATFORMS = [
     type: "MUSIC",
     color: "text-gold-accent border-gold-accent/30",
     bg: "bg-gold-accent/10",
+    url: "https://suno.com/@liminalforge",
   },
   {
-    name: "pixai.art/@apolon",
+    name: "pixai.art/en/@apolon/artworks",
     desc: "ビジュアル放送",
     type: "VISUAL",
     color: "text-pink-400 border-pink-400/30",
     bg: "bg-pink-400/10",
+    url: "https://pixai.art/en/@apolon/artworks",
   },
 ];
 
@@ -960,12 +1045,17 @@ function LiminalSection() {
                   >
                     {p.type}
                   </Badge>
-                  <div className="flex-1 min-w-0">
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 min-w-0 hover:opacity-80 transition-opacity"
+                  >
                     <p className="text-sm font-mono text-cosmic-text truncate">
                       {p.name}
                     </p>
                     <p className="text-xs text-cosmic-muted">{p.desc}</p>
-                  </div>
+                  </a>
                 </div>
               ))}
             </div>
@@ -1130,7 +1220,7 @@ function ConsistencySection() {
 }
 
 /* ═══════════════════════════════════════════
-   CHARACTER TIERS
+   CHARACTER TIERS & FACTION ROSTER
    ═══════════════════════════════════════════ */
 function CharacterTiersSection() {
   const tiers = [
@@ -1170,6 +1260,83 @@ function CharacterTiersSection() {
         "フィオナ",
         "セバスチャン",
         "弦太郎 (Lv569)",
+      ],
+    },
+  ];
+
+  const factions = [
+    {
+      name: "トリニティ・アライアンス / ボグダス・ジャベリン",
+      subtitle: "Trinity Alliance / Bogdas Javelin",
+      color: "text-cyan-400",
+      borderColor: "border-cyan-400/30",
+      dotColor: "bg-cyan-400",
+      members: [
+        { name: "アイリス", note: "ヴァーミリオン首脳・トリニティ・アライアンス指導者" },
+        { name: "セバスチャン・ヴァレリウス", note: "ボグダス・ジャベリンリーダー" },
+        { name: "ガレス", note: "ボグダス・ジャベリン副リーダー" },
+        { name: "ミユシャリ", note: "ボグダス・ジャベリンメンバー" },
+        { name: "ファリエル", note: "ボグダス・ジャベリンメンバー" },
+        { name: "エレナ", note: "ヴァーミリオン諜報機関・元本部長" },
+        { name: "アイナ・フォン・リースフェルト", note: "ボグダス・ジャベリンメンバー" },
+        { name: "フレデリック・ギャビー", note: "ボグダス・ジャベリンメンバー" },
+        { name: "ミナ・エウレカ", note: "ボグダス・ジャベリンメンバー" },
+        { name: "シェロン・ジェラス", note: "ボグダス・ジャベリンメンバー" },
+        { name: "イルミーゼ", note: "ボグダス・ジャベリンメンバー" },
+        { name: "ホワイトノイズ", note: "ボグダス・ジャベリンメンバー" },
+        { name: "ワドリナ", note: "ボグダス・ジャベリンメンバー" },
+        { name: "ニニギス・カラス", note: "ボグダス・ジャベリンメンバー" },
+        { name: "イェシバトー", note: "ボグダス・ジャベリンメンバー" },
+        { name: "アザゼル・ヘクトパス", note: "元ヴァーミリオン首脳" },
+      ],
+    },
+    {
+      name: "V7 / ブルー・ローズ",
+      subtitle: "V7 / Blue Rose",
+      color: "text-blue-400",
+      borderColor: "border-blue-400/30",
+      dotColor: "bg-blue-400",
+      members: [
+        { name: "フィオナ", note: "ブルー・ローズ統率者・V7急先鋒" },
+        { name: "ピアトリーノ", note: "フィオナの腹心・ブルー・ローズ地下街担当" },
+        { name: "マリーナ・ボビン", note: "ミエルテンガ総統" },
+        { name: "カスチーナ・テンペスト", note: "クロセヴィア首脳" },
+        { name: "アイク・ロペス", note: "SSレンジ首脳" },
+        { name: "レイド・カキザキ", note: "アイアン・シンジケート首脳" },
+        { name: "ミカエル・ガブリエリ", note: "ファールージャ社CEO" },
+        { name: "ヨニック", note: "ブルー・ローズ政府最高司令官" },
+      ],
+    },
+    {
+      name: "アルファ・ヴェノム（シルバー・ヴェノム）",
+      subtitle: "Alpha Venom / Silver Venom",
+      color: "text-red-400",
+      borderColor: "border-red-400/30",
+      dotColor: "bg-red-400",
+      members: [
+        { name: "マスター・ヴェノム", note: "シルバー・ヴェノムリーダー（「影の支配者」・本名不明）" },
+        { name: "レヴィリア・サーペンティナ", note: "シルバー・ヴェノム幹部" },
+        { name: "レオン", note: "シルバー・ヴェノム幹部" },
+        { name: "ヴィヴィエッタ", note: "四楓院ヴィヴィエッタ・元捕虜" },
+        { name: "イズミ", note: "アルファ・ヴェノムメンバー" },
+        { name: "ゴルディロックス", note: "アルファ・ヴェノムメンバー" },
+        { name: "カタリナ", note: "アルファ・ヴェノムメンバー" },
+        { name: "ボブリスティ", note: "アルファ・ヴェノムメンバー" },
+        { name: "ギル", note: "アルファ・ヴェノムメンバー" },
+        { name: "ラストマン", note: "シルバー・ヴェノム残党" },
+      ],
+    },
+    {
+      name: "その他の登場人物",
+      subtitle: "Other Characters",
+      color: "text-cosmic-muted",
+      borderColor: "border-cosmic-border/50",
+      dotColor: "bg-cosmic-muted",
+      members: [
+        { name: "ゴールデン・ヴェノム捕虜男性", note: "名前なし・組織名のみ記録" },
+        { name: "ヴァーミリオン政府高官3名", note: "外交担当など・個別名なし" },
+        { name: "エリオス", note: "E470年 処刑" },
+        { name: "弦太郎", note: "Lv569" },
       ],
     },
   ];
@@ -1238,6 +1405,58 @@ function CharacterTiersSection() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        </RevealSection>
+
+        {/* ─── Faction Character Roster ─── */}
+        <RevealSection>
+          <div className="mt-16">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-400/20 mb-4">
+                <Users className="w-6 h-6 text-red-400" />
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-cosmic-gradient mb-2">
+                勢力別キャラクター一覧
+              </h2>
+              <p className="text-cosmic-muted text-sm max-w-xl mx-auto">
+                E528現代における主要勢力と所属キャラクターの完全リスト
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {factions.map((faction) => (
+                <div
+                  key={faction.name}
+                  className={`glass-card rounded-xl border ${faction.borderColor} overflow-hidden transition-all duration-300 hover:scale-[1.01]`}
+                >
+                  <div className="px-6 py-4 bg-gradient-to-r from-cosmic-surface to-cosmic-dark/50 flex items-center gap-3">
+                    <span className={`w-2.5 h-2.5 rounded-full ${faction.dotColor} shrink-0`} />
+                    <div>
+                      <h3 className={`font-bold text-sm ${faction.color}`}>
+                        {faction.name}
+                      </h3>
+                      <p className="text-[10px] text-cosmic-muted font-mono">
+                        {faction.subtitle}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="p-4 space-y-1">
+                    {faction.members.map((m) => (
+                      <div
+                        key={m.name}
+                        className={`flex items-start gap-3 px-3 py-2 rounded-lg hover:bg-cosmic-dark/50 transition-colors`}
+                      >
+                        <span className={`text-cosmic-muted mt-0.5 shrink-0 text-xs`}>▸</span>
+                        <div className="min-w-0">
+                          <p className="text-sm text-cosmic-text font-medium">{m.name}</p>
+                          <p className="text-[11px] text-cosmic-muted">{m.note}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </RevealSection>
