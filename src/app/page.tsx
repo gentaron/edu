@@ -35,13 +35,10 @@ import {
   Menu,
   X,
   TrendingUp,
-  ExternalLink,
-  BookOpen,
 } from "lucide-react";
 
 /* ─── Section IDs ─── */
 const SECTIONS = [
-  { id: "canon", label: "正典" },
   { id: "universe", label: "宇宙構造" },
   { id: "timeline", label: "年表" },
   { id: "auralis", label: "AURALIS" },
@@ -303,112 +300,6 @@ function HeroSection() {
 }
 
 /* ═══════════════════════════════════════════
-   CANON NARRATIVE STRUCTURE
-   ═══════════════════════════════════════════ */
-const CORE_NARRATIVES = [
-  { title: "EDU World Overview", url: "https://raw.githubusercontent.com/gentaron/edutext/main/worldedu.txt" },
-  { title: "Kate Claudia & Lillie Steiner's Story", url: "https://raw.githubusercontent.com/gentaron/edutext/main/kateclaudiaandlilliesteiner.txt" },
-  { title: "Diana's Story", url: "https://raw.githubusercontent.com/gentaron/edutext/main/DianaWorld.txt" },
-  { title: "Iris's Story Ep1", url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_1.txt" },
-  { title: "Iris's Story Ep2", url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_2.txt" },
-  { title: "Iris's Story Ep3", url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_3.txt" },
-  { title: "Iris's Story Ep4", url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_4.txt" },
-  { title: "Gue's Story", url: "https://raw.githubusercontent.com/gentaron/edutext/main/gue.txt" },
-  { title: "Layla's Battle Records 1", url: "https://raw.githubusercontent.com/gentaron/edutext/main/laylastats.txt" },
-  { title: "Layla's Battle Records 2", url: "https://raw.githubusercontent.com/gentaron/edutext/main/laylastats2.txt" },
-  { title: "Alpha Cain & Celia Dominix's Story", url: "https://raw.githubusercontent.com/gentaron/edutext/main/nebura.txt" },
-];
-
-const SUB_NARRATIVES = [
-  { title: "AURALIS Spinoff", url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt" },
-  { title: "Gentaro's Story", url: "https://raw.githubusercontent.com/gentaron/edutext/main/Gentaroworld.txt" },
-  { title: "Jen's Story Ep1", url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep1.txt" },
-  { title: "Jen's Story Ep2", url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep2.txt" },
-  { title: "Jen's Story Ep3", url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep3.txt" },
-  { title: "Jun's Story", url: "https://raw.githubusercontent.com/gentaron/edutext/main/Junandslime.txt" },
-  { title: "Layla Virel Nova's Story", url: "https://raw.githubusercontent.com/gentaron/edutext/main/LAYLA.txt" },
-  { title: "Myu's Story", url: "https://raw.githubusercontent.com/gentaron/edutext/main/Myustory.txt" },
-  { title: "Casteria Grenvelt's Story", url: "https://raw.githubusercontent.com/gentaron/edutext/main/kasuteriasan.txt" },
-  { title: "Sitra Celes's Story", url: "https://raw.githubusercontent.com/gentaron/edutext/main/sitra.txt" },
-];
-
-function CanonNarrativeSection() {
-  return (
-    <section id="canon" className="relative py-20 px-4">
-      <div className="max-w-6xl mx-auto">
-        <RevealSection>
-          <SectionHeader
-            icon={<Scroll className="w-6 h-6 text-gold-accent" />}
-            title="EDU 正典ナラティブ"
-            subtitle="Canonical narrative structure — Core と Sub の二層正典体系"
-          />
-        </RevealSection>
-
-        <RevealSection>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Core Narrative */}
-            <div className="glass-card rounded-xl overflow-hidden border border-gold-accent/30 transition-all duration-300">
-              <div className="bg-gradient-to-r from-gold-accent/10 to-amber-500/5 px-6 py-4 border-b border-gold-accent/20">
-                <div className="flex items-center gap-2">
-                  <Crown className="w-5 h-5 text-gold-accent" />
-                  <h3 className="text-lg font-bold text-gold-accent">Core Narrative</h3>
-                  <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full bg-gold-accent/20 text-gold-accent border border-gold-accent/30">
-                    権威正典
-                  </span>
-                </div>
-                <p className="text-xs text-cosmic-muted mt-1">最優先 — 整合性の基準となる正典テキスト</p>
-              </div>
-              <div className="p-4 space-y-2">
-                {CORE_NARRATIVES.map((item, i) => (
-                  <a
-                    key={i}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gold-accent/15 bg-gold-accent/5 text-xs transition-all duration-200 hover:bg-gold-accent/10 hover:border-gold-accent/30 hover:shadow-[0_0_12px_rgba(234,179,8,0.15)] group"
-                  >
-                    <ExternalLink className="w-3 h-3 text-gold-accent/60 group-hover:text-gold-accent shrink-0 transition-colors" />
-                    <span className="text-gold-accent truncate">{item.title}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Sub Narrative */}
-            <div className="glass-card rounded-xl overflow-hidden border border-electric-blue/20 transition-all duration-300">
-              <div className="bg-gradient-to-r from-electric-blue/10 to-cyan-500/5 px-6 py-4 border-b border-electric-blue/15">
-                <div className="flex items-center gap-2">
-                  <BookOpen className="w-5 h-5 text-electric-blue" />
-                  <h3 className="text-lg font-bold text-electric-blue">Sub Narrative</h3>
-                  <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full bg-electric-blue/15 text-electric-blue/80 border border-electric-blue/25">
-                    派生正典
-                  </span>
-                </div>
-                <p className="text-xs text-cosmic-muted mt-1">Coreに従属 — 整合性維持の前提で展開される派生物語</p>
-              </div>
-              <div className="p-4 space-y-2">
-                {SUB_NARRATIVES.map((item, i) => (
-                  <a
-                    key={i}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg border border-electric-blue/10 bg-electric-blue/5 text-xs transition-all duration-200 hover:bg-electric-blue/10 hover:border-electric-blue/20 group"
-                  >
-                    <ExternalLink className="w-3 h-3 text-electric-blue/50 group-hover:text-electric-blue shrink-0 transition-colors" />
-                    <span className="text-electric-blue/80 truncate">{item.title}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </RevealSection>
-      </div>
-    </section>
-  );
-}
-
-/* ═══════════════════════════════════════════
    UNIVERSE STRUCTURE
    ═══════════════════════════════════════════ */
 function UniverseSection() {
@@ -614,11 +505,11 @@ const TIMELINE_DATA: { period: string; range: string; color: string; borderColor
     events: [
       e("E319: 新ZAMLT期の余波。Jen（Lv938+）がValoria宮殿を掌握。現在もValoria連合圏を主導", "西大陸"),
       e("E320〜E340: ネオクラン同盟が分散統治モデルを拡大。地域クラン結成、量子ファイナンス・コアのローカル版でnトークンの地域内循環開始。クラン・フォーラム（E325年設立）で低階層の声を可視化", "Gigapolis"),
-      e("E325: レイラ・ヴィレル・ノヴァ（Pink Voltage）がAURALISに参加。弦太郎（Lv569）がAURALIS周辺に登場 — Gentaro's Story（Sub Narrative）で活動の詳細が記録", "西大陸"),
+      e("E325: レイラ・ヴィレル・ノヴァ（Pink Voltage）がAURALISに参加。弦太郎（Lv569）がAURALIS周辺に登場", "西大陸"),
       e("Ninny Offenbach原初個体 — Alpha Kane時代のGigapolisに存在。のちにKaneと袂を分かち別惑星（惑星Solaris）へ離脱 → クローン継承で遺伝子が世代を超えて継承", "惑星Solaris"),
       e("【Eros-7】ガロ（後のアヤカ・リンの盟友）がシャドウ・ユニオンの指導者に。E330年のヒル破壊事件（搾取ヒル1,000体破壊）後、マトリカル・カウンシルが搾取抑制剤で鎮圧", "Eros-7"),
       e("E335〜E370: セリア・ドミニクスがAlpha Kaneを倒しSelinopolis改名。セリア黄金期 — フェルミ音楽・nトークン経済・AURALISすべての頂点に到達", "Gigapolis"),
-      e("E340: Slime Woman出現（ペルセポネ仮想宇宙実験の事故で高次元世界から顕現）。Junandslime.txt（Sub Narrative）によると、特定の個人（Jun）との間に特異な相互作用が発生。Tier 1アクティブ現役最強格として約200年にわたり存在し続ける", "Gigapolis"),
+      e("E340: Slime Woman出現（ペルセポネ仮想宇宙実験の事故で高次元世界から顕現）。特定の個人（Jun）との間に特異な相互作用が発生。Tier 1アクティブ現役最強格として約200年にわたり存在し続ける", "Gigapolis"),
       e("E350: 第五次繁栄フェスティバル開催 — 戦士決定戦とホロアート融合。ネオンコロシアム視聴率95%。シャドウ・リベリオンの反体制ホログラムがアンダーグリッドで話題に", "Gigapolis"),
       e("E370: アポロン-ドミニオン戦争勃発 — 次元エネルギー鉱脈の支配権を巡るE16 vs M104銀河軍事国家集団。E16の次元兵器（空間ホール質量破壊兵器）が勝利", "M104銀河"),
       e("【スライム危機 E380〜E400】ZAMLT時代の過剰バイオエンジニアリング実験が原因で搾取生物が遺伝子変異しスライム形態に進化。ギガポリスの地下インフラに侵入、エネルギー供給70%停止、人口20%（約8,000万人）避難", "Gigapolis"),
@@ -680,7 +571,7 @@ const TIMELINE_DATA: { period: string; range: string; color: string; borderColor
       e("【フィオナの裏切り E523〜E525】ブルーローズ統率者フィオナがアルファ・ヴェノムと内通していることが発覚。マリーナ・ボビン（ミエルテンガ総統）との共謀も判明。トリニティ・アライアンス内部に激震", "東大陸・クレセント"),
       e("【V7 vs トリニティ 冷戦期 E525〜E528】フィオナの裏切りを機にV7とトリニティの対立が激化。レヴィリア・サーペンティナ（シルバー・ヴェノム幹部）の動向も不透明。アイリスはトリニティ指導者としてクレセント全域の安定を模索", "東大陸・クレセント"),
       e("E528: 現在 — Genesis Vault 2,000本突破。EDU統合版Wiki（整合性5原則・確定修正3点）準拠。アイリスは引き続きトリニティ・アライアンス指導者として、フィオナ・アルファ・ヴェノムとの対峙を続ける", "E16星系"),
-      e("【Sub Narrative】カステリア・グレンヴェルト（kasuteriasan.txt）・シトラ・セレス（sitra.txt）・ミュー（Myustory.txt）・ジュン（Junandslime.txt）など、Core Narrativeとは別の視点からEDU世界を描くSub Narrative群が正典体系の一部として記録。特にジュンとSlime Womanの物語は、高次元存在と人間の接触というEDU宇宙論において重要なテーマを扱う", "E16星系"),
+      e("カステリア・グレンヴェルト・シトラ・セレス・ミュー・ジュンなど、EDU世界の多様な個人の物語が記録されている。特にジュンとSlime Womanの物語は、高次元存在と人間の接触というEDU宇宙論において重要なテーマを扱う", "E16星系"),
     ],
   },
 ];
@@ -2042,10 +1933,6 @@ export default function HomePage() {
 
         {/* Divider between hero and content */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-nebula-purple/40 to-transparent" />
-
-        <CanonNarrativeSection />
-
-        <div className="w-full h-px bg-gradient-to-r from-transparent via-gold-accent/30 to-transparent" />
 
         <UniverseSection />
 
