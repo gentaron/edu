@@ -29,12 +29,9 @@ import {
 
 type Category = "キャラクター" | "用語" | "組織" | "地理" | "技術" | "歴史";
 
-type NarrativeTier = "core" | "sub";
-
 interface SourceLink {
   url: string;
   label: string;
-  tier: NarrativeTier;
 }
 
 interface WikiEntry {
@@ -69,7 +66,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "Gigapolis西大陸",
     tier: "神格・歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Diana.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/DianaWorld.txt", label: "Diana's Story", tier: "core" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/DianaWorld.txt", label: "Diana's Story" }],
   },
   {
     id: "Jen",
@@ -83,9 +80,9 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "Valoria連合圏",
     tier: "Tier 1",
     sourceLinks: [
-      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep1.txt", label: "Jen's Story Ep1", tier: "sub" },
-      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep2.txt", label: "Jen's Story Ep2", tier: "sub" },
-      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep3.txt", label: "Jen's Story Ep3", tier: "sub" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep1.txt", label: "Jen's Story Ep1" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep2.txt", label: "Jen's Story Ep2" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep3.txt", label: "Jen's Story Ep3" },
     ],
   },
   {
@@ -95,11 +92,11 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
-      "E400年以降、Gigapolis地下街最深部を実効支配。エヴァトロン支配期（E400〜E475）において、表の支配者エヴァトロンとは別に地下世界の真の権力者として暗躍。TinaとGueの二つの名で呼ばれることから、正体に関する諸説が存在する。Gue's Story（Core Narrative）で詳細が語られる中心的キャラクターであり、地下経済の掌握と独自の情報ネットワークを駆使して、エヴァトロン崩壊後もその影響力を維持し続けている。",
+      "E400年以降、Gigapolis地下街最深部を実効支配。エヴァトロン支配期（E400〜E475）において、表の支配者エヴァトロンとは別に地下世界の真の権力者として暗躍。TinaとGueの二つの名で呼ばれることから、正体に関する諸説が存在する。地下経済の掌握と独自の情報ネットワークを駆使して、エヴァトロン崩壊後もその影響力を維持し続けている。",
     era: "E400〜現在",
     affiliation: "Gigapolis地下街",
     tier: "Tier 1",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/gue.txt", label: "Gue's Story", tier: "core" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/gue.txt", label: "Gue's Story" }],
   },
   {
     id: "セリア・ドミニクス",
@@ -113,7 +110,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "Selinopolis（旧Gigapolis）",
     tier: "神格・歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/CeliaDminix.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/nebura.txt", label: "Alpha Cain & Celia Dominix's Story", tier: "core" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/nebura.txt", label: "Alpha Cain & Celia Dominix's Story" }],
   },
   {
     id: "アルファ・ケイン",
@@ -126,7 +123,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E318〜",
     affiliation: "シャドウ・リベリオン",
     tier: "神格・歴史的人物",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/nebura.txt", label: "Alpha Cain & Celia Dominix's Story", tier: "core" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/nebura.txt", label: "Alpha Cain & Celia Dominix's Story" }],
   },
   {
     id: "エリオス・ウォルド",
@@ -177,9 +174,9 @@ const CHARACTERS: WikiEntry[] = [
     tier: "Tier 1",
     image: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirelNova.png",
     sourceLinks: [
-      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/laylastats.txt", label: "Layla's Battle Records 1", tier: "core" },
-      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/laylastats2.txt", label: "Layla's Battle Records 2", tier: "core" },
-      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/LAYLA.txt", label: "Layla Virel Nova's Story", tier: "sub" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/laylastats.txt", label: "Layla's Battle Records 1" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/laylastats2.txt", label: "Layla's Battle Records 2" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/LAYLA.txt", label: "Layla Virel Nova's Story" },
     ],
   },
   {
@@ -193,7 +190,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E325〜現在",
     affiliation: "AURALIS関連",
     tier: "Tier 2",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Gentaroworld.txt", label: "Gentaro's Story", tier: "sub" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Gentaroworld.txt", label: "Gentaro's Story" }],
   },
 
   /* AURALIS */
@@ -209,7 +206,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第一世代（創設者）",
     tier: "神格・歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/KateClaudia.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/kateclaudiaandlilliesteiner.txt", label: "Kate Claudia & Lillie Steiner's Story", tier: "core" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/kateclaudiaandlilliesteiner.txt", label: "Kate Claudia & Lillie Steiner's Story" }],
   },
   {
     id: "Kate Patton",
@@ -223,7 +220,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/KatePatton.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff", tier: "sub" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff" }],
   },
   {
     id: "Lily Steiner",
@@ -237,7 +234,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第一世代（創設者）",
     tier: "神格・歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/LillieSteiner.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/kateclaudiaandlilliesteiner.txt", label: "Kate Claudia & Lillie Steiner's Story", tier: "core" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/kateclaudiaandlilliesteiner.txt", label: "Kate Claudia & Lillie Steiner's Story" }],
   },
   {
     id: "Lillie Ardent",
@@ -251,7 +248,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/LillieArdent.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff", tier: "sub" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff" }],
   },
   {
     id: "ミナ・エウレカ・エルンスト",
@@ -265,7 +262,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第二世代 / リミナル・フォージ",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/MinaEurekaErnst.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff", tier: "sub" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff" }],
   },
   {
     id: "Ninny Offenbach",
@@ -279,7 +276,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/NinnyOffenbach.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff", tier: "sub" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff" }],
   },
 
   /* Iris/Crescent */
@@ -296,10 +293,10 @@ const CHARACTERS: WikiEntry[] = [
     tier: "Tier 1",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Iris.png",
     sourceLinks: [
-      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_1.txt", label: "Iris's Story Ep1", tier: "core" },
-      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_2.txt", label: "Iris's Story Ep2", tier: "core" },
-      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_3.txt", label: "Iris's Story Ep3", tier: "core" },
-      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_4.txt", label: "Iris's Story Ep4", tier: "core" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_1.txt", label: "Iris's Story Ep1" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_2.txt", label: "Iris's Story Ep2" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_3.txt", label: "Iris's Story Ep3" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_4.txt", label: "Iris's Story Ep4" },
     ],
   },
   {
@@ -682,7 +679,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E340〜現在",
     affiliation: "不明（高次元存在）",
     tier: "Tier 1",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Junandslime.txt", label: "Jun's Story", tier: "sub" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Junandslime.txt", label: "Jun's Story" }],
   },
   {
     id: "テミルタロン",
@@ -777,7 +774,7 @@ const CHARACTERS: WikiEntry[] = [
     tier: "Tier 1",
   },
 
-  /* Sub Narrative Characters */
+  /* 新規キャラクター */
   {
     id: "カステリア・グレンヴェルト",
     name: "カステリア・グレンヴェルト",
@@ -785,12 +782,12 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
-      "Sub Narrativeキャラクター。カスチーナ・テンペスト（Castina Tempest、クロセヴィア首脳）とは別人。Gigapolis西大陸を拠点とする人物で、独自の物語を持つサブナラティブの主人公。kasuteriasan.txtにその物語が記録されている。クレセント地方の政治情勢とは直接的な関わりを持たないが、西大陸の社会における独自の視点を提供する存在。",
+      "カスチーナ・テンペスト（Castina Tempest、クロセヴィア首脳）とは別人。Gigapolis西大陸を拠点とする人物。クレセント地方の政治情勢とは直接的な関わりを持たないが、西大陸の社会における独自の視点を提供する存在。",
     era: "不詳",
     affiliation: "Gigapolis西大陸",
-    tier: "Sub Narrative",
+    tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/CasteriaGrenvelt.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/kasuteriasan.txt", label: "Casteria Grenvelt's Story", tier: "sub" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/kasuteriasan.txt", label: "Casteria Grenvelt's Story" }],
   },
   {
     id: "シトラ・セレス",
@@ -799,12 +796,12 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
-      "Sub Narrativeキャラクター。独自の物語を持つサブナラティブの主人公。sitra.txtにその物語が記録されている。E16連星系のどこかで活動する個人で、Core Narrativeの主要な事件群とは別の視点からEDU世界を体験する存在。正確な所属や時代はサブナラティブの文脈において語られる。",
+      "E16連星系のどこかで活動する個人。EDU世界の主要な事件群とは別の視点から世界を体験する存在。",
     era: "不詳",
     affiliation: "不詳",
-    tier: "Sub Narrative",
+    tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/SitraCeles.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/sitra.txt", label: "Sitra Celes's Story", tier: "sub" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/sitra.txt", label: "Sitra Celes's Story" }],
   },
   {
     id: "ミュー",
@@ -813,12 +810,12 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
-      "Sub Narrativeキャラクター。Myustory.txtにその物語が記録されている独自の主人公。E16連星系における個人の物語を軸に、Core Narrativeの英雄たちとは異なる規模の、しかし等しくEDU世界の一部である生活と冒険を描く。テクノ文化ルネサンス（E475〜E500）以降の現代社会を舞台にしている可能性が高い。",
+      "E16連星系における個人の物語を軸に、英雄たちとは異なる規模の、しかし等しくEDU世界の一部である生活と冒険を描く。テクノ文化ルネサンス（E475〜E500）以降の現代社会を舞台にしている可能性が高い。",
     era: "不詳",
     affiliation: "不詳",
-    tier: "Sub Narrative",
+    tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Myu.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Myustory.txt", label: "Myu's Story", tier: "sub" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Myustory.txt", label: "Myu's Story" }],
   },
   {
     id: "ジュン",
@@ -827,12 +824,12 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
-      "Sub Narrativeキャラクター。Slime Woman（E340年ペルセポネ事故で顕現した高次元存在）との特異な相互作用を持つ人物。Junandslime.txtにその物語が記録されており、Slime WomanのE340年顕現以降の行動や性質について、Core Narrativeでは語られない側面を明らかにする。高次元存在であるSlime Womanが人間社会でどのように振る舞うのか、そして特定の個人との間に何が生じるのかを描く、EDU宇宙論にとって重要なサブナラティブ。",
+      "Slime Woman（E340年ペルセポネ事故で顕現した高次元存在）との特異な相互作用を持つ人物。高次元存在であるSlime Womanが人間社会でどのように振る舞うのか、そして特定の個人との間に何が生じるのかを描く、EDU宇宙論にとって重要な物語。",
     era: "E340以降〜現在",
     affiliation: "不詳（Slime Womanとの関連）",
-    tier: "Sub Narrative",
+    tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Jun.png",
-    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Junandslime.txt", label: "Jun's Story", tier: "sub" }],
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Junandslime.txt", label: "Jun's Story" }],
   },
 ];
 
@@ -2061,37 +2058,21 @@ function CanonSourceLinks({ links }: { links: SourceLink[] }) {
     <div className="mt-3 pt-3 border-t border-cosmic-border/30">
       <p className="text-[10px] text-cosmic-muted mb-2 uppercase tracking-wider font-bold flex items-center gap-1.5">
         <Scroll className="w-3 h-3" />
-        正典ソース
+        関連資料
       </p>
       <div className="space-y-1.5">
-        {links.map((link, idx) => {
-          const isCore = link.tier === "core";
-          return (
+        {links.map((link, idx) => (
             <a
               key={idx}
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={
-                isCore
-                  ? "flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-gold-accent/20 bg-gold-accent/5 text-xs text-gold-accent hover:bg-gold-accent/10 transition-all duration-200 hover:scale-[1.01]"
-                  : "flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-electric-blue/15 bg-electric-blue/5 text-xs text-electric-blue/80 hover:bg-electric-blue/10 transition-all duration-200 hover:scale-[1.01]"
-              }
+              className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-nebula-purple/15 bg-nebula-purple/5 text-xs text-nebula-purple/80 hover:bg-nebula-purple/10 transition-all duration-200 hover:scale-[1.01]"
             >
               <ExternalLink className="w-3 h-3 shrink-0" />
               <span className="truncate">{link.label}</span>
-              <span
-                className={
-                  isCore
-                    ? "ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 bg-gold-accent/20 text-gold-accent"
-                    : "ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 bg-electric-blue/15 text-electric-blue/70"
-                }
-              >
-                {isCore ? "Core" : "Sub"}
-              </span>
             </a>
-          );
-        })}
+        ))}
       </div>
     </div>
   );
