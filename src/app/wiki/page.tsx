@@ -172,52 +172,56 @@ const CHARACTERS: WikiEntry[] = [
 
   /* AURALIS */
   {
-    id: "Kate Patton（初代）",
-    name: "Kate Patton（初代）",
-    nameEn: "Kate Patton (1st Gen)",
+    id: "Kate Claudia",
+    name: "Kate Claudia",
+    nameEn: "Kate Claudia",
     category: "キャラクター",
     subCategory: "AURALIS",
     description:
-      "AURALIS Collective創設者の1人。E290年正式組織化。E400年エヴァトロン弾圧で逮捕・消息不明。",
-    era: "E290〜E400",
-    affiliation: "AURALIS Collective第一世代",
+      "AURALIS Collective創設者。通称「設計者」。E270年にLily Steinerと出会い、表現を諦めない人々の集団「AURALIS」を立ち上げた。E290年正式組織化。「光と音を永遠のものに」を理念とし、リリーが感情の炎ならケイトはその形を与える鋳型だった。E335〜E370年のセリア黄金期にAURALISを最盛期へ導く。E400年エヴァトロン弾圧で逮捕・消息不明。その名は新代のKate Pattonに継承された。",
+    era: "E270〜E400",
+    affiliation: "AURALIS Collective第一世代（創設者）",
     tier: "神格・歴史的人物",
+    image: "/edu-kate-claudia.png",
+  },
+  {
+    id: "Kate Patton",
+    name: "Kate Patton",
+    nameEn: "Kate Patton",
+    category: "キャラクター",
+    subCategory: "AURALIS",
+    description:
+      "AURALIS Collective第二世代。初代Kate Claudiaの「名」を継承。大地の豊かさ・安定を体現。E522年の第二世代正式発足時に参画。",
+    era: "E522〜現在",
+    affiliation: "AURALIS Collective第二世代",
+    tier: "Tier 2",
     image: "/edu-kate.png",
   },
   {
-    id: "Kate Patton（新代）",
-    name: "Kate Patton（新代）",
-    nameEn: "Kate Patton (2nd Gen)",
-    category: "キャラクター",
-    subCategory: "AURALIS",
-    description: "AURALIS第二世代。大地の豊かさ・安定を体現。",
-    era: "E522〜現在",
-    affiliation: "AURALIS Collective第二世代",
-    tier: "Tier 2",
-  },
-  {
-    id: "Lillie Ardent（初代）",
-    name: "Lillie Ardent（初代）",
-    nameEn: "Lillie Ardent (1st Gen)",
+    id: "Lily Steiner",
+    name: "Lily Steiner",
+    nameEn: "Lily Steiner",
     category: "キャラクター",
     subCategory: "AURALIS",
     description:
-      "AURALIS Collective創設者の1人。Kate初代と共にE290年に組織化。E400年消息不明。",
-    era: "E290〜E400",
-    affiliation: "AURALIS Collective第一世代",
+      "AURALIS Collective創設者。本名Lily Steiner、AURALIS公称名「Lillie Ardent 初代」。E270年にKate Claudiaと出会いAURALISを共同創設。「感情の炎」と称され、舞台上で性別の境界を歌う表現は神話となった。レイラのコールドスリープを誰よりも近くで見守り、目覚めるたびに「おかえり」と迎えた。E400年エヴァトロン弾圧で逮捕・最後のステージで「AURALISは消えない。灰から、また燃える」と言い残す。その名は新代のLillie Ardentに継承された。",
+    era: "E270〜E400",
+    affiliation: "AURALIS Collective第一世代（創設者）",
     tier: "神格・歴史的人物",
-    image: "/edu-lillie.png",
+    image: "/edu-lillie-steiner.png",
   },
   {
-    id: "Lillie Ardent（新代）",
-    name: "Lillie Ardent（新代）",
-    nameEn: "Lillie Ardent (2nd Gen)",
+    id: "Lillie Ardent",
+    name: "Lillie Ardent",
+    nameEn: "Lillie Ardent",
     category: "キャラクター",
     subCategory: "AURALIS",
-    description: "AURALIS第二世代。情熱的で大胆。",
+    description:
+      "AURALIS Collective第二世代。初代Lily Steinerの「名」を継承。情熱的で大胆。E522年の第二世代正式発足時に参画。",
     era: "E522〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
+    image: "/edu-lillie.png",
   },
   {
     id: "ミナ・エウレカ・エルンスト",
@@ -671,34 +675,6 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "マトリカル・リフォーム運動",
   },
 
-  /* Kate Claudia & Lily Steiner */
-  {
-    id: "Kate Claudia",
-    name: "Kate Claudia",
-    nameEn: "Kate Claudia",
-    category: "キャラクター",
-    subCategory: "Gigapolis",
-    description:
-      "AURALIS Collective第二世代のメンバー。Kate Patton（新代）の異名を持つ。情熱と知性を兼ね備えたリーダー格。E522年のAURALIS第二世代正式発足時に参画。",
-    era: "E522〜現在",
-    affiliation: "AURALIS Collective第二世代",
-    tier: "Tier 2",
-    image: "/edu-kate-claudia.png",
-  },
-  {
-    id: "Lily Steiner",
-    name: "Lily Steiner",
-    nameEn: "Lily Steiner",
-    category: "キャラクター",
-    subCategory: "Gigapolis",
-    description:
-      "AURALIS Collective第二世代のメンバー。Lillie Ardent（新代）の異名を持つ。大胆で情熱的な性格。E522年のAURALIS第二世代正式発足時に参画。",
-    era: "E522〜現在",
-    affiliation: "AURALIS Collective第二世代",
-    tier: "Tier 2",
-    image: "/edu-lillie-steiner.png",
-  },
-
   /* Eros-7 */
   {
     id: "リリス・ヴェイン",
@@ -1141,7 +1117,7 @@ const TERMINOLOGY: WikiEntry[] = [
     category: "用語",
     subCategory: "技術・概念",
     description:
-      "AURALISの伝統。Kate Patton, Lillie Ardentなどの「名」が世代を超えて継承される。",
+      "AURALISの伝統。初代Kate Claudiaの「Kate」、初代Lily Steinerの「Lillie Ardent」などの「名」が世代を超えて継承される。同じ特性を持つ者が名を受け継ぐ。",
   },
   {
     id: "戦士決定戦",
