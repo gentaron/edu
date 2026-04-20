@@ -78,7 +78,7 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
-      "Lv938+。E319年にValoria宮殿を掌握。現在もValoria連合圏を主導する現役最強格。",
+      "Lv938+。E319年にValoria宮殿を掌握し、ZAMLT崩壊後の権力真空を埋める形で台頭。現在もValoria連合圏を主導する現役最強格の一人。Alpha Kaneのギガポリス解放戦に触発されたとも言われ、新ZAMLT期の混乱を鎮め西大陸の安定を確立した。EDU現代において最古参のTier 1アクティブ勢力として、セリア黄金期の記憶を持つ数少ない存在。",
     era: "E319〜現在",
     affiliation: "Valoria連合圏",
     tier: "Tier 1",
@@ -95,10 +95,11 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
-      "E400年以降、Gigapolis地下街最深部を実効支配。",
+      "E400年以降、Gigapolis地下街最深部を実効支配。エヴァトロン支配期（E400〜E475）において、表の支配者エヴァトロンとは別に地下世界の真の権力者として暗躍。TinaとGueの二つの名で呼ばれることから、正体に関する諸説が存在する。Gue's Story（Core Narrative）で詳細が語られる中心的キャラクターであり、地下経済の掌握と独自の情報ネットワークを駆使して、エヴァトロン崩壊後もその影響力を維持し続けている。",
     era: "E400〜現在",
     affiliation: "Gigapolis地下街",
     tier: "Tier 1",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/gue.txt", label: "Gue's Story", tier: "core" }],
   },
   {
     id: "セリア・ドミニクス",
@@ -134,7 +135,7 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
-      "テリアン反乱軍の指導者。エヴァトロンに抵抗したが、E470年に処刑。",
+      "テリアン反乱軍の指導者。エヴァトロンによるGigapolis支配（E400〜E475）に対して、数十年にわたり武装抵抗を組織した悲劇の英雄。A籍制度の廃止と市民の自由回復を掲げ、低階層住民から広範な支持を集めた。しかしE470年にエヴァトロン軍に捕縛され公開処刑。彼の死はテクロサス東方支隊のクレセント大地方常駐（E470）を促す契機となり、のちのクレセント政治情勢に間接的な影響を与えた。",
     era: "?〜E470",
     affiliation: "テリアン反乱軍",
     tier: "歴史的人物",
@@ -187,10 +188,12 @@ const CHARACTERS: WikiEntry[] = [
     nameEn: "Gentaro",
     category: "キャラクター",
     subCategory: "Gigapolis",
-    description: "Lv569。AURALIS関連人物。",
-    era: "E325〜",
+    description:
+      "Lv569。E325年頃AURALIS周辺で登場。「光と音を永遠にする」理念に共鳴し、AURALIS Collectiveの活動に深く関わる人物。セリア黄金期（E335〜E370）からエヴァトロン弾圧（E400）、そして第二世代再興（E522）まで、長きにわたりAURALISの興亡を見守り続けてきた。レイラ・ヴィレル・ノヴァのAURALIS参加とも関連があり、彼女のスライム危機での英雄的活躍を近くで目撃した可能性がある。E522年の第二世代正式発足後もAURALISに関連して活動を継続しているとされる。",
+    era: "E325〜現在",
     affiliation: "AURALIS関連",
     tier: "Tier 2",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Gentaroworld.txt", label: "Gentaro's Story", tier: "sub" }],
   },
 
   /* AURALIS */
@@ -328,7 +331,7 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Iris/クレセント",
     description:
-      "ボグダス・ジャベリンリーダー。IRIS現代ランキング4位。",
+      "ボグダス・ジャベリンリーダー。IRIS現代ランキング4位。E490年頃にヴァーミリオンに恒久駐在を開始。テクロサス系譜（E15ファランクス → E295三頭政治改編 → E470東方支隊）を継承する軍事組織の当代指導者。副リーダー・ガレスを筆頭とする精鋭部隊を率い、アイリスのシルバー・ヴェノムに対抗や救出作戦（E510・E519）で中核的な役割を果たした。トリニティ・アライアンスの軍事的支柱として、V7との冷戦期においても安定した戦力を維持。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     tier: "Tier 2",
@@ -351,7 +354,7 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Iris/クレセント",
     description:
-      "ブルーローズ統率者。V7急先鋒。IRIS現代ランキング2位。のちにアルファ・ヴェノムと内通。",
+      "ブルーローズ統率者。V7急先鋒。IRIS現代ランキング2位。E490年頃からクレセント政治の表舞台に登場。アイリス救出作戦（E510）でボグダス・ジャベリンと連携して活躍し、V7設立（E515）に向けて外交を主導。E520年のトリニティ・アライアンス結成後、ミエルテンガ総統への就任をアイリスに推薦するなど協調的姿勢を見せていたが、E523〜E525年にアルファ・ヴェノムと内通していることが発覚。腹心のピアトリーノを通じてブルーローズ地下街を掌握し、二重スパイとしてクレセント全域に激震をもたらした。",
     era: "E490〜現在",
     affiliation: "ブルーローズ / アルファ・ヴェノム（内通）",
     tier: "Tier 2",
@@ -364,7 +367,7 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Iris/クレセント",
     description:
-      "ミエルテンガ総統。真の黒幕の可能性。IRIS現代ランキング3位。",
+      "ミエルテンガ総統。IRIS現代ランキング3位。E515年のV7設立からクレセント政治の中核を担う。表向きはトリニティ・アライアンスの盟友として振る舞うが、フィオナの裏切り（E523〜E525）との共謀説が浮上しており、クレセント全域における「真の黒幕」の可能性が指摘されている。E520年のアイリスのミエルテンガ首脳就任自体がフィオナの推薦によるものであり、マリーナの関与が疑われている。高圧的な政治手腕と深い情報網で知られ、ランキング3位の実力は伊達ではないとされる。",
     era: "E515〜現在",
     affiliation: "ミエルテンガ",
     tier: "Tier 2",
@@ -375,7 +378,8 @@ const CHARACTERS: WikiEntry[] = [
     nameEn: "Castina Tempest",
     category: "キャラクター",
     subCategory: "Iris/クレセント",
-    description: "クロセヴィア首脳。IRIS現代ランキング5位。",
+    description:
+      "クロセヴィア首脳。IRIS現代ランキング5位。E515年のV7設立メンバーの一人。テンペストの名が示す通り、荒波のような政治的判断力でクロセヴィアを率いる。V7 vs トリニティの二大陣営対立において、明確な陣営選択を避け独自路線を歩む戦略家。Casteria Grenvelt（カステリア・グレンヴェルト）とは全くの別人物であり、混同を避けるべき。",
     era: "E515〜現在",
     affiliation: "クロセヴィア",
     tier: "Tier 2",
@@ -386,7 +390,8 @@ const CHARACTERS: WikiEntry[] = [
     nameEn: "Izumi",
     category: "キャラクター",
     subCategory: "Iris/クレセント",
-    description: "アルファ・ヴェノムリーダー。両性具有。",
+    description:
+      "アルファ・ヴェノムリーダー。両性具有。E518年にシルバー・ヴェノム残党を吸収し、アルファ・ヴェノムを大幅に勢力拡大。E519年には自らの指揮でアイリスの再拉致を成功させるなど、極めて高い戦略的判断力と実行力を持つ。ボブリスティ・ギル・カタリナ・ゴルディロックス・AJらを率い、フィオナを内通者として抱き込むことでV7内部からトリニティ・アライアンスを弱体化させる二重工作を展開。アイリス最大の敵対者。",
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
     tier: "Tier 2",
@@ -672,10 +677,12 @@ const CHARACTERS: WikiEntry[] = [
     name: "Slime Woman",
     category: "キャラクター",
     subCategory: "Gigapolis",
-    description: "E340年、ペルセポネ仮想宇宙実験の事故で高次元世界から顕現。Tier 1現役最強格。",
+    description:
+      "E340年、ティムール・シャーが設計した仮想多元宇宙「ペルセポネ」の実験事故により、高次元世界（Tier Ω）からE16通常次元（Tier Ε）に顕現した超越的存在。スライム危機（E380〜E400）の遠因となった搾取生物の遺伝子変異にも間接的に関与している可能性がある。Tier 1アクティブ現役最強格であり、その能力の正体は高次元物理学の未解明領域に属する。人間社会の枠組みに完全に適応しているわけではなく、特定の個人（Junなど）とのみ特異な相互作用を示す。E340年の顕現から約200年近く存在し続ける、EDU中最も謎めいた存在。",
     era: "E340〜現在",
-    affiliation: "不明",
+    affiliation: "不明（高次元存在）",
     tier: "Tier 1",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Junandslime.txt", label: "Jun's Story", tier: "sub" }],
   },
   {
     id: "テミルタロン",
@@ -764,10 +771,68 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Eros-7",
     description:
-      "Lv.842。搾精生物専門ハンター。マトリカル・リフォーム運動を組織。",
-    era: "E380〜",
+      "Lv.842。搾精生物専門ハンター。マトリカル・リフォーム運動を組織。E380年のスライム危機では、ビキニバリア・カウパー波を駆使してアンダーグリッド深部でスライムの巣を破壊。プライマリー・フィールド経由で全市民に戦闘記録中継し、英雄的な名声を確立。E525年にはシャドウ・ユニオン男性リーダー・ガロや女性商人ゼナと同盟を結び、労働時間短縮・精子レジストリ男女平等化を掲げるマトリカル・リフォーム運動を本格的に組織。Eros-7社会変革の原動力。",
+    era: "E380〜現在",
     affiliation: "シャドウ・ユニオン / マトリカル・リフォーム運動",
     tier: "Tier 1",
+  },
+
+  /* Sub Narrative Characters */
+  {
+    id: "カステリア・グレンヴェルト",
+    name: "カステリア・グレンヴェルト",
+    nameEn: "Casteria Grenvelt",
+    category: "キャラクター",
+    subCategory: "Gigapolis",
+    description:
+      "Sub Narrativeキャラクター。カスチーナ・テンペスト（Castina Tempest、クロセヴィア首脳）とは別人。Gigapolis西大陸を拠点とする人物で、独自の物語を持つサブナラティブの主人公。kasuteriasan.txtにその物語が記録されている。クレセント地方の政治情勢とは直接的な関わりを持たないが、西大陸の社会における独自の視点を提供する存在。",
+    era: "不詳",
+    affiliation: "Gigapolis西大陸",
+    tier: "Sub Narrative",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/CasteriaGrenvelt.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/kasuteriasan.txt", label: "Casteria Grenvelt's Story", tier: "sub" }],
+  },
+  {
+    id: "シトラ・セレス",
+    name: "シトラ・セレス",
+    nameEn: "Sitra Celes",
+    category: "キャラクター",
+    subCategory: "Gigapolis",
+    description:
+      "Sub Narrativeキャラクター。独自の物語を持つサブナラティブの主人公。sitra.txtにその物語が記録されている。E16連星系のどこかで活動する個人で、Core Narrativeの主要な事件群とは別の視点からEDU世界を体験する存在。正確な所属や時代はサブナラティブの文脈において語られる。",
+    era: "不詳",
+    affiliation: "不詳",
+    tier: "Sub Narrative",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/SitraCeles.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/sitra.txt", label: "Sitra Celes's Story", tier: "sub" }],
+  },
+  {
+    id: "ミュー",
+    name: "ミュー",
+    nameEn: "Myu",
+    category: "キャラクター",
+    subCategory: "Gigapolis",
+    description:
+      "Sub Narrativeキャラクター。Myustory.txtにその物語が記録されている独自の主人公。E16連星系における個人の物語を軸に、Core Narrativeの英雄たちとは異なる規模の、しかし等しくEDU世界の一部である生活と冒険を描く。テクノ文化ルネサンス（E475〜E500）以降の現代社会を舞台にしている可能性が高い。",
+    era: "不詳",
+    affiliation: "不詳",
+    tier: "Sub Narrative",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Myu.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Myustory.txt", label: "Myu's Story", tier: "sub" }],
+  },
+  {
+    id: "ジュン",
+    name: "ジュン",
+    nameEn: "Jun",
+    category: "キャラクター",
+    subCategory: "Gigapolis",
+    description:
+      "Sub Narrativeキャラクター。Slime Woman（E340年ペルセポネ事故で顕現した高次元存在）との特異な相互作用を持つ人物。Junandslime.txtにその物語が記録されており、Slime WomanのE340年顕現以降の行動や性質について、Core Narrativeでは語られない側面を明らかにする。高次元存在であるSlime Womanが人間社会でどのように振る舞うのか、そして特定の個人との間に何が生じるのかを描く、EDU宇宙論にとって重要なサブナラティブ。",
+    era: "E340以降〜現在",
+    affiliation: "不詳（Slime Womanとの関連）",
+    tier: "Sub Narrative",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Jun.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Junandslime.txt", label: "Jun's Story", tier: "sub" }],
   },
 ];
 
