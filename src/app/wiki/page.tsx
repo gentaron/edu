@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
+import Image from "next/image";
 import {
   Search,
   ArrowLeft,
@@ -18,6 +19,7 @@ import {
   ChevronDown,
   X,
   Scroll,
+  User,
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -36,6 +38,7 @@ interface WikiEntry {
   era?: string;
   affiliation?: string;
   tier?: string;
+  image?: string;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -55,6 +58,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E260〜E280",
     affiliation: "Gigapolis西大陸",
     tier: "神格・歴史的人物",
+    image: "/edu-diana.png",
   },
   {
     id: "Jen",
@@ -83,7 +87,7 @@ const CHARACTERS: WikiEntry[] = [
   {
     id: "セリア・ドミニクス",
     name: "セリア・ドミニクス",
-    nameEn: "Celia Dominicus",
+    nameEn: "Celia Dminix",
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
@@ -91,6 +95,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E335〜E370",
     affiliation: "Selinopolis（旧Gigapolis）",
     tier: "神格・歴史的人物",
+    image: "/edu-celia.png",
   },
   {
     id: "アルファ・ケイン",
@@ -248,6 +253,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E480〜現在",
     affiliation: "トリニティ・アライアンス / 元ヴァーミリオン諜報機関長",
     tier: "Tier 1",
+    image: "/edu-iris.png",
   },
   {
     id: "ウィリー",
@@ -305,6 +311,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E490〜現在",
     affiliation: "ブルーローズ / アルファ・ヴェノム（内通）",
     tier: "Tier 2",
+    image: "/edu-fiona.png",
   },
   {
     id: "マリーナ・ボビン",
@@ -657,6 +664,34 @@ const CHARACTERS: WikiEntry[] = [
     description: "女性商人。アヤカ・リン・ガロと同盟を結びマトリカル・リフォーム運動に参加。",
     era: "E525〜",
     affiliation: "マトリカル・リフォーム運動",
+  },
+
+  /* Kate Claudia & Lily Steiner */
+  {
+    id: "Kate Claudia",
+    name: "Kate Claudia",
+    nameEn: "Kate Claudia",
+    category: "キャラクター",
+    subCategory: "Gigapolis",
+    description:
+      "AURALIS Collective第二世代のメンバー。Kate Patton（新代）の異名を持つ。情熱と知性を兼ね備えたリーダー格。E522年のAURALIS第二世代正式発足時に参画。",
+    era: "E522〜現在",
+    affiliation: "AURALIS Collective第二世代",
+    tier: "Tier 2",
+    image: "/edu-kate-claudia.png",
+  },
+  {
+    id: "Lily Steiner",
+    name: "Lily Steiner",
+    nameEn: "Lily Steiner",
+    category: "キャラクター",
+    subCategory: "Gigapolis",
+    description:
+      "AURALIS Collective第二世代のメンバー。Lillie Ardent（新代）の異名を持つ。大胆で情熱的な性格。E522年のAURALIS第二世代正式発足時に参画。",
+    era: "E522〜現在",
+    affiliation: "AURALIS Collective第二世代",
+    tier: "Tier 2",
+    image: "/edu-lillie-steiner.png",
   },
 
   /* Eros-7 */
@@ -1962,7 +1997,21 @@ function WikiCard({ entry, isExpanded, onToggle }: { entry: WikiEntry; isExpande
     >
       <div className="p-4 sm:p-5">
         {/* Header */}
-        <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="flex items-start gap-4 mb-3">
+          {/* Avatar / Icon */}
+          <div className="shrink-0 w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-nebula-purple/40 bg-cosmic-dark/80 flex items-center justify-center">
+            {entry.image ? (
+              <Image
+                src={entry.image}
+                alt={entry.name}
+                width={56}
+                height={56}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <User className="w-5 h-5 text-nebula-purple/60" />
+            )}
+          </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-1.5">
               <span
@@ -2017,6 +2066,20 @@ function WikiCard({ entry, isExpanded, onToggle }: { entry: WikiEntry; isExpande
         {/* Expanded details */}
         {isExpanded && (
           <div className="mt-4 pt-3 border-t border-cosmic-border/30 space-y-3">
+            {/* Large portrait */}
+            {entry.image && (
+              <div className="flex justify-center">
+                <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-xl overflow-hidden border-2 border-nebula-purple/30 shadow-lg shadow-nebula-purple/10">
+                  <Image
+                    src={entry.image}
+                    alt={entry.name}
+                    width={160}
+                    height={160}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            )}
             <p className="text-sm text-cosmic-text/90 leading-relaxed">
               {entry.description}
             </p>
