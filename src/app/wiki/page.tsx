@@ -20,6 +20,7 @@ import {
   X,
   Scroll,
   User,
+  ExternalLink,
 } from "lucide-react";
 
 /* ═══════════════════════════════════════════════════════════════
@@ -27,6 +28,14 @@ import {
    ═══════════════════════════════════════════════════════════════ */
 
 type Category = "キャラクター" | "用語" | "組織" | "地理" | "技術" | "歴史";
+
+type NarrativeTier = "core" | "sub";
+
+interface SourceLink {
+  url: string;
+  label: string;
+  tier: NarrativeTier;
+}
 
 interface WikiEntry {
   id: string;
@@ -39,6 +48,7 @@ interface WikiEntry {
   affiliation?: string;
   tier?: string;
   image?: string;
+  sourceLinks?: SourceLink[];
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -59,6 +69,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "Gigapolis西大陸",
     tier: "神格・歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Diana.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/DianaWorld.txt", label: "Diana's Story", tier: "core" }],
   },
   {
     id: "Jen",
@@ -71,6 +82,11 @@ const CHARACTERS: WikiEntry[] = [
     era: "E319〜現在",
     affiliation: "Valoria連合圏",
     tier: "Tier 1",
+    sourceLinks: [
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep1.txt", label: "Jen's Story Ep1", tier: "sub" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep2.txt", label: "Jen's Story Ep2", tier: "sub" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep3.txt", label: "Jen's Story Ep3", tier: "sub" },
+    ],
   },
   {
     id: "Tina/Gue",
@@ -96,6 +112,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "Selinopolis（旧Gigapolis）",
     tier: "神格・歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/CeliaDminix.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/nebura.txt", label: "Alpha Cain & Celia Dominix's Story", tier: "core" }],
   },
   {
     id: "アルファ・ケイン",
@@ -108,6 +125,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E318〜",
     affiliation: "シャドウ・リベリオン",
     tier: "神格・歴史的人物",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/nebura.txt", label: "Alpha Cain & Celia Dominix's Story", tier: "core" }],
   },
   {
     id: "エリオス・ウォルド",
@@ -157,6 +175,11 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 1",
     image: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirelNova.png",
+    sourceLinks: [
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/laylastats.txt", label: "Layla's Battle Records 1", tier: "core" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/laylastats2.txt", label: "Layla's Battle Records 2", tier: "core" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/LAYLA.txt", label: "Layla Virel Nova's Story", tier: "sub" },
+    ],
   },
   {
     id: "弦太郎",
@@ -183,6 +206,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第一世代（創設者）",
     tier: "神格・歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/KateClaudia.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/kateclaudiaandlilliesteiner.txt", label: "Kate Claudia & Lillie Steiner's Story", tier: "core" }],
   },
   {
     id: "Kate Patton",
@@ -196,6 +220,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/KatePatton.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff", tier: "sub" }],
   },
   {
     id: "Lily Steiner",
@@ -209,6 +234,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第一世代（創設者）",
     tier: "神格・歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/LillieSteiner.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/kateclaudiaandlilliesteiner.txt", label: "Kate Claudia & Lillie Steiner's Story", tier: "core" }],
   },
   {
     id: "Lillie Ardent",
@@ -222,6 +248,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/LillieArdent.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff", tier: "sub" }],
   },
   {
     id: "ミナ・エウレカ・エルンスト",
@@ -235,6 +262,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第二世代 / リミナル・フォージ",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/MinaEurekaErnst.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff", tier: "sub" }],
   },
   {
     id: "Ninny Offenbach",
@@ -248,6 +276,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/NinnyOffenbach.png",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Auralishentai.txt", label: "AURALIS Spinoff", tier: "sub" }],
   },
 
   /* Iris/Crescent */
@@ -263,6 +292,12 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "トリニティ・アライアンス / 元ヴァーミリオン諜報機関長",
     tier: "Tier 1",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Iris.png",
+    sourceLinks: [
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_1.txt", label: "Iris's Story Ep1", tier: "core" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_2.txt", label: "Iris's Story Ep2", tier: "core" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_3.txt", label: "Iris's Story Ep3", tier: "core" },
+      { url: "https://raw.githubusercontent.com/gentaron/edutext/main/IRIS_4.txt", label: "Iris's Story Ep4", tier: "core" },
+    ],
   },
   {
     id: "ウィリー",
@@ -1954,6 +1989,50 @@ function StarField() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   CANON SOURCE LINKS (used in WikiCard)
+   ═══════════════════════════════════════════════════════════════ */
+function CanonSourceLinks({ links }: { links: SourceLink[] }) {
+  return (
+    <div className="mt-3 pt-3 border-t border-cosmic-border/30">
+      <p className="text-[10px] text-cosmic-muted mb-2 uppercase tracking-wider font-bold flex items-center gap-1.5">
+        <Scroll className="w-3 h-3" />
+        正典ソース
+      </p>
+      <div className="space-y-1.5">
+        {links.map((link, idx) => {
+          const isCore = link.tier === "core";
+          return (
+            <a
+              key={idx}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={
+                isCore
+                  ? "flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-gold-accent/20 bg-gold-accent/5 text-xs text-gold-accent hover:bg-gold-accent/10 transition-all duration-200 hover:scale-[1.01]"
+                  : "flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-electric-blue/15 bg-electric-blue/5 text-xs text-electric-blue/80 hover:bg-electric-blue/10 transition-all duration-200 hover:scale-[1.01]"
+              }
+            >
+              <ExternalLink className="w-3 h-3 shrink-0" />
+              <span className="truncate">{link.label}</span>
+              <span
+                className={
+                  isCore
+                    ? "ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 bg-gold-accent/20 text-gold-accent"
+                    : "ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 bg-electric-blue/15 text-electric-blue/70"
+                }
+              >
+                {isCore ? "Core" : "Sub"}
+              </span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    WIKI CARD COMPONENT
    ═══════════════════════════════════════════════════════════════ */
 
@@ -2084,6 +2163,9 @@ function WikiCard({ entry, isExpanded, onToggle }: { entry: WikiEntry; isExpande
                 </div>
               )}
             </div>
+            {entry.sourceLinks && entry.sourceLinks.length > 0 && (
+              <CanonSourceLinks links={entry.sourceLinks} />
+            )}
           </div>
         )}
       </div>

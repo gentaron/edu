@@ -1,0 +1,342 @@
+Date,Opponent,Outcome,Method,Duration,Location
+2094-01-10,Plasma Wraith,Victory,Lightning Strike,4:22,Energy Plant
+2094-01-15,Cyber Fang,Victory,Electrified Punch,3:45,Undercity Slums
+2094-01-22,Neon Viper,Victory,Nanofiber Kick,5:10,Neon Plaza
+2094-02-01,Shadow Drone,Victory,Shockwave Blast,4:00,Industrial District
+2094-02-08,Steel Marauder,Victory,Cybernetic Grapple,3:55,Warehouse Zone
+2094-02-15,Glint Reaver,Victory,Lightning Strike,4:30,Colosseum
+2094-02-22,Flux Siren,Loss,Psychic Overload,6:12,Undercity Sewers
+2094-03-01,Blaze Warden,Victory,Jet-Powered Spin,3:40,Spire Arena
+2094-03-08,Star Vindicator,Victory,Electrified Punch,4:15,Orbital Port
+2094-03-15,Chroma Blade,Victory,Nanofiber Kick,3:50,Neon Market
+2094-03-22,Slime Fragment,Victory,Shockwave Blast,5:20,Undercity Depths
+2094-03-29,Iron Vortex,Victory,Lightning Strike,4:10,Factory Ruins
+2094-04-05,Lunar Fang,Victory,Cybernetic Grapple,3:45,Colosseum
+2094-04-12,Thundercoil,Victory,Electrified Punch,4:25,Power Grid
+2094-04-19,Prism Wraith,Victory,Jet-Powered Spin,3:30,Neon Plaza
+2094-04-26,Glint Reaver,Victory,Shockwave Blast,4:00,Undercity Slums
+2094-05-03,Slime Swarm,Victory,Lightning Strike,5:15,Industrial District
+2094-05-10,Cipher Blaze,Victory,Nanofiber Kick,3:50,Warehouse Zone
+2094-05-17,Nova Wisp,Victory,Electrified Punch,4:20,Spire Arena
+2094-05-24,Shade Pulse,Victory,Jet-Powered Spin,3:45,Neon Market
+2094-05-31,Starcoil,Victory,Shockwave Blast,4:10,Colosseum
+2094-06-07,Obsidian Spark,Victory,Lightning Strike,3:55,Undercity Sewers
+2094-06-14,Neon Fang,Victory,Cybernetic Grapple,4:30,Power Grid
+2094-06-21,Thunder Ember,Victory,Electrified Punch,3:40,Neon Plaza
+2094-06-28,Glint Carver,Victory,Nanofiber Kick,4:05,Industrial District
+2094-07-05,Prism Bolt,Victory,Shockwave Blast,3:50,Warehouse Zone
+2094-07-12,Flux Reaver,Victory,Lightning Strike,4:15,Spire Arena
+2094-07-19,Aurora Wraith,Victory,Jet-Powered Spin,3:30,Colosseum
+2094-07-26,Storm Vindicator,Victory,Electrified Punch,4:00,Neon Market
+2094-08-02,Shadow Flux,Victory,Nanofiber Kick,3:45,Undercity Depths
+2094-08-09,Night Vortex,Victory,Shockwave Blast,4:20,Factory Ruins
+2094-08-16,Blaze Siren,Victory,Lightning Strike,3:55,Power Grid
+2094-08-23,Star Pulse,Victory,Cybernetic Grapple,4:10,Neon Plaza
+2094-08-30,Iron Ember,Victory,Electrified Punch,3:40,Industrial District
+2094-09-06,Neon Striker,Victory,Jet-Powered Spin,4:05,Warehouse Zone
+2094-09-13,Thunder Wisp,Victory,Shockwave Blast,3:50,Spire Arena
+2094-09-20,Glint Fang,Victory,Nanofiber Kick,4:15,Colosseum
+2094-09-27,Shade Bolt,Victory,Lightning Strike,3:30,Undercity Sewers
+2094-10-04,Prism Carver,Victory,Electrified Punch,4:00,Neon Market
+2094-10-11,Flux Spark,Victory,Jet-Powered Spin,3:45,Power Grid
+2094-10-18,Obsidian Reaver,Victory,Shockwave Blast,4:20,Industrial District
+2094-10-25,Aurora Pulse,Victory,Nanofiber Kick,3:55,Warehouse Zone
+2094-11-01,Storm Wraith,Victory,Lightning Strike,4:10,Spire Arena
+2094-11-08,Celestine Claw,Victory,Electrified Punch,3:40,Colosseum
+2094-11-15,Shadow Pulse,Victory,Jet-Powered Spin,4:05,Neon Plaza
+2094-11-22,Night Wraith,Victory,Shockwave Blast,3:50,Undercity Depths
+2094-11-29,Blaze Vindicator,Victory,Nanofiber Kick,4:15,Factory Ruins
+2094-12-06,Iron Claw,Victory,Lightning Strike,3:30,Power Grid
+2094-12-13,Slime Fragment,Victory,Electrified Punch,4:20,Undercity Sewers
+2094-12-20,Neon Bolt,Victory,Jet-Parvowered Spin,3:45,Neon Market
+2094-12-27,Thunder Reaver,Victory,Shockwave Blast,4:00,Industrial District
+2095-01-03,Shade Wisp,Victory,Nanofiber Kick,3:55,Warehouse Zone
+2095-01-10,Prism Striker,Victory,Lightning Strike,4:10,Spire Arena
+2095-01-17,Flux Fang,Victory,Electrified Punch,3:40,Colosseum
+2095-01-24,Aurora Carver,Victory,Jet-Powered Spin,4:05,Neon Plaza
+2095-01-31,Storm Bolt,Victory,Shockwave Blast,3:50,Undercity Depths
+2095-02-07,Celestine Pulse,Victory,Nanofiber Kick,4:15,Factory Ruins
+2095-02-14,Shadow Spark,Victory,Lightning Strike,3:30,Power Grid
+2095-02-21,Night Vindicator,Victory,Electrified Punch,4:00,Neon Market
+2095-02-28,Blaze Wraith,Victory,Jet-Powered Spin,3:45,Industrial District
+2095-03-07,Astral Flow,Victory,Shockwave Blast,4:10,Warehouse Zone
+2095-03-14,Iron Reaver,Victory,Nanofiber Kick,3:55,Spire Arena
+2095-03-21,Neon Pulse,Victory,Lightning Strike,4:20,Colosseum
+2095-03-28,Slime Swarm,Victory,Electrified Punch,5:00,Undercity Sewers
+2095-04-04,Strong-Arm Murderer,Victory,Cybernetic Grapple,3:40,Derelict Warehouse
+2095-04-11,Shade Siren,Victory,Jet-Powered Spin,4:05,Neon Plaza
+2095-04-18,Thunder Flux,Victory,Shockwave Blast,3:50,Power Grid
+2095-04-25,Celestine Reaver,Victory,Nanofiber Kick,4:15,Industrial District
+2095-05-02,Neon Wisp,Victory,Lightning Strike,3:30,Warehouse Zone
+2095-05-09,Storm Claw,Victory,Electrified Punch,4:00,Spire Arena
+2095-05-16,Blaze Striker,Victory,Jet-Powered Spin,3:45,Colosseum
+2095-05-23,Star Bolt,Victory,Shockwave Blast,4:10,Neon Market
+2095-05-30,Iron Spark,Loss,Psychic Ambush,6:20,Undercity Depths
+2095-06-06,Prism Fang,Victory,Nanofiber Kick,3:55,Factory Ruins
+2095-06-13,Aurora Wisp,Victory,Lightning Strike,4:00,Power Grid
+2095-06-20,Slime Beast,Loss,Mucus Trap,7:10,Undercity Sewers
+2095-06-27,Glint Siren,Victory,Electrified Punch,3:50,Neon Plaza
+2095-07-04,Shade Bolt,Victory,Jet-Powered Spin,4:05,Industrial District
+2095-07-11,Thunder Wraith,Victory,Shockwave Blast,3:40,Warehouse Zone
+2095-07-18,Neon Claw,Victory,Nanofiber Kick,4:15,Spire Arena
+2095-07-25,Celestine Spark,Victory,Lightning Strike,3:30,Colosseum
+2095-08-01,Slime Fragment,Victory,Electrified Punch,4:20,Undercity Depths
+2095-08-08,Flux Wisp,Victory,Jet-Powered Spin,3:45,Neon Market
+2095-08-15,Star Fang,Victory,Shockwave Blast,4:00,Power Grid
+2095-08-22,Aurora Claw,Victory,Nanofiber Kick,3:55,Industrial District
+2095-08-29,Prism Siren,Victory,Lightning Strike,4:10,Warehouse Zone
+2095-09-05,Ken (Possessed),Loss,Supernatural Binding,6:30,Ruined Plaza
+2095-09-12,Slime Swarm,Victory,Electrified Punch,5:00,Undercity Sewers
+2095-09-19,Mirage,Victory,Shockwave Blast,4:45,Colosseum
+2095-09-26,Slime Core (w/ Ayaka),Victory,Lightning Strike & Bikini Soul Burst,6:15,Undercity Reactor
+2095-10-03,Neon Vindicator,Victory,Nanofiber Kick,3:50,Neon Plaza
+2095-10-10,Thunder Spark,Loss,Psychic Overload,5:55,Power Grid
+2095-10-17,Shade Wraith,Victory,Electrified Punch,4:05,Industrial District
+2095-10-24,Blaze Pulse,Victory,Jet-Powered Spin,3:40,Warehouse Zone
+2095-10-31,Star Reaver,Victory,Shockwave Blast,4:15,Spire Arena
+2095-11-07,Iron Wisp,Loss,Mucus Ambush,6:25,Undercity Depths
+2095-11-14,Prism Claw,Victory,Nanofiber Kick,3:50,Colosseum
+2095-11-21,Flux Siren,Victory,Lightning Strike,4:00,Neon Market
+2095-11-28,Slime Fragment,Loss,Psychic Trap,5:40,Undercity Sewers
+2095-12-05,Aurora Bolt,Victory,Electrified Punch,3:45,Power Grid
+2095-12-12,Neon Fang,Loss,Overwhelming Swarm,6:10,Undercity Plaza
+2095-12-19,Void Stalker,Victory,Lightning Strike,4:10,Colosseum
+2095-12-26,Crimson Flux,Victory,Electrified Punch,3:50,Neon Plaza
+2096-01-02,Slime Offshoot,Victory,Shockwave Blast,5:05,Undercity Sewers
+2096-01-09,Phantom Blade,Victory,Nanofiber Kick,4:00,Industrial District
+2096-01-16,Star Reaver,Victory,Jet-Powered Spin,3:45,Spire Arena
+2096-01-23,Obsidian Wraith,Victory,Cybernetic Grapple,4:20,Power Grid
+2096-01-30,Neon Siren,Victory,Lightning Strike,3:55,Neon Market
+2096-02-06,Thunder Pulse,Victory,Electrified Punch,4:15,Warehouse Zone
+2096-02-13,Glint Fang,Victory,Shockwave Blast,3:40,Colosseum
+2096-02-20,Shade Vortex,Victory,Nanofiber Kick,4:05,Undercity Depths
+2096-02-27,Prism Spark,Victory,Jet-Powered Spin,3:50,Factory Ruins
+2096-03-05,Aurora Claw,Victory,Lightning Strike,4:10,Neon Plaza
+2096-03-12,Storm Wisp,Victory,Electrified Punch,3:45,Power Grid
+2096-03-19,Celestine Bolt,Victory,Shockwave Blast,4:00,Industrial District
+2096-03-26,Shadow Reaver,Victory,Nanofiber Kick,3:55,Spire Arena
+2096-04-02,Blaze Fang,Victory,Cybernetic Grapple,4:20,Colosseum
+2096-04-09,Star Pulse,Victory,Lightning Strike,3:50,Neon Market
+2096-04-16,Iron Wraith,Victory,Electrified Punch,4:05,Warehouse Zone
+2096-04-23,Neon Striker,Victory,Jet-Powered Spin,3:40,Undercity Sewers
+2096-04-30,Thunder Siren,Victory,Shockwave Blast,4:15,Factory Ruins
+2096-05-07,Glint Pulse,Victory,Nanofiber Kick,3:55,Spire Arena
+2096-05-14,Shade Claw,Victory,Lightning Strike,4:00,Neon Plaza
+2096-05-21,Prism Wisp,Victory,Electrified Punch,3:45,Power Grid
+2096-05-28,Slime Fragment,Loss,Psychic Trap,6:10,Undercity Depths
+2096-06-04,Aurora Reaver,Victory,Shockwave Blast,4:20,Industrial District
+2096-06-11,Storm Fang,Victory,Nanofiber Kick,3:50,Colosseum
+2096-06-18,Celestine Wraith,Victory,Jet-Powered Spin,4:05,Warehouse Zone
+2096-06-25,Shadow Spark,Victory,Lightning Strike,3:40,Neon Market
+2096-07-02,Blaze Siren,Victory,Electrified Punch,4:15,Spire Arena
+2096-07-09,Star Vortex,Victory,Shockwave Blast,3:55,Undercity Sewers
+2096-07-16,Iron Pulse,Victory,Nanofiber Kick,4:00,Factory Ruins
+2096-07-23,Neon Bolt,Victory,Cybernetic Grapple,3:45,Power Grid
+2096-07-30,Thunder Wisp,Victory,Lightning Strike,4:10,Neon Plaza
+2096-08-06,Glint Reaver,Victory,Electrified Punch,3:50,Industrial District
+2096-08-13,Shade Fang,Victory,Jet-Powered Spin,4:05,Colosseum
+2096-08-20,Prism Siren,Victory,Shockwave Blast,3:40,Warehouse Zone
+2096-08-27,Aurora Pulse,Victory,Nanofiber Kick,4:15,Spire Arena
+2096-09-03,Storm Wraith,Victory,Lightning Strike,3:55,Neon Market
+2096-09-10,Celestine Claw,Victory,Electrified Punch,4:00,Undercity Depths
+2096-09-17,Shadow Bolt,Loss,Overwhelming Swarm,6:25,Undercity Sewers
+2096-09-24,Blaze Wisp,Victory,Shockwave Blast,3:50,Power Grid
+2096-10-01,Star Reaver,Victory,Nanofiber Kick,4:10,Industrial District
+2096-10-08,Iron Fang,Victory,Jet-Powered Spin,3:45,Colosseum
+2096-10-15,Neon Pulse,Victory,Lightning Strike,4:05,Warehouse Zone
+2096-10-22,Thunder Spark,Victory,Electrified Punch,3:50,Spire Arena
+2096-10-29,Glint Siren,Victory,Shockwave Blast,4:15,Neon Market
+2096-11-05,Shade Wraith,Victory,Nanofiber Kick,3:40,Undercity Depths
+2096-11-12,Prism Bolt,Victory,Cybernetic Grapple,4:00,Factory Ruins
+2096-11-19,Aurora Fang,Victory,Lightning Strike,3:55,Power Grid
+2096-11-26,Storm Pulse,Victory,Electrified Punch,4:10,Neon Plaza
+2096-12-03,Slime Swarm,Victory,Shockwave Blast,5:00,Undercity Sewers
+2096-12-10,Celestine Wisp,Victory,Nanofiber Kick,3:45,Industrial District
+2096-12-17,Shadow Siren,Victory,Jet-Powered Spin,4:05,Colosseum
+2096-12-24,Blaze Claw,Victory,Lightning Strike,3:50,Warehouse Zone
+2096-12-31,Star Bolt,Victory,Electrified Punch,4:15,Spire Arena
+2097-01-07,Iron Wraith,Victory,Shockwave Blast,3:40,Neon Market
+2097-01-14,Neon Fang,Victory,Nanofiber Kick,4:00,Undercity Depths
+2097-01-21,Thunder Reaver,Victory,Cybernetic Grapple,3:55,Factory Ruins
+2097-01-28,Glint Pulse,Victory,Lightning Strike,4:10,Power Grid
+2097-02-04,Shade Spark,Victory,Electrified Punch,3:45,Neon Plaza
+2097-02-11,Prism Wraith,Victory,Jet-Powered Spin,4:05,Industrial District
+2097-02-18,Aurora Siren,Victory,Shockwave Blast,3:50,Colosseum
+2097-02-25,Storm Bolt,Victory,Nanofiber Kick,4:15,Warehouse Zone
+2097-03-04,Slime Offshoot,Victory,Lightning Strike,5:10,Undercity Sewers
+2097-03-11,Celestine Fang,Victory,Electrified Punch,3:40,Spire Arena
+2097-03-18,Shadow Pulse,Loss,Psychic Overload,6:20,Undercity Depths
+2097-03-25,Blaze Wisp,Victory,Shockwave Blast,4:00,Neon Market
+2097-04-01,Star Reaver,Victory,Nanofiber Kick,3:55,Power Grid
+2097-04-08,Iron Claw,Victory,Jet-Powered Spin,4:10,Industrial District
+2097-04-15,Neon Siren,Victory,Lightning Strike,3:45,Colosseum
+2097-04-22,Thunder Wraith,Victory,Electrified Punch,4:05,Warehouse Zone
+2097-04-29,Glint Bolt,Victory,Shockwave Blast,3:50,Spire Arena
+2097-05-06,Shade Fang,Victory,Nanofiber Kick,4:15,Neon Plaza
+2097-05-13,Prism Pulse,Victory,Cybernetic Grapple,3:40,Undercity Sewers
+2097-05-20,Aurora Wisp,Victory,Lightning Strike,4:00,Factory Ruins
+2097-05-27,Storm Siren,Victory,Electrified Punch,3:55,Power Grid
+2097-06-03,Slime Fragment (w/ Ayaka),Victory,Lightning Strike & Bikini Soul Burst,5:30,Undercity Reactor
+2097-06-10,Celestine Bolt,Victory,Shockwave Blast,4:10,Neon Market
+2097-06-17,Shadow Reaver,Loss,Mucus Ambush,6:15,Undercity Depths
+2097-06-24,Blaze Fang,Victory,Nanofiber Kick,3:50,Colosseum
+2097-07-01,Star Pulse,Victory,Jet-Powered Spin,4:05,Warehouse Zone
+2097-07-08,Iron Wisp,Victory,Lightning Strike,3:40,Spire Arena
+2097-07-15,Neon Claw,Victory,Electrified Punch,4:15,Neon Plaza
+2097-07-22,Thunder Siren,Victory,Shockwave Blast,3:55,Industrial District
+2097-07-29,Glint Wraith,Victory,Nanofiber Kick,4:00,Power Grid
+2097-08-05,Shade Pulse,Victory,Cybernetic Grapple,3:45,Undercity Sewers
+2097-08-12,Prism Fang,Loss,Psychic Trap,6:10,Undercity Depths
+2097-08-19,Aurora Bolt,Victory,Lightning Strike,4:05,Neon Market
+2097-08-26,Storm Wisp,Victory,Electrified Punch,3:50,Colosseum
+2097-09-02,Celestine Reaver,Victory,Shockwave Blast,4:15,Warehouse Zone
+2097-09-09,Shadow Siren,Victory,Nanofiber Kick,3:40,Spire Arena
+2097-09-16,Blaze Pulse,Victory,Jet-Powered Spin,4:00,Industrial District
+2097-09-23,Star Fang,Victory,Lightning Strike,3:55,Power Grid
+2097-09-30,Slime Swarm,Loss,Overwhelming Swarm,6:30,Undercity Sewers
+2097-10-07,Iron Bolt,Victory,Electrified Punch,4:10,Neon Plaza
+2097-10-14,Neon Wraith,Victory,Shockwave Blast,3:45,Factory Ruins
+2097-10-21,Thunder Pulse,Victory,Nanofiber Kick,4:05,Colosseum
+2097-10-28,Glint Siren,Loss,Psychic Overload,6:20,Undercity Depths
+2097-11-04,Shade Bolt,Victory,Lightning Strike,3:50,Spire Arena
+2097-11-11,Prism Wisp,Victory,Electrified Punch,4:15,Neon Market
+2097-11-18,Aurora Fang,Victory,Shockwave Blast,3:40,Industrial District
+2097-11-25,Storm Claw,Victory,Nanofiber Kick,4:00,Colosseum
+2097-12-02,Eclipse Raider,Victory,Lightning Strike,3:50,Neon Plaza
+2097-12-09,Slime Offshoot,Victory,Shockwave Blast,5:10,Undercity Sewers
+2097-12-16,Volt Phantom,Victory,Electrified Punch,4:05,Industrial District
+2097-12-23,Star Wisp,Victory,Jet-Powered Spin,3:45,Spire Arena
+2097-12-30,Obsidian Fang,Victory,Cybernetic Grapple,4:15,Power Grid
+2098-01-06,Neon Pulse,Victory,Lightning Strike,3:55,Neon Market
+2098-01-13,Thunder Siren,Victory,Electrified Punch,4:10,Warehouse Zone
+2098-01-20,Glint Reaver,Victory,Shockwave Blast,3:40,Colosseum
+2098-01-27,Shade Vortex,Victory,Nanofiber Kick,4:05,Undercity Depths
+2098-02-03,Prism Spark,Victory,Jet-Powered Spin,3:50,Factory Ruins
+2098-02-10,Aurora Wraith,Victory,Lightning Strike,4:00,Neon Plaza
+2098-02-17,Storm Pulse,Victory,Electrified Punch,3:45,Power Grid
+2098-02-24,Celestine Bolt,Victory,Shockwave Blast,4:15,Industrial District
+2098-03-03,Shadow Fang,Victory,Nanofiber Kick,3:55,Spire Arena
+2098-03-10,Blaze Wisp,Victory,Cybernetic Grapple,4:10,Colosseum
+2098-03-17,Star Siren,Victory,Lightning Strike,3:50,Neon Market
+2098-03-24,Iron Pulse,Victory,Electrified Punch,4:05,Warehouse Zone
+2098-03-31,Neon Claw,Victory,Jet-Powered Spin,3:40,Undercity Sewers
+2098-04-07,Thunder Wraith,Victory,Shockwave Blast,4:15,Factory Ruins
+2098-04-14,Glint Fang,Victory,Nanofiber Kick,3:55,Spire Arena
+2098-04-21,Shade Pulse,Victory,Lightning Strike,4:00,Neon Plaza
+2098-04-28,Prism Wisp,Victory,Electrified Punch,3:45,Power Grid
+2098-05-05,Slime Fragment,Loss,Psychic Trap,6:20,Undercity Depths
+2098-05-12,Aurora Bolt,Victory,Shockwave Blast,4:10,Industrial District
+2098-05-19,Storm Siren,Victory,Nanofiber Kick,3:50,Colosseum
+2098-05-26,Celestine Wraith,Victory,Jet-Powered Spin,4:05,Warehouse Zone
+2098-06-02,Shadow Reaver,Victory,Lightning Strike,3:40,Neon Market
+2098-06-09,Blaze Pulse,Victory,Electrified Punch,4:15,Spire Arena
+2098-06-16,Star Fang,Victory,Shockwave Blast,3:55,Undercity Sewers
+2098-06-23,Iron Wisp,Victory,Nanofiber Kick,4:00,Factory Ruins
+2098-06-30,Neon Siren,Victory,Cybernetic Grapple,3:45,Power Grid
+2098-07-07,Thunder Pulse,Victory,Lightning Strike,4:10,Neon Plaza
+2098-07-14,Glint Wraith,Victory,Electrified Punch,3:50,Industrial District
+2098-07-21,Shade Bolt,Victory,Jet-Powered Spin,4:05,Colosseum
+2098-07-28,Prism Fang,Victory,Shockwave Blast,3:40,Warehouse Zone
+2098-08-04,Aurora Reaver,Victory,Nanofiber Kick,4:15,Spire Arena
+2098-08-11,Storm Wisp,Victory,Lightning Strike,3:55,Neon Market
+2098-08-18,Celestine Pulse,Victory,Electrified Punch,4:00,Undercity Depths
+2098-08-25,Shadow Siren,Loss,Overwhelming Swarm,6:25,Undercity Sewers
+2098-09-01,Blaze Wraith,Victory,Shockwave Blast,3:50,Power Grid
+2098-09-08,Star Pulse,Victory,Nanofiber Kick,4:10,Industrial District
+2098-09-15,Iron Fang,Victory,Jet-Powered Spin,3:45,Colosseum
+2098-09-22,Neon Bolt,Victory,Lightning Strike,4:05,Warehouse Zone
+2098-09-29,Thunder Reaver,Victory,Electrified Punch,3:50,Spire Arena
+2098-10-06,Glint Pulse,Victory,Shockwave Blast,4:15,Neon Market
+2098-10-13,Shade Wisp,Victory,Nanofiber Kick,3:40,Undercity Depths
+2098-10-20,Prism Siren,Victory,Cybernetic Grapple,4:00,Factory Ruins
+2098-10-27,Aurora Claw,Victory,Lightning Strike,3:55,Power Grid
+2098-11-03,Storm Fang,Victory,Electrified Punch,4:10,Neon Plaza
+2098-11-10,Slime Swarm,Victory,Shockwave Blast,5:00,Undercity Sewers
+2098-11-17,Celestine Wisp,Victory,Nanofiber Kick,3:45,Industrial District
+2098-11-24,Shadow Pulse,Victory,Jet-Powered Spin,4:05,Colosseum
+2098-12-01,Blaze Siren,Victory,Lightning Strike,3:50,Warehouse Zone
+2098-12-08,Star Wraith,Victory,Electrified Punch,4:15,Spire Arena
+2098-12-15,Iron Bolt,Victory,Shockwave Blast,3:40,Neon Market
+2098-12-22,Neon Wisp,Victory,Nanofiber Kick,4:00,Undercity Depths
+2098-12-29,Thunder Fang,Victory,Cybernetic Grapple,3:55,Factory Ruins
+2099-01-05,Glint Siren,Victory,Lightning Strike,4:10,Power Grid
+2099-01-12,Shade Reaver,Victory,Electrified Punch,3:45,Neon Plaza
+2099-01-19,Prism Pulse,Victory,Jet-Powered Spin,4:05,Industrial District
+2099-01-26,Aurora Wisp,Victory,Shockwave Blast,3:50,Colosseum
+2099-02-02,Storm Siren,Victory,Nanofiber Kick,4:15,Warehouse Zone
+2099-02-09,Slime Offshoot (w/ Ayaka),Victory,Lightning Strike & Bikini Soul Burst,5:25,Undercity Reactor
+2099-02-16,Celestine Fang,Victory,Electrified Punch,3:40,Spire Arena
+2099-02-23,Shadow Bolt,Loss,Psychic Overload,6:15,Undercity Depths
+2099-03-02,Blaze Pulse,Victory,Shockwave Blast,4:00,Neon Market
+2099-03-09,Star Siren,Victory,Nanofiber Kick,3:55,Power Grid
+2099-03-16,Iron Wraith,Victory,Jet-Powered Spin,4:10,Industrial District
+2099-03-23,Neon Fang,Victory,Lightning Strike,3:45,Colosseum
+2099-03-30,Thunder Pulse,Victory,Electrified Punch,4:05,Warehouse Zone
+2099-04-06,Glint Wisp,Victory,Shockwave Blast,3:50,Spire Arena
+2099-04-13,Shade Siren,Victory,Nanofiber Kick,4:15,Neon Plaza
+2099-04-20,Prism Bolt,Victory,Cybernetic Grapple,3:40,Undercity Sewers
+2099-04-27,Aurora Reaver,Victory,Lightning Strike,4:00,Factory Ruins
+2099-05-04,Storm Wisp,Victory,Electrified Punch,3:55,Power Grid
+2099-05-11,Slime Fragment,Loss,Mucus Ambush,6:20,Undercity Depths
+2099-05-18,Celestine Pulse,Victory,Shockwave Blast,4:10,Neon Market
+2099-05-25,Shadow Fang,Victory,Nanofiber Kick,3:45,Colosseum
+2099-06-01,Blaze Wraith,Victory,Jet-Powered Spin,4:05,Warehouse Zone
+2099-06-08,Star Pulse,Victory,Lightning Strike,3:50,Spire Arena
+2099-06-15,Iron Siren,Victory,Electrified Punch,4:15,Industrial District
+2099-06-22,Neon Wisp,Victory,Shockwave Blast,3:40,Power Grid
+2099-06-29,Thunder Bolt,Victory,Nanofiber Kick,4:00,Neon Plaza
+2099-07-06,Glint Fang,Victory,Cybernetic Grapple,3:55,Undercity Sewers
+2099-07-13,Shade Pulse,Loss,Psychic Trap,6:25,Undercity Depths
+2099-07-20,Prism Wraith,Victory,Lightning Strike,4:10,Colosseum
+2099-07-27,Aurora Siren,Victory,Electrified Punch,3:45,Warehouse Zone
+2099-08-03,Storm Fang,Victory,Shockwave Blast,4:05,Spire Arena
+2099-08-10,Celestine Wisp,Victory,Nanofiber Kick,3:50,Neon Market
+2099-08-17,Shadow Reaver,Victory,Jet-Powered Spin,4:15,Industrial District
+2099-08-24,Blaze Pulse,Victory,Lightning Strike,3:40,Power Grid
+2099-08-31,Star Fang,Loss,Overwhelming Swarm,6:30,Undercity Sewers
+2099-09-07,Iron Wisp,Victory,Electrified Punch,4:00,Colosseum
+2099-09-14,Neon Siren,Victory,Shockwave Blast,3:55,Warehouse Zone
+2099-09-21,Thunder Wraith,Victory,Nanofiber Kick,4:10,Spire Arena
+2099-09-28,Glint Pulse,Loss,Psychic Overload,6:15,Undercity Depths
+2099-10-05,Shade Bolt,Victory,Lightning Strike,3:50,Neon Plaza
+2099-10-12,Prism Fang,Victory,Electrified Punch,4:05,Industrial District
+2099-10-19,Aurora Wisp,Victory,Shockwave Blast,3:40,Colosseum
+2099-10-26,Storm Pulse,Victory,Nanofiber Kick,4:00,Spire Arena
+2099-11-02,Nova Striker,Victory,Lightning Strike,3:50,Neon Plaza
+2099-11-09,Slime Fragment,Victory,Shockwave Blast,5:05,Undercity Sewers
+2099-11-16,Phantom Wisp,Victory,Electrified Punch,4:10,Industrial District
+2099-11-23,Star Bolt,Victory,Jet-Powered Spin,3:45,Colosseum
+2099-11-30,Obsidian Pulse,Victory,Cybernetic Grapple,4:15,Power Grid
+2099-12-07,Neon Fang,Victory,Lightning Strike,3:55,Neon Market
+2099-12-14,Thunder Wraith,Victory,Electrified Punch,4:05,Warehouse Zone
+2099-12-21,Glint Siren,Victory,Shockwave Blast,3:40,Spire Arena
+2099-12-28,Shade Reaver,Victory,Nanofiber Kick,4:00,Undercity Depths
+2100-01-04,Prism Wisp,Victory,Jet-Powered Spin,3:50,Factory Ruins
+2100-01-11,Aurora Fang,Victory,Lightning Strike,4:10,Neon Plaza
+2100-01-18,Storm Siren,Victory,Electrified Punch,3:45,Power Grid
+2100-01-25,Celestine Wraith,Victory,Shockwave Blast,4:05,Industrial District
+2100-02-01,Shadow Pulse,Victory,Nanofiber Kick,3:55,Colosseum
+2100-02-08,Blaze Wisp,Victory,Cybernetic Grapple,4:15,Neon Market
+2100-02-15,Star Siren,Victory,Lightning Strike,3:50,Warehouse Zone
+2100-02-22,Iron Bolt,Victory,Electrified Punch,4:00,Spire Arena
+2100-02-29,Neon Wraith,Victory,Shockwave Blast,3:40,Undercity Sewers
+2100-03-07,Thunder Pulse,Victory,Nanofiber Kick,4:10,Factory Ruins
+2100-03-14,Glint Fang,Victory,Jet-Powered Spin,3:45,Power Grid
+2100-03-21,Shade Siren,Victory,Lightning Strike,4:05,Neon Plaza
+2100-03-28,Prism Bolt,Victory,Electrified Punch,3:55,Industrial District
+2100-04-04,Slime Offshoot,Loss,Psychic Trap,6:20,Undercity Depths
+2100-04-11,Aurora Wisp,Victory,Shockwave Blast,4:00,Colosseum
+2100-04-18,Storm Fang,Victory,Nanofiber Kick,3:50,Spire Arena
+2100-04-25,Celestine Pulse,Victory,Lightning Strike,4:15,Neon Market
+2100-05-02,Shadow Wraith,Victory,Electrified Punch,3:40,Warehouse Zone
+2100-05-09,Blaze Siren,Victory,Jet-Powered Spin,4:05,Power Grid
+2100-05-16,Star Pulse,Victory,Shockwave Blast,3:55,Industrial District
+2100-05-23,Iron Wisp,Victory,Nanofiber Kick,4:10,Colosseum
+2100-05-30,Neon Siren,Victory,Cybernetic Grapple,3:45,Undercity Sewers
+2100-06-06,Thunder Bolt,Victory,Lightning Strike,4:00,Neon Plaza
+2100-06-13,Glint Pulse,Victory,Electrified Punch,3:50,Spire Arena
+2100-06-20,Shade Fang,Loss,Overwhelming Swarm,6:25,Undercity Depths
+2100-06-27,Prism Wraith,Victory,Shockwave Blast,4:05,Warehouse Zone
+2100-07-04,Slime Fragment (w/ Ayaka),Victory,Lightning Strike & Bikini Soul Burst,5:15,Undercity Reactor
+2100-07-11,Aurora Siren,Victory,Nanofiber Kick,3:55,Colosseum
+2100-07-18,Storm Wisp,Loss,Psychic Overload,6:10,Undercity Sewers
