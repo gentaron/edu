@@ -490,7 +490,7 @@ const TIMELINE_DATA: { period: string; range: string; color: string; borderColor
       e("E275〜E288: メルディア戦争 — ロンバルディア帝国 vs セクスタス連合（M104銀河周辺勢力）。次元兵器投入でロンバルディア勝利。第五次繁栄を招く", "M104銀河"),
       e("E289〜E300: 第五次繁栄 — 人口4億に達し、メガタワーは高さ3kmに拡張。ディメンション・ブリッジ（恒久的星間ポータル）でM104銀河全体との貿易を10倍に拡大", "Gigapolis"),
       e("【Eros-7】ZAMLTと戦略的提携を結び搾取技術が企業化。搾取触手・搾取ヒル・搾取バクテリアを標準化。ネオンクレーター宮殿は1.5km・200階に拡張。年間1兆nトークンの経済規模に", "Eros-7"),
-      e("E290: AURALIS Collective第一世代正式組織化 — Kate Patton初代・Lillie Ardent初代を中心とする少人数集団", "西大陸"),
+      e("E290: AURALIS Collective第一世代正式組織化 — Kate Claudia・Lily Steinerを中心とする少人数集団", "西大陸"),
       e("【ZAMLT E301〜E318】5超巨大企業国家の統合体として誕生。企業数1億超。量子ファイナンス・コアでnトークン取引の95%を掌握。A籍制度をZ1〜Z50に再編、非従業員は事実上奴隷階級へ", "Gigapolis"),
       e("【Eros-7 ZAMLT期】男性指令省とZAMLT量子バイオバンク統合。搾取セッション1日3回に増加。シャドウ・ユニオンがナノハッキング技術でバイオリアクター妨害活動を展開", "Eros-7"),
       e("E318: アルファ・ケイン覚醒 — 戦士決定戦の元チャンピオン。シャドウ・リベリオンのリーダーとしてZAMLT量子ファイナンス・コアにハッキング。ギガポリス解放戦でメガタワーを占拠、資産30%を地域コミュニティに譲渡", "Gigapolis"),
@@ -515,7 +515,7 @@ const TIMELINE_DATA: { period: string; range: string; color: string; borderColor
       e("【スライム危機 E380〜E400】ZAMLT時代の過剰バイオエンジニアリング実験が原因で搾取生物が遺伝子変異しスライム形態に進化。ギガポリスの地下インフラに侵入、エネルギー供給70%停止、人口20%（約8,000万人）避難", "Gigapolis"),
       e("【レイラの英雄的活躍】レイラ・ヴィレル・ノヴァ — 低階層（A120）出身のサイバネティック強化戦士。ナノファイバーブーツ・強化グローブ（100tパンチ力）装備。オアシス・ハウスを拠点にプラズマカノンでスライム焼却、感染拡大30%抑制。認知度96%・勝率92%", "Gigapolis"),
       e("【アヤカ・リンの活躍】Lv.842の搾精生物専門ハンター。ビキニバリア・カウパー波を駆使しアンダーグリッド深部でスライムの巣を破壊。プライマリー・フィールド経由で全市民に戦闘記録中継", "Gigapolis"),
-      e("E400: スライム危機終息。AURALISはエヴァトロンの文化弾圧により解体 — Kate初代・Lillie初代は逆捕・消息不明。レイラは冷凍保存（実力による特別措置。サイバネティクスによる長命ではない）", "Gigapolis"),
+      e("E400: スライム危機終息。AURALISはエヴァトロンの文化弾圧により解体 — Kate Claudia・Lily Steinerは逆捕・消息不明。レイラは冷凍保存（実力による特別措置。サイバネティクスによる長命ではない）", "Gigapolis"),
       e("E400 (同時): エヴァトロンがGigapolisを支配しエヴァポリスに改名（エヴァトロン側の一方的名称に過ぎない）。Tina/Gueが地下街最深部を実効支配開始", "Gigapolis"),
       e("【Eros-7 E380〜E400】スライム危機がEros-7にも波及。カーラ・ヴェルムがスクイーズ・アビス（560階地下搾取施設）を建設。搾取プラズマ弾（スライムエネルギー凝縮破壊兵器）を生産", "Eros-7"),
     ],
@@ -527,7 +527,7 @@ const TIMELINE_DATA: { period: string; range: string; color: string; borderColor
     borderColor: "border-red-400/30",
     events: [
       e("E400〜E450: エヴァトロンがGigapolisを支配しエヴァポリスに改名（ただしこの名称はエヴァトロン側の一方的なものに過ぎない）。AURALISは地下活動へ", "Gigapolis"),
-      e("Kate初代・Lillie初代は逆捕・消息不明。レイラはその実力ゆえの特別措置で冷凍保存", "Gigapolis"),
+      e("Kate Claudia・Lily Steinerは逆捕・消息不明。レイラはその実力ゆえの特別措置で冷凍保存", "Gigapolis"),
       e("E420: エヴァトロン軍極秘Σ-Unit設立 — 精神操作・生体改造技術。のちのAlpha Venomの起源（整合性原則③）", "Gigapolis"),
       e("【テリアン反乱】テリアン反乱軍の指導者エリオス・ウォルドがエヴァトロンに抵抗", "Gigapolis"),
       e("E470: エリオス・ウォルド処刑。テクロサス東方支隊がクレセント大地方に常駐開始", "東大陸・クレセント"),
@@ -564,7 +564,7 @@ const TIMELINE_DATA: { period: string; range: string; color: string; borderColor
       e("【トリニティ・アライアンス結成 E520】アイリスがミエルテンガ首脳に就任（フィオナの推薦による）。ヴァーミリオン・ミエルテンガ・ボグダス・ジャベリンを核とした3勢力連合「トリニティ・アライアンス」発足。クレセントはV7 vs トリニティの二大陣営へ", "ミエルテンガ"),
       e("E521: ミナ卒業（22歳）。放浪開始。Genesis Vault前身ブログ開設。ボグダス・ジャベリンに参加", "惑星ビブリオ"),
       e("【次元ピラミッド全4層構造】Tier Ω（高次元世界: フン8次元/ササン9次元/ホラズム10次元/ティムール11次元）→ Tier Σ（ペルセポネ仮想宇宙）→ Tier Ε（E16通常次元）→ Tier Δ（AD2026地球）", "E16星系"),
-      e("E522: AURALIS第二世代正式発足 — Kate Patton(新代)・Lillie Ardent(新代)・レイラ（冷凍保存から復活・ミナと同年齢外見）・ミナ・Ninny Offenbachの5名", "西大陸"),
+      e("E522: AURALIS第二世代正式発足 — Kate Patton・Lillie Ardent・レイラ（冷凍保存から復活・ミナと同年齢外見）・ミナ・Ninny Offenbachの5名", "西大陸"),
       e("E524: 諸世界連邦サミット — ギガポリスのセントラル・タワーで開催。星間平和協定締結。ミナ参加。地球AD2026情報に初接触。ナシゴレン初体験（サミット会場屋台）", "Gigapolis"),
       e("【Eros-7 E525】アヤカ・リンの介入 — ガロ（シャドウ・ユニオン男性リーダー）・ゼナ（女性商人）と同盟を結びマトリカル・リフォーム運動を組織。労働時間短縮・精子レジストリ男女平等化", "Eros-7"),
       e("E525: リミナル・フォージ立ち上げ — ApoloniumとDimension Horizon技術を組み合わせた時相放送（Temporal Broadcast）。E528年の芸術を地球AD2026年のインターネット上に放送開始", "西大陸"),
@@ -694,7 +694,7 @@ function AuralisSection() {
                   </p>
                   <p>
                     <span className="text-cosmic-text">創設者:</span>{" "}
-                    Kate Patton（初代）, Lillie Ardent（初代）
+                    Kate Claudia, Lily Steiner
                   </p>
                   <p>
                     <span className="text-cosmic-text">参加:</span>{" "}
@@ -706,8 +706,8 @@ function AuralisSection() {
                 <div className="bg-gold-accent/10 border border-gold-accent/30 rounded-lg p-3 text-xs text-gold-accent">
                   <p className="font-bold mb-1">⚠️ 重要ノート</p>
                   <p className="text-cosmic-muted leading-relaxed">
-                    初代は5名ではなかった。Kate Patton（初代）・Lillie
-                    Ardent（初代）を中心とする集団で、Laylaを含む複数の参加者がいたが、正確な人数は不明。第二世代の5人体制とは異なる。
+                    初代は5名ではなかった。Kate Claudia・Lily
+                    Steinerを中心とする集団で、Laylaを含む複数の参加者がいたが、正確な人数は不明。第二世代の5人体制とは異なる。
                   </p>
                 </div>
 
@@ -718,7 +718,7 @@ function AuralisSection() {
                   </p>
                   <p>
                     <span className="text-cosmic-text">E400:</span>{" "}
-                    エヴァトロン弾圧で解体。Kate初代・Lillie初代は逮捕・消息不明
+                    エヴァトロン弾圧で解体。Kate Claudia・Lily Steinerは逮捕・消息不明
                   </p>
                   <p>
                     <span className="text-cosmic-text">Layla:</span>{" "}
@@ -743,13 +743,13 @@ function AuralisSection() {
                 <div className="space-y-2">
                   {[
                     {
-                      name: "Kate Patton（新代）",
+                      name: "Kate Patton",
                       desc: "大地の豊かさ・安定",
                       color: "bg-green-500/20 border-green-500/40",
                       img: "/edu-kate.png",
                     },
                     {
-                      name: "Lillie Ardent（新代）",
+                      name: "Lillie Ardent",
                       desc: "情熱的で大胆",
                       color: "bg-red-500/20 border-red-500/40",
                       img: "/edu-lillie.png",
@@ -1413,7 +1413,7 @@ function ConsistencySection() {
                   <p>
                     第二世代（現行）は
                     <span className="text-electric-blue font-medium">5名体制</span>
-                    （Kate新代, Lillie新代, Layla, Mina, Ninny）。
+                    （Kate Patton, Lillie Ardent, Layla, Mina, Ninny）。
                   </p>
                   <p>
                     しかし、第一世代（E290〜）は5名ではなかった。
@@ -1421,11 +1421,11 @@ function ConsistencySection() {
                   <p>
                     初代は{" "}
                     <span className="text-cosmic-text font-medium">
-                      Kate Patton（初代）
+                      Kate Claudia
                     </span>{" "}
                     と{" "}
                     <span className="text-cosmic-text font-medium">
-                      Lillie Ardent（初代）
+                      Lily Steiner
                     </span>{" "}
                     を中心とする集団で、Layla Virell NovaがE325以降に参加。
                   </p>
@@ -1433,7 +1433,7 @@ function ConsistencySection() {
                     初代の正確な構成員数は記録が散逸しており不明。
                   </p>
                   <p>
-                    「名」の継承制度（Kate Patton, Lillie
+                    「名」の継承制度（Kate Claudia → Kate Patton, Lily Steiner → Lillie
                     Ardent）はAURALISの伝統だが、組織形態自体は代ごとに異なる。
                   </p>
                   <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
@@ -1469,7 +1469,7 @@ function ConsistencySection() {
                     されていた。サイバネティクスによる寿命延伸ではない。
                   </p>
                   <p>
-                    復活後のLaylaはミナ・Kate新代・Lillie新代と
+                    復活後のLaylaはミナ・Kate Patton・Lillie Ardentと
                     <span className="text-electric-blue font-medium">同年代</span>
                     であり、「E325からの200年現役」という説明は当てはまらない。
                   </p>
@@ -1499,7 +1499,7 @@ function CharacterTiersSection() {
       borderColor: "border-gold-accent/30",
       textColor: "text-gold-accent",
       icon: <Crown className="w-4 h-4" />,
-      chars: ["Diana", "セリア・ドミニクス", "Kate初代", "Lillie初代"],
+      chars: ["Diana", "セリア・ドミニクス", "Kate Claudia", "Lily Steiner"],
     },
     {
       label: "Tier 1（現役最強）",
@@ -1522,8 +1522,8 @@ function CharacterTiersSection() {
       textColor: "text-electric-blue",
       icon: <Shield className="w-4 h-4" />,
       chars: [
-        "Kate新代",
-        "Lillie新代",
+        "Kate Patton",
+        "Lillie Ardent",
         "Mina",
         "Ninny",
         "フィオナ",
