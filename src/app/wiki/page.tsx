@@ -56,7 +56,7 @@ const CHARACTERS: WikiEntry[] = [
   /* Gigapolis/West Continent */
   {
     id: "Diana",
-    name: "Diana",
+    name: "ディアナ",
     nameEn: "Diana",
     category: "キャラクター",
     subCategory: "Gigapolis",
@@ -70,7 +70,7 @@ const CHARACTERS: WikiEntry[] = [
   },
   {
     id: "Jen",
-    name: "Jen",
+    name: "ジェン",
     nameEn: "Jen",
     category: "キャラクター",
     subCategory: "Gigapolis",
@@ -87,7 +87,7 @@ const CHARACTERS: WikiEntry[] = [
   },
   {
     id: "Tina/Gue",
-    name: "Tina/Gue",
+    name: "ティナ/グエ",
     nameEn: "Tina / Gue",
     category: "キャラクター",
     subCategory: "Gigapolis",
@@ -196,7 +196,7 @@ const CHARACTERS: WikiEntry[] = [
   /* AURALIS */
   {
     id: "Kate Claudia",
-    name: "Kate Claudia",
+    name: "ケイト・クラウディア",
     nameEn: "Kate Claudia",
     category: "キャラクター",
     subCategory: "AURALIS",
@@ -210,7 +210,7 @@ const CHARACTERS: WikiEntry[] = [
   },
   {
     id: "Kate Patton",
-    name: "Kate Patton",
+    name: "ケイト・パットン",
     nameEn: "Kate Patton",
     category: "キャラクター",
     subCategory: "AURALIS",
@@ -224,7 +224,7 @@ const CHARACTERS: WikiEntry[] = [
   },
   {
     id: "Lily Steiner",
-    name: "Lily Steiner",
+    name: "リリー・スタイナー",
     nameEn: "Lily Steiner",
     category: "キャラクター",
     subCategory: "AURALIS",
@@ -238,7 +238,7 @@ const CHARACTERS: WikiEntry[] = [
   },
   {
     id: "Lillie Ardent",
-    name: "Lillie Ardent",
+    name: "リリー・アーデント",
     nameEn: "Lillie Ardent",
     category: "キャラクター",
     subCategory: "AURALIS",
@@ -266,7 +266,7 @@ const CHARACTERS: WikiEntry[] = [
   },
   {
     id: "Ninny Offenbach",
-    name: "Ninny Offenbach",
+    name: "ニニー・オッフェンバッハ",
     nameEn: "Ninny Offenbach",
     category: "キャラクター",
     subCategory: "AURALIS",
@@ -426,18 +426,7 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "シルバー・ヴェノム",
     tier: "Tier 2",
   },
-  {
-    id: "クラウス・フィオナ",
-    name: "クラウス・フィオナ",
-    nameEn: "Klaus Fiona",
-    category: "キャラクター",
-    subCategory: "Iris/クレセント",
-    description:
-      "ファールージャ社COO。アイリス救出作戦に参加。",
-    era: "E510頃",
-    affiliation: "ファールージャ社",
-    tier: "Tier 2",
-  },
+
   {
     id: "ミユシャリ",
     name: "ミユシャリ",
@@ -671,7 +660,8 @@ const CHARACTERS: WikiEntry[] = [
   },
   {
     id: "Slime_Woman",
-    name: "Slime Woman",
+    name: "スライム・ウーマン",
+    nameEn: "Slime Woman",
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
