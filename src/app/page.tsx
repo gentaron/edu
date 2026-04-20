@@ -45,6 +45,7 @@ const SECTIONS = [
   { id: "mina", label: "ミナ" },
   { id: "liminal", label: "リミナル・フォージ" },
   { id: "consistency", label: "整合性ノート" },
+  { id: "iris", label: "アイリス" },
   { id: "characters", label: "キャラクター" },
   { id: "factions", label: "勢力系譜" },
 ];
@@ -273,6 +274,12 @@ function HeroSection() {
           >
             <Radio className="w-3 h-3 mr-1" /> Liminal Forge
           </Badge>
+          <Badge
+            variant="outline"
+            className="border-rose-400/50 text-rose-400 text-xs px-3 py-1"
+          >
+            <Shield className="w-3 h-3 mr-1" /> Iris Worlds
+          </Badge>
         </div>
       </div>
 
@@ -371,11 +378,14 @@ function UniverseSection() {
                   <div className="flex flex-wrap gap-1.5">
                     {[
                       "ヴァーミリオン",
-                      "クロセヴィア",
-                      "SSレンジ",
                       "ブルー・ローズ",
                       "ミエルテンガ",
+                      "クロセヴィア",
+                      "SSレンジ",
                       "アイアン・シンジケート",
+                      "SUDOM",
+                      "ファティマ連邦",
+                      "スターク三国",
                     ].map((city) => (
                       <span
                         key={city}
@@ -413,6 +423,9 @@ const locColor: Record<string,string> = {
   "E16星系": "bg-slate-500/20 text-slate-300 border-slate-500/30",
   "地球": "bg-green-500/20 text-green-300 border-green-500/30",
   "AD2026地球": "bg-green-500/20 text-green-300 border-green-500/30",
+  "ヴァーミリオン": "bg-rose-500/20 text-rose-300 border-rose-500/30",
+  "ブルーローズ": "bg-sky-500/20 text-sky-300 border-sky-500/30",
+  "ミエルテンガ": "bg-amber-500/20 text-amber-300 border-amber-500/30",
 };
 const e = (text: string, loc?: string): TlEv => ({ text, loc });
 
@@ -516,7 +529,10 @@ const TIMELINE_DATA: { period: string; range: string; color: string; borderColor
       e("E475: エヴァポリス廃墟化。エヴァトロン崩壊", "Gigapolis"),
       e("【Eros-7】E475年: カーラ・ヴェルムのスクイーズ・アビスが搾取プラズマ弾を大量生産しEros-7の軍事力を強化。シャドウ・ユニオンの抵抗がさらに激化", "Eros-7"),
       e("E475 (同時): エヴァトロン崩壊後、Σ-Unit残党が「シルバー・ヴェノム」として独立 → のち「アルファ・ヴェノム」と「ゴールデン・ヴェノム」に分派", "M104銀河"),
+      e("【アイリスの台頭 E480〜E495】ヴァーミリオン裏路地でストリートギャングとの戦闘を経て、同国諜報機関にスカウト。ブルーワイヤとウォーター・オーブの戦闘術を習得し、急速に頭角を現す", "ヴァーミリオン"),
+      e("【シルバー・ヴェノムの暗躍 E485〜】シルバー・ヴェノムがクレセント地方に浸透。レオン（幹部）率いる部隊がヴァーミリオン周辺で活動開始。アイリスとシルバー・ヴェノムの長期にわたる対立の始まり", "東大陸・クレセント"),
       e("テクロサス系譜: E15ファランクス → E295三頭政治改編 → E470東方支隊クレセント常駐 → E490頃ボグダス・ジャベリン（セバスチャン・ヴァレリウス率、IRIS 4位）がヴァーミリオンに恒久駐在", "東大陸・クレセント"),
+      e("【アイリスとボグダス・ジャベリン E490〜】アイリスがボグダス・ジャベリン（セバスチャン・ヴァレリウス、ガレス、ミユシャリ等）と協力関係を構築。ヴァーミリオン諜報機関での地位を確立し、ウィリー（パートナー）と共に各地の脅威に対処", "ヴァーミリオン"),
       e("東大陸クレセント大地方の主要国家体制確立 — ヴァーミリオン(アイリス/IRIS1位)・ブルーローズ(フィオナ/V7/2位)・ミエルテンガ(マリーナ/3位)・テクロサス(BJ/4位)・クロセヴィア(カスチーナ/5位)", "東大陸・クレセント"),
     ],
   },
@@ -528,18 +544,28 @@ const TIMELINE_DATA: { period: string; range: string; color: string; borderColor
     events: [
       e("【テクノ文化ルネサンス E475〜E500】次元極地平技術の民主化と文化融合。ネオンコロシアムがアートと技術の祭典に進化。レイラの戦績がホログラム展示で不朽の名声を獲得", "Gigapolis"),
       e("E490頃: ボグダス・ジャベリンがヴァーミリオンに恒久駐在", "東大陸・クレセント"),
+      e("【アイリスの諜報機関昇進 E495〜E505】ジマ・オイル襲撃作戦等でシルバー・ヴェノムに対する成果を上げ、ヴァーミリオン諜報機関の実力者に。エレナ（元本部長）の後継として機関長に昇進", "ヴァーミリオン"),
       e("E495〜E500: ネオクラン同盟がUECO（星間経済協同組合）・ヒーローエージェンシーと統合し銀河系コンソーシアム設立。トゥキディデスの罠回避を志向", "M104銀河"),
       e("E499: ミナ・エウレカ・アーネスト誕生（ノスタルジア・コロニー。父:エンジニア、母:歴史記録官）", "ノスタルジア・コロニー"),
       e("E505: Eros-7でスクイーズ・アビス解体。搾取技術を医療・クリーンエネルギー用途に転換。搾取バクテリアがナノメディシン（遺伝子修復剤）として再設計", "Eros-7"),
       e("E509: Alpha Venomのノスタルジア・コロニー攻撃 — 「重力崩壊弾頭」の閃光が10歳のミナに「戦略への目覚め」をもたらす。難民船で脱出", "ノスタルジア・コロニー"),
+      e("【アイリスのシルバー・ヴェノムとの激突 E508〜E515】レオン率いるシルバー・ヴェノム部隊との複数回の戦闘。アイリスはブルーワイヤとウォーター・オーブで応戦。ヴェルリット一族（ラブマーク使いの魔女）との遭遇も", "ヴァーミリオン"),
+      e("E510: シルバー・ヴェノムによるアイリス拉致事件 — レオンとマスター・ヴェノムの策によりアイリスが捕縛。ボグダス・ジャベリン（セバスチャン・ガレス）とクラウス・フィオナ（ファールージャ社COO）の連携による救出作戦", "東大陸・クレセント"),
+      e("E512: アイリス救出後、フィオナとの協力関係が深化。ヴィヴィエッタ（四楓院ヴィヴィエッタ）の救出作戦にも成功。V7（Vital Seven）7カ国連合の設立準備が始まる", "ブルーローズ"),
       e("E514: ミナ、学術都市惑星「ビブリオ」のロレンツィオ国際大学AI学部入学（15歳）。文明崩壊予測モデルを研究", "惑星ビブリオ"),
+      e("【V7設立とクレセントの政治激変 E515〜E520】Vital Seven（ヴァーミリオン・ブルーローズ・ミエルテンガ・クロセヴィア・SSレンジ・アイアン・シンジケート・ファティマ連邦）正式設立。フィオナが急先鋒として外交を主導", "東大陸・クレセント"),
+      e("E518: アルファ・ヴェノムの台頭 — シルバー・ヴェノム残党を吸収し大幅に勢力拡大。イズミ（両性具有のリーダー）・ボブリスティ・ギル・カタリナ・ゴルディロックスらが活動活発化。アイリスに対する新たな脅威", "東大陸・クレセント"),
+      e("E519: アルファ・ヴェノムによるアイリス再拉致事件。イズミの指揮下でアイリスが捕縛されるも、ボグダス・ジャベリンの決死の救出作戦により奪還。この事件がクレセント政治の転換点となる", "東大陸・クレセント"),
+      e("【トリニティ・アライアンス結成 E520】アイリスがミエルテンガ首脳に就任（フィオナの推薦による）。ヴァーミリオン・ミエルテンガ・ボグダス・ジャベリンを核とした3勢力連合「トリニティ・アライアンス」発足。クレセントはV7 vs トリニティの二大陣営へ", "ミエルテンガ"),
       e("E521: ミナ卒業（22歳）。放浪開始。Genesis Vault前身ブログ開設。ボグダス・ジャベリンに参加", "惑星ビブリオ"),
       e("【次元ピラミッド全4層構造】Tier Ω（高次元世界: フン8次元/ササン9次元/ホラズム10次元/ティムール11次元）→ Tier Σ（ペルセポネ仮想宇宙）→ Tier Ε（E16通常次元）→ Tier Δ（AD2026地球）", "E16星系"),
       e("E522: AURALIS第二世代正式発足 — Kate Patton(新代)・Lillie Ardent(新代)・レイラ（冷凍保存から復活・ミナと同年齢外見）・ミナ・Ninny Offenbachの5名", "西大陸"),
       e("E524: 諸世界連邦サミット — ギガポリスのセントラル・タワーで開催。星間平和協定締結。ミナ参加。地球AD2026情報に初接触。ナシゴレン初体験（サミット会場屋台）", "Gigapolis"),
       e("【Eros-7 E525】アヤカ・リンの介入 — ガロ（シャドウ・ユニオン男性リーダー）・ゼナ（女性商人）と同盟を結びマトリカル・リフォーム運動を組織。労働時間短縮・精子レジストリ男女平等化", "Eros-7"),
       e("E525: リミナル・フォージ立ち上げ — ApoloniumとDimension Horizon技術を組み合わせた時相放送（Temporal Broadcast）。E528年の芸術を地球AD2026年のインターネット上に放送開始", "西大陸"),
-      e("E528: 現在 — Genesis Vault 2,000本突破。EDU統合版Wiki（整合性5原則・確定修正3点）準拠", "E16星系"),
+      e("【フィオナの裏切り E523〜E525】ブルーローズ統率者フィオナがアルファ・ヴェノムと内通していることが発覚。マリーナ・ボビン（ミエルテンガ総統）との共謀も判明。トリニティ・アライアンス内部に激震", "東大陸・クレセント"),
+      e("【V7 vs トリニティ 冷戦期 E525〜E528】フィオナの裏切りを機にV7とトリニティの対立が激化。レヴィリア・サーペンティナ（シルバー・ヴェノム幹部）の動向も不透明。アイリスはトリニティ指導者としてクレセント全域の安定を模索", "東大陸・クレセント"),
+      e("E528: 現在 — Genesis Vault 2,000本突破。EDU統合版Wiki（整合性5原則・確定修正3点）準拠。アイリスは引き続きトリニティ・アライアンス指導者として、フィオナ・アルファ・ヴェノムとの対峙を続ける", "E16星系"),
     ],
   },
 ];
@@ -969,6 +995,14 @@ const PLATFORMS = [
     bg: "bg-pink-400/10",
     url: "https://pixai.art/en/@apolon/artworks",
   },
+  {
+    name: "irisworlds.netlify.app/story",
+    desc: "アイリス物語（Iris Worlds）",
+    type: "IRIS",
+    color: "text-rose-400 border-rose-400/30",
+    bg: "bg-rose-400/10",
+    url: "https://irisworlds.netlify.app/story",
+  },
 ];
 
 function LiminalSection() {
@@ -1059,6 +1093,236 @@ function LiminalSection() {
                 </div>
               ))}
             </div>
+          </div>
+        </RevealSection>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   IRIS CHARACTER PROFILE
+   ═══════════════════════════════════════════ */
+const IRIS_TIMELINE = [
+  { year: "E480", event: "ヴァーミリオン裏路地で戦闘開始", loc: "ヴァーミリオン" },
+  { year: "E485", event: "諜報機関にスカウト", loc: "ヴァーミリオン" },
+  { year: "E490", event: "ボグダス・ジャベリンと協力関係構築", loc: "ヴァーミリオン" },
+  { year: "E505", event: "諜報機関長に昇進", loc: "ヴァーミリオン" },
+  { year: "E510", event: "シルバー・ヴェノムに拉致・救出", loc: "東大陸・クレセント" },
+  { year: "E512", event: "フィオナと協力・V7設立準備", loc: "ブルーローズ" },
+  { year: "E515", event: "V7正式設立", loc: "東大陸・クレセント" },
+  { year: "E519", event: "アルファ・ヴェノムに再拉致・救出", loc: "東大陸・クレセント" },
+  { year: "E520", event: "トリニティ・アライアンス結成", loc: "ミエルテンガ" },
+  { year: "E523", event: "フィオナの裏切り発覚", loc: "東大陸・クレセント" },
+  { year: "E528", event: "現在 — V7 vs トリニティ冷戦継続", loc: "東大陸・クレセント" },
+];
+
+const IRIS_ABILITIES = [
+  { name: "ブルーワイヤ", desc: "特殊な青色のワイヤーを操作し、敵の拘束・移動・攻撃に使用するアイリスの代名詞的武装", color: "bg-blue-500/20 border-blue-500/30 text-blue-300" },
+  { name: "ウォーター・オーブ", desc: "水属性のオーブを生成・操作する能力。防御・攻撃両面で運用", color: "bg-cyan-500/20 border-cyan-500/30 text-cyan-300" },
+  { name: "ブラックダイス", desc: "黒いダイス型の特殊武器。戦闘術と戦略分析に組み合わせて使用", color: "bg-slate-500/20 border-slate-400/30 text-slate-300" },
+  { name: "戦略分析", desc: "複雑な政治情勢と戦況を瞬時に分析し、最適な行動指針を導き出す卓越した知略", color: "bg-amber-500/20 border-amber-500/30 text-amber-300" },
+];
+
+const IRIS_RELATIONS = [
+  { name: "ウィリー", note: "パートナー兼元恋人。アイリスの最も近い理解者", color: "border-rose-400/30" },
+  { name: "エレナ", note: "ヴァーミリオン諜報機関元本部長。アイリスの直属の上司", color: "border-purple-400/30" },
+  { name: "セバスチャン", note: "ボグダス・ジャベリンリーダー。IRIS現代ランキング4位", color: "border-cyan-400/30" },
+  { name: "フィオナ", note: "ブルーローズ統率者。かつての盟友だが…IRIS2位", color: "border-blue-400/30" },
+  { name: "マリーナ・ボビン", note: "ミエルテンガ総統。真の黒幕の可能性。IRIS3位", color: "border-amber-400/30" },
+  { name: "イズミ", note: "アルファ・ヴェノムリーダー。アイリスの最大の脅威", color: "border-red-400/30" },
+];
+
+function IrisSection() {
+  return (
+    <section id="iris" className="relative py-20 px-4">
+      <div className="max-w-6xl mx-auto">
+        <RevealSection>
+          <SectionHeader
+            icon={<Shield className="w-6 h-6 text-rose-400" />}
+            title="アイリス"
+            subtitle="Iris — ヴァーミリオンの英雄、トリニティ・アライアンス指導者"
+          />
+        </RevealSection>
+
+        <RevealSection>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Character Portrait */}
+            <div className="lg:col-span-1">
+              <div className="glass-card rounded-xl overflow-hidden transition-all duration-300">
+                <div className="relative">
+                  <img
+                    src="/edu-mina.png"
+                    alt="アイリス"
+                    className="w-full aspect-[3/4] object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-cosmic-dark via-transparent to-transparent" />
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-accent">
+                      <Crown className="w-3 h-3" /> IRIS 1位
+                    </span>
+                  </div>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <p className="text-xl font-bold text-cosmic-text">アイリス</p>
+                    <p className="text-xs text-rose-400">Iris — Dominion Vermillion</p>
+                    <p className="text-[10px] text-cosmic-muted mt-1">トリニティ・アライアンス指導者</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Profile Details */}
+            <div className="lg:col-span-2 space-y-4">
+              {/* Basic Info */}
+              <div className="glass-card rounded-xl p-6">
+                <h3 className="text-sm font-bold text-rose-400 mb-4 uppercase tracking-wider">
+                  プロフィール
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
+                  {[
+                    ["所属", "トリニティ・アライアンス"],
+                    ["前所属", "ヴァーミリオン諜報機関長"],
+                    ["外見", "青いボディスーツ・白いショール"],
+                    ["特徴", "背中ジッパー・黒いダイス"],
+                    ["性格", "冷徹・ strategic・仲間思い"],
+                    ["Tier", "Tier 1（現役最強）"],
+                  ].map(([k, v]) => (
+                    <div key={k}>
+                      <p className="text-cosmic-muted text-xs mb-0.5">{k}</p>
+                      <p className="text-cosmic-text font-medium">{v}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Abilities */}
+              <div className="glass-card rounded-xl p-6">
+                <h3 className="text-sm font-bold text-blue-400 mb-4 uppercase tracking-wider">
+                  能力・装備
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {IRIS_ABILITIES.map((ability) => (
+                    <div
+                      key={ability.name}
+                      className={`p-3 rounded-lg border ${ability.color} transition-all hover:scale-[1.02]`}
+                    >
+                      <p className="text-sm font-bold mb-1">{ability.name}</p>
+                      <p className="text-[11px] opacity-80">{ability.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Key Relationships */}
+              <div className="glass-card rounded-xl p-6">
+                <h3 className="text-sm font-bold text-pink-400 mb-4 uppercase tracking-wider">
+                  主要関係者
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {IRIS_RELATIONS.map((rel) => (
+                    <div
+                      key={rel.name}
+                      className={`flex items-start gap-3 px-3 py-2 rounded-lg border ${rel.color} hover:bg-cosmic-dark/50 transition-colors`}
+                    >
+                      <span className="text-cosmic-muted mt-0.5 shrink-0 text-xs">▸</span>
+                      <div className="min-w-0">
+                        <p className="text-sm text-cosmic-text font-medium">{rel.name}</p>
+                        <p className="text-[11px] text-cosmic-muted">{rel.note}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </RevealSection>
+
+        {/* Iris Story Timeline */}
+        <RevealSection>
+          <div className="mt-8 glass-card rounded-xl p-6">
+            <h3 className="text-sm font-bold text-rose-400 mb-4 uppercase tracking-wider">
+              アイリス物語年表
+            </h3>
+            <div className="space-y-2 ml-2 border-l-2 border-rose-400/30 pl-4">
+              {IRIS_TIMELINE.map((t, idx) => (
+                <div key={idx} className="flex flex-wrap gap-2 text-sm items-start">
+                  <span className="text-rose-400 font-bold shrink-0 w-16">{t.year}</span>
+                  <span className={`inline-flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 ${locColor[t.loc] || "bg-gray-500/20 text-gray-300 border-gray-500/30"}`}>
+                    {t.loc}
+                  </span>
+                  <span className="text-cosmic-text/90">{t.event}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </RevealSection>
+
+        {/* Organizations & Political Landscape */}
+        <RevealSection>
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Trinity Alliance */}
+            <div className="glass-card rounded-xl p-5 border border-cyan-400/20">
+              <h4 className="text-sm font-bold text-cyan-400 mb-3 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                トリニティ・アライアンス
+              </h4>
+              <p className="text-xs text-cosmic-muted mb-3">
+                アイリスが指導する3勢力連合。E520年結成。
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {["ヴァーミリオン", "ミエルテンガ", "ボグダス・ジャベリン"].map((n) => (
+                  <span key={n} className="text-[10px] bg-cyan-500/15 text-cyan-300 px-2 py-0.5 rounded border border-cyan-500/20">{n}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* V7 */}
+            <div className="glass-card rounded-xl p-5 border border-blue-400/20">
+              <h4 className="text-sm font-bold text-blue-400 mb-3 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-blue-400" />
+                V7 (Vital Seven)
+              </h4>
+              <p className="text-xs text-cosmic-muted mb-3">
+                フィオナが急先鋒の7カ国連合。E515年設立。
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {["ブルーローズ", "SSレンジ", "クロセヴィア", "アイアン・シンジケート", "ファティマ連邦"].map((n) => (
+                  <span key={n} className="text-[10px] bg-blue-500/15 text-blue-300 px-2 py-0.5 rounded border border-blue-500/20">{n}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Alpha Venom */}
+            <div className="glass-card rounded-xl p-5 border border-red-400/20">
+              <h4 className="text-sm font-bold text-red-400 mb-3 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-400" />
+                アルファ・ヴェノム
+              </h4>
+              <p className="text-xs text-cosmic-muted mb-3">
+                イズミ率いる暗黒組織。シルバー・ヴェノムの後継。
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {["イズミ", "ボブリスティ", "ギル", "カタリナ", "ゴルディロックス", "AJ"].map((n) => (
+                  <span key={n} className="text-[10px] bg-red-500/15 text-red-300 px-2 py-0.5 rounded border border-red-500/20">{n}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </RevealSection>
+
+        {/* External link */}
+        <RevealSection>
+          <div className="mt-6 text-center">
+            <a
+              href="https://irisworlds.netlify.app/story"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-rose-500/10 border border-rose-400/30 text-rose-400 text-sm font-medium hover:bg-rose-500/20 transition-all hover:scale-[1.02]"
+            >
+              <Shield className="w-4 h-4" />
+              アイリス物語全文を読む — Iris Worlds
+              <span className="text-[10px] text-cosmic-muted">↗</span>
+            </a>
           </div>
         </RevealSection>
       </div>
@@ -1685,6 +1949,10 @@ export default function HomePage() {
         <div className="w-full h-px bg-gradient-to-r from-transparent via-gold-accent/40 to-transparent" />
 
         <ConsistencySection />
+
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-rose-400/30 to-transparent" />
+
+        <IrisSection />
 
         <div className="w-full h-px bg-gradient-to-r from-transparent via-nebula-purple/20 to-transparent" />
 
