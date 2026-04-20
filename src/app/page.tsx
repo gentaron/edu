@@ -1157,7 +1157,7 @@ function IrisSection() {
               <div className="glass-card rounded-xl overflow-hidden transition-all duration-300">
                 <div className="relative">
                   <img
-                    src="/edu-mina.png"
+                    src="/edu-iris.png"
                     alt="アイリス"
                     className="w-full aspect-[3/4] object-cover"
                   />

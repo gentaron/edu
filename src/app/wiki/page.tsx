@@ -156,6 +156,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E325〜E400（冷凍）→ E522〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 1",
+    image: "/edu-layla.png",
   },
   {
     id: "弦太郎",
@@ -181,6 +182,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E290〜E400",
     affiliation: "AURALIS Collective第一世代",
     tier: "神格・歴史的人物",
+    image: "/edu-kate.png",
   },
   {
     id: "Kate Patton（新代）",
@@ -204,6 +206,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E290〜E400",
     affiliation: "AURALIS Collective第一世代",
     tier: "神格・歴史的人物",
+    image: "/edu-lillie.png",
   },
   {
     id: "Lillie Ardent（新代）",
@@ -227,6 +230,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E499〜現在（29歳）",
     affiliation: "AURALIS Collective第二世代 / リミナル・フォージ",
     tier: "Tier 2",
+    image: "/edu-mina.png",
   },
   {
     id: "Ninny Offenbach",
@@ -239,6 +243,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "新代〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
+    image: "/edu-ninny.png",
   },
 
   /* Iris/Crescent */
