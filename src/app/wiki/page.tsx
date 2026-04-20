@@ -1400,14 +1400,6 @@ const TERMINOLOGY: WikiEntry[] = [
     subCategory: "施設・建造物",
     description: "惑星ビブリオにある国際大学。ミナがE514年にAI学部に入学。",
   },
-  {
-    id: "カシオペア矮小銀河",
-    name: "カシオペア矮小銀河",
-    category: "地理",
-    subCategory: "宇宙・天文",
-    description: "E16連星系が位置するM104銀河ハロー領域の近傍にある矮小銀河。",
-  },
-
   /* 戦争・歴史事件 */
   {
     id: "エルトナ戦争",
