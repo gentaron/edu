@@ -48,6 +48,7 @@ const SECTIONS = [
   { id: "iris", label: "アイリス" },
   { id: "characters", label: "キャラクター" },
   { id: "factions", label: "勢力系譜" },
+  { id: "wiki-link", label: "Wiki", href: "/wiki" },
 ];
 
 /* ─── Reveal-on-scroll hook ─── */
@@ -152,9 +153,11 @@ function Navigation({ activeSection }: { activeSection: string }) {
             {SECTIONS.map((s) => (
               <a
                 key={s.id}
-                href={`#${s.id}`}
+                href={"href" in s && s.href ? s.href : `#${s.id}`}
                 className={`px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-all rounded-md hover:bg-cosmic-surface ${
-                  activeSection === s.id
+                  "href" in s && s.href
+                    ? "text-gold-accent hover:text-gold-accent/80"
+                    : activeSection === s.id
                     ? "text-electric-blue bg-cosmic-surface"
                     : "text-cosmic-muted"
                 }`}
@@ -179,10 +182,12 @@ function Navigation({ activeSection }: { activeSection: string }) {
             {SECTIONS.map((s) => (
               <a
                 key={s.id}
-                href={`#${s.id}`}
+                href={"href" in s && s.href ? s.href : `#${s.id}`}
                 onClick={() => setMobileOpen(false)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
-                  activeSection === s.id
+                  "href" in s && s.href
+                    ? "text-gold-accent hover:text-gold-accent/80 bg-cosmic-surface"
+                    : activeSection === s.id
                     ? "text-electric-blue bg-cosmic-surface"
                     : "text-cosmic-muted hover:bg-cosmic-surface"
                 }`}
@@ -305,7 +310,7 @@ function UniverseSection() {
           <SectionHeader
             icon={<Globe2 className="w-6 h-6 text-nebula-purple" />}
             title="宇宙・星系構造"
-            subtitle="E16連星系 — M104銀河ハローに浮かぶ人類の新たな故郷"
+            subtitle={<>E16連星系 — M104銀河ハローに浮かぶ人類の新たな故郷</>}
           />
         </RevealSection>
 
@@ -314,7 +319,7 @@ function UniverseSection() {
             {/* E16 Binary Star System */}
             <div className="glass-card glass-card-hover rounded-xl p-6 transition-all duration-300">
               <h3 className="text-lg font-bold text-electric-blue mb-4 flex items-center gap-2">
-                <Star className="w-5 h-5" /> E16連星系
+                <Star className="w-5 h-5" /> <a href="/wiki#E16連星系" className="text-electric-blue hover:underline">E16連星系</a>
               </h3>
               <div className="space-y-3">
                 {[
@@ -338,14 +343,14 @@ function UniverseSection() {
             {/* Symphony of Stars Geography */}
             <div className="glass-card glass-card-hover rounded-xl p-6 transition-all duration-300">
               <h3 className="text-lg font-bold text-gold-accent mb-4 flex items-center gap-2">
-                <Globe2 className="w-5 h-5" /> シンフォニー・オブ・スターズ
+                <Globe2 className="w-5 h-5" /> <a href="/wiki#シンフォニー・オブ・スターズ" className="text-gold-accent hover:underline">シンフォニー・オブ・スターズ</a>
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* West Continent */}
                 <div className="bg-cosmic-dark/50 rounded-lg p-4">
                   <h4 className="text-sm font-bold text-nebula-purple mb-2 flex items-center gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-nebula-purple" />
-                    西大陸: Gigapolis圏
+                    西大陸: <a href="/wiki#ギガポリス" className="text-nebula-purple hover:underline">Gigapolis</a>圏
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
                     {[
@@ -634,7 +639,7 @@ function AuralisSection() {
         <RevealSection>
           <SectionHeader
             icon={<Sparkles className="w-6 h-6 text-electric-blue" />}
-            title="AURALIS Collective"
+            title={<a href="/wiki#AURALIS" className="text-cosmic-gradient hover:underline">AURALIS Collective</a>}
             subtitle="「光と音を永遠にする — Where Light and Sound Become Eternal」"
           />
         </RevealSection>
@@ -835,7 +840,7 @@ function MinaSection() {
           <SectionHeader
             icon={<Users className="w-6 h-6 text-blue-400" />}
             title="ミナ・エウレカ・エルンスト"
-            subtitle="Mina Eureka Ernst — AURALIS第二世代、リミナル・フォージ創設者"
+            subtitle={<>Mina Eureka Ernst — AURALIS第二世代、<a href="/wiki#リミナル・フォージ" className="text-electric-blue hover:underline">リミナル・フォージ</a>創設者</>}
           />
         </RevealSection>
 
@@ -871,14 +876,14 @@ function MinaSection() {
                   プロフィール
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
-                  {[
+                  {([
                     ["生年月日", "E499年8月16日"],
                     ["年齢", "29歳"],
                     ["血液型", "AB型"],
-                    ["出生地", "ノスタルジア・コロニー"],
+                    ["出生地", <a key="wl" href="/wiki#ノスタルジア・コロニー" className="text-electric-blue hover:underline">ノスタルジア・コロニー</a>],
                     ["外見", "青い長髪・長身"],
                     ["性格", "マイペース・先進的・承認欲求あり"],
-                  ].map(([k, v]) => (
+                  ] as [string, React.ReactNode][]).map(([k, v]) => (
                     <div key={k}>
                       <p className="text-cosmic-muted text-xs mb-0.5">{k}</p>
                       <p className="text-cosmic-text font-medium">{v}</p>
@@ -1012,8 +1017,8 @@ function LiminalSection() {
         <RevealSection>
           <SectionHeader
             icon={<Radio className="w-6 h-6 text-gold-accent" />}
-            title="リミナル・フォージ"
-            subtitle="Liminal Forge — E528からAD2026へ、時空を超えた放送プロジェクト"
+            title={<a href="/wiki#リミナル・フォージ" className="text-cosmic-gradient hover:underline">リミナル・フォージ</a>}
+            subtitle={<>Liminal Forge — E528からAD2026へ、時空を超えた放送プロジェクト</>}
           />
         </RevealSection>
 
@@ -1033,9 +1038,9 @@ function LiminalSection() {
               <div className="bg-electric-blue/15 border border-electric-blue/30 rounded-lg p-4 min-w-[200px]">
                 <p className="text-xs text-cosmic-muted mb-1">経由</p>
                 <p className="text-sm font-bold text-electric-blue">
-                  ペルセポネ仮想宇宙
+                  <a href="/wiki#ペルセポネ" className="text-electric-blue hover:underline">ペルセポネ</a>仮想宇宙
                 </p>
-                <p className="text-xs text-cosmic-muted">× Dimension Horizon</p>
+                <p className="text-xs text-cosmic-muted">× <a href="/wiki#次元極地平" className="text-electric-blue hover:underline">Dimension Horizon</a></p>
               </div>
               <ArrowDown className="w-5 h-5 text-cosmic-muted rotate-90 sm:rotate-0 shrink-0" />
               <div className="bg-gold-accent/15 border border-gold-accent/30 rounded-lg p-4 min-w-[160px]">
@@ -1141,7 +1146,7 @@ function IrisSection() {
           <SectionHeader
             icon={<Shield className="w-6 h-6 text-rose-400" />}
             title="アイリス"
-            subtitle="Iris — ヴァーミリオンの英雄、トリニティ・アライアンス指導者"
+            subtitle={<>Iris — <a href="/wiki#ヴァーミリオン" className="text-rose-400 hover:underline">ヴァーミリオン</a>の英雄、<a href="/wiki#トリニティ・アライアンス" className="text-rose-400 hover:underline">トリニティ・アライアンス</a>指導者</>}
           />
         </RevealSection>
 
@@ -1179,14 +1184,14 @@ function IrisSection() {
                   プロフィール
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-sm">
-                  {[
-                    ["所属", "トリニティ・アライアンス"],
-                    ["前所属", "ヴァーミリオン諜報機関長"],
+                  {([
+                    ["所属", <a key="wl1" href="/wiki#トリニティ・アライアンス" className="text-electric-blue hover:underline">トリニティ・アライアンス</a>],
+                    ["前所属", <React.Fragment key="wl2"><a href="/wiki#ヴァーミリオン" className="text-electric-blue hover:underline">ヴァーミリオン</a>諜報機関長</React.Fragment>],
                     ["外見", "青いボディスーツ・白いショール"],
                     ["特徴", "背中ジッパー・黒いダイス"],
                     ["性格", "冷徹・ strategic・仲間思い"],
                     ["Tier", "Tier 1（現役最強）"],
-                  ].map(([k, v]) => (
+                  ] as [string, React.ReactNode][]).map(([k, v]) => (
                     <div key={k}>
                       <p className="text-cosmic-muted text-xs mb-0.5">{k}</p>
                       <p className="text-cosmic-text font-medium">{v}</p>
@@ -1264,7 +1269,7 @@ function IrisSection() {
             <div className="glass-card rounded-xl p-5 border border-cyan-400/20">
               <h4 className="text-sm font-bold text-cyan-400 mb-3 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                トリニティ・アライアンス
+                <a href="/wiki#トリニティ・アライアンス" className="text-cyan-400 hover:underline">トリニティ・アライアンス</a>
               </h4>
               <p className="text-xs text-cosmic-muted mb-3">
                 アイリスが指導する3勢力連合。E520年結成。
@@ -1280,7 +1285,7 @@ function IrisSection() {
             <div className="glass-card rounded-xl p-5 border border-blue-400/20">
               <h4 className="text-sm font-bold text-blue-400 mb-3 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-400" />
-                V7 (Vital Seven)
+                <a href="/wiki#V7" className="text-blue-400 hover:underline">V7</a> (Vital Seven)
               </h4>
               <p className="text-xs text-cosmic-muted mb-3">
                 フィオナが急先鋒の7カ国連合。E515年設立。
@@ -1296,7 +1301,7 @@ function IrisSection() {
             <div className="glass-card rounded-xl p-5 border border-red-400/20">
               <h4 className="text-sm font-bold text-red-400 mb-3 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-red-400" />
-                アルファ・ヴェノム
+                <a href="/wiki#アルファ・ヴェノム" className="text-red-400 hover:underline">アルファ・ヴェノム</a>
               </h4>
               <p className="text-xs text-cosmic-muted mb-3">
                 イズミ率いる暗黒組織。シルバー・ヴェノムの後継。
