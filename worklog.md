@@ -51,3 +51,26 @@ Eternal Dominion Universe (EDU) の統合時空構造書 v3.0 をベースにし
 - `public/edu-mina.png` — AI生成ミナポートレート
 - `public/edu-auralis.png` — AI生成AURALIS画像
 - `public/edu-liminal.png` — AI生成リミナルフォージ画像
+---
+Task ID: 1
+Agent: Main Agent
+Task: Integrate Iris story into EDU guide website with timeline consistency
+
+Work Log:
+- Read full page.tsx (~1700 lines) to understand existing structure
+- Added "iris" section to navigation (SECTIONS array)
+- Added 3 new locColor entries for ヴァーミリオン, ブルーローズ, ミエルテンガ
+- Expanded East Continent geography with 3 new nations: SUDOM, ファティマ連邦, スターク三国
+- Added 4 new Iris story events to Period 4 (E480-E495 timeline: street fights, spy agency, Silver Venom, Bogdas Javelin)
+- Added 8 new Iris story events to Period 5 (E495-E528: agency promotion, V7, Alpha Venom, Trinity Alliance, Fiona betrayal, cold war)
+- Created full IrisSection component with: portrait, profile info, abilities (ブルーワイヤ/ウォーター・オーブ/ブラックダイス/戦略分析), key relationships, story timeline, political landscape (Trinity/V7/Alpha Venom), external link
+- Added Iris Worlds link to Liminal Forge platforms
+- Added "Iris Worlds" badge to Hero section
+- Build passed successfully
+
+Stage Summary:
+- Iris story fully integrated into EDU timeline with consistent E-calendar dates
+- New dedicated character page for Iris with comprehensive profile
+- All navigation, geography, timeline, and character sections updated
+- External link to irisworlds.netlify.app/story added in 2 places
+
