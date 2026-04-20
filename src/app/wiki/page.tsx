@@ -58,7 +58,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E260〜E280",
     affiliation: "Gigapolis西大陸",
     tier: "神格・歴史的人物",
-    image: "/edu-diana.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Diana.png",
   },
   {
     id: "Jen",
@@ -95,7 +95,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E335〜E370",
     affiliation: "Selinopolis（旧Gigapolis）",
     tier: "神格・歴史的人物",
-    image: "/edu-celia.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/CeliaDminix.png",
   },
   {
     id: "アルファ・ケイン",
@@ -156,7 +156,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E325〜E400（冷凍）→ E522〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 1",
-    image: "/edu-layla.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirelNova.png",
   },
   {
     id: "弦太郎",
@@ -182,7 +182,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E270〜E400",
     affiliation: "AURALIS Collective第一世代（創設者）",
     tier: "神格・歴史的人物",
-    image: "/edu-kate-claudia.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/KateClaudia.png",
   },
   {
     id: "Kate Patton",
@@ -195,7 +195,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E522〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
-    image: "/edu-kate.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/KatePatton.png",
   },
   {
     id: "Lily Steiner",
@@ -208,7 +208,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E270〜E400",
     affiliation: "AURALIS Collective第一世代（創設者）",
     tier: "神格・歴史的人物",
-    image: "/edu-lillie-steiner.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/LillieSteiner.png",
   },
   {
     id: "Lillie Ardent",
@@ -221,7 +221,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E522〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
-    image: "/edu-lillie.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/LillieArdent.png",
   },
   {
     id: "ミナ・エウレカ・エルンスト",
@@ -234,7 +234,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E499〜現在（29歳）",
     affiliation: "AURALIS Collective第二世代 / リミナル・フォージ",
     tier: "Tier 2",
-    image: "/edu-mina.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/MinaEurekaErnst.png",
   },
   {
     id: "Ninny Offenbach",
@@ -247,7 +247,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "新代〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
-    image: "/edu-ninny.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/NinnyOffenbach.png",
   },
 
   /* Iris/Crescent */
@@ -262,7 +262,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E480〜現在",
     affiliation: "トリニティ・アライアンス / 元ヴァーミリオン諜報機関長",
     tier: "Tier 1",
-    image: "/edu-iris.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Iris.png",
   },
   {
     id: "ウィリー",
@@ -320,7 +320,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E490〜現在",
     affiliation: "ブルーローズ / アルファ・ヴェノム（内通）",
     tier: "Tier 2",
-    image: "/edu-fiona.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Fiona.png",
   },
   {
     id: "マリーナ・ボビン",

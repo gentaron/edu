@@ -746,31 +746,31 @@ function AuralisSection() {
                       name: "Kate Patton",
                       desc: "大地の豊かさ・安定",
                       color: "bg-green-500/20 border-green-500/40",
-                      img: "/edu-kate.png",
+                      img: "https://raw.githubusercontent.com/gentaron/image/main/KatePatton.png",
                     },
                     {
                       name: "Lillie Ardent",
                       desc: "情熱的で大胆",
                       color: "bg-red-500/20 border-red-500/40",
-                      img: "/edu-lillie.png",
+                      img: "https://raw.githubusercontent.com/gentaron/image/main/LillieArdent.png",
                     },
                     {
                       name: "Layla Virell Nova",
                       desc: "Pink Voltage — 冷凍保存から復活、ミナたちと同年代",
                       color: "bg-pink-500/20 border-pink-500/40",
-                      img: "/edu-layla.png",
+                      img: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirelNova.png",
                     },
                     {
                       name: "Mina Eureka Ernst",
                       desc: "celestial × avant-garde, AI研究員",
                       color: "bg-blue-500/20 border-electric-blue/40",
-                      img: "/edu-mina.png",
+                      img: "https://raw.githubusercontent.com/gentaron/image/main/MinaEurekaErnst.png",
                     },
                     {
                       name: "Ninny Offenbach",
                       desc: "無邪気で爆発的な活力 — 原初個体はAlpha Kane時代に別惑星へ、クローン技術で遺伝子継承ののちGigapolisに再帰還",
                       color: "bg-yellow-500/20 border-gold-accent/40",
-                      img: "/edu-ninny.png",
+                      img: "https://raw.githubusercontent.com/gentaron/image/main/NinnyOffenbach.png",
                     },
                   ].map((m) => (
                     <div
@@ -851,7 +851,7 @@ function MinaSection() {
               <div className="glass-card rounded-xl overflow-hidden transition-all duration-300">
                 <div className="relative">
                   <img
-                    src="/edu-mina.png"
+                    src="https://raw.githubusercontent.com/gentaron/image/main/MinaEurekaErnst.png"
                     alt="ミナ・エウレカ・エルンスト"
                     className="w-full aspect-[3/4] object-cover"
                   />
@@ -1157,7 +1157,7 @@ function IrisSection() {
               <div className="glass-card rounded-xl overflow-hidden transition-all duration-300">
                 <div className="relative">
                   <img
-                    src="/edu-iris.png"
+                    src="https://raw.githubusercontent.com/gentaron/image/main/Iris.png"
                     alt="アイリス"
                     className="w-full aspect-[3/4] object-cover"
                   />
