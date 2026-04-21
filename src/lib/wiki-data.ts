@@ -747,7 +747,6 @@ const CHARACTERS: WikiEntry[] = [
     era: "不詳",
     affiliation: "Gigapolis西大陸",
     tier: "Tier 2",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/CasteriaGrenvelt.png",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/kasuteriasan.txt", label: "Casteria Grenvelt's Story" }],
   },
   {
@@ -761,7 +760,6 @@ const CHARACTERS: WikiEntry[] = [
     era: "不詳",
     affiliation: "不詳",
     tier: "Tier 2",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/SitraCeles.png",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/sitra.txt", label: "Sitra Celes's Story" }],
   },
   {
@@ -775,7 +773,6 @@ const CHARACTERS: WikiEntry[] = [
     era: "不詳",
     affiliation: "不詳",
     tier: "Tier 2",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/Myu.png",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Myustory.txt", label: "Myu's Story" }],
   },
   {
@@ -789,7 +786,6 @@ const CHARACTERS: WikiEntry[] = [
     era: "E340以降〜現在",
     affiliation: "不詳（Slime Womanとの関連）",
     tier: "Tier 2",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/Jun.png",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Junandslime.txt", label: "Jun's Story" }],
   },
 ];
