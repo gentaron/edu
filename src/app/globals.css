@@ -263,3 +263,10 @@
 .faction-connector {
   border-left: 2px solid rgba(124, 58, 237, 0.4);
 }
+
+/* Story prose styling */
+.prose-story p:first-of-type::first-letter {
+  font-size: 1.15em;
+  font-weight: 600;
+  color: rgba(167, 139, 250, 0.9);
+}
