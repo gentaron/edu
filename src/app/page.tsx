@@ -55,7 +55,8 @@ const SECTIONS = [
   { id: "wiki-link", label: "Wiki", href: "/wiki" },
   { id: "game-link", label: "Card Game", href: "/game" },
   { id: "pve-link", label: "PvE Battle", href: "/card-game" },
-  { id: "story-link", label: "Story", href: "/story/IRIS_1" },
+  { id: "story-link", label: "Story小説集", href: "/story" },
+  { id: "card-game-link", label: "カードゲーム", href: "/card-game" },
 ];
 
 /* ─── Reveal-on-scroll hook ─── */
@@ -272,7 +273,7 @@ function QuickAccessSection() {
       tag: "READ",
     },
     {
-      href: "/story/IRIS_1",
+      href: "/story",
       icon: <Scroll className="w-8 h-8" />,
       title: "Story 小説集",
       desc: "アイリスの諜報活動、レイラの英雄伝、ミナの放浪記 — EDU世界を彩る物語を全文で",
@@ -1099,12 +1100,12 @@ const PLATFORMS = [
     url: "https://pixai.art/en/@apolon/artworks",
   },
   {
-    name: "irisworlds.netlify.app/story",
-    desc: "アイリス物語（Iris Worlds）",
-    type: "IRIS",
-    color: "text-rose-400 border-rose-400/30",
-    bg: "bg-rose-400/10",
-    url: "https://irisworlds.netlify.app/story",
+    name: "EDU Story Archive",
+    desc: "アイリス物語（EDU内部）",
+    type: "STORY",
+    color: "text-cyan-400 border-cyan-400/30",
+    bg: "bg-cyan-400/10",
+    url: "/story",
   },
 ];
 
@@ -1417,14 +1418,11 @@ function IrisSection() {
         <RevealSection>
           <div className="mt-6 text-center">
             <a
-              href="https://irisworlds.netlify.app/story"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-rose-500/10 border border-rose-400/30 text-rose-400 text-sm font-medium hover:bg-rose-500/20 transition-all hover:scale-[1.02]"
+              href="/story"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-sm font-medium hover:bg-cyan-500/20 transition-all hover:scale-[1.02]"
             >
               <Shield className="w-4 h-4" />
-              アイリス物語全文を読む — Iris Worlds
-              <span className="text-[10px] text-cosmic-muted">↗</span>
+              EDU小説集を読む
             </a>
           </div>
         </RevealSection>
