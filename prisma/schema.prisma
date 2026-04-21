@@ -92,3 +92,30 @@ model TurnLog {
   payloadJson String
   match      Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
 }
+
+// ═══ PvE Card Game ═══
+
+model PveCard {
+  id         String  @id @default(cuid())
+  name       String
+  nameEn     String?
+  attack     Int     @default(0)
+  defense    Int     @default(0)
+  cost       Int     @default(1)
+  effect     String?   // 効果テキスト
+  imageUrl   String
+  flavorText String?
+  loreSource String?   // 参照元: "IRIS_1" など
+}
+
+model Enemy {
+  id             String  @id @default(cuid())
+  name           String
+  nameEn         String?
+  maxHp          Int
+  attack         Int
+  imageUrl       String
+  description    String?
+  attackPattern  String  // JSON: [{phase, dmg, message, special}]
+  reward         String?
+}

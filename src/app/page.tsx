@@ -54,6 +54,7 @@ const SECTIONS = [
   { id: "factions", label: "勢力系譜" },
   { id: "wiki-link", label: "Wiki", href: "/wiki" },
   { id: "game-link", label: "Card Game", href: "/game" },
+  { id: "pve-link", label: "PvE Battle", href: "/card-game" },
   { id: "story-link", label: "Story", href: "/story/IRIS_1" },
 ];
 
@@ -164,6 +165,8 @@ function Navigation({ activeSection }: { activeSection: string }) {
                   "href" in s && s.href
                     ? s.id === "game-link"
                       ? "text-rose-400 hover:text-rose-300"
+                      : s.id === "pve-link"
+                      ? "text-orange-400 hover:text-orange-300"
                       : s.id === "story-link"
                       ? "text-cyan-400 hover:text-cyan-300"
                       : "text-gold-accent hover:text-gold-accent/80"
@@ -198,6 +201,8 @@ function Navigation({ activeSection }: { activeSection: string }) {
                   "href" in s && s.href
                     ? s.id === "game-link"
                       ? "text-rose-400 hover:text-rose-300 bg-cosmic-surface"
+                      : s.id === "pve-link"
+                      ? "text-orange-400 hover:text-orange-300 bg-cosmic-surface"
                       : s.id === "story-link"
                       ? "text-cyan-400 hover:text-cyan-300 bg-cosmic-surface"
                       : "text-gold-accent hover:text-gold-accent/80 bg-cosmic-surface"
@@ -276,12 +281,22 @@ function QuickAccessSection() {
       borderColor: "border-cyan-500/30 hover:border-cyan-400/60",
       tag: "STORY",
     },
+    {
+      href: "/card-game",
+      icon: <Swords className="w-8 h-8" />,
+      title: "PvE バトル",
+      desc: "次元竜や堕落天使とターン制カードバトル。ドラッグ＆ドロップでカードを出して敵を討て",
+      gradient: "from-orange-500/20 via-red-500/20 to-purple-500/20",
+      iconColor: "text-orange-400",
+      borderColor: "border-orange-500/30 hover:border-orange-400/60",
+      tag: "BATTLE",
+    },
   ];
 
   return (
     <section className="relative py-16 px-4">
       <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {cards.map((card) => (
             <Link
               key={card.href}
@@ -1967,6 +1982,8 @@ function FooterSection() {
         </div>
         <div className="flex justify-center gap-4 text-xs text-cosmic-muted">
           <Link href="/game" className="hover:text-rose-400 transition-colors">Card Game</Link>
+          <span className="text-cosmic-border">|</span>
+          <Link href="/card-game" className="hover:text-orange-400 transition-colors">PvE Battle</Link>
           <span className="text-cosmic-border">|</span>
           <Link href="/wiki" className="hover:text-gold-accent transition-colors">Wiki</Link>
           <span className="text-cosmic-border">|</span>
