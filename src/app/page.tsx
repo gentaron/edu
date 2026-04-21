@@ -251,10 +251,10 @@ function SectionHeader({
 function QuickAccessSection() {
   const cards = [
     {
-      href: "/game",
+      href: "/card-game",
       icon: <Gamepad2 className="w-8 h-8" />,
       title: "EDU Card Game",
-      desc: "E16連星系のキャラクターたちを使ったトレーディングカードゲーム。デッキを組んでAI対戦に挑もう",
+      desc: "25種のカードから20枚デッキを構築。10種の敵とのターン制PvEバトルに挑め",
       gradient: "from-rose-500/20 via-purple-500/20 to-indigo-500/20",
       iconColor: "text-rose-400",
       borderColor: "border-rose-500/30 hover:border-rose-400/60",
@@ -281,10 +281,10 @@ function QuickAccessSection() {
       tag: "STORY",
     },
     {
-      href: "/card-game",
+      href: "/card-game/select",
       icon: <Swords className="w-8 h-8" />,
       title: "PvE バトル",
-      desc: "次元竜や堕落天使とターン制カードバトル。ドラッグ＆ドロップでカードを出して敵を討て",
+      desc: "NORMAL・HARD・BOSS・FINALの10種の敵と戦う。鉄塊ゴーレムやヴォイドキングが待つ",
       gradient: "from-orange-500/20 via-red-500/20 to-purple-500/20",
       iconColor: "text-orange-400",
       borderColor: "border-orange-500/30 hover:border-orange-400/60",

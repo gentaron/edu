@@ -598,10 +598,6 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "シルバー・ヴェノム",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/MasterVenom.png",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/Yonik.png",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/MikaelGabrieli.png",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/ReidKakizaki.png",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/AikeLopez.png",
   },
   {
     id: "ゴルディロックス",
@@ -677,10 +673,6 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "不明（高次元存在）",
     tier: "Tier 1",
     image: "https://raw.githubusercontent.com/gentaron/image/main/SlimeWoman.png",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/AJ.png",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/Lastman.png",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/Gil.png",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/Bobristy.png",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Junandslime.txt", label: "Jun's Story" }],
   },
   {
@@ -730,7 +722,6 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "Eros-7",
     tier: "歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/LilithVane.png",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/Zena.png",
   },
   {
     id: "シルヴィア・クロウ",
