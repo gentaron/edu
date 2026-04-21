@@ -52,11 +52,9 @@ const SECTIONS = [
   { id: "iris", label: "アイリス" },
   { id: "characters", label: "キャラクター" },
   { id: "factions", label: "勢力系譜" },
-  { id: "wiki-link", label: "Wiki", href: "/wiki" },
-  { id: "game-link", label: "Card Game", href: "/game" },
-  { id: "pve-link", label: "PvE Battle", href: "/card-game" },
-  { id: "story-link", label: "Story小説集", href: "/story" },
-  { id: "card-game-link", label: "カードゲーム", href: "/card-game" },
+  { id: "wiki-link",  label: "Wiki",       href: "/wiki" },
+  { id: "story-link", label: "Story",      href: "/story" },
+  { id: "game-link",  label: "Card Game",  href: "/card-game" },
 ];
 
 /* ─── Reveal-on-scroll hook ─── */
