@@ -4,7 +4,6 @@ import {
   PlayerState,
   MAX_HP,
   STARTING_HAND,
-  shuffle,
   type BoardSlot,
   playCard,
   startTurn,
@@ -12,9 +11,8 @@ import {
   resolveAttack,
   applyDamage,
   checkWinner,
-  boardPower,
 } from "../_lib/rules";
-import { makeSeed } from "../_lib/shuffle";
+import { shuffle, makeSeed } from "../_lib/shuffle";
 
 /* ── Context ─────────────────────────────────────────── */
 
