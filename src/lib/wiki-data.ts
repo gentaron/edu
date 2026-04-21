@@ -50,6 +50,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E319〜現在",
     affiliation: "Valoria連合圏",
     tier: "Tier 1",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Jen.png",
     sourceLinks: [
       { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep1.txt", label: "Jen's Story Ep1" },
       { url: "https://raw.githubusercontent.com/gentaron/edutext/main/Jenstoryep2.txt", label: "Jen's Story Ep2" },
@@ -67,6 +68,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E400〜現在",
     affiliation: "Gigapolis地下街",
     tier: "Tier 1",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/TinaGue.png",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/gue.txt", label: "Gue's Story" }],
   },
   {
@@ -94,6 +96,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E318〜",
     affiliation: "シャドウ・リベリオン",
     tier: "神格・歴史的人物",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/AlphaKane.png",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/nebura.txt", label: "Alpha Cain & Celia Dominix's Story" }],
   },
   {
@@ -107,6 +110,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "?〜E470",
     affiliation: "テリアン反乱軍",
     tier: "歴史的人物",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/EriosWald.png",
   },
   {
     id: "エル・フォルハウス",
@@ -119,6 +123,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E150",
     affiliation: "コーポラタムパブリカ",
     tier: "歴史的人物",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/ElForhaus.png",
   },
   {
     id: "ティムール・シャー",
@@ -131,6 +136,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E0頃",
     affiliation: "移民団",
     tier: "歴史的人物",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/TimurShah.png",
   },
   {
     id: "レイラ・ヴィレル・ノヴァ",
@@ -161,6 +167,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E325〜現在",
     affiliation: "AURALIS関連",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Gentaro.png",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Gentaroworld.txt", label: "Gentaro's Story" }],
   },
 
@@ -280,6 +287,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E490〜",
     affiliation: "ヴァーミリオン",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Willie.png",
   },
   {
     id: "エレナ",
@@ -291,6 +299,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "?〜E505頃",
     affiliation: "ヴァーミリオン諜報機関",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Elena.png",
   },
   {
     id: "セバスチャン・ヴァレリウス",
@@ -303,6 +312,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/SebastianValerius.png",
   },
   {
     id: "ガレス",
@@ -314,6 +324,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Gareth.png",
   },
   {
     id: "フィオナ",
@@ -339,6 +350,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E515〜現在",
     affiliation: "ミエルテンガ",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/MarinaBobbin.png",
   },
   {
     id: "カスチーナ・テンペスト",
@@ -351,6 +363,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E515〜現在",
     affiliation: "クロセヴィア",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/CastinaTempest.png",
   },
   {
     id: "イズミ",
@@ -363,6 +376,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Izumi.png",
   },
   {
     id: "レオン",
@@ -374,6 +388,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E485〜",
     affiliation: "シルバー・ヴェノム",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Leon.png",
   },
   {
     id: "ヴィヴィエッタ",
@@ -385,6 +400,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "?〜E512",
     affiliation: "捕虜（のち救出）",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Vivietta.png",
   },
   {
     id: "レヴィリア・サーペンティナ",
@@ -396,6 +412,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "?〜現在",
     affiliation: "シルバー・ヴェノム",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/LeviliaSerpentina.png",
   },
 
   {
@@ -407,6 +424,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ボグダス・ジャベリンメンバー。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Miyushari.png",
   },
   {
     id: "ファリエル",
@@ -417,6 +435,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ボグダス・ジャベリンメンバー。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Fariel.png",
   },
   {
     id: "アイナ",
@@ -427,6 +446,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ボグダス・ジャベリンメンバー。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/AinaVonRiesfeld.png",
   },
   {
     id: "ギャビー",
@@ -437,6 +457,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ボグダス・ジャベリンメンバー。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/FredericGabby.png",
   },
   {
     id: "シェロン",
@@ -447,6 +468,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ボグダス・ジャベリンメンバー。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/SheronJeras.png",
   },
   {
     id: "イルミーゼ",
@@ -457,6 +479,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ボグダス・ジャベリンメンバー。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Ilmise.png",
   },
   {
     id: "ホワイトノイズ",
@@ -467,6 +490,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ボグダス・ジャベリンメンバー。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/WhiteNoise.png",
   },
   {
     id: "ワドリナ",
@@ -477,6 +501,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ボグダス・ジャベリンメンバー。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Wadrina.png",
   },
   {
     id: "ニニギス",
@@ -487,6 +512,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ボグダス・ジャベリンメンバー。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/NinigisKaras.png",
   },
   {
     id: "イェシバトー",
@@ -497,6 +523,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ボグダス・ジャベリンメンバー。",
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Yeshibato.png",
   },
   {
     id: "アザゼル",
@@ -507,6 +534,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "元ヴァーミリオン首脳。",
     era: "?〜E480頃",
     affiliation: "ヴァーミリオン",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/AzazelHectopus.png",
   },
   {
     id: "ピアトリーノ",
@@ -517,6 +545,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "フィオナの腹心。ブルー・ローズ地下街担当。",
     era: "E515〜現在",
     affiliation: "ブルーローズ",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Piatrino.png",
   },
   {
     id: "アイク・ロペス",
@@ -568,6 +597,11 @@ const CHARACTERS: WikiEntry[] = [
     era: "E475〜E500頃",
     affiliation: "シルバー・ヴェノム",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/MasterVenom.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Yonik.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/MikaelGabrieli.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/ReidKakizaki.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/AikeLopez.png",
   },
   {
     id: "ゴルディロックス",
@@ -578,6 +612,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "アルファ・ヴェノムメンバー。",
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Goldilocks.png",
   },
   {
     id: "カタリナ",
@@ -588,6 +623,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "アルファ・ヴェノムメンバー。",
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Katarina.png",
   },
   {
     id: "ボブリスティ",
@@ -640,6 +676,11 @@ const CHARACTERS: WikiEntry[] = [
     era: "E340〜現在",
     affiliation: "不明（高次元存在）",
     tier: "Tier 1",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/SlimeWoman.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/AJ.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Lastman.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Gil.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Bobristy.png",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/Junandslime.txt", label: "Jun's Story" }],
   },
   {
@@ -652,6 +693,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E80〜E90",
     affiliation: "テンプル・オブ・ホライゾン",
     tier: "歴史的人物",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Temirtaron.png",
   },
   {
     id: "アリア・ソル",
@@ -663,6 +705,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E151頃",
     affiliation: "惑星連邦構想派",
     tier: "歴史的人物",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/AriaSol.png",
   },
   {
     id: "ゼナ",
@@ -686,6 +729,8 @@ const CHARACTERS: WikiEntry[] = [
     era: "E0頃",
     affiliation: "Eros-7",
     tier: "歴史的人物",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/LilithVane.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Zena.png",
   },
   {
     id: "シルヴィア・クロウ",
@@ -698,6 +743,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E97〜E101",
     affiliation: "Eros-7",
     tier: "歴史的人物",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/SylviaCrow.png",
   },
   {
     id: "カーラ・ヴェルム",
@@ -710,6 +756,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E380〜E505",
     affiliation: "Eros-7",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/KarlaVelm.png",
   },
   {
     id: "ガロ",
@@ -721,6 +768,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E330〜",
     affiliation: "シャドウ・ユニオン",
     tier: "Tier 2",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Garo.png",
   },
   {
     id: "アヤカ・リン",
@@ -733,6 +781,7 @@ const CHARACTERS: WikiEntry[] = [
     era: "E380〜現在",
     affiliation: "シャドウ・ユニオン / マトリカル・リフォーム運動",
     tier: "Tier 1",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/AyakaRin.png",
   },
 
   /* 新規キャラクター */
