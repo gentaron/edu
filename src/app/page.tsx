@@ -18,6 +18,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
+import Link from "next/link";
 import {
   Star,
   ChevronDown,
@@ -35,6 +36,9 @@ import {
   Menu,
   X,
   TrendingUp,
+  Gamepad2,
+  BookOpen,
+  ExternalLink,
 } from "lucide-react";
 
 /* ─── Section IDs ─── */
@@ -49,6 +53,8 @@ const SECTIONS = [
   { id: "characters", label: "キャラクター" },
   { id: "factions", label: "勢力系譜" },
   { id: "wiki-link", label: "Wiki", href: "/wiki" },
+  { id: "game-link", label: "Card Game", href: "/game" },
+  { id: "story-link", label: "Story", href: "/story/IRIS_1" },
 ];
 
 /* ─── Reveal-on-scroll hook ─── */
@@ -156,7 +162,11 @@ function Navigation({ activeSection }: { activeSection: string }) {
                 href={"href" in s && s.href ? s.href : `#${s.id}`}
                 className={`px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-all rounded-md hover:bg-cosmic-surface ${
                   "href" in s && s.href
-                    ? "text-gold-accent hover:text-gold-accent/80"
+                    ? s.id === "game-link"
+                      ? "text-rose-400 hover:text-rose-300"
+                      : s.id === "story-link"
+                      ? "text-cyan-400 hover:text-cyan-300"
+                      : "text-gold-accent hover:text-gold-accent/80"
                     : activeSection === s.id
                     ? "text-electric-blue bg-cosmic-surface"
                     : "text-cosmic-muted"
@@ -186,7 +196,11 @@ function Navigation({ activeSection }: { activeSection: string }) {
                 onClick={() => setMobileOpen(false)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                   "href" in s && s.href
-                    ? "text-gold-accent hover:text-gold-accent/80 bg-cosmic-surface"
+                    ? s.id === "game-link"
+                      ? "text-rose-400 hover:text-rose-300 bg-cosmic-surface"
+                      : s.id === "story-link"
+                      ? "text-cyan-400 hover:text-cyan-300 bg-cosmic-surface"
+                      : "text-gold-accent hover:text-gold-accent/80 bg-cosmic-surface"
                     : activeSection === s.id
                     ? "text-electric-blue bg-cosmic-surface"
                     : "text-cosmic-muted hover:bg-cosmic-surface"
@@ -224,6 +238,74 @@ function SectionHeader({
         <p className="text-cosmic-muted text-sm max-w-xl mx-auto">{subtitle}</p>
       )}
     </div>
+  );
+}
+
+/* ═══════════════════════════════════════════
+   QUICK ACCESS CARDS
+   ═══════════════════════════════════════════ */
+function QuickAccessSection() {
+  const cards = [
+    {
+      href: "/game",
+      icon: <Gamepad2 className="w-8 h-8" />,
+      title: "EDU Card Game",
+      desc: "E16連星系のキャラクターたちを使ったトレーディングカードゲーム。デッキを組んでAI対戦に挑もう",
+      gradient: "from-rose-500/20 via-purple-500/20 to-indigo-500/20",
+      iconColor: "text-rose-400",
+      borderColor: "border-rose-500/30 hover:border-rose-400/60",
+      tag: "PLAY",
+    },
+    {
+      href: "/wiki",
+      icon: <BookOpen className="w-8 h-8" />,
+      title: "EDU Wiki 百科事典",
+      desc: "E16連星系のすべてがここに。宇宙構造、歴史、キャラクター、勢力まで200以上の項目を収録",
+      gradient: "from-gold-accent/20 via-nebula-purple/20 to-electric-blue/20",
+      iconColor: "text-gold-accent",
+      borderColor: "border-gold-accent/30 hover:border-gold-accent/60",
+      tag: "READ",
+    },
+    {
+      href: "/story/IRIS_1",
+      icon: <Scroll className="w-8 h-8" />,
+      title: "Story 小説集",
+      desc: "アイリスの諜報活動、レイラの英雄伝、ミナの放浪記 — EDU世界を彩る物語を全文で",
+      gradient: "from-cyan-500/20 via-blue-500/20 to-nebula-purple/20",
+      iconColor: "text-cyan-400",
+      borderColor: "border-cyan-500/30 hover:border-cyan-400/60",
+      tag: "STORY",
+    },
+  ];
+
+  return (
+    <section className="relative py-16 px-4">
+      <div className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {cards.map((card) => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className={`group relative overflow-hidden rounded-xl border ${card.borderColor} bg-gradient-to-br ${card.gradient} backdrop-blur-sm transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-cosmic-dark/50`}
+            >
+              <div className="p-6 flex flex-col gap-3">
+                <div className="flex items-center justify-between">
+                  <div className={`${card.iconColor} transition-transform duration-300 group-hover:scale-110`}>{card.icon}</div>
+                  <span className={`text-[10px] font-bold tracking-widest ${card.iconColor} opacity-60`}>{card.tag}</span>
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-cosmic-text mb-1 flex items-center gap-1.5">
+                    {card.title}
+                    <ExternalLink className={`w-3.5 h-3.5 ${card.iconColor} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                  </h3>
+                  <p className="text-xs text-cosmic-muted leading-relaxed">{card.desc}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -1884,6 +1966,12 @@ function FooterSection() {
           </p>
         </div>
         <div className="flex justify-center gap-4 text-xs text-cosmic-muted">
+          <Link href="/game" className="hover:text-rose-400 transition-colors">Card Game</Link>
+          <span className="text-cosmic-border">|</span>
+          <Link href="/wiki" className="hover:text-gold-accent transition-colors">Wiki</Link>
+          <span className="text-cosmic-border">|</span>
+          <Link href="/story/IRIS_1" className="hover:text-cyan-400 transition-colors">Story</Link>
+          <span className="text-cosmic-border">|</span>
           <span>E528 / AD2026</span>
           <span className="text-cosmic-border">|</span>
           <span>光と音を永遠にする</span>
@@ -1930,6 +2018,11 @@ export default function HomePage() {
 
       <main className="relative z-10">
         <HeroSection />
+
+        {/* Quick Access Cards */}
+        <RevealSection>
+          <QuickAccessSection />
+        </RevealSection>
 
         {/* Divider between hero and content */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-nebula-purple/40 to-transparent" />
