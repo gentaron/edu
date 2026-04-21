@@ -254,7 +254,7 @@ function QuickAccessSection() {
       href: "/card-game",
       icon: <Gamepad2 className="w-8 h-8" />,
       title: "EDU Card Game",
-      desc: "25種のカードから20枚デッキを構築。10種の敵とのターン制PvEバトルに挑め",
+      desc: "全キャラクターをカードとして収録。デッキを構築し、10種の敵とターン制バトルに挑め",
       gradient: "from-rose-500/20 via-purple-500/20 to-indigo-500/20",
       iconColor: "text-rose-400",
       borderColor: "border-rose-500/30 hover:border-rose-400/60",

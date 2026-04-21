@@ -124,7 +124,7 @@ export default function DeckBuildPage() {
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Description */}
         <p className="text-xs text-cosmic-muted mb-6">
-          25枚のカードプールから20枚のデッキを構築してください（同一カード最大2枚）
+          64種のキャラクターカードプールから20枚のデッキを構築してください（同一カード最大2枚）
         </p>
 
         {/* Two-column layout */}
