@@ -80,6 +80,7 @@ export default function WikiEntryPage() {
                   alt={entry.name}
                   width={208}
                   height={208}
+                  unoptimized
                   className="w-full h-full object-cover"
                 />
               </div>
