@@ -4,8 +4,9 @@ import React, { useEffect } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, User, Scroll, ExternalLink } from "lucide-react";
+import { ArrowLeft, User, Scroll, BookOpen } from "lucide-react";
 import { ALL_ENTRIES } from "@/lib/wiki-data";
+import { getStoriesForEntry } from "@/lib/stories";
 
 const CATEGORY_STYLES: Record<string, { color: string; bg: string; border: string }> = {
   "キャラクター": { color: "text-nebula-purple", bg: "bg-nebula-purple/15", border: "border-nebula-purple/30" },
@@ -147,29 +148,31 @@ export default function WikiEntryPage() {
             </p>
           </div>
 
-          {/* Source links */}
-          {entry.sourceLinks && entry.sourceLinks.length > 0 && (
-            <div className="glass-card rounded-xl p-6 sm:p-8 mb-8">
-              <h2 className="text-sm font-bold text-cosmic-muted mb-4 uppercase tracking-wider flex items-center gap-2">
-                <ExternalLink className="w-4 h-4 text-nebula-purple" />
-                関連資料
-              </h2>
-              <div className="space-y-2">
-                {entry.sourceLinks.map((link, idx) => (
-                  <a
-                    key={idx}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl border border-nebula-purple/15 bg-nebula-purple/5 text-sm text-nebula-purple/90 hover:bg-nebula-purple/10 hover:border-nebula-purple/30 transition-all duration-200"
-                  >
-                    <ExternalLink className="w-4 h-4 shrink-0" />
-                    <span className="truncate">{link.label}</span>
-                  </a>
-                ))}
+          {/* Story links */}
+          {(() => {
+            const stories = getStoriesForEntry(entry.id);
+            if (stories.length === 0) return null;
+            return (
+              <div className="glass-card rounded-xl p-6 sm:p-8 mb-8">
+                <h2 className="text-sm font-bold text-cosmic-muted mb-4 uppercase tracking-wider flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-nebula-purple" />
+                  関連作品
+                </h2>
+                <div className="space-y-2">
+                  {stories.map((story) => (
+                    <Link
+                      key={story.slug}
+                      href={`/story/${story.slug}`}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl border border-nebula-purple/15 bg-nebula-purple/5 text-sm text-nebula-purple/90 hover:bg-nebula-purple/10 hover:border-nebula-purple/30 transition-all duration-200"
+                    >
+                      <BookOpen className="w-4 h-4 shrink-0" />
+                      <span className="truncate">{story.title}</span>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* Navigation between entries */}
           <div className="flex justify-between items-center gap-4">
