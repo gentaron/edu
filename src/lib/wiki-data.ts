@@ -556,6 +556,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "SSレンジ首脳。V7メンバー。",
     era: "E515〜現在",
     affiliation: "SSレンジ / V7",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/AikeLopez.png",
   },
   {
     id: "レイド・カキザキ",
@@ -566,6 +567,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "アイアン・シンジケート首脳。V7メンバー。",
     era: "E515〜現在",
     affiliation: "アイアン・シンジケート / V7",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/ReidKakizaki.png",
   },
   {
     id: "ミカエル・ガブリエリ",
@@ -576,6 +578,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ファールージャ社CEO。",
     era: "E515〜現在",
     affiliation: "ファールージャ社",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/MikaelGabrieli.png",
   },
   {
     id: "ヨニック",
@@ -586,6 +589,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "ブルー・ローズ政府最高司令官。",
     era: "E515〜現在",
     affiliation: "ブルーローズ",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Yonik.png",
   },
   {
     id: "マスター・ヴェノム",
@@ -630,6 +634,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "アルファ・ヴェノムメンバー。",
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Bobristy.png",
   },
   {
     id: "ギル",
@@ -640,6 +645,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "アルファ・ヴェノムメンバー。",
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Gil.png",
   },
   {
     id: "ラストマン",
@@ -650,6 +656,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "シルバー・ヴェノム残党。",
     era: "E500〜",
     affiliation: "シルバー・ヴェノム残党",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Lastman.png",
   },
   {
     id: "AJ",
@@ -660,6 +667,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "アルファ・ヴェノムメンバー。",
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/AJ.png",
   },
   {
     id: "Slime_Woman",
@@ -708,6 +716,7 @@ const CHARACTERS: WikiEntry[] = [
     description: "女性商人。アヤカ・リン・ガロと同盟を結びマトリカル・リフォーム運動に参加。",
     era: "E525〜",
     affiliation: "マトリカル・リフォーム運動",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/Zena.png",
   },
 
   /* Eros-7 */
