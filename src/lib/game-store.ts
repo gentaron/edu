@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { GameCard, Enemy } from "./card-data";
+import { type GameCard, type Enemy, type AbilityType } from "./card-data";
 
 /* ═══════════════════════════════════════════════════════
    Deck Store — 構築画面用（localStorage永続化）
@@ -11,6 +11,7 @@ interface DeckState {
   deckName: string;
   addCard: (card: GameCard) => void;
   removeCard: (cardId: string) => void;
+  moveCard: (fromIndex: number, toIndex: number) => void;
   clearDeck: () => void;
   setDeckName: (name: string) => void;
 }
@@ -23,17 +24,24 @@ export const useDeckStore = create<DeckState>()(
 
       addCard: (card) =>
         set((s) => {
-          const sameCount = s.deck.filter((c) => c.id === card.id).length;
-          if (s.deck.length >= 20 || sameCount >= 2) return s;
+          const alreadyExists = s.deck.some((c) => c.id === card.id);
+          if (s.deck.length >= 5 || alreadyExists) return s;
           return { deck: [...s.deck, card] };
         }),
 
       removeCard: (cardId) =>
         set((s) => {
-          const idx = s.deck.findIndex((c) => c.id === cardId);
-          if (idx === -1) return s;
+          const next = s.deck.filter((c) => c.id !== cardId);
+          return { deck: next };
+        }),
+
+      moveCard: (fromIndex, toIndex) =>
+        set((s) => {
+          if (fromIndex < 0 || fromIndex >= s.deck.length) return s;
+          if (toIndex < 0 || toIndex >= s.deck.length) return s;
           const next = [...s.deck];
-          next.splice(idx, 1);
+          const [moved] = next.splice(fromIndex, 1);
+          next.splice(toIndex, 0, moved);
           return { deck: next };
         }),
 
@@ -48,207 +56,237 @@ export const useDeckStore = create<DeckState>()(
    Battle Store — バトル画面用
    ═══════════════════════════════════════════════════════ */
 
-type BattlePhase = "idle" | "main" | "enemy" | "victory" | "defeat";
+type BattlePhase = "idle" | "playerTurn" | "resolving" | "enemyTurn" | "victory" | "defeat";
 
 interface BattleState {
   phase: BattlePhase;
   playerHp: number;
   playerMaxHp: number;
-  playerMana: number;
   shieldBuffer: number;
-  hand: GameCard[];
-  battleDeck: GameCard[];
-  discard: GameCard[];
-  field: GameCard[];
   selectedEnemy: Enemy | null;
   enemyHp: number;
   enemyCurrentPhase: number;
   turn: number;
-  cardsPlayedThisTurn: number;
+  currentCardIndex: number;
+  deckOrder: GameCard[];
+  playerAbility: AbilityType | null;
   poisonActive: boolean;
+  enemyAttackReduction: number;
   log: string[];
 
   startBattle: (enemy: Enemy, deck: GameCard[]) => void;
-  drawCard: () => void;
-  playCard: (cardId: string) => void;
-  endTurn: () => void;
+  playAbility: (ability: AbilityType) => void;
+  checkPhaseTransition: () => void;
+  executeEnemyTurn: () => void;
   resetBattle: () => void;
 }
 
 const PLAYER_MAX_HP = 30;
-const MAX_HAND = 5;
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 
 function addLog(
   setter: (fn: (s: BattleState) => Partial<BattleState>) => void,
   msg: string
 ) {
-  setter((s) => ({ log: [...s.log.slice(-9), msg] }));
+  setter((s) => ({ log: [...s.log.slice(-19), msg] }));
 }
 
 export const useBattleStore = create<BattleState>((set, get) => ({
   phase: "idle",
   playerHp: PLAYER_MAX_HP,
   playerMaxHp: PLAYER_MAX_HP,
-  playerMana: 0,
   shieldBuffer: 0,
-  hand: [],
-  battleDeck: [],
-  discard: [],
-  field: [],
   selectedEnemy: null,
   enemyHp: 0,
   enemyCurrentPhase: 0,
   turn: 0,
-  cardsPlayedThisTurn: 0,
+  currentCardIndex: 0,
+  deckOrder: [],
+  playerAbility: null,
   poisonActive: false,
+  enemyAttackReduction: 0,
   log: [],
 
   startBattle: (enemy, deck) => {
-    const shuffled = shuffle([...deck]);
-    const isFrost = enemy.id === "frost-guardian";
-    const initialDraw = isFrost ? 1 : 3;
-    const hand = shuffled.slice(0, initialDraw);
-    const remaining = shuffled.slice(initialDraw);
+    // 氷獄の守護者: 開始時HP-5
+    const hpPenalty = enemy.id === "frost-guardian" ? 5 : 0;
 
     set({
-      phase: "main",
-      playerHp: PLAYER_MAX_HP,
+      phase: "playerTurn",
+      playerHp: PLAYER_MAX_HP - hpPenalty,
       playerMaxHp: PLAYER_MAX_HP,
-      playerMana: 3,
       shieldBuffer: 0,
-      hand,
-      battleDeck: remaining,
-      discard: [],
-      field: [],
       selectedEnemy: enemy,
       enemyHp: enemy.maxHp,
       enemyCurrentPhase: 0,
       turn: 1,
-      cardsPlayedThisTurn: 0,
+      currentCardIndex: 0,
+      deckOrder: [...deck],
+      playerAbility: null,
       poisonActive: enemy.id === "venom-hydra",
-      log: [`⚔️ ${enemy.name} との戦闘開始！`],
+      enemyAttackReduction: 0,
+      log: [
+        `⚔️ ${enemy.name} との戦闘開始！`,
+        `— カード ${deck.length}/5 —`,
+      ],
     });
   },
 
-  drawCard: () => {
+  playAbility: (ability) => {
     const s = get();
-    if (s.hand.length >= MAX_HAND) return;
+    if (s.phase !== "playerTurn") return;
+    if (s.currentCardIndex >= s.deckOrder.length) return;
 
-    let deck = [...s.battleDeck];
-    let discard = [...s.discard];
+    const card = s.deckOrder[s.currentCardIndex];
+    const enemy = s.selectedEnemy;
+    if (!enemy) return;
 
-    if (deck.length === 0) {
-      if (discard.length === 0) return;
-      deck = shuffle(discard);
-      discard = [];
-      addLog(set, "墓地をシャッフルして山札に戻した。");
-    }
+    set({ phase: "resolving", playerAbility: ability });
 
-    const [drawn, ...rest] = deck;
-    set({ hand: [...s.hand, drawn], battleDeck: rest, discard });
-  },
-
-  playCard: (cardId) => {
-    const s = get();
-    if (s.phase !== "main") return;
-
-    const card = s.hand.find((c) => c.id === cardId);
-    if (!card) return;
-    if (s.playerMana < card.cost) return;
-
-    // 深淵の大蜘蛛: 偶数ターンは1枚制限
-    if (
-      s.selectedEnemy?.id === "void-spider" &&
-      s.turn % 2 === 0 &&
-      s.cardsPlayedThisTurn >= 1
-    ) {
-      return;
-    }
-
-    const newHand = s.hand.filter((c) => c.id !== cardId);
-    const newField = [...s.field, card];
     let newEnemyHp = s.enemyHp;
     let newPlayerHp = s.playerHp;
     let newShield = s.shieldBuffer;
-    let logMsg = `🎭 ${card.name}を使用！`;
+    let newEnemyAttackReduction = s.enemyAttackReduction;
+    let logMsg = "";
 
-    const enemyId = s.selectedEnemy?.id;
+    const enemyId = enemy.id;
+    const isVoidKingPhase3 = enemyId === "void-king" && s.enemyCurrentPhase >= 2;
+    const isVoidKingPhase2Plus = enemyId === "void-king" && s.enemyCurrentPhase >= 1;
 
-    if (card.type === "攻撃") {
-      newEnemyHp = Math.max(0, newEnemyHp - card.attack);
-      logMsg += ` 敵に${card.attack}ダメージ！`;
-    } else if (card.type === "防御") {
-      let defValue = card.defense;
-      if (enemyId === "iron-golem") {
-        defValue = Math.floor(defValue / 2);
-        logMsg += " 防御は半減！";
+    switch (ability) {
+      case "攻撃": {
+        // Void King phase 3: only 必殺 can deal damage in final phase
+        if (isVoidKingPhase3) {
+          logMsg = `🎭 ${card.name}の攻撃…しかし虚無に吸収された！`;
+        } else {
+          newEnemyHp = Math.max(0, newEnemyHp - card.attack);
+          logMsg = `⚔️ ${card.name}の攻撃！ 敵に${card.attack}ダメージ！`;
+        }
+        break;
       }
-      newShield += defValue;
-      logMsg += ` シールド+${defValue}`;
-      if (enemyId === "flame-spirit") {
-        newPlayerHp = Math.max(0, newPlayerHp - 1);
-        logMsg += " 熱で1ダメージ！";
+
+      case "防御": {
+        // 深淵の大蜘蛛: 偶数ターンは防御不可
+        if (enemyId === "void-spider" && s.turn % 2 === 0) {
+          logMsg = `🚫 深淵の大蜘蛛の干渉で防御が封じられた！`;
+        } else {
+          let defValue = card.defense;
+          // 鉄塊ゴーレム: 防御半減
+          if (enemyId === "iron-golem") {
+            defValue = Math.floor(defValue / 2);
+            logMsg = `🛡️ ${card.name}の防御！ シールド+${defValue}（半減！）`;
+          } else {
+            logMsg = `🛡️ ${card.name}の防御！ シールド+${defValue}`;
+          }
+          newShield += defValue;
+          // 炎の精霊王: 防御ごとに1ダメージ
+          if (enemyId === "flame-spirit") {
+            newPlayerHp = Math.max(0, newPlayerHp - 1);
+            logMsg += " 🔥熱で1ダメージ！";
+          }
+        }
+        break;
       }
-    } else if (card.type === "効果" && card.effect) {
-      if (card.effect.includes("ドロー") && card.effect.includes("ダメージ")) {
-        const dmgMatch = card.effect.match(/(\d+)ダメージ/);
-        const dmg = dmgMatch ? parseInt(dmgMatch[1]) : 2;
+
+      case "効果": {
+        const eff = card.effect;
+        const val = card.effectValue;
+
+        // Void King phase 3: only 必殺 can deal damage in final phase
+        const canDamage = !isVoidKingPhase3;
+
+        if (eff.includes("回復") && eff.includes("ダメージ") && eff.includes("シールド")) {
+          // "HPをX回復＋シールド+Y" pattern (e.g., Casteria)
+          const healVal = val;
+          const shieldVal = Math.max(1, Math.floor(val * 0.7));
+          if (canDamage) {
+            // Some effects also have damage component
+          }
+          newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + healVal);
+          newShield += shieldVal;
+          logMsg = `✨ ${card.name}の${card.effect}！ HP${healVal}回復＋シールド+${shieldVal}`;
+        } else if (eff.includes("ダメージ") && eff.includes("回復")) {
+          const dmg = val;
+          const heal = Math.max(1, Math.floor(val * 0.5));
+          if (canDamage) {
+            newEnemyHp = Math.max(0, newEnemyHp - dmg);
+          }
+          newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + heal);
+          if (canDamage) {
+            logMsg = `✨ ${card.name}の${card.effect}！ 敵に${dmg}ダメージ＋HP${heal}回復！`;
+          } else {
+            logMsg = `✨ ${card.name}の効果！ HP${heal}回復！（ダメージは吸収）`;
+          }
+        } else if (eff.includes("ダメージ") && eff.includes("シールド")) {
+          const dmg = val;
+          const shieldVal = Math.max(1, Math.floor(val * 0.7));
+          if (canDamage) {
+            newEnemyHp = Math.max(0, newEnemyHp - dmg);
+          }
+          newShield += shieldVal;
+          if (canDamage) {
+            logMsg = `✨ ${card.name}の${card.effect}！ 敵に${dmg}ダメージ＋シールド+${shieldVal}！`;
+          } else {
+            logMsg = `✨ ${card.name}の効果！ シールド+${shieldVal}！（ダメージは吸収）`;
+          }
+        } else if (eff.includes("回復")) {
+          const heal = val;
+          newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + heal);
+          logMsg = `✨ ${card.name}の${card.effect}！ HP${heal}回復！`;
+        } else if (eff.includes("ダメージ")) {
+          const dmg = val;
+          if (canDamage) {
+            newEnemyHp = Math.max(0, newEnemyHp - dmg);
+            logMsg = `✨ ${card.name}の${card.effect}！ 敵に${dmg}ダメージ！`;
+          } else {
+            logMsg = `✨ ${card.name}の効果…虚無に吸収された！`;
+          }
+        } else if (eff.includes("シールド")) {
+          const shieldVal = val;
+          newShield += shieldVal;
+          logMsg = `✨ ${card.name}の${card.effect}！ シールド+${shieldVal}！`;
+        } else if (eff.includes("低下")) {
+          newEnemyAttackReduction = Math.min(newEnemyAttackReduction + val, 8);
+          logMsg = `✨ ${card.name}の${card.effect}！ 敵の攻撃力-${val}！`;
+        } else if (eff.includes("次元ピラミッド")) {
+          // Special: deals 5 damage + 3 heal
+          if (canDamage) {
+            newEnemyHp = Math.max(0, newEnemyHp - 5);
+          }
+          newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + 3);
+          if (canDamage) {
+            logMsg = `✨ 次元ピラミッド展開！ 敵に5ダメージ＋HP3回復！`;
+          } else {
+            logMsg = `✨ 次元ピラミッド展開！ HP3回復！（ダメージは吸収）`;
+          }
+        } else {
+          // Fallback: heal
+          newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + val);
+          logMsg = `✨ ${card.name}の${card.effect}！ HP${val}回復！`;
+        }
+        break;
+      }
+
+      case "必殺": {
+        let dmg = card.ultimate;
+        // Void King phase 3: 必殺 deals 2x damage
+        if (isVoidKingPhase3) {
+          dmg *= 2;
+          logMsg = `💥 ${card.ultimateName}！！ 必殺ダメージ2倍で${dmg}ダメージ！！`;
+        } else {
+          logMsg = `💥 ${card.ultimateName}！！ ${dmg}ダメージ！！`;
+        }
         newEnemyHp = Math.max(0, newEnemyHp - dmg);
-        logMsg += ` 敵に${dmg}ダメージ！`;
-        setTimeout(() => get().drawCard(), 0);
-        logMsg += " 1枚ドロー！";
-      } else if (card.effect.includes("ドロー") && card.effect.includes("回復")) {
-        const healMatch = card.effect.match(/(\d+)回復/);
-        const heal = healMatch ? parseInt(healMatch[1]) : 2;
-        newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + heal);
-        logMsg += ` HP${heal}回復！`;
-        setTimeout(() => get().drawCard(), 0);
-        logMsg += " 1枚ドロー！";
-      } else if (card.effect.includes("ダメージ")) {
-        const dmgMatch = card.effect.match(/(\d+)ダメージ/);
-        const dmg = dmgMatch ? parseInt(dmgMatch[1]) : 2;
-        newEnemyHp = Math.max(0, newEnemyHp - dmg);
-        logMsg += ` 敵に${dmg}ダメージ！`;
-      } else if (card.effect.includes("回復")) {
-        const healMatch = card.effect.match(/(\d+)回復/);
-        const heal = healMatch ? parseInt(healMatch[1]) : 3;
-        newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + heal);
-        logMsg += ` HP${heal}回復！`;
+        break;
       }
-    } else if (card.type === "必殺") {
-      let dmg = card.attack;
-      if (enemyId === "void-king" && s.enemyCurrentPhase === 2) {
-        dmg *= 2;
-        logMsg += " 必殺ダメージ2倍！";
-      }
-      newEnemyHp = Math.max(0, newEnemyHp - dmg);
-      logMsg += ` 必殺で${dmg}ダメージ！`;
     }
 
     addLog(set, logMsg);
 
-    set({
-      hand: newHand,
-      field: newField,
-      playerMana: s.playerMana - card.cost,
-      enemyHp: newEnemyHp,
-      playerHp: newPlayerHp,
-      shieldBuffer: newShield,
-      cardsPlayedThisTurn: s.cardsPlayedThisTurn + 1,
-    });
-
+    // Check victory
     if (newEnemyHp <= 0) {
       set((prev) => ({
         phase: "victory",
+        enemyHp: 0,
         log: [
           ...prev.log,
           `🏆 ${prev.selectedEnemy!.name} を撃破！`,
@@ -258,80 +296,98 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       return;
     }
 
+    set({
+      enemyHp: newEnemyHp,
+      playerHp: newPlayerHp,
+      shieldBuffer: newShield,
+      enemyAttackReduction: newEnemyAttackReduction,
+    });
+
+    // Check phase transitions
     get().checkPhaseTransition();
+
+    // Enemy turn after delay
+    setTimeout(() => {
+      get().executeEnemyTurn();
+    }, 1000);
   },
 
-  endTurn: () => {
+  executeEnemyTurn: () => {
     const s = get();
-    if (s.phase !== "main") return;
+    if (!s.selectedEnemy) return;
+    if (s.phase === "victory" || s.phase === "defeat") return;
 
-    const newDiscard = [...s.discard, ...s.field];
-    addLog(set, "— プレイヤーターン終了 —");
-    set({ phase: "enemy", field: [], discard: newDiscard });
+    const enemy = s.selectedEnemy;
+    const hpPercent = (s.enemyHp / enemy.maxHp) * 100;
 
-    setTimeout(() => {
-      const cs = get();
-      if (cs.phase !== "enemy" || !cs.selectedEnemy) return;
+    set({ phase: "enemyTurn" });
 
-      const enemy = cs.selectedEnemy;
-      const hpPercent = (cs.enemyHp / enemy.maxHp) * 100;
-
-      // Sum attack bonus from all active phases
-      let totalBonus = 0;
-      for (const p of enemy.phases) {
-        if (hpPercent <= p.triggerHpPercent) {
-          totalBonus += p.attackBonus;
-        }
+    // Sum attack bonus from all active phases
+    let totalBonus = 0;
+    for (const p of enemy.phases) {
+      if (hpPercent <= p.triggerHpPercent) {
+        totalBonus += p.attackBonus;
       }
+    }
 
-      const totalAttack = enemy.attackPower + totalBonus;
-      const damage = Math.max(0, totalAttack - cs.shieldBuffer);
+    const baseAttack = Math.max(0, enemy.attackPower + totalBonus - s.enemyAttackReduction);
+    const damage = Math.max(0, baseAttack - s.shieldBuffer);
 
-      addLog(set, `💥 ${enemy.name}の攻撃！ ${damage}ダメージ！`);
+    addLog(set, `💥 ${enemy.name}の攻撃！ ${damage}ダメージ！`);
 
-      let newPlayerHp = Math.max(0, cs.playerHp - damage);
+    let newPlayerHp = Math.max(0, s.playerHp - damage);
 
-      // 毒ダメージ
-      if (cs.poisonActive) {
-        newPlayerHp = Math.max(0, newPlayerHp - 1);
-        addLog(set, "☠️ 毒により1ダメージ！");
+    // 毒ダメージ
+    if (s.poisonActive) {
+      newPlayerHp = Math.max(0, newPlayerHp - 1);
+      addLog(set, "☠️ 毒により1ダメージ！");
+    }
+
+    // 敵自己回復
+    let newEnemyHp = s.enemyHp;
+    for (const p of enemy.phases) {
+      if (p.selfHealPerTurn && hpPercent <= p.triggerHpPercent) {
+        newEnemyHp = Math.min(enemy.maxHp, newEnemyHp + p.selfHealPerTurn);
+        addLog(set, `💚 ${enemy.name}が${p.selfHealPerTurn}HP回復！`);
       }
+    }
 
-      // 敵自己回復
-      let newEnemyHp = cs.enemyHp;
-      for (const p of enemy.phases) {
-        if (p.selfHealPerTurn && hpPercent <= p.triggerHpPercent) {
-          newEnemyHp = Math.min(enemy.maxHp, newEnemyHp + p.selfHealPerTurn);
-          addLog(set, `💚 ${enemy.name}が${p.selfHealPerTurn}HP回復！`);
-        }
-      }
+    const nextCardIndex = s.currentCardIndex + 1;
 
-      set({
-        playerHp: newPlayerHp,
-        enemyHp: newEnemyHp,
-        shieldBuffer: 0,
-      });
+    set({
+      playerHp: newPlayerHp,
+      enemyHp: newEnemyHp,
+      shieldBuffer: 0,
+      enemyAttackReduction: 0,
+      currentCardIndex: nextCardIndex,
+      playerAbility: null,
+    });
 
-      if (newPlayerHp <= 0) {
-        set((prev) => ({
-          phase: "defeat",
-          log: [...prev.log, "💀 プレイヤーは倒された..."],
-        }));
-        return;
-      }
+    if (newPlayerHp <= 0) {
+      set((prev) => ({
+        phase: "defeat",
+        log: [...prev.log, "💀 プレイヤーは倒された..."],
+      }));
+      return;
+    }
 
-      // 次ターン
-      const newTurn = cs.turn + 1;
-      const newMana = Math.min(newTurn + 1, 6);
-      set({
-        phase: "main",
-        turn: newTurn,
-        playerMana: newMana,
-        cardsPlayedThisTurn: 0,
-      });
-      addLog(set, `— ターン${newTurn} — マナ${newMana}`);
-      setTimeout(() => get().drawCard(), 100);
-    }, 800);
+    // Check if all cards used
+    if (nextCardIndex >= s.deckOrder.length) {
+      set((prev) => ({
+        phase: "defeat",
+        log: [...prev.log, "💀 カードが全て使い果たされた…"],
+      }));
+      return;
+    }
+
+    // Next turn
+    const newTurn = s.turn + 1;
+    const remaining = s.deckOrder.length - nextCardIndex;
+    set({
+      phase: "playerTurn",
+      turn: newTurn,
+    });
+    addLog(set, `— ターン${newTurn} — 残り${remaining}枚`);
   },
 
   checkPhaseTransition: () => {
@@ -351,11 +407,11 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       addLog(set, `⚠️ ${s.selectedEnemy.phases[newPhase - 1].message}`);
       set({ enemyCurrentPhase: newPhase });
 
-      // ヴォイドリーパー: フェーズ移行で手札没収
+      // ヴォイドリーパー: フェーズ移行で3ダメージ
       if (s.selectedEnemy.id === "void-reaper") {
-        const discarded = [...s.hand];
-        addLog(set, `🌪️ 手札${discarded.length}枚を吹き飛ばされた！`);
-        set({ hand: [], discard: [...s.discard, ...discarded] });
+        const newHp = Math.max(0, s.playerHp - 3);
+        addLog(set, `🌪️ 次元断絶の衝撃で3ダメージ！`);
+        set({ playerHp: newHp });
       }
     }
   },
@@ -365,18 +421,16 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       phase: "idle",
       playerHp: PLAYER_MAX_HP,
       playerMaxHp: PLAYER_MAX_HP,
-      playerMana: 0,
       shieldBuffer: 0,
-      hand: [],
-      battleDeck: [],
-      discard: [],
-      field: [],
       selectedEnemy: null,
       enemyHp: 0,
       enemyCurrentPhase: 0,
       turn: 0,
-      cardsPlayedThisTurn: 0,
+      currentCardIndex: 0,
+      deckOrder: [],
+      playerAbility: null,
       poisonActive: false,
+      enemyAttackReduction: 0,
       log: [],
     }),
 }));

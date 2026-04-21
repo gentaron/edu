@@ -121,14 +121,14 @@ export default function EnemySelectPage() {
   const router = useRouter();
   const deck = useDeckStore((s) => s.deck);
 
-  if (deck.length < 20) {
+  if (deck.length < 5) {
     return (
       <div className="min-h-screen bg-cosmic-dark flex items-center justify-center">
         <div className="glass-card rounded-xl p-8 text-center max-w-sm">
           <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto mb-4" />
           <h2 className="text-lg font-bold text-cosmic-text mb-2">デッキが未完成です</h2>
           <p className="text-xs text-cosmic-muted mb-6">
-            デッキは20枚必要です。現在 <span className="text-rose-400 font-bold">{deck.length}</span>/20枚
+            デッキは5枚必要です。現在 <span className="text-rose-400 font-bold">{deck.length}</span>/5枚
           </p>
           <Link
             href="/card-game"

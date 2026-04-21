@@ -1,19 +1,21 @@
 "use client";
 
-import React, { useEffect, useRef, useCallback, useMemo, Suspense } from "react";
+import React, { useEffect, useRef, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Swords,
   Heart,
-  Droplets,
   Shield,
-  Skull,
   Crown,
   AlertTriangle,
+  Zap,
+  Sparkles,
+  Crosshair,
+  Skull,
 } from "lucide-react";
-import { ENEMIES, type GameCard, type CardType } from "@/lib/card-data";
+import { ENEMIES, type GameCard, type AbilityType } from "@/lib/card-data";
 import { useDeckStore, useBattleStore } from "@/lib/game-store";
 import {
   Dialog,
@@ -23,78 +25,44 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-/* ─── Card Type Colors ─── */
-const typeStyles: Record<CardType, { border: string; bg: string; badge: string }> = {
-  攻撃: { border: "border-red-400/50", bg: "bg-red-500/10", badge: "bg-red-500/20 text-red-400" },
-  防御: { border: "border-blue-400/50", bg: "bg-blue-500/10", badge: "bg-blue-500/20 text-blue-400" },
-  効果: { border: "border-purple-400/50", bg: "bg-purple-500/10", badge: "bg-purple-500/20 text-purple-400" },
-  必殺: { border: "border-yellow-400/50", bg: "bg-yellow-500/10", badge: "bg-yellow-500/20 text-yellow-400" },
-};
-
-/* ─── Hand Card ─── */
-function HandCard({
-  card,
-  playable,
+/* ─── Ability Button ─── */
+function AbilityButton({
+  label,
+  icon,
+  value,
+  subLabel,
+  color,
   onClick,
-  isSpiderRestricted,
+  disabled,
 }: {
-  card: GameCard;
-  playable: boolean;
+  label: string;
+  icon: React.ReactNode;
+  value: string;
+  subLabel?: string;
+  color: string;
   onClick: () => void;
-  isSpiderRestricted: boolean;
+  disabled: boolean;
 }) {
-  const ts = typeStyles[card.type];
-  const disabled = !playable || isSpiderRestricted;
-  const reason = isSpiderRestricted ? "今ターンは1枚のみ" : "";
-
   return (
     <motion.button
-      layout
-      whileHover={disabled ? {} : { y: -8 }}
-      whileTap={disabled ? {} : { scale: 0.95 }}
+      whileHover={disabled ? {} : { scale: 1.03 }}
+      whileTap={disabled ? {} : { scale: 0.97 }}
       onClick={onClick}
       disabled={disabled}
-      title={reason}
-      className={`relative w-28 h-40 rounded-xl border backdrop-blur-sm flex flex-col items-center justify-between p-2 transition-all duration-200 shrink-0 ${ts.border} ${ts.bg} ${
-        disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"
-      } ${card.rarity === "SR" ? "shadow-yellow-400/20 shadow-md" : ""}`}
+      className={`flex-1 rounded-xl border backdrop-blur-sm p-3 transition-all duration-200 flex flex-col items-center gap-1.5 ${
+        disabled
+          ? "opacity-30 cursor-not-allowed border-cosmic-border/20 bg-cosmic-deep/30"
+          : `cursor-pointer hover:shadow-lg border-opacity-40 ${color}`
+      }`}
     >
-      {/* Cost */}
-      <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-nebula-purple border border-nebula-purple/50 flex items-center justify-center">
-        <span className="text-[10px] font-bold text-white">{card.cost}</span>
-      </div>
-
-      {/* Rarity badge */}
-      {card.rarity !== "C" && (
-        <div className="absolute top-0.5 left-0.5">
-          <span className={`text-[7px] font-bold ${card.rarity === "SR" ? "text-yellow-400" : "text-blue-400"}`}>
-            {card.rarity}
-          </span>
-        </div>
+      {icon}
+      <span className="text-xs font-bold text-cosmic-text">{label}</span>
+      <span className="text-[10px] font-bold text-cosmic-muted">{value}</span>
+      {subLabel && (
+        <span className="text-[8px] text-cosmic-muted/70 leading-tight text-center line-clamp-2 max-w-full">
+          {subLabel}
+        </span>
       )}
-
-      {/* Image */}
-      <div className="w-12 h-12 rounded-lg overflow-hidden bg-cosmic-deep/50 mb-1">
-        <img src={card.imageUrl} alt={card.name} className="w-full h-full object-contain" />
-      </div>
-
-      {/* Name */}
-      <p className="text-[8px] font-bold text-cosmic-text text-center leading-tight line-clamp-2">
-        {card.name}
-      </p>
-
-      {/* Type Badge */}
-      <span className={`text-[7px] font-bold px-1 py-0.5 rounded ${ts.badge}`}>{card.type}</span>
-
-      {/* Stats */}
-      <div className="text-[8px] text-center">
-        {card.type === "攻撃" && <span className="text-red-400 font-bold">ATK {card.attack}</span>}
-        {card.type === "防御" && <span className="text-blue-400 font-bold">DEF {card.defense}</span>}
-        {card.type === "効果" && card.effect && (
-          <span className="text-purple-300 leading-tight">{card.effect}</span>
-        )}
-        {card.type === "必殺" && <span className="text-yellow-400 font-bold">ATK {card.attack}</span>}
-      </div>
     </motion.button>
   );
 }
@@ -115,7 +83,7 @@ function HpBar({ current, max, color }: { current: number; max: number; color: "
   );
 }
 
-/* ─── Battle Content (needs useSearchParams) ─── */
+/* ─── Battle Content ─── */
 function BattleContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -126,30 +94,30 @@ function BattleContent() {
   const phase = useBattleStore((s) => s.phase);
   const playerHp = useBattleStore((s) => s.playerHp);
   const playerMaxHp = useBattleStore((s) => s.playerMaxHp);
-  const playerMana = useBattleStore((s) => s.playerMana);
   const shieldBuffer = useBattleStore((s) => s.shieldBuffer);
-  const hand = useBattleStore((s) => s.hand);
-  const battleDeck = useBattleStore((s) => s.battleDeck);
-  const discard = useBattleStore((s) => s.discard);
   const selectedEnemy = useBattleStore((s) => s.selectedEnemy);
   const enemyHp = useBattleStore((s) => s.enemyHp);
   const enemyCurrentPhase = useBattleStore((s) => s.enemyCurrentPhase);
   const turn = useBattleStore((s) => s.turn);
-  const cardsPlayedThisTurn = useBattleStore((s) => s.cardsPlayedThisTurn);
+  const currentCardIndex = useBattleStore((s) => s.currentCardIndex);
+  const deckOrder = useBattleStore((s) => s.deckOrder);
+  const playerAbility = useBattleStore((s) => s.playerAbility);
   const poisonActive = useBattleStore((s) => s.poisonActive);
+  const enemyAttackReduction = useBattleStore((s) => s.enemyAttackReduction);
   const log = useBattleStore((s) => s.log);
 
   const startBattle = useBattleStore((s) => s.startBattle);
-  const playCard = useBattleStore((s) => s.playCard);
-  const endTurn = useBattleStore((s) => s.endTurn);
+  const playAbility = useBattleStore((s) => s.playAbility);
   const resetBattle = useBattleStore((s) => s.resetBattle);
+
+  const currentCard: GameCard | undefined = deckOrder[currentCardIndex];
 
   // Start battle on mount
   useEffect(() => {
     const enemyId = searchParams.get("enemy");
     if (enemyId && !selectedEnemy) {
       const enemy = ENEMIES.find((e) => e.id === enemyId);
-      if (enemy && deck.length >= 20) {
+      if (enemy && deck.length >= 5) {
         startBattle(enemy, deck);
       } else {
         router.replace("/card-game/select");
@@ -178,13 +146,19 @@ function BattleContent() {
 
   if (!selectedEnemy) return null;
 
-  const maxMana = Math.min(turn + 1, 6);
-  const isPlayerTurn = phase === "main";
+  const isPlayerTurn = phase === "playerTurn";
+  const isResolving = phase === "resolving";
   const isVictory = phase === "victory";
   const isDefeat = phase === "defeat";
+  const remainingCards = deckOrder.length - currentCardIndex;
 
-  const isSpiderRestricted =
-    selectedEnemy.id === "void-spider" && turn % 2 === 0 && cardsPlayedThisTurn >= 1;
+  // Check if defense is blocked (void-spider even turn)
+  const isDefenseBlocked =
+    selectedEnemy.id === "void-spider" && turn % 2 === 0;
+
+  // Check if attack/effect damage is blocked (void-king phase 3)
+  const isDamageBlocked =
+    selectedEnemy.id === "void-king" && enemyCurrentPhase >= 2;
 
   const phaseMessages = log.filter(
     (l) => l.startsWith("⚠️") || l.startsWith("🌪️") || l.startsWith("💚")
@@ -202,16 +176,17 @@ function BattleContent() {
           <span className="text-cosmic-border">|</span>
           <Swords className="w-4 h-4 text-rose-400" />
           <span className="text-xs font-bold text-cosmic-gradient">Battle</span>
-          <span className="text-[10px] text-cosmic-muted ml-auto">ターン {turn}</span>
+          <span className="text-[10px] text-cosmic-muted ml-auto">
+            ターン {turn} | 残り {remainingCards}/{deckOrder.length}
+          </span>
         </div>
       </div>
 
-      {/* 3-Row Layout */}
       <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-4 py-3 gap-3 overflow-hidden">
 
         {/* ── Top: Enemy Area ── */}
         <motion.div
-          animate={phase === "enemy" ? { x: [0, -12, 12, -10, 10, 0] } : {}}
+          animate={phase === "enemyTurn" ? { x: [0, -12, 12, -10, 10, 0] } : {}}
           transition={{ duration: 0.4 }}
           className="glass-card rounded-xl p-4 shrink-0"
         >
@@ -261,20 +236,11 @@ function BattleContent() {
                   ⚡ {selectedEnemy.specialRule}
                 </p>
               )}
-
-              {/* Log */}
-              <div ref={logRef} className="mt-2 space-y-0.5 max-h-16 overflow-hidden">
-                {log.slice(-4).map((msg, i) => (
-                  <p key={i} className="text-[9px] text-cosmic-muted/60 truncate">
-                    {msg}
-                  </p>
-                ))}
-              </div>
             </div>
           </div>
         </motion.div>
 
-        {/* ── Middle: Battle Info ── */}
+        {/* ── Middle: Player Status ── */}
         <div className="glass-card rounded-xl p-3 shrink-0">
           <div className="flex items-center justify-between flex-wrap gap-3">
             {/* Player HP */}
@@ -284,20 +250,6 @@ function BattleContent() {
               <span className="text-[10px] font-bold text-emerald-400 whitespace-nowrap">
                 {playerHp}/{playerMaxHp}
               </span>
-            </div>
-
-            {/* Mana */}
-            <div className="flex items-center gap-1">
-              <Droplets className="w-3 h-3 text-electric-blue" />
-              {Array.from({ length: maxMana }, (_, i) => (
-                <span
-                  key={i}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    i < playerMana ? "bg-electric-blue" : "bg-cosmic-deep border border-cosmic-border/30"
-                  }`}
-                />
-              ))}
-              <span className="text-[9px] text-cosmic-muted ml-0.5">{playerMana}/{maxMana}</span>
             </div>
 
             {/* Status badges */}
@@ -312,126 +264,219 @@ function BattleContent() {
                   ☠️ 毒
                 </span>
               )}
-              {isSpiderRestricted && (
+              {enemyAttackReduction > 0 && (
+                <span className="text-[9px] text-cyan-400 bg-cyan-500/10 border border-cyan-400/20 rounded px-1.5 py-0.5">
+                  ⬇ 敵攻撃-{enemyAttackReduction}
+                </span>
+              )}
+              {isDefenseBlocked && (
                 <span className="text-[9px] text-orange-400 bg-orange-500/10 border border-orange-400/20 rounded px-1.5 py-0.5">
-                  🕸️ 1枚制限
+                  🕸️ 防御封じ
                 </span>
               )}
             </div>
-
-            {/* Deck / Discard counts */}
-            <div className="text-[9px] text-cosmic-muted flex items-center gap-2">
-              <span>山札: {battleDeck.length}</span>
-              <span>墓地: {discard.length}</span>
-            </div>
           </div>
         </div>
 
-        {/* ── Bottom: Player Area ── */}
-        <div className="glass-card rounded-xl p-3 flex-1 flex flex-col min-h-0">
-          {/* Hand */}
-          <div className="flex gap-2 overflow-x-auto pb-2 mb-3 flex-1 items-end">
-            <AnimatePresence mode="popLayout">
-              {hand.map((card) => (
-                <motion.div
-                  key={card.id + "_" + turn + "_" + hand.indexOf(card)}
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -40 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <HandCard
-                    card={card}
-                    playable={isPlayerTurn && playerMana >= card.cost}
-                    onClick={() => playCard(card.id)}
-                    isSpiderRestricted={isSpiderRestricted}
-                  />
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-
-          {/* End Turn */}
-          <div className="shrink-0">
-            <button
-              onClick={endTurn}
-              disabled={!isPlayerTurn}
-              className={`w-full py-2.5 rounded-xl text-xs font-bold transition-all ${
-                isPlayerTurn
-                  ? "bg-nebula-purple/20 border border-nebula-purple/40 text-nebula-purple hover:bg-nebula-purple/30"
-                  : "bg-cosmic-deep/50 border border-cosmic-border/20 text-cosmic-muted cursor-not-allowed"
-              }`}
+        {/* ── Bottom: Card + Abilities + Log ── */}
+        {currentCard && !isVictory && !isDefeat && (
+          <div className="flex-1 flex flex-col gap-3 min-h-0">
+            {/* Current Card Display */}
+            <motion.div
+              key={currentCardIndex}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="glass-card rounded-xl p-4 shrink-0"
             >
-              {phase === "enemy" ? "敵の攻撃中..." : "ターン終了"}
-            </button>
+              <div className="flex items-center gap-4">
+                {/* Card Image */}
+                <div className="w-24 h-32 rounded-xl overflow-hidden bg-cosmic-deep/50 border border-cosmic-border/30 shrink-0 relative">
+                  <img
+                    src={currentCard.imageUrl}
+                    alt={currentCard.name}
+                    className="w-full h-full object-cover"
+                  />
+                  {currentCard.rarity !== "C" && (
+                    <div className="absolute top-1 left-1">
+                      <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${
+                        currentCard.rarity === "SR"
+                          ? "bg-yellow-500/30 text-yellow-300 border border-yellow-400/50"
+                          : "bg-blue-500/30 text-blue-300 border border-blue-400/50"
+                      }`}>
+                        {currentCard.rarity}
+                      </span>
+                    </div>
+                  )}
+                  {/* Card position */}
+                  <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-nebula-purple/80 border border-nebula-purple/50 flex items-center justify-center">
+                    <span className="text-[8px] font-bold text-white">{currentCardIndex + 1}</span>
+                  </div>
+                </div>
+
+                {/* Card Info */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm font-bold text-cosmic-text mb-0.5">{currentCard.name}</h3>
+                  <p className="text-[9px] text-cosmic-muted mb-2">{currentCard.affiliation}</p>
+
+                  {/* Flavor Text */}
+                  <p className="text-[9px] text-cosmic-muted/60 italic mb-2 line-clamp-2">
+                    {currentCard.flavorText}
+                  </p>
+
+                  {/* Quick Stats */}
+                  <div className="flex items-center gap-3 text-[9px]">
+                    <span className="text-red-400 font-bold">⚔ 攻撃 {currentCard.attack}</span>
+                    <span className="text-blue-400 font-bold">🛡 防御 {currentCard.defense}</span>
+                    <span className="text-purple-300 font-bold">✨ 効果 {currentCard.effectValue}</span>
+                    <span className="text-yellow-400 font-bold">💥 必殺 {currentCard.ultimate}</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Ability Buttons */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 shrink-0">
+              <AbilityButton
+                label="攻撃"
+                icon={<Crosshair className="w-5 h-5 text-red-400" />}
+                value={`${currentCard.attack}ダメージ`}
+                subLabel={isDamageBlocked ? "（無効化）" : undefined}
+                color="bg-red-500/10 border-red-400/40 hover:bg-red-500/20"
+                onClick={() => playAbility("攻撃")}
+                disabled={!isPlayerTurn}
+              />
+              <AbilityButton
+                label="防御"
+                icon={<Shield className="w-5 h-5 text-blue-400" />}
+                value={`シールド+${currentCard.defense}`}
+                subLabel={isDefenseBlocked ? "（封じられ中）" : undefined}
+                color="bg-blue-500/10 border-blue-400/40 hover:bg-blue-500/20"
+                onClick={() => playAbility("防御")}
+                disabled={!isPlayerTurn || isDefenseBlocked}
+              />
+              <AbilityButton
+                label="効果"
+                icon={<Sparkles className="w-5 h-5 text-purple-400" />}
+                value={currentCard.effect}
+                subLabel={isDamageBlocked && currentCard.effect.includes("ダメージ") ? "（ダメージ無効）" : undefined}
+                color="bg-purple-500/10 border-purple-400/40 hover:bg-purple-500/20"
+                onClick={() => playAbility("効果")}
+                disabled={!isPlayerTurn}
+              />
+              <AbilityButton
+                label="必殺"
+                icon={<Zap className="w-5 h-5 text-yellow-400" />}
+                value={`${currentCard.ultimateName}！${currentCard.ultimate}ダメージ`}
+                subLabel={
+                  isDamageBlocked && selectedEnemy.id === "void-king" && enemyCurrentPhase >= 2
+                    ? "（2倍！→ ${currentCard.ultimate * 2}ダメージ）"
+                    : undefined
+                }
+                color="bg-yellow-500/10 border-yellow-400/40 hover:bg-yellow-500/20"
+                onClick={() => playAbility("必殺")}
+                disabled={!isPlayerTurn}
+              />
+            </div>
+
+            {/* Status indicator */}
+            <div className="text-center shrink-0">
+              {isPlayerTurn && (
+                <p className="text-[10px] text-emerald-400/70">能力を選んでください</p>
+              )}
+              {isResolving && (
+                <p className="text-[10px] text-yellow-400/70">
+                  {playerAbility === "必殺" ? "💥 必殺発動中..." : "能力を発動中..."}
+                </p>
+              )}
+              {phase === "enemyTurn" && (
+                <p className="text-[10px] text-rose-400/70 animate-pulse">敵の攻撃中...</p>
+              )}
+            </div>
+
+            {/* Battle Log */}
+            <div className="glass-card rounded-xl p-3 flex-1 min-h-0 overflow-hidden flex flex-col">
+              <div className="flex items-center gap-1.5 mb-2 shrink-0">
+                <Swords className="w-3 h-3 text-cosmic-muted" />
+                <span className="text-[9px] font-bold text-cosmic-muted">バトルログ</span>
+              </div>
+              <div
+                ref={logRef}
+                className="space-y-0.5 overflow-y-auto flex-1 max-h-32 custom-scrollbar"
+              >
+                {log.map((msg, i) => (
+                  <p
+                    key={i}
+                    className={`text-[9px] leading-relaxed ${
+                      msg.startsWith("💥") ? "text-rose-400/80" :
+                      msg.startsWith("⚔️") ? "text-red-400/70" :
+                      msg.startsWith("🛡️") ? "text-blue-400/70" :
+                      msg.startsWith("✨") ? "text-purple-400/70" :
+                      msg.startsWith("💥") ? "text-yellow-400/80" :
+                      msg.startsWith("⚠️") ? "text-red-400" :
+                      msg.startsWith("🌪️") ? "text-cyan-400" :
+                      msg.startsWith("💚") ? "text-emerald-400" :
+                      msg.startsWith("🏆") ? "text-gold-accent" :
+                      msg.startsWith("💀") ? "text-rose-400" :
+                      msg.startsWith("—") ? "text-cosmic-muted/40" :
+                      "text-cosmic-muted/60"
+                    }`}
+                  >
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Defeat with no card (all cards used) or victory/defeat */}
+        {(isVictory || isDefeat) && (
+          <div className="flex-1 glass-card rounded-xl p-4 flex flex-col items-center justify-center gap-4">
+            {isVictory ? (
+              <>
+                <Crown className="w-12 h-12 text-gold-accent" />
+                <h2 className="text-xl font-black text-gold-accent">勝利！</h2>
+                <p className="text-sm text-cosmic-muted">{selectedEnemy.name} を撃破した！</p>
+                <p className="text-xs text-gold-accent">🏆 {selectedEnemy.reward}</p>
+              </>
+            ) : (
+              <>
+                <Skull className="w-12 h-12 text-rose-400" />
+                <h2 className="text-xl font-black text-rose-400">敗北...</h2>
+                <p className="text-sm text-cosmic-muted">
+                  {playerHp <= 0
+                    ? `${selectedEnemy.name} に倒された…`
+                    : "カードが全て使い果たされた…"}
+                </p>
+                <p className="text-xs text-cosmic-muted">
+                  敵残りHP: <span className="text-rose-400 font-bold">{enemyHp}</span> /
+                  <span className="text-cosmic-muted">{selectedEnemy.maxHp}</span>
+                </p>
+              </>
+            )}
+
+            <div className="flex gap-3 mt-2">
+              <button
+                onClick={handleRetry}
+                className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${
+                  isVictory
+                    ? "bg-gold-accent/20 border border-gold-accent/40 text-gold-accent hover:bg-gold-accent/30"
+                    : "bg-red-500/20 border border-red-400/40 text-red-400 hover:bg-red-500/30"
+                }`}
+              >
+                もう一度挑戦
+              </button>
+              <button
+                onClick={handleDeckChange}
+                className="px-6 py-2 rounded-lg bg-cosmic-surface/50 border border-cosmic-border/30 text-cosmic-muted text-sm hover:bg-cosmic-surface transition-all"
+              >
+                デッキを変える
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* ── Victory Modal ── */}
-      <Dialog open={isVictory} onOpenChange={() => {}}>
-        <DialogContent className="bg-cosmic-dark border-gold-accent/50 sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="text-center text-2xl font-black text-gold-accent">
-              勝利！
-            </DialogTitle>
-            <DialogDescription className="text-center text-cosmic-muted">
-              {selectedEnemy.name} を撃破した！
-            </DialogDescription>
-          </DialogHeader>
-          <div className="text-center py-4 space-y-4">
-            <p className="text-sm text-gold-accent font-medium">🏆 {selectedEnemy.reward}</p>
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={handleRetry}
-                className="py-2 rounded-lg bg-gold-accent/20 border border-gold-accent/40 text-gold-accent text-sm font-bold hover:bg-gold-accent/30 transition-all"
-              >
-                もう一度挑戦
-              </button>
-              <button
-                onClick={handleDeckChange}
-                className="py-2 rounded-lg bg-cosmic-surface/50 border border-cosmic-border/30 text-cosmic-muted text-sm hover:bg-cosmic-surface transition-all"
-              >
-                デッキを変える
-              </button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* ── Defeat Modal ── */}
-      <Dialog open={isDefeat} onOpenChange={() => {}}>
-        <DialogContent className="bg-cosmic-dark border-red-500/50 sm:max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="text-center text-2xl font-black text-red-400">
-              敗北...
-            </DialogTitle>
-            <DialogDescription className="text-center text-cosmic-muted">
-              {selectedEnemy.name} に倒された…
-            </DialogDescription>
-          </DialogHeader>
-          <div className="text-center py-4 space-y-3">
-            <p className="text-xs text-cosmic-muted">
-              敵残りHP: <span className="text-rose-400 font-bold">{enemyHp}</span> /
-              <span className="text-cosmic-muted">{selectedEnemy.maxHp}</span>
-            </p>
-            <div className="flex flex-col gap-2">
-              <button
-                onClick={handleRetry}
-                className="py-2 rounded-lg bg-red-500/20 border border-red-400/40 text-red-400 text-sm font-bold hover:bg-red-500/30 transition-all"
-              >
-                もう一度挑戦
-              </button>
-              <button
-                onClick={handleDeckChange}
-                className="py-2 rounded-lg bg-cosmic-surface/50 border border-cosmic-border/30 text-cosmic-muted text-sm hover:bg-cosmic-surface transition-all"
-              >
-                デッキを変える
-              </button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
