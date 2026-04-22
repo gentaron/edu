@@ -1,9 +1,9 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { BookOpen, ArrowLeft, Clock, Users, ChevronDown, Library } from "lucide-react"
 import { ALL_STORIES, CHAPTERS, getStoriesByChapter } from "@/lib/stories"
 
@@ -101,16 +101,16 @@ function seededRandom(seed: number) {
 }
 
 function StarField() {
-  const stars = React.useMemo(
+  const stars = useMemo(
     () =>
-      Array.from({ length: 100 }, (_, i) => ({
+      Array.from({ length: 80 }, (_, i) => ({
         id: i,
         left: seededRandom(i * 7 + 1)() * 100,
         top: seededRandom(i * 13 + 3)() * 100,
         size: seededRandom(i * 17 + 5)() * 2 + 0.5,
         delay: seededRandom(i * 23 + 7)() * 5,
         duration: seededRandom(i * 29 + 11)() * 3 + 2,
-        opacity: seededRandom(i * 31 + 13)() * 0.6 + 0.2,
+        opacity: seededRandom(i * 31 + 13)() * 0.5 + 0.2,
       })),
     []
   )
@@ -135,60 +135,117 @@ function StarField() {
   )
 }
 
-/* ─── Animations ─── */
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06 },
-  },
-}
+/* ─── Story Card ─── */
+function StoryCard({
+  story,
+  chapter,
+  index,
+}: {
+  story: (typeof ALL_STORIES)[0]
+  chapter: (typeof CHAPTERS)[0]
+  index: number
+}) {
+  const colors = CHAPTER_COLORS[chapter.id]
+  return (
+    <Link
+      href={`/story/${story.slug}`}
+      className="block group relative glass-card glass-card-hover rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+    >
+      {/* Top accent line */}
+      <div
+        className={`h-0.5 bg-gradient-to-r ${chapter.color} opacity-50 group-hover:opacity-100 transition-opacity duration-300`}
+      />
+      <div className="p-5">
+        {/* Number + Title */}
+        <div className="flex items-start gap-3 mb-3">
+          <span
+            className={`shrink-0 w-7 h-7 rounded-lg ${colors.bg} flex items-center justify-center text-[10px] font-bold ${colors.text} border ${colors.border}`}
+          >
+            {index + 1}
+          </span>
+          <div className="min-w-0 flex-1">
+            <h4 className="text-sm font-bold text-cosmic-text group-hover:text-electric-blue transition-colors mb-0.5 leading-snug">
+              {story.title}
+            </h4>
+            {story.label !== story.title && (
+              <p className="text-[10px] text-cosmic-muted truncate">{story.label}</p>
+            )}
+          </div>
+        </div>
 
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
-}
+        {/* Era */}
+        {story.era && (
+          <div className="mb-3">
+            <span
+              className={`inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border ${colors.badge}`}
+            >
+              <Clock className="w-3 h-3" />
+              {story.era}
+            </span>
+          </div>
+        )}
 
-const chapterHeader = {
-  hidden: { opacity: 0, scale: 0.95 },
-  show: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.6, ease: "easeOut" as const },
-  },
+        {/* Characters */}
+        {story.relatedEntries.length > 0 && (
+          <div className="mb-4 flex items-center gap-1.5 flex-wrap">
+            <Users className="w-3 h-3 text-cosmic-muted shrink-0" />
+            {story.relatedEntries.map((entry) => (
+              <Link
+                key={entry}
+                href={`/wiki#${entry}`}
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1 text-[10px] text-cosmic-muted bg-cosmic-surface/50 border border-cosmic-border/30 rounded-full px-2 py-0.5 hover:text-electric-blue hover:border-electric-blue/30 transition-colors"
+              >
+                {entryImageMap[entry] && (
+                  <Image
+                    src={entryImageMap[entry]}
+                    alt={entry}
+                    width={14}
+                    height={14}
+                    className="rounded-full"
+                  />
+                )}
+                {entry}
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* CTA */}
+        <div className="flex items-center justify-end">
+          <span
+            className={`inline-flex items-center gap-1 text-xs font-medium ${colors.text} group-hover:gap-2 transition-all`}
+          >
+            読む
+            <span>→</span>
+          </span>
+        </div>
+      </div>
+    </Link>
+  )
 }
 
 /* ─── Chapter Section ─── */
 function ChapterSection({
   chapter,
   stories,
-  index,
 }: {
   chapter: (typeof CHAPTERS)[0]
   stories: (typeof ALL_STORIES)[0][]
-  index: number
 }) {
-  const [isOpen, setIsOpen] = useState(index < 2) // First 2 chapters open by default
+  const [isOpen, setIsOpen] = useState(true)
   const colors = CHAPTER_COLORS[chapter.id]
-  const isExpanded = isOpen
 
   return (
-    <motion.section
-      variants={container}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-50px" }}
-      className="mb-12"
-    >
-      {/* Chapter Header — Clickable to expand/collapse */}
-      <motion.button
-        variants={chapterHeader}
-        onClick={() => setIsOpen(!isOpen)}
+    <section className="mb-14">
+      {/* Chapter Header */}
+      <button
+        type="button"
+        onClick={() => setIsOpen((v) => !v)}
         className={`w-full text-left glass-card rounded-2xl p-6 sm:p-8 mb-6 transition-all duration-300 hover:shadow-lg ${colors.glow} group cursor-pointer border ${colors.border}`}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            {/* Chapter Number + Title */}
             <div className="flex items-center gap-3 mb-2">
               <span
                 className={`text-4xl sm:text-5xl font-black bg-gradient-to-br ${chapter.color} bg-clip-text text-transparent leading-none`}
@@ -196,14 +253,12 @@ function ChapterSection({
                 {toRoman(chapter.id)}
               </span>
               <div>
-                <h3 className={`text-lg sm:text-xl font-bold ${colors.text}`}>{chapter.titleJa}</h3>
+                <h2 className={`text-lg sm:text-xl font-bold ${colors.text}`}>{chapter.titleJa}</h2>
                 <p className="text-xs text-cosmic-muted tracking-widest uppercase">
                   {chapter.titleEn}
                 </p>
               </div>
             </div>
-
-            {/* Era Badge */}
             <div className="flex items-center gap-2 mt-3 mb-3">
               <Clock className="w-3.5 h-3.5 text-cosmic-muted" />
               <span
@@ -213,129 +268,46 @@ function ChapterSection({
               </span>
               <span className="text-[11px] text-cosmic-muted">{stories.length} 作品</span>
             </div>
-
-            {/* Description */}
             <p className="text-xs sm:text-sm text-cosmic-muted/80 leading-relaxed max-w-2xl">
               {chapter.description}
             </p>
           </div>
-
-          {/* Expand/Collapse Icon */}
           <div
-            className={`shrink-0 w-8 h-8 rounded-lg ${colors.bg} flex items-center justify-center transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}
+            className={`shrink-0 w-8 h-8 rounded-lg ${colors.bg} flex items-center justify-center transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
           >
             <ChevronDown className={`w-4 h-4 ${colors.text}`} />
           </div>
         </div>
-      </motion.button>
+      </button>
 
-      {/* Story Cards */}
-      <AnimatePresence>
-        {isExpanded && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pl-0 sm:pl-2">
-              {stories.map((story, i) => (
-                <motion.div key={story.slug} variants={item} transition={{ delay: i * 0.05 }}>
-                  <Link
-                    href={`/story/${story.slug}`}
-                    className="block group relative glass-card glass-card-hover rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
-                  >
-                    {/* Top accent line */}
-                    <div
-                      className={`h-0.5 bg-gradient-to-r ${chapter.color} opacity-60 group-hover:opacity-100 transition-opacity`}
-                    />
-
-                    <div className="p-5">
-                      {/* Chapter indicator + Title */}
-                      <div className="flex items-start gap-3 mb-3">
-                        <span
-                          className={`shrink-0 w-7 h-7 rounded-lg ${colors.bg} flex items-center justify-center text-[10px] font-bold ${colors.text} border ${colors.border}`}
-                        >
-                          {i + 1}
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <h4
-                            className={`text-sm font-bold text-cosmic-text group-hover:text-electric-blue transition-colors mb-0.5 leading-snug`}
-                          >
-                            {story.title}
-                          </h4>
-                          {story.label !== story.title && (
-                            <p className="text-[10px] text-cosmic-muted truncate">{story.label}</p>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Era Badge */}
-                      {story.era && (
-                        <div className="mb-3">
-                          <span
-                            className={`inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border ${colors.badge}`}
-                          >
-                            <Clock className="w-3 h-3" />
-                            {story.era}
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Related Characters */}
-                      {story.relatedEntries.length > 0 && (
-                        <div className="mb-4 flex items-center gap-1.5 flex-wrap">
-                          <Users className="w-3 h-3 text-cosmic-muted shrink-0" />
-                          {story.relatedEntries.map((entry) => (
-                            <Link
-                              key={entry}
-                              href={`/wiki#${entry}`}
-                              onClick={(e) => e.stopPropagation()}
-                              className="flex items-center gap-1 text-[10px] text-cosmic-muted bg-cosmic-surface/50 border border-cosmic-border/30 rounded-full px-2 py-0.5 hover:text-electric-blue hover:border-electric-blue/30 transition-colors"
-                            >
-                              {entryImageMap[entry] && (
-                                <Image
-                                  src={entryImageMap[entry]}
-                                  alt={entry}
-                                  width={14}
-                                  height={14}
-                                  className="rounded-full"
-                                />
-                              )}
-                              {entry}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Read CTA */}
-                      <div className="flex items-center justify-end">
-                        <span
-                          className={`inline-flex items-center gap-1 text-xs font-medium ${colors.text} group-hover:gap-2 transition-all`}
-                        >
-                          読む
-                          <span>→</span>
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.section>
+      {/* Story Cards Grid — always rendered, visibility via CSS for stability */}
+      <div
+        className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pl-0 sm:pl-2 transition-all duration-300 ${
+          isOpen
+            ? "max-h-[9999px] opacity-100"
+            : "max-h-0 opacity-0 overflow-hidden pointer-events-none"
+        }`}
+      >
+        {stories.map((story, i) => (
+          <StoryCard key={story.slug} story={story} chapter={chapter} index={i} />
+        ))}
+      </div>
+    </section>
   )
 }
 
-/* ─── Main Page ─── */
+/* ─── Pre-compute stats ─── */
 const uniqueCharacters = new Set<string>()
 for (const s of ALL_STORIES) {
   for (const e of s.relatedEntries) uniqueCharacters.add(e)
 }
 
+const chapterData = CHAPTERS.map((ch) => ({
+  chapter: ch,
+  stories: getStoriesByChapter(ch.id),
+})).filter((d) => d.stories.length > 0)
+
+/* ─── Main Page ─── */
 export default function StoryArchivePage() {
   return (
     <div className="relative min-h-screen bg-cosmic-dark">
@@ -364,24 +336,20 @@ export default function StoryArchivePage() {
 
       <main className="relative z-10 pt-20 pb-20 px-4">
         <div className="max-w-5xl mx-auto">
-          {/* Hero Section */}
+          {/* Hero */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
+            transition={{ duration: 0.7 }}
             className="text-center mb-16"
           >
-            {/* Decorative top line */}
             <div className="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-nebula-purple to-transparent mb-8" />
-
             <div className="flex items-center justify-center gap-3 mb-4">
               <BookOpen className="w-8 h-8 text-nebula-purple" />
             </div>
-
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-cosmic-gradient mb-4 tracking-wider">
               Story Archive
             </h1>
-
             <p className="text-sm sm:text-base text-cosmic-muted max-w-xl mx-auto leading-relaxed">
               Eternal Dominion Universe —
               <br className="sm:hidden" /> 全五章にわたる物語全集
@@ -415,12 +383,12 @@ export default function StoryArchivePage() {
 
             {/* Chapter Timeline Preview */}
             <div className="flex justify-center gap-2 mt-8 flex-wrap">
-              {CHAPTERS.map((ch, i) => (
+              {CHAPTERS.map((ch) => (
                 <motion.div
                   key={ch.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + i * 0.1, duration: 0.4 }}
+                  transition={{ delay: 0.3 + ch.id * 0.1, duration: 0.4 }}
                   className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-medium ${CHAPTER_COLORS[ch.id].badge}`}
                 >
                   <span className="font-black">{toRoman(ch.id)}</span>
@@ -429,18 +397,13 @@ export default function StoryArchivePage() {
               ))}
             </div>
 
-            {/* Decorative bottom line */}
             <div className="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-nebula-purple to-transparent mt-8" />
           </motion.div>
 
           {/* Chapter Sections */}
-          {CHAPTERS.map((chapter, index) => {
-            const stories = getStoriesByChapter(chapter.id)
-            if (stories.length === 0) return null
-            return (
-              <ChapterSection key={chapter.id} chapter={chapter} stories={stories} index={index} />
-            )
-          })}
+          {chapterData.map((data) => (
+            <ChapterSection key={data.chapter.id} chapter={data.chapter} stories={data.stories} />
+          ))}
         </div>
       </main>
 

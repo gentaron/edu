@@ -50,14 +50,6 @@ const entryImageMap: Record<string, string> = {
   "Ninny Offenbach": "/edu-fiona.png",
 }
 
-function seededRandom(seed: number) {
-  let s = seed
-  return () => {
-    s = (s * 16807 + 0) % 2147483647
-    return (s - 1) / 2147483646
-  }
-}
-
 function toRoman(n: number): string {
   const map: [number, string][] = [
     [10, "X"],
@@ -76,54 +68,25 @@ function toRoman(n: number): string {
   return result
 }
 
-function StarField() {
-  const stars = React.useMemo(
-    () =>
-      Array.from({ length: 60 }, (_, i) => ({
-        id: i,
-        left: seededRandom(i * 7 + 1)() * 100,
-        top: seededRandom(i * 13 + 3)() * 100,
-        size: seededRandom(i * 17 + 5)() * 2 + 0.5,
-        delay: seededRandom(i * 23 + 7)() * 5,
-        duration: seededRandom(i * 29 + 11)() * 3 + 2,
-        opacity: seededRandom(i * 31 + 13)() * 0.5 + 0.2,
-      })),
-    []
-  )
+/* Scene break detection — stable pure function */
+function isSceneBreak(text: string): boolean {
+  const t = text.trim()
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-      {stars.map((s) => (
-        <div
-          key={s.id}
-          className="absolute rounded-full bg-white animate-twinkle"
-          style={{
-            left: `${s.left}%`,
-            top: `${s.top}%`,
-            width: s.size,
-            height: s.size,
-            animationDelay: `${s.delay}s`,
-            animationDuration: `${s.duration}s`,
-            opacity: s.opacity,
-          }}
-        />
-      ))}
-    </div>
+    t.startsWith("─") ||
+    t.startsWith("─") ||
+    t.startsWith("==") ||
+    t.startsWith("**") ||
+    t.startsWith("##") ||
+    t.startsWith("＊") ||
+    t.length < 5
   )
 }
 
-function ReadingProgressBar() {
-  return (
-    <div
-      id="reading-progress"
-      className="fixed top-[56px] left-0 right-0 z-50 h-0.5 bg-cosmic-border/30"
-    >
-      <div
-        id="reading-progress-bar"
-        className="h-full bg-gradient-to-r from-nebula-purple via-electric-blue to-nebula-purple w-0 transition-[width] duration-100"
-      />
-    </div>
-  )
-}
+/* ─── Reading Progress (client component) ─── */
+import ReadingProgress from "./_components/reading-progress"
+
+/* ─── Star Field (client component) ─── */
+import StarField from "./_components/star-field"
 
 function RelatedStoriesSection({
   currentSlug,
@@ -150,23 +113,24 @@ function RelatedStoriesSection({
         関連作品
       </h3>
       <div className="flex flex-col gap-2">
-        {stories.map((s) =>
-          s ? (
-            <Link
-              key={s.slug}
-              href={`/story/${s.slug}`}
-              className="flex items-center gap-3 px-4 py-3 rounded-xl border border-nebula-purple/15 bg-nebula-purple/5 text-sm text-nebula-purple/90 hover:bg-nebula-purple/10 hover:border-nebula-purple/30 transition-all duration-200 group"
-            >
-              <BookOpen className="w-4 h-4 shrink-0" />
-              <div className="flex-1 min-w-0">
-                <span className="truncate block group-hover:text-electric-blue transition-colors">
-                  {s.title}
-                </span>
-                {s.era && <span className="text-[10px] text-cosmic-muted">{s.era}</span>}
-              </div>
-              <ChevronRight className="w-3 h-3 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-            </Link>
-          ) : null
+        {stories.map(
+          (s) =>
+            s && (
+              <Link
+                key={s.slug}
+                href={`/story/${s.slug}`}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl border border-nebula-purple/15 bg-nebula-purple/5 text-sm text-nebula-purple/90 hover:bg-nebula-purple/10 hover:border-nebula-purple/30 transition-all duration-200 group"
+              >
+                <BookOpen className="w-4 h-4 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <span className="truncate block group-hover:text-electric-blue transition-colors">
+                    {s.title}
+                  </span>
+                  {s.era && <span className="text-[10px] text-cosmic-muted">{s.era}</span>}
+                </div>
+                <ChevronRight className="w-3 h-3 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </Link>
+            )
         )}
       </div>
     </div>
@@ -200,7 +164,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
   return (
     <div className="relative min-h-screen bg-cosmic-dark">
       <StarField />
-      <ReadingProgressBar />
+      <ReadingProgress />
 
       {/* Top Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-cosmic-border/50">
@@ -267,7 +231,6 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
 
           {/* Story Header */}
           <header className="mb-12">
-            {/* Chapter gradient accent */}
             {chapter && (
               <div className={`h-0.5 w-16 mb-6 bg-gradient-to-r ${chapter.color} rounded-full`} />
             )}
@@ -287,13 +250,13 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
               </div>
             )}
 
-            {/* Related Characters — Fancy chips */}
+            {/* Related Characters */}
             <div className="flex flex-wrap gap-2">
               {relatedEntries.map((entry) => (
                 <Link
                   key={entry.id}
                   href={`/wiki/${encodeURIComponent(entry.id)}`}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-full border border-nebula-purple/20 bg-nebula-purple/5 text-nebula-purple/80 hover:bg-nebula-purple/15 hover:border-nebula-purple/40 transition-all duration-200 group"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-full border border-nebula-purple/20 bg-nebula-purple/5 text-nebula-purple/80 hover:bg-nebula-purple/15 hover:border-nebula-purple/40 transition-all duration-200"
                 >
                   <div className="w-5 h-5 rounded-full overflow-hidden border border-nebula-purple/30 bg-cosmic-dark/60 flex items-center justify-center shrink-0">
                     {entryImageMap[entry.name] ? (
@@ -325,11 +288,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
           <article className="prose-story">
             {paragraphs.map((p, i) => (
               <div key={i} className="mb-6">
-                {/* Scene break indicator */}
-                {p.trim().startsWith("─") ||
-                p.trim().startsWith("==") ||
-                p.trim().startsWith("**") ||
-                p.trim().startsWith("##") ? (
+                {isSceneBreak(p) ? (
                   <div className="flex items-center justify-center py-4">
                     <div className="w-12 h-px bg-nebula-purple/30" />
                     <div className="w-1.5 h-1.5 rounded-full bg-nebula-purple/40 mx-3" />
@@ -344,7 +303,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
             ))}
           </article>
 
-          {/* Story footer */}
+          {/* Story footer divider */}
           <div className="mt-12 flex items-center gap-3">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-cosmic-border/40 to-transparent" />
             <BookOpen className="w-3 h-3 text-cosmic-border/50" />
@@ -354,7 +313,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
           {/* Related Stories */}
           <RelatedStoriesSection currentSlug={slug} entryIds={story.relatedEntries} />
 
-          {/* Chapter Navigation — Prev/Next within chapter */}
+          {/* Chapter Navigation */}
           <div className="mt-12 pt-8 border-t border-cosmic-border/30">
             <div className="flex items-center justify-between gap-4">
               {prev ? (
@@ -397,7 +356,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
             </div>
           </div>
 
-          {/* Back to archive */}
+          {/* Back links */}
           <div className="mt-10 text-center">
             <Link
               href="/story"
@@ -435,26 +394,6 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
           </Link>
         </div>
       </footer>
-
-      {/* Reading progress script */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              var bar = document.getElementById('reading-progress-bar');
-              if (!bar) return;
-              function update() {
-                var scrollTop = window.scrollY || document.documentElement.scrollTop;
-                var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-                bar.style.width = progress + '%';
-              }
-              window.addEventListener('scroll', update, { passive: true });
-              update();
-            })();
-          `,
-        }}
-      />
     </div>
   )
 }
