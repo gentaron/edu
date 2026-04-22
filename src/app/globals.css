@@ -122,29 +122,62 @@
 
 /* Star field animation */
 @keyframes twinkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.3), 0 0 60px rgba(124, 58, 237, 0.1); }
-  50% { box-shadow: 0 0 30px rgba(124, 58, 237, 0.5), 0 0 80px rgba(124, 58, 237, 0.2); }
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(124, 58, 237, 0.3),
+      0 0 60px rgba(124, 58, 237, 0.1);
+  }
+  50% {
+    box-shadow:
+      0 0 30px rgba(124, 58, 237, 0.5),
+      0 0 80px rgba(124, 58, 237, 0.2);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 
 @keyframes scroll-bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
-  40% { transform: translateY(-8px) translateX(-50%); }
-  60% { transform: translateY(-4px) translateX(-50%); }
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0) translateX(-50%);
+  }
+  40% {
+    transform: translateY(-8px) translateX(-50%);
+  }
+  60% {
+    transform: translateY(-4px) translateX(-50%);
+  }
 }
 
 .animate-twinkle {
@@ -206,15 +239,21 @@
 
 /* Glow effects */
 .glow-purple {
-  box-shadow: 0 0 20px rgba(124, 58, 237, 0.4), 0 0 60px rgba(124, 58, 237, 0.1);
+  box-shadow:
+    0 0 20px rgba(124, 58, 237, 0.4),
+    0 0 60px rgba(124, 58, 237, 0.1);
 }
 
 .glow-blue {
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.4), 0 0 60px rgba(56, 189, 248, 0.1);
+  box-shadow:
+    0 0 20px rgba(56, 189, 248, 0.4),
+    0 0 60px rgba(56, 189, 248, 0.1);
 }
 
 .glow-gold {
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4), 0 0 60px rgba(245, 158, 11, 0.1);
+  box-shadow:
+    0 0 20px rgba(245, 158, 11, 0.4),
+    0 0 60px rgba(245, 158, 11, 0.1);
 }
 
 /* Consistency note special border */
@@ -225,7 +264,7 @@
 }
 
 .consistency-border::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: -2px;
   border-radius: inherit;
@@ -240,7 +279,9 @@
 .reveal-section {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  transition:
+    opacity 0.8s ease-out,
+    transform 0.8s ease-out;
 }
 
 .reveal-section.visible {
@@ -266,7 +307,70 @@
 
 /* Story prose styling */
 .prose-story p:first-of-type::first-letter {
-  font-size: 1.15em;
-  font-weight: 600;
-  color: rgba(167, 139, 250, 0.9);
+  font-size: 1.3em;
+  font-weight: 700;
+  color: rgba(167, 139, 250, 0.95);
+  float: left;
+  margin-right: 0.08em;
+  line-height: 1;
+}
+
+.prose-story p {
+  position: relative;
+}
+
+/* Reading progress bar */
+#reading-progress {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Chapter section animations */
+@keyframes chapter-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0px transparent;
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(124, 58, 237, 0.08);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+/* Scene break decoration */
+.scene-break {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
+.scene-break::before,
+.scene-break::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(124, 58, 237, 0.3), transparent);
+}
+
+.scene-break-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(124, 58, 237, 0.4);
+  margin: 0 0.75rem;
 }

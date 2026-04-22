@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest"
-import { ALL_STORIES, getStoryBySlug } from "../stories"
+import {
+  ALL_STORIES,
+  CHAPTERS,
+  getStoryBySlug,
+  getStoriesByChapter,
+  getAdjacentStories,
+} from "../stories"
 
 describe("stories", () => {
   it("ALL_STORIES should have no duplicate slugs", () => {
@@ -32,5 +38,42 @@ describe("stories", () => {
     // Test non-existent slug
     const notFound = getStoryBySlug("non-existent-story")
     expect(notFound).toBeUndefined()
+  })
+
+  it("CHAPTERS should have 5 entries", () => {
+    expect(CHAPTERS.length).toBe(5)
+  })
+
+  it("each story should have a valid chapter assignment", () => {
+    for (const story of ALL_STORIES) {
+      expect(story.chapter).toBeGreaterThanOrEqual(1)
+      expect(story.chapter).toBeLessThanOrEqual(5)
+      expect(typeof story.chapterOrder).toBe("number")
+      expect(story.chapterOrder).toBeGreaterThanOrEqual(1)
+    }
+  })
+
+  it("getStoriesByChapter should return stories sorted by chapterOrder", () => {
+    const chapter1 = getStoriesByChapter(1)
+    expect(chapter1.length).toBeGreaterThanOrEqual(1)
+    for (let i = 1; i < chapter1.length; i++) {
+      expect(chapter1[i].chapterOrder).toBeGreaterThanOrEqual(chapter1[i - 1].chapterOrder)
+    }
+  })
+
+  it("getAdjacentStories should return correct prev/next within chapter", () => {
+    const jen1 = getStoryBySlug("jen-story-1")
+    expect(jen1).toBeDefined()
+    const { prev, next } = getAdjacentStories(jen1!)
+    expect(prev).toBeDefined() // nebura
+    expect(next).toBeDefined() // jen-story-2
+    expect(next!.slug).toBe("jen-story-2")
+
+    // First in chapter should have no prev
+    const nebura = getStoryBySlug("nebura")
+    expect(nebura).toBeDefined()
+    const { prev: nebPrev, next: nebNext } = getAdjacentStories(nebura!)
+    expect(nebPrev).toBeUndefined()
+    expect(nebNext).toBeDefined()
   })
 })
