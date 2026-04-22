@@ -717,7 +717,7 @@ export const ENEMIES: Enemy[] = [
     id: "frost-guardian",
     name: "氷獄の守護者",
     title: "絶対零度の鎧",
-    maxHp: 38,
+    maxHp: 42,
     attackPower: 5,
     imageUrl: "/logo.svg",
     description:
@@ -737,8 +737,8 @@ export const ENEMIES: Enemy[] = [
     id: "flame-spirit",
     name: "炎の精霊王",
     title: "業火の化身",
-    maxHp: 32,
-    attackPower: 6,
+    maxHp: 36,
+    attackPower: 7,
     imageUrl: "/logo.svg",
     description:
       "太古の火山に宿る炎の精霊。その熱量は防壁すら溶かし、近づく者を灰に変える。",
@@ -754,7 +754,7 @@ export const ENEMIES: Enemy[] = [
     id: "void-spider",
     name: "深淵の大蜘蛛",
     title: "虚無の糸使い",
-    maxHp: 40,
+    maxHp: 45,
     attackPower: 4,
     imageUrl: "/logo.svg",
     description:
@@ -771,8 +771,8 @@ export const ENEMIES: Enemy[] = [
     id: "fallen-angel",
     name: "堕落した天使",
     title: "翼なき裁判者",
-    maxHp: 50,
-    attackPower: 6,
+    maxHp: 65,
+    attackPower: 8,
     imageUrl: "/logo.svg",
     description:
       "かつてAURALISの守護天使だったが、次元崩壊に巻き込まれ堕天した。3段階の怒りを持つ。",
@@ -797,8 +797,8 @@ export const ENEMIES: Enemy[] = [
     id: "void-reaper",
     name: "ヴォイドリーパー",
     title: "時空の刈り手",
-    maxHp: 55,
-    attackPower: 7,
+    maxHp: 75,
+    attackPower: 9,
     imageUrl: "/logo.svg",
     description:
       "虚無から現れ、存在そのものを刈り取る死神。3フェーズの力で時空を歪める。",
@@ -816,8 +816,8 @@ export const ENEMIES: Enemy[] = [
     id: "void-king",
     name: "虚無の王",
     title: "終焉の支配者",
-    maxHp: 70,
-    attackPower: 8,
+    maxHp: 100,
+    attackPower: 11,
     imageUrl: "/logo.svg",
     description:
       "全ての虚無の根源。宇宙の終わりを体現する存在。必殺能力のみが最終フェーズを突破できる。",
