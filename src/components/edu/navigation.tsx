@@ -13,7 +13,7 @@ const SECTIONS = [
   { id: "characters", label: "キャラクター", href: "/characters" },
   { id: "factions", label: "勢力系譜", href: "/factions" },
   { id: "technology", label: "技術体系", href: "/technology" },
-  { id: "card-game-link", label: "Card Game", href: "/card-game/select" },
+  { id: "card-game-link", label: "Card Game", href: "/card-game" },
   { id: "wiki-link", label: "Wiki", href: "/wiki" },
   { id: "story-link", label: "Story", href: "/story" },
   { id: "ranking-link", label: "長者番付", href: "/ranking" },

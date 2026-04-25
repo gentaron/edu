@@ -25,6 +25,32 @@ export default function TimelinePage() {
 
         <RevealSection>
           <div className="max-w-4xl mx-auto px-4 pb-20">
+            {/* 概説 */}
+            <div className="glass-card rounded-xl p-6 mb-8">
+              <h2 className="text-lg font-bold text-cosmic-text mb-4 flex items-center gap-2">
+                <Scroll className="w-5 h-5 text-gold-accent" /> 統合年表とは
+              </h2>
+              <div className="space-y-3 text-sm text-cosmic-muted leading-relaxed">
+                <p>
+                  E16連星系の人類史は、
+                  <span className="text-gold-accent font-medium">AD 3500年の地球離脱</span>
+                  から始まり、<span className="text-electric-blue font-medium">E528年の現代</span>
+                  に至るまで、約2000年以上にわたる壮大なドラマを紡いできた。この年表は、各時代の主要な出来事を場所別に整理し、E16文明の全体像を俯瞰できるように構成されている。各時代は異なる背景色で識別され、重要な出来事には対応する場所のバッジが付与されている。
+                </p>
+                <p>
+                  年表は大きく<span className="text-cosmic-text font-medium">地球時代</span>、
+                  <span className="text-cosmic-text font-medium">開拓期</span>、
+                  <span className="text-cosmic-text font-medium">E16文明の発展期</span>、そして
+                  <span className="text-cosmic-text font-medium">現代（E520年代）</span>
+                  の主要なフェーズに分けられる。開拓期にはテクロサス帝国やセリア・ドミニクスのような初期国家が台頭し、その後のE16文明の政治・文化・技術の基盤を形成した。E400年代のエヴァトロン弾圧は文明全体に深い傷跡を残し、その余波は現代の国際情勢にも影響を及ぼしている。
+                </p>
+                <p>
+                  各イベントには場所情報が付与されており、対応するバッジをクリックすることで Wiki
+                  の該当項目にジャンプできる。出来事の発生源となった都市や組織を視覚的に把握しながら歴史を追うことができる設計になっている。
+                </p>
+              </div>
+            </div>
+
             <Accordion type="multiple" className="space-y-3">
               {TIMELINE_DATA.map((period, idx) => (
                 <AccordionItem
@@ -66,7 +92,10 @@ export default function TimelinePage() {
 
         <footer className="relative border-t border-cosmic-border/50 py-8 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <Link href="/" className="text-xs text-cosmic-muted hover:text-gold-accent transition-colors">
+            <Link
+              href="/"
+              className="text-xs text-cosmic-muted hover:text-gold-accent transition-colors"
+            >
               ← トップページに戻る
             </Link>
           </div>

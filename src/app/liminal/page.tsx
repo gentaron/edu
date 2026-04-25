@@ -14,13 +14,52 @@ export default function LiminalPage() {
       <div className="relative z-10">
         <PageHeader
           icon={<Radio className="w-6 h-6 text-gold-accent" />}
-          title={<Link href="/wiki#リミナル・フォージ" className="text-cosmic-gradient hover:underline">リミナル・フォージ</Link>}
+          title={
+            <Link href="/wiki#リミナル・フォージ" className="text-cosmic-gradient hover:underline">
+              リミナル・フォージ
+            </Link>
+          }
           subtitle="Liminal Forge — E528からAD2026へ、時空を超えた放送プロジェクト"
           wikiHref="/wiki#リミナル・フォージ"
         />
 
         <RevealSection>
           <div className="max-w-6xl mx-auto px-4 pb-20">
+            {/* 概説 */}
+            <div className="glass-card rounded-xl p-6 mb-8">
+              <h2 className="text-lg font-bold text-cosmic-text mb-4 flex items-center gap-2">
+                <Radio className="w-5 h-5 text-gold-accent" /> リミナル・フォージとは
+              </h2>
+              <div className="space-y-3 text-sm text-cosmic-muted leading-relaxed">
+                <p>
+                  <span className="text-gold-accent font-medium">
+                    リミナル・フォージ（Liminal Forge）
+                  </span>
+                  は、E528年の現代からAD
+                  2026年の地球へ情報を送信する画期的な時空放送プロジェクトである。このプロジェクトは
+                  AURALIS Collective
+                  第二世代のメンバーであるミナ・エウレカ・エルンストが創設し、E16文明が到達した高度な技術を駆使して実現された。
+                </p>
+                <p>
+                  放送の経路は非常に複雑である。まず
+                  <span className="text-nebula-purple font-medium">AURALIS 本部</span>
+                  （E528年）から信号が発信され、
+                  <span className="text-electric-blue font-medium">ペルセポネ仮想宇宙</span>と
+                  <span className="text-electric-blue font-medium">
+                    次元極地平（Dimension Horizon）
+                  </span>
+                  を経由して時空を超え、AD
+                  2026年の地球インターネットに到達する。この仕組みは、E16文明が開発した高次元通信技術と量子演算に基づいている。
+                </p>
+                <p>
+                  AD
+                  2026年が到達点に選ばれたのには二つの理由がある。第一に、この時代の地球はAI技術の臨界点にあり、時空通信を受信可能な技術レベルに達していたこと。第二に、AD
+                  2026年はE16文明の遠い原点 —
+                  人類の旅路の始まりに敬意を込めた選択である。リミナル・フォージは複数のプラットフォームを通じて配信されており、それぞれ異なる形式と目的を持った放送を行っている。
+                </p>
+              </div>
+            </div>
+
             {/* Broadcasting mechanism */}
             <div className="glass-card rounded-xl p-6 mb-6">
               <h3 className="text-lg font-bold text-gold-accent mb-4">時相放送の仕組み</h3>
@@ -28,15 +67,28 @@ export default function LiminalPage() {
                 <div className="bg-nebula-purple/15 border border-nebula-purple/30 rounded-lg p-4 min-w-[160px]">
                   <p className="text-xs text-cosmic-muted mb-1">起点</p>
                   <p className="text-sm font-bold text-nebula-purple">E528</p>
-                  <p className="text-xs text-cosmic-muted"><Link href="/wiki#AURALIS" className="hover:text-nebula-purple hover:underline">AURALIS</Link>本部</p>
+                  <p className="text-xs text-cosmic-muted">
+                    <Link href="/wiki#AURALIS" className="hover:text-nebula-purple hover:underline">
+                      AURALIS
+                    </Link>
+                    本部
+                  </p>
                 </div>
                 <ArrowDown className="w-5 h-5 text-cosmic-muted rotate-90 sm:rotate-0 shrink-0" />
                 <div className="bg-electric-blue/15 border border-electric-blue/30 rounded-lg p-4 min-w-[200px]">
                   <p className="text-xs text-cosmic-muted mb-1">経由</p>
                   <p className="text-sm font-bold text-electric-blue">
-                    <Link href="/wiki#ペルセポネ" className="text-electric-blue hover:underline">ペルセポネ</Link>仮想宇宙
+                    <Link href="/wiki#ペルセポネ" className="text-electric-blue hover:underline">
+                      ペルセポネ
+                    </Link>
+                    仮想宇宙
                   </p>
-                  <p className="text-xs text-cosmic-muted">× <Link href="/wiki#次元極地平" className="text-electric-blue hover:underline">Dimension Horizon</Link></p>
+                  <p className="text-xs text-cosmic-muted">
+                    ×{" "}
+                    <Link href="/wiki#次元極地平" className="text-electric-blue hover:underline">
+                      Dimension Horizon
+                    </Link>
+                  </p>
                 </div>
                 <ArrowDown className="w-5 h-5 text-cosmic-muted rotate-90 sm:rotate-0 shrink-0" />
                 <div className="bg-gold-accent/15 border border-gold-accent/30 rounded-lg p-4 min-w-[160px]">
@@ -65,9 +117,19 @@ export default function LiminalPage() {
               <h3 className="text-lg font-bold text-electric-blue mb-4">放送プラットフォーム</h3>
               <div className="space-y-3">
                 {PLATFORMS.map((p) => (
-                  <div key={p.name} className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-lg border ${p.color} ${p.bg} transition-all hover:scale-[1.01]`}>
-                    <Badge variant="outline" className={`w-fit text-[10px] ${p.color} shrink-0`}>{p.type}</Badge>
-                    <a href={p.url} target="_blank" rel="noopener noreferrer" className="flex-1 min-w-0 hover:opacity-80 transition-opacity">
+                  <div
+                    key={p.name}
+                    className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-lg border ${p.color} ${p.bg} transition-all hover:scale-[1.01]`}
+                  >
+                    <Badge variant="outline" className={`w-fit text-[10px] ${p.color} shrink-0`}>
+                      {p.type}
+                    </Badge>
+                    <a
+                      href={p.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 min-w-0 hover:opacity-80 transition-opacity"
+                    >
                       <p className="text-sm font-mono text-cosmic-text truncate">{p.name}</p>
                       <p className="text-xs text-cosmic-muted">{p.desc}</p>
                     </a>
@@ -80,7 +142,12 @@ export default function LiminalPage() {
 
         <footer className="relative border-t border-cosmic-border/50 py-8 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <Link href="/" className="text-xs text-cosmic-muted hover:text-gold-accent transition-colors">← トップページに戻る</Link>
+            <Link
+              href="/"
+              className="text-xs text-cosmic-muted hover:text-gold-accent transition-colors"
+            >
+              ← トップページに戻る
+            </Link>
           </div>
         </footer>
       </div>
