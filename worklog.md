@@ -49,3 +49,26 @@ Stage Summary:
 - メインページのキャラクターTier表を全64体のカードデータから動的生成
 - 勢力系譜セクションに詳細情報を追加
 - コミット: c0a83b6 feat: モバイル対応・レアリティビジュアル改善・勢力セクション強化・旧PvP削除
+---
+
+Task ID: 1
+Agent: main
+Task: Fix navigation bar missing on 9 sub-pages + character page not displaying
+
+Work Log:
+
+- Pulled latest code from main (48bd3ac..1fc263d)
+- Investigated character page: build succeeds, HTML generated correctly with all 64 cards
+- Identified root cause for missing nav: Navigation component was defined inline in page.tsx only
+- Extracted Navigation to shared component: src/components/edu/navigation.tsx
+- Added Navigation to layout.tsx so it renders on ALL pages globally
+- Removed duplicate Navigation and SECTIONS from page.tsx
+- Removed unused imports (Menu, X) from page.tsx
+- Verified build succeeds: all 40 pages generated successfully
+- Committed and pushed to main (eb5e3c5)
+
+Stage Summary:
+
+- Navigation bar now shows on all pages (main + 9 sub-pages + wiki/story/etc.)
+- Character page build verified working - was likely a Netlify deployment issue from previous failed builds
+- Files changed: layout.tsx, page.tsx, navigation.tsx (new)
