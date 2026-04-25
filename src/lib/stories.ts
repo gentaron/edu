@@ -15,6 +15,7 @@ export interface ChapterMeta {
   titleEn: string
   era: string
   description: string
+  descriptionEn: string
   color: string // tailwind color token for gradient accent
   gradient: string // CSS gradient string for chapter header
 }
@@ -27,6 +28,8 @@ export const CHAPTERS: ChapterMeta[] = [
     era: "E260〜E300",
     description:
       "E16星系への移住から始まる、新天地での最初の物語。ダイアナとケイト・クラウディアたちの初期の足跡が、この世界の基盤を築いていく。",
+    descriptionEn:
+      "The first stories of humanity's new home in the E16 star system. Diana and Kate Claudia lay the foundations of this world in an era of wonder and discovery.",
     color: "from-amber-500 to-orange-600",
     gradient: "linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(249,115,22,0.08) 100%)",
   },
@@ -37,6 +40,8 @@ export const CHAPTERS: ChapterMeta[] = [
     era: "E300〜E400",
     description:
       "英雄たちが次々と覚醒し、ギガポリスの舞台に立つ時代。ネブラ、ジェン、レイラ、弦太郎 — 異なる道を歩む彼らの物語が交錯する。",
+    descriptionEn:
+      "Heroes rise one by one to take the stage of Gigapolis. The paths of Nebura, Jen, Layla, and Gentaro cross in an age of awakening power and converging destinies.",
     color: "from-nebula-purple to-violet-600",
     gradient: "linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(139,92,246,0.08) 100%)",
   },
@@ -47,6 +52,8 @@ export const CHAPTERS: ChapterMeta[] = [
     era: "E400〜",
     description:
       "世界の均衡が崩れ、新たな争いが始まる時代。グエ、ジュンの物語を中心に、激動の時代を生き抜く人々の姿を描く。",
+    descriptionEn:
+      "The balance of the world fractures as new conflicts erupt. Centered on the stories of Gue and Jun, this era chronicles those who survive the chaos of a world in upheaval.",
     color: "from-red-500 to-rose-600",
     gradient: "linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(244,63,94,0.08) 100%)",
   },
@@ -57,6 +64,8 @@ export const CHAPTERS: ChapterMeta[] = [
     era: "E480〜",
     description:
       "アイリスをはじめとする新世代の英雄が、星々の歴史を受け継ぎ新たな章を開く。カステリア、シトラ、ミュー — 個性豊かな物語が紡がれる。",
+    descriptionEn:
+      "A new generation led by Iris inherits the history of the stars and opens a fresh chapter. Casteria, Sitra, and Myu each weave their own distinct and vibrant tale.",
     color: "from-electric-blue to-cyan-500",
     gradient: "linear-gradient(135deg, rgba(56,189,248,0.15) 0%, rgba(6,182,212,0.08) 100%)",
   },
@@ -67,6 +76,8 @@ export const CHAPTERS: ChapterMeta[] = [
     era: "E520〜",
     description:
       "AURALISの誕生と、最新の時代を彩る物語。ミナ、ニニー、パットン、アーデント — 新世界の幕開けを告げるスピンオフ群。",
+    descriptionEn:
+      "The birth of AURALIS and the stories that color the newest era. Kate Patton, Lillie Ardent, Mina, and Ninny herald the dawn of a new world through their spinoff tales.",
     color: "from-emerald-500 to-teal-500",
     gradient: "linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(20,184,166,0.08) 100%)",
   },
