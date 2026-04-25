@@ -1,11 +1,12 @@
 "use client"
+import type { ReactNode } from "react"
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
 
-export function PageHeader({ icon, title, subtitle, wikiHref }: { 
-  icon: React.ReactNode; 
-  title: React.ReactNode; 
-  subtitle?: React.ReactNode;
+export function PageHeader({ icon, title, subtitle, wikiHref }: {
+  icon: ReactNode;
+  title: ReactNode;
+  subtitle?: ReactNode;
   wikiHref?: string;
 }) {
   return (

@@ -21,7 +21,7 @@ function FactionNode({
     <div className="flex gap-4">
       <div className="flex flex-col items-center">
         <div className={`w-3 h-3 rounded-full ${dotColor} shrink-0`} />
-        {!isLast && <div className={`w-0.5 flex-1 min-h-[24px] ${color} opacity-30`} />}
+        {!isLast && <div className={`w-0.5 flex-1 min-h-[24px] ${color.replace("border-", "bg-")} opacity-30`} />}
       </div>
       <div className="pb-4">
         <span className="text-xs text-cosmic-muted">{node.year}</span>

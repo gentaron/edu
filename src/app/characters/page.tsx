@@ -25,7 +25,7 @@ export default function CharactersPage() {
         cards: cards.sort((a, b) => {
           const rarityOrder = { SR: 0, R: 1, C: 2 }
           if (rarityOrder[a.rarity] !== rarityOrder[b.rarity]) return rarityOrder[a.rarity] - rarityOrder[b.rarity]
-          return (b.attack + b.defense + b.effectValue + b.ultimate) - (a.attack + a.defense + a.effectValue + b.ultimate)
+          return (b.attack + b.defense + b.effectValue + b.ultimate) - (a.attack + a.defense + a.effectValue + a.ultimate)
         }),
       }))
   })()
