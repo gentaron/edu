@@ -1,11 +1,12 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { BookOpen, ArrowLeft, Clock, Users, ChevronDown, Library } from "lucide-react"
 import { ALL_STORIES, CHAPTERS, getStoriesByChapter } from "@/lib/stories"
+import { type Lang, tl } from "@/lib/lang"
 
 /* ─── Wiki name to image mapping ─── */
 const entryImageMap: Record<string, string> = {
@@ -135,15 +136,47 @@ function StarField() {
   )
 }
 
+/* ─── Lang Toggle ─── */
+function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
+  return (
+    <div className="flex items-center border border-cosmic-border/40 rounded-lg overflow-hidden shrink-0">
+      <button
+        type="button"
+        onClick={() => setLang("ja")}
+        className={`px-2.5 py-1 text-[11px] font-bold transition-colors ${
+          lang === "ja"
+            ? "bg-nebula-purple text-white"
+            : "text-cosmic-muted hover:text-cosmic-text"
+        }`}
+      >
+        JP
+      </button>
+      <button
+        type="button"
+        onClick={() => setLang("en")}
+        className={`px-2.5 py-1 text-[11px] font-bold transition-colors ${
+          lang === "en"
+            ? "bg-nebula-purple text-white"
+            : "text-cosmic-muted hover:text-cosmic-text"
+        }`}
+      >
+        EN
+      </button>
+    </div>
+  )
+}
+
 /* ─── Story Card ─── */
 function StoryCard({
   story,
   chapter,
   index,
+  lang,
 }: {
   story: (typeof ALL_STORIES)[0]
   chapter: (typeof CHAPTERS)[0]
   index: number
+  lang: Lang
 }) {
   const colors = CHAPTER_COLORS[chapter.id]
   return (
@@ -216,7 +249,7 @@ function StoryCard({
           <span
             className={`inline-flex items-center gap-1 text-xs font-medium ${colors.text} group-hover:gap-2 transition-all`}
           >
-            読む
+            {tl("読む", "Read", lang)}
             <span>→</span>
           </span>
         </div>
@@ -229,15 +262,19 @@ function StoryCard({
 function ChapterSection({
   chapter,
   stories,
+  lang,
+  sectionRef,
 }: {
   chapter: (typeof CHAPTERS)[0]
   stories: (typeof ALL_STORIES)[0][]
+  lang: Lang
+  sectionRef: React.RefObject<HTMLElement | null>
 }) {
   const [isOpen, setIsOpen] = useState(true)
   const colors = CHAPTER_COLORS[chapter.id]
 
   return (
-    <section className="mb-14">
+    <section ref={sectionRef} id={`chapter-${chapter.id}`} className="mb-14 scroll-mt-20">
       {/* Chapter Header */}
       <button
         type="button"
@@ -253,9 +290,11 @@ function ChapterSection({
                 {toRoman(chapter.id)}
               </span>
               <div>
-                <h2 className={`text-lg sm:text-xl font-bold ${colors.text}`}>{chapter.titleJa}</h2>
+                <h2 className={`text-lg sm:text-xl font-bold ${colors.text}`}>
+                  {tl(chapter.titleJa, chapter.titleEn, lang)}
+                </h2>
                 <p className="text-xs text-cosmic-muted tracking-widest uppercase">
-                  {chapter.titleEn}
+                  {tl(chapter.titleEn, chapter.titleJa, lang)}
                 </p>
               </div>
             </div>
@@ -266,10 +305,12 @@ function ChapterSection({
               >
                 {chapter.era}
               </span>
-              <span className="text-[11px] text-cosmic-muted">{stories.length} 作品</span>
+              <span className="text-[11px] text-cosmic-muted">
+                {stories.length} {tl("作品", "stories", lang)}
+              </span>
             </div>
             <p className="text-xs sm:text-sm text-cosmic-muted/80 leading-relaxed max-w-2xl">
-              {chapter.description}
+              {tl(chapter.description, chapter.descriptionEn, lang)}
             </p>
           </div>
           <div
@@ -280,7 +321,7 @@ function ChapterSection({
         </div>
       </button>
 
-      {/* Story Cards Grid — always rendered, visibility via CSS for stability */}
+      {/* Story Cards Grid */}
       <div
         className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pl-0 sm:pl-2 transition-all duration-300 ${
           isOpen
@@ -289,7 +330,7 @@ function ChapterSection({
         }`}
       >
         {stories.map((story, i) => (
-          <StoryCard key={story.slug} story={story} chapter={chapter} index={i} />
+          <StoryCard key={story.slug} story={story} chapter={chapter} index={i} lang={lang} />
         ))}
       </div>
     </section>
@@ -309,6 +350,30 @@ const chapterData = CHAPTERS.map((ch) => ({
 
 /* ─── Main Page ─── */
 export default function StoryArchivePage() {
+  const [lang, setLangState] = useState<Lang>("ja")
+
+  useEffect(() => {
+    const saved = localStorage.getItem("edu-lang") as Lang | null
+    if (saved === "en" || saved === "ja") setLangState(saved)
+  }, [])
+
+  const setLang = (l: Lang) => {
+    setLangState(l)
+    localStorage.setItem("edu-lang", l)
+  }
+
+  /* Refs for chapter scroll-jump */
+  const chapterRefs = useRef<Record<number, React.RefObject<HTMLElement | null>>>({})
+  for (const { chapter } of chapterData) {
+    if (!chapterRefs.current[chapter.id]) {
+      chapterRefs.current[chapter.id] = React.createRef<HTMLElement>()
+    }
+  }
+
+  function scrollToChapter(id: number) {
+    chapterRefs.current[id]?.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
   return (
     <div className="relative min-h-screen bg-cosmic-dark">
       <StarField />
@@ -316,20 +381,23 @@ export default function StoryArchivePage() {
       {/* Top Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-cosmic-border/50">
         <div className="max-w-5xl mx-auto px-4">
-          <div className="flex items-center gap-4 h-14">
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-cosmic-muted hover:text-electric-blue transition-colors shrink-0"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span className="text-xs hidden sm:inline">EDU</span>
-            </Link>
-            <div className="flex items-center gap-2 min-w-0">
-              <Library className="w-4 h-4 text-nebula-purple shrink-0" />
-              <span className="text-sm font-bold text-cosmic-gradient truncate">
-                EDU Story Archive
-              </span>
+          <div className="flex items-center justify-between gap-4 h-14">
+            <div className="flex items-center gap-4 min-w-0">
+              <Link
+                href="/"
+                className="flex items-center gap-2 text-cosmic-muted hover:text-electric-blue transition-colors shrink-0"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span className="text-xs hidden sm:inline">EDU</span>
+              </Link>
+              <div className="flex items-center gap-2 min-w-0">
+                <Library className="w-4 h-4 text-nebula-purple shrink-0" />
+                <span className="text-sm font-bold text-cosmic-gradient truncate">
+                  EDU Story Archive
+                </span>
+              </div>
             </div>
+            <LangToggle lang={lang} setLang={setLang} />
           </div>
         </div>
       </nav>
@@ -341,7 +409,7 @@ export default function StoryArchivePage() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
             <div className="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-nebula-purple to-transparent mb-8" />
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -351,8 +419,9 @@ export default function StoryArchivePage() {
               Story Archive
             </h1>
             <p className="text-sm sm:text-base text-cosmic-muted max-w-xl mx-auto leading-relaxed">
-              Eternal Dominion Universe —
-              <br className="sm:hidden" /> 全五章にわたる物語全集
+              Eternal Dominion Universe —{" "}
+              <br className="sm:hidden" />
+              {tl("全五章にわたる物語全集", "A Complete Collection Across Five Chapters", lang)}
             </p>
 
             {/* Stats */}
@@ -360,14 +429,14 @@ export default function StoryArchivePage() {
               <div className="flex flex-col items-center">
                 <span className="text-2xl font-black text-cosmic-text">{CHAPTERS.length}</span>
                 <span className="text-[10px] text-cosmic-muted uppercase tracking-wider">
-                  Chapters
+                  {tl("章", "Chapters", lang)}
                 </span>
               </div>
               <div className="w-px h-10 bg-cosmic-border/50" />
               <div className="flex flex-col items-center">
                 <span className="text-2xl font-black text-cosmic-text">{ALL_STORIES.length}</span>
                 <span className="text-[10px] text-cosmic-muted uppercase tracking-wider">
-                  Stories
+                  {tl("作品", "Stories", lang)}
                 </span>
               </div>
               <div className="w-px h-10 bg-cosmic-border/50" />
@@ -376,33 +445,67 @@ export default function StoryArchivePage() {
                   {uniqueCharacters.size}
                 </span>
                 <span className="text-[10px] text-cosmic-muted uppercase tracking-wider">
-                  Characters
+                  {tl("キャラ", "Characters", lang)}
                 </span>
               </div>
-            </div>
-
-            {/* Chapter Timeline Preview */}
-            <div className="flex justify-center gap-2 mt-8 flex-wrap">
-              {CHAPTERS.map((ch) => (
-                <motion.div
-                  key={ch.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 + ch.id * 0.1, duration: 0.4 }}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-medium ${CHAPTER_COLORS[ch.id].badge}`}
-                >
-                  <span className="font-black">{toRoman(ch.id)}</span>
-                  <span className="hidden sm:inline">{ch.titleJa}</span>
-                </motion.div>
-              ))}
             </div>
 
             <div className="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-nebula-purple to-transparent mt-8" />
           </motion.div>
 
+          {/* ─── Chapter Quick Navigation ─── */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="mb-14"
+          >
+            <div className="flex items-center gap-3 mb-5">
+              <div className="h-px flex-1 bg-cosmic-border/30" />
+              <span className="text-[10px] text-cosmic-muted uppercase tracking-widest font-medium">
+                {tl("章一覧", "Chapter Index", lang)}
+              </span>
+              <div className="h-px flex-1 bg-cosmic-border/30" />
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              {chapterData.map(({ chapter, stories }) => {
+                const colors = CHAPTER_COLORS[chapter.id]
+                return (
+                  <button
+                    key={chapter.id}
+                    type="button"
+                    onClick={() => scrollToChapter(chapter.id)}
+                    className={`text-left p-4 rounded-xl border glass-card hover:scale-[1.03] hover:shadow-lg transition-all duration-200 group ${colors.border} ${colors.glow}`}
+                  >
+                    <span
+                      className={`text-3xl font-black bg-gradient-to-br ${chapter.color} bg-clip-text text-transparent leading-none block mb-2`}
+                    >
+                      {toRoman(chapter.id)}
+                    </span>
+                    <p className={`text-xs font-bold ${colors.text} leading-tight mb-1`}>
+                      {tl(chapter.titleJa, chapter.titleEn, lang)}
+                    </p>
+                    <p className="text-[10px] text-cosmic-muted">
+                      {chapter.era}
+                    </p>
+                    <p className={`text-[10px] mt-1.5 ${colors.text} opacity-70`}>
+                      {stories.length} {tl("作品", "stories", lang)}
+                    </p>
+                  </button>
+                )
+              })}
+            </div>
+          </motion.div>
+
           {/* Chapter Sections */}
           {chapterData.map((data) => (
-            <ChapterSection key={data.chapter.id} chapter={data.chapter} stories={data.stories} />
+            <ChapterSection
+              key={data.chapter.id}
+              chapter={data.chapter}
+              stories={data.stories}
+              lang={lang}
+              sectionRef={chapterRefs.current[data.chapter.id]}
+            />
           ))}
         </div>
       </main>
@@ -417,7 +520,7 @@ export default function StoryArchivePage() {
             className="inline-flex items-center gap-1.5 text-xs text-electric-blue hover:underline transition-colors"
           >
             <ArrowLeft className="w-3 h-3" />
-            EDU 百科事典に戻る
+            {tl("EDU 百科事典に戻る", "Back to EDU Encyclopedia", lang)}
           </Link>
         </div>
       </footer>
