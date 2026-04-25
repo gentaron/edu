@@ -3,7 +3,12 @@
   publish = ".next"
 
 [images]
-  remote_images = ["https://raw.githubusercontent.com/**"]
+  service = "netlify"
+
+[[images.remote_patterns]]
+  protocol = "https"
+  hostname = "raw.githubusercontent.com"
+  pathname = "/**"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
