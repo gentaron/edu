@@ -20,22 +20,22 @@ const diffColors: Record<string, { border: string; badge: string; icon: React.Re
   NORMAL: {
     border: "border-green-400/40",
     badge: "text-green-400 bg-green-500/10 border-green-500/40",
-    icon: <Shield className="w-5 h-5 text-green-400" />,
+    icon: <Shield className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" />,
   },
   HARD: {
     border: "border-orange-400/40",
     badge: "text-orange-400 bg-orange-500/10 border-orange-500/40",
-    icon: <Swords className="w-5 h-5 text-orange-400" />,
+    icon: <Swords className="w-4 h-4 sm:w-5 sm:h-5 text-orange-400" />,
   },
   BOSS: {
     border: "border-red-400/40",
     badge: "text-red-400 bg-red-500/10 border-red-500/40",
-    icon: <Skull className="w-5 h-5 text-red-400" />,
+    icon: <Skull className="w-4 h-4 sm:w-5 sm:h-5 text-red-400" />,
   },
   FINAL: {
     border: "border-yellow-400/40",
     badge: "text-yellow-400 bg-yellow-500/10 border-yellow-500/40",
-    icon: <Crown className="w-5 h-5 text-yellow-400" />,
+    icon: <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />,
   },
 };
 
@@ -66,8 +66,8 @@ function EnemyCard({
       }`}
     >
       {/* Header bar */}
-      <div className="relative h-28 bg-cosmic-deep flex items-center justify-center">
-        <img src={enemy.imageUrl} alt={enemy.name} className="w-16 h-16 object-contain opacity-60" />
+      <div className="relative h-20 sm:h-28 bg-cosmic-deep flex items-center justify-center">
+        <img src={enemy.imageUrl} alt={enemy.name} className="w-14 h-14 sm:w-16 sm:h-16 object-contain opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-t from-cosmic-dark via-cosmic-dark/40 to-transparent" />
         <div className="absolute top-2 right-2">
           <span className={`text-[9px] font-bold px-2 py-0.5 rounded border ${dc.badge}`}>
@@ -75,14 +75,14 @@ function EnemyCard({
           </span>
         </div>
         <div className="absolute bottom-2 left-3">
-          <h3 className="text-sm font-bold text-cosmic-text">{enemy.name}</h3>
-          <p className="text-[10px] text-cosmic-muted">{enemy.title}</p>
+          <h3 className="text-xs sm:text-sm font-bold text-cosmic-text">{enemy.name}</h3>
+          <p className="text-[9px] sm:text-[10px] text-cosmic-muted">{enemy.title}</p>
         </div>
       </div>
 
-      <div className="p-4 space-y-3">
+      <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
         {/* Stats */}
-        <div className="flex items-center gap-4 text-xs text-cosmic-muted">
+        <div className="flex items-center gap-3 sm:gap-4 text-xs text-cosmic-muted">
           <span>HP: <span className="text-rose-400 font-bold">{enemy.maxHp}</span></span>
           <span>ATK: <span className="text-orange-400 font-bold">{enemy.attackPower}</span></span>
           <span>Phase: <span className="text-yellow-400 font-bold">{enemy.phases.length + 1}</span></span>
@@ -106,7 +106,7 @@ function EnemyCard({
           <span className="text-[10px] text-gold-accent/60">🏆 {enemy.reward}</span>
           <button
             onClick={onBattle}
-            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-rose-500/20 border border-rose-400/30 text-rose-400 text-xs font-bold hover:bg-rose-500/30 hover:scale-[1.03] transition-all"
+            className="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-lg bg-rose-500/20 border border-rose-400/30 text-rose-400 text-xs font-bold hover:bg-rose-500/30 hover:scale-[1.03] transition-all"
           >
             バトル開始
             <ChevronRight className="w-3 h-3" />
@@ -124,7 +124,7 @@ export default function EnemySelectPage() {
   if (deck.length < 5) {
     return (
       <div className="min-h-screen bg-cosmic-dark flex items-center justify-center">
-        <div className="glass-card rounded-xl p-8 text-center max-w-sm">
+        <div className="glass-card rounded-xl p-6 sm:p-8 text-center max-w-sm mx-4">
           <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto mb-4" />
           <h2 className="text-lg font-bold text-cosmic-text mb-2">デッキが未完成です</h2>
           <p className="text-xs text-cosmic-muted mb-6">
@@ -145,33 +145,33 @@ export default function EnemySelectPage() {
     <div className="min-h-screen bg-cosmic-dark">
       {/* Header */}
       <div className="glass-card border-b border-cosmic-border/50">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center gap-3">
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center gap-2 sm:gap-3">
           <Link href="/card-game" className="text-xs text-cosmic-muted hover:text-cosmic-text transition-colors">
-            <ArrowLeft className="w-4 h-4 inline" /> デッキ構築に戻る
+            <ArrowLeft className="w-4 h-4 inline" /> <span className="hidden sm:inline">デッキ構築に戻る</span>
           </Link>
-          <span className="text-cosmic-border">|</span>
-          <Swords className="w-5 h-5 text-rose-400" />
-          <h1 className="text-sm font-bold text-cosmic-gradient">敵を選択</h1>
+          <span className="text-cosmic-border hidden sm:inline">|</span>
+          <Swords className="w-4 h-4 sm:w-5 sm:h-5 text-rose-400" />
+          <h1 className="text-xs sm:text-sm font-bold text-cosmic-gradient">敵を選択</h1>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {DIFF_ORDER.map((diff) => {
           const enemies = ENEMIES.filter((e) => e.difficulty === diff);
           if (enemies.length === 0) return null;
           return (
-            <div key={diff} className="mb-10">
-              <div className="flex items-center gap-2 mb-4">
+            <div key={diff} className="mb-8 sm:mb-10">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4">
                 {diffColors[diff].icon}
-                <h2 className="text-xs font-bold text-cosmic-muted uppercase tracking-widest">
+                <h2 className="text-[10px] sm:text-xs font-bold text-cosmic-muted uppercase tracking-widest">
                   {DIFF_LABELS[diff]}
                 </h2>
                 <div className="flex-1 h-px bg-cosmic-border/20" />
               </div>
 
-              <div className={`grid gap-4 ${
+              <div className={`grid gap-3 sm:gap-4 ${
                 diff === "FINAL"
-                  ? "grid-cols-1 sm:grid-cols-1 max-w-md mx-auto"
+                  ? "grid-cols-1 max-w-md mx-auto"
                   : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
               }`}>
                 {enemies.map((enemy) => (

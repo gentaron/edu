@@ -249,7 +249,7 @@ function FieldCharSlot({
             : {}
       }
       transition={isActing ? { duration: 0.6, repeat: 1 } : isCharHit ? { duration: 0.4 } : {}}
-      className={`relative flex flex-col items-center gap-1 p-2 rounded-xl border backdrop-blur-sm transition-all duration-300 min-w-[72px] max-w-[92px] ${
+      className={`relative flex flex-col items-center gap-0.5 sm:gap-1 p-1.5 sm:p-2 rounded-xl border backdrop-blur-sm transition-all duration-300 min-w-[60px] sm:min-w-[72px] max-w-[76px] sm:max-w-[92px] ${
         char.isDown
           ? "opacity-30 border-cosmic-border/10 bg-cosmic-deep/20 cursor-not-allowed"
           : isActing && actingAbility
@@ -258,7 +258,11 @@ function FieldCharSlot({
               ? "border-red-400/60 bg-red-500/15 shadow-lg shadow-red-500/30"
               : isSelected
                 ? "border-yellow-400/60 bg-yellow-500/10 shadow-lg shadow-yellow-500/20 ring-1 ring-yellow-400/30"
-                : "border-cosmic-border/30 bg-cosmic-surface/50 hover:border-nebula-purple/50 hover:bg-nebula-purple/5"
+                : char.card.rarity === "SR"
+                  ? "field-sr bg-cosmic-surface/50"
+                  : char.card.rarity === "R"
+                    ? "field-r bg-cosmic-surface/50"
+                    : "border-cosmic-border/30 bg-cosmic-surface/50 hover:border-nebula-purple/50 hover:bg-nebula-purple/5"
       }`}
     >
       {isSelected && !isActing && (
@@ -295,17 +299,17 @@ function FieldCharSlot({
         </div>
       )}
       <div
-        className={`w-12 h-12 rounded-lg overflow-hidden bg-cosmic-deep/50 border shrink-0 ${isActing && actingAbility === "必殺" ? "border-yellow-400 shadow-lg shadow-yellow-500/40" : isActing && actingAbility === "攻撃" ? "border-red-400 shadow-lg shadow-red-500/30" : "border-cosmic-border/20"}`}
+        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-cosmic-deep/50 border shrink-0 ${isActing && actingAbility === "必殺" ? "border-yellow-400 shadow-lg shadow-yellow-500/40" : isActing && actingAbility === "攻撃" ? "border-red-400 shadow-lg shadow-red-500/30" : "border-cosmic-border/20"}`}
       >
         <img src={char.card.imageUrl} alt={char.card.name} className="w-full h-full object-cover" />
       </div>
       <p
-        className={`text-[8px] font-bold text-center leading-tight line-clamp-1 ${char.isDown ? "text-cosmic-muted/30" : "text-cosmic-text"}`}
+        className={`text-[7px] sm:text-[8px] font-bold text-center leading-tight line-clamp-1 ${char.isDown ? "text-cosmic-muted/30" : "text-cosmic-text"}`}
       >
         {char.card.name}
       </p>
       <span
-        className={`text-[7px] font-black px-1 py-px rounded ${char.card.rarity === "SR" ? "bg-yellow-500/20 text-yellow-400 border border-yellow-400/30" : char.card.rarity === "R" ? "bg-blue-500/20 text-blue-400 border border-blue-400/30" : "bg-cosmic-deep/50 text-cosmic-muted border border-cosmic-border/30"}`}
+        className={`text-[6px] sm:text-[7px] font-black px-1 py-px rounded ${char.card.rarity === "SR" ? "rarity-badge-sr" : char.card.rarity === "R" ? "rarity-badge-r" : "bg-cosmic-deep/50 text-cosmic-muted border border-cosmic-border/30"}`}
       >
         {char.card.rarity}
       </span>
@@ -397,7 +401,7 @@ function AbilityButton({
       whileTap={disabled ? {} : { scale: 0.94 }}
       onClick={onClick}
       disabled={disabled}
-      className={`relative flex-1 rounded-xl border backdrop-blur-sm p-3 transition-all duration-300 flex flex-col items-center gap-1.5 overflow-hidden ${
+      className={`relative flex-1 rounded-xl border backdrop-blur-sm p-2 sm:p-3 transition-all duration-300 flex flex-col items-center gap-1 sm:gap-1.5 overflow-hidden min-h-[56px] sm:min-h-0 ${
         disabled
           ? "opacity-25 cursor-not-allowed border-cosmic-border/20 bg-cosmic-deep/30"
           : `cursor-pointer hover:shadow-xl border-opacity-50 ${color}`
@@ -412,10 +416,10 @@ function AbilityButton({
         />
       )}
       {icon}
-      <span className="text-xs font-bold text-cosmic-text relative z-10">{label}</span>
-      <span className="text-[10px] font-bold text-cosmic-muted relative z-10">{value}</span>
+      <span className="text-[10px] sm:text-xs font-bold text-cosmic-text relative z-10">{label}</span>
+      <span className="text-[8px] sm:text-[10px] font-bold text-cosmic-muted relative z-10">{value}</span>
       {subLabel && (
-        <span className="text-[8px] text-cosmic-muted/70 leading-tight text-center line-clamp-2 max-w-full relative z-10">
+        <span className="text-[7px] sm:text-[8px] text-cosmic-muted/70 leading-tight text-center line-clamp-2 max-w-full relative z-10">
           {subLabel}
         </span>
       )}
@@ -576,7 +580,7 @@ function BattleContent() {
 
         {/* Header */}
         <div className="glass-card border-b border-cosmic-border/50 shrink-0 z-10">
-          <div className="max-w-5xl mx-auto px-4 py-2 flex items-center gap-3">
+          <div className="max-w-5xl mx-auto px-3 sm:px-4 py-2 flex items-center gap-2 sm:gap-3">
             <Link
               href="/card-game/select"
               className="text-xs text-cosmic-muted hover:text-cosmic-text transition-colors"
@@ -592,7 +596,7 @@ function BattleContent() {
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-3 py-3 gap-3 overflow-y-auto relative z-10">
+        <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-2 sm:px-3 py-2 sm:py-3 gap-2 sm:gap-3 overflow-y-auto relative z-10">
           {/* Enemy Area */}
           <motion.div
             animate={
@@ -610,7 +614,7 @@ function BattleContent() {
                 : {}
             }
             transition={{ duration: 0.5 }}
-            className="glass-card rounded-xl p-4 shrink-0 relative overflow-hidden"
+            className="glass-card rounded-xl p-3 sm:p-4 shrink-0 relative overflow-hidden"
           >
             {selectedEnemy.difficulty === "BOSS" && (
               <motion.div
@@ -640,9 +644,9 @@ function BattleContent() {
                 className="absolute inset-0 bg-red-500/20 pointer-events-none z-10 rounded-xl"
               />
             )}
-            <div className="flex items-start gap-4 relative z-10">
+            <div className="flex items-center gap-2 sm:gap-3 sm:items-start relative z-10">
               <div
-                className={`w-20 h-20 rounded-xl bg-cosmic-deep/50 border flex items-center justify-center shrink-0 overflow-hidden ${selectedEnemy.difficulty === "FINAL" ? "border-yellow-400/60 shadow-lg shadow-yellow-500/20" : selectedEnemy.difficulty === "BOSS" ? "border-red-400/50 shadow-lg shadow-red-500/20" : "border-cosmic-border/30"}`}
+                className={`w-14 h-14 sm:w-20 sm:h-20 rounded-xl bg-cosmic-deep/50 border flex items-center justify-center shrink-0 overflow-hidden ${selectedEnemy.difficulty === "FINAL" ? "border-yellow-400/60 shadow-lg shadow-yellow-500/20" : selectedEnemy.difficulty === "BOSS" ? "border-red-400/50 shadow-lg shadow-red-500/20" : "border-cosmic-border/30"}`}
               >
                 <motion.img
                   src={selectedEnemy.imageUrl}
@@ -654,10 +658,10 @@ function BattleContent() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <h3 className="text-sm font-bold text-cosmic-text">{selectedEnemy.name}</h3>
+                  <h3 className="text-xs sm:text-sm font-bold text-cosmic-text">{selectedEnemy.name}</h3>
                   <span className="text-[10px] text-cosmic-muted">{selectedEnemy.title}</span>
                   <span
-                    className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${diffColors[selectedEnemy.difficulty].badge}`}
+                    className={`text-[7px] sm:text-[8px] font-bold px-1.5 py-0.5 rounded border ${diffColors[selectedEnemy.difficulty].badge}`}
                   >
                     {selectedEnemy.difficulty}
                   </span>
@@ -809,9 +813,9 @@ function BattleContent() {
                   transition={{ duration: 0.3 }}
                   className="glass-card rounded-xl p-4 shrink-0"
                 >
-                  <div className="flex items-center gap-3 mb-3">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <motion.div
-                      className="w-10 h-10 rounded-lg overflow-hidden bg-cosmic-deep/50 border border-yellow-400/30 shrink-0"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden bg-cosmic-deep/50 border border-yellow-400/30 shrink-0"
                       animate={
                         isPlayerTurn
                           ? {
@@ -923,12 +927,12 @@ function BattleContent() {
               {/* Battle Log */}
               <div className="glass-card rounded-xl p-3 flex-1 min-h-0 overflow-hidden flex flex-col">
                 <div className="flex items-center gap-1.5 mb-2 shrink-0">
-                  <Swords className="w-3 h-3 text-cosmic-muted" />
-                  <span className="text-[9px] font-bold text-cosmic-muted">バトルログ</span>
+                  <Swords className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cosmic-muted" />
+                  <span className="text-[8px] sm:text-[9px] font-bold text-cosmic-muted">バトルログ</span>
                 </div>
                 <div
                   ref={logRef}
-                  className="space-y-0.5 overflow-y-auto flex-1 max-h-40 custom-scrollbar"
+                  className="space-y-0.5 overflow-y-auto flex-1 max-h-28 sm:max-h-40 custom-scrollbar"
                 >
                   {log.map((msg, i) => (
                     <p

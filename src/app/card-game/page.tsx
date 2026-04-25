@@ -26,8 +26,22 @@ const rarityColors: Record<string, { border: string; label: string }> = {
   SR: { border: "border-yellow-400/50 bg-yellow-500/10", label: "text-yellow-400" },
 };
 
+const rarityCardClass: Record<string, string> = {
+  SR: "card-sr",
+  R: "card-r",
+  C: "card-c",
+};
+
+const rarityBadgeClass: Record<string, string> = {
+  SR: "rarity-badge-sr",
+  R: "rarity-badge-r",
+  C: "bg-cosmic-surface/50 text-cosmic-muted border border-cosmic-border/30",
+};
+
 function CardInPool({ card, inDeck, onAdd }: { card: GameCard; inDeck: boolean; onAdd: () => void }) {
   const rc = rarityColors[card.rarity];
+  const cardClass = rarityCardClass[card.rarity];
+  const badgeClass = rarityBadgeClass[card.rarity];
 
   return (
     <motion.button
@@ -36,33 +50,33 @@ function CardInPool({ card, inDeck, onAdd }: { card: GameCard; inDeck: boolean; 
       whileTap={!inDeck ? { scale: 0.95 } : {}}
       onClick={onAdd}
       disabled={inDeck}
-      className={`relative w-36 h-52 rounded-xl border ${rc.border} backdrop-blur-sm flex flex-col overflow-hidden transition-all duration-200 shrink-0 ${
+      className={`relative w-28 h-40 sm:w-36 sm:h-52 rounded-xl ${rc.border} backdrop-blur-sm flex flex-col overflow-hidden transition-all duration-200 shrink-0 ${cardClass} ${
         inDeck ? "opacity-40 cursor-not-allowed" : "cursor-pointer hover:shadow-lg"
-      } ${card.rarity === "SR" ? "animate-pulse-glow" : ""}`}
+      } ${card.rarity === "SR" ? "" : ""}`}
     >
       {/* In-deck badge */}
       {inDeck && (
-        <div className="absolute top-1.5 right-1.5 z-10 w-5 h-5 rounded-full bg-emerald-500 border border-emerald-400/50 flex items-center justify-center">
+        <div className="absolute top-1.5 right-1.5 z-20 w-5 h-5 rounded-full bg-emerald-500 border border-emerald-400/50 flex items-center justify-center">
           <span className="text-[8px]">✓</span>
         </div>
       )}
 
       {/* Image */}
-      <div className="h-20 w-full overflow-hidden bg-cosmic-deep/50">
+      <div className="h-16 sm:h-20 w-full overflow-hidden bg-cosmic-deep/50 relative z-10">
         <Image src={card.imageUrl} alt={card.name} width={144} height={80} className="w-full h-full object-cover" />
       </div>
 
       {/* Info */}
-      <div className="flex-1 flex flex-col items-center justify-between p-2 min-h-0">
+      <div className="flex-1 flex flex-col items-center justify-between p-1.5 sm:p-2 min-h-0 relative z-10">
         <div className="text-center">
-          <p className="text-[9px] font-bold text-cosmic-text leading-tight line-clamp-2">{card.name}</p>
-          <span className="inline-block text-[7px] font-bold px-1.5 py-0.5 rounded mt-0.5 bg-cosmic-surface/50 text-cosmic-muted border border-cosmic-border/30">
+          <p className="text-[8px] sm:text-[9px] font-bold text-cosmic-text leading-tight line-clamp-2">{card.name}</p>
+          <span className={`inline-block text-[7px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${badgeClass}`}>
             {card.rarity}
           </span>
         </div>
 
         {/* Stats preview */}
-        <div className="flex items-center gap-1.5 text-[8px] font-bold">
+        <div className="flex items-center gap-1 sm:gap-1.5 text-[7px] sm:text-[8px] font-bold">
           <span className="text-red-400">⚔{card.attack}</span>
           <span className="text-blue-400">🛡{card.defense}</span>
           <span className="text-purple-300">✨{card.effectValue}</span>
@@ -87,6 +101,7 @@ function DeckSlot({
   onMoveDown: () => void;
 }) {
   const rc = rarityColors[card.rarity];
+  const badgeClass = rarityBadgeClass[card.rarity];
 
   return (
     <motion.div
@@ -108,7 +123,7 @@ function DeckSlot({
       <span className="text-[10px] font-medium text-cosmic-text flex-1 truncate">{card.name}</span>
 
       {/* Rarity */}
-      <span className={`text-[8px] font-bold ${rc.label} px-1 py-0.5 rounded`}>{card.rarity}</span>
+      <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${badgeClass}`}>{card.rarity}</span>
 
       {/* Reorder buttons */}
       <div className="flex flex-col gap-0 shrink-0">
@@ -131,7 +146,7 @@ function DeckSlot({
       {/* Remove */}
       <button
         onClick={onRemove}
-        className="text-cosmic-muted hover:text-rose-400 transition-colors shrink-0"
+        className="text-cosmic-muted hover:text-rose-400 transition-colors shrink-0 min-w-[16px] min-h-[16px] flex items-center justify-center"
       >
         ×
       </button>
@@ -159,19 +174,19 @@ export default function DeckBuildPage() {
     <div className="min-h-screen bg-cosmic-dark">
       {/* Header */}
       <div className="glass-card border-b border-cosmic-border/50">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-3">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center gap-2 sm:gap-3">
           <Link href="/" className="text-xs text-cosmic-muted hover:text-cosmic-text transition-colors">
-            <ArrowLeft className="w-4 h-4 inline" /> ホームへ
+            <ArrowLeft className="w-4 h-4 inline" /> <span className="hidden sm:inline">ホームへ</span>
           </Link>
           <span className="text-cosmic-border">|</span>
-          <Swords className="w-5 h-5 text-rose-400" />
-          <h1 className="text-sm font-bold text-cosmic-gradient">EDU CARD GAME — デッキ構築</h1>
+          <Swords className="w-4 h-4 sm:w-5 sm:h-5 text-rose-400" />
+          <h1 className="text-xs sm:text-sm font-bold text-cosmic-gradient">EDU CARD GAME — デッキ構築</h1>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
         {/* Description */}
-        <div className="flex items-start gap-2 mb-6">
+        <div className="flex items-start gap-2 mb-4 sm:mb-6">
           <Info className="w-4 h-4 text-nebula-purple shrink-0 mt-0.5" />
           <p className="text-xs text-cosmic-muted">
             64種のキャラクターから<strong className="text-cosmic-text">5枚</strong>を選び、順番を決めてバトルに挑もう。
@@ -180,11 +195,11 @@ export default function DeckBuildPage() {
         </div>
 
         {/* Two-column layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 sm:gap-6">
           {/* Left: Card Pool */}
           <div>
             {/* Filters */}
-            <div className="flex flex-wrap items-center gap-2 mb-4">
+            <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
               <Filter className="w-3.5 h-3.5 text-cosmic-muted" />
               {(["全て", "C", "R", "SR"] as const).map((r) => (
                 <button
@@ -202,7 +217,7 @@ export default function DeckBuildPage() {
             </div>
 
             {/* Card Grid */}
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               <AnimatePresence mode="popLayout">
                 {filteredCards.map((card) => (
                   <CardInPool
@@ -217,7 +232,7 @@ export default function DeckBuildPage() {
           </div>
 
           {/* Right: Current Deck */}
-          <div className="glass-card rounded-xl p-4 h-fit lg:sticky lg:top-4">
+          <div className="glass-card rounded-xl p-3 sm:p-4 h-fit lg:sticky lg:top-4 order-first lg:order-last">
             {/* Deck Name */}
             <input
               value={deckName}
@@ -246,8 +261,8 @@ export default function DeckBuildPage() {
             {/* Deck slots */}
             <div className="space-y-1.5 mb-4">
               {deck.length === 0 ? (
-                <p className="text-[10px] text-cosmic-muted/50 text-center py-8">
-                  カードを左のプールから追加してください
+                <p className="text-[10px] text-cosmic-muted/50 text-center py-6 sm:py-8">
+                  カードを下のプールから追加してください
                 </p>
               ) : (
                 <AnimatePresence>

@@ -19,6 +19,7 @@ import {
   ReferenceLine,
 } from "recharts"
 import Link from "next/link"
+import { ALL_CARDS, type GameCard } from "@/lib/card-data"
 import {
   Star,
   ChevronDown,
@@ -1972,38 +1973,58 @@ function ConsistencySection() {
    CHARACTER TIERS & FACTION ROSTER
    ═══════════════════════════════════════════ */
 function CharacterTiersSection() {
-  const tiers = [
+  /* Build tier data from ALL_CARDS */
+  const srCards = ALL_CARDS.filter((c) => c.rarity === "SR").sort((a, b) => (b.attack + b.defense + b.effectValue + b.ultimate) - (a.attack + a.defense + a.effectValue + a.ultimate))
+  const rCards = ALL_CARDS.filter((c) => c.rarity === "R").sort((a, b) => (b.attack + b.defense + b.effectValue + b.ultimate) - (a.attack + a.defense + a.effectValue + a.ultimate))
+  const cCards = ALL_CARDS.filter((c) => c.rarity === "C").sort((a, b) => (b.attack + b.defense + b.effectValue + b.ultimate) - (a.attack + a.defense + a.effectValue + a.ultimate))
+
+  /* Group cards by affiliation */
+  const cardsByAffiliation = (() => {
+    const map = new Map<string, GameCard[]>()
+    ALL_CARDS.forEach((card) => {
+      const list = map.get(card.affiliation) || []
+      list.push(card)
+      map.set(card.affiliation, list)
+    })
+    return Array.from(map.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([affiliation, cards]) => ({
+        affiliation,
+        cards: cards.sort((a, b) => {
+          const rarityOrder = { SR: 0, R: 1, C: 2 }
+          if (rarityOrder[a.rarity] !== rarityOrder[b.rarity]) return rarityOrder[a.rarity] - rarityOrder[b.rarity]
+          return (b.attack + b.defense + b.effectValue + b.ultimate) - (a.attack + a.defense + a.effectValue + b.ultimate)
+        }),
+      }))
+  })()
+
+  const tierSections = [
     {
-      label: "神格・歴史的人物",
-      color: "from-gold-accent/20 to-gold-dim/10",
-      borderColor: "border-gold-accent/30",
-      textColor: "text-gold-accent",
-      icon: <Crown className="w-4 h-4" />,
-      chars: ["Diana", "セリア・ドミニクス", "Kate Claudia", "Lily Steiner"],
+      label: `SR — 伝説級 ×${srCards.length}`,
+      color: "from-yellow-500/20 to-amber-500/10",
+      borderColor: "border-yellow-400/30",
+      textColor: "text-yellow-400",
+      icon: <Crown className="w-4 h-4 text-yellow-400" />,
+      cards: srCards,
+      badgeClass: "rarity-badge-sr",
     },
     {
-      label: "Tier 1（現役最強）",
-      color: "from-nebula-purple/20 to-nebula-purple-dim/10",
-      borderColor: "border-nebula-purple/30",
-      textColor: "text-nebula-purple",
-      icon: <Swords className="w-4 h-4" />,
-      chars: ["Jen (Lv938+)", "Tina / Gue", "Layla", "Slime Woman", "アイリス"],
+      label: `R — レア ×${rCards.length}`,
+      color: "from-blue-500/20 to-cyan-500/10",
+      borderColor: "border-blue-400/30",
+      textColor: "text-blue-400",
+      icon: <Swords className="w-4 h-4 text-blue-400" />,
+      cards: rCards,
+      badgeClass: "rarity-badge-r",
     },
     {
-      label: "Tier 2（主要活動層）",
-      color: "from-electric-blue/20 to-electric-blue-dim/10",
-      borderColor: "border-electric-blue/30",
-      textColor: "text-electric-blue",
-      icon: <Shield className="w-4 h-4" />,
-      chars: [
-        "Kate Patton",
-        "Lillie Ardent",
-        "Mina",
-        "Ninny",
-        "フィオナ",
-        "セバスチャン",
-        "弦太郎 (Lv569)",
-      ],
+      label: `C — コモン ×${cCards.length}`,
+      color: "from-cosmic-surface to-cosmic-dark/50",
+      borderColor: "border-cosmic-border/40",
+      textColor: "text-cosmic-muted",
+      icon: <Shield className="w-4 h-4 text-cosmic-muted" />,
+      cards: cCards,
+      badgeClass: "bg-cosmic-deep/50 text-cosmic-muted border border-cosmic-border/30",
     },
   ]
 
@@ -2094,36 +2115,65 @@ function CharacterTiersSection() {
           <SectionHeader
             icon={<Crown className="w-6 h-6 text-gold-accent" />}
             title="キャラクターTier表"
-            subtitle="Eternal Dominion Universe — 現勢力バランス"
+            subtitle="Eternal Dominion Universe — 全64キャラクターのカードデータ"
           />
         </RevealSection>
 
+        {/* ─── Tier Table with Card Stats ─── */}
         <RevealSection>
           <div className="space-y-6">
-            {tiers.map((tier) => (
+            {tierSections.map((tier) => (
               <div
                 key={tier.label}
                 className={`glass-card rounded-xl border ${tier.borderColor} overflow-hidden transition-all duration-300 hover:scale-[1.01]`}
               >
-                <div className={`bg-gradient-to-r ${tier.color} px-6 py-4 flex items-center gap-3`}>
+                <div className={`bg-gradient-to-r ${tier.color} px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-3`}>
                   {tier.icon}
-                  <h3 className={`font-bold ${tier.textColor}`}>{tier.label}</h3>
+                  <h3 className={`font-bold text-xs sm:text-sm ${tier.textColor}`}>{tier.label}</h3>
                 </div>
-                <div className="p-6 flex flex-wrap gap-3">
-                  {tier.chars.map((c) => (
-                    <span
-                      key={c}
-                      className={`px-4 py-2 rounded-lg bg-cosmic-dark/60 border ${tier.borderColor} text-sm text-cosmic-text font-medium hover:bg-cosmic-dark transition-colors cursor-default`}
-                    >
-                      {c}
-                    </span>
-                  ))}
+                <div className="p-3 sm:p-4 overflow-x-auto">
+                  <table className="w-full text-xs sm:text-sm">
+                    <thead>
+                      <tr className="border-b border-cosmic-border/30">
+                        <th className="text-left py-2 px-2 text-cosmic-muted font-medium">キャラ</th>
+                        <th className="text-left py-2 px-2 text-cosmic-muted font-medium hidden sm:table-cell">勢力</th>
+                        <th className="text-center py-2 px-2 text-red-400 font-medium">⚔</th>
+                        <th className="text-center py-2 px-2 text-blue-400 font-medium">🛡</th>
+                        <th className="text-center py-2 px-2 text-purple-300 font-medium">✨</th>
+                        <th className="text-center py-2 px-2 text-yellow-400 font-medium">💥</th>
+                        <th className="text-center py-2 px-2 text-cosmic-muted font-medium">合計</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tier.cards.map((card) => {
+                        const total = card.attack + card.defense + card.effectValue + card.ultimate
+                        return (
+                          <tr key={card.id} className="border-b border-cosmic-border/10 hover:bg-cosmic-surface/30 transition-colors">
+                            <td className="py-2 px-2">
+                              <div className="flex items-center gap-2">
+                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${tier.badgeClass}`}>
+                                  {card.rarity}
+                                </span>
+                                <span className="text-cosmic-text font-medium">{card.name}</span>
+                              </div>
+                            </td>
+                            <td className="py-2 px-2 text-cosmic-muted text-xs hidden sm:table-cell">{card.affiliation}</td>
+                            <td className="py-2 px-2 text-center text-red-400 font-bold">{card.attack}</td>
+                            <td className="py-2 px-2 text-center text-blue-400 font-bold">{card.defense}</td>
+                            <td className="py-2 px-2 text-center text-purple-300 font-bold">{card.effectValue}</td>
+                            <td className="py-2 px-2 text-center text-yellow-400 font-bold">{card.ultimate}</td>
+                            <td className={`py-2 px-2 text-center font-black ${tier.textColor}`}>{total}</td>
+                          </tr>
+                        )
+                      })}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             ))}
 
             {/* IRIS Ranking */}
-            <div className="glass-card rounded-xl p-6 border border-pink-400/20">
+            <div className="glass-card rounded-xl p-4 sm:p-6 border border-pink-400/20">
               <h3 className="text-sm font-bold text-pink-400 mb-4 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-pink-400" />
                 IRIS現代ランキング
@@ -2151,7 +2201,7 @@ function CharacterTiersSection() {
           </div>
         </RevealSection>
 
-        {/* ─── Faction Character Roster ─── */}
+        {/* ─── Faction Character Roster (from card data) ─── */}
         <RevealSection>
           <div className="mt-16">
             <div className="text-center mb-10">
@@ -2162,39 +2212,48 @@ function CharacterTiersSection() {
                 勢力別キャラクター一覧
               </h2>
               <p className="text-cosmic-muted text-sm max-w-xl mx-auto">
-                E528現代における主要勢力と所属キャラクターの完全リスト
+                E528現代における主要勢力と所属キャラクターの完全リスト（全64体）
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {factions.map((faction) => (
-                <div
-                  key={faction.name}
-                  className={`glass-card rounded-xl border ${faction.borderColor} overflow-hidden transition-all duration-300 hover:scale-[1.01]`}
-                >
-                  <div className="px-6 py-4 bg-gradient-to-r from-cosmic-surface to-cosmic-dark/50 flex items-center gap-3">
-                    <span className={`w-2.5 h-2.5 rounded-full ${faction.dotColor} shrink-0`} />
-                    <div>
-                      <h3 className={`font-bold text-sm ${faction.color}`}>{faction.name}</h3>
-                      <p className="text-[10px] text-cosmic-muted font-mono">{faction.subtitle}</p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              {cardsByAffiliation.map((faction) => {
+                const srCount = faction.cards.filter((c) => c.rarity === "SR").length
+                const rCount = faction.cards.filter((c) => c.rarity === "R").length
+                const cCount = faction.cards.filter((c) => c.rarity === "C").length
+                return (
+                  <div key={faction.affiliation} className="glass-card rounded-xl border border-cosmic-border/30 overflow-hidden transition-all duration-300 hover:scale-[1.01]">
+                    <div className="px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-cosmic-surface to-cosmic-dark/50 flex items-center gap-3">
+                      <span className="w-2.5 h-2.5 rounded-full bg-nebula-purple shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-xs sm:text-sm text-cosmic-text truncate">{faction.affiliation}</h3>
+                        <p className="text-[10px] text-cosmic-muted">{faction.cards.length}体</p>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {srCount > 0 && <span className="text-[9px] font-bold px-1.5 py-0.5 rounded rarity-badge-sr">SR×{srCount}</span>}
+                        {rCount > 0 && <span className="text-[9px] font-bold px-1.5 py-0.5 rounded rarity-badge-r">R×{rCount}</span>}
+                        {cCount > 0 && <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-cosmic-deep/50 text-cosmic-muted border border-cosmic-border/30">C×{cCount}</span>}
+                      </div>
+                    </div>
+                    <div className="p-3 sm:p-4 space-y-0.5">
+                      {faction.cards.map((card) => (
+                        <div key={card.id} className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-cosmic-dark/50 transition-colors">
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${
+                            card.rarity === "SR" ? "rarity-badge-sr" : card.rarity === "R" ? "rarity-badge-r" : "bg-cosmic-deep/50 text-cosmic-muted border border-cosmic-border/30"
+                          }`}>{card.rarity}</span>
+                          <span className="text-xs sm:text-sm text-cosmic-text font-medium flex-1 truncate">{card.name}</span>
+                          <div className="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[10px] shrink-0">
+                            <span className="text-red-400 font-bold">{card.attack}</span>
+                            <span className="text-blue-400 font-bold">{card.defense}</span>
+                            <span className="text-purple-300 font-bold">{card.effectValue}</span>
+                            <span className="text-yellow-400 font-bold">{card.ultimate}</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <div className="p-4 space-y-1">
-                    {faction.members.map((m) => (
-                      <div
-                        key={m.name}
-                        className={`flex items-start gap-3 px-3 py-2 rounded-lg hover:bg-cosmic-dark/50 transition-colors`}
-                      >
-                        <span className={`text-cosmic-muted mt-0.5 shrink-0 text-xs`}>▸</span>
-                        <div className="min-w-0">
-                          <p className="text-sm text-cosmic-text font-medium">{m.name}</p>
-                          <p className="text-[11px] text-cosmic-muted">{m.note}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </RevealSection>
@@ -2212,6 +2271,9 @@ const FACTION_TREES = [
     color: "border-nebula-purple",
     dotColor: "bg-nebula-purple",
     textColor: "text-nebula-purple",
+    description: "E15年のファランクス創設に始まる、最古にして最大の軍事系譜。E295年にテクロサスが統合し、E470年の東方支隊を経て、現在のボグダス・ジャベリンへと至る。",
+    keyMembers: ["ファリエル", "ニニギス・カラス", "セバスチャン・ヴァレリウス", "ガレス"],
+    alliances: "トリニティ・アライアンスと同盟関係。V7及びブルーローズとは協調関係にある。",
     nodes: [
       { year: "E15", name: "ファランクス" },
       { year: "E295", name: "テクロサス" },
@@ -2224,6 +2286,9 @@ const FACTION_TREES = [
     color: "border-red-400",
     dotColor: "bg-red-400",
     textColor: "text-red-400",
+    description: "E420年のΣ-Unit実験に端を発する暗殺・破壊活動の系譜。シルバー・ヴェノムからアルファ・ヴェノム、ゴールデン・ヴェノムへと進化し、最強の毒殺術を継承する。",
+    keyMembers: ["マスター・ヴェノム", "イズミ", "レヴィリア・サーペンティナ", "レオン"],
+    alliances: "独立系組織。シルバー・ヴェノム残党（ラストマン）が分離している。",
     nodes: [
       { year: "E420", name: "Σ-Unit" },
       { year: "E475", name: "シルバー・ヴェノム" },
@@ -2235,6 +2300,9 @@ const FACTION_TREES = [
     color: "border-electric-blue",
     dotColor: "bg-electric-blue",
     textColor: "text-electric-blue",
+    description: "E285年のZAMLT創設から始まる政治的系譜。セリア黄金期、エヴァトロン統治期を経て、ポスト・エヴァトロン分裂により西にValoria、東にトリニティ、異次元にEros-7が生まれた。",
+    keyMembers: ["セリア・ドミニクス", "アイリス", "ジェン", "ミナ・エウレカ・エルンスト"],
+    alliances: "トリニティ・アライアンスが中心。Valoria連合圏は独立勢力として対立軸にある。",
     nodes: [
       { year: "E285", name: "ZAMLT" },
       { year: "E335", name: "セリア黄金期" },
@@ -2305,15 +2373,44 @@ function FactionSection() {
             {FACTION_TREES.map((tree) => (
               <div
                 key={tree.name}
-                className="glass-card glass-card-hover rounded-xl p-6 transition-all duration-300"
+                className="glass-card glass-card-hover rounded-xl p-4 sm:p-6 transition-all duration-300"
               >
                 <h3
-                  className={`text-base font-bold ${tree.textColor} mb-6 flex items-center gap-2`}
+                  className={`text-sm sm:text-base font-bold ${tree.textColor} mb-4 flex items-center gap-2`}
                 >
                   <span className={`w-2.5 h-2.5 rounded-full ${tree.dotColor}`} />
                   {tree.name}
                 </h3>
-                <div>
+
+                {/* Description */}
+                <p className="text-[11px] sm:text-xs text-cosmic-muted leading-relaxed mb-4">
+                  {tree.description}
+                </p>
+
+                {/* Key Members */}
+                <div className="mb-4">
+                  <p className="text-[10px] sm:text-[11px] font-bold text-cosmic-text mb-2 flex items-center gap-1.5">
+                    <Users className="w-3 h-3 text-nebula-purple" /> 主要メンバー
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {tree.keyMembers.map((m) => (
+                      <span key={m} className="text-[10px] px-2 py-0.5 rounded bg-cosmic-surface/50 border border-cosmic-border/30 text-cosmic-text">
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Alliance info */}
+                <div className="mb-5">
+                  <p className="text-[10px] sm:text-[11px] font-bold text-cosmic-text mb-1.5 flex items-center gap-1.5">
+                    <Globe2 className="w-3 h-3 text-electric-blue" /> 同盟・関係
+                  </p>
+                  <p className="text-[10px] sm:text-[11px] text-cosmic-muted leading-relaxed">{tree.alliances}</p>
+                </div>
+
+                {/* Timeline nodes */}
+                <div className="border-t border-cosmic-border/30 pt-4">
                   {tree.nodes.map((node, idx) => (
                     <FactionNode
                       key={idx}
@@ -2348,12 +2445,8 @@ function FooterSection() {
           <p className="text-xs text-cosmic-muted">AURALIS 地球2026交信プロジェクト設定書 v2.0</p>
         </div>
         <div className="flex justify-center gap-4 text-xs text-cosmic-muted">
-          <Link href="/game" className="hover:text-rose-400 transition-colors">
-            Card Game
-          </Link>
-          <span className="text-cosmic-border">|</span>
           <Link href="/card-game" className="hover:text-orange-400 transition-colors">
-            PvE Battle
+            Card Game
           </Link>
           <span className="text-cosmic-border">|</span>
           <Link href="/wiki" className="hover:text-gold-accent transition-colors">

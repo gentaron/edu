@@ -374,3 +374,122 @@
   background: rgba(124, 58, 237, 0.4);
   margin: 0 0.75rem;
 }
+
+/* ═══════════════════════════════════════════
+   Card Rarity Visual System
+   ═══════════════════════════════════════════ */
+
+/* SR — Gold shimmer animation */
+@keyframes shimmer-gold {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* SR card: gold gradient border + shimmer */
+.card-sr {
+  position: relative;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.card-sr::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    #f59e0b,
+    #fbbf24,
+    #f59e0b,
+    #d97706,
+    #f59e0b,
+    #fbbf24,
+    #f59e0b
+  );
+  background-size: 300% 300%;
+  animation: shimmer-gold 3s linear infinite;
+  z-index: -1;
+  border-radius: 0.75rem;
+}
+
+/* SR card sparkle overlay */
+.card-sr::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    transparent 20%,
+    rgba(251, 191, 36, 0.08) 40%,
+    transparent 50%,
+    rgba(251, 191, 36, 0.05) 70%,
+    transparent 80%
+  );
+  background-size: 300% 300%;
+  animation: shimmer-gold 4s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* R card: blue gradient border + subtle glow */
+.card-r {
+  position: relative;
+  border: 2px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15), 0 0 30px rgba(56, 189, 248, 0.05);
+}
+
+/* C card: standard appearance */
+.card-c {
+  border: 1px solid rgba(42, 42, 94, 0.5);
+}
+
+/* SR field slot: gold glow border */
+.field-sr {
+  border: 2px solid rgba(245, 158, 11, 0.5) !important;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.25), 0 0 40px rgba(245, 158, 11, 0.08);
+}
+
+/* R field slot: blue accent border */
+.field-r {
+  border: 2px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.15), 0 0 25px rgba(56, 189, 248, 0.05);
+}
+
+/* SR rarity badge */
+.rarity-badge-sr {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.15));
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  text-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+}
+
+/* R rarity badge */
+.rarity-badge-r {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+/* Custom scrollbar for card game */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(42, 42, 94, 0.5);
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 58, 237, 0.5);
+}
