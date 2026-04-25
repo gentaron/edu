@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[images]
+  remote_images = ["https://raw.githubusercontent.com/**"]
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
