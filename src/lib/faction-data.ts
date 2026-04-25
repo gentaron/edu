@@ -1,0 +1,50 @@
+export const FACTION_TREES = [
+  {
+    name: "テクロサス系譜",
+    color: "border-nebula-purple",
+    dotColor: "bg-nebula-purple",
+    textColor: "text-nebula-purple",
+    description: "E15年のファランクス創設に始まる、最古にして最大の軍事系譜。E295年にテクロサスが統合し、E470年の東方支隊を経て、現在のボグダス・ジャベリンへと至る。",
+    keyMembers: ["ファリエル", "ニニギス・カラス", "セバスチャン・ヴァレリウス", "ガレス"],
+    alliances: "トリニティ・アライアンスと同盟関係。V7及びブルーローズとは協調関係にある。",
+    nodes: [
+      { year: "E15", name: "ファランクス" },
+      { year: "E295", name: "テクロサス" },
+      { year: "E470", name: "東方支隊" },
+      { year: "現在", name: "ボグダス・ジャベリン" },
+    ],
+  },
+  {
+    name: "Alpha Venom系譜",
+    color: "border-red-400",
+    dotColor: "bg-red-400",
+    textColor: "text-red-400",
+    description: "E420年のΣ-Unit実験に端を発する暗殺・破壊活動の系譜。シルバー・ヴェノムからアルファ・ヴェノム、ゴールデン・ヴェノムへと進化し、最強の毒殺術を継承する。",
+    keyMembers: ["マスター・ヴェノム", "イズミ", "レヴィリア・サーペンティナ", "レオン"],
+    alliances: "独立系組織。シルバー・ヴェノム残党（ラストマン）が分離している。",
+    nodes: [
+      { year: "E420", name: "Σ-Unit" },
+      { year: "E475", name: "シルバー・ヴェノム" },
+      { year: "E500", name: "アルファ・ヴェノム / ゴールデン・ヴェノム" },
+    ],
+  },
+  {
+    name: "政体系譜",
+    color: "border-electric-blue",
+    dotColor: "bg-electric-blue",
+    textColor: "text-electric-blue",
+    description: "E285年のZAMLT創設から始まる政治的系譜。セリア黄金期、エヴァトロン統治期を経て、ポスト・エヴァトロン分裂により西にValoria、東にトリニティ、異次元にEros-7が生まれた。",
+    keyMembers: ["セリア・ドミニクス", "アイリス", "ジェン", "ミナ・エウレカ・エルンスト"],
+    alliances: "トリニティ・アライアンスが中心。Valoria連合圏は独立勢力として対立軸にある。",
+    nodes: [
+      { year: "E285", name: "ZAMLT" },
+      { year: "E335", name: "セリア黄金期" },
+      { year: "E400", name: "エヴァトロン" },
+      {
+        year: "E475",
+        name: "ポスト・エヴァトロン",
+        children: ["西: Valoria", "東: トリニティ", "V7"],
+      },
+    ],
+  },
+]
