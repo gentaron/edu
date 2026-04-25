@@ -2,13 +2,5 @@
   command = "npm run build"
   publish = ".next"
 
-[images]
-  service = "netlify"
-
-[[images.remote_patterns]]
-  protocol = "https"
-  hostname = "raw.githubusercontent.com"
-  pathname = "/**"
-
 [[plugins]]
   package = "@netlify/plugin-nextjs"

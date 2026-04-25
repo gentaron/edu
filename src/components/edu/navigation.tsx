@@ -13,6 +13,7 @@ const SECTIONS = [
   { id: "characters", label: "キャラクター", href: "/characters" },
   { id: "factions", label: "勢力系譜", href: "/factions" },
   { id: "technology", label: "技術体系", href: "/technology" },
+  { id: "card-game-link", label: "Card Game", href: "/card-game/select" },
   { id: "wiki-link", label: "Wiki", href: "/wiki" },
   { id: "story-link", label: "Story", href: "/story" },
   { id: "ranking-link", label: "長者番付", href: "/ranking" },
@@ -43,7 +44,9 @@ export function Navigation() {
                       ? "text-cyan-400 hover:text-cyan-300"
                       : s.id === "ranking-link"
                         ? "text-emerald-400 hover:text-emerald-300"
-                        : "text-cosmic-muted hover:text-electric-blue"
+                        : s.id === "card-game-link"
+                          ? "text-orange-400 hover:text-orange-300"
+                          : "text-cosmic-muted hover:text-electric-blue"
                 }`}
               >
                 {s.label}
@@ -75,7 +78,9 @@ export function Navigation() {
                       ? "text-cyan-400 bg-cosmic-surface"
                       : s.id === "ranking-link"
                         ? "text-emerald-400 bg-cosmic-surface"
-                        : "text-cosmic-muted hover:bg-cosmic-surface"
+                        : s.id === "card-game-link"
+                          ? "text-orange-400 bg-cosmic-surface"
+                          : "text-cosmic-muted hover:bg-cosmic-surface"
                 }`}
               >
                 {s.label}
