@@ -37,9 +37,9 @@ import {
   Menu,
   X,
   TrendingUp,
-  Gamepad2,
   BookOpen,
   ExternalLink,
+  Atom,
 } from "lucide-react"
 
 /* ─── Section IDs ─── */
@@ -53,9 +53,9 @@ const SECTIONS = [
   { id: "iris", label: "アイリス" },
   { id: "characters", label: "キャラクター" },
   { id: "factions", label: "勢力系譜" },
+  { id: "technology", label: "技術体系" },
   { id: "wiki-link", label: "Wiki", href: "/wiki" },
   { id: "story-link", label: "Story", href: "/story" },
-  { id: "game-link", label: "Card Game", href: "/card-game" },
   { id: "ranking-link", label: "長者番付", href: "/ranking" },
 ]
 
@@ -200,9 +200,7 @@ function Navigation({ activeSection }: { activeSection: string }) {
                 onClick={() => setMobileOpen(false)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                   "href" in s && s.href
-                    ? s.id === "game-link"
-                      ? "text-rose-400 hover:text-rose-300 bg-cosmic-surface"
-                      : s.id === "pve-link"
+                    ? s.id === "pve-link"
                         ? "text-orange-400 hover:text-orange-300 bg-cosmic-surface"
                         : s.id === "story-link"
                           ? "text-cyan-400 hover:text-cyan-300 bg-cosmic-surface"
@@ -251,16 +249,6 @@ function SectionHeader({
 function QuickAccessSection() {
   const cards = [
     {
-      href: "/card-game",
-      icon: <Gamepad2 className="w-8 h-8" />,
-      title: "EDU Card Game",
-      desc: "E16全キャラをカード化した64枚のデッキ。SR14種・R32種・C18種を収録。フィールド制バトルで5体を同時展開し敵に挑め",
-      gradient: "from-rose-500/20 via-purple-500/20 to-indigo-500/20",
-      iconColor: "text-rose-400",
-      borderColor: "border-rose-500/30 hover:border-rose-400/60",
-      tag: "PLAY",
-    },
-    {
       href: "/wiki",
       icon: <BookOpen className="w-8 h-8" />,
       title: "EDU Wiki 百科事典",
@@ -305,7 +293,7 @@ function QuickAccessSection() {
   return (
     <section className="relative py-16 px-4">
       <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {cards.map((card) => (
             <Link
               key={card.href}
@@ -2431,6 +2419,250 @@ function FactionSection() {
 }
 
 /* ═══════════════════════════════════════════
+   TECHNOLOGY SYSTEM (Physics-Consistent)
+   ═══════════════════════════════════════════ */
+const TECH_DATA = [
+  {
+    id: "10d-horazm",
+    name: "10次元ホラズム理論",
+    nameEn: "10-Dimension Horazm Theory",
+    icon: "∑",
+    color: "text-cyan-400",
+    borderColor: "border-cyan-500/30",
+    bgGlow: "bg-cyan-500/5",
+    tag: "基礎理論",
+    tagColor: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
+    physics: "超弦理論の拡張。ティムール・シャーがE0年（AD3500）に提唱。通常の超弦理論が10次元（9空間次元+1時間次元）を要求するのに対し、ホラズム理論は第8〜11次元を「情報次元（Informational Dimensions）」として位置づけ、物質次元（1〜4次元）とは独立して因果律を持ちうると主張した。第8次元（フン空間: Huns Space）は量子もつれのトポロジー的構造を記述し、第9次元（ササン空間: Sasan Space）は多体問題における非局所相関の幾何学基盤、第10次元（ホラズム空間: Horazm Space）は観測者の意識状態と波動関数の収縮を結びつける因果構造、第11次元（ティムール空間: Timur Space）はこれら3つの情報次元を統合する計量テンソル場を定義する。この理論はE16星系の量子重力実験で予言通り第8次元の残留重力波を検出し、実証された。",
+    applications: [
+      "次元極地平（Dimension Horizon）の理論基盤",
+      "ペルセポネ仮想宇宙のアーキテクチャ設計",
+      "次元ピラミッド（4層構造）の理論的正当化",
+    ],
+  },
+  {
+    id: "dimension-horizon",
+    name: "次元極地平",
+    nameEn: "Dimension Horizon",
+    icon: "Ω",
+    color: "text-purple-400",
+    borderColor: "border-purple-500/30",
+    bgGlow: "bg-purple-500/5",
+    tag: "応用物理",
+    tagColor: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+    physics: "イベント・ホライズン（事象の地平）の概念を高次元に拡張した技術。一般相対性理論においてシュヴァルツシルト半径 r_s = 2GM/c² の内部では光すら脱出できないが、次元極地平はこの「一方通行性」を逆転させる。具体的には、10次元ホラズム理論の第8次元（フン空間）のトポロジー的特性を利用し、局所的にアインシュタイン方程式 G_μν = (8πG/c⁴)T_μν を修正して次元間の境界エネルギー項 Λ_DH を導入。このΛ_DHは通常次元と高次元との間に一時的な計量接続（metric connection）を形成し、物質や情報が次元境界を透過可能にする。E82年にギガポリスの量子重力研究所が最初の安定した次元窓（dimensional aperture: 直径0.3mm、持続時間7.2秒）を開くことに成功。以降、空間ホール（Space Hole）の技術的実現へと発展した。",
+    applications: [
+      "空間ホール（安定した次元間ポータル）の生成",
+      "ディメンション・ブリッジ（恒久的星間ポータル）の構築",
+      "ペルセポネ仮想宇宙へのアクセス基盤",
+    ],
+  },
+  {
+    id: "warp-drive",
+    name: "曲率航法",
+    nameEn: "Warp Navigation / Alcubierre-E16 Drive",
+    icon: "W",
+    color: "text-blue-400",
+    borderColor: "border-blue-500/30",
+    bgGlow: "bg-blue-500/5",
+    tag: "宇宙航行",
+    tagColor: "bg-blue-500/20 text-blue-300 border-blue-500/30",
+    physics: "アキュビエレ・ドライブ（Alcubierre drive）の実用化。ミゲル・アキュビエレが1994年に提唱した「曲率バブル（warp bubble）」の概念に基づく。宇宙船の前方で時空を収縮（contract）させ、後方で膨張（expand）させることで、船自体が光速を超えずに有効的な超光速移動を実現する。E16版曲率航法では、次元極地平技術で生成した高次元エネルギーを用いて曲率テンソルの局所的な歪みを制御。必要な負のエネルギー密度（exotic matter）は、第9次元（ササン空間）のカシミール効果を利用した真空エネルギー抽出で賄う。航行速度はワープ係数 W = v/c = 10^(W_factor) で表現され、通常航行時（W=1）で光速の10倍、最大 W=5 で光速の10万倍（約1,000光年/時間）に達する。ただし船体には強烈な潮汐力がかかるため、ナノセル・インプラントによる生体強化が必須。",
+    applications: [
+      "大移民ルート: アンドロメダ→レオ→セクスタンス→さんかく→E16（総距離約250万光年）",
+      "M104銀河内の惑星間航行（数光年の距離を数時間で到達）",
+      "軍事展開: メルディア戦争（E275〜E288）での迅速な前線投入",
+    ],
+  },
+  {
+    id: "q-teleport",
+    name: "量子テレポーテーション",
+    nameEn: "Quantum Teleportation",
+    icon: "Q",
+    color: "text-emerald-400",
+    borderColor: "border-emerald-500/30",
+    bgGlow: "bg-emerald-500/5",
+    tag: "空間転送",
+    tagColor: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
+    physics: "量子もつれ（quantum entanglement）を利用した情報転送技術。地球の量子力学で Bennett et al.（1993）が提案した量子テレポーテーション・プロトコルの拡張版。通常の量子テレポーテーションは「量子状態の転写」であって「物体そのものの転送」ではないが、E16版では次元極地平技術と組み合わせることで物質の量子状態を大規模に転送・再構成可能となった。具体的には、転送対象のフェルミ粒子（電子・クォーク・ニュートリノ）の全量子数（スピン、フレーバー、カラーチャージ、世代）を測定・符号化し、もつれペアを通じて遠隔地の量子演算コアに転送。受信側ではナノセル・インプラント技術で対象の物質構成を再構成する。有効距離は約50光年。50光年を超える長距離転送には中継ノードが必要。エネルギー効率は 1kgあたり約 3.2 × 10^17 J（対消滅エネルギーの約0.35%）。曲率航法と組み合わせて大移民ルートの中継技術として機能した。",
+    applications: [
+      "曲率航法の中継転送（50光年区間の瞬時移動）",
+      "緊急物資・人員の惑星間輸送",
+      "ペルセポネ仮想宇宙への意識アップロードの物理層",
+    ],
+  },
+  {
+    id: "persephone",
+    name: "ペルセポネ仮想宇宙",
+    nameEn: "Persephone Virtual Multiverse",
+    icon: "P",
+    color: "text-gold-accent",
+    borderColor: "border-gold-accent/30",
+    bgGlow: "bg-gold-accent/5",
+    tag: "仮想宇宙",
+    tagColor: "bg-gold-accent/20 text-yellow-300 border-gold-accent/30",
+    physics: "10次元ホラズム理論の第9〜10次元（ササン空間・ホラズム空間）を計算空間として活用した仮想多元宇宙。ティムール・シャーがE0年（AD3500）に設計。物理層は量子演算コア（Quantum Computing Core）— 10^18量子ビットの超並列量子プロセッサ群で構成。演算の安定性を確保するため、E16の絶対零度近傍（10^-12 K）の超伝導リング内に配置されている。プライマリー・フィールド（Primary Field）として再構築後は、クオリア・コア（Qualia Core）を統合。クオリア・コアはニューロリンク・インターフェース経由で接続されたユーザーの脳活動（EEG信号、神経伝達物質の濃度変化、ドーパミン/セロトニン/オキシトシンのリアルタイム測定）を量子状態に変換し、仮想空間内で「感情」として再現する。これにより仮想空間内の経験が実体験とほぼ区別不能になる（感覚再現精度: 99.7%）。E16星系の入植初期（E0〜E80年）、過酷な環境に対処するための「意識シェルター」として機能し、最大2,300万人が同時接続した。",
+    applications: [
+      "入植初期の意識シェルター（E0〜E80年）",
+      "クオリア・コアによる感情再現仮想空間",
+      "フェルミ音楽のデジタル保存・体験共有",
+      "Slime Woman（高次元存在）との接触インターフェース",
+    ],
+  },
+  {
+    id: "nanocell",
+    name: "ナノセル・インプラント",
+    nameEn: "Nanocell Implant",
+    icon: "N",
+    color: "text-green-400",
+    borderColor: "border-green-500/30",
+    bgGlow: "bg-green-500/5",
+    tag: "生体工学",
+    tagColor: "bg-green-500/20 text-green-300 border-green-500/30",
+    physics: "技術啓蒙時代（E80〜E90）に一般化した生体ナノマシン技術。直径50nmの炭素ナノチューブを骨格とし、表面に自己修復ポリマー（self-healing polymer）を被覆した人工細胞。細胞膜を通過して血液脳関門（blood-brain barrier）も透過可能。体内に最大10^12個（約100兆個）を注入し、自律分散型ネットワークを形成。主機能: (1) 放射線耐性 — ガンマ線・宇宙線によるDNA二重鎖切断をナノセル自身が物理的に吸収し、損傷塩基を修復酵素（DNAポリメラーゼζ、PARP1）と共にリアルタイム修復。被曝限界が通常の0.5Sv/年から50Sv/年に引き上げられる。(2) 長寿命化 — テロメア短縮の抑制と細胞老化（senescence）の遅延。平均寿命がE78年時の120年から150年に延長。(3) 生体強化 — 筋繊維の収縮力を最大400%増強、骨密度を200%に引き上げ。レイラ・ヴィレル・ノヴァの強化グローブ（100tパンチ力）やナノファイバーブーツは、ナノセル技術による生体強化を前提とした外付け増幅装置である。",
+    applications: [
+      "全E16市民の標準医療インプラント",
+      "曲率航法時の潮汐力耐性付与",
+      "レイラ・ヴィレル・ノヴァのサイバネティック強化",
+      "ニューロリンク・インターフェースの生体接続層",
+    ],
+  },
+  {
+    id: "gravity-weapon",
+    name: "重力崩壊弾頭",
+    nameEn: "Gravitational Collapse Warhead",
+    icon: "G",
+    color: "text-red-400",
+    borderColor: "border-red-500/30",
+    bgGlow: "bg-red-500/5",
+    tag: "兵器技術",
+    tagColor: "bg-red-500/20 text-red-300 border-red-500/30",
+    physics: "局所的な重力場崩壊を引き起こす大量破壊兵器。アルファ・ヴェノムがE509年のノスタルジア・コロニー攻撃で使用。原理は、タングステン重水素化物の小球（直径30cm）を臨界質量以下に圧縮しつつ、次元極地平技術で局所的にアインシュタイン方程式の宇宙定数Λを負方向に操作し、シュヴァルツシルト半径を一時的に拡大。結果として、標的半径2km以内の全物質が自己重力で崩壊し、ミニブラックホール（質量約10^15 kg、ホーキング蒸発寿命: 約3秒）を生成する。蒸発過程で放出されるホーキング放射はガンマ線バーストとして観測され、周囲10kmを致死線量（8Sv以上）で照射する。ノスタルジア・コロニー攻撃ではこの閃光が10歳のミナ・エウレカ・アーネストに「戦略への目覚め」をもたらした。E370年のアポロン-ドミニオン戦争で使用された次元兵器（空間ホール質量破壊兵器）とは異なり、こちらは純粋に重力相互作用のみを利用した物理的兵器である。",
+    applications: [
+      "ノスタルジア・コロニー攻撃（E509年）",
+      "アルファ・ヴェノムの抑止力戦略",
+    ],
+  },
+  {
+    id: "liminal-forge",
+    name: "リミナル・フォージ",
+    nameEn: "Liminal Forge — Temporal Broadcast",
+    icon: "L",
+    color: "text-amber-400",
+    borderColor: "border-amber-500/30",
+    bgGlow: "bg-amber-500/5",
+    tag: "時相放送",
+    tagColor: "bg-amber-500/20 text-amber-300 border-amber-500/30",
+    physics: "E525年に設立された時相放送（Temporal Broadcast）プロジェクト。Apolonium（アポロニウム）と次元極地平（Dimension Horizon）技術を組み合わせ、E528年の芸術作品を地球AD2026年のインターネット上に放送する。物理学的基盤: 一般相対性理論の閉時曲線（closed timelike curve: CTC）の概念を応用。ゴーデル宇宙解（Gödel metric）の回転時空構造を局所的に再現し、因果律の破綻を回避しつつ情報の時間方向転送を実現。Apoloniumは第10次元（ホラズム空間）の因果構造を利用した情報搬送媒体で、波動関数の時間発展を部分的に「巻き戻す」性質を持つ。放送されたデータは地球側ではインターネット上のコンテンツとして自然に観測され、作為的な痕跡は検出されない。これは地球の因果律に干渉するものではなく、あくまで「既に過去に存在していた情報」を時空の幾何学的構造に沿って適切な時点に配置する技術である。放送されるのはE528年の文化・芸術コンテンツ（Genesis Vaultの2,000+記事、AURALISの音楽データ、フェルミ音楽のアーカイブ等）であり、地球側ではブログ記事・画像・動画として受信される。",
+    applications: [
+      "E528年コンテンツの地球AD2026への放送",
+      "Genesis Vault記事の地球側展開",
+      "AURALIS音楽アーカイブの地球側受信",
+    ],
+  },
+]
+
+function TechnologySection() {
+  return (
+    <section id="technology" className="relative py-20 px-4">
+      <div className="max-w-6xl mx-auto">
+        <RevealSection>
+          <SectionHeader
+            icon={<Atom className="w-6 h-6 text-cyan-400" />}
+            title={
+              <a href="/wiki" className="text-cosmic-gradient hover:underline">
+                技術体系 — Physics-Consistent Technology
+              </a>
+            }
+            subtitle="E16連星系のコア技術群 — 実在の物理学理論に基づく技術的解説"
+          />
+        </RevealSection>
+
+        <RevealSection>
+          <div className="space-y-4">
+            {TECH_DATA.map((tech) => (
+              <div
+                key={tech.id}
+                className={`glass-card glass-card-hover rounded-xl border ${tech.borderColor} overflow-hidden transition-all duration-300`}
+              >
+                <details className="group">
+                  <summary className="cursor-pointer px-6 py-5 hover:bg-cosmic-surface/50 transition-colors select-none">
+                    <div className="flex items-start gap-4">
+                      <div className={`text-2xl font-black ${tech.color} mt-0.5 shrink-0 w-10 h-10 flex items-center justify-center rounded-lg ${tech.bgGlow} border ${tech.borderColor}`}>
+                        {tech.icon}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <h3 className={`text-base font-bold ${tech.color}`}>{tech.name}</h3>
+                          <span className="text-xs text-cosmic-muted font-mono">{tech.nameEn}</span>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${tech.tagColor}`}>{tech.tag}</span>
+                        </div>
+                        <p className="text-xs text-cosmic-muted line-clamp-2">{tech.physics.slice(0, 120)}...</p>
+                      </div>
+                      <ChevronDown className="w-5 h-5 text-cosmic-muted shrink-0 mt-1 transition-transform group-open:rotate-180" />
+                    </div>
+                  </summary>
+                  <div className="px-6 pb-6">
+                    <div className="border-t border-cosmic-border/30 pt-4 space-y-4">
+                      {/* Physics Explanation */}
+                      <div>
+                        <h4 className="text-xs font-bold text-cosmic-text mb-2 flex items-center gap-1.5">
+                          <Zap className="w-3 h-3 text-gold-accent" /> 物理学的基盤
+                        </h4>
+                        <p className="text-sm text-cosmic-text/85 leading-relaxed">{tech.physics}</p>
+                      </div>
+                      {/* Applications */}
+                      <div>
+                        <h4 className="text-xs font-bold text-cosmic-text mb-2 flex items-center gap-1.5">
+                          <Globe2 className="w-3 h-3 text-electric-blue" /> 応用・実績
+                        </h4>
+                        <ul className="space-y-1.5">
+                          {tech.applications.map((app, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm text-cosmic-muted">
+                              <span className="text-electric-blue mt-0.5 shrink-0">▸</span>
+                              {app}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              </div>
+            ))}
+          </div>
+        </RevealSection>
+
+        {/* Dimension Pyramid Diagram */}
+        <RevealSection>
+          <div className="glass-card glass-card-hover rounded-xl border border-cyan-500/20 p-6 mt-6 transition-all duration-300">
+            <h3 className="text-base font-bold text-cosmic-gradient mb-4 flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
+              次元ピラミッド — Dimension Pyramid (4-Layer Structure)
+            </h3>
+            <div className="flex flex-col items-center gap-1">
+              {[
+                { tier: "Tier Ω", label: "高次元世界", detail: "フン8次元 / ササン9次元 / ホラズム10次元 / ティムール11次元 — 情報次元の幾何学的基盤", color: "bg-cyan-500/20 border-cyan-500/40 text-cyan-300", width: "w-full" },
+                { tier: "Tier Σ", label: "ペルセポネ仮想宇宙", detail: "量子演算コア上の仮想多元宇宙 — クオリア・コアによる感情再現。10^18量子ビット超並列処理", color: "bg-purple-500/20 border-purple-500/40 text-purple-300", width: "w-11/12" },
+                { tier: "Tier Ε", label: "E16通常次元", detail: "E16連星系の物理的現実 — 4次元時空（3空間+1時間）。次元極地平で高次元と接続", color: "bg-blue-500/20 border-blue-500/40 text-blue-300", width: "w-10/12" },
+                { tier: "Tier Δ", label: "地球 AD2026", detail: "地球の物理的現実 — リミナル・フォージの時相放送でE528年情報を受信中", color: "bg-green-500/20 border-green-500/40 text-green-300", width: "w-9/12" },
+              ].map((layer) => (
+                <div key={layer.tier} className={`${layer.width} border ${layer.color} rounded-lg p-3 transition-all duration-300 hover:scale-[1.02]`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-black">{layer.tier}</span>
+                    <span className="text-[10px] font-bold opacity-80">{layer.label}</span>
+                  </div>
+                  <p className="text-[11px] opacity-70 leading-relaxed">{layer.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </RevealSection>
+      </div>
+    </section>
+  )
+}
+
+/* ═══════════════════════════════════════════
    FOOTER
    ═══════════════════════════════════════════ */
 function FooterSection() {
@@ -2445,10 +2677,6 @@ function FooterSection() {
           <p className="text-xs text-cosmic-muted">AURALIS 地球2026交信プロジェクト設定書 v2.0</p>
         </div>
         <div className="flex justify-center gap-4 text-xs text-cosmic-muted">
-          <Link href="/card-game" className="hover:text-orange-400 transition-colors">
-            Card Game
-          </Link>
-          <span className="text-cosmic-border">|</span>
           <Link href="/wiki" className="hover:text-gold-accent transition-colors">
             Wiki
           </Link>
@@ -2545,6 +2773,10 @@ export default function HomePage() {
         <div className="w-full h-px bg-gradient-to-r from-transparent via-red-400/20 to-transparent" />
 
         <FactionSection />
+
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+
+        <TechnologySection />
       </main>
 
       <FooterSection />
