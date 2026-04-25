@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ArrowLeft, User, Scroll, BookOpen } from "lucide-react";
 import { ALL_ENTRIES } from "@/lib/wiki-data";
 import { getStoriesForEntry } from "@/lib/stories";
+import WikiDescription from "./_components/wiki-description";
 
 const CATEGORY_STYLES: Record<string, { color: string; bg: string; border: string }> = {
   "キャラクター": { color: "text-nebula-purple", bg: "bg-nebula-purple/15", border: "border-nebula-purple/30" },
@@ -144,9 +145,7 @@ export default function WikiEntryPage() {
               <Scroll className="w-4 h-4 text-nebula-purple" />
               概要
             </h2>
-            <p className="text-sm sm:text-base text-cosmic-text/90 leading-relaxed whitespace-pre-line">
-              {entry.description}
-            </p>
+            <WikiDescription description={entry.description} />
           </div>
 
           {/* Story links */}
