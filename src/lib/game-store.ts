@@ -48,7 +48,7 @@ export const useDeckStore = create<DeckState>()(
 );
 
 /* ═══════════════════════════════════════════════════════
-   Field-based Battle Store
+   Field-based Battle Store — Individual Character HP
    ═══════════════════════════════════════════════════════ */
 
 type BattlePhase =
@@ -68,8 +68,6 @@ export interface FieldChar {
 
 interface BattleState {
   phase: BattlePhase;
-  playerHp: number;
-  playerMaxHp: number;
   shieldBuffer: number;
   selectedEnemy: Enemy | null;
   enemyHp: number;
@@ -97,8 +95,6 @@ interface BattleState {
   resetBattle: () => void;
 }
 
-const PLAYER_MAX_HP = 40;
-
 function charMaxHp(card: GameCard): number {
   const base = card.rarity === "SR" ? 14 : card.rarity === "R" ? 10 : 8;
   return base + card.defense;
@@ -111,10 +107,31 @@ function addLog(
   setter((s) => ({ log: [...s.log.slice(-29), msg] }));
 }
 
+/** Pick a random alive character and apply damage. Returns updated fieldChars + hitIndex. */
+function hitRandomChar(
+  fieldChars: FieldChar[],
+  damage: number,
+  setter: (fn: (s: BattleState) => Partial<BattleState>) => void,
+  emoji: string,
+  msgPrefix: string
+): { fieldChars: FieldChar[]; hitIndex: number | null } {
+  const alive = fieldChars.filter((fc) => !fc.isDown);
+  if (alive.length === 0) return { fieldChars, hitIndex: null };
+  const target = alive[Math.floor(Math.random() * alive.length)];
+  const idx = fieldChars.findIndex((fc) => fc.card.id === target.card.id);
+  const newHp = Math.max(0, target.hp - damage);
+  const updated = [...fieldChars];
+  updated[idx] = { ...target, hp: newHp, isDown: newHp <= 0 };
+  if (newHp <= 0) {
+    addLog(setter, `${emoji} ${msgPrefix}${target.card.name}を撃破！ ${target.card.name}は戦闘不能！`);
+  } else {
+    addLog(setter, `${emoji} ${msgPrefix}${target.card.name}に${damage}ダメージ！`);
+  }
+  return { fieldChars: updated, hitIndex: idx };
+}
+
 export const useBattleStore = create<BattleState>((set, get) => ({
   phase: "idle",
-  playerHp: PLAYER_MAX_HP,
-  playerMaxHp: PLAYER_MAX_HP,
   shieldBuffer: 0,
   selectedEnemy: null,
   enemyHp: 0,
@@ -135,17 +152,16 @@ export const useBattleStore = create<BattleState>((set, get) => ({
   charHitIndex: null,
 
   startBattle: (enemy, deck) => {
-    const hpPenalty = enemy.id === "frost-guardian" ? 5 : 0;
-    const field: FieldChar[] = deck.map((c) => ({
-      card: c,
-      hp: charMaxHp(c),
-      maxHp: charMaxHp(c),
-      isDown: false,
-    }));
+    const field: FieldChar[] = deck.map((c) => {
+      let hp = charMaxHp(c);
+      // Frost guardian: reduce each character by 1 HP at start
+      if (enemy.id === "frost-guardian") {
+        hp = Math.max(1, hp - 1);
+      }
+      return { card: c, hp, maxHp: charMaxHp(c), isDown: false };
+    });
     set({
       phase: "playerTurn",
-      playerHp: PLAYER_MAX_HP - hpPenalty,
-      playerMaxHp: PLAYER_MAX_HP,
       shieldBuffer: 0,
       selectedEnemy: enemy,
       enemyHp: enemy.maxHp,
@@ -159,7 +175,8 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       log: [
         `⚔️ ${enemy.name} との戦闘開始！`,
         `— 5体の味方がフィールドに出撃！ —`,
-      ],
+        enemy.id === "frost-guardian" ? "❄️ 絶対零度の冷気が味方全体を襲う！全員に1ダメージ！" : "",
+      ].filter(Boolean),
       lastAbilityUsed: null,
       lastCharIndex: null,
       screenShake: false,
@@ -188,6 +205,10 @@ export const useBattleStore = create<BattleState>((set, get) => ({
     const enemy = s.selectedEnemy;
     if (!enemy) return;
 
+    // Working copy of field characters (for healing)
+    let newFieldChars = s.fieldCharacters.map((c) => ({ ...c }));
+    const selIdx = s.selectedCharIndex;
+
     set({
       phase: "resolving",
       playerAbility: ability,
@@ -201,7 +222,6 @@ export const useBattleStore = create<BattleState>((set, get) => ({
     });
 
     let newEnemyHp = s.enemyHp;
-    let newPlayerHp = s.playerHp;
     let newShield = s.shieldBuffer;
     let newEnemyAttackReduction = s.enemyAttackReduction;
     let logMsg = "";
@@ -231,8 +251,11 @@ export const useBattleStore = create<BattleState>((set, get) => ({
           }
           newShield += defValue;
           if (enemyId === "flame-spirit") {
-            newPlayerHp = Math.max(0, newPlayerHp - 1);
-            logMsg += " 🔥熱で1ダメージ！";
+            // Self-damage goes to selected character
+            const selChar = newFieldChars[selIdx];
+            const newHp = Math.max(0, selChar.hp - 1);
+            newFieldChars[selIdx] = { ...selChar, hp: newHp, isDown: newHp <= 0 };
+            logMsg += ` 🔥熱で${card.name}に1ダメージ！`;
           }
         }
         break;
@@ -241,21 +264,28 @@ export const useBattleStore = create<BattleState>((set, get) => ({
         const eff = card.effect;
         const val = card.effectValue;
         const canDamage = !isVoidKingPhase3;
+
+        // Helper: heal selected character
+        function healSelected(amount: number) {
+          const selChar = newFieldChars[selIdx];
+          const newHp = Math.min(selChar.maxHp, selChar.hp + amount);
+          newFieldChars[selIdx] = { ...selChar, hp: newHp, isDown: false };
+          return newHp - selChar.hp; // actual healed amount
+        }
+
         if (eff.includes("回復") && eff.includes("ダメージ") && eff.includes("シールド")) {
-          const healVal = val;
+          const actual = healSelected(val);
           const shieldVal = Math.max(1, Math.floor(val * 0.7));
-          newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + healVal);
           newShield += shieldVal;
-          logMsg = `✨ ${card.name}の${card.effect}！ HP${healVal}回復＋シールド+${shieldVal}`;
+          logMsg = `✨ ${card.name}の${card.effect}！ ${card.name}のHP${actual}回復＋シールド+${shieldVal}`;
         } else if (eff.includes("ダメージ") && eff.includes("回復")) {
           const dmg = val;
-          const heal = Math.max(1, Math.floor(val * 0.5));
+          const actual = healSelected(Math.max(1, Math.floor(val * 0.5)));
           if (canDamage) newEnemyHp = Math.max(0, newEnemyHp - dmg);
-          newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + heal);
           if (canDamage) {
-            logMsg = `✨ ${card.name}の${card.effect}！ 敵に${dmg}ダメージ＋HP${heal}回復！`;
+            logMsg = `✨ ${card.name}の${card.effect}！ 敵に${dmg}ダメージ＋${card.name}のHP${actual}回復！`;
           } else {
-            logMsg = `✨ ${card.name}の効果！ HP${heal}回復！（ダメージは吸収）`;
+            logMsg = `✨ ${card.name}の効果！ ${card.name}のHP${actual}回復！（ダメージは吸収）`;
           }
         } else if (eff.includes("ダメージ") && eff.includes("シールド")) {
           const dmg = val;
@@ -268,9 +298,8 @@ export const useBattleStore = create<BattleState>((set, get) => ({
             logMsg = `✨ ${card.name}の効果！ シールド+${shieldVal}！（ダメージは吸収）`;
           }
         } else if (eff.includes("回復")) {
-          const heal = val;
-          newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + heal);
-          logMsg = `✨ ${card.name}の${card.effect}！ HP${heal}回復！`;
+          const actual = healSelected(val);
+          logMsg = `✨ ${card.name}の${card.effect}！ ${card.name}のHP${actual}回復！`;
         } else if (eff.includes("ダメージ")) {
           const dmg = val;
           if (canDamage) {
@@ -288,15 +317,15 @@ export const useBattleStore = create<BattleState>((set, get) => ({
           logMsg = `✨ ${card.name}の${card.effect}！ 敵の攻撃力-${val}！`;
         } else if (eff.includes("次元ピラミッド")) {
           if (canDamage) newEnemyHp = Math.max(0, newEnemyHp - 5);
-          newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + 3);
+          const actual = healSelected(3);
           if (canDamage) {
-            logMsg = `✨ 次元ピラミッド展開！ 敵に5ダメージ＋HP3回復！`;
+            logMsg = `✨ 次元ピラミッド展開！ 敵に5ダメージ＋${card.name}のHP${actual}回復！`;
           } else {
-            logMsg = `✨ 次元ピラミッド展開！ HP3回復！（ダメージは吸収）`;
+            logMsg = `✨ 次元ピラミッド展開！ ${card.name}のHP${actual}回復！（ダメージは吸収）`;
           }
         } else {
-          newPlayerHp = Math.min(s.playerMaxHp, s.playerHp + val);
-          logMsg = `✨ ${card.name}の${card.effect}！ HP${val}回復！`;
+          const actual = healSelected(val);
+          logMsg = `✨ ${card.name}の${card.effect}！ ${card.name}のHP${actual}回復！`;
         }
         break;
       }
@@ -320,6 +349,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
         set((prev) => ({
           phase: "victory",
           enemyHp: 0,
+          fieldCharacters: newFieldChars,
           screenShake: false,
           enemyFlash: false,
           healFlash: false,
@@ -333,9 +363,9 @@ export const useBattleStore = create<BattleState>((set, get) => ({
 
     set({
       enemyHp: newEnemyHp,
-      playerHp: newPlayerHp,
       shieldBuffer: newShield,
       enemyAttackReduction: newEnemyAttackReduction,
+      fieldCharacters: newFieldChars,
     });
     get().checkPhaseTransition();
 
@@ -361,6 +391,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       charHitIndex: null,
     });
 
+    // Calculate total phase bonus
     let totalBonus = 0;
     for (const p of enemy.phases) {
       if (hpPercent <= p.triggerHpPercent) {
@@ -369,33 +400,54 @@ export const useBattleStore = create<BattleState>((set, get) => ({
     }
 
     const baseAttack = Math.max(0, enemy.attackPower + totalBonus - s.enemyAttackReduction);
-    const damage = Math.max(0, baseAttack - s.shieldBuffer);
-    addLog(set, `💥 ${enemy.name}の攻撃！ ${damage}ダメージ！`);
+    const effectiveDamage = Math.max(0, baseAttack - s.shieldBuffer);
+    addLog(set, `💥 ${enemy.name}の攻撃！ ${effectiveDamage}ダメージ！`);
 
-    let newPlayerHp = Math.max(0, s.playerHp - damage);
-
-    if (s.poisonActive) {
-      newPlayerHp = Math.max(0, newPlayerHp - 1);
-      addLog(set, "☠️ 毒により1ダメージ！");
-    }
-
+    // Main attack → random alive character
     let newFieldChars = [...s.fieldCharacters];
     let hitCharIdx: number | null = null;
-
-    function randomCharDamage(fieldChars: FieldChar[], dmg: number, emoji: string, msgPrefix: string) {
-      const alive = fieldChars.filter((fc) => !fc.isDown);
-      if (alive.length === 0) return fieldChars;
-      const target = alive[Math.floor(Math.random() * alive.length)];
-      const idx = fieldChars.findIndex((fc) => fc.card.id === target.card.id);
-      const newHp = Math.max(0, target.hp - dmg);
-      fieldChars[idx] = { ...target, hp: newHp, isDown: newHp <= 0 };
-      hitCharIdx = idx;
-      if (newHp <= 0) {
-        addLog(set, `${emoji} ${msgPrefix}${target.card.name}を撃破！ ${target.card.name}は戦闘不能！`);
-      } else {
-        addLog(set, `${emoji} ${msgPrefix}${target.card.name}に${dmg}ダメージ！`);
+    if (effectiveDamage > 0) {
+      const alive = newFieldChars.filter((fc) => !fc.isDown);
+      if (alive.length > 0) {
+        const target = alive[Math.floor(Math.random() * alive.length)];
+        const idx = newFieldChars.findIndex((fc) => fc.card.id === target.card.id);
+        if (idx !== -1) {
+          const newHp = Math.max(0, target.hp - effectiveDamage);
+          newFieldChars[idx] = { ...target, hp: newHp, isDown: newHp <= 0 };
+          hitCharIdx = idx;
+          if (newHp <= 0) {
+            addLog(set, `💀 ${target.card.name}は戦闘不能になった！`);
+          } else {
+            addLog(set, `💥 ${target.card.name}に${effectiveDamage}ダメージ！`);
+          }
+        }
       }
-      return fieldChars;
+    }
+
+    // Poison damage → random alive character
+    if (s.poisonActive) {
+      const alive = newFieldChars.filter((fc) => !fc.isDown);
+      if (alive.length > 0) {
+        const target = alive[Math.floor(Math.random() * alive.length)];
+        const idx = newFieldChars.findIndex((fc) => fc.card.id === target.card.id);
+        if (idx !== -1) {
+          const newHp = Math.max(0, target.hp - 1);
+          newFieldChars[idx] = { ...target, hp: newHp, isDown: newHp <= 0 };
+          hitCharIdx = idx;
+          if (newHp <= 0) {
+            addLog(set, `☠️ 毒により${target.card.name}が戦闘不能！`);
+          } else {
+            addLog(set, `☠️ 毒により${target.card.name}に1ダメージ！`);
+          }
+        }
+      }
+    }
+
+    // Enemy-specific special abilities targeting characters
+    function randomCharDamage(fieldChars: FieldChar[], dmg: number, emoji: string, msgPrefix: string) {
+      const result = hitRandomChar(fieldChars, dmg, set, emoji, msgPrefix);
+      if (result.hitIndex !== null) hitCharIdx = result.hitIndex;
+      return result.fieldChars;
     }
 
     const enemyHpPct = (s.enemyHp / enemy.maxHp) * 100;
@@ -441,6 +493,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       newFieldChars = randomCharDamage(newFieldChars, 3, "🌀", "存在の侵食が");
     }
 
+    // Enemy self-heal
     let newEnemyHp = s.enemyHp;
     for (const p of enemy.phases) {
       if (p.selfHealPerTurn && hpPercent <= p.triggerHpPercent) {
@@ -453,24 +506,21 @@ export const useBattleStore = create<BattleState>((set, get) => ({
 
     setTimeout(() => {
       set({
-        playerHp: newPlayerHp,
         enemyHp: newEnemyHp,
         shieldBuffer: 0,
         enemyAttackReduction: 0,
         fieldCharacters: newFieldChars,
         turn: newTurn,
         screenShake: false,
-        charHitIndex: null,
+        charHitIndex: hitCharIdx,
       });
 
+      // Defeat condition: all characters down
       const allDown = newFieldChars.every((fc) => fc.isDown);
-      if (newPlayerHp <= 0 || allDown) {
-        const reason = allDown && newPlayerHp > 0
-          ? "味方が全員戦闘不能になった…"
-          : "プレイヤーは倒された...";
+      if (allDown) {
         set((prev) => ({
           phase: "defeat",
-          log: [...prev.log, `💀 ${reason}`],
+          log: [...prev.log, `💀 味方が全員戦闘不能になった…`],
         }));
         return;
       }
@@ -494,23 +544,32 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       addLog(set, `⚠️ ${s.selectedEnemy.phases[newPhase - 1].message}`);
       set({ enemyCurrentPhase: newPhase });
       if (s.selectedEnemy.id === "void-reaper") {
-        const newHp = Math.max(0, s.playerHp - 4);
-        addLog(set, `🌪️ 次元断絶の衝撃で4ダメージ！`);
-        const aliveChars = get().fieldCharacters.filter((fc) => !fc.isDown);
+        // Phase transition damage → random character (previously was playerHp)
         const updatedChars = [...get().fieldCharacters];
+        const aliveChars = updatedChars.filter((fc) => !fc.isDown);
         if (aliveChars.length > 0) {
           const target = aliveChars[Math.floor(Math.random() * aliveChars.length)];
           const idx = updatedChars.findIndex((fc) => fc.card.id === target.card.id);
-          const charHp = Math.max(0, target.hp - 3);
+          const charHp = Math.max(0, target.hp - 4);
           updatedChars[idx] = { ...target, hp: charHp, isDown: charHp <= 0 };
+          addLog(set, `🌪️ 次元断絶の衝撃で${target.card.name}に4ダメージ！`);
           if (charHp <= 0) {
-            addLog(set, `🌪️ 次元断絶が${target.card.name}を巻き込んだ！ ${target.card.name}は戦闘不能！`);
-          } else {
-            addLog(set, `🌪️ 次元断絶が${target.card.name}に3ダメージ！`);
+            addLog(set, `🌪️ ${target.card.name}は次元断絶に飲み込まれた！`);
           }
-          set({ playerHp: newHp, fieldCharacters: updatedChars });
-        } else {
-          set({ playerHp: newHp });
+          // Additional 3 damage to another character
+          const remainingAlive = updatedChars.filter((fc) => !fc.isDown);
+          if (remainingAlive.length > 0) {
+            const target2 = remainingAlive[Math.floor(Math.random() * remainingAlive.length)];
+            const idx2 = updatedChars.findIndex((fc) => fc.card.id === target2.card.id);
+            const charHp2 = Math.max(0, target2.hp - 3);
+            updatedChars[idx2] = { ...target2, hp: charHp2, isDown: charHp2 <= 0 };
+            if (charHp2 <= 0) {
+              addLog(set, `🌪️ 次元断絶が${target2.card.name}を巻き込んだ！ ${target2.card.name}は戦闘不能！`);
+            } else {
+              addLog(set, `🌪️ 次元断絶が${target2.card.name}に3ダメージ！`);
+            }
+          }
+          set({ fieldCharacters: updatedChars });
         }
       }
     }
@@ -519,8 +578,6 @@ export const useBattleStore = create<BattleState>((set, get) => ({
   resetBattle: () =>
     set({
       phase: "idle",
-      playerHp: PLAYER_MAX_HP,
-      playerMaxHp: PLAYER_MAX_HP,
       shieldBuffer: 0,
       selectedEnemy: null,
       enemyHp: 0,

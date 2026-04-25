@@ -731,7 +731,7 @@ export const ENEMIES: Enemy[] = [
         attackBonus: 4,
       },
     ],
-    specialRule: "バトル開始時プレイヤーHPが5減少する",
+    specialRule: "バトル開始時味方全体に1ダメージ。防御能力の効果が半減する（シールド値÷2）",
   },
   {
     id: "flame-spirit",

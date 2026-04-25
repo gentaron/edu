@@ -440,8 +440,6 @@ function BattleContent() {
 
   const deck = useDeckStore((s) => s.deck)
   const phase = useBattleStore((s) => s.phase)
-  const playerHp = useBattleStore((s) => s.playerHp)
-  const playerMaxHp = useBattleStore((s) => s.playerMaxHp)
   const shieldBuffer = useBattleStore((s) => s.shieldBuffer)
   const selectedEnemy = useBattleStore((s) => s.selectedEnemy)
   const enemyHp = useBattleStore((s) => s.enemyHp)
@@ -732,53 +730,39 @@ function BattleContent() {
             </AnimatePresence>
           </motion.div>
 
-          {/* Player Status */}
-          <div className="glass-card rounded-xl p-3 shrink-0 relative overflow-hidden">
+          {/* Status Buffs */}
+          <div className="flex items-center gap-1.5 px-1 shrink-0 relative overflow-hidden">
             <ShieldDomeEffect active={shieldFlash} />
             <HealWaveEffect active={healFlash} />
-            <div className="flex items-center justify-between flex-wrap gap-3 relative z-10">
-              <div className="flex items-center gap-2 flex-1 min-w-[140px]">
-                <motion.div
-                  animate={healFlash ? { scale: [1, 1.4, 1], rotate: [0, 10, -10, 0] } : {}}
-                  transition={{ duration: 0.5 }}
-                >
-                  <Heart className="w-3.5 h-3.5 text-emerald-400" />
-                </motion.div>
-                <HpBar current={playerHp} max={playerMaxHp} color="emerald" />
-                <span className="text-[10px] font-bold text-emerald-400 whitespace-nowrap">
-                  {playerHp}/{playerMaxHp}
+            <div className="flex items-center gap-1.5 relative z-10 flex-wrap">
+              {shieldBuffer > 0 && (
+                <span className="text-[9px] text-blue-400 bg-blue-500/10 border border-blue-400/20 rounded px-1.5 py-0.5 flex items-center gap-0.5">
+                  <Shield className="w-3 h-3" /> {shieldBuffer}
                 </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                {shieldBuffer > 0 && (
-                  <span className="text-[9px] text-blue-400 bg-blue-500/10 border border-blue-400/20 rounded px-1.5 py-0.5 flex items-center gap-0.5">
-                    <Shield className="w-3 h-3" /> {shieldBuffer}
-                  </span>
-                )}
-                {poisonActive && (
-                  <motion.span
-                    animate={{ opacity: [0.6, 1, 0.6] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                    className="text-[9px] text-amber-400 bg-amber-500/10 border border-amber-400/20 rounded px-1.5 py-0.5"
-                  >
-                    ☠️ 毒
-                  </motion.span>
-                )}
-                {enemyAttackReduction > 0 && (
-                  <span className="text-[9px] text-cyan-400 bg-cyan-500/10 border border-cyan-400/20 rounded px-1.5 py-0.5">
-                    ⬇ 敵攻撃-{enemyAttackReduction}
-                  </span>
-                )}
-                {isDefenseBlocked && (
-                  <motion.span
-                    animate={{ opacity: [0.6, 1, 0.6] }}
-                    transition={{ duration: 1, repeat: Infinity }}
-                    className="text-[9px] text-orange-400 bg-orange-500/10 border border-orange-400/20 rounded px-1.5 py-0.5"
-                  >
-                    🕸️ 防御封じ
-                  </motion.span>
-                )}
-              </div>
+              )}
+              {poisonActive && (
+                <motion.span
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                  className="text-[9px] text-amber-400 bg-amber-500/10 border border-amber-400/20 rounded px-1.5 py-0.5"
+                >
+                  ☠️ 毒
+                </motion.span>
+              )}
+              {enemyAttackReduction > 0 && (
+                <span className="text-[9px] text-cyan-400 bg-cyan-500/10 border border-cyan-400/20 rounded px-1.5 py-0.5">
+                  ⬇ 敵攻撃-{enemyAttackReduction}
+                </span>
+              )}
+              {isDefenseBlocked && (
+                <motion.span
+                  animate={{ opacity: [0.6, 1, 0.6] }}
+                  transition={{ duration: 1, repeat: Infinity }}
+                  className="text-[9px] text-orange-400 bg-orange-500/10 border border-orange-400/20 rounded px-1.5 py-0.5"
+                >
+                  🕸️ 防御封じ
+                </motion.span>
+              )}
             </div>
           </div>
 
@@ -996,9 +980,7 @@ function BattleContent() {
                   <Skull className="w-12 h-12 text-rose-400" />
                   <h2 className="text-xl font-black text-rose-400">敗北...</h2>
                   <p className="text-sm text-cosmic-muted">
-                    {playerHp <= 0
-                      ? `${selectedEnemy.name} に倒された…`
-                      : "味方が全員戦闘不能になった…"}
+                    味方が全員戦闘不能になった…
                   </p>
                   <p className="text-xs text-cosmic-muted">
                     敵残りHP: <span className="text-rose-400 font-bold">{enemyHp}</span>/
