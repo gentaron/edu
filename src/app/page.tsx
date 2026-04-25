@@ -55,6 +55,7 @@ const SECTIONS = [
   { id: "wiki-link", label: "Wiki", href: "/wiki" },
   { id: "story-link", label: "Story", href: "/story" },
   { id: "game-link", label: "Card Game", href: "/card-game" },
+  { id: "ranking-link", label: "長者番付", href: "/ranking" },
 ]
 
 /* ─── Reveal-on-scroll hook ─── */
@@ -166,7 +167,9 @@ function Navigation({ activeSection }: { activeSection: string }) {
                         ? "text-orange-400 hover:text-orange-300"
                         : s.id === "story-link"
                           ? "text-cyan-400 hover:text-cyan-300"
-                          : "text-gold-accent hover:text-gold-accent/80"
+                          : s.id === "ranking-link"
+                            ? "text-emerald-400 hover:text-emerald-300"
+                            : "text-gold-accent hover:text-gold-accent/80"
                     : activeSection === s.id
                       ? "text-electric-blue bg-cosmic-surface"
                       : "text-cosmic-muted"
@@ -202,7 +205,9 @@ function Navigation({ activeSection }: { activeSection: string }) {
                         ? "text-orange-400 hover:text-orange-300 bg-cosmic-surface"
                         : s.id === "story-link"
                           ? "text-cyan-400 hover:text-cyan-300 bg-cosmic-surface"
-                          : "text-gold-accent hover:text-gold-accent/80 bg-cosmic-surface"
+                          : s.id === "ranking-link"
+                            ? "text-emerald-400 hover:text-emerald-300 bg-cosmic-surface"
+                            : "text-gold-accent hover:text-gold-accent/80 bg-cosmic-surface"
                     : activeSection === s.id
                       ? "text-electric-blue bg-cosmic-surface"
                       : "text-cosmic-muted hover:bg-cosmic-surface"
@@ -248,7 +253,7 @@ function QuickAccessSection() {
       href: "/card-game",
       icon: <Gamepad2 className="w-8 h-8" />,
       title: "EDU Card Game",
-      desc: "64種のキャラクターカードを収録。デッキを構築し、10種の敵とターン制バトルに挑め",
+      desc: "E16全キャラをカード化した64枚のデッキ。SR14種・R32種・C18種を収録。フィールド制バトルで5体を同時展開し敵に挑め",
       gradient: "from-rose-500/20 via-purple-500/20 to-indigo-500/20",
       iconColor: "text-rose-400",
       borderColor: "border-rose-500/30 hover:border-rose-400/60",
@@ -258,7 +263,7 @@ function QuickAccessSection() {
       href: "/wiki",
       icon: <BookOpen className="w-8 h-8" />,
       title: "EDU Wiki 百科事典",
-      desc: "E16連星系のすべてがここに。宇宙構造、歴史、キャラクター、勢力まで200以上の項目を収録",
+      desc: "E16連星系の百科事典。キャラクター・歴史・用語・技術・地理・組織を網羅。各項目に自動リンク網でrelatedEntriesを横断検索",
       gradient: "from-gold-accent/20 via-nebula-purple/20 to-electric-blue/20",
       iconColor: "text-gold-accent",
       borderColor: "border-gold-accent/30 hover:border-gold-accent/60",
@@ -268,7 +273,7 @@ function QuickAccessSection() {
       href: "/story",
       icon: <Scroll className="w-8 h-8" />,
       title: "Story 小説集",
-      desc: "アイリスの諜報活動、レイラの英雄伝、ミナの放浪記 — EDU世界を彩る物語を全文で",
+      desc: "5章20話の連作小説。黎明編から新世界編まで、アイリス・レイラ・ケイン・ミナたちの物語を全文収録",
       gradient: "from-cyan-500/20 via-blue-500/20 to-nebula-purple/20",
       iconColor: "text-cyan-400",
       borderColor: "border-cyan-500/30 hover:border-cyan-400/60",
@@ -278,18 +283,28 @@ function QuickAccessSection() {
       href: "/card-game/select",
       icon: <Swords className="w-8 h-8" />,
       title: "PvE バトル",
-      desc: "NORMAL・HARD・BOSS・FINALの10種の敵と戦う。鉄塊ゴーレムや虚無の王が待つ",
+      desc: "NORMAL・HARD・BOSS・FINALの4段階10種の敵と戦う。スターダスト・ドラゴンから虚無の王まで、各敵にフェーズギミック付き",
       gradient: "from-orange-500/20 via-red-500/20 to-purple-500/20",
       iconColor: "text-orange-400",
       borderColor: "border-orange-500/30 hover:border-orange-400/60",
       tag: "BATTLE",
+    },
+    {
+      href: "/ranking",
+      icon: <TrendingUp className="w-8 h-8" />,
+      title: "世界長者番付",
+      desc: "E16経済圏の富豪ランキング。ミカエル・ガブリエリから歴史的人物まで推定資産をnトークンで公開",
+      gradient: "from-emerald-500/20 via-gold-accent/20 to-nebula-purple/20",
+      iconColor: "text-emerald-400",
+      borderColor: "border-emerald-500/30 hover:border-emerald-400/60",
+      tag: "RANKING",
     },
   ]
 
   return (
     <section className="relative py-16 px-4">
       <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {cards.map((card) => (
             <Link
               key={card.href}
