@@ -28,8 +28,8 @@ const SECTION_PAGES = [
   {
     href: "/universe",
     icon: <Globe2 className="w-6 h-6" />,
-    title: "宇宙・星系構造",
-    desc: "E16連星系の天文データとシンフォニー・オブ・スターズの地理",
+    title: "全宇宙・星系構造",
+    desc: "E16連星系、Eros-7、惑星ビブリオ、惑星Solaris — M104銀河全域の天文データ",
     color: "text-electric-blue",
     borderColor: "border-electric-blue/30 hover:border-electric-blue/60",
   },
@@ -37,7 +37,7 @@ const SECTION_PAGES = [
     href: "/timeline",
     icon: <Scroll className="w-6 h-6" />,
     title: "統合年表",
-    desc: "AD3500〜E528のE16人類史。6時代の完全年表",
+    desc: "AD3500〜E528の全宇宙人類史。バーズ帝国から銀河系コンソーシアムまで",
     color: "text-gold-accent",
     borderColor: "border-gold-accent/30 hover:border-gold-accent/60",
   },
@@ -85,7 +85,7 @@ const SECTION_PAGES = [
     href: "/factions",
     icon: <Swords className="w-6 h-6" />,
     title: "勢力系譜",
-    desc: "テクロサス・アルファ・ヴェノム・政体系の3系譜",
+    desc: "テクロサス・アルファ・ヴェノム・政体系・Eros-7・宇宙帝国系の全系譜",
     color: "text-red-400",
     borderColor: "border-red-400/30 hover:border-red-400/60",
   },
@@ -108,7 +108,7 @@ function QuickAccessSection() {
       href: "/wiki",
       icon: <BookOpen className="w-8 h-8" />,
       title: "EDU Wiki 百科事典",
-      desc: "E16連星系の百科事典。キャラクター・歴史・用語・技術・地理・組織を網羅",
+      desc: "全宇宙の百科事典。E16・Eros-7・ビブリオ・Solarisのキャラクター・歴史・組織を網羅",
       gradient: "from-gold-accent/20 via-nebula-purple/20 to-electric-blue/20",
       iconColor: "text-gold-accent",
       borderColor: "border-gold-accent/30 hover:border-gold-accent/60",
@@ -212,7 +212,7 @@ function HeroSection() {
           統合時空構造書 v3.0
         </p>
         <p className="text-sm sm:text-base text-electric-blue/80 tracking-wider">
-          E16連星系から地球AD2026へ
+          M104銀河全域 — E16・Eros-7・ビブリオ・Solaris
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Badge
@@ -220,6 +220,21 @@ function HeroSection() {
             className="border-nebula-purple/50 text-nebula-purple text-xs px-3 py-1"
           >
             <Star className="w-3 h-3 mr-1" /> E16連星系
+          </Badge>
+          <Badge variant="outline" className="border-pink-400/50 text-pink-400 text-xs px-3 py-1">
+            <Globe2 className="w-3 h-3 mr-1" /> Eros-7
+          </Badge>
+          <Badge
+            variant="outline"
+            className="border-emerald-400/50 text-emerald-400 text-xs px-3 py-1"
+          >
+            <Globe2 className="w-3 h-3 mr-1" /> 惑星ビブリオ
+          </Badge>
+          <Badge
+            variant="outline"
+            className="border-orange-400/50 text-orange-400 text-xs px-3 py-1"
+          >
+            <Globe2 className="w-3 h-3 mr-1" /> 惑星Solaris
           </Badge>
           <Badge
             variant="outline"
@@ -235,6 +250,9 @@ function HeroSection() {
           </Badge>
           <Badge variant="outline" className="border-rose-400/50 text-rose-400 text-xs px-3 py-1">
             <Shield className="w-3 h-3 mr-1" /> Iris Worlds
+          </Badge>
+          <Badge variant="outline" className="border-cyan-400/50 text-cyan-400 text-xs px-3 py-1">
+            <Users className="w-3 h-3 mr-1" /> 銀河系コンソーシアム
           </Badge>
         </div>
       </div>

@@ -55,7 +55,7 @@ export default function FactionsPage() {
         <PageHeader
           icon={<Swords className="w-6 h-6 text-red-400" />}
           title="勢力系譜"
-          subtitle="E16連星系の主要勢力の系統図"
+          subtitle="全宇宙の主要勢力の系統図 — E16・Eros-7・銀河規模組織"
           wikiHref="/wiki#テクロサス"
         />
 
@@ -82,14 +82,16 @@ export default function FactionsPage() {
                   はイズミ率いる暗黒組織であり、シルバー・ヴェノムの後継として星系の秩序を脅かす存在である。
                 </p>
                 <p>
-                  以下の系統図は、各勢力の歴史的変遷と主要メンバー、同盟関係を視覚的に整理したものである。勢力名をクリックすると
-                  Wiki
-                  の該当項目にジャンプし、より詳細な情報を確認できる。各系統の分岐や統合の過程から、E16文明の政治的ダイナミクスの奥深さを理解できるだろう。
+                  さらにE16の枠を超え、
+                  <span className="text-pink-400 font-medium">Eros-7</span>
+                  ではマトリカル・カウンシルとシャドウ・ユニオンが独自の社会制度を巡って対立し、銀河規模では
+                  <span className="text-cyan-400 font-medium">銀河系コンソーシアム</span>
+                  がバーズ帝国から続く壮大な統合の歴史の到達点として機能している。以下の系統図は、E16・Eros-7・銀河全域にわたる各勢力の歴史的変遷を視覚的に整理したものである。
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {FACTION_TREES.map((tree) => (
                 <div
                   key={tree.name}

@@ -1,9 +1,77 @@
 "use client"
 import Link from "next/link"
-import { Globe2, Star } from "lucide-react"
+import { Globe2, Star, Users, Zap } from "lucide-react"
 import { StarField } from "@/components/edu/star-field"
 import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
 import { PageHeader } from "@/components/edu/page-header"
+
+function PlanetCard({
+  icon,
+  title,
+  titleEn,
+  color,
+  borderColor,
+  wikiHref,
+  stats,
+  description,
+  regions,
+}: {
+  icon: React.ReactNode
+  title: string
+  titleEn: string
+  color: string
+  borderColor: string
+  wikiHref: string
+  stats: [string, React.ReactNode][]
+  description: string
+  regions?: { name: string; wiki: string | null }[][]
+}) {
+  return (
+    <div
+      className={`glass-card glass-card-hover rounded-xl p-6 transition-all duration-300 border ${borderColor}`}
+    >
+      <h3 className={`text-lg font-bold ${color} mb-4 flex items-center gap-2`}>
+        {icon}{" "}
+        <Link href={wikiHref} className={`${color} hover:underline`}>
+          {title}
+        </Link>
+      </h3>
+      <div className="space-y-3">
+        {stats.map(([k, v]) => (
+          <div key={String(k)} className="flex gap-3 text-sm">
+            <span className="text-gold-accent font-medium shrink-0 w-20">{k}</span>
+            <span className="text-cosmic-muted">{v}</span>
+          </div>
+        ))}
+      </div>
+      {description && (
+        <p className="mt-4 text-xs text-cosmic-muted leading-relaxed">{description}</p>
+      )}
+      {regions && regions.length > 0 && (
+        <div className="mt-4 space-y-2">
+          {regions.map((group, gi) => (
+            <div key={gi} className="bg-cosmic-dark/50 rounded-lg p-3">
+              {group.map((r) => (
+                <span
+                  key={r.name}
+                  className="text-xs bg-cosmic-surface px-2 py-0.5 rounded text-cosmic-muted mr-1.5 mb-1 inline-block"
+                >
+                  {r.wiki ? (
+                    <Link href={r.wiki} className="hover:text-electric-blue hover:underline">
+                      {r.name}
+                    </Link>
+                  ) : (
+                    r.name
+                  )}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function UniversePage() {
   return (
@@ -12,8 +80,8 @@ export default function UniversePage() {
       <div className="relative z-10">
         <PageHeader
           icon={<Globe2 className="w-6 h-6 text-nebula-purple" />}
-          title="宇宙・星系構造"
-          subtitle="E16連星系 — M104銀河ハローに浮かぶ人類の新たな故郷"
+          title="全宇宙・星系構造"
+          subtitle="M104銀河全域 — E16連星系・Eros-7・惑星ビブリオ・惑星Solaris"
           wikiHref="/wiki#E16連星系"
         />
 
@@ -22,162 +90,234 @@ export default function UniversePage() {
             {/* 概説 */}
             <div className="glass-card rounded-xl p-6 mb-8">
               <h2 className="text-lg font-bold text-cosmic-text mb-4 flex items-center gap-2">
-                <Globe2 className="w-5 h-5 text-nebula-purple" /> E16連星系とは
+                <Globe2 className="w-5 h-5 text-nebula-purple" /> Eternal Dominion Universe —
+                全宇宙像
               </h2>
               <div className="space-y-3 text-sm text-cosmic-muted leading-relaxed">
                 <p>
-                  E16連星系は、
-                  <span className="text-electric-blue font-medium">
-                    M104（ NGC 4594 ）銀河のハロー領域
-                  </span>
-                  に位置する二重星系である。主星 Ea16（黄白色巨星）と伴星
-                  Eb16（赤色矮星）から構成され、人類が地球を離脱した後に到達した新たな故郷として機能している。この星系は
-                  E暦の起点となり、E1年 = AD 3501年として歴史が刻まれている。
+                  Eternal Dominion Universe は、
+                  <span className="text-electric-blue font-medium">M104（NGC 4594）銀河</span>
+                  を舞台とする壮大な文明圏である。AD
+                  3500年に地球を離脱した人類は、M104銀河のハロー領域に到達し、E16連星系を第一の故郷として文明を築き上げた。しかし、人類の活動はE16に留まらず、周辺の惑星や星系へと拡大していった。
                 </p>
                 <p>
-                  主星を公転する唯一の居住惑星
-                  <span className="text-gold-accent font-medium">シンフォニー・オブ・スターズ</span>
-                  は、自転周期44時間4分を持つ独特な環境を有する。この惑星は二つの大陸から成り立っており、西大陸には
-                  <span className="text-nebula-purple font-medium">Gigapolis 圈</span>
-                  と呼ばれる巨大都市群が広がり、東大陸には
-                  <span className="text-electric-blue font-medium">クレセント大地方</span>
-                  として多様な国家・勢力が群雄割拠している。二つの大陸は異なる文化・政治体制を持ち、時に対立しながらも、星系全体の存続をかけて協力を迫られる局面も少なくない。
+                  現在、M104銀河内には
+                  <span className="text-nebula-purple font-medium">E16連星系</span>
+                  のほかに、女性主導のマトリカル社会を持つ
+                  <span className="text-pink-400 font-medium">Eros-7</span>
+                  、学術・研究の中心地である
+                  <span className="text-emerald-400 font-medium">惑星ビブリオ</span>、そして
+                  <span className="text-orange-400 font-medium">惑星Solaris</span>
+                  など、複数の居住世界が存在する。それぞれの惑星は独自の政治体制・文化・歴史を持ちながらも、星間経済協同組合
+                  <span className="text-cyan-400 font-medium">UECO</span>や
+                  <span className="text-cyan-400 font-medium">銀河系コンソーシアム</span>
+                  を通じて緩やかに結合されている。
                 </p>
                 <p>
-                  西大陸の Gigapolis 圈には Chem・Abrivo・Troyane などの主要都市に加え、地下街や
-                  Persepolis
-                  などの特殊区域が存在し、高度な都市文明を築いている。一方、東大陸のクレセント大地方ではヴァーミリオン、ブルーローズ、ミエルテンガなどの強国がしのぎを削り、アイアン・シンジケートや
-                  SUDOM など多様な勢力が入り交じる複雑な国際情勢が形成されている。
+                  この宇宙の政治は多極的であり、E16内ではトリニティ・アライアンスとV7が東西大陸の覇権を争い、Eros-7ではマトリカル・カウンシルとシャドウ・ユニオンが社会制度を巡って対立している。さらに銀河規模では、バーズ帝国からテクロサスを経て銀河系コンソーシアムに至る壮大な政治変遷の歴史が刻まれている。
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* 宇宙マップ概略 */}
+            <div className="glass-card rounded-xl p-6 mb-8 border border-cyan-500/20">
+              <h3 className="text-base font-bold text-cosmic-gradient mb-4 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
+                銀河規模組織
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="bg-cosmic-dark/50 rounded-lg p-4 border border-cyan-500/20">
+                  <h4 className="text-sm font-bold text-cyan-400 mb-2 flex items-center gap-2">
+                    <Zap className="w-4 h-4" />
+                    <Link href="/wiki#UECO" className="text-cyan-400 hover:underline">
+                      UECO
+                    </Link>
+                  </h4>
+                  <p className="text-xs text-cosmic-muted leading-relaxed">
+                    星間経済協同組合。各惑星間の経済活動を調整し、通貨・貿易のルールを統轄する。ヒーローエージェンシーと統合され、銀河系コンソーシアムの中核となった。
+                  </p>
+                </div>
+                <div className="bg-cosmic-dark/50 rounded-lg p-4 border border-cyan-500/20">
+                  <h4 className="text-sm font-bold text-cyan-400 mb-2 flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    <Link
+                      href="/wiki#銀河系コンソーシアム"
+                      className="text-cyan-400 hover:underline"
+                    >
+                      銀河系コンソーシアム
+                    </Link>
+                  </h4>
+                  <p className="text-xs text-cosmic-muted leading-relaxed">
+                    E495〜E500年に設立された統合体。ネオクラン同盟・UECO・ヒーローエージェンシーが統合。トゥキディデスの罠回避を志向する全宇宙規模の協力枠組み。
+                  </p>
+                </div>
+                <div className="bg-cosmic-dark/50 rounded-lg p-4 border border-cyan-500/20">
+                  <h4 className="text-sm font-bold text-cyan-400 mb-2 flex items-center gap-2">
+                    <Star className="w-4 h-4" />
+                    <Link href="/wiki#M104銀河" className="text-cyan-400 hover:underline">
+                      M104銀河（NGC 4594）
+                    </Link>
+                  </h4>
+                  <p className="text-xs text-cosmic-muted leading-relaxed">
+                    sombrero
+                    galaxy。E16連星系やEros-7などの居住世界が存在する銀河。ハロー領域に人類文明が展開している。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 星系・惑星カード */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
               {/* E16 Binary Star System */}
-              <div className="glass-card glass-card-hover rounded-xl p-6 transition-all duration-300">
-                <h3 className="text-lg font-bold text-electric-blue mb-4 flex items-center gap-2">
-                  <Star className="w-5 h-5" />{" "}
-                  <Link href="/wiki#E16連星系" className="text-electric-blue hover:underline">
-                    E16連星系
-                  </Link>
-                </h3>
-                <div className="space-y-3">
-                  {[
-                    ["所在", "M104銀河ハロー某所"],
-                    ["主星", "Ea16（黄白色巨星）"],
-                    ["伴星", "Eb16（赤色矮星）"],
-                    [
-                      "主要惑星",
-                      <Link
-                        key="s"
-                        href="/wiki#シンフォニー・オブ・スターズ"
-                        className="text-cosmic-muted hover:text-electric-blue hover:underline"
-                      >
-                        シンフォニー・オブ・スターズ
-                      </Link>,
-                    ],
-                    ["自転周期", "44時間4分"],
-                    ["暦法", "東暦（E暦）E1 = AD 3501"],
-                  ].map(([k, v]) => (
-                    <div key={String(k)} className="flex gap-3 text-sm">
-                      <span className="text-gold-accent font-medium shrink-0 w-20">{k}</span>
-                      <span className="text-cosmic-muted">{v}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <PlanetCard
+                icon={<Star className="w-5 h-5" />}
+                title="E16連星系"
+                titleEn="E16 Binary System"
+                color="text-electric-blue"
+                borderColor="border-electric-blue/20"
+                wikiHref="/wiki#E16連星系"
+                stats={[
+                  ["所在", "M104銀河ハロー某所"],
+                  ["主星", "Ea16（黄白色巨星）"],
+                  ["伴星", "Eb16（赤色矮星）"],
+                  [
+                    "主要惑星",
+                    <Link
+                      key="s"
+                      href="/wiki#シンフォニー・オブ・スターズ"
+                      className="text-cosmic-muted hover:text-electric-blue hover:underline"
+                    >
+                      シンフォニー・オブ・スターズ
+                    </Link>,
+                  ],
+                  ["自転周期", "44時間4分"],
+                  ["暦法", "東暦（E暦）E1 = AD 3501"],
+                ]}
+                description="人類が最初に到達した星系。西大陸のGigapolis圈と東大陸のクレセント大地方の二大文明圏を擁し、E16文明の中心地。"
+                regions={[
+                  [
+                    { name: "Gigapolis", wiki: "/wiki#ギガポリス" },
+                    { name: "Chem", wiki: null },
+                    { name: "Abrivo", wiki: null },
+                    { name: "Troyane", wiki: null },
+                    { name: "Ronve", wiki: null },
+                    { name: "Valoria", wiki: "/wiki#Valoria連合圏" },
+                    { name: "Persepolis", wiki: null },
+                  ],
+                  [
+                    { name: "ヴァーミリオン", wiki: "/wiki#ヴァーミリオン" },
+                    { name: "ブルー・ローズ", wiki: "/wiki#ブルーローズ" },
+                    { name: "ミエルテンガ", wiki: "/wiki#ミエルテンガ" },
+                    { name: "クロセヴィア", wiki: null },
+                    { name: "アイアン・シンジケート", wiki: null },
+                    { name: "ファティマ連邦", wiki: null },
+                  ],
+                ]}
+              />
 
-              {/* Symphony of Stars Geography */}
-              <div className="glass-card glass-card-hover rounded-xl p-6 transition-all duration-300">
-                <h3 className="text-lg font-bold text-gold-accent mb-4 flex items-center gap-2">
-                  <Globe2 className="w-5 h-5" />{" "}
-                  <Link
-                    href="/wiki#シンフォニー・オブ・スターズ"
-                    className="text-gold-accent hover:underline"
-                  >
-                    シンフォニー・オブ・スターズ
-                  </Link>
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* West Continent */}
-                  <div className="bg-cosmic-dark/50 rounded-lg p-4">
-                    <h4 className="text-sm font-bold text-nebula-purple mb-2 flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-nebula-purple" />
-                      西大陸:{" "}
-                      <Link href="/wiki#ギガポリス" className="text-nebula-purple hover:underline">
-                        Gigapolis
-                      </Link>
-                      圈
-                    </h4>
-                    <div className="flex flex-wrap gap-1.5">
-                      {[
-                        { name: "Chem", wiki: null },
-                        { name: "Abrivo", wiki: null },
-                        { name: "Troyane", wiki: null },
-                        { name: "Ronve", wiki: null },
-                        { name: "Poitiers", wiki: null },
-                        { name: "Lille", wiki: null },
-                        { name: "Valoria", wiki: "/wiki#Valoria連合圏" },
-                        { name: "地下街", wiki: null },
-                        { name: "Persepolis", wiki: null },
-                      ].map((city) => (
-                        <span
-                          key={city.name}
-                          className="text-xs bg-cosmic-surface px-2 py-0.5 rounded text-cosmic-muted"
-                        >
-                          {city.wiki ? (
-                            <Link
-                              href={city.wiki}
-                              className="hover:text-electric-blue hover:underline"
-                            >
-                              {city.name}
-                            </Link>
-                          ) : (
-                            city.name
-                          )}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+              {/* Eros-7 */}
+              <PlanetCard
+                icon={<Globe2 className="w-5 h-5" />}
+                title="Eros-7"
+                titleEn="Eros-7"
+                color="text-pink-400"
+                borderColor="border-pink-400/20"
+                wikiHref="/wiki#Eros-7"
+                stats={[
+                  ["所在", "E16外縁"],
+                  ["重力", "1.1G"],
+                  ["大気", "薄い酸素大気"],
+                  [
+                    "社会体制",
+                    <Link
+                      key="mc"
+                      href="/wiki#マトリカル・カウンシル"
+                      className="text-cosmic-muted hover:text-pink-400 hover:underline"
+                    >
+                      マトリカル社会（女性主導）
+                    </Link>,
+                  ],
+                  [
+                    "統治機関",
+                    <Link
+                      key="ms"
+                      href="/wiki#男性指令省"
+                      className="text-cosmic-muted hover:text-pink-400 hover:underline"
+                    >
+                      男性指令省
+                    </Link>,
+                  ],
+                  [
+                    "対立組織",
+                    <Link
+                      key="su"
+                      href="/wiki#シャドウ・ユニオン"
+                      className="text-cosmic-muted hover:text-pink-400 hover:underline"
+                    >
+                      シャドウ・ユニオン
+                    </Link>,
+                  ],
+                ]}
+                description="女性主導のマトリカル社会が形成された惑星。搾取生物とエスパー能力をめぐる独自の文明を発展させ、E525年にはマトリカル・リフォーム運動が勃発。リリス・ヴェイン、シルヴィア・クロウ、アヤカ・リンなどの英雄を輩出。"
+                regions={[
+                  [
+                    { name: "ネオンクレーター宮殿", wiki: "/wiki#ネオンクレーター宮殿" },
+                    { name: "スクイーズ・アビス", wiki: "/wiki#スクイーズ・アビス" },
+                    { name: "アンダーグリッド", wiki: "/wiki#アンダーグリッド" },
+                    { name: "セントラル・タワー", wiki: "/wiki#セントラル・タワー" },
+                  ],
+                ]}
+              />
 
-                  {/* East Continent */}
-                  <div className="bg-cosmic-dark/50 rounded-lg p-4">
-                    <h4 className="text-sm font-bold text-electric-blue mb-2 flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-electric-blue" />
-                      東大陸: クレセント大地方
-                    </h4>
-                    <div className="flex flex-wrap gap-1.5">
-                      {[
-                        { name: "ヴァーミリオン", wiki: "/wiki#ヴァーミリオン" },
-                        { name: "ブルー・ローズ", wiki: "/wiki#ブルーローズ" },
-                        { name: "ミエルテンガ", wiki: "/wiki#ミエルテンガ" },
-                        { name: "クロセヴィア", wiki: null },
-                        { name: "SSレンジ", wiki: null },
-                        { name: "アイアン・シンジケート", wiki: null },
-                        { name: "SUDOM", wiki: null },
-                        { name: "ファティマ連邦", wiki: null },
-                        { name: "スターク三国", wiki: null },
-                      ].map((city) => (
-                        <span
-                          key={city.name}
-                          className="text-xs bg-cosmic-surface px-2 py-0.5 rounded text-cosmic-muted"
-                        >
-                          {city.wiki ? (
-                            <Link
-                              href={city.wiki}
-                              className="hover:text-electric-blue hover:underline"
-                            >
-                              {city.name}
-                            </Link>
-                          ) : (
-                            city.name
-                          )}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* 惑星ビブリオ */}
+              <PlanetCard
+                icon={<Globe2 className="w-5 h-5" />}
+                title="惑星ビブリオ"
+                titleEn="Planet Bibliotheca"
+                color="text-emerald-400"
+                borderColor="border-emerald-400/20"
+                wikiHref="/wiki#惑星ビブリオ"
+                stats={[
+                  ["所在", "M104銀河内"],
+                  ["特徴", "学術・研究の中心地"],
+                  [
+                    "主要施設",
+                    <Link
+                      key="uu"
+                      href="/wiki#ビブリオ国際大学"
+                      className="text-cosmic-muted hover:text-emerald-400 hover:underline"
+                    >
+                      ビブリオ国際大学
+                    </Link>,
+                  ],
+                  [
+                    "関連人物",
+                    <Link
+                      key="mi"
+                      href="/wiki#ミナ・エウレカ・エルンスト"
+                      className="text-cosmic-muted hover:text-emerald-400 hover:underline"
+                    >
+                      ミナ（E514年入学）
+                    </Link>,
+                  ],
+                ]}
+                description="M104銀河内に位置する学術惑星。ビブリオ国際大学を擁し、AI学部をはじめとする高度な教育・研究機関が集積している。ミナ・エウレカ・エルンストはE514年にこの惑星のAI学部に入学し、後のリミナル・フォージ構想の種を育んだ。"
+              />
+
+              {/* 惑星Solaris */}
+              <PlanetCard
+                icon={<Globe2 className="w-5 h-5" />}
+                title="惑星Solaris"
+                titleEn="Planet Solaris"
+                color="text-orange-400"
+                borderColor="border-orange-400/20"
+                wikiHref="/wiki#惑星Solaris"
+                stats={[
+                  ["所在", "M104銀河内"],
+                  ["特徴", "恒星エネルギー研究"],
+                ]}
+                description="M104銀河内に位置する惑星。恒星エネルギーの研究拠点として機能し、銀河系コンソーシアムの技術基盤を支える一翼を担っている。"
+              />
             </div>
           </div>
         </RevealSection>
