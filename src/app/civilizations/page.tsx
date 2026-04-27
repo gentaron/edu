@@ -75,6 +75,15 @@ export default function CivilizationsPage() {
                     <p className="text-xs text-cosmic-muted leading-relaxed mb-3">
                       {civ.description}
                     </p>
+                    {civ.planets && civ.planets.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {civ.planets.map((p) => (
+                          <span key={p} className="text-[9px] px-1.5 py-0.5 rounded bg-cosmic-surface border border-cosmic-border/50 text-cosmic-muted">
+                            {p}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                     <div className="flex items-center justify-between text-[10px] text-cosmic-muted">
                       <span>{civ.leader}</span>
                       <ExternalLink className={`w-3.5 h-3.5 ${civ.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
@@ -105,6 +114,15 @@ export default function CivilizationsPage() {
                       <span className="text-[10px] text-cosmic-muted">{civ.nameEn}</span>
                     </div>
                     <p className="text-xs text-cosmic-muted leading-relaxed mb-2">{civ.description}</p>
+                    {civ.planets && civ.planets.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        {civ.planets.map((p) => (
+                          <span key={p} className="text-[9px] px-1.5 py-0.5 rounded bg-cosmic-surface border border-cosmic-border/50 text-cosmic-muted">
+                            {p}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                     <p className="text-[10px] text-cosmic-muted">専門: {civ.specialization}</p>
                     {civ.wikiId && (
                       <Link href={`/wiki/${encodeURIComponent(civ.wikiId)}`} className="text-[10px] text-gold-accent hover:underline mt-1 inline-block">
@@ -138,6 +156,15 @@ export default function CivilizationsPage() {
                       <h3 className={`text-sm font-bold ${civ.color}`}>{civ.name}</h3>
                     </div>
                     <p className="text-xs text-cosmic-muted leading-relaxed mb-3">{civ.description}</p>
+                    {civ.planets && civ.planets.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-3">
+                        {civ.planets.map((p) => (
+                          <span key={p} className="text-[9px] px-1.5 py-0.5 rounded bg-cosmic-surface border border-cosmic-border/50 text-cosmic-muted">
+                            {p}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                     {civ.gdp && (
                       <p className="text-[10px] text-cosmic-muted mb-2">GDP: {civ.gdp}</p>
                     )}

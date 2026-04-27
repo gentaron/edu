@@ -23,6 +23,7 @@ export interface Civilization {
   wikiId: string;
   href: string;
   isHistorical?: boolean;
+  planets?: string[];
 }
 
 export interface CivilizationLeader {
@@ -65,6 +66,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
       "ディオクレニス — 科学技術分野での提携",
       "エヴァトロン — 武器供与を通じた影響力拡大",
     ],
+    planets: ["グランベル・プライム", "ノヴァ・エコー", "クインシアス", "ヴェルディ・ステーション"],
     wikiId: "グランベル",
     href: "/civilizations/granbell",
   },
@@ -92,6 +94,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
       "ディオクレニス — 宇宙探査提案に協力的",
       "ファルージャ — 平和外交で連携",
     ],
+    planets: ["エレシオン・プライム", "ソラリス", "ヴィータ", "リーファ"],
     wikiId: "エレシオン",
     href: "/civilizations/elyseon",
   },
@@ -119,6 +122,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
       "ファルージャ — 調停の対象",
       "ディオクレニス — トゥキディデスの罠の提起者",
     ],
+    planets: ["ティエリア・フォートレス", "シールド・バース", "アーミーナ", "ヴァンガード"],
     wikiId: "ティエリア",
     href: "/civilizations/tyeria",
   },
@@ -146,6 +150,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
       "エレシオン — 平和外交で連携",
       "ディオクレニス — 文化交流で協力",
     ],
+    planets: ["ファルージャ・ハブ", "アーティザ", "ビブロ", "メロディ"],
     wikiId: "ファルージャ",
     href: "/civilizations/fallujah",
   },
@@ -173,6 +178,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
       "エレシオン — 探査提案に支持",
       "ファルージャ — 文化交流で協力",
     ],
+    planets: ["コリンド・ステーション", "ネオ・フロンティア", "オデッセイ", "スペクトラ"],
     wikiId: "ディオクレニス",
     href: "/civilizations/dioclenis",
   },
@@ -198,6 +204,7 @@ export const OTHER_CIVILIZATIONS: Civilization[] = [
     relationships: [],
     wikiId: "エレシュ",
     href: "",
+    planets: ["エレシュ・サンクチュアリ", "オラクル", "ヴェズレル", "セラフィム"],
   },
   {
     id: "prokio",
@@ -215,6 +222,7 @@ export const OTHER_CIVILIZATIONS: Civilization[] = [
     history: "",
     currentStatus: "",
     relationships: [],
+    planets: ["プロキオ・ネクサス", "コマース", "レーン", "バザール"],
     wikiId: "プロキオ",
     href: "",
   },
@@ -234,6 +242,7 @@ export const OTHER_CIVILIZATIONS: Civilization[] = [
     history: "",
     currentStatus: "",
     relationships: [],
+    planets: ["ロースター・コア", "シグナル", "クアンタ", "リンク"],
     wikiId: "ロースター",
     href: "",
   },
@@ -265,6 +274,7 @@ export const HISTORICAL_CIVILIZATIONS: Civilization[] = [
       "アポロン文明圏 — 全面戦争",
       "グランベル — マスター・クインシアスがセリアを高評価",
     ],
+    planets: ["Symphony of Stars", "Eros-7", "E16小惑星帯"],
     wikiId: "セリア・ドミニクス",
     href: "",
     isHistorical: true,
@@ -292,6 +302,7 @@ export const HISTORICAL_CIVILIZATIONS: Civilization[] = [
       "Dominion — 同盟拒絶→全面戦争",
       "エヴァトロン — 戦後の混乱に関連",
     ],
+    planets: ["アポロン・セントラリス（崩壊）", "アレス", "ヘファイストス", "アテナ"],
     wikiId: "アポロン・Dominion大戦",
     href: "",
     isHistorical: true,
@@ -320,6 +331,7 @@ export const HISTORICAL_CIVILIZATIONS: Civilization[] = [
       "アポロン文明圏 — 大戦の敵対",
       "セリアンズ — 抵抗に直面",
     ],
+    planets: ["エヴァ・プライム", "Evapolis（Gigapolis）", "ゴルゴン", "タルタロス"],
     wikiId: "エヴァトロン",
     href: "",
     isHistorical: true,
