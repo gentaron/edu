@@ -929,6 +929,112 @@ const CHARACTERS: WikiEntry[] = [
     affiliation: "エヴァトロン",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
   },
+
+  /* ── 宇宙文明圏 ── */
+  {
+    id: "アルゼン・カーリーン",
+    name: "アルゼン・カーリーン",
+    nameEn: "Alzen Carlin",
+    category: "キャラクター",
+    subCategory: "宇宙文明圏",
+    description:
+      "宇宙最大経済圏グランベルの大統領。GDP150兆ドルの経済帝国を率いる。第一回宇宙連合会合で「争いを超え、共存と繁栄の道を見つけることが次世代への責任」と演説。オルダシティ出身。",
+    era: "現在",
+    affiliation: "グランベル",
+    tier: "Tier 1",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "グレイモンド・ハウザー",
+    name: "グレイモンド・ハウザー",
+    nameEn: "Greymond Houser",
+    category: "キャラクター",
+    subCategory: "宇宙文明圏",
+    description:
+      "ティエリア総帥。宇宙最強の軍事力を指揮。「軍事力なくして平和は守れない」と主張し、エレシオンのリアナ女王と対立。グランベルの経済的支配に軍事力で均衡する政策をとる。",
+    era: "現在",
+    affiliation: "ティエリア",
+    tier: "Tier 1",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "女王リアナ・ソリス",
+    name: "女王リアナ・ソリス",
+    nameEn: "Queen Liana Solis",
+    category: "キャラクター",
+    subCategory: "宇宙文明圏",
+    description:
+      "エレシオン女王。医療技術と環境再生技術で宇宙をリードする。「軍拡はさらなる争いを招く」とティエリアに反対。平和主義・技術共有推進。",
+    era: "現在",
+    affiliation: "エレシオン",
+    tier: "Tier 1",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "マドリス・カーネル",
+    name: "マドリス・カーネル",
+    nameEn: "Madris Kernel",
+    category: "キャラクター",
+    subCategory: "宇宙文明圏",
+    description:
+      "ファルージャ評議会代表。文化的影響力と外交力で対立勢力間の調停役。「文化の力が宇宙全体を結びつける鍵」と信じる。",
+    era: "現在",
+    affiliation: "ファルージャ",
+    tier: "Tier 2",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "ネイサン・コリンド",
+    name: "ネイサン・コリンド",
+    nameEn: "Nathan Corind",
+    category: "キャラクター",
+    subCategory: "宇宙文明圏",
+    description:
+      "ディオクレニス科学宰相。「トゥキディデスの罠」を提起し、宇宙共同探査プロジェクトを提案。4つの具体的提案（平和協定、UECO設立、技術共有、文化交流）を行った。",
+    era: "現在",
+    affiliation: "ディオクレニス",
+    tier: "Tier 2",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "ロナン・アーサ",
+    name: "ロナン・アーサ",
+    nameEn: "Ronan Arthur",
+    category: "キャラクター",
+    subCategory: "宇宙文明圏（歴史）",
+    description:
+      "アポロン文明圏の指導者。アポロンの騎士団の頂点に立つ英雄。最盛期GDP125兆ドル。セリアに同盟を提案したが拒絶され、ケンタウロスレーザーを発射。最終的にセリアのヴェノム艦隊により戦死。",
+    era: "歴史的人物",
+    affiliation: "アポロン文明圏",
+    tier: "歴史的人物",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "グリム・ダルゴス",
+    name: "グリム・ダルゴス",
+    nameEn: "Grim Dargos",
+    category: "キャラクター",
+    subCategory: "宇宙文明圏（歴史）",
+    description:
+      "エヴァトロン初代リーダー。男尊女卑文化を基盤とする銀河系を率いた。セリアとの同盟を承認。大戦でセリア・Dominion側として参戦。",
+    era: "歴史的人物",
+    affiliation: "エヴァトロン",
+    tier: "歴史的人物",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "ヴァイロン・デアクス",
+    name: "ヴァイロン・デアクス",
+    nameEn: "Vylon Deax",
+    category: "キャラクター",
+    subCategory: "宇宙文明圏（歴史）",
+    description:
+      "エヴァトロン幹部。戦後の疲弊したDominionを買収・吸収した後、Dominion統治者に任命された。エヴァトロンの文化・価値観をDominion全土に浸透させた。",
+    era: "歴史的人物",
+    affiliation: "エヴァトロン / Dominion",
+    tier: "歴史的人物",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
 ];
 
 /* ═══════════════════════════════════════════════════════════════
@@ -2157,6 +2263,129 @@ const TERMINOLOGY: WikiEntry[] = [
     category: "用語",
     subCategory: "地理",
     description: "アポロン文明圏の中核惑星。全軍事力はここから動員された。アポロン・Dominion大戦の最終局面でセリアのヴェノム艦隊に攻略・爆砕され、アポロン文明圏壊滅の象徴となった。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+
+  /* ── 宇宙文明圏（組織） ── */
+  {
+    id: "グランベル",
+    name: "グランベル",
+    nameEn: "Granbell",
+    category: "組織",
+    subCategory: "宇宙文明圏",
+    description:
+      "宇宙ランキング第1位の経済圏。GDP150兆ドルで宇宙全体の約25%を占める。首都オルダシティ。マルチバース開拓と次元間技術で他勢力を圧倒。現リーダー: アルゼン・カーリーン大統領。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "エレシオン",
+    name: "エレシオン",
+    nameEn: "Elyseon",
+    category: "組織",
+    subCategory: "宇宙文明圏",
+    description:
+      "宇宙ランキング第2位。医療技術と環境再生技術をリードする平和主義文明圏。リーダー: 女王リアナ・ソリス。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "ティエリア",
+    name: "ティエリア",
+    nameEn: "Tyeria",
+    category: "組織",
+    subCategory: "宇宙文明圏",
+    description:
+      "宇宙ランキング第3位。宇宙最強の軍事力と防衛ネットワークを持つ。リーダー: 総帥グレイモンド・ハウザー。軍事技術輸出が経済基盤。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "ファルージャ",
+    name: "ファルージャ",
+    nameEn: "Fallujah",
+    category: "組織",
+    subCategory: "宇宙文明圏",
+    description:
+      "宇宙ランキング第4位。文化的影響力と外交力で対立勢力間の調停役。リーダー: マドリス・カーネル。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "ディオクレニス",
+    name: "ディオクレニス",
+    nameEn: "Dioclenis",
+    category: "組織",
+    subCategory: "宇宙文明圏",
+    description:
+      "宇宙ランキング第5位。宇宙探査と科学技術研究の最前線。リーダー: ネイサン・コリンド。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "エレシュ",
+    name: "エレシュ",
+    nameEn: "Eresh",
+    category: "組織",
+    subCategory: "宇宙文明圏",
+    description: "宇宙ランキング第6位。宗教・精神的影響力を持つ勢力。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "プロキオ",
+    name: "プロキオ",
+    nameEn: "Prokio",
+    category: "組織",
+    subCategory: "宇宙文明圏",
+    description: "宇宙ランキング第7位。宇宙中の貿易ルートを掌握する交易・物流専門勢力。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "ロースター",
+    name: "ロースター",
+    nameEn: "Roastar",
+    category: "組織",
+    subCategory: "宇宙文明圏",
+    description: "宇宙ランキング第8位。次元間通信と量子ネットワーク技術の革新特化型勢力。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "エヴァトロン",
+    name: "エヴァトロン",
+    nameEn: "Evatron",
+    category: "組織",
+    subCategory: "宇宙文明圏（歴史）",
+    description:
+      "宇宙ランキング第14位。男尊女卑文化。戦後Dominionを吸収しE16系を支配。首都Evapolis。セリアンズの抵抗に直面。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+
+  /* ── 宇宙文明圏（用語） ── */
+  {
+    id: "宇宙連合会合",
+    name: "宇宙連合会合",
+    nameEn: "Cosmic Assembly",
+    category: "用語",
+    subCategory: "宇宙文明圏",
+    description:
+      "第一回宇宙連合会合はグランベルの首都オルダシティで開催された。全勢力の指導者が参加し、宇宙の将来について議論。グランベル・ティエリア間の緊張、エレシオンの平和主義提案、ディオクレニスの宇宙探査提案などが議論された。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+  {
+    id: "トゥキディデスの罠",
+    name: "トゥキディデスの罠",
+    nameEn: "Thucydides Trap",
+    category: "用語",
+    subCategory: "宇宙文明圏",
+    description:
+      "新興大国と現存大国の間に不可避的に対立が生じる国際関係理論。ディオクレニスのネイサンが提起し、グランベル（経済1位）とティエリア（軍事3位）の関係にこの罠の危険性を指摘。かつてのアポロン・Dominion関係も同様の構造だった。",
+    sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
+  },
+
+  /* ── 宇宙文明圏（歴史） ── */
+  {
+    id: "アポロン・Dominion大戦",
+    name: "アポロン・Dominion大戦",
+    nameEn: "Apollon-Dominion War",
+    category: "歴史",
+    subCategory: "宇宙文明圏",
+    description:
+      "アポロン文明圏（GDP125兆ドル）とDominion（GDP81兆ドル）の全面戦争。ロナンの同盟提案をセリアが拒絶したことが端緒。ケンタウロスレーザーとG4ファントムパルスが交差。セリアのヴェノム艦隊がアポロン・セントラリスを攻略。結果: アポロンGDP32億、Dominion GDP23兆に激減。エヴァトロンが戦後のDominionを吸収。",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
   },
 ];

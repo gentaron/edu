@@ -319,6 +319,56 @@ export default function UniversePage() {
                 description="M104銀河内に位置する惑星。恒星エネルギーの研究拠点として機能し、銀河系コンソーシアムの技術基盤を支える一翼を担っている。"
               />
             </div>
+
+            {/* 宇宙5大文明圏 */}
+            <RevealSection>
+              <div className="glass-card rounded-xl p-6 border border-amber-500/20 mb-8">
+                <h3 className="text-base font-bold text-amber-400 mb-4 flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                  宇宙5大文明圏
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <Link href="/civilizations/granbell" className="bg-cosmic-dark/50 rounded-lg p-3 border border-amber-400/20 hover:border-amber-400/40 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-amber-400">グランベル</span>
+                      <span className="text-xs text-cosmic-muted">#1</span>
+                    </div>
+                    <p className="text-xs text-cosmic-muted mt-1">量子経済・次元間技術 — GDP150兆ドル</p>
+                  </Link>
+                  <Link href="/civilizations/elyseon" className="bg-cosmic-dark/50 rounded-lg p-3 border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-emerald-400">エレシオン</span>
+                      <span className="text-xs text-cosmic-muted">#2</span>
+                    </div>
+                    <p className="text-xs text-cosmic-muted mt-1">医療技術・環境再生 — 平和外交</p>
+                  </Link>
+                  <Link href="/civilizations/tyeria" className="bg-cosmic-dark/50 rounded-lg p-3 border border-rose-400/20 hover:border-rose-400/40 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-rose-400">ティエリア</span>
+                      <span className="text-xs text-cosmic-muted">#3</span>
+                    </div>
+                    <p className="text-xs text-cosmic-muted mt-1">軍事力・防衛ネットワーク</p>
+                  </Link>
+                  <Link href="/civilizations/fallujah" className="bg-cosmic-dark/50 rounded-lg p-3 border border-violet-400/20 hover:border-violet-400/40 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-violet-400">ファルージャ</span>
+                      <span className="text-xs text-cosmic-muted">#4</span>
+                    </div>
+                    <p className="text-xs text-cosmic-muted mt-1">文化的影響力・外交・調停</p>
+                  </Link>
+                  <Link href="/civilizations/dioclenis" className="bg-cosmic-dark/50 rounded-lg p-3 border border-cyan-400/20 hover:border-cyan-400/40 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-cyan-400">ディオクレニス</span>
+                      <span className="text-xs text-cosmic-muted">#5</span>
+                    </div>
+                    <p className="text-xs text-cosmic-muted mt-1">宇宙探査・科学技術研究</p>
+                  </Link>
+                  <Link href="/civilizations" className="bg-cosmic-dark/50 rounded-lg p-3 border border-cosmic-border/30 hover:border-amber-400/40 transition-colors flex items-center justify-center">
+                    <span className="text-xs text-cosmic-muted">全文明圏を見る →</span>
+                  </Link>
+                </div>
+              </div>
+            </RevealSection>
           </div>
         </RevealSection>
 

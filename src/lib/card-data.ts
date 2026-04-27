@@ -471,6 +471,62 @@ export const ALL_CARDS: GameCard[] = [
     attack: 4, defense: 4, effect: "HPを3回復＋敵に2ダメージ", effectValue: 3, ultimate: 10, ultimateName: "不可解次元干渉波",
   },
 
+  /* ── 宇宙文明圏カード ── */
+  {
+    id: "char-alzen-carlin",
+    name: "アルゼン・カーリーン",
+    imageUrl: "/logo.svg",
+    flavorText: "「グランベル大統領。宇宙最大の経済帝国を率いる。」",
+    rarity: "R",
+    affiliation: "グランベル",
+    attack: 5, defense: 5, effect: "HPを4回復", effectValue: 4, ultimate: 11, ultimateName: "経済帝国の絶対支配",
+  },
+  {
+    id: "char-greymond-houser",
+    name: "グレイモンド・ハウザー",
+    imageUrl: "/logo.svg",
+    flavorText: "「ティエリア総帥。宇宙最強の軍事力を指揮する。」",
+    rarity: "R",
+    affiliation: "ティエリア",
+    attack: 6, defense: 3, effect: "敵に4ダメージ", effectValue: 4, ultimate: 11, ultimateName: "軍事力の絶対防衛",
+  },
+  {
+    id: "char-liana-solis",
+    name: "女王リアナ・ソリス",
+    imageUrl: "/logo.svg",
+    flavorText: "「エレシオン女王。医療と再生の力で宇宙を癒す。」",
+    rarity: "R",
+    affiliation: "エレシオン",
+    attack: 4, defense: 5, effect: "HPを4回復＋シールド+2", effectValue: 4, ultimate: 10, ultimateName: "再生の女王の慈悲",
+  },
+  {
+    id: "char-madris-kernel",
+    name: "マドリス・カーネル",
+    imageUrl: "/logo.svg",
+    flavorText: "「ファルージャ代表。文化の力で争いを鎮める。」",
+    rarity: "R",
+    affiliation: "ファルージャ",
+    attack: 3, defense: 4, effect: "敵の攻撃力低下", effectValue: 2, ultimate: 9, ultimateName: "文化調停の外交術",
+  },
+  {
+    id: "char-nathan-corind",
+    name: "ネイサン・コリンド",
+    imageUrl: "/logo.svg",
+    flavorText: "「ディオクレニス宰相。科学で宇宙の未来を拓く。」",
+    rarity: "R",
+    affiliation: "ディオクレニス",
+    attack: 4, defense: 4, effect: "シールド+4", effectValue: 4, ultimate: 10, ultimateName: "科学の結晶シールド",
+  },
+  {
+    id: "char-ronan-arthur",
+    name: "ロナン・アーサ",
+    imageUrl: "/logo.svg",
+    flavorText: "「アポロンの騎士王。ケンタウロスレーザーの英雄。」",
+    rarity: "SR",
+    affiliation: "アポロン文明圏",
+    attack: 7, defense: 4, effect: "敵に5ダメージ", effectValue: 5, ultimate: 17, ultimateName: "ケンタウロスレーザー",
+  },
+
   /* ════════════════════════════════════════
      C ×18 — 一般キャラクター
      ════════════════════════════════════════ */

@@ -12,7 +12,9 @@ import {
   Landmark,
   Clock,
   Info,
+  Globe2,
 } from "lucide-react"
+import { CIVILIZATION_LEADERS } from "@/lib/civilization-data"
 
 /* ─── Seeded PRNG (avoids SSR hydration mismatch) ─── */
 function seededRandom(seed: number) {
@@ -491,6 +493,54 @@ export default function RankingPage() {
                   maxWealth={maxWealth}
                 />
               ))}
+            </div>
+
+            {/* Civilization Leaders Section */}
+            <div className="mt-12 mb-8">
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 mb-3">
+                  <Globe2 className="w-5 h-5 text-amber-400" />
+                  <h2 className="text-xl font-bold text-cosmic-gradient">文明圏指導者</h2>
+                </div>
+                <p className="text-xs text-cosmic-muted">宇宙5大文明圏の指導者 — 国家規模の力を持つ指導者たち</p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {CIVILIZATION_LEADERS.map((leader, i) => (
+                  <Link
+                    key={leader.wikiId}
+                    href={`/wiki/${encodeURIComponent(leader.wikiId)}`}
+                    className="glass-card rounded-xl border border-cosmic-border/40 hover:border-amber-400/30 p-5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(245,158,11,0.1)]"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30">
+                        <span className="text-sm font-bold text-amber-400">#{i + 1}</span>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-cosmic-text">{leader.name}</h3>
+                        <p className={`text-xs ${leader.civilizationColor}`}>{leader.title}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-cosmic-muted">文明圏</span>
+                        <span className={leader.civilizationColor}>{leader.civilization}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-cosmic-muted">規模</span>
+                        <span className="text-electric-blue">{leader.wealth}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-cosmic-muted">時代</span>
+                        <span className="text-gold-accent">{leader.era}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-cosmic-muted">出自</span>
+                        <span className="text-cosmic-muted">{leader.source}</span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
 
             {/* Footer Notes */}

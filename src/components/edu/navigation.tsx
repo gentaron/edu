@@ -5,6 +5,7 @@ import { Star, Menu, X } from "lucide-react"
 
 const SECTIONS = [
   { id: "universe", label: "宇宙構造", href: "/universe" },
+  { id: "civilizations", label: "文明圏", href: "/civilizations" },
   { id: "timeline", label: "年表", href: "/timeline" },
   { id: "auralis", label: "AURALIS", href: "/auralis" },
   { id: "mina", label: "ミナ", href: "/mina" },
@@ -46,7 +47,9 @@ export function Navigation() {
                         ? "text-emerald-400 hover:text-emerald-300"
                         : s.id === "card-game-link"
                           ? "text-orange-400 hover:text-orange-300"
-                          : "text-cosmic-muted hover:text-electric-blue"
+                          : s.id === "civilizations"
+                            ? "text-amber-400 hover:text-amber-300"
+                            : "text-cosmic-muted hover:text-electric-blue"
                 }`}
               >
                 {s.label}
@@ -80,7 +83,9 @@ export function Navigation() {
                         ? "text-emerald-400 bg-cosmic-surface"
                         : s.id === "card-game-link"
                           ? "text-orange-400 bg-cosmic-surface"
-                          : "text-cosmic-muted hover:bg-cosmic-surface"
+                          : s.id === "civilizations"
+                            ? "text-amber-400 bg-cosmic-surface"
+                            : "text-cosmic-muted hover:bg-cosmic-surface"
                 }`}
               >
                 {s.label}

@@ -34,6 +34,14 @@ const SECTION_PAGES = [
     borderColor: "border-electric-blue/30 hover:border-electric-blue/60",
   },
   {
+    href: "/civilizations",
+    icon: <Globe2 className="w-6 h-6" />,
+    title: "宇宙5大文明圏",
+    desc: "グランベル・エレシオン・ティエリア・ファルージャ・ディオクレニス — 宇宙勢力の全貌",
+    color: "text-amber-400",
+    borderColor: "border-amber-400/30 hover:border-amber-400/60",
+  },
+  {
     href: "/timeline",
     icon: <Scroll className="w-6 h-6" />,
     title: "統合年表",
@@ -253,6 +261,9 @@ function HeroSection() {
           </Badge>
           <Badge variant="outline" className="border-cyan-400/50 text-cyan-400 text-xs px-3 py-1">
             <Users className="w-3 h-3 mr-1" /> 銀河系コンソーシアム
+          </Badge>
+          <Badge variant="outline" className="border-amber-400/50 text-amber-400 text-xs px-3 py-1">
+            <Globe2 className="w-3 h-3 mr-1" /> 宇宙5大文明圏
           </Badge>
           <Badge variant="outline" className="border-gold-accent/50 text-gold-accent text-xs px-3 py-1">
             <Globe2 className="w-3 h-3 mr-1" /> グランベル
