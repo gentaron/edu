@@ -254,6 +254,12 @@ function HeroSection() {
           <Badge variant="outline" className="border-cyan-400/50 text-cyan-400 text-xs px-3 py-1">
             <Users className="w-3 h-3 mr-1" /> 銀河系コンソーシアム
           </Badge>
+          <Badge variant="outline" className="border-gold-accent/50 text-gold-accent text-xs px-3 py-1">
+            <Globe2 className="w-3 h-3 mr-1" /> グランベル
+          </Badge>
+          <Badge variant="outline" className="border-rose-300/50 text-rose-300 text-xs px-3 py-1">
+            <Shield className="w-3 h-3 mr-1" /> ティエリア
+          </Badge>
         </div>
       </div>
       <div className="absolute bottom-8 left-1/2 animate-scroll-bounce">
