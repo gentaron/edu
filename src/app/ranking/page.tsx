@@ -79,6 +79,18 @@ interface RankingEntry {
 const RANKING_DATA: RankingEntry[] = [
   {
     rank: 1,
+    name: "アルゼン・カーリーン",
+    title: "グランベル大統領",
+    wealth: "150兆n",
+    wealthNum: 1500000,
+    source: "宇宙最大経済圏・量子経済・次元間技術",
+    affiliation: "グランベル / 5大文明圏",
+    era: "現在",
+    isHistorical: false,
+    wikiId: "アルゼン・カーリーン",
+  },
+  {
+    rank: 2,
     name: "ミカエル・ガブリエリ",
     title: "ファールージャ社CEO",
     wealth: "8兆5,000億n",
@@ -90,7 +102,7 @@ const RANKING_DATA: RankingEntry[] = [
     wikiId: "ミカエル・ガブリエリ",
   },
   {
-    rank: 2,
+    rank: 3,
     name: "アイク・ロペス",
     title: "SSレンジ首脳",
     wealth: "4兆2,000億n",
@@ -102,7 +114,19 @@ const RANKING_DATA: RankingEntry[] = [
     wikiId: "アイク・ロペス",
   },
   {
-    rank: 3,
+    rank: 4,
+    name: "グレイモンド・ハウザー",
+    title: "ティエリア総帥",
+    wealth: "3兆8,000億n",
+    wealthNum: 38000,
+    source: "軍事技術輸出・防衛ネットワーク",
+    affiliation: "ティエリア / 5大文明圏",
+    era: "現在",
+    isHistorical: false,
+    wikiId: "グレイモンド・ハウザー",
+  },
+  {
+    rank: 5,
     name: "レイド・カキザキ",
     title: "アイアン・シンジケート首脳",
     wealth: "2兆8,000億n",
@@ -114,7 +138,43 @@ const RANKING_DATA: RankingEntry[] = [
     wikiId: "レイド・カキザキ",
   },
   {
-    rank: 4,
+    rank: 6,
+    name: "ネイサン・コリンド",
+    title: "ディオクレニス科学宰相",
+    wealth: "2兆5,000億n",
+    wealthNum: 25000,
+    source: "宇宙探査技術・次元技術研究",
+    affiliation: "ディオクレニス / 5大文明圏",
+    era: "現在",
+    isHistorical: false,
+    wikiId: "ネイサン・コリンド",
+  },
+  {
+    rank: 7,
+    name: "マドリス・カーネル",
+    title: "ファルージャ評議会代表",
+    wealth: "2兆1,000億n",
+    wealthNum: 21000,
+    source: "文化交流・外交・調停",
+    affiliation: "ファルージャ / 5大文明圏",
+    era: "現在",
+    isHistorical: false,
+    wikiId: "マドリス・カーネル",
+  },
+  {
+    rank: 8,
+    name: "リアナ・ソリス",
+    title: "エレシオン女王",
+    wealth: "1兆8,000億n",
+    wealthNum: 18000,
+    source: "医療技術・環境再生技術",
+    affiliation: "エレシオン / 5大文明圏",
+    era: "現在",
+    isHistorical: false,
+    wikiId: "リアナ・ソリス",
+  },
+  {
+    rank: 9,
     name: "ティナ/グエ",
     title: "地下街の支配者",
     wealth: "1兆9,500億n",
@@ -126,7 +186,7 @@ const RANKING_DATA: RankingEntry[] = [
     wikiId: "Tina/Gue",
   },
   {
-    rank: 5,
+    rank: 10,
     name: "フィオナ",
     title: "ブルーローズ統率者",
     wealth: "1兆4,000億n",
@@ -138,7 +198,7 @@ const RANKING_DATA: RankingEntry[] = [
     wikiId: "フィオナ",
   },
   {
-    rank: 6,
+    rank: 11,
     name: "ゼナ",
     title: "Eros-7女性商人",
     wealth: "4,500億n",
@@ -150,7 +210,7 @@ const RANKING_DATA: RankingEntry[] = [
     wikiId: "ゼナ",
   },
   {
-    rank: 7,
+    rank: 12,
     name: "カーラ・ヴェルム",
     title: "スクイーズ・アビス建設者",
     wealth: "3,800億n",
@@ -162,11 +222,23 @@ const RANKING_DATA: RankingEntry[] = [
     wikiId: "カーラ・ヴェルム",
   },
   {
-    rank: 8,
+    rank: 13,
+    name: "セリア・ドミニクス",
+    title: "セリア黄金期の創設者",
+    wealth: "1,800億n",
+    wealthNum: 1800,
+    source: "nトークン経済の確立・次元エネルギー技術",
+    affiliation: "Selinopolis/Dominion（歴史的人物）",
+    era: "E335〜E370",
+    isHistorical: true,
+    wikiId: "セリア・ドミニクス",
+  },
+  {
+    rank: 14,
     name: "エル・フォルハウス",
     title: '革命家「新時代のルーキー」',
-    wealth: "2,100億n",
-    wealthNum: 2100,
+    wealth: "1,500億n",
+    wealthNum: 1500,
     source: "完全自由経済の確立",
     affiliation: "コーポラタムパブリカ（歴史的人物）",
     era: "E150",
@@ -174,19 +246,7 @@ const RANKING_DATA: RankingEntry[] = [
     wikiId: "エル・フォルハウス",
   },
   {
-    rank: 9,
-    name: "セリア・ドミニクス",
-    title: "セリア黄金期の創設者",
-    wealth: "1,800億n",
-    wealthNum: 1800,
-    source: "nトークン経済の確立",
-    affiliation: "Selinopolis（歴史的人物）",
-    era: "E335〜E370",
-    isHistorical: true,
-    wikiId: "セリア・ドミニクス",
-  },
-  {
-    rank: 10,
+    rank: 15,
     name: "アルファ・ケイン",
     title: "シャドウ・リベリオンのリーダー",
     wealth: "1,200億n",
@@ -401,6 +461,12 @@ function FooterNotes() {
             ギガポリス第四繁栄期のGDPは年間14京nトークンに達した歴史がある
           </span>
         </li>
+        <li className="flex items-start gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
+          <span>
+            上位に宇宙5大文明圏の指導者（グランベル・ティエリア・ディオクレニス・ファルージャ・エレシオン）がランクイン。Alzen Carlinは150兆nで全宇宙最高額
+          </span>
+        </li>
       </ul>
     </div>
   )
@@ -456,7 +522,7 @@ export default function RankingPage() {
             <div className="mt-8 flex flex-wrap justify-center gap-4 sm:gap-6">
               <div className="glass-card rounded-lg px-4 py-3 min-w-[120px]">
                 <p className="text-xl font-black text-gold-accent tabular-nums">
-                  10
+                  15
                 </p>
                 <p className="text-[10px] text-cosmic-muted tracking-wider">
                   ランクイン
@@ -464,7 +530,7 @@ export default function RankingPage() {
               </div>
               <div className="glass-card rounded-lg px-4 py-3 min-w-[120px]">
                 <p className="text-xl font-black text-electric-blue tabular-nums">
-                  8兆5,000億
+                  150兆
                 </p>
                 <p className="text-[10px] text-cosmic-muted tracking-wider">
                   最高推定資産 (n)
@@ -472,7 +538,7 @@ export default function RankingPage() {
               </div>
               <div className="glass-card rounded-lg px-4 py-3 min-w-[120px]">
                 <p className="text-xl font-black text-nebula-purple tabular-nums">
-                  7
+                  12
                 </p>
                 <p className="text-[10px] text-cosmic-muted tracking-wider">
                   勢力・組織
