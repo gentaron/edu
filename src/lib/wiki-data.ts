@@ -78,7 +78,7 @@ const CHARACTERS: WikiEntry[] = [
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
-      "E335〜E370年にアルファ・ケインを倒してSelinopolisへの改名を実現し、セリア黄金期の創設者となった歴史的人物。フェルミ音楽の頂点・nトークン経済の確立・AURALISの最盛期導きの三分野すべてに革命をもたらし、EDU史上最も多面的な影響力を持つ統治者として神格化されている。",
+      "E335〜E370年にZAMLTを倒してSelinopolisへの改名を実現し、セリア黄金期の創設者となった歴史的人物。E365頃にはエヴァトロンと同盟を締結しGDP81京ドルに達成、都市名をDominionへ改称。フェルミ音楽の頂点・nトークン経済の確立・AURALISの最盛期導きの三分野すべてに革命をもたらし、EDU史上最も多面的な影響力を持つ統治者として神格化されている。",
     era: "E335〜E370",
     affiliation: "Selinopolis（旧Gigapolis）",
     tier: "神格・歴史的人物",
@@ -1436,7 +1436,7 @@ const TERMINOLOGY: WikiEntry[] = [
     name: "Selinopolis",
     category: "地理",
     subCategory: "西大陸都市",
-    description: "旧Gigapolis。セリア・ドミニクスがAlpha Kaneを倒した後、Selinopolisと改名。詳細は用語「Selinopolis（ドミニオン）」を参照。",
+    description: "旧Gigapolis。セリア・ドミニクスがZAMLTを倒した後、Selinopolisと改名。詳細は用語「Selinopolis（ドミニオン）」を参照。",
   },
   {
     id: "エヴァポリス",
@@ -1889,7 +1889,7 @@ const TERMINOLOGY: WikiEntry[] = [
     name: "次元兵器",
     category: "技術",
     subCategory: "技術・概念",
-    description: "空間ホール質量破壊兵器。高次元エネルギーを解放し広範囲を破壊する超兵器。アポロン・ドミニオン大戦（E370年）の教訓から開発された系譜の兵器である。",
+    description: "空間ホール質量破壊兵器。高次元エネルギーを解放し広範囲を破壊する超兵器。アポロン・ドミニオン大戦（E370〜E385年）の教訓から開発された系譜の兵器である。",
   },
   {
     id: "ディメンション・ブリッジ",
@@ -2131,8 +2131,8 @@ const TERMINOLOGY: WikiEntry[] = [
     name: "アポロン・Dominion大戦",
     category: "用語",
     subCategory: "戦争・歴史事件",
-    description: "アポロン文明圏とDominion（セリア率いるSelinopolis）の全面戦争。ロナンの同盟提案拒絶が端緒。ケンタウロスレーザーとG4ファントムパルスの撃ち合いの末、セリアのヴェノム艦隊がアポロン・セントラリスを攻略・爆砕。両文明とも壊滅的損害を受け、宇宙秩序は大きく変容した。",
-    era: "歴史上",
+    description: "アポロン文明圏とDominion（セリア率いるSelinopolis）の全面戦争。E370年に宣戦布告。E375年にアポロンがケンタウロスレーザー発射、E378年にセリアがG4ファントムパルスで応戦。E385年にセリアのヴェノム艦隊がアポロン・セントラリスを攻略・爆砕し戦争終結。両文明とも壊滅的損害を受け、宇宙秩序は大きく変容した。なおE400年のエヴァトロンによるGigapolis占領は戦争終結とは別事象である。",
+    era: "E370〜E385",
     sourceLinks: [{ url: "https://raw.githubusercontent.com/gentaron/edutext/main/eduuni.txt", label: "eduuni.txt" }],
   },
   {
