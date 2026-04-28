@@ -57,10 +57,11 @@ for (const item of NAME_MAP) {
 
 interface WikiDescriptionProps {
   description: string
+  entryId?: string
 }
 
-export default function WikiDescription({ description }: WikiDescriptionProps) {
-  const segments = useMemo(() => tokenize(description), [description])
+export default function WikiDescription({ description, entryId }: WikiDescriptionProps) {
+  const segments = useMemo(() => tokenize(description, entryId), [description, entryId])
 
   return (
     <p className="text-sm sm:text-base text-white/65 leading-relaxed whitespace-pre-line font-light">
@@ -85,7 +86,7 @@ export default function WikiDescription({ description }: WikiDescriptionProps) {
 
 type Segment = { type: "text"; text: string } | { type: "link"; text: string; id: string }
 
-function tokenize(text: string): Segment[] {
+function tokenize(text: string, currentEntryId?: string): Segment[] {
   const result: Segment[] = []
   let lastIndex = 0
 
@@ -103,7 +104,7 @@ function tokenize(text: string): Segment[] {
 
     // Look up the entry id
     const id = NAME_TO_ID.get(matched) ?? NAME_TO_ID.get(matched.toLowerCase())
-    if (id) {
+    if (id && id !== currentEntryId) {
       result.push({ type: "link", text: matched, id })
     } else {
       // Fallback: treat as plain text (shouldn't happen but just in case)

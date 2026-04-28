@@ -144,7 +144,7 @@ export default function WikiEntryPage() {
               <Scroll className="w-3.5 h-3.5 text-white/15" />
               概要
             </h2>
-            <WikiDescription description={entry.description} />
+            <WikiDescription description={entry.description} entryId={entry.id} />
           </div>
 
           {/* Story links */}
