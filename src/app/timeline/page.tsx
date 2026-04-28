@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link"
 import { Scroll } from "lucide-react"
 import {

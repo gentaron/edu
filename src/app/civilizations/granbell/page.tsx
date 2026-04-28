@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link"
 import { Crown, Globe2 } from "lucide-react"
 import { StarField } from "@/components/edu/star-field"

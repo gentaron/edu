@@ -396,6 +396,29 @@ export function getStoriesByChapter(chapterId: number): StoryMeta[] {
   )
 }
 
+/** Shared character → portrait image mapping (used by story archive + reader) */
+export const ENTRY_IMAGE_MAP: Record<string, string> = {
+  アイリス: "/edu-iris.png",
+  Diana: "/edu-diana.png",
+  "Kate Claudia": "/edu-kate-claudia.png",
+  "Lily Steiner": "/edu-lillie-steiner.png",
+  "レイラ・ヴィレル・ノヴァ": "/edu-fiona.png",
+  "カステリア・グレンヴェルト": "/edu-diana.png",
+  "シトラ・セレス": "/edu-iris.png",
+  ミュー: "/edu-diana.png",
+  Jen: "/edu-iris.png",
+  "Tina/Gue": "/edu-diana.png",
+  "アルファ・ケイン": "/edu-hero.png",
+  "セリア・ドミニクス": "/edu-celia.png",
+  弦太郎: "/edu-auralis.png",
+  Slime_Woman: "/edu-diana.png",
+  ジュン: "/edu-hero.png",
+  "Kate Patton": "/edu-kate-claudia.png",
+  "Lillie Ardent": "/edu-lillie-steiner.png",
+  "ミナ・エウレカ・エルンスト": "/edu-diana.png",
+  "Ninny Offenbach": "/edu-fiona.png",
+}
+
 export function getAdjacentStories(story: StoryMeta): { prev?: StoryMeta; next?: StoryMeta } {
   const chapterStories = getStoriesByChapter(story.chapter)
   const idx = chapterStories.findIndex((s) => s.slug === story.slug)

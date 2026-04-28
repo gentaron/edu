@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link"
 import { Globe2, Star, Users, Zap } from "lucide-react"
 import { StarField } from "@/components/edu/star-field"

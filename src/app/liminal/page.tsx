@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link"
 import { Radio, ArrowDown, Zap, Star } from "lucide-react"
 import { Badge } from "@/components/ui/badge"

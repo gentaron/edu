@@ -17,36 +17,14 @@ import {
 import {
   type StoryMeta,
   type ChapterMeta,
+  ENTRY_IMAGE_MAP,
   getStoriesForEntry,
   getStoryBySlug,
   getStoryTitle,
 } from "@/lib/stories"
 import { type Lang, tl } from "@/lib/lang"
 import ReadingProgress from "./reading-progress"
-import StarField from "./star-field"
-
-/* ─── Wiki name to image mapping ─── */
-const entryImageMap: Record<string, string> = {
-  アイリス: "/edu-iris.png",
-  Diana: "/edu-diana.png",
-  "Kate Claudia": "/edu-kate-claudia.png",
-  "Lily Steiner": "/edu-lillie-steiner.png",
-  "レイラ・ヴィレル・ノヴァ": "/edu-fiona.png",
-  "カステリア・グレンヴェルト": "/edu-diana.png",
-  "シトラ・セレス": "/edu-iris.png",
-  ミュー: "/edu-diana.png",
-  Jen: "/edu-iris.png",
-  "Tina/Gue": "/edu-diana.png",
-  "アルファ・ケイン": "/edu-hero.png",
-  "セリア・ドミニクス": "/edu-celia.png",
-  弦太郎: "/edu-auralis.png",
-  Slime_Woman: "/edu-diana.png",
-  ジュン: "/edu-hero.png",
-  "Kate Patton": "/edu-kate-claudia.png",
-  "Lillie Ardent": "/edu-lillie-steiner.png",
-  "ミナ・エウレカ・エルンスト": "/edu-diana.png",
-  "Ninny Offenbach": "/edu-fiona.png",
-}
+import { StarField } from "@/components/edu/star-field"
 
 function toRoman(n: number): string {
   const map: [number, string][] = [
@@ -255,12 +233,12 @@ export function StoryReaderUI({
     : ""
 
   return (
-    <div className="relative min-h-screen bg-[#0c0c0c]">
+    <div className="relative min-h-screen bg-edu-bg">
       <StarField />
       <ReadingProgress />
 
       {/* Top Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0c0c0c]/80 backdrop-blur-xl border-b border-white/5">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-edu-bg/90 backdrop-blur-sm border-b border-edu-border">
         <div className="max-w-[680px] mx-auto px-6">
           <div className="flex items-center justify-between h-14 gap-3">
             {/* Left: breadcrumb */}
@@ -355,9 +333,9 @@ export function StoryReaderUI({
                   className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium rounded-full border border-white/6 bg-white/3 text-white/40 hover:text-white/60 hover:border-white/12 transition-all duration-300"
                 >
                   <div className="w-5 h-5 rounded-full overflow-hidden border border-white/8 bg-white/5 flex items-center justify-center shrink-0">
-                    {entryImageMap[entry.name] ? (
+                    {ENTRY_IMAGE_MAP[entry.name] ? (
                       <Image
-                        src={entryImageMap[entry.name]}
+                        src={ENTRY_IMAGE_MAP[entry.name]}
                         alt={entry.name}
                         width={20}
                         height={20}

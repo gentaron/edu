@@ -4,32 +4,9 @@ import React, { useState, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { BookOpen, ArrowLeft, Clock, Users, ChevronDown, Library, Feather } from "lucide-react"
-import { ALL_STORIES, CHAPTERS, getStoriesByChapter, getStoryTitle } from "@/lib/stories"
+import { ALL_STORIES, CHAPTERS, ENTRY_IMAGE_MAP, getStoriesByChapter, getStoryTitle } from "@/lib/stories"
 import { type Lang, tl } from "@/lib/lang"
 import { StarField } from "@/components/edu/star-field"
-
-/* ─── Wiki name to image mapping ─── */
-const entryImageMap: Record<string, string> = {
-  アイリス: "/edu-iris.png",
-  Diana: "/edu-diana.png",
-  "Kate Claudia": "/edu-kate-claudia.png",
-  "Lily Steiner": "/edu-lillie-steiner.png",
-  "レイラ・ヴィレル・ノヴァ": "/edu-fiona.png",
-  "カステリア・グレンヴェルト": "/edu-diana.png",
-  "シトラ・セレス": "/edu-iris.png",
-  ミュー: "/edu-diana.png",
-  Jen: "/edu-iris.png",
-  "Tina/Gue": "/edu-diana.png",
-  "アルファ・ケイン": "/edu-hero.png",
-  "セリア・ドミニクス": "/edu-celia.png",
-  弦太郎: "/edu-auralis.png",
-  Slime_Woman: "/edu-diana.png",
-  ジュン: "/edu-hero.png",
-  "Kate Patton": "/edu-kate-claudia.png",
-  "Lillie Ardent": "/edu-lillie-steiner.png",
-  "ミナ・エウレカ・エルンスト": "/edu-diana.png",
-  "Ninny Offenbach": "/edu-fiona.png",
-}
 
 /* ─── Roman numerals ─── */
 function toRoman(n: number): string {
@@ -134,9 +111,9 @@ function StoryCard({
                 onClick={(e) => e.stopPropagation()}
                 className="flex items-center gap-1 text-[10px] text-edu-muted bg-edu-surface border border-edu-border rounded-full px-2 py-0.5 hover:text-edu-accent hover:border-edu-accent/30 transition-all duration-300"
               >
-                {entryImageMap[entry] && (
+                {ENTRY_IMAGE_MAP[entry] && (
                   <Image
-                    src={entryImageMap[entry]}
+                    src={ENTRY_IMAGE_MAP[entry]}
                     alt={entry}
                     width={12}
                     height={12}

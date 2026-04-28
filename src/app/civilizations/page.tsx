@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link"
 import { Crown, Heart, Shield, Scale, Telescope, Sparkles, Package, Radio, Skull, Swords, Globe2, ExternalLink } from "lucide-react"
 import { StarField } from "@/components/edu/star-field"

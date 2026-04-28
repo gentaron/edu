@@ -3,10 +3,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* ═══════════════════════════════════════════
-   EDU Design System — ona.la-inspired minimalism
-   Dark navy base + gold accent + muted typography
-   ═══════════════════════════════════════════ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -45,7 +41,6 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* EDU Custom — Refined palette */
   --color-edu-bg:        #0c0f1a;
   --color-edu-surface:   #151a2e;
   --color-edu-card:      #1a2038;
@@ -54,8 +49,6 @@
   --color-edu-muted:     #6b7394;
   --color-edu-accent:    #c8a44e;
   --color-edu-accent2:   #5b6abf;
-  --color-edu-link:      #c8a44e;
-  --color-edu-link-dim:  #a08030;
 }
 
 :root {
@@ -91,7 +84,6 @@
   --sidebar-accent-foreground: #c8cdd8;
   --sidebar-border: #252d4a;
   --sidebar-ring: #5b6abf;
-
   color-scheme: dark;
 }
 
@@ -106,72 +98,39 @@
     line-break: strict;
     text-spacing-trim: trim-start;
   }
-  html {
-    scroll-behavior: smooth;
-  }
+  html { scroll-behavior: smooth; }
 }
 
-/* ─── Scrollbar ─── */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #252d4a;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3a4570;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #252d4a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a4570; }
 
-/* ─── Minimal animations (ona.la: essentially none) ─── */
+/* Animations */
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes twinkle {
   0%, 100% { opacity: 0.15; }
   50%      { opacity: 0.5; }
 }
+.animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
+.animate-twinkle { animation: twinkle 4s ease-in-out infinite; }
 
-.animate-fade-in {
-  animation: fade-in 0.4s ease-out forwards;
-}
-
-.animate-twinkle {
-  animation: twinkle 4s ease-in-out infinite;
-}
-
-/* ─── Section reveal — minimal ─── */
+/* Reveal on scroll */
 .reveal-section {
   opacity: 0;
   transform: translateY(12px);
-  transition:
-    opacity 0.6s ease-out,
-    transform 0.6s ease-out;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
-
 .reveal-section.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* ─── Navigation ─── */
-.nav-link {
-  color: #6b7394;
-  transition: color 0.15s;
-}
-.nav-link:hover {
-  color: #c8a44e;
-}
-.nav-link.active {
-  color: #c8cdd8;
-}
-
-/* ─── Cards — flat, no blur, no gradients ─── */
+/* Card */
 .edu-card {
   background: #1a2038;
   border: 1px solid #252d4a;
@@ -183,7 +142,7 @@
   border-color: #3a4570;
 }
 
-/* ─── Tags/Chips (ona.la style) ─── */
+/* Tag chip */
 .edu-tag {
   display: inline-block;
   padding: 0.2em 0.5em;
@@ -192,42 +151,25 @@
   font-size: x-small;
   color: #c8a44e;
   word-break: keep-all;
-  border: none;
 }
 
-/* ─── Links ─── */
+/* Link */
 .edu-link {
   color: #c8a44e;
   text-decoration: none;
   transition: color 0.15s;
 }
-.edu-link:hover {
-  color: #d4b45e;
-}
+.edu-link:hover { color: #d4b45e; }
 
-/* ─── Dividers ─── */
-.edu-divider {
-  border: none;
-  height: 1px;
-  background: #252d4a;
-}
+/* Divider */
+.edu-divider { border: none; height: 1px; background: #252d4a; }
 
-/* ─── Blockquotes ─── */
-.edu-blockquote {
-  padding-left: 0.5em;
-  border-left: 4px solid #252d4a;
-}
-
-/* ═══════════════════════════════════════════
-   Novel Prose — sophisticated reading experience
-   ═══════════════════════════════════════════ */
+/* Novel Prose */
 .novel-prose {
   max-width: 100%;
   font-feature-settings: "pkna" 1, "palt" 0.9;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
-
 .novel-paragraph {
   font-size: 15px;
   line-height: 2;
@@ -238,7 +180,6 @@
   margin-bottom: 1.6em;
   font-weight: 300;
 }
-
 .novel-prose .novel-paragraph:first-of-type::first-letter {
   font-size: 2.2em;
   font-weight: 300;
@@ -249,154 +190,57 @@
   line-height: 1;
   font-feature-settings: "pkna" 0;
 }
-
 :root[lang="ja"] .novel-paragraph,
-.novel-prose .novel-paragraph + .novel-paragraph {
-  text-indent: 1em;
-}
-
+.novel-prose .novel-paragraph + .novel-paragraph { text-indent: 1em; }
 .novel-prose .flex + .novel-paragraph,
-.novel-prose h2 + .novel-paragraph {
-  text-indent: 0;
-}
-
+.novel-prose h2 + .novel-paragraph { text-indent: 0; }
 @media (min-width: 640px) {
-  .novel-paragraph {
-    font-size: 16px;
-    line-height: 2.1;
-    letter-spacing: 0.05em;
-  }
+  .novel-paragraph { font-size: 16px; line-height: 2.1; letter-spacing: 0.05em; }
 }
 
-/* ─── Scene break ─── */
+/* Scene break */
 .scene-break {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem 0;
 }
-.scene-break::before,
-.scene-break::after {
+.scene-break::before, .scene-break::after {
   content: "";
   flex: 1;
   height: 1px;
   background: #252d4a;
 }
 .scene-break-dot {
-  width: 3px;
-  height: 3px;
+  width: 3px; height: 3px;
   border-radius: 50%;
   background: #3a4570;
   margin: 0 0.75rem;
 }
 
-/* ─── Reading progress ─── */
-#reading-progress {
-  background: #1a2038;
-}
+#reading-progress { background: #1a2038; }
 
-/* ═══════════════════════════════════════════
-   Card Rarity Visual System — simplified
-   ═══════════════════════════════════════════ */
-.card-sr {
-  border: 1px solid rgba(200, 164, 78, 0.5);
-}
-
-.card-r {
-  border: 1px solid rgba(91, 106, 191, 0.4);
-}
-
-.card-c {
-  border: 1px solid rgba(37, 45, 74, 0.8);
-}
-
-.field-sr {
-  border: 1px solid rgba(200, 164, 78, 0.4) !important;
-}
-
-.field-r {
-  border: 1px solid rgba(91, 106, 191, 0.3) !important;
-}
-
+/* Card Rarity */
+.card-sr { border: 1px solid rgba(200, 164, 78, 0.5); }
+.card-r  { border: 1px solid rgba(91, 106, 191, 0.4); }
+.card-c  { border: 1px solid rgba(37, 45, 74, 0.8); }
+.field-sr { border: 1px solid rgba(200, 164, 78, 0.4) !important; }
+.field-r  { border: 1px solid rgba(91, 106, 191, 0.3) !important; }
 .rarity-badge-sr {
   background: rgba(200, 164, 78, 0.15);
   color: #c8a44e;
   border: 1px solid rgba(200, 164, 78, 0.3);
 }
-
 .rarity-badge-r {
   background: rgba(91, 106, 191, 0.15);
   color: #5b6abf;
   border: 1px solid rgba(91, 106, 191, 0.25);
 }
 
-/* ─── Custom scrollbar for card game ─── */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #252d4a;
-  border-radius: 2px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #3a4570;
-}
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #252d4a; border-radius: 2px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #3a4570; }
 
-/* ─── Legacy compatibility aliases (used by existing pages) ─── */
-.glass-card {
-  background: rgba(26, 32, 56, 0.8);
-  border: 1px solid #252d4a;
-  border-radius: 0.5rem;
-}
-
-.glass-card-hover:hover {
-  background: rgba(30, 37, 64, 0.9);
-  border-color: #3a4570;
-}
-
-.text-cosmic-gradient {
-  color: #c8cdd8;
-}
-
-.text-purple-gradient {
-  color: #5b6abf;
-}
-
-.text-blue-gradient {
-  color: #38bdf8;
-}
-
-.glow-purple,
-.glow-blue,
-.glow-gold {
-  box-shadow: none;
-}
-
-.nav-active {
-  color: #c8a44e;
-}
-
-.timeline-line {
-  background: linear-gradient(to bottom, #5b6abf, #c8a44e);
-}
-
-.faction-connector {
-  border-left: 2px solid #252d4a;
-}
-
-.consistency-border {
-  border: 1px solid #252d4a;
-}
-
-.consistency-border::before {
-  display: none;
-}
-
-/* ─── em:lang(ja) bold instead of italic ─── */
-em:lang(ja) {
-  font-style: normal;
-  font-weight: bolder;
-}
+/* em:lang(ja) bold instead of italic */
+em:lang(ja) { font-style: normal; font-weight: bolder; }
