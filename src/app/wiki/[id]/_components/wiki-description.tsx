@@ -86,6 +86,33 @@ export default function WikiDescription({ description, entryId }: WikiDescriptio
 
 type Segment = { type: "text"; text: string } | { type: "link"; text: string; id: string }
 
+function isKatakanaLike(ch: string): boolean {
+  const code = ch.codePointAt(0) ?? 0
+  // Katakana (30A0-30FF), Hiragana (3040-309F), CJK unified ideographs (4E00-9FFF),
+  // Katakana-hiragana prolonged sound mark (30FC), CJK Extension A (3400-4DBF)
+  return (
+    (code >= 0x30a0 && code <= 0x30ff) ||
+    (code >= 0x3040 && code <= 0x309f) ||
+    (code >= 0x4e00 && code <= 0x9fff) ||
+    (code >= 0x3400 && code <= 0x4dbf) ||
+    code === 0x30fc || // prolongation mark ー
+    code === 0x3005 || // repetition mark 々
+    code === 0x3006 // cjk iteration mark 〆
+  )
+}
+
+function isEmbeddedInWord(text: string, index: number, length: number): boolean {
+  // Check the character BEFORE the match
+  const before = index > 0 ? text[index - 1] : ""
+  // Check the character AFTER the match
+  const after = index + length < text.length ? text[index + length] : ""
+
+  // If both sides have Japanese characters, this is embedded in a larger word
+  const beforeIsJP = before !== "" && isKatakanaLike(before)
+  const afterIsJP = after !== "" && isKatakanaLike(after)
+  return beforeIsJP || afterIsJP
+}
+
 function tokenize(text: string, currentEntryId?: string): Segment[] {
   const result: Segment[] = []
   let lastIndex = 0
@@ -104,10 +131,13 @@ function tokenize(text: string, currentEntryId?: string): Segment[] {
 
     // Look up the entry id
     const id = NAME_TO_ID.get(matched) ?? NAME_TO_ID.get(matched.toLowerCase())
-    if (id && id !== currentEntryId) {
+    const isValidLink =
+      id && id !== currentEntryId && !isEmbeddedInWord(text, match.index, matched.length)
+
+    if (isValidLink) {
       result.push({ type: "link", text: matched, id })
     } else {
-      // Fallback: treat as plain text (shouldn't happen but just in case)
+      // Fallback: treat as plain text (embedded in word or self-link)
       result.push({ type: "text", text: matched })
     }
 

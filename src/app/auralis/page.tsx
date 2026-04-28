@@ -12,7 +12,10 @@ export default function AuralisPage() {
         <PageHeader
           icon={<Sparkles className="w-6 h-6 text-edu-accent2" />}
           title={
-            <Link href={`/wiki/${encodeURIComponent("AURALIS")}`} className="text-edu-text hover:underline">
+            <Link
+              href={`/wiki/${encodeURIComponent("AURALIS")}`}
+              className="text-edu-text hover:underline"
+            >
               AURALIS Collective
             </Link>
           }
@@ -35,31 +38,86 @@ export default function AuralisPage() {
                 </p>
                 <p>
                   <span className="text-edu-accent2 font-medium">第一世代（E290〜E420）</span>は{" "}
-                  <Link href={`/wiki/${encodeURIComponent("Kate Claudia")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Kate Claudia</Link>
-                  {" "}と{" "}
-                  <Link href={`/wiki/${encodeURIComponent("Lily Steiner")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Lily Steiner</Link>
+                  <Link
+                    href={`/wiki/${encodeURIComponent("Kate Claudia")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    Kate Claudia
+                  </Link>{" "}
+                  と{" "}
+                  <Link
+                    href={`/wiki/${encodeURIComponent("Lily Steiner")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    Lily Steiner
+                  </Link>
                   を中心に創設され、
-                  <Link href={`/wiki/${encodeURIComponent("セリア・ドミニクス")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">セリア・ドミニクス</Link>
+                  <Link
+                    href={`/wiki/${encodeURIComponent("セリア・ドミニクス")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    セリア・ドミニクス
+                  </Link>
                   の黄金期に最盛期を迎えた。しかし、E400年の
-                  <Link href={`/wiki/${encodeURIComponent("エヴァトロン")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">エヴァトロン</Link>
+                  <Link
+                    href={`/wiki/${encodeURIComponent("エヴァトロン")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    エヴァトロン
+                  </Link>
                   弾圧により組織は解体され、創設者たちは逮捕・消息不明となった。唯一、{" "}
-                  <Link href={`/wiki/${encodeURIComponent("レイラ・ヴィレル・ノヴァ")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Layla Virell Nova</Link>
-                  {" "}は冷凍保存によって時を超え、第二世代への橋渡し役となる。
+                  <Link
+                    href={`/wiki/${encodeURIComponent("レイラ・ヴィレル・ノヴァ")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    Layla Virell Nova
+                  </Link>{" "}
+                  は冷凍保存によって時を超え、第二世代への橋渡し役となる。
                 </p>
                 <p>
                   <span className="text-edu-accent2 font-medium">第二世代（E522〜現在）</span>
                   は5人のメンバーで構成され、現代のE16文明において文化的・技術的な中核を担っている。{" "}
-                  <Link href={`/wiki/${encodeURIComponent("Kate Patton")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Kate Patton</Link>
+                  <Link
+                    href={`/wiki/${encodeURIComponent("Kate Patton")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    Kate Patton
+                  </Link>
                   、
-                  <Link href={`/wiki/${encodeURIComponent("Lillie Ardent")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Lillie Ardent</Link>
+                  <Link
+                    href={`/wiki/${encodeURIComponent("Lillie Ardent")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    Lillie Ardent
+                  </Link>
                   、
-                  <Link href={`/wiki/${encodeURIComponent("レイラ・ヴィレル・ノヴァ")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Layla Virell Nova</Link>
+                  <Link
+                    href={`/wiki/${encodeURIComponent("レイラ・ヴィレル・ノヴァ")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    Layla Virell Nova
+                  </Link>
                   （冷凍保存からの復活）、
-                  <Link href={`/wiki/${encodeURIComponent("ミナ・エウレカ・エルンスト")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Mina Eureka Ernst</Link>
+                  <Link
+                    href={`/wiki/${encodeURIComponent("ミナ・エウレカ・エルンスト")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    Mina Eureka Ernst
+                  </Link>
                   （AI研究員）、
-                  <Link href={`/wiki/${encodeURIComponent("Ninny Offenbach")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Ninny Offenbach</Link>
+                  <Link
+                    href={`/wiki/${encodeURIComponent("Ninny Offenbach")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    Ninny Offenbach
+                  </Link>
                   （原初個体は
-                  <Link href={`/wiki/${encodeURIComponent("アルファ・ケイン")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Alpha Kane</Link>
+                  <Link
+                    href={`/wiki/${encodeURIComponent("アルファ・ケイン")}`}
+                    className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                  >
+                    Alpha Kane
+                  </Link>
                   時代に別惑星へ離脱、クローン技術で遺伝子継承ののち再帰還）の5人は、それぞれが独自の背景と能力を持ち、AURALIS
                   を新たな段階へと導いている。
                 </p>
@@ -89,6 +147,66 @@ export default function AuralisPage() {
               </div>
             </div>
 
+            {/* Layla Virell Nova — Featured Illustration */}
+            <div className="edu-card rounded-xl overflow-hidden mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2">
+                <div className="relative">
+                  <img
+                    src={
+                      process.env.NODE_ENV === "production"
+                        ? "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirelNova.png"
+                        : "/LaylaVirelNova.png"
+                    }
+                    alt="Layla Virell Nova — Pink Voltage"
+                    className="w-full h-full min-h-[280px] object-cover object-top"
+                  />
+                  <div className="absolute top-3 left-3">
+                    <span className="text-[10px] px-2.5 py-1 rounded-full bg-pink-500/20 border border-pink-400/30 text-pink-300 backdrop-blur-sm tracking-wider">
+                      PINK VOLTAGE
+                    </span>
+                  </div>
+                </div>
+                <div className="p-6 flex flex-col justify-center">
+                  <h3 className="text-lg font-bold text-edu-accent2 mb-1">
+                    レイラ・ヴィレル・ノヴァ
+                  </h3>
+                  <p className="text-xs text-edu-muted mb-3">
+                    Layla Virell Nova — 第一世代から第二世代への架け橋
+                  </p>
+                  <div className="space-y-2 text-sm text-edu-muted leading-relaxed">
+                    <p>
+                      E325年AURALIS参加。E380〜E400年のスライム危機ではオアシス・ハウスを拠点に英雄的活躍を見せ、プラズマカノンとナノファイバーブーツを駆使してスライムの巣を焼却した。
+                    </p>
+                    <p>
+                      E400年に冷凍保存され、E522年に目覚めた後はAURALIS
+                      Collective第二世代として活動。Pink
+                      Voltageの異名は電撃的な戦闘スタイルに由来する。
+                    </p>
+                    <p>
+                      {[
+                        { label: "所属", value: "AURALIS Collective第二世代" },
+                        { label: "Tier", value: "Tier 1" },
+                        { label: "時代", value: "E325〜E400（冷凍）→ E522〜現在" },
+                      ].map((m) => (
+                        <span
+                          key={m.label}
+                          className="inline-flex items-center gap-1 text-xs text-edu-muted mr-3"
+                        >
+                          <span className="text-edu-accent font-medium">{m.label}:</span> {m.value}
+                        </span>
+                      ))}
+                    </p>
+                  </div>
+                  <Link
+                    href={`/wiki/${encodeURIComponent("レイラ・ヴィレル・ノヴァ")}`}
+                    className="mt-4 inline-flex items-center gap-1.5 text-xs text-edu-accent2 hover:underline"
+                  >
+                    Wikiで詳しく見る →
+                  </Link>
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* First Generation */}
               <div className="edu-card rounded-xl overflow-hidden transition-all duration-300">
@@ -100,8 +218,7 @@ export default function AuralisPage() {
                 </div>
                 <div className="p-6 space-y-4">
                   <h3 className="text-lg font-bold text-edu-accent2">
-                    第一世代{" "}
-                    <span className="text-xs text-edu-muted font-normal">E290〜E420</span>
+                    第一世代 <span className="text-xs text-edu-muted font-normal">E290〜E420</span>
                   </h3>
                   <div className="space-y-2 text-sm text-edu-muted">
                     <p>
@@ -164,15 +281,24 @@ export default function AuralisPage() {
                     </p>
                     <p>
                       <span className="text-edu-text">E400:</span>{" "}
-                      <Link href={`/wiki/${encodeURIComponent("エヴァトロン")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">
+                      <Link
+                        href={`/wiki/${encodeURIComponent("エヴァトロン")}`}
+                        className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                      >
                         エヴァトロン
                       </Link>
                       弾圧で解体。
-                      <Link href={`/wiki/${encodeURIComponent("Kate Claudia")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">
+                      <Link
+                        href={`/wiki/${encodeURIComponent("Kate Claudia")}`}
+                        className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                      >
                         Kate Claudia
                       </Link>
                       ・
-                      <Link href={`/wiki/${encodeURIComponent("Lily Steiner")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">
+                      <Link
+                        href={`/wiki/${encodeURIComponent("Lily Steiner")}`}
+                        className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                      >
                         Lily Steiner
                       </Link>
                       は逮捕・消息不明
@@ -195,8 +321,7 @@ export default function AuralisPage() {
                 </div>
                 <div className="p-6 space-y-4">
                   <h3 className="text-lg font-bold text-edu-accent2">
-                    第二世代{" "}
-                    <span className="text-xs text-edu-muted font-normal">E522〜現在</span>
+                    第二世代 <span className="text-xs text-edu-muted font-normal">E522〜現在</span>
                   </h3>
                   <div className="space-y-2">
                     {[
@@ -245,10 +370,7 @@ export default function AuralisPage() {
                         </div>
                         <div className="min-w-0">
                           <p className="text-sm font-medium text-edu-text truncate">
-                            <Link
-                              href={m.wiki}
-                              className="hover:text-edu-accent2 hover:underline"
-                            >
+                            <Link href={m.wiki} className="hover:text-edu-accent2 hover:underline">
                               {m.name}
                             </Link>
                           </p>
@@ -289,8 +411,7 @@ export default function AuralisPage() {
                         >
                           Gigapolis
                         </Link>
-                        に
-                        <span className="text-edu-accent font-medium">再帰還</span>
+                        に<span className="text-edu-accent font-medium">再帰還</span>
                         してミナと出会い、第二世代に加入した。
                       </p>
                     </div>

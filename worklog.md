@@ -1,58 +1,77 @@
-# Worklog
+# Worklog — wiki-data.ts Comprehensive Edits
 
-## 2026-04-29 — 大改編: 用語リンク修正・未リンク追加・キャラ画像追加・Wiki説明拡充
+## Date: 2025-07-20
 
-### Task ID: 1
+## Summary
 
-### Agent: Main Agent + 4 Sub-agents
+Performed comprehensive edits to `/home/z/my-project/src/lib/wiki-data.ts` (3086 → 3297 lines, +211 lines).
 
-### Task: 4つの改修を一括実施
+## Task A: New Character Entries (9 entries added to CHARACTERS array)
 
-### Work Log:
+Added before CHARACTERS `]` closing bracket, in new sections:
 
-- Pull latest from main (already up to date)
-- Explored full codebase structure (24 page files, 150+ wiki entries)
-- Identified 100+ wiki hash links (`/wiki#termId`) across 15 non-wiki/cardgame/story pages
-- Identified 4 characters missing image URLs (Casteria, Sitra, Myu, Jun)
-- Identified 9 space faction leaders with no images in repo (no action - no upload permission)
-- Agent batch 1: Fixed links in auralis, iris, mina, liminal (36 fixes + 33 new links)
-- Agent batch 2: Fixed links in 6 civilizations pages (36 fixes + 14 new links)
-- Agent batch 3: Fixed links in factions, universe, technology, timeline, characters (21 fixes + 45 new links)
-- Added image URLs for 4 characters: CasteriaGrenvelt.png, SitraCeles.png, Myu.png, Jun.png
-- Agent batch 4: Expanded 41 TERMINOLOGY descriptions (first batch)
-- Agent batch 5: Expanded 81 TERMINOLOGY descriptions (second batch)
-- Total: ~122 wiki term descriptions expanded to 100+ chars
-- Build verified: TypeScript passes, Next.js build passes
-- Committed and pushed to main as `97dc973`
+### ZAMLT 企業リーダー (7 entries)
 
-### Stage Summary:
+1. **ラファエル・ドレイク** (Rafael Drake) — トロン・コーポレーションCEO
+2. **アイリス・ノヴァ** (Iris Nova) — アロエオイル・コーポレーションリーダー
+3. **カルロス・ヴァンダム** (Carlos Vandam) — マモン・コーポレーションリーダー
+4. **アーサー・グリム** (Arthur Grim) — ゼブラ・コーポレーションリーダー
+5. **エリザベス・リンドバーグ** (Elizabeth Lindberg) — ルレンツ・コーポレーションリーダー
+6. **レイ・ヴァンデルト** (Ray Vandelte) — ゼブラ・コーポレーション工作員
+7. **リンダ** (Linda) — ルレンツ・コーポレーション研究員
 
-- **17 files changed**, +473/-318 lines
-- All `/wiki#hash` links converted to `/wiki/${encodeURIComponent(id)}` on target pages
-- 90+ new wiki links added to previously unlinked terms
-- 4 character images added, 130+ wiki descriptions expanded
-- Commit: `97dc973` pushed to main
+### テクロサス系譜 (1 entry)
 
----
+8. **クロノ・ヴァーレント** (Chrono Valeint) — テクロサス指導者
 
-Task ID: 1
-Agent: main
-Task: ZAMLT・エレシュ・プロキオ・ロースターのWikiページ網羅的拡充
+### 宇宙勢力（歴史） (1 entry)
 
-Work Log:
+9. **オメガ＝ユリシス** (Omega=Ulysses) — EVILSリーダー
 
-- git pullで最新状態を取得（Already up to date）
-- nebura.txt（遠隔URL）とwiki-data.ts、civilization-data.ts、faction-data.tsを読み込み現状把握
-- ZAMLT関連：5企業(トロン/アロエオイル/マモン/ゼブラ/ルレンツ)・ストロベリー・プロトコルX・次元の塔・カタリスト・コア・シルバープラント・伴共役・EVILS・クリストッフェル次元・ギガポリス解放戦をTERMINOLOGYに追加
-- エレシュ：メインエントリ「エレシュ」追加、指導者「大司教」をCHARACTERSに追加（既存サブエントリ4件は維持）
-- プロキオ：メインエントリ「プロキオ」追加、指導者「商工会議長」をCHARACTERSに追加、レーン・システム・プロキオ・クリアをTERMINOLOGYに追加（既存サブエントリ3件は維持）
-- ロースター：メインエントリ「ロースター」追加、指導者「通信長官」をCHARACTERSに追加、クアンタ・ラボをTERMINOLOGYに追加（既存サブエントリ3件は維持）
-- nebura.txt関連：エリオット・シュトラス・アレンをCHARACTERSに追加
-- ビルド確認（next build成功）
-- コミットad41dd6でMainにプッシュ完了
+## Task B: Leader History Appended to Organization Descriptions (4 edits)
 
-Stage Summary:
+1. **UECO** — Appended: 初代議長情報、E495〜E500年移行期主導、惑星ビブリオ保管記録
+2. **ネオクラン同盟** — Appended: 初代共同代表、ZAMLT崩壊後民主化運動指導者
+3. **コーポラタムパブリカ** — Appended: 最高執行官制度、14兆ドルGDP、シュトラスによる解任
+4. **銀河系コンソーシアム** — Appended: グランベル・ティエリア共同議長体制
 
-- 25件の新Wikiエントリ追加（キャラクター5件、組織/技術/歴史20件）
-- 全エントリに世界線整合性と因果関係を反映したdescriptionを記述
-- コミット: ad41dd6 → main へプッシュ済み
+## Task C: New Terminology Entries (10 entries added to TERMINOLOGY array)
+
+### 西大陸都市 (4 entries)
+
+1. **ギガポリス** (Gigapolis) — 西大陸最大都市の完全な歴史
+2. **Poitiers** — 文化・学術都市「音の都」
+3. **Chem** — 化学工業都市
+4. **Troyane** — 宗教都市
+
+### 歴史・時代 (1 entry)
+
+5. **第五次繁栄期** — メルディア戦争後の繁栄期
+
+### 組織・制度 (1 entry)
+
+6. **戦士決定戦** — ヒーローエージェンシー選抜大会
+
+### 技術・概念 (4 entries)
+
+7. **次元ピラミッド** (Dimension Pyramid) — 宇宙論的框架
+8. **搾取生物** (Extraction Creature) — Eros-7原生生物群
+9. **G4ファントムパルス** — セリアの次元エネルギー兵器
+10. **ケンタウロスレーザー** — アポロンの超巨大レーザー兵器
+
+## Task D: Geographic Description Verification
+
+1. **セントラル・タワー** — "Gigapolisの中心部" → ✅ CORRECT, no change needed
+2. **ギガポリス解放戦** — "メガタワー（ZAMLT本社）" → ✅ CORRECT, no change needed
+3. **シンフォニー・オブ・スターズ** — Entry at line 1270 confirms "E16連星系の中心惑星" (planet) → ✅ CORRECT
+
+## TypeScript Verification
+
+- `npx tsc --noEmit` — ✅ PASSED (no errors)
+
+## Notes
+
+- All existing entries preserved intact
+- All new entries follow existing WikiEntry interface
+- No type definitions, array structures, or exports modified
+- No trailing commas or syntax issues
