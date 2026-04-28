@@ -37,7 +37,7 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
   ])
 
   const splitParagraphs = (text: string | null) =>
-    text ? text.split(/\n\n+/).filter((p) => p.trim().length > 0) : []
+    text ? text.split(/\n/).filter((p) => p.trim().length > 0) : []
 
   const paragraphsJa = splitParagraphs(textJa)
   const paragraphsEn = splitParagraphs(textEn)

@@ -9,14 +9,14 @@ function seededRandom(seed: number) {
   }
 }
 
-const stars = Array.from({ length: 60 }, (_, i) => ({
+const stars = Array.from({ length: 40 }, (_, i) => ({
   id: i,
   left: seededRandom(i * 7 + 1)() * 100,
   top: seededRandom(i * 13 + 3)() * 100,
-  size: seededRandom(i * 17 + 5)() * 2 + 0.5,
-  delay: seededRandom(i * 23 + 7)() * 5,
-  duration: seededRandom(i * 29 + 11)() * 3 + 2,
-  opacity: seededRandom(i * 31 + 13)() * 0.5 + 0.2,
+  size: seededRandom(i * 17 + 5)() * 1 + 0.3,
+  delay: seededRandom(i * 23 + 7)() * 6,
+  duration: seededRandom(i * 29 + 11)() * 4 + 3,
+  opacity: seededRandom(i * 31 + 13)() * 0.15 + 0.05,
 }))
 
 export default function StarField() {

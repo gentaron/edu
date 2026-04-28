@@ -305,7 +305,7 @@
   border-left: 2px solid rgba(124, 58, 237, 0.4);
 }
 
-/* Story prose styling */
+/* Story prose styling — legacy */
 .prose-story p:first-of-type::first-letter {
   font-size: 1.3em;
   font-weight: 700;
@@ -317,6 +317,72 @@
 
 .prose-story p {
   position: relative;
+}
+
+/* ═══════════════════════════════════════════
+   Novel Prose — sophisticated reading experience
+   ═══════════════════════════════════════════ */
+.novel-prose {
+  max-width: 100%;
+  font-feature-settings:
+    "pkna" 1,
+    "palt" 0.9;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.novel-paragraph {
+  font-size: 15px;
+  line-height: 2;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.72);
+  text-align: justify;
+  text-justify: inter-ideograph;
+  margin-bottom: 1.6em;
+  font-weight: 300;
+  transition: color 0.2s ease;
+}
+
+.novel-paragraph:hover {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* Drop cap for the first paragraph */
+.novel-prose .novel-paragraph:first-of-type::first-letter {
+  font-size: 2.2em;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.55);
+  float: left;
+  margin-right: 0.06em;
+  margin-top: 0.05em;
+  line-height: 1;
+  font-feature-settings: "pkna" 0;
+}
+
+/* Indent for Japanese text paragraphs */
+:root[lang="ja"] .novel-paragraph,
+.novel-prose .novel-paragraph + .novel-paragraph {
+  text-indent: 1em;
+}
+
+/* Override indent after scene breaks */
+.novel-prose .flex + .novel-paragraph,
+.novel-prose h2 + .novel-paragraph {
+  text-indent: 0;
+}
+
+/* Dialogue lines — slightly different styling */
+.novel-paragraph:has(> :only-child) {
+  /* Fallback */
+}
+
+/* Subtle reading comfort */
+@media (min-width: 640px) {
+  .novel-paragraph {
+    font-size: 16px;
+    line-height: 2.1;
+    letter-spacing: 0.05em;
+  }
 }
 
 /* Reading progress bar */

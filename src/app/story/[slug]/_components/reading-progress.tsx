@@ -24,10 +24,10 @@ export default function ReadingProgress() {
   }, [])
 
   return (
-    <div className="fixed top-[56px] left-0 right-0 z-50 h-0.5 bg-cosmic-border/30">
+    <div className="fixed top-[56px] left-0 right-0 z-50 h-px bg-white/3">
       <div
         ref={barRef}
-        className="h-full bg-gradient-to-r from-nebula-purple via-electric-blue to-nebula-purple w-0 transition-[width] duration-100"
+        className="h-full bg-gradient-to-r from-white/0 via-white/20 to-white/0 w-0 transition-[width] duration-150"
       />
     </div>
   )

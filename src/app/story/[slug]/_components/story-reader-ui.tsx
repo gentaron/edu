@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import {
@@ -12,8 +12,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Library,
+  Feather,
 } from "lucide-react"
-import { type StoryMeta, type ChapterMeta, getStoriesForEntry, getStoryBySlug, getStoryTitle } from "@/lib/stories"
+import {
+  type StoryMeta,
+  type ChapterMeta,
+  getStoriesForEntry,
+  getStoryBySlug,
+  getStoryTitle,
+} from "@/lib/stories"
 import { type Lang, tl } from "@/lib/lang"
 import ReadingProgress from "./reading-progress"
 import StarField from "./star-field"
@@ -59,30 +66,56 @@ function toRoman(n: number): string {
   return result
 }
 
+/* ─── Detect scene breaks / section markers ─── */
 function isSceneBreak(text: string): boolean {
   const t = text.trim()
   return (
     t.startsWith("─") ||
-    t.startsWith("─") ||
+    t.startsWith("━") ||
     t.startsWith("==") ||
     t.startsWith("**") ||
     t.startsWith("##") ||
     t.startsWith("＊") ||
-    t.length < 5
+    (t.length < 5 && !t.match(/[a-zA-Z\u3040-\u30ff\u4e00-\u9faf]/))
+  )
+}
+
+/* ─── Detect chapter-like headings within text ─── */
+function isChapterHeading(text: string): boolean {
+  const t = text.trim()
+  // Very short lines (1-15 chars) that don't end with typical sentence punctuation
+  return (
+    t.length > 0 &&
+    t.length <= 20 &&
+    !t.endsWith("。") &&
+    !t.endsWith(".") &&
+    !t.endsWith("！") &&
+    !t.endsWith("？") &&
+    !t.endsWith("!") &&
+    !t.endsWith("?") &&
+    !t.endsWith("」") &&
+    !t.endsWith("'") &&
+    !t.endsWith('"') &&
+    !t.endsWith(")") &&
+    !t.startsWith("「") &&
+    !t.startsWith('"') &&
+    !t.startsWith("(") &&
+    !t.startsWith("「") &&
+    t !== ""
   )
 }
 
 /* ─── Lang Toggle ─── */
 function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
   return (
-    <div className="flex items-center border border-cosmic-border/40 rounded-lg overflow-hidden shrink-0">
+    <div className="flex items-center border border-white/10 rounded-full overflow-hidden shrink-0 backdrop-blur-md bg-white/5">
       <button
         type="button"
         onClick={() => setLang("ja")}
-        className={`px-2.5 py-1 text-[11px] font-bold transition-colors ${
+        className={`px-3 py-1 text-[11px] font-semibold tracking-wider uppercase transition-all duration-300 ${
           lang === "ja"
-            ? "bg-nebula-purple text-white"
-            : "text-cosmic-muted hover:text-cosmic-text"
+            ? "bg-white/15 text-white shadow-inner"
+            : "text-white/40 hover:text-white/70"
         }`}
       >
         JP
@@ -90,10 +123,10 @@ function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void 
       <button
         type="button"
         onClick={() => setLang("en")}
-        className={`px-2.5 py-1 text-[11px] font-bold transition-colors ${
+        className={`px-3 py-1 text-[11px] font-semibold tracking-wider uppercase transition-all duration-300 ${
           lang === "en"
-            ? "bg-nebula-purple text-white"
-            : "text-cosmic-muted hover:text-cosmic-text"
+            ? "bg-white/15 text-white shadow-inner"
+            : "text-white/40 hover:text-white/70"
         }`}
       >
         EN
@@ -124,26 +157,24 @@ function RelatedStoriesSection({
 
   if (stories.length === 0) return null
   return (
-    <div className="mt-12 pt-8 border-t border-cosmic-border/30">
-      <h3 className="text-sm font-bold text-cosmic-muted uppercase tracking-wider mb-5 flex items-center gap-2">
-        <BookOpen className="w-4 h-4 text-nebula-purple" />
+    <div className="mt-16 pt-10 border-t border-white/8">
+      <h3 className="text-xs font-semibold text-white/30 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+        <BookOpen className="w-3.5 h-3.5" />
         {tl("関連作品", "Related Stories", lang)}
       </h3>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1.5">
         {stories.map(
           (s) =>
             s && (
               <Link
                 key={s.slug}
                 href={`/story/${s.slug}`}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl border border-nebula-purple/15 bg-nebula-purple/5 text-sm text-nebula-purple/90 hover:bg-nebula-purple/10 hover:border-nebula-purple/30 transition-all duration-200 group"
+                className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-white/50 hover:text-white/80 hover:bg-white/5 transition-all duration-300 group"
               >
-                <BookOpen className="w-4 h-4 shrink-0" />
+                <BookOpen className="w-3.5 h-3.5 shrink-0 opacity-40" />
                 <div className="flex-1 min-w-0">
-                  <span className="truncate block group-hover:text-electric-blue transition-colors">
-                    {getStoryTitle(s, lang)}
-                  </span>
-                  {s.era && <span className="text-[10px] text-cosmic-muted">{s.era}</span>}
+                  <span className="truncate block">{getStoryTitle(s, lang)}</span>
+                  {s.era && <span className="text-[10px] text-white/25">{s.era}</span>}
                 </div>
                 <ChevronRight className="w-3 h-3 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Link>
@@ -181,53 +212,72 @@ export function StoryReaderUI({
   next,
   relatedEntries,
 }: StoryReaderUIProps) {
-  const [lang, setLangState] = useState<Lang>("ja")
-
-  useEffect(() => {
-    const saved = localStorage.getItem("edu-lang") as Lang | null
-    if (saved === "en" || saved === "ja") setLangState(saved)
-  }, [])
+  const [lang, setLangState] = useState<Lang>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("edu-lang") as Lang | null
+      if (saved === "en" || saved === "ja") return saved
+    }
+    return "ja"
+  })
 
   const setLang = (l: Lang) => {
     setLangState(l)
     localStorage.setItem("edu-lang", l)
   }
 
-  const chapterLabel =
-    chapter
-      ? tl(
-          `第${toRoman(chapter.id)}章 ${chapter.titleJa}`,
-          `Chapter ${toRoman(chapter.id)} · ${chapter.titleEn}`,
-          lang
-        )
-      : ""
+  const paragraphs = lang === "ja" ? paragraphsJa : paragraphsEn
+
+  /* Detect section breaks for chapter-like structure */
+  const sections = useMemo(() => {
+    const result: Array<{
+      type: "heading" | "scene" | "paragraph"
+      content: string
+      index: number
+    }> = []
+    paragraphs.forEach((p, i) => {
+      if (isSceneBreak(p)) {
+        result.push({ type: "scene", content: p, index: i })
+      } else if (isChapterHeading(p) && i > 0 && isSceneBreak(paragraphs[i - 1])) {
+        result.push({ type: "heading", content: p, index: i })
+      } else {
+        result.push({ type: "paragraph", content: p, index: i })
+      }
+    })
+    return result
+  }, [paragraphs])
+
+  const chapterLabel = chapter
+    ? tl(
+        `第${toRoman(chapter.id)}章 ${chapter.titleJa}`,
+        `Chapter ${toRoman(chapter.id)} · ${chapter.titleEn}`,
+        lang
+      )
+    : ""
 
   return (
-    <div className="relative min-h-screen bg-cosmic-dark">
+    <div className="relative min-h-screen bg-[#0c0c0c]">
       <StarField />
       <ReadingProgress />
 
       {/* Top Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-cosmic-border/50">
-        <div className="max-w-3xl mx-auto px-4">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0c0c0c]/80 backdrop-blur-xl border-b border-white/5">
+        <div className="max-w-[680px] mx-auto px-6">
           <div className="flex items-center justify-between h-14 gap-3">
             {/* Left: breadcrumb */}
             <div className="flex items-center gap-3 min-w-0 flex-1">
               <Link
                 href="/story"
-                className="flex items-center gap-2 text-cosmic-muted hover:text-electric-blue transition-colors shrink-0"
+                className="flex items-center gap-2 text-white/30 hover:text-white/60 transition-colors shrink-0"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span className="text-xs hidden sm:inline">Story</span>
+                <span className="text-[11px] hidden sm:inline tracking-wider uppercase">Story</span>
               </Link>
-              <span className="text-cosmic-border">/</span>
+              <span className="text-white/10">/</span>
               <div className="flex items-center gap-1.5 min-w-0">
                 {chapter && (
-                  <span className="text-[10px] text-cosmic-muted shrink-0">
-                    {toRoman(chapter.id)}
-                  </span>
+                  <span className="text-[10px] text-white/25 shrink-0">{toRoman(chapter.id)}</span>
                 )}
-                <span className="text-xs text-cosmic-muted truncate">
+                <span className="text-[11px] text-white/30 truncate">
                   {chapter ? tl(chapter.titleJa, chapter.titleEn, lang) : ""}
                 </span>
               </div>
@@ -239,19 +289,19 @@ export function StoryReaderUI({
               {prev && (
                 <Link
                   href={`/story/${prev.slug}`}
-                  className="w-7 h-7 rounded-lg bg-cosmic-surface/50 border border-cosmic-border/30 flex items-center justify-center text-cosmic-muted hover:text-electric-blue hover:border-electric-blue/30 transition-colors"
+                  className="w-7 h-7 rounded-full bg-white/5 border border-white/8 flex items-center justify-center text-white/30 hover:text-white/60 hover:border-white/15 transition-all duration-300"
                   title={prev.title}
                 >
-                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <ChevronLeft className="w-3 h-3" />
                 </Link>
               )}
               {next && (
                 <Link
                   href={`/story/${next.slug}`}
-                  className="w-7 h-7 rounded-lg bg-cosmic-surface/50 border border-cosmic-border/30 flex items-center justify-center text-cosmic-muted hover:text-electric-blue hover:border-electric-blue/30 transition-colors"
+                  className="w-7 h-7 rounded-full bg-white/5 border border-white/8 flex items-center justify-center text-white/30 hover:text-white/60 hover:border-white/15 transition-all duration-300"
                   title={next.title}
                 >
-                  <ChevronRight className="w-3.5 h-3.5" />
+                  <ChevronRight className="w-3 h-3" />
                 </Link>
               )}
             </div>
@@ -259,42 +309,40 @@ export function StoryReaderUI({
         </div>
       </nav>
 
-      <main className="relative z-10 pt-24 pb-20 px-4">
-        <div className="max-w-2xl mx-auto">
+      <main className="relative z-10 pt-28 pb-24 px-6">
+        <div className="max-w-[680px] mx-auto">
           {/* Chapter Indicator */}
           {chapter && (
-            <div className="mb-8 flex items-center gap-2">
+            <div className="mb-10 flex items-center gap-3">
               <Link
                 href="/story"
-                className="inline-flex items-center gap-1.5 text-[11px] font-medium text-cosmic-muted bg-cosmic-surface/50 border border-cosmic-border/30 rounded-full px-3 py-1 hover:text-electric-blue hover:border-electric-blue/30 transition-colors"
+                className="inline-flex items-center gap-2 text-[10px] font-medium text-white/25 bg-white/3 border border-white/6 rounded-full px-4 py-1.5 hover:text-white/50 hover:border-white/12 transition-all duration-300 tracking-wider uppercase"
               >
                 <Library className="w-3 h-3" />
                 {chapterLabel}
               </Link>
-              <span className="text-[10px] text-cosmic-muted">
+              <span className="text-[10px] text-white/20 tabular-nums">
                 {storyIndex + 1} / {chapterStories.length}
               </span>
             </div>
           )}
 
           {/* Story Header */}
-          <header className="mb-12">
+          <header className="mb-16">
             {chapter && (
-              <div className={`h-0.5 w-16 mb-6 bg-gradient-to-r ${chapter.color} rounded-full`} />
+              <div
+                className={`h-px w-12 mb-8 bg-gradient-to-r ${chapter.color} opacity-40 rounded-full`}
+              />
             )}
 
-            <h1 className="text-2xl sm:text-3xl font-black text-cosmic-text mb-3 leading-tight tracking-tight">
+            <h1 className="text-2xl sm:text-[28px] font-extralight text-white/90 mb-4 leading-[1.4] tracking-tight">
               {getStoryTitle(story, lang)}
             </h1>
 
-            {story.label !== story.title && (
-              <p className="text-xs text-cosmic-muted mb-4">{story.label}</p>
-            )}
-
             {story.era && (
               <div className="flex items-center gap-2 mb-6">
-                <Clock className="w-3.5 h-3.5 text-cosmic-muted" />
-                <span className="text-xs text-cosmic-muted">{story.era}</span>
+                <Clock className="w-3 h-3 text-white/20" />
+                <span className="text-[11px] text-white/25 tracking-wider">{story.era}</span>
               </div>
             )}
 
@@ -304,9 +352,9 @@ export function StoryReaderUI({
                 <Link
                   key={entry.id}
                   href={`/wiki/${encodeURIComponent(entry.id)}`}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-full border border-nebula-purple/20 bg-nebula-purple/5 text-nebula-purple/80 hover:bg-nebula-purple/15 hover:border-nebula-purple/40 transition-all duration-200"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium rounded-full border border-white/6 bg-white/3 text-white/40 hover:text-white/60 hover:border-white/12 transition-all duration-300"
                 >
-                  <div className="w-5 h-5 rounded-full overflow-hidden border border-nebula-purple/30 bg-cosmic-dark/60 flex items-center justify-center shrink-0">
+                  <div className="w-5 h-5 rounded-full overflow-hidden border border-white/8 bg-white/5 flex items-center justify-center shrink-0">
                     {entryImageMap[entry.name] ? (
                       <Image
                         src={entryImageMap[entry.name]}
@@ -316,7 +364,7 @@ export function StoryReaderUI({
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <Users className="w-3 h-3 text-nebula-purple/60" />
+                      <Users className="w-2.5 h-2.5 text-white/20" />
                     )}
                   </div>
                   {entry.name}
@@ -325,17 +373,17 @@ export function StoryReaderUI({
             </div>
 
             {/* Decorative divider */}
-            <div className="mt-8 flex items-center gap-3">
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-cosmic-border/40 to-transparent" />
-              <BookOpen className="w-3 h-3 text-cosmic-border/50" />
-              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-cosmic-border/40 to-transparent" />
+            <div className="mt-10 flex items-center gap-4">
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+              <Feather className="w-3 h-3 text-white/10" />
+              <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
             </div>
           </header>
 
           {/* Story Body */}
-          <article className="prose-story">
+          <article className="novel-prose">
             {fetchFailed ? (
-              <p className="text-sm text-cosmic-muted/70 text-center py-12">
+              <p className="text-sm text-white/30 text-center py-16">
                 {tl(
                   "この作品は現在読み込みできません。後ほど再度お試しください。",
                   "This story is currently unavailable. Please try again later.",
@@ -343,29 +391,44 @@ export function StoryReaderUI({
                 )}
               </p>
             ) : (
-              (lang === "ja" ? paragraphsJa : paragraphsEn).map((p, i) => (
-                <div key={i} className="mb-6">
-                  {isSceneBreak(p) ? (
-                    <div className="flex items-center justify-center py-4">
-                      <div className="w-12 h-px bg-nebula-purple/30" />
-                      <div className="w-1.5 h-1.5 rounded-full bg-nebula-purple/40 mx-3" />
-                      <div className="w-12 h-px bg-nebula-purple/30" />
+              sections.map((section) => {
+                if (section.type === "scene") {
+                  return (
+                    <div key={section.index} className="flex items-center justify-center py-10">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-px bg-gradient-to-r from-transparent to-white/10" />
+                        <div className="w-1 h-1 rounded-full bg-white/15" />
+                        <div className="w-24 h-px bg-white/10" />
+                        <div className="w-1 h-1 rounded-full bg-white/15" />
+                        <div className="w-16 h-px bg-gradient-to-l from-transparent to-white/10" />
+                      </div>
                     </div>
-                  ) : (
-                    <p className="text-sm sm:text-base text-cosmic-text/85 leading-[2] text-justify indent-4">
-                      {p.trim()}
-                    </p>
-                  )}
-                </div>
-              ))
+                  )
+                }
+                if (section.type === "heading") {
+                  return (
+                    <h2
+                      key={section.index}
+                      className="text-base sm:text-lg font-extralight text-white/70 mt-12 mb-6 tracking-wide text-center"
+                    >
+                      {section.content.trim()}
+                    </h2>
+                  )
+                }
+                return (
+                  <p key={section.index} className="novel-paragraph">
+                    {section.content.trim()}
+                  </p>
+                )
+              })
             )}
           </article>
 
           {/* Story footer divider */}
-          <div className="mt-12 flex items-center gap-3">
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-cosmic-border/40 to-transparent" />
-            <BookOpen className="w-3 h-3 text-cosmic-border/50" />
-            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-cosmic-border/40 to-transparent" />
+          <div className="mt-16 flex items-center gap-4">
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+            <Feather className="w-3 h-3 text-white/10" />
+            <div className="flex-1 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
           </div>
 
           {/* Related Stories */}
@@ -376,20 +439,20 @@ export function StoryReaderUI({
           />
 
           {/* Chapter Navigation */}
-          <div className="mt-12 pt-8 border-t border-cosmic-border/30">
+          <div className="mt-16 pt-10 border-t border-white/8">
             <div className="flex items-center justify-between gap-4">
               {prev ? (
                 <Link
                   href={`/story/${prev.slug}`}
-                  className="flex-1 group p-4 rounded-xl border border-cosmic-border/20 bg-cosmic-surface/30 hover:bg-cosmic-surface/60 hover:border-nebula-purple/30 transition-all duration-200"
+                  className="flex-1 group p-5 rounded-xl border border-white/5 bg-white/2 hover:bg-white/4 hover:border-white/10 transition-all duration-300"
                 >
-                  <div className="flex items-center gap-2 mb-1">
-                    <ArrowLeft className="w-3 h-3 text-cosmic-muted group-hover:text-electric-blue transition-colors" />
-                    <span className="text-[10px] text-cosmic-muted uppercase tracking-wider">
+                  <div className="flex items-center gap-2 mb-2">
+                    <ArrowLeft className="w-3 h-3 text-white/20 group-hover:text-white/50 transition-colors" />
+                    <span className="text-[10px] text-white/20 uppercase tracking-[0.15em]">
                       {tl("前の作品", "Previous", lang)}
                     </span>
                   </div>
-                  <p className="text-xs font-bold text-cosmic-text group-hover:text-electric-blue transition-colors line-clamp-2">
+                  <p className="text-xs font-light text-white/50 group-hover:text-white/70 transition-colors line-clamp-2 leading-relaxed">
                     {getStoryTitle(prev, lang)}
                   </p>
                 </Link>
@@ -400,15 +463,15 @@ export function StoryReaderUI({
               {next ? (
                 <Link
                   href={`/story/${next.slug}`}
-                  className="flex-1 group p-4 rounded-xl border border-cosmic-border/20 bg-cosmic-surface/30 hover:bg-cosmic-surface/60 hover:border-nebula-purple/30 transition-all duration-200 text-right"
+                  className="flex-1 group p-5 rounded-xl border border-white/5 bg-white/2 hover:bg-white/4 hover:border-white/10 transition-all duration-300 text-right"
                 >
-                  <div className="flex items-center justify-end gap-2 mb-1">
-                    <span className="text-[10px] text-cosmic-muted uppercase tracking-wider">
+                  <div className="flex items-center justify-end gap-2 mb-2">
+                    <span className="text-[10px] text-white/20 uppercase tracking-[0.15em]">
                       {tl("次の作品", "Next", lang)}
                     </span>
-                    <ArrowRight className="w-3 h-3 text-cosmic-muted group-hover:text-electric-blue transition-colors" />
+                    <ArrowRight className="w-3 h-3 text-white/20 group-hover:text-white/50 transition-colors" />
                   </div>
-                  <p className="text-xs font-bold text-cosmic-text group-hover:text-electric-blue transition-colors line-clamp-2">
+                  <p className="text-xs font-light text-white/50 group-hover:text-white/70 transition-colors line-clamp-2 leading-relaxed">
                     {getStoryTitle(next, lang)}
                   </p>
                 </Link>
@@ -419,20 +482,20 @@ export function StoryReaderUI({
           </div>
 
           {/* Back links */}
-          <div className="mt-10 text-center">
+          <div className="mt-12 text-center">
             <Link
               href="/story"
-              className="inline-flex items-center gap-2 text-xs text-electric-blue hover:underline transition-colors"
+              className="inline-flex items-center gap-2 text-[11px] text-white/20 hover:text-white/40 transition-colors tracking-wider uppercase"
             >
               <ArrowLeft className="w-3 h-3" />
               {tl("Story Archive に戻る", "Back to Story Archive", lang)}
             </Link>
             {relatedEntries.length > 0 && (
               <>
-                <span className="text-cosmic-border mx-3">|</span>
+                <span className="text-white/8 mx-3">|</span>
                 <Link
                   href={`/wiki/${encodeURIComponent(relatedEntries[0].id)}`}
-                  className="inline-flex items-center gap-1.5 text-xs text-cosmic-muted hover:text-electric-blue hover:underline transition-colors"
+                  className="inline-flex items-center gap-1.5 text-[11px] text-white/15 hover:text-white/35 transition-colors"
                 >
                   {tl(
                     `「${relatedEntries[0].name}」のWiki`,
@@ -447,15 +510,17 @@ export function StoryReaderUI({
       </main>
 
       {/* Footer */}
-      <footer className="relative border-t border-cosmic-border/50 py-8 px-4">
-        <div className="max-w-3xl mx-auto text-center space-y-2">
-          <div className="w-16 h-0.5 mx-auto bg-gradient-to-r from-transparent via-nebula-purple to-transparent" />
-          <p className="text-xs text-cosmic-muted">EDU Stories — Eternal Dominion Universe</p>
+      <footer className="relative border-t border-white/5 py-10 px-6">
+        <div className="max-w-[680px] mx-auto text-center space-y-3">
+          <div className="w-12 h-px mx-auto bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+          <p className="text-[10px] text-white/15 tracking-[0.15em] uppercase">
+            EDU Stories — Eternal Dominion Universe
+          </p>
           <Link
             href="/story"
-            className="inline-flex items-center gap-1.5 text-xs text-electric-blue hover:underline transition-colors"
+            className="inline-flex items-center gap-1.5 text-[10px] text-white/15 hover:text-white/30 transition-colors tracking-wider uppercase"
           >
-            <ArrowLeft className="w-3 h-3" />
+            <ArrowLeft className="w-2.5 h-2.5" />
             {tl("Story Archive に戻る", "Back to Story Archive", lang)}
           </Link>
         </div>
