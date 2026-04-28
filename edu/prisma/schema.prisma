@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  title     String
+  content   String?
+  published Boolean  @default(false)
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ═══ EDU Card Game ═══
+
+model Card {
+  id          String  @id @default(cuid())
+  name        String
+  type        String  // "character" | "event" | "location" | "tech"
+  cost        Int     @default(0)
+  power       Int     @default(0)
+  description String
+  loreRef     String? // e.g. "IRIS_1" → lore/IRIS_1.txt
+  imageUrl    String?
+  decks       DeckCard[]
+}
+
+model Deck {
+  id     String     @id @default(cuid())
+  name   String
+  ownerId String?
+  cards  DeckCard[]
+  matches MatchPlayer[]
+}
+
+model DeckCard {
+  id     String @id @default(cuid())
+  deckId String
+  cardId String
+  count  Int    @default(1)
+  deck   Deck   @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  card   Card   @relation(fields: [cardId], references: [id])
+
+  @@unique([deckId, cardId])
+}
+
+model Match {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  rngSeed   String
+  status    String      @default("waiting") // "waiting" | "playing" | "finished"
+  winnerId  String?
+  players   MatchPlayer[]
+  logs      TurnLog[]
+}
+
+model MatchPlayer {
+  id          String @id @default(cuid())
+  matchId     String
+  userId      String? // nullable for demo / AI
+  deckId      String
+  initialHand String // JSON array of card IDs
+  match       Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  deck        Deck   @relation(fields: [deckId], references: [id])
+}
+
+model TurnLog {
+  id         String @id @default(cuid())
+  matchId    String
+  turnNumber Int
+  action     String // "draw" | "play" | "attack" | "end_turn" | "ability"
+  payloadJson String
+  match      Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+}
+
+// ═══ PvE Card Game ═══
+
+model PveCard {
+  id         String  @id @default(cuid())
+  name       String
+  nameEn     String?
+  attack     Int     @default(0)
+  defense    Int     @default(0)
+  cost       Int     @default(1)
+  effect     String?   // 効果テキスト
+  imageUrl   String
+  flavorText String?
+  loreSource String?   // 参照元: "IRIS_1" など
+}
+
+model Enemy {
+  id             String  @id @default(cuid())
+  name           String
+  nameEn         String?
+  maxHp          Int
+  attack         Int
+  imageUrl       String
+  description    String?
+  attackPattern  String  // JSON: [{phase, dmg, message, special}]
+  reward         String?
+}
