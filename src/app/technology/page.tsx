@@ -8,13 +8,13 @@ import { TECH_DATA } from "@/lib/tech-data"
 
 export default function TechnologyPage() {
   return (
-    <div className="relative min-h-screen bg-cosmic-dark">
+    <div className="relative min-h-screen bg-edu-bg">
       <StarField />
       <div className="relative z-10">
         <PageHeader
           icon={<Atom className="w-6 h-6 text-cyan-400" />}
           title={
-            <Link href="/wiki" className="text-cosmic-gradient hover:underline">
+            <Link href="/wiki" className="text-edu-text hover:underline">
               技術体系 — Physics-Consistent Technology
             </Link>
           }
@@ -24,11 +24,11 @@ export default function TechnologyPage() {
         <RevealSection>
           <div className="max-w-6xl mx-auto px-4 pb-20">
             {/* 概説 */}
-            <div className="glass-card rounded-xl p-6 mb-8">
-              <h2 className="text-lg font-bold text-cosmic-text mb-4 flex items-center gap-2">
+            <div className="edu-card rounded-xl p-6 mb-8">
+              <h2 className="text-lg font-bold text-edu-text mb-4 flex items-center gap-2">
                 <Atom className="w-5 h-5 text-cyan-400" /> E16技術体系とは
               </h2>
-              <div className="space-y-3 text-sm text-cosmic-muted leading-relaxed">
+              <div className="space-y-3 text-sm text-edu-muted leading-relaxed">
                 <p>
                   E16連星系の技術体系は、
                   <span className="text-cyan-400 font-medium">実在の物理学理論</span>
@@ -36,7 +36,7 @@ export default function TechnologyPage() {
                   世界観の技術的側面に科学的な厚みと信憑性が与えられている。
                 </p>
                 <p>
-                  技術体系は<span className="text-cosmic-text font-medium">次元ピラミッド</span>
+                  技術体系は<span className="text-edu-text font-medium">次元ピラミッド</span>
                   として4層構造で整理されている。
                   <span className="text-green-400 font-medium">Tier Δ</span>（地球
                   AD2026）が基盤となり、<span className="text-blue-400 font-medium">Tier Ε</span>
@@ -54,10 +54,10 @@ export default function TechnologyPage() {
               {TECH_DATA.map((tech) => (
                 <div
                   key={tech.id}
-                  className={`glass-card glass-card-hover rounded-xl border ${tech.borderColor} overflow-hidden transition-all duration-300`}
+                  className={`edu-card rounded-xl border ${tech.borderColor} overflow-hidden transition-all duration-300`}
                 >
                   <details className="group">
-                    <summary className="cursor-pointer px-6 py-5 hover:bg-cosmic-surface/50 transition-colors select-none">
+                    <summary className="cursor-pointer px-6 py-5 hover:bg-edu-surface/50 transition-colors select-none">
                       <div className="flex items-start gap-4">
                         <div
                           className={`text-2xl font-black ${tech.color} mt-0.5 shrink-0 w-10 h-10 flex items-center justify-center rounded-lg ${tech.bgGlow} border ${tech.borderColor}`}
@@ -67,7 +67,7 @@ export default function TechnologyPage() {
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-wrap items-center gap-2 mb-1">
                             <h3 className={`text-base font-bold ${tech.color}`}>{tech.name}</h3>
-                            <span className="text-xs text-cosmic-muted font-mono">
+                            <span className="text-xs text-edu-muted font-mono">
                               {tech.nameEn}
                             </span>
                             <span
@@ -76,34 +76,34 @@ export default function TechnologyPage() {
                               {tech.tag}
                             </span>
                           </div>
-                          <p className="text-xs text-cosmic-muted line-clamp-2">
+                          <p className="text-xs text-edu-muted line-clamp-2">
                             {tech.physics.slice(0, 120)}...
                           </p>
                         </div>
-                        <ChevronDown className="w-5 h-5 text-cosmic-muted shrink-0 mt-1 transition-transform group-open:rotate-180" />
+                        <ChevronDown className="w-5 h-5 text-edu-muted shrink-0 mt-1 transition-transform group-open:rotate-180" />
                       </div>
                     </summary>
                     <div className="px-6 pb-6">
-                      <div className="border-t border-cosmic-border/30 pt-4 space-y-4">
+                      <div className="border-t border-edu-border/30 pt-4 space-y-4">
                         <div>
-                          <h4 className="text-xs font-bold text-cosmic-text mb-2 flex items-center gap-1.5">
-                            <Zap className="w-3 h-3 text-gold-accent" /> 物理学的基盤
+                          <h4 className="text-xs font-bold text-edu-text mb-2 flex items-center gap-1.5">
+                            <Zap className="w-3 h-3 text-edu-accent" /> 物理学的基盤
                           </h4>
-                          <p className="text-sm text-cosmic-text/85 leading-relaxed">
+                          <p className="text-sm text-edu-text/85 leading-relaxed">
                             {tech.physics}
                           </p>
                         </div>
                         <div>
-                          <h4 className="text-xs font-bold text-cosmic-text mb-2 flex items-center gap-1.5">
-                            <Globe2 className="w-3 h-3 text-electric-blue" /> 応用・実績
+                          <h4 className="text-xs font-bold text-edu-text mb-2 flex items-center gap-1.5">
+                            <Globe2 className="w-3 h-3 text-edu-accent2" /> 応用・実績
                           </h4>
                           <ul className="space-y-1.5">
                             {tech.applications.map((app, idx) => (
                               <li
                                 key={idx}
-                                className="flex items-start gap-2 text-sm text-cosmic-muted"
+                                className="flex items-start gap-2 text-sm text-edu-muted"
                               >
-                                <span className="text-electric-blue mt-0.5 shrink-0">▸</span>
+                                <span className="text-edu-accent2 mt-0.5 shrink-0">▸</span>
                                 {app}
                               </li>
                             ))}
@@ -117,8 +117,8 @@ export default function TechnologyPage() {
             </div>
 
             {/* Dimension Pyramid Diagram */}
-            <div className="glass-card glass-card-hover rounded-xl border border-cyan-500/20 p-6 mt-6 transition-all duration-300">
-              <h3 className="text-base font-bold text-cosmic-gradient mb-4 flex items-center gap-2">
+            <div className="edu-card rounded-xl border border-cyan-500/20 p-6 mt-6 transition-all duration-300">
+              <h3 className="text-base font-bold text-edu-text mb-4 flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
                 次元ピラミッド — Dimension Pyramid (4-Layer Structure)
               </h3>
@@ -158,7 +158,7 @@ export default function TechnologyPage() {
                 ].map((layer) => (
                   <div
                     key={layer.tier}
-                    className={`${layer.width} border ${layer.color} rounded-lg p-3 transition-all duration-300 hover:scale-[1.02]`}
+                    className={`${layer.width} border ${layer.color} rounded-lg p-3 transition-all duration-300`}
                   >
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-xs font-black">{layer.tier}</span>
@@ -172,11 +172,11 @@ export default function TechnologyPage() {
           </div>
         </RevealSection>
 
-        <footer className="relative border-t border-cosmic-border/50 py-8 px-4">
+        <footer className="relative border-t border-edu-border/50 py-8 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Link
               href="/"
-              className="text-xs text-cosmic-muted hover:text-gold-accent transition-colors"
+              className="text-xs text-edu-muted hover:text-edu-accent transition-colors"
             >
               ← トップページに戻る
             </Link>

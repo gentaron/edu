@@ -45,7 +45,7 @@ export const CHAPTERS: ChapterMeta[] = [
       "英雄たちが次々と覚醒し、ギガポリスの舞台に立つ時代。ネブラ、ジェン、レイラ、弦太郎 — 異なる道を歩む彼らの物語が交錯する。",
     descriptionEn:
       "Heroes rise one by one to take the stage of Gigapolis. The paths of Nebura, Jen, Layla, and Gentaro cross in an age of awakening power and converging destinies.",
-    color: "from-nebula-purple to-violet-600",
+    color: "from-edu-accent2 to-violet-600",
     gradient: "linear-gradient(135deg, rgba(124,58,237,0.15) 0%, rgba(139,92,246,0.08) 100%)",
   },
   {
@@ -69,7 +69,7 @@ export const CHAPTERS: ChapterMeta[] = [
       "アイリスをはじめとする新世代の英雄が、星々の歴史を受け継ぎ新たな章を開く。カステリア、シトラ、ミュー — 個性豊かな物語が紡がれる。",
     descriptionEn:
       "A new generation led by Iris inherits the history of the stars and opens a fresh chapter. Casteria, Sitra, and Myu each weave their own distinct and vibrant tale.",
-    color: "from-electric-blue to-cyan-500",
+    color: "from-edu-accent2 to-cyan-500",
     gradient: "linear-gradient(135deg, rgba(56,189,248,0.15) 0%, rgba(6,182,212,0.08) 100%)",
   },
   {

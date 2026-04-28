@@ -3,6 +3,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ═══════════════════════════════════════════
+   EDU Design System — ona.la-inspired minimalism
+   Dark navy base + gold accent + muted typography
+   ═══════════════════════════════════════════ */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -41,56 +45,54 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* EDU Custom Colors */
-  --color-cosmic-dark: #0a0a1a;
-  --color-cosmic-deep: #0d0d2b;
-  --color-cosmic-surface: #141432;
-  --color-cosmic-card: #1a1a3e;
-  --color-cosmic-border: #2a2a5e;
-  --color-nebula-purple: #7c3aed;
-  --color-nebula-purple-dim: #5b21b6;
-  --color-electric-blue: #38bdf8;
-  --color-electric-blue-dim: #0ea5e9;
-  --color-gold-accent: #f59e0b;
-  --color-gold-dim: #d97706;
-  --color-cosmic-text: #e2e8f0;
-  --color-cosmic-muted: #94a3b8;
-  --color-star-glow: rgba(124, 58, 237, 0.3);
+  /* EDU Custom — Refined palette */
+  --color-edu-bg:        #0c0f1a;
+  --color-edu-surface:   #151a2e;
+  --color-edu-card:      #1a2038;
+  --color-edu-border:    #252d4a;
+  --color-edu-text:      #c8cdd8;
+  --color-edu-muted:     #6b7394;
+  --color-edu-accent:    #c8a44e;
+  --color-edu-accent2:   #5b6abf;
+  --color-edu-link:      #c8a44e;
+  --color-edu-link-dim:  #a08030;
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: #0a0a1a;
-  --foreground: #e2e8f0;
-  --card: #1a1a3e;
-  --card-foreground: #e2e8f0;
-  --popover: #1a1a3e;
-  --popover-foreground: #e2e8f0;
-  --primary: #7c3aed;
-  --primary-foreground: #f8fafc;
-  --secondary: #141432;
-  --secondary-foreground: #e2e8f0;
-  --muted: #141432;
-  --muted-foreground: #94a3b8;
-  --accent: #2a2a5e;
-  --accent-foreground: #e2e8f0;
-  --destructive: #ef4444;
-  --border: #2a2a5e;
-  --input: #2a2a5e;
-  --ring: #7c3aed;
-  --chart-1: #7c3aed;
-  --chart-2: #38bdf8;
-  --chart-3: #f59e0b;
-  --chart-4: #10b981;
-  --chart-5: #f43f5e;
-  --sidebar: #0d0d2b;
-  --sidebar-foreground: #e2e8f0;
-  --sidebar-primary: #7c3aed;
-  --sidebar-primary-foreground: #f8fafc;
-  --sidebar-accent: #141432;
-  --sidebar-accent-foreground: #e2e8f0;
-  --sidebar-border: #2a2a5e;
-  --sidebar-ring: #7c3aed;
+  --radius: 0.5rem;
+  --background:   #0c0f1a;
+  --foreground:   #c8cdd8;
+  --card:         #1a2038;
+  --card-foreground: #c8cdd8;
+  --popover:      #1a2038;
+  --popover-foreground: #c8cdd8;
+  --primary:      #5b6abf;
+  --primary-foreground: #e2e8f0;
+  --secondary:    #151a2e;
+  --secondary-foreground: #c8cdd8;
+  --muted:        #151a2e;
+  --muted-foreground: #6b7394;
+  --accent:       #252d4a;
+  --accent-foreground: #c8cdd8;
+  --destructive:  #ef4444;
+  --border:       #252d4a;
+  --input:        #252d4a;
+  --ring:         #5b6abf;
+  --chart-1:      #5b6abf;
+  --chart-2:      #c8a44e;
+  --chart-3:      #4ade80;
+  --chart-4:      #f87171;
+  --chart-5:      #38bdf8;
+  --sidebar:      #0e1120;
+  --sidebar-foreground: #c8cdd8;
+  --sidebar-primary: #5b6abf;
+  --sidebar-primary-foreground: #e2e8f0;
+  --sidebar-accent: #151a2e;
+  --sidebar-accent-foreground: #c8cdd8;
+  --sidebar-border: #252d4a;
+  --sidebar-ring: #5b6abf;
+
+  color-scheme: dark;
 }
 
 @layer base {
@@ -98,190 +100,58 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-cosmic-dark text-cosmic-text;
+    @apply bg-edu-bg text-edu-text antialiased;
+    font-feature-settings: "palt" 1, "kern" 1;
+    text-autospace: no-autospace;
+    line-break: strict;
+    text-spacing-trim: trim-start;
   }
   html {
     scroll-behavior: smooth;
   }
 }
 
-/* Scrollbar */
+/* ─── Scrollbar ─── */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a1a;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2a5e;
-  border-radius: 4px;
+  background: #252d4a;
+  border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7c3aed;
+  background: #3a4570;
 }
 
-/* Star field animation */
+/* ─── Minimal animations (ona.la: essentially none) ─── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 1;
-  }
+  0%, 100% { opacity: 0.15; }
+  50%      { opacity: 0.5; }
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes pulse-glow {
-  0%,
-  100% {
-    box-shadow:
-      0 0 20px rgba(124, 58, 237, 0.3),
-      0 0 60px rgba(124, 58, 237, 0.1);
-  }
-  50% {
-    box-shadow:
-      0 0 30px rgba(124, 58, 237, 0.5),
-      0 0 80px rgba(124, 58, 237, 0.2);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% center;
-  }
-  100% {
-    background-position: 200% center;
-  }
-}
-
-@keyframes scroll-bounce {
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateY(0) translateX(-50%);
-  }
-  40% {
-    transform: translateY(-8px) translateX(-50%);
-  }
-  60% {
-    transform: translateY(-4px) translateX(-50%);
-  }
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
 }
 
 .animate-twinkle {
-  animation: twinkle 3s ease-in-out infinite;
+  animation: twinkle 4s ease-in-out infinite;
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-.animate-shimmer {
-  background-size: 200% auto;
-  animation: shimmer 3s linear infinite;
-}
-
-.animate-scroll-bounce {
-  animation: scroll-bounce 2s ease-in-out infinite;
-}
-
-/* Glass morphism cards */
-.glass-card {
-  background: rgba(26, 26, 62, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(124, 58, 237, 0.2);
-}
-
-.glass-card-hover:hover {
-  background: rgba(26, 26, 62, 0.8);
-  border-color: rgba(124, 58, 237, 0.4);
-  box-shadow: 0 0 30px rgba(124, 58, 237, 0.15);
-}
-
-/* Cosmic text gradient */
-.text-cosmic-gradient {
-  background: linear-gradient(135deg, #7c3aed, #38bdf8, #f59e0b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.text-purple-gradient {
-  background: linear-gradient(135deg, #a78bfa, #7c3aed, #5b21b6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.text-blue-gradient {
-  background: linear-gradient(135deg, #38bdf8, #0ea5e9, #6366f1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Glow effects */
-.glow-purple {
-  box-shadow:
-    0 0 20px rgba(124, 58, 237, 0.4),
-    0 0 60px rgba(124, 58, 237, 0.1);
-}
-
-.glow-blue {
-  box-shadow:
-    0 0 20px rgba(56, 189, 248, 0.4),
-    0 0 60px rgba(56, 189, 248, 0.1);
-}
-
-.glow-gold {
-  box-shadow:
-    0 0 20px rgba(245, 158, 11, 0.4),
-    0 0 60px rgba(245, 158, 11, 0.1);
-}
-
-/* Consistency note special border */
-.consistency-border {
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  position: relative;
-}
-
-.consistency-border::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, #f59e0b, #7c3aed, #38bdf8, #f59e0b);
-  background-size: 300% 300%;
-  animation: shimmer 4s linear infinite;
-  z-index: -1;
-  border-radius: 0.75rem;
-}
-
-/* Section reveal animation */
+/* ─── Section reveal — minimal ─── */
 .reveal-section {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(12px);
   transition:
-    opacity 0.8s ease-out,
-    transform 0.8s ease-out;
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 }
 
 .reveal-section.visible {
@@ -289,34 +159,63 @@
   transform: translateY(0);
 }
 
-/* Navigation active indicator */
-.nav-active {
-  color: #38bdf8;
-  border-bottom: 2px solid #38bdf8;
+/* ─── Navigation ─── */
+.nav-link {
+  color: #6b7394;
+  transition: color 0.15s;
+}
+.nav-link:hover {
+  color: #c8a44e;
+}
+.nav-link.active {
+  color: #c8cdd8;
 }
 
-/* Timeline line */
-.timeline-line {
-  background: linear-gradient(to bottom, #7c3aed, #38bdf8, #f59e0b);
+/* ─── Cards — flat, no blur, no gradients ─── */
+.edu-card {
+  background: #1a2038;
+  border: 1px solid #252d4a;
+  border-radius: 0.5rem;
+  transition: border-color 0.2s, background 0.2s;
+}
+.edu-card:hover {
+  background: #1e2540;
+  border-color: #3a4570;
 }
 
-/* Faction tree connector */
-.faction-connector {
-  border-left: 2px solid rgba(124, 58, 237, 0.4);
+/* ─── Tags/Chips (ona.la style) ─── */
+.edu-tag {
+  display: inline-block;
+  padding: 0.2em 0.5em;
+  border-radius: 10%;
+  background-color: #252d4a;
+  font-size: x-small;
+  color: #c8a44e;
+  word-break: keep-all;
+  border: none;
 }
 
-/* Story prose styling — legacy */
-.prose-story p:first-of-type::first-letter {
-  font-size: 1.3em;
-  font-weight: 700;
-  color: rgba(167, 139, 250, 0.95);
-  float: left;
-  margin-right: 0.08em;
-  line-height: 1;
+/* ─── Links ─── */
+.edu-link {
+  color: #c8a44e;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.edu-link:hover {
+  color: #d4b45e;
 }
 
-.prose-story p {
-  position: relative;
+/* ─── Dividers ─── */
+.edu-divider {
+  border: none;
+  height: 1px;
+  background: #252d4a;
+}
+
+/* ─── Blockquotes ─── */
+.edu-blockquote {
+  padding-left: 0.5em;
+  border-left: 4px solid #252d4a;
 }
 
 /* ═══════════════════════════════════════════
@@ -324,9 +223,7 @@
    ═══════════════════════════════════════════ */
 .novel-prose {
   max-width: 100%;
-  font-feature-settings:
-    "pkna" 1,
-    "palt" 0.9;
+  font-feature-settings: "pkna" 1, "palt" 0.9;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -335,23 +232,17 @@
   font-size: 15px;
   line-height: 2;
   letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(200, 205, 216, 0.72);
   text-align: justify;
   text-justify: inter-ideograph;
   margin-bottom: 1.6em;
   font-weight: 300;
-  transition: color 0.2s ease;
 }
 
-.novel-paragraph:hover {
-  color: rgba(255, 255, 255, 0.82);
-}
-
-/* Drop cap for the first paragraph */
 .novel-prose .novel-paragraph:first-of-type::first-letter {
   font-size: 2.2em;
   font-weight: 300;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(200, 205, 216, 0.45);
   float: left;
   margin-right: 0.06em;
   margin-top: 0.05em;
@@ -359,24 +250,16 @@
   font-feature-settings: "pkna" 0;
 }
 
-/* Indent for Japanese text paragraphs */
 :root[lang="ja"] .novel-paragraph,
 .novel-prose .novel-paragraph + .novel-paragraph {
   text-indent: 1em;
 }
 
-/* Override indent after scene breaks */
 .novel-prose .flex + .novel-paragraph,
 .novel-prose h2 + .novel-paragraph {
   text-indent: 0;
 }
 
-/* Dialogue lines — slightly different styling */
-.novel-paragraph:has(> :only-child) {
-  /* Fallback */
-}
-
-/* Subtle reading comfort */
 @media (min-width: 640px) {
   .novel-paragraph {
     font-size: 16px;
@@ -385,147 +268,135 @@
   }
 }
 
-/* Reading progress bar */
-#reading-progress {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-/* Chapter section animations */
-@keyframes chapter-glow {
-  0%,
-  100% {
-    box-shadow: 0 0 0px transparent;
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(124, 58, 237, 0.08);
-  }
-}
-
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.5s ease-out forwards;
-}
-
-/* Scene break decoration */
+/* ─── Scene break ─── */
 .scene-break {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem 0;
 }
-
 .scene-break::before,
 .scene-break::after {
   content: "";
   flex: 1;
   height: 1px;
-  background: linear-gradient(to right, transparent, rgba(124, 58, 237, 0.3), transparent);
+  background: #252d4a;
 }
-
 .scene-break-dot {
-  width: 4px;
-  height: 4px;
+  width: 3px;
+  height: 3px;
   border-radius: 50%;
-  background: rgba(124, 58, 237, 0.4);
+  background: #3a4570;
   margin: 0 0.75rem;
 }
 
+/* ─── Reading progress ─── */
+#reading-progress {
+  background: #1a2038;
+}
+
 /* ═══════════════════════════════════════════
-   Card Rarity Visual System
+   Card Rarity Visual System — simplified
    ═══════════════════════════════════════════ */
-
-@keyframes glow-sr-border {
-  0%,
-  100% {
-    box-shadow:
-      0 0 8px rgba(251, 191, 36, 0.3),
-      0 0 20px rgba(251, 191, 36, 0.1);
-  }
-  50% {
-    box-shadow:
-      0 0 14px rgba(251, 191, 36, 0.5),
-      0 0 35px rgba(251, 191, 36, 0.2),
-      0 0 60px rgba(245, 158, 11, 0.08);
-  }
-}
-
-/* SR card: border glow only — no surface effects */
 .card-sr {
-  position: relative;
-  border: 2px solid rgba(251, 191, 36, 0.5);
-  animation: glow-sr-border 2.5s ease-in-out infinite;
+  border: 1px solid rgba(200, 164, 78, 0.5);
 }
 
-/* R card: blue gradient border + subtle glow */
 .card-r {
-  position: relative;
-  border: 2px solid rgba(56, 189, 248, 0.4);
-  box-shadow:
-    0 0 12px rgba(56, 189, 248, 0.15),
-    0 0 30px rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(91, 106, 191, 0.4);
 }
 
-/* C card: standard appearance */
 .card-c {
-  border: 1px solid rgba(42, 42, 94, 0.5);
+  border: 1px solid rgba(37, 45, 74, 0.8);
 }
 
-/* SR field slot: gold glow border */
 .field-sr {
-  border: 2px solid rgba(245, 158, 11, 0.5) !important;
-  box-shadow:
-    0 0 15px rgba(245, 158, 11, 0.25),
-    0 0 40px rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(200, 164, 78, 0.4) !important;
 }
 
-/* R field slot: blue accent border */
 .field-r {
-  border: 2px solid rgba(56, 189, 248, 0.35) !important;
-  box-shadow:
-    0 0 10px rgba(56, 189, 248, 0.15),
-    0 0 25px rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(91, 106, 191, 0.3) !important;
 }
 
-/* SR rarity badge */
 .rarity-badge-sr {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.15));
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  text-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+  background: rgba(200, 164, 78, 0.15);
+  color: #c8a44e;
+  border: 1px solid rgba(200, 164, 78, 0.3);
 }
 
-/* R rarity badge */
 .rarity-badge-r {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(91, 106, 191, 0.15);
+  color: #5b6abf;
+  border: 1px solid rgba(91, 106, 191, 0.25);
 }
 
-/* Custom scrollbar for card game */
+/* ─── Custom scrollbar for card game ─── */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(42, 42, 94, 0.5);
+  background: #252d4a;
   border-radius: 2px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(124, 58, 237, 0.5);
+  background: #3a4570;
+}
+
+/* ─── Legacy compatibility aliases (used by existing pages) ─── */
+.glass-card {
+  background: rgba(26, 32, 56, 0.8);
+  border: 1px solid #252d4a;
+  border-radius: 0.5rem;
+}
+
+.glass-card-hover:hover {
+  background: rgba(30, 37, 64, 0.9);
+  border-color: #3a4570;
+}
+
+.text-cosmic-gradient {
+  color: #c8cdd8;
+}
+
+.text-purple-gradient {
+  color: #5b6abf;
+}
+
+.text-blue-gradient {
+  color: #38bdf8;
+}
+
+.glow-purple,
+.glow-blue,
+.glow-gold {
+  box-shadow: none;
+}
+
+.nav-active {
+  color: #c8a44e;
+}
+
+.timeline-line {
+  background: linear-gradient(to bottom, #5b6abf, #c8a44e);
+}
+
+.faction-connector {
+  border-left: 2px solid #252d4a;
+}
+
+.consistency-border {
+  border: 1px solid #252d4a;
+}
+
+.consistency-border::before {
+  display: none;
+}
+
+/* ─── em:lang(ja) bold instead of italic ─── */
+em:lang(ja) {
+  font-style: normal;
+  font-weight: bolder;
 }

@@ -8,7 +8,7 @@ import { Navigation } from "@/components/edu/navigation"
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "700", "900"],
+  weight: ["300", "400", "500", "700"],
 })
 
 export const metadata: Metadata = {
@@ -34,9 +34,9 @@ export default function RootLayout({
   children: ReactNode
 }>) {
   return (
-    <html lang="ja" className="dark" suppressHydrationWarning>
+    <html lang="ja" suppressHydrationWarning>
       <body
-        className={`${notoSansJP.variable} font-sans antialiased`}
+        className={`${notoSansJP.variable} font-sans`}
         style={{ fontFamily: "var(--font-sans), 'Noto Sans JP', sans-serif" }}
       >
         <Navigation />

@@ -39,8 +39,8 @@ export const TIMELINE_DATA: {
   {
     period: "前史 (Pre-E1)",
     range: "AD 3500以前 — 宇宙的文脈",
-    color: "text-gold-accent",
-    borderColor: "border-gold-accent/30",
+    color: "text-edu-accent",
+    borderColor: "border-edu-accent/30",
     events: [
       e("【天文背景】E16連星系はM104銀河（ソンブレロ銀河）のハロー領域に位置。主星Ea16（スペクトル型K2、質量1.2太陽質量）と伴星Eb16（スペクトル型M3、質量0.4太陽質量）が0.8AUの楕円軌道で安定した重力場を形成", "E16星系"),
       e("【星系構造】E16星系には中心惑星「星々の交響曲（Symphony of Stars）」を含む7惑星と数十の小惑星帯が存在。Symphony of StarsはEa16のハビタブルゾーン内に位置し、平均表面温度15℃、重力0.92G、自転周期44時間4分", "E16星系"),
@@ -55,8 +55,8 @@ export const TIMELINE_DATA: {
   {
     period: "第一期 E1〜E200",
     range: "入植・帝国・繁栄・革命",
-    color: "text-nebula-purple",
-    borderColor: "border-nebula-purple/30",
+    color: "text-edu-accent2",
+    borderColor: "border-edu-accent2/30",
     events: [
       e("E1: 定住開始。Clan（Gig-community）組織。A-Registry（旅券）の萌芽", "シンフォニー・オブ・スターズ"),
       e("E6: 第一繁栄期。パラトン等の初期都市圏形成", "シンフォニー・オブ・スターズ"),
@@ -86,8 +86,8 @@ export const TIMELINE_DATA: {
   {
     period: "第二期 E200〜E320",
     range: "パクス・ロンバルディカ・ZAMLT・アルファ・ケイン",
-    color: "text-electric-blue",
-    borderColor: "border-electric-blue/30",
+    color: "text-edu-accent2",
+    borderColor: "border-edu-accent2/30",
     events: [
       e("【パクス・ロンバルディカ E205〜E278】コーポラタムパブリカが経済と政治を完全掌握。ギガポリス経済規模は年間5京nトークンに達するも、A籍制度の硬直化で格差が極端化。シャドウ・リベリオン活発化", "Gigapolis"),
       e("E260〜E280: Diana（初代Wonder Woman）台頭", "西大陸"),

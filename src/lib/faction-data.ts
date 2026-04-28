@@ -1,9 +1,9 @@
 export const FACTION_TREES = [
   {
     name: "テクロサス系譜",
-    color: "border-nebula-purple",
-    dotColor: "bg-nebula-purple",
-    textColor: "text-nebula-purple",
+    color: "border-edu-accent2",
+    dotColor: "bg-edu-accent2",
+    textColor: "text-edu-accent2",
     description:
       "E15年のファランクス創設に始まる、最古にして最大の軍事系譜。E295年にテクロサスが統合し、E470年の東方支隊を経て、現在のボグダス・ジャベリンへと至る。",
     keyMembers: ["ファリエル", "ニニギス・カラス", "セバスチャン・ヴァレリウス", "ガレス"],
@@ -32,9 +32,9 @@ export const FACTION_TREES = [
   },
   {
     name: "政体系譜",
-    color: "border-electric-blue",
-    dotColor: "bg-electric-blue",
-    textColor: "text-electric-blue",
+    color: "border-edu-accent2",
+    dotColor: "bg-edu-accent2",
+    textColor: "text-edu-accent2",
     description:
       "E285年のZAMLT創設から始まる政治的系譜。セリア黄金期、エヴァトロン統治期を経て、ポスト・エヴァトロン分裂により西にValoria、東にトリニティ、異次元にEros-7が生まれた。",
     keyMembers: ["セリア・ドミニクス", "アイリス", "ジェン", "ミナ・エウレカ・エルンスト"],
@@ -114,9 +114,9 @@ export const FACTION_TREES = [
   },
   {
     name: "現代宇宙勢力ランキング",
-    color: "border-gold-accent",
-    dotColor: "bg-gold-accent",
-    textColor: "text-gold-accent",
+    color: "border-edu-accent",
+    dotColor: "bg-edu-accent",
+    textColor: "text-edu-accent",
     description: "第一回宇宙連合会合（オルダシティ開催）を経て形成された現代宇宙の力関係。グランベル（経済1位）、エレシオン（医療2位）、ティエリア（軍事3位）が鼎立し、ファルージャ（文化）、ディオクレニス（探査）、エレシュ（宗教）、プロキオ（貿易）、ロースター（通信）が続く。グランベルとティエリアの間にトゥキディデスの罠の危険性が指摘されている。",
     keyMembers: ["アルゼン・カーリーン", "グレイモンド・ハウザー", "女王リアナ・ソリス", "マドリス・カーネル", "ネイサン・コリンド"],
     alliances: "宇宙連合会合で多極的協力体制が議論されたが、グランベル・ティエリア間の緊張は継続。",

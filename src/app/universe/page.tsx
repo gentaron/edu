@@ -28,7 +28,7 @@ function PlanetCard({
 }) {
   return (
     <div
-      className={`glass-card glass-card-hover rounded-xl p-6 transition-all duration-300 border ${borderColor}`}
+      className={`edu-card rounded-xl p-6 transition-all duration-300 border ${borderColor}`}
     >
       <h3 className={`text-lg font-bold ${color} mb-4 flex items-center gap-2`}>
         {icon}{" "}
@@ -39,25 +39,25 @@ function PlanetCard({
       <div className="space-y-3">
         {stats.map(([k, v]) => (
           <div key={String(k)} className="flex gap-3 text-sm">
-            <span className="text-gold-accent font-medium shrink-0 w-20">{k}</span>
-            <span className="text-cosmic-muted">{v}</span>
+            <span className="text-edu-accent font-medium shrink-0 w-20">{k}</span>
+            <span className="text-edu-muted">{v}</span>
           </div>
         ))}
       </div>
       {description && (
-        <p className="mt-4 text-xs text-cosmic-muted leading-relaxed">{description}</p>
+        <p className="mt-4 text-xs text-edu-muted leading-relaxed">{description}</p>
       )}
       {regions && regions.length > 0 && (
         <div className="mt-4 space-y-2">
           {regions.map((group, gi) => (
-            <div key={gi} className="bg-cosmic-dark/50 rounded-lg p-3">
+            <div key={gi} className="bg-edu-bg/50 rounded-lg p-3">
               {group.map((r) => (
                 <span
                   key={r.name}
-                  className="text-xs bg-cosmic-surface px-2 py-0.5 rounded text-cosmic-muted mr-1.5 mb-1 inline-block"
+                  className="text-xs bg-edu-surface px-2 py-0.5 rounded text-edu-muted mr-1.5 mb-1 inline-block"
                 >
                   {r.wiki ? (
-                    <Link href={r.wiki} className="hover:text-electric-blue hover:underline">
+                    <Link href={r.wiki} className="hover:text-edu-accent2 hover:underline">
                       {r.name}
                     </Link>
                   ) : (
@@ -75,11 +75,11 @@ function PlanetCard({
 
 export default function UniversePage() {
   return (
-    <div className="relative min-h-screen bg-cosmic-dark">
+    <div className="relative min-h-screen bg-edu-bg">
       <StarField />
       <div className="relative z-10">
         <PageHeader
-          icon={<Globe2 className="w-6 h-6 text-nebula-purple" />}
+          icon={<Globe2 className="w-6 h-6 text-edu-accent2" />}
           title="全宇宙・星系構造"
           subtitle="M104銀河全域 — E16連星系・Eros-7・惑星ビブリオ・惑星Solaris"
           wikiHref="/wiki#E16連星系"
@@ -88,21 +88,21 @@ export default function UniversePage() {
         <RevealSection>
           <div className="max-w-6xl mx-auto px-4 pb-20">
             {/* 概説 */}
-            <div className="glass-card rounded-xl p-6 mb-8">
-              <h2 className="text-lg font-bold text-cosmic-text mb-4 flex items-center gap-2">
-                <Globe2 className="w-5 h-5 text-nebula-purple" /> Eternal Dominion Universe —
+            <div className="edu-card rounded-xl p-6 mb-8">
+              <h2 className="text-lg font-bold text-edu-text mb-4 flex items-center gap-2">
+                <Globe2 className="w-5 h-5 text-edu-accent2" /> Eternal Dominion Universe —
                 全宇宙像
               </h2>
-              <div className="space-y-3 text-sm text-cosmic-muted leading-relaxed">
+              <div className="space-y-3 text-sm text-edu-muted leading-relaxed">
                 <p>
                   Eternal Dominion Universe は、
-                  <span className="text-electric-blue font-medium">M104（NGC 4594）銀河</span>
+                  <span className="text-edu-accent2 font-medium">M104（NGC 4594）銀河</span>
                   を舞台とする壮大な文明圏である。AD
                   3500年に地球を離脱した人類は、M104銀河のハロー領域に到達し、E16連星系を第一の故郷として文明を築き上げた。しかし、人類の活動はE16に留まらず、周辺の惑星や星系へと拡大していった。
                 </p>
                 <p>
                   現在、M104銀河内には
-                  <span className="text-nebula-purple font-medium">E16連星系</span>
+                  <span className="text-edu-accent2 font-medium">E16連星系</span>
                   のほかに、女性主導のマトリカル社会を持つ
                   <span className="text-pink-400 font-medium">Eros-7</span>
                   、学術・研究の中心地である
@@ -120,24 +120,24 @@ export default function UniversePage() {
             </div>
 
             {/* 宇宙マップ概略 */}
-            <div className="glass-card rounded-xl p-6 mb-8 border border-cyan-500/20">
-              <h3 className="text-base font-bold text-cosmic-gradient mb-4 flex items-center gap-2">
+            <div className="edu-card rounded-xl p-6 mb-8 border border-cyan-500/20">
+              <h3 className="text-base font-bold text-edu-text mb-4 flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
                 銀河規模組織
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-cosmic-dark/50 rounded-lg p-4 border border-cyan-500/20">
+                <div className="bg-edu-bg/50 rounded-lg p-4 border border-cyan-500/20">
                   <h4 className="text-sm font-bold text-cyan-400 mb-2 flex items-center gap-2">
                     <Zap className="w-4 h-4" />
                     <Link href="/wiki#UECO" className="text-cyan-400 hover:underline">
                       UECO
                     </Link>
                   </h4>
-                  <p className="text-xs text-cosmic-muted leading-relaxed">
+                  <p className="text-xs text-edu-muted leading-relaxed">
                     星間経済協同組合。各惑星間の経済活動を調整し、通貨・貿易のルールを統轄する。ヒーローエージェンシーと統合され、銀河系コンソーシアムの中核となった。
                   </p>
                 </div>
-                <div className="bg-cosmic-dark/50 rounded-lg p-4 border border-cyan-500/20">
+                <div className="bg-edu-bg/50 rounded-lg p-4 border border-cyan-500/20">
                   <h4 className="text-sm font-bold text-cyan-400 mb-2 flex items-center gap-2">
                     <Users className="w-4 h-4" />
                     <Link
@@ -147,18 +147,18 @@ export default function UniversePage() {
                       銀河系コンソーシアム
                     </Link>
                   </h4>
-                  <p className="text-xs text-cosmic-muted leading-relaxed">
+                  <p className="text-xs text-edu-muted leading-relaxed">
                     E495〜E500年に設立された統合体。ネオクラン同盟・UECO・ヒーローエージェンシーが統合。トゥキディデスの罠回避を志向する全宇宙規模の協力枠組み。
                   </p>
                 </div>
-                <div className="bg-cosmic-dark/50 rounded-lg p-4 border border-cyan-500/20">
+                <div className="bg-edu-bg/50 rounded-lg p-4 border border-cyan-500/20">
                   <h4 className="text-sm font-bold text-cyan-400 mb-2 flex items-center gap-2">
                     <Star className="w-4 h-4" />
                     <Link href="/wiki#M104銀河" className="text-cyan-400 hover:underline">
                       M104銀河（NGC 4594）
                     </Link>
                   </h4>
-                  <p className="text-xs text-cosmic-muted leading-relaxed">
+                  <p className="text-xs text-edu-muted leading-relaxed">
                     sombrero
                     galaxy。E16連星系やEros-7などの居住世界が存在する銀河。ハロー領域に人類文明が展開している。
                   </p>
@@ -173,8 +173,8 @@ export default function UniversePage() {
                 icon={<Star className="w-5 h-5" />}
                 title="E16連星系"
                 titleEn="E16 Binary System"
-                color="text-electric-blue"
-                borderColor="border-electric-blue/20"
+                color="text-edu-accent2"
+                borderColor="border-edu-accent2/20"
                 wikiHref="/wiki#E16連星系"
                 stats={[
                   ["所在", "M104銀河ハロー某所"],
@@ -185,7 +185,7 @@ export default function UniversePage() {
                     <Link
                       key="s"
                       href="/wiki#シンフォニー・オブ・スターズ"
-                      className="text-cosmic-muted hover:text-electric-blue hover:underline"
+                      className="text-edu-muted hover:text-edu-accent2 hover:underline"
                     >
                       シンフォニー・オブ・スターズ
                     </Link>,
@@ -232,7 +232,7 @@ export default function UniversePage() {
                     <Link
                       key="mc"
                       href="/wiki#マトリカル・カウンシル"
-                      className="text-cosmic-muted hover:text-pink-400 hover:underline"
+                      className="text-edu-muted hover:text-pink-400 hover:underline"
                     >
                       マトリカル社会（女性主導）
                     </Link>,
@@ -242,7 +242,7 @@ export default function UniversePage() {
                     <Link
                       key="ms"
                       href="/wiki#男性指令省"
-                      className="text-cosmic-muted hover:text-pink-400 hover:underline"
+                      className="text-edu-muted hover:text-pink-400 hover:underline"
                     >
                       男性指令省
                     </Link>,
@@ -252,7 +252,7 @@ export default function UniversePage() {
                     <Link
                       key="su"
                       href="/wiki#シャドウ・ユニオン"
-                      className="text-cosmic-muted hover:text-pink-400 hover:underline"
+                      className="text-edu-muted hover:text-pink-400 hover:underline"
                     >
                       シャドウ・ユニオン
                     </Link>,
@@ -285,7 +285,7 @@ export default function UniversePage() {
                     <Link
                       key="uu"
                       href="/wiki#ビブリオ国際大学"
-                      className="text-cosmic-muted hover:text-emerald-400 hover:underline"
+                      className="text-edu-muted hover:text-emerald-400 hover:underline"
                     >
                       ビブリオ国際大学
                     </Link>,
@@ -295,7 +295,7 @@ export default function UniversePage() {
                     <Link
                       key="mi"
                       href="/wiki#ミナ・エウレカ・エルンスト"
-                      className="text-cosmic-muted hover:text-emerald-400 hover:underline"
+                      className="text-edu-muted hover:text-emerald-400 hover:underline"
                     >
                       ミナ（E514年入学）
                     </Link>,
@@ -322,49 +322,49 @@ export default function UniversePage() {
 
             {/* 宇宙5大文明圏 */}
             <RevealSection>
-              <div className="glass-card rounded-xl p-6 border border-amber-500/20 mb-8">
+              <div className="edu-card rounded-xl p-6 border border-amber-500/20 mb-8">
                 <h3 className="text-base font-bold text-amber-400 mb-4 flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
                   宇宙5大文明圏
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  <Link href="/civilizations/granbell" className="bg-cosmic-dark/50 rounded-lg p-3 border border-amber-400/20 hover:border-amber-400/40 transition-colors">
+                  <Link href="/civilizations/granbell" className="bg-edu-bg/50 rounded-lg p-3 border border-amber-400/20 hover:border-amber-400/40 transition-colors">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-bold text-amber-400">グランベル</span>
-                      <span className="text-xs text-cosmic-muted">#1</span>
+                      <span className="text-xs text-edu-muted">#1</span>
                     </div>
-                    <p className="text-xs text-cosmic-muted mt-1">量子経済・次元間技術 — GDP150兆ドル</p>
+                    <p className="text-xs text-edu-muted mt-1">量子経済・次元間技術 — GDP150兆ドル</p>
                   </Link>
-                  <Link href="/civilizations/elyseon" className="bg-cosmic-dark/50 rounded-lg p-3 border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
+                  <Link href="/civilizations/elyseon" className="bg-edu-bg/50 rounded-lg p-3 border border-emerald-400/20 hover:border-emerald-400/40 transition-colors">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-bold text-emerald-400">エレシオン</span>
-                      <span className="text-xs text-cosmic-muted">#2</span>
+                      <span className="text-xs text-edu-muted">#2</span>
                     </div>
-                    <p className="text-xs text-cosmic-muted mt-1">医療技術・環境再生 — 平和外交</p>
+                    <p className="text-xs text-edu-muted mt-1">医療技術・環境再生 — 平和外交</p>
                   </Link>
-                  <Link href="/civilizations/tyeria" className="bg-cosmic-dark/50 rounded-lg p-3 border border-rose-400/20 hover:border-rose-400/40 transition-colors">
+                  <Link href="/civilizations/tyeria" className="bg-edu-bg/50 rounded-lg p-3 border border-rose-400/20 hover:border-rose-400/40 transition-colors">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-bold text-rose-400">ティエリア</span>
-                      <span className="text-xs text-cosmic-muted">#3</span>
+                      <span className="text-xs text-edu-muted">#3</span>
                     </div>
-                    <p className="text-xs text-cosmic-muted mt-1">軍事力・防衛ネットワーク</p>
+                    <p className="text-xs text-edu-muted mt-1">軍事力・防衛ネットワーク</p>
                   </Link>
-                  <Link href="/civilizations/fallujah" className="bg-cosmic-dark/50 rounded-lg p-3 border border-violet-400/20 hover:border-violet-400/40 transition-colors">
+                  <Link href="/civilizations/fallujah" className="bg-edu-bg/50 rounded-lg p-3 border border-violet-400/20 hover:border-violet-400/40 transition-colors">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-bold text-violet-400">ファルージャ</span>
-                      <span className="text-xs text-cosmic-muted">#4</span>
+                      <span className="text-xs text-edu-muted">#4</span>
                     </div>
-                    <p className="text-xs text-cosmic-muted mt-1">文化的影響力・外交・調停</p>
+                    <p className="text-xs text-edu-muted mt-1">文化的影響力・外交・調停</p>
                   </Link>
-                  <Link href="/civilizations/dioclenis" className="bg-cosmic-dark/50 rounded-lg p-3 border border-cyan-400/20 hover:border-cyan-400/40 transition-colors">
+                  <Link href="/civilizations/dioclenis" className="bg-edu-bg/50 rounded-lg p-3 border border-cyan-400/20 hover:border-cyan-400/40 transition-colors">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-bold text-cyan-400">ディオクレニス</span>
-                      <span className="text-xs text-cosmic-muted">#5</span>
+                      <span className="text-xs text-edu-muted">#5</span>
                     </div>
-                    <p className="text-xs text-cosmic-muted mt-1">宇宙探査・科学技術研究</p>
+                    <p className="text-xs text-edu-muted mt-1">宇宙探査・科学技術研究</p>
                   </Link>
-                  <Link href="/civilizations" className="bg-cosmic-dark/50 rounded-lg p-3 border border-cosmic-border/30 hover:border-amber-400/40 transition-colors flex items-center justify-center">
-                    <span className="text-xs text-cosmic-muted">全文明圏を見る →</span>
+                  <Link href="/civilizations" className="bg-edu-bg/50 rounded-lg p-3 border border-edu-border/30 hover:border-amber-400/40 transition-colors flex items-center justify-center">
+                    <span className="text-xs text-edu-muted">全文明圏を見る →</span>
                   </Link>
                 </div>
               </div>
@@ -372,11 +372,11 @@ export default function UniversePage() {
           </div>
         </RevealSection>
 
-        <footer className="relative border-t border-cosmic-border/50 py-8 px-4">
+        <footer className="relative border-t border-edu-border/50 py-8 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Link
               href="/"
-              className="text-xs text-cosmic-muted hover:text-gold-accent transition-colors"
+              className="text-xs text-edu-muted hover:text-edu-accent transition-colors"
             >
               ← トップページに戻る
             </Link>

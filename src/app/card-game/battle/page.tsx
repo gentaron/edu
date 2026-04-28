@@ -165,7 +165,7 @@ function HpBar({
       ? "bg-gradient-to-r from-rose-600 via-red-400 to-rose-500"
       : "bg-gradient-to-r from-emerald-600 via-green-400 to-emerald-500"
   return (
-    <div className="w-full h-3 bg-cosmic-deep rounded-full overflow-hidden border border-cosmic-border/30 relative">
+    <div className="w-full h-3 bg-edu-bg rounded-full overflow-hidden border border-edu-border/30 relative">
       {pct > 0 && (
         <motion.div
           className={`h-full rounded-full ${cls} shadow-lg`}
@@ -251,7 +251,7 @@ function FieldCharSlot({
       transition={isActing ? { duration: 0.6, repeat: 1 } : isCharHit ? { duration: 0.4 } : {}}
       className={`relative flex flex-col items-center gap-0.5 sm:gap-1 p-1.5 sm:p-2 rounded-xl border backdrop-blur-sm transition-all duration-300 min-w-[60px] sm:min-w-[72px] max-w-[76px] sm:max-w-[92px] ${
         char.isDown
-          ? "opacity-30 border-cosmic-border/10 bg-cosmic-deep/20 cursor-not-allowed"
+          ? "opacity-30 border-edu-border/10 bg-edu-bg/20 cursor-not-allowed"
           : isActing && actingAbility
             ? `${abilityGlow[actingAbility]} ${abilityBg[actingAbility]} shadow-lg`
             : isCharHit
@@ -259,10 +259,10 @@ function FieldCharSlot({
               : isSelected
                 ? "border-yellow-400/60 bg-yellow-500/10 shadow-lg shadow-yellow-500/20 ring-1 ring-yellow-400/30"
                 : char.card.rarity === "SR"
-                  ? "field-sr bg-cosmic-surface/50"
+                  ? "field-sr bg-edu-surface/50"
                   : char.card.rarity === "R"
-                    ? "field-r bg-cosmic-surface/50"
-                    : "border-cosmic-border/30 bg-cosmic-surface/50 hover:border-nebula-purple/50 hover:bg-nebula-purple/5"
+                    ? "field-r bg-edu-surface/50"
+                    : "border-edu-border/30 bg-edu-surface/50 hover:border-edu-accent2/50 hover:bg-edu-accent2/5"
       }`}
     >
       {isSelected && !isActing && (
@@ -270,9 +270,9 @@ function FieldCharSlot({
           initial={{ scale: 0 }}
           animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
           transition={{ duration: 0.5 }}
-          className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-yellow-400 border-2 border-cosmic-dark flex items-center justify-center z-10"
+          className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-yellow-400 border-2 border-edu-bg flex items-center justify-center z-10"
         >
-          <span className="text-[8px] font-black text-cosmic-dark">&#9660;</span>
+          <span className="text-[8px] font-black text-edu-bg">&#9660;</span>
         </motion.div>
       )}
       {isActing && actingAbility && (
@@ -289,7 +289,7 @@ function FieldCharSlot({
         </motion.div>
       )}
       {char.isDown && (
-        <div className="absolute inset-0 flex items-center justify-center z-10 bg-cosmic-dark/60 rounded-xl">
+        <div className="absolute inset-0 flex items-center justify-center z-10 bg-edu-bg/60 rounded-xl">
           <motion.div
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
@@ -299,23 +299,23 @@ function FieldCharSlot({
         </div>
       )}
       <div
-        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-cosmic-deep/50 border shrink-0 ${isActing && actingAbility === "必殺" ? "border-yellow-400 shadow-lg shadow-yellow-500/40" : isActing && actingAbility === "攻撃" ? "border-red-400 shadow-lg shadow-red-500/30" : "border-cosmic-border/20"}`}
+        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-edu-bg/50 border shrink-0 ${isActing && actingAbility === "必殺" ? "border-yellow-400 shadow-lg shadow-yellow-500/40" : isActing && actingAbility === "攻撃" ? "border-red-400 shadow-lg shadow-red-500/30" : "border-edu-border/20"}`}
       >
         <img src={char.card.imageUrl} alt={char.card.name} className="w-full h-full object-cover" />
       </div>
       <p
-        className={`text-[7px] sm:text-[8px] font-bold text-center leading-tight line-clamp-1 ${char.isDown ? "text-cosmic-muted/30" : "text-cosmic-text"}`}
+        className={`text-[7px] sm:text-[8px] font-bold text-center leading-tight line-clamp-1 ${char.isDown ? "text-edu-muted/30" : "text-edu-text"}`}
       >
         {char.card.name}
       </p>
       <span
-        className={`text-[6px] sm:text-[7px] font-black px-1 py-px rounded ${char.card.rarity === "SR" ? "rarity-badge-sr" : char.card.rarity === "R" ? "rarity-badge-r" : "bg-cosmic-deep/50 text-cosmic-muted border border-cosmic-border/30"}`}
+        className={`text-[6px] sm:text-[7px] font-black px-1 py-px rounded ${char.card.rarity === "SR" ? "rarity-badge-sr" : char.card.rarity === "R" ? "rarity-badge-r" : "bg-edu-bg/50 text-edu-muted border border-edu-border/30"}`}
       >
         {char.card.rarity}
       </span>
       {!char.isDown && (
         <div className="w-full">
-          <div className="w-full h-1.5 bg-cosmic-deep rounded-full overflow-hidden relative">
+          <div className="w-full h-1.5 bg-edu-bg rounded-full overflow-hidden relative">
             <motion.div
               className={`h-full rounded-full bg-gradient-to-r ${hpColor} transition-all duration-500`}
               style={{ width: `${hpPct}%` }}
@@ -329,7 +329,7 @@ function FieldCharSlot({
             )}
           </div>
           <p
-            className={`text-[7px] text-center mt-0.5 ${hpPct <= 25 ? "text-rose-400 font-bold" : "text-cosmic-muted"}`}
+            className={`text-[7px] text-center mt-0.5 ${hpPct <= 25 ? "text-rose-400 font-bold" : "text-edu-muted"}`}
           >
             {char.hp}/{char.maxHp}
           </p>
@@ -403,7 +403,7 @@ function AbilityButton({
       disabled={disabled}
       className={`relative flex-1 rounded-xl border backdrop-blur-sm p-2 sm:p-3 transition-all duration-300 flex flex-col items-center gap-1 sm:gap-1.5 overflow-hidden min-h-[56px] sm:min-h-0 ${
         disabled
-          ? "opacity-25 cursor-not-allowed border-cosmic-border/20 bg-cosmic-deep/30"
+          ? "opacity-25 cursor-not-allowed border-edu-border/20 bg-edu-bg/30"
           : `cursor-pointer hover:shadow-xl border-opacity-50 ${color}`
       }`}
     >
@@ -416,10 +416,10 @@ function AbilityButton({
         />
       )}
       {icon}
-      <span className="text-[10px] sm:text-xs font-bold text-cosmic-text relative z-10">{label}</span>
-      <span className="text-[8px] sm:text-[10px] font-bold text-cosmic-muted relative z-10">{value}</span>
+      <span className="text-[10px] sm:text-xs font-bold text-edu-text relative z-10">{label}</span>
+      <span className="text-[8px] sm:text-[10px] font-bold text-edu-muted relative z-10">{value}</span>
       {subLabel && (
-        <span className="text-[7px] sm:text-[8px] text-cosmic-muted/70 leading-tight text-center line-clamp-2 max-w-full relative z-10">
+        <span className="text-[7px] sm:text-[8px] text-edu-muted/70 leading-tight text-center line-clamp-2 max-w-full relative z-10">
           {subLabel}
         </span>
       )}
@@ -558,7 +558,7 @@ function BattleContent() {
             : { x: 0, y: 0 }
         }
         transition={{ duration: 0.6 }}
-        className="min-h-screen bg-cosmic-dark flex flex-col overflow-hidden"
+        className="min-h-screen bg-edu-bg flex flex-col overflow-hidden"
       >
         {/* BG Particles */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
@@ -579,18 +579,18 @@ function BattleContent() {
         </div>
 
         {/* Header */}
-        <div className="glass-card border-b border-cosmic-border/50 shrink-0 z-10">
+        <div className="edu-card border-b border-edu-border/50 shrink-0 z-10">
           <div className="max-w-5xl mx-auto px-3 sm:px-4 py-2 flex items-center gap-2 sm:gap-3">
             <Link
               href="/card-game/select"
-              className="text-xs text-cosmic-muted hover:text-cosmic-text transition-colors"
+              className="text-xs text-edu-muted hover:text-edu-text transition-colors"
             >
               ← 敵選択
             </Link>
-            <span className="text-cosmic-border">|</span>
+            <span className="text-edu-border">|</span>
             <Swords className="w-4 h-4 text-rose-400" />
-            <span className="text-xs font-bold text-cosmic-gradient">Battle</span>
-            <span className="text-[10px] text-cosmic-muted ml-auto">
+            <span className="text-xs font-bold text-edu-text">Battle</span>
+            <span className="text-[10px] text-edu-muted ml-auto">
               ターン {turn} | 味方 {aliveCount}/5
             </span>
           </div>
@@ -614,7 +614,7 @@ function BattleContent() {
                 : {}
             }
             transition={{ duration: 0.5 }}
-            className="glass-card rounded-xl p-3 sm:p-4 shrink-0 relative overflow-hidden"
+            className="edu-card rounded-xl p-3 sm:p-4 shrink-0 relative overflow-hidden"
           >
             {selectedEnemy.difficulty === "BOSS" && (
               <motion.div
@@ -646,7 +646,7 @@ function BattleContent() {
             )}
             <div className="flex items-center gap-2 sm:gap-3 sm:items-start relative z-10">
               <div
-                className={`w-14 h-14 sm:w-20 sm:h-20 rounded-xl bg-cosmic-deep/50 border flex items-center justify-center shrink-0 overflow-hidden ${selectedEnemy.difficulty === "FINAL" ? "border-yellow-400/60 shadow-lg shadow-yellow-500/20" : selectedEnemy.difficulty === "BOSS" ? "border-red-400/50 shadow-lg shadow-red-500/20" : "border-cosmic-border/30"}`}
+                className={`w-14 h-14 sm:w-20 sm:h-20 rounded-xl bg-edu-bg/50 border flex items-center justify-center shrink-0 overflow-hidden ${selectedEnemy.difficulty === "FINAL" ? "border-yellow-400/60 shadow-lg shadow-yellow-500/20" : selectedEnemy.difficulty === "BOSS" ? "border-red-400/50 shadow-lg shadow-red-500/20" : "border-edu-border/30"}`}
               >
                 <motion.img
                   src={selectedEnemy.imageUrl}
@@ -658,8 +658,8 @@ function BattleContent() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <h3 className="text-xs sm:text-sm font-bold text-cosmic-text">{selectedEnemy.name}</h3>
-                  <span className="text-[10px] text-cosmic-muted">{selectedEnemy.title}</span>
+                  <h3 className="text-xs sm:text-sm font-bold text-edu-text">{selectedEnemy.name}</h3>
+                  <span className="text-[10px] text-edu-muted">{selectedEnemy.title}</span>
                   <span
                     className={`text-[7px] sm:text-[8px] font-bold px-1.5 py-0.5 rounded border ${diffColors[selectedEnemy.difficulty].badge}`}
                   >
@@ -776,10 +776,10 @@ function BattleContent() {
               {/* Field: 5 characters */}
               <div className="shrink-0">
                 <div className="flex items-center gap-1.5 mb-2">
-                  <User className="w-3 h-3 text-cosmic-muted" />
-                  <span className="text-[9px] font-bold text-cosmic-muted">味方パーティ</span>
+                  <User className="w-3 h-3 text-edu-muted" />
+                  <span className="text-[9px] font-bold text-edu-muted">味方パーティ</span>
                   <motion.span
-                    className="text-[8px] text-nebula-purple ml-1"
+                    className="text-[8px] text-edu-accent2 ml-1"
                     animate={isPlayerTurn ? { opacity: [0.4, 1, 0.4] } : {}}
                     transition={{ duration: 1.5, repeat: Infinity }}
                   >
@@ -811,11 +811,11 @@ function BattleContent() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="glass-card rounded-xl p-4 shrink-0"
+                  className="edu-card rounded-xl p-4 shrink-0"
                 >
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                     <motion.div
-                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden bg-cosmic-deep/50 border border-yellow-400/30 shrink-0"
+                      className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden bg-edu-bg/50 border border-yellow-400/30 shrink-0"
                       animate={
                         isPlayerTurn
                           ? {
@@ -836,10 +836,10 @@ function BattleContent() {
                       />
                     </motion.div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-xs font-bold text-cosmic-text">
+                      <h3 className="text-xs font-bold text-edu-text">
                         {selectedChar.card.name}
                       </h3>
-                      <p className="text-[9px] text-cosmic-muted">
+                      <p className="text-[9px] text-edu-muted">
                         {selectedChar.card.affiliation}
                       </p>
                     </div>
@@ -917,7 +917,7 @@ function BattleContent() {
                   <motion.p
                     animate={{ opacity: [0.4, 1, 0.4] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
-                    className="text-[10px] text-cosmic-muted"
+                    className="text-[10px] text-edu-muted"
                   >
                     味方キャラをクリックして選択してください
                   </motion.p>
@@ -925,10 +925,10 @@ function BattleContent() {
               )}
 
               {/* Battle Log */}
-              <div className="glass-card rounded-xl p-3 flex-1 min-h-0 overflow-hidden flex flex-col">
+              <div className="edu-card rounded-xl p-3 flex-1 min-h-0 overflow-hidden flex flex-col">
                 <div className="flex items-center gap-1.5 mb-2 shrink-0">
-                  <Swords className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-cosmic-muted" />
-                  <span className="text-[8px] sm:text-[9px] font-bold text-cosmic-muted">バトルログ</span>
+                  <Swords className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-edu-muted" />
+                  <span className="text-[8px] sm:text-[9px] font-bold text-edu-muted">バトルログ</span>
                 </div>
                 <div
                   ref={logRef}
@@ -953,12 +953,12 @@ function BattleContent() {
                                     : msg.startsWith("💚")
                                       ? "text-emerald-400"
                                       : msg.startsWith("🏆")
-                                        ? "text-gold-accent"
+                                        ? "text-edu-accent"
                                         : msg.startsWith("💀")
                                           ? "text-rose-400"
                                           : msg.startsWith("—")
-                                            ? "text-cosmic-muted/40"
-                                            : "text-cosmic-muted/60"
+                                            ? "text-edu-muted/40"
+                                            : "text-edu-muted/60"
                       }`}
                     >
                       {msg}
@@ -971,22 +971,22 @@ function BattleContent() {
 
           {/* Victory / Defeat */}
           {(isVictory || isDefeat) && (
-            <div className="flex-1 glass-card rounded-xl p-4 flex flex-col items-center justify-center gap-4">
+            <div className="flex-1 edu-card rounded-xl p-4 flex flex-col items-center justify-center gap-4">
               {isVictory ? (
                 <>
-                  <Crown className="w-12 h-12 text-gold-accent" />
-                  <h2 className="text-xl font-black text-gold-accent">勝利！</h2>
-                  <p className="text-sm text-cosmic-muted">{selectedEnemy.name} を撃破した！</p>
-                  <p className="text-xs text-gold-accent">🏆 {selectedEnemy.reward}</p>
+                  <Crown className="w-12 h-12 text-edu-accent" />
+                  <h2 className="text-xl font-black text-edu-accent">勝利！</h2>
+                  <p className="text-sm text-edu-muted">{selectedEnemy.name} を撃破した！</p>
+                  <p className="text-xs text-edu-accent">🏆 {selectedEnemy.reward}</p>
                 </>
               ) : (
                 <>
                   <Skull className="w-12 h-12 text-rose-400" />
                   <h2 className="text-xl font-black text-rose-400">敗北...</h2>
-                  <p className="text-sm text-cosmic-muted">
+                  <p className="text-sm text-edu-muted">
                     味方が全員戦闘不能になった…
                   </p>
-                  <p className="text-xs text-cosmic-muted">
+                  <p className="text-xs text-edu-muted">
                     敵残りHP: <span className="text-rose-400 font-bold">{enemyHp}</span>/
                     {selectedEnemy.maxHp}
                   </p>
@@ -995,13 +995,13 @@ function BattleContent() {
               <div className="flex gap-3 mt-2">
                 <button
                   onClick={handleRetry}
-                  className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${isVictory ? "bg-gold-accent/20 border border-gold-accent/40 text-gold-accent hover:bg-gold-accent/30" : "bg-red-500/20 border border-red-400/40 text-red-400 hover:bg-red-500/30"}`}
+                  className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${isVictory ? "bg-edu-accent/20 border border-edu-accent/40 text-edu-accent hover:bg-edu-accent/30" : "bg-red-500/20 border border-red-400/40 text-red-400 hover:bg-red-500/30"}`}
                 >
                   もう一度挑戦
                 </button>
                 <button
                   onClick={handleDeckChange}
-                  className="px-6 py-2 rounded-lg bg-cosmic-surface/50 border border-cosmic-border/30 text-cosmic-muted text-sm hover:bg-cosmic-surface transition-all"
+                  className="px-6 py-2 rounded-lg bg-edu-surface/50 border border-edu-border/30 text-edu-muted text-sm hover:bg-edu-surface transition-all"
                 >
                   デッキを変える
                 </button>
@@ -1018,10 +1018,10 @@ export default function BattlePage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center bg-cosmic-dark">
+        <div className="min-h-screen flex items-center justify-center bg-edu-bg">
           <div className="text-center space-y-4">
-            <div className="w-8 h-8 border-2 border-electric-blue border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-xs text-cosmic-muted">バトルを準備中...</p>
+            <div className="w-8 h-8 border-2 border-edu-accent2 border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-xs text-edu-muted">バトルを準備中...</p>
           </div>
         </div>
       }

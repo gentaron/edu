@@ -10,23 +10,24 @@ export function PageHeader({ icon, title, subtitle, wikiHref }: {
   wikiHref?: string;
 }) {
   return (
-    <div className="relative pt-24 pb-10 px-4">
-      <div className="max-w-6xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-1 text-xs text-cosmic-muted hover:text-cosmic-text transition-colors mb-6">
-          <ChevronLeft className="w-3 h-3" /> トップページに戻る
+    <div className="pt-20 pb-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        <Link href="/" className="inline-flex items-center gap-1 text-xs text-edu-muted hover:text-edu-accent transition-colors mb-6">
+          <ChevronLeft className="w-3 h-3" /> トップ
         </Link>
-        <div className="text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-nebula-purple/20 mb-4 glow-purple">
-            {icon}
+        <div>
+          <div className="flex items-center gap-3 mb-3">
+            <span className="text-edu-muted">{icon}</span>
+            <h1 className="text-xl sm:text-2xl font-medium text-edu-text tracking-wide">{title}</h1>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-cosmic-gradient mb-2">{title}</h1>
-          {subtitle && <p className="text-cosmic-muted text-sm max-w-xl mx-auto">{subtitle}</p>}
+          {subtitle && <p className="text-sm text-edu-muted leading-relaxed">{subtitle}</p>}
           {wikiHref && (
-            <Link href={wikiHref} className="inline-flex items-center gap-1 text-xs text-gold-accent hover:text-gold-accent/80 mt-3 transition-colors">
-              Wiki で詳しく見る →
+            <Link href={wikiHref} className="inline-flex items-center gap-1 text-xs text-edu-accent hover:text-edu-accent2 mt-3 transition-colors">
+              Wiki で詳しく →
             </Link>
           )}
         </div>
+        <hr className="edu-divider mt-8" />
       </div>
     </div>
   )

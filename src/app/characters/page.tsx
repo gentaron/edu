@@ -79,21 +79,21 @@ export default function CharactersPage() {
     },
     {
       label: `C — コモン ×${cCards.length}`,
-      color: "from-cosmic-surface to-cosmic-dark/50",
-      borderColor: "border-cosmic-border/40",
-      textColor: "text-cosmic-muted",
-      icon: <Shield className="w-4 h-4 text-cosmic-muted" />,
+      color: "from-edu-surface to-edu-bg/50",
+      borderColor: "border-edu-border/40",
+      textColor: "text-edu-muted",
+      icon: <Shield className="w-4 h-4 text-edu-muted" />,
       cards: cCards,
-      badgeClass: "bg-cosmic-deep/50 text-cosmic-muted border border-cosmic-border/30",
+      badgeClass: "bg-edu-bg/50 text-edu-muted border border-edu-border/30",
     },
   ]
 
   return (
-    <div className="relative min-h-screen bg-cosmic-dark">
+    <div className="relative min-h-screen bg-edu-bg">
       <StarField />
       <div className="relative z-10">
         <PageHeader
-          icon={<Crown className="w-6 h-6 text-gold-accent" />}
+          icon={<Crown className="w-6 h-6 text-edu-accent" />}
           title="キャラクターTier表"
           subtitle="Eternal Dominion Universe — 全64キャラクターのカードデータ"
         />
@@ -105,7 +105,7 @@ export default function CharactersPage() {
               {tierSections.map((tier) => (
                 <div
                   key={tier.label}
-                  className={`glass-card rounded-xl border ${tier.borderColor} overflow-hidden transition-all duration-300 hover:scale-[1.01]`}
+                  className={`edu-card rounded-xl border ${tier.borderColor} overflow-hidden transition-all duration-300`}
                 >
                   <div
                     className={`bg-gradient-to-r ${tier.color} px-4 sm:px-6 py-3 sm:py-4 flex items-center gap-3`}
@@ -118,18 +118,18 @@ export default function CharactersPage() {
                   <div className="p-3 sm:p-4 overflow-x-auto">
                     <table className="w-full text-xs sm:text-sm">
                       <thead>
-                        <tr className="border-b border-cosmic-border/30">
-                          <th className="text-left py-2 px-2 text-cosmic-muted font-medium">
+                        <tr className="border-b border-edu-border/30">
+                          <th className="text-left py-2 px-2 text-edu-muted font-medium">
                             キャラ
                           </th>
-                          <th className="text-left py-2 px-2 text-cosmic-muted font-medium hidden sm:table-cell">
+                          <th className="text-left py-2 px-2 text-edu-muted font-medium hidden sm:table-cell">
                             勢力
                           </th>
                           <th className="text-center py-2 px-2 text-red-400 font-medium">⚔</th>
                           <th className="text-center py-2 px-2 text-blue-400 font-medium">🛡</th>
                           <th className="text-center py-2 px-2 text-purple-300 font-medium">✨</th>
                           <th className="text-center py-2 px-2 text-yellow-400 font-medium">💥</th>
-                          <th className="text-center py-2 px-2 text-cosmic-muted font-medium">
+                          <th className="text-center py-2 px-2 text-edu-muted font-medium">
                             合計
                           </th>
                         </tr>
@@ -141,7 +141,7 @@ export default function CharactersPage() {
                           return (
                             <tr
                               key={card.id}
-                              className="border-b border-cosmic-border/10 hover:bg-cosmic-surface/30 transition-colors"
+                              className="border-b border-edu-border/10 hover:bg-edu-surface/30 transition-colors"
                             >
                               <td className="py-2 px-2">
                                 <div className="flex items-center gap-2">
@@ -150,10 +150,10 @@ export default function CharactersPage() {
                                   >
                                     {card.rarity}
                                   </span>
-                                  <span className="text-cosmic-text font-medium">{card.name}</span>
+                                  <span className="text-edu-text font-medium">{card.name}</span>
                                 </div>
                               </td>
-                              <td className="py-2 px-2 text-cosmic-muted text-xs hidden sm:table-cell">
+                              <td className="py-2 px-2 text-edu-muted text-xs hidden sm:table-cell">
                                 {card.affiliation}
                               </td>
                               <td className="py-2 px-2 text-center text-red-400 font-bold">
@@ -181,26 +181,26 @@ export default function CharactersPage() {
               ))}
 
               {/* IRIS Ranking */}
-              <div className="glass-card rounded-xl p-4 sm:p-6 border border-pink-400/20">
+              <div className="edu-card rounded-xl p-4 sm:p-6 border border-pink-400/20">
                 <h3 className="text-sm font-bold text-pink-400 mb-4 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-pink-400" /> IRIS現代ランキング
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   {[
-                    { rank: 1, name: "アイリス", color: "text-gold-accent" },
+                    { rank: 1, name: "アイリス", color: "text-edu-accent" },
                     { rank: 2, name: "フィオナ", color: "text-gray-300" },
                     { rank: 3, name: "マリーナ", color: "text-amber-700" },
-                    { rank: 4, name: "セバスチャン", color: "text-cosmic-muted" },
-                    { rank: 5, name: "カスチーナ", color: "text-cosmic-muted" },
+                    { rank: 4, name: "セバスチャン", color: "text-edu-muted" },
+                    { rank: 5, name: "カスチーナ", color: "text-edu-muted" },
                   ].map((r) => (
                     <div
                       key={r.rank}
-                      className="flex items-center gap-2 bg-cosmic-dark/50 rounded-lg px-3 py-2 border border-cosmic-border/50"
+                      className="flex items-center gap-2 bg-edu-bg/50 rounded-lg px-3 py-2 border border-edu-border/50"
                     >
                       <span className={`text-lg font-black ${r.color} w-6 text-center`}>
                         {r.rank}
                       </span>
-                      <span className="text-sm text-cosmic-text font-medium">{r.name}</span>
+                      <span className="text-sm text-edu-text font-medium">{r.name}</span>
                     </div>
                   ))}
                 </div>
@@ -222,15 +222,15 @@ export default function CharactersPage() {
                   return (
                     <div
                       key={faction.affiliation}
-                      className="glass-card rounded-xl border border-cosmic-border/30 overflow-hidden transition-all duration-300 hover:scale-[1.01]"
+                      className="edu-card rounded-xl border border-edu-border/30 overflow-hidden transition-all duration-300"
                     >
-                      <div className="px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-cosmic-surface to-cosmic-dark/50 flex items-center gap-3">
-                        <span className="w-2.5 h-2.5 rounded-full bg-nebula-purple shrink-0" />
+                      <div className="px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-edu-surface to-edu-bg/50 flex items-center gap-3">
+                        <span className="w-2.5 h-2.5 rounded-full bg-edu-accent2 shrink-0" />
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-xs sm:text-sm text-cosmic-text truncate">
+                          <h3 className="font-bold text-xs sm:text-sm text-edu-text truncate">
                             {faction.affiliation}
                           </h3>
-                          <p className="text-[10px] text-cosmic-muted">{faction.cards.length}体</p>
+                          <p className="text-[10px] text-edu-muted">{faction.cards.length}体</p>
                         </div>
                         <div className="flex items-center gap-1.5 shrink-0">
                           {srCount > 0 && (
@@ -244,7 +244,7 @@ export default function CharactersPage() {
                             </span>
                           )}
                           {cCount > 0 && (
-                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-cosmic-deep/50 text-cosmic-muted border border-cosmic-border/30">
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-edu-bg/50 text-edu-muted border border-edu-border/30">
                               C×{cCount}
                             </span>
                           )}
@@ -254,14 +254,14 @@ export default function CharactersPage() {
                         {faction.cards.map((card) => (
                           <div
                             key={card.id}
-                            className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-cosmic-dark/50 transition-colors"
+                            className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-edu-bg/50 transition-colors"
                           >
                             <span
-                              className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${card.rarity === "SR" ? "rarity-badge-sr" : card.rarity === "R" ? "rarity-badge-r" : "bg-cosmic-deep/50 text-cosmic-muted border border-cosmic-border/30"}`}
+                              className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${card.rarity === "SR" ? "rarity-badge-sr" : card.rarity === "R" ? "rarity-badge-r" : "bg-edu-bg/50 text-edu-muted border border-edu-border/30"}`}
                             >
                               {card.rarity}
                             </span>
-                            <span className="text-xs sm:text-sm text-cosmic-text font-medium flex-1 truncate">
+                            <span className="text-xs sm:text-sm text-edu-text font-medium flex-1 truncate">
                               {card.name}
                             </span>
                             <div className="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[10px] shrink-0">
@@ -281,11 +281,11 @@ export default function CharactersPage() {
           </div>
         </section>
 
-        <footer className="relative border-t border-cosmic-border/50 py-8 px-4">
+        <footer className="relative border-t border-edu-border/50 py-8 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Link
               href="/"
-              className="text-xs text-cosmic-muted hover:text-gold-accent transition-colors"
+              className="text-xs text-edu-muted hover:text-edu-accent transition-colors"
             >
               ← トップページに戻る
             </Link>

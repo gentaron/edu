@@ -14,11 +14,11 @@ import { TIMELINE_DATA, locColor } from "@/lib/timeline-data"
 
 export default function TimelinePage() {
   return (
-    <div className="relative min-h-screen bg-cosmic-dark">
+    <div className="relative min-h-screen bg-edu-bg">
       <StarField />
       <div className="relative z-10">
         <PageHeader
-          icon={<Scroll className="w-6 h-6 text-gold-accent" />}
+          icon={<Scroll className="w-6 h-6 text-edu-accent" />}
           title="統合年表"
           subtitle="E16連星系の人類史 — AD 3500からE528現代まで"
         />
@@ -26,22 +26,22 @@ export default function TimelinePage() {
         <RevealSection>
           <div className="max-w-4xl mx-auto px-4 pb-20">
             {/* 概説 */}
-            <div className="glass-card rounded-xl p-6 mb-8">
-              <h2 className="text-lg font-bold text-cosmic-text mb-4 flex items-center gap-2">
-                <Scroll className="w-5 h-5 text-gold-accent" /> 統合年表とは
+            <div className="edu-card rounded-xl p-6 mb-8">
+              <h2 className="text-lg font-bold text-edu-text mb-4 flex items-center gap-2">
+                <Scroll className="w-5 h-5 text-edu-accent" /> 統合年表とは
               </h2>
-              <div className="space-y-3 text-sm text-cosmic-muted leading-relaxed">
+              <div className="space-y-3 text-sm text-edu-muted leading-relaxed">
                 <p>
                   E16連星系の人類史は、
-                  <span className="text-gold-accent font-medium">AD 3500年の地球離脱</span>
-                  から始まり、<span className="text-electric-blue font-medium">E528年の現代</span>
+                  <span className="text-edu-accent font-medium">AD 3500年の地球離脱</span>
+                  から始まり、<span className="text-edu-accent2 font-medium">E528年の現代</span>
                   に至るまで、約2000年以上にわたる壮大なドラマを紡いできた。この年表は、各時代の主要な出来事を場所別に整理し、E16文明の全体像を俯瞰できるように構成されている。各時代は異なる背景色で識別され、重要な出来事には対応する場所のバッジが付与されている。
                 </p>
                 <p>
-                  年表は大きく<span className="text-cosmic-text font-medium">地球時代</span>、
-                  <span className="text-cosmic-text font-medium">開拓期</span>、
-                  <span className="text-cosmic-text font-medium">E16文明の発展期</span>、そして
-                  <span className="text-cosmic-text font-medium">現代（E520年代）</span>
+                  年表は大きく<span className="text-edu-text font-medium">地球時代</span>、
+                  <span className="text-edu-text font-medium">開拓期</span>、
+                  <span className="text-edu-text font-medium">E16文明の発展期</span>、そして
+                  <span className="text-edu-text font-medium">現代（E520年代）</span>
                   の主要なフェーズに分けられる。開拓期にはテクロサス帝国やセリア・ドミニクスのような初期国家が台頭し、その後のE16文明の政治・文化・技術の基盤を形成した。E400年代のエヴァトロン弾圧は文明全体に深い傷跡を残し、その余波は現代の国際情勢にも影響を及ぼしている。
                 </p>
                 <p>
@@ -56,21 +56,21 @@ export default function TimelinePage() {
                 <AccordionItem
                   key={idx}
                   value={`period-${idx}`}
-                  className={`glass-card rounded-xl border ${period.borderColor} px-0 overflow-hidden transition-all duration-300`}
+                  className={`edu-card rounded-xl border ${period.borderColor} px-0 overflow-hidden transition-all duration-300`}
                 >
-                  <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-cosmic-surface/50 transition-colors">
+                  <AccordionTrigger className="px-6 py-4 hover:no-underline hover:bg-edu-surface/50 transition-colors">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                       <span className={`font-bold text-sm sm:text-base ${period.color}`}>
                         {period.period}
                       </span>
-                      <span className="text-xs text-cosmic-muted">{period.range}</span>
+                      <span className="text-xs text-edu-muted">{period.range}</span>
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="px-6 pb-4">
-                    <div className="space-y-2.5 ml-2 border-l-2 border-cosmic-border pl-4">
+                    <div className="space-y-2.5 ml-2 border-l-2 border-edu-border pl-4">
                       {period.events.map((ev, evIdx) => (
                         <div key={evIdx} className="flex flex-wrap gap-2 text-sm items-start">
-                          <span className="text-cosmic-muted mt-0.5 shrink-0">▸</span>
+                          <span className="text-edu-muted mt-0.5 shrink-0">▸</span>
                           {ev.loc && (
                             <Link
                               href={`/wiki#${encodeURIComponent(ev.loc)}`}
@@ -79,7 +79,7 @@ export default function TimelinePage() {
                               {ev.loc}
                             </Link>
                           )}
-                          <span className="text-cosmic-text/90">{ev.text}</span>
+                          <span className="text-edu-text/90">{ev.text}</span>
                         </div>
                       ))}
                     </div>
@@ -90,11 +90,11 @@ export default function TimelinePage() {
           </div>
         </RevealSection>
 
-        <footer className="relative border-t border-cosmic-border/50 py-8 px-4">
+        <footer className="relative border-t border-edu-border/50 py-8 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Link
               href="/"
-              className="text-xs text-cosmic-muted hover:text-gold-accent transition-colors"
+              className="text-xs text-edu-muted hover:text-edu-accent transition-colors"
             >
               ← トップページに戻る
             </Link>

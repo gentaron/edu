@@ -10,7 +10,7 @@ import { locColor } from "@/lib/timeline-data"
 
 export default function IrisPage() {
   return (
-    <div className="relative min-h-screen bg-cosmic-dark">
+    <div className="relative min-h-screen bg-edu-bg">
       <StarField />
       <div className="relative z-10">
         <PageHeader
@@ -35,16 +35,16 @@ export default function IrisPage() {
         <RevealSection>
           <div className="max-w-6xl mx-auto px-4 pb-20">
             {/* 概説 */}
-            <div className="glass-card rounded-xl p-6 mb-8">
-              <h2 className="text-lg font-bold text-cosmic-text mb-4 flex items-center gap-2">
+            <div className="edu-card rounded-xl p-6 mb-8">
+              <h2 className="text-lg font-bold text-edu-text mb-4 flex items-center gap-2">
                 <Shield className="w-5 h-5 text-rose-400" /> アイリスとは
               </h2>
-              <div className="space-y-3 text-sm text-cosmic-muted leading-relaxed">
+              <div className="space-y-3 text-sm text-edu-muted leading-relaxed">
                 <p>
                   <span className="text-rose-400 font-medium">アイリス</span>は、E16連星系において
-                  <span className="text-cosmic-text font-medium">Tier 1（現役最強）</span>
+                  <span className="text-edu-text font-medium">Tier 1（現役最強）</span>
                   の戦闘能力を持つ英雄である。かつては
-                  <span className="text-electric-blue hover:underline">ヴァーミリオン</span>
+                  <span className="text-edu-accent2 hover:underline">ヴァーミリオン</span>
                   の諜報機関長を務めていたが、現在は
                   <span className="text-cyan-400 hover:underline">トリニティ・アライアンス</span>
                   の指導者として、E16星系全体の秩序維持と平和構築に奔走している。その冷徹かつ
@@ -67,23 +67,23 @@ export default function IrisPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Character Portrait */}
               <div className="lg:col-span-1">
-                <div className="glass-card rounded-xl overflow-hidden transition-all duration-300">
+                <div className="edu-card rounded-xl overflow-hidden transition-all duration-300">
                   <div className="relative">
                     <img
                       src="https://raw.githubusercontent.com/gentaron/image/main/Iris.png"
                       alt="アイリス"
                       className="w-full aspect-[3/4] object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-cosmic-dark via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-edu-bg via-transparent to-transparent" />
                     <div className="absolute top-4 left-4">
-                      <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-gold-accent/20 border border-gold-accent/40 text-gold-accent">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full bg-edu-accent/20 border border-edu-accent/40 text-edu-accent">
                         <Crown className="w-3 h-3" /> IRIS 1位
                       </span>
                     </div>
                     <div className="absolute bottom-4 left-4 right-4">
-                      <p className="text-xl font-bold text-cosmic-text">アイリス</p>
+                      <p className="text-xl font-bold text-edu-text">アイリス</p>
                       <p className="text-xs text-rose-400">Iris — Dominion Vermillion</p>
-                      <p className="text-[10px] text-cosmic-muted mt-1">
+                      <p className="text-[10px] text-edu-muted mt-1">
                         トリニティ・アライアンス指導者
                       </p>
                     </div>
@@ -93,7 +93,7 @@ export default function IrisPage() {
 
               {/* Profile Details */}
               <div className="lg:col-span-2 space-y-4">
-                <div className="glass-card rounded-xl p-6">
+                <div className="edu-card rounded-xl p-6">
                   <h3 className="text-sm font-bold text-rose-400 mb-4 uppercase tracking-wider">
                     プロフィール
                   </h3>
@@ -105,7 +105,7 @@ export default function IrisPage() {
                           <Link
                             key="wl1"
                             href="/wiki#トリニティ・アライアンス"
-                            className="text-electric-blue hover:underline"
+                            className="text-edu-accent2 hover:underline"
                           >
                             トリニティ・アライアンス
                           </Link>,
@@ -115,7 +115,7 @@ export default function IrisPage() {
                           <React.Fragment key="wl2">
                             <Link
                               href="/wiki#ヴァーミリオン"
-                              className="text-electric-blue hover:underline"
+                              className="text-edu-accent2 hover:underline"
                             >
                               ヴァーミリオン
                             </Link>
@@ -129,15 +129,15 @@ export default function IrisPage() {
                       ] as [string, React.ReactNode][]
                     ).map(([k, v]) => (
                       <div key={k}>
-                        <p className="text-cosmic-muted text-xs mb-0.5">{k}</p>
-                        <p className="text-cosmic-text font-medium">{v}</p>
+                        <p className="text-edu-muted text-xs mb-0.5">{k}</p>
+                        <p className="text-edu-text font-medium">{v}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Abilities */}
-                <div className="glass-card rounded-xl p-6">
+                <div className="edu-card rounded-xl p-6">
                   <h3 className="text-sm font-bold text-blue-400 mb-4 uppercase tracking-wider">
                     能力・装備
                   </h3>
@@ -145,7 +145,7 @@ export default function IrisPage() {
                     {IRIS_ABILITIES.map((ability) => (
                       <div
                         key={ability.name}
-                        className={`p-3 rounded-lg border ${ability.color} transition-all hover:scale-[1.02]`}
+                        className={`p-3 rounded-lg border ${ability.color} transition-all`}
                       >
                         <p className="text-sm font-bold mb-1">{ability.name}</p>
                         <p className="text-[11px] opacity-80">{ability.desc}</p>
@@ -155,7 +155,7 @@ export default function IrisPage() {
                 </div>
 
                 {/* Key Relationships */}
-                <div className="glass-card rounded-xl p-6">
+                <div className="edu-card rounded-xl p-6">
                   <h3 className="text-sm font-bold text-pink-400 mb-4 uppercase tracking-wider">
                     主要関係者
                   </h3>
@@ -163,12 +163,12 @@ export default function IrisPage() {
                     {IRIS_RELATIONS.map((rel) => (
                       <div
                         key={rel.name}
-                        className={`flex items-start gap-3 px-3 py-2 rounded-lg border ${rel.color} hover:bg-cosmic-dark/50 transition-colors`}
+                        className={`flex items-start gap-3 px-3 py-2 rounded-lg border ${rel.color} hover:bg-edu-bg/50 transition-colors`}
                       >
-                        <span className="text-cosmic-muted mt-0.5 shrink-0 text-xs">▸</span>
+                        <span className="text-edu-muted mt-0.5 shrink-0 text-xs">▸</span>
                         <div className="min-w-0">
-                          <p className="text-sm text-cosmic-text font-medium">{rel.name}</p>
-                          <p className="text-[11px] text-cosmic-muted">{rel.note}</p>
+                          <p className="text-sm text-edu-text font-medium">{rel.name}</p>
+                          <p className="text-[11px] text-edu-muted">{rel.note}</p>
                         </div>
                       </div>
                     ))}
@@ -178,7 +178,7 @@ export default function IrisPage() {
             </div>
 
             {/* Iris Story Timeline */}
-            <div className="mt-8 glass-card rounded-xl p-6">
+            <div className="mt-8 edu-card rounded-xl p-6">
               <h3 className="text-sm font-bold text-rose-400 mb-4 uppercase tracking-wider">
                 アイリス物語年表
               </h3>
@@ -191,7 +191,7 @@ export default function IrisPage() {
                     >
                       {t.loc}
                     </span>
-                    <span className="text-cosmic-text/90">{t.event}</span>
+                    <span className="text-edu-text/90">{t.event}</span>
                   </div>
                 ))}
               </div>
@@ -199,7 +199,7 @@ export default function IrisPage() {
 
             {/* Organizations */}
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="glass-card rounded-xl p-5 border border-cyan-400/20">
+              <div className="edu-card rounded-xl p-5 border border-cyan-400/20">
                 <h4 className="text-sm font-bold text-cyan-400 mb-3 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-cyan-400" />
                   <Link
@@ -209,7 +209,7 @@ export default function IrisPage() {
                     トリニティ・アライアンス
                   </Link>
                 </h4>
-                <p className="text-xs text-cosmic-muted mb-3">
+                <p className="text-xs text-edu-muted mb-3">
                   アイリスが指導する3勢力連合。E520年結成。
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -223,7 +223,7 @@ export default function IrisPage() {
                   ))}
                 </div>
               </div>
-              <div className="glass-card rounded-xl p-5 border border-blue-400/20">
+              <div className="edu-card rounded-xl p-5 border border-blue-400/20">
                 <h4 className="text-sm font-bold text-blue-400 mb-3 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-blue-400" />
                   <Link href="/wiki#V7" className="text-blue-400 hover:underline">
@@ -231,8 +231,8 @@ export default function IrisPage() {
                   </Link>{" "}
                   (Vital Seven)
                 </h4>
-                <p className="text-xs text-cosmic-muted mb-3">
-                  <Link href="/wiki#フィオナ" className="hover:text-nebula-purple hover:underline">
+                <p className="text-xs text-edu-muted mb-3">
+                  <Link href="/wiki#フィオナ" className="hover:text-edu-accent2 hover:underline">
                     フィオナ
                   </Link>
                   が急先鋒の7カ国連合。E515年設立。
@@ -254,15 +254,15 @@ export default function IrisPage() {
                   ))}
                 </div>
               </div>
-              <div className="glass-card rounded-xl p-5 border border-red-400/20">
+              <div className="edu-card rounded-xl p-5 border border-red-400/20">
                 <h4 className="text-sm font-bold text-red-400 mb-3 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-red-400" />
                   <Link href="/wiki#アルファ・ヴェノム" className="text-red-400 hover:underline">
                     アルファ・ヴェノム
                   </Link>
                 </h4>
-                <p className="text-xs text-cosmic-muted mb-3">
-                  <Link href="/wiki#イズミ" className="hover:text-nebula-purple hover:underline">
+                <p className="text-xs text-edu-muted mb-3">
+                  <Link href="/wiki#イズミ" className="hover:text-edu-accent2 hover:underline">
                     イズミ
                   </Link>
                   率いる暗黒組織。シルバー・ヴェノムの後継。
@@ -286,7 +286,7 @@ export default function IrisPage() {
             <div className="mt-6 text-center">
               <Link
                 href="/story"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-sm font-medium hover:bg-cyan-500/20 transition-all hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cyan-500/10 border border-cyan-400/30 text-cyan-400 text-sm font-medium hover:bg-cyan-500/20 transition-all"
               >
                 <Shield className="w-4 h-4" /> EDU小説集を読む
               </Link>
@@ -294,11 +294,11 @@ export default function IrisPage() {
           </div>
         </RevealSection>
 
-        <footer className="relative border-t border-cosmic-border/50 py-8 px-4">
+        <footer className="relative border-t border-edu-border/50 py-8 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Link
               href="/"
-              className="text-xs text-cosmic-muted hover:text-gold-accent transition-colors"
+              className="text-xs text-edu-muted hover:text-edu-accent transition-colors"
             >
               ← トップページに戻る
             </Link>

@@ -9,13 +9,13 @@ import { PLATFORMS } from "@/lib/liminal-data"
 
 export default function LiminalPage() {
   return (
-    <div className="relative min-h-screen bg-cosmic-dark">
+    <div className="relative min-h-screen bg-edu-bg">
       <StarField />
       <div className="relative z-10">
         <PageHeader
-          icon={<Radio className="w-6 h-6 text-gold-accent" />}
+          icon={<Radio className="w-6 h-6 text-edu-accent" />}
           title={
-            <Link href="/wiki#リミナル・フォージ" className="text-cosmic-gradient hover:underline">
+            <Link href="/wiki#リミナル・フォージ" className="text-edu-text hover:underline">
               リミナル・フォージ
             </Link>
           }
@@ -26,13 +26,13 @@ export default function LiminalPage() {
         <RevealSection>
           <div className="max-w-6xl mx-auto px-4 pb-20">
             {/* 概説 */}
-            <div className="glass-card rounded-xl p-6 mb-8">
-              <h2 className="text-lg font-bold text-cosmic-text mb-4 flex items-center gap-2">
-                <Radio className="w-5 h-5 text-gold-accent" /> リミナル・フォージとは
+            <div className="edu-card rounded-xl p-6 mb-8">
+              <h2 className="text-lg font-bold text-edu-text mb-4 flex items-center gap-2">
+                <Radio className="w-5 h-5 text-edu-accent" /> リミナル・フォージとは
               </h2>
-              <div className="space-y-3 text-sm text-cosmic-muted leading-relaxed">
+              <div className="space-y-3 text-sm text-edu-muted leading-relaxed">
                 <p>
-                  <span className="text-gold-accent font-medium">
+                  <span className="text-edu-accent font-medium">
                     リミナル・フォージ（Liminal Forge）
                   </span>
                   は、E528年の現代からAD
@@ -42,10 +42,10 @@ export default function LiminalPage() {
                 </p>
                 <p>
                   放送の経路は非常に複雑である。まず
-                  <span className="text-nebula-purple font-medium">AURALIS 本部</span>
+                  <span className="text-edu-accent2 font-medium">AURALIS 本部</span>
                   （E528年）から信号が発信され、
-                  <span className="text-electric-blue font-medium">ペルセポネ仮想宇宙</span>と
-                  <span className="text-electric-blue font-medium">
+                  <span className="text-edu-accent2 font-medium">ペルセポネ仮想宇宙</span>と
+                  <span className="text-edu-accent2 font-medium">
                     次元極地平（Dimension Horizon）
                   </span>
                   を経由して時空を超え、AD
@@ -61,51 +61,51 @@ export default function LiminalPage() {
             </div>
 
             {/* Broadcasting mechanism */}
-            <div className="glass-card rounded-xl p-6 mb-6">
-              <h3 className="text-lg font-bold text-gold-accent mb-4">時相放送の仕組み</h3>
+            <div className="edu-card rounded-xl p-6 mb-6">
+              <h3 className="text-lg font-bold text-edu-accent mb-4">時相放送の仕組み</h3>
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-center text-center">
-                <div className="bg-nebula-purple/15 border border-nebula-purple/30 rounded-lg p-4 min-w-[160px]">
-                  <p className="text-xs text-cosmic-muted mb-1">起点</p>
-                  <p className="text-sm font-bold text-nebula-purple">E528</p>
-                  <p className="text-xs text-cosmic-muted">
-                    <Link href="/wiki#AURALIS" className="hover:text-nebula-purple hover:underline">
+                <div className="bg-edu-accent2/15 border border-edu-accent2/30 rounded-lg p-4 min-w-[160px]">
+                  <p className="text-xs text-edu-muted mb-1">起点</p>
+                  <p className="text-sm font-bold text-edu-accent2">E528</p>
+                  <p className="text-xs text-edu-muted">
+                    <Link href="/wiki#AURALIS" className="hover:text-edu-accent2 hover:underline">
                       AURALIS
                     </Link>
                     本部
                   </p>
                 </div>
-                <ArrowDown className="w-5 h-5 text-cosmic-muted rotate-90 sm:rotate-0 shrink-0" />
-                <div className="bg-electric-blue/15 border border-electric-blue/30 rounded-lg p-4 min-w-[200px]">
-                  <p className="text-xs text-cosmic-muted mb-1">経由</p>
-                  <p className="text-sm font-bold text-electric-blue">
-                    <Link href="/wiki#ペルセポネ" className="text-electric-blue hover:underline">
+                <ArrowDown className="w-5 h-5 text-edu-muted rotate-90 sm:rotate-0 shrink-0" />
+                <div className="bg-edu-accent2/15 border border-edu-accent2/30 rounded-lg p-4 min-w-[200px]">
+                  <p className="text-xs text-edu-muted mb-1">経由</p>
+                  <p className="text-sm font-bold text-edu-accent2">
+                    <Link href="/wiki#ペルセポネ" className="text-edu-accent2 hover:underline">
                       ペルセポネ
                     </Link>
                     仮想宇宙
                   </p>
-                  <p className="text-xs text-cosmic-muted">
+                  <p className="text-xs text-edu-muted">
                     ×{" "}
-                    <Link href="/wiki#次元極地平" className="text-electric-blue hover:underline">
+                    <Link href="/wiki#次元極地平" className="text-edu-accent2 hover:underline">
                       Dimension Horizon
                     </Link>
                   </p>
                 </div>
-                <ArrowDown className="w-5 h-5 text-cosmic-muted rotate-90 sm:rotate-0 shrink-0" />
-                <div className="bg-gold-accent/15 border border-gold-accent/30 rounded-lg p-4 min-w-[160px]">
-                  <p className="text-xs text-cosmic-muted mb-1">到達点</p>
-                  <p className="text-sm font-bold text-gold-accent">AD2026</p>
-                  <p className="text-xs text-cosmic-muted">地球インターネット</p>
+                <ArrowDown className="w-5 h-5 text-edu-muted rotate-90 sm:rotate-0 shrink-0" />
+                <div className="bg-edu-accent/15 border border-edu-accent/30 rounded-lg p-4 min-w-[160px]">
+                  <p className="text-xs text-edu-muted mb-1">到達点</p>
+                  <p className="text-sm font-bold text-edu-accent">AD2026</p>
+                  <p className="text-xs text-edu-muted">地球インターネット</p>
                 </div>
               </div>
-              <div className="mt-6 p-4 bg-cosmic-dark/50 rounded-lg border border-cosmic-border/50">
-                <h4 className="text-sm font-bold text-cosmic-text mb-2">なぜ2026年？</h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-cosmic-muted">
+              <div className="mt-6 p-4 bg-edu-bg/50 rounded-lg border border-edu-border/50">
+                <h4 className="text-sm font-bold text-edu-text mb-2">なぜ2026年？</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-edu-muted">
                   <div className="flex items-start gap-2">
-                    <Zap className="w-4 h-4 text-gold-accent shrink-0 mt-0.5" />
+                    <Zap className="w-4 h-4 text-edu-accent shrink-0 mt-0.5" />
                     <p>AI技術臨界点 — 地球文明の技術発展が時空通信を可能にする</p>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Star className="w-4 h-4 text-gold-accent shrink-0 mt-0.5" />
+                    <Star className="w-4 h-4 text-edu-accent shrink-0 mt-0.5" />
                     <p>E16文明の遠い原点 — 人類の旅路の始まりに敬意を込めて</p>
                   </div>
                 </div>
@@ -113,13 +113,13 @@ export default function LiminalPage() {
             </div>
 
             {/* Platform table */}
-            <div className="glass-card rounded-xl p-6">
-              <h3 className="text-lg font-bold text-electric-blue mb-4">放送プラットフォーム</h3>
+            <div className="edu-card rounded-xl p-6">
+              <h3 className="text-lg font-bold text-edu-accent2 mb-4">放送プラットフォーム</h3>
               <div className="space-y-3">
                 {PLATFORMS.map((p) => (
                   <div
                     key={p.name}
-                    className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-lg border ${p.color} ${p.bg} transition-all hover:scale-[1.01]`}
+                    className={`flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 p-3 rounded-lg border ${p.color} ${p.bg} transition-all`}
                   >
                     <Badge variant="outline" className={`w-fit text-[10px] ${p.color} shrink-0`}>
                       {p.type}
@@ -130,8 +130,8 @@ export default function LiminalPage() {
                       rel="noopener noreferrer"
                       className="flex-1 min-w-0 hover:opacity-80 transition-opacity"
                     >
-                      <p className="text-sm font-mono text-cosmic-text truncate">{p.name}</p>
-                      <p className="text-xs text-cosmic-muted">{p.desc}</p>
+                      <p className="text-sm font-mono text-edu-text truncate">{p.name}</p>
+                      <p className="text-xs text-edu-muted">{p.desc}</p>
                     </a>
                   </div>
                 ))}
@@ -140,11 +140,11 @@ export default function LiminalPage() {
           </div>
         </RevealSection>
 
-        <footer className="relative border-t border-cosmic-border/50 py-8 px-4">
+        <footer className="relative border-t border-edu-border/50 py-8 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Link
               href="/"
-              className="text-xs text-cosmic-muted hover:text-gold-accent transition-colors"
+              className="text-xs text-edu-muted hover:text-edu-accent transition-colors"
             >
               ← トップページに戻る
             </Link>
