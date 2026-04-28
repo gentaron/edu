@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { BookOpen, ArrowLeft, Clock, Users, ChevronDown, Library } from "lucide-react"
-import { ALL_STORIES, CHAPTERS, getStoriesByChapter } from "@/lib/stories"
+import { ALL_STORIES, CHAPTERS, getStoriesByChapter, getStoryTitle } from "@/lib/stories"
 import { type Lang, tl } from "@/lib/lang"
 
 /* ─── Wiki name to image mapping ─── */
@@ -198,7 +198,7 @@ function StoryCard({
           </span>
           <div className="min-w-0 flex-1">
             <h4 className="text-sm font-bold text-cosmic-text group-hover:text-electric-blue transition-colors mb-0.5 leading-snug">
-              {story.title}
+              {getStoryTitle(story, lang)}
             </h4>
             {story.label !== story.title && (
               <p className="text-[10px] text-cosmic-muted truncate">{story.label}</p>

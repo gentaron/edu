@@ -4,7 +4,7 @@ import {
   ALL_STORIES,
   CHAPTERS,
   getStoryBySlug,
-  getStoryUrl,
+  getStoryUrlForLang,
   getStoriesByChapter,
   getAdjacentStories,
 } from "@/lib/stories"
@@ -15,21 +15,33 @@ export function generateStaticParams() {
   return ALL_STORIES.map((s) => ({ slug: s.slug }))
 }
 
+async function fetchStoryText(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, { next: { revalidate: 3600 } })
+    if (!res.ok) return null
+    return await res.text()
+  } catch {
+    return null
+  }
+}
+
 export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const story = getStoryBySlug(slug)
   if (!story) return notFound()
 
-  let text: string | null = null
-  try {
-    const res = await fetch(getStoryUrl(story.fileName), { next: { revalidate: 3600 } })
-    if (!res.ok) throw new Error(`fetch failed: ${res.status}`)
-    text = await res.text()
-  } catch {
-    text = null
-  }
+  // Fetch both language versions in parallel
+  const [textJa, textEn] = await Promise.all([
+    fetchStoryText(getStoryUrlForLang(story, "ja")),
+    fetchStoryText(getStoryUrlForLang(story, "en")),
+  ])
 
-  const paragraphs = text ? text.split(/\n\n+/).filter((p) => p.trim().length > 0) : []
+  const splitParagraphs = (text: string | null) =>
+    text ? text.split(/\n\n+/).filter((p) => p.trim().length > 0) : []
+
+  const paragraphsJa = splitParagraphs(textJa)
+  const paragraphsEn = splitParagraphs(textEn)
+
   const relatedEntries = ALL_ENTRIES.filter((e) => story.relatedEntries.includes(e.id)).map(
     (e) => ({ id: e.id, name: e.name })
   )
@@ -41,8 +53,9 @@ export default async function StoryPage({ params }: { params: Promise<{ slug: st
   return (
     <StoryReaderUI
       story={story}
-      paragraphs={paragraphs}
-      fetchFailed={text === null}
+      paragraphsJa={paragraphsJa}
+      paragraphsEn={paragraphsEn}
+      fetchFailed={textJa === null && textEn === null}
       chapter={chapter}
       chapterStories={chapterStories}
       storyIndex={storyIndex}

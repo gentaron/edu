@@ -13,7 +13,7 @@ import {
   ChevronRight,
   Library,
 } from "lucide-react"
-import { type StoryMeta, type ChapterMeta, getStoriesForEntry, getStoryBySlug } from "@/lib/stories"
+import { type StoryMeta, type ChapterMeta, getStoriesForEntry, getStoryBySlug, getStoryTitle } from "@/lib/stories"
 import { type Lang, tl } from "@/lib/lang"
 import ReadingProgress from "./reading-progress"
 import StarField from "./star-field"
@@ -141,7 +141,7 @@ function RelatedStoriesSection({
                 <BookOpen className="w-4 h-4 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <span className="truncate block group-hover:text-electric-blue transition-colors">
-                    {s.title}
+                    {getStoryTitle(s, lang)}
                   </span>
                   {s.era && <span className="text-[10px] text-cosmic-muted">{s.era}</span>}
                 </div>
@@ -157,7 +157,8 @@ function RelatedStoriesSection({
 /* ─── Props ─── */
 export type StoryReaderUIProps = {
   story: StoryMeta
-  paragraphs: string[]
+  paragraphsJa: string[]
+  paragraphsEn: string[]
   fetchFailed: boolean
   chapter: ChapterMeta | undefined
   chapterStories: StoryMeta[]
@@ -170,7 +171,8 @@ export type StoryReaderUIProps = {
 /* ─── Main Client Component ─── */
 export function StoryReaderUI({
   story,
-  paragraphs,
+  paragraphsJa,
+  paragraphsEn,
   fetchFailed,
   chapter,
   chapterStories,
@@ -282,7 +284,7 @@ export function StoryReaderUI({
             )}
 
             <h1 className="text-2xl sm:text-3xl font-black text-cosmic-text mb-3 leading-tight tracking-tight">
-              {story.title}
+              {getStoryTitle(story, lang)}
             </h1>
 
             {story.label !== story.title && (
@@ -341,7 +343,7 @@ export function StoryReaderUI({
                 )}
               </p>
             ) : (
-              paragraphs.map((p, i) => (
+              (lang === "ja" ? paragraphsJa : paragraphsEn).map((p, i) => (
                 <div key={i} className="mb-6">
                   {isSceneBreak(p) ? (
                     <div className="flex items-center justify-center py-4">
@@ -388,7 +390,7 @@ export function StoryReaderUI({
                     </span>
                   </div>
                   <p className="text-xs font-bold text-cosmic-text group-hover:text-electric-blue transition-colors line-clamp-2">
-                    {prev.title}
+                    {getStoryTitle(prev, lang)}
                   </p>
                 </Link>
               ) : (
@@ -407,7 +409,7 @@ export function StoryReaderUI({
                     <ArrowRight className="w-3 h-3 text-cosmic-muted group-hover:text-electric-blue transition-colors" />
                   </div>
                   <p className="text-xs font-bold text-cosmic-text group-hover:text-electric-blue transition-colors line-clamp-2">
-                    {next.title}
+                    {getStoryTitle(next, lang)}
                   </p>
                 </Link>
               ) : (
