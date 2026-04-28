@@ -12,12 +12,12 @@ export default function AuralisPage() {
         <PageHeader
           icon={<Sparkles className="w-6 h-6 text-edu-accent2" />}
           title={
-            <Link href="/wiki#AURALIS" className="text-edu-text hover:underline">
+            <Link href={`/wiki/${encodeURIComponent("AURALIS")}`} className="text-edu-text hover:underline">
               AURALIS Collective
             </Link>
           }
           subtitle="「光と音を永遠にする — Where Light and Sound Become Eternal」"
-          wikiHref="/wiki#AURALIS"
+          wikiHref={`/wiki/${encodeURIComponent("AURALIS")}`}
         />
 
         <RevealSection>
@@ -34,17 +34,33 @@ export default function AuralisPage() {
                   は単なる芸術集団ではなく、政治的影響力も持ち、歴史上度々権力との対立を経験してきた。
                 </p>
                 <p>
-                  <span className="text-edu-accent2 font-medium">第一世代（E290〜E420）</span>は
-                  Kate Claudia と Lily Steiner
-                  を中心に創設され、セリア・ドミニクスの黄金期に最盛期を迎えた。しかし、E400年のエヴァトロン弾圧により組織は解体され、創設者たちは逮捕・消息不明となった。唯一、Layla
-                  Virell Nova は冷凍保存によって時を超え、第二世代への橋渡し役となる。
+                  <span className="text-edu-accent2 font-medium">第一世代（E290〜E420）</span>は{" "}
+                  <Link href={`/wiki/${encodeURIComponent("Kate Claudia")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Kate Claudia</Link>
+                  {" "}と{" "}
+                  <Link href={`/wiki/${encodeURIComponent("Lily Steiner")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Lily Steiner</Link>
+                  を中心に創設され、
+                  <Link href={`/wiki/${encodeURIComponent("セリア・ドミニクス")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">セリア・ドミニクス</Link>
+                  の黄金期に最盛期を迎えた。しかし、E400年の
+                  <Link href={`/wiki/${encodeURIComponent("エヴァトロン")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">エヴァトロン</Link>
+                  弾圧により組織は解体され、創設者たちは逮捕・消息不明となった。唯一、{" "}
+                  <Link href={`/wiki/${encodeURIComponent("レイラ・ヴィレル・ノヴァ")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Layla Virell Nova</Link>
+                  {" "}は冷凍保存によって時を超え、第二世代への橋渡し役となる。
                 </p>
                 <p>
                   <span className="text-edu-accent2 font-medium">第二世代（E522〜現在）</span>
-                  は5人のメンバーで構成され、現代のE16文明において文化的・技術的な中核を担っている。Kate
-                  Patton、Lillie Ardent、Layla Virell Nova（冷凍保存からの復活）、Mina Eureka
-                  Ernst（AI研究員）、Ninny Offenbach（原初個体はAlpha
-                  Kane時代に別惑星へ離脱、クローン技術で遺伝子継承ののち再帰還）の5人は、それぞれが独自の背景と能力を持ち、AURALIS
+                  は5人のメンバーで構成され、現代のE16文明において文化的・技術的な中核を担っている。{" "}
+                  <Link href={`/wiki/${encodeURIComponent("Kate Patton")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Kate Patton</Link>
+                  、
+                  <Link href={`/wiki/${encodeURIComponent("Lillie Ardent")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Lillie Ardent</Link>
+                  、
+                  <Link href={`/wiki/${encodeURIComponent("レイラ・ヴィレル・ノヴァ")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Layla Virell Nova</Link>
+                  （冷凍保存からの復活）、
+                  <Link href={`/wiki/${encodeURIComponent("ミナ・エウレカ・エルンスト")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Mina Eureka Ernst</Link>
+                  （AI研究員）、
+                  <Link href={`/wiki/${encodeURIComponent("Ninny Offenbach")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Ninny Offenbach</Link>
+                  （原初個体は
+                  <Link href={`/wiki/${encodeURIComponent("アルファ・ケイン")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">Alpha Kane</Link>
+                  時代に別惑星へ離脱、クローン技術で遺伝子継承ののち再帰還）の5人は、それぞれが独自の背景と能力を持ち、AURALIS
                   を新たな段階へと導いている。
                 </p>
               </div>
@@ -91,7 +107,7 @@ export default function AuralisPage() {
                     <p>
                       <span className="text-edu-text">E270頃:</span> AURALIS Proto（
                       <Link
-                        href="/wiki#Diana"
+                        href={`/wiki/${encodeURIComponent("Diana")}`}
                         className="text-edu-muted hover:text-edu-accent2 hover:underline"
                       >
                         Diana
@@ -104,14 +120,14 @@ export default function AuralisPage() {
                     <p>
                       <span className="text-edu-text">創設者:</span>{" "}
                       <Link
-                        href="/wiki#Kate Claudia"
+                        href={`/wiki/${encodeURIComponent("Kate Claudia")}`}
                         className="text-edu-muted hover:text-edu-accent2 hover:underline"
                       >
                         Kate Claudia
                       </Link>
                       ,{" "}
                       <Link
-                        href="/wiki#Lily Steiner"
+                        href={`/wiki/${encodeURIComponent("Lily Steiner")}`}
                         className="text-edu-muted hover:text-edu-accent2 hover:underline"
                       >
                         Lily Steiner
@@ -120,7 +136,7 @@ export default function AuralisPage() {
                     <p>
                       <span className="text-edu-text">参加:</span>{" "}
                       <Link
-                        href="/wiki#レイラ・ヴィレル・ノヴァ"
+                        href={`/wiki/${encodeURIComponent("レイラ・ヴィレル・ノヴァ")}`}
                         className="text-edu-muted hover:text-edu-accent2 hover:underline"
                       >
                         Layla Virell Nova
@@ -139,7 +155,7 @@ export default function AuralisPage() {
                     <p>
                       <span className="text-edu-text">E335〜E370:</span>{" "}
                       <Link
-                        href="/wiki#セリア・ドミニクス"
+                        href={`/wiki/${encodeURIComponent("セリア・ドミニクス")}`}
                         className="text-edu-muted hover:text-edu-accent2 hover:underline"
                       >
                         セリア黄金期
@@ -147,8 +163,19 @@ export default function AuralisPage() {
                       に最盛期
                     </p>
                     <p>
-                      <span className="text-edu-text">E400:</span> エヴァトロン弾圧で解体。Kate
-                      Claudia・Lily Steinerは逮捕・消息不明
+                      <span className="text-edu-text">E400:</span>{" "}
+                      <Link href={`/wiki/${encodeURIComponent("エヴァトロン")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">
+                        エヴァトロン
+                      </Link>
+                      弾圧で解体。
+                      <Link href={`/wiki/${encodeURIComponent("Kate Claudia")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">
+                        Kate Claudia
+                      </Link>
+                      ・
+                      <Link href={`/wiki/${encodeURIComponent("Lily Steiner")}`} className="text-edu-muted hover:text-edu-accent2 hover:underline">
+                        Lily Steiner
+                      </Link>
+                      は逮捕・消息不明
                     </p>
                     <p>
                       <span className="text-edu-text">Layla:</span>{" "}
@@ -178,35 +205,35 @@ export default function AuralisPage() {
                         desc: "大地の豊かさ・安定",
                         color: "bg-green-500/20 border-green-500/40",
                         img: "https://raw.githubusercontent.com/gentaron/image/main/KatePatton.png",
-                        wiki: "/wiki#Kate Patton",
+                        wiki: `/wiki/${encodeURIComponent("Kate Patton")}`,
                       },
                       {
                         name: "Lillie Ardent",
                         desc: "情熱的で大胆",
                         color: "bg-red-500/20 border-red-500/40",
                         img: "https://raw.githubusercontent.com/gentaron/image/main/LillieArdent.png",
-                        wiki: "/wiki#Lillie Ardent",
+                        wiki: `/wiki/${encodeURIComponent("Lillie Ardent")}`,
                       },
                       {
                         name: "Layla Virell Nova",
                         desc: "Pink Voltage — 冷凍保存から復活、ミナたちと同年代",
                         color: "bg-pink-500/20 border-pink-500/40",
                         img: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirellNova.png",
-                        wiki: "/wiki#レイラ・ヴィレル・ノヴァ",
+                        wiki: `/wiki/${encodeURIComponent("レイラ・ヴィレル・ノヴァ")}`,
                       },
                       {
                         name: "Mina Eureka Ernst",
                         desc: "celestial × avant-garde, AI研究員",
                         color: "bg-blue-500/20 border-edu-accent2/40",
                         img: "https://raw.githubusercontent.com/gentaron/image/main/MinaEurekaErnst.png",
-                        wiki: "/wiki#ミナ・エウレカ・エルンスト",
+                        wiki: `/wiki/${encodeURIComponent("ミナ・エウレカ・エルンスト")}`,
                       },
                       {
                         name: "Ninny Offenbach",
                         desc: "無邪気で爆発的な活力 — 原初個体はAlpha Kane時代に別惑星へ、クローン技術で遺伝子継承ののちGigapolisに再帰還",
                         color: "bg-yellow-500/20 border-edu-accent/40",
                         img: "https://raw.githubusercontent.com/gentaron/image/main/NinnyOffenbach.png",
-                        wiki: "/wiki#Ninny Offenbach",
+                        wiki: `/wiki/${encodeURIComponent("Ninny Offenbach")}`,
                       },
                     ].map((m) => (
                       <div
@@ -239,16 +266,30 @@ export default function AuralisPage() {
                       <p>
                         ニニーの<span className="text-edu-text font-medium">原初個体</span>は
                         <Link
-                          href="/wiki#アルファ・ケイン"
+                          href={`/wiki/${encodeURIComponent("アルファ・ケイン")}`}
                           className="text-edu-muted hover:text-edu-accent2 hover:underline"
                         >
                           Alpha Kane
                         </Link>
-                        時代のGigapolisに存在していたが、Kaneと袂を分かち別惑星へ離脱した。
+                        時代の
+                        <Link
+                          href={`/wiki/${encodeURIComponent("ギガポリス")}`}
+                          className="text-edu-muted hover:text-edu-accent2 hover:underline"
+                        >
+                          Gigapolis
+                        </Link>
+                        に存在していたが、Kaneと袂を分かち別惑星へ離脱した。
                       </p>
                       <p>
                         そこから<span className="text-edu-accent2 font-medium">クローン技術</span>
-                        で遺伝子が世代を超えて継承され、現代のNinnyがGigapolisに
+                        で遺伝子が世代を超えて継承され、現代のNinnyが
+                        <Link
+                          href={`/wiki/${encodeURIComponent("ギガポリス")}`}
+                          className="text-edu-accent font-medium hover:text-edu-accent2 hover:underline"
+                        >
+                          Gigapolis
+                        </Link>
+                        に
                         <span className="text-edu-accent font-medium">再帰還</span>
                         してミナと出会い、第二世代に加入した。
                       </p>

@@ -17,17 +17,17 @@ export default function MinaPage() {
           subtitle={
             <>
               Mina Eureka Ernst —{" "}
-              <Link href="/wiki#AURALIS" className="text-edu-accent2 hover:underline">
+              <Link href={`/wiki/${encodeURIComponent("AURALIS")}`} className="text-edu-accent2 hover:underline">
                 AURALIS
               </Link>
               第二世代、{" "}
-              <Link href="/wiki#リミナル・フォージ" className="text-edu-accent2 hover:underline">
+              <Link href={`/wiki/${encodeURIComponent("リミナル・フォージ")}`} className="text-edu-accent2 hover:underline">
                 リミナル・フォージ
               </Link>
               創設者
             </>
           }
-          wikiHref="/wiki#ミナ・エウレカ・エルンスト"
+          wikiHref={`/wiki/${encodeURIComponent("ミナ・エウレカ・エルンスト")}`}
         />
 
         <RevealSection>
@@ -40,28 +40,41 @@ export default function MinaPage() {
               <div className="space-y-3 text-sm text-edu-muted leading-relaxed">
                 <p>
                   <span className="text-edu-accent2 font-medium">ミナ・エウレカ・エルンスト</span>
-                  は、E16連星系において最も影響力のある人物の一人である。AURALIS Collective
-                  の第二世代メンバーであり、同時に
-                  <span className="text-edu-accent font-medium">リミナル・フォージ</span>
-                  の創設者として、E528年の現代から過去の地球（AD
+                  {" "}は、E16連星系において最も影響力のある人物の一人である。{" "}
+                  <Link href={`/wiki/${encodeURIComponent("AURALIS")}`} className="text-edu-accent2 hover:underline">
+                    AURALIS Collective
+                  </Link>
+                  {" "}の第二世代メンバーであり、同時に{" "}
+                  <Link href={`/wiki/${encodeURIComponent("リミナル・フォージ")}`} className="text-edu-accent hover:underline">
+                    リミナル・フォージ
+                  </Link>
+                  {" "}の創設者として、E528年の現代から過去の地球（AD
                   2026年）への時空通信プロジェクトを主導している。彼女の多彩な才能と行動力は、E16文明の技術的・文化的発展に多大な影響を与えている。
                 </p>
                 <p>
-                  E499年に
-                  <span className="text-edu-accent2 hover:underline">ノスタルジア・コロニー</span>
-                  で生まれたミナは、AB型の血液型を持ち、青い長髪と長身という特徴的な外見を有する。彼女の性格はマイペースで先進的、そして承認欲求があると自己分析しており、その人間性がAURALIS
+                  E499年に{" "}
+                  <Link href={`/wiki/${encodeURIComponent("ノスタルジア・コロニー")}`} className="text-edu-accent2 hover:underline">
+                    ノスタルジア・コロニー
+                  </Link>
+                  {" "}で生まれたミナは、AB型の血液型を持ち、青い長髪と長身という特徴的な外見を有する。彼女の性格はマイペースで先進的、そして承認欲求があると自己分析しており、その人間性がAURALIS
                   の活動やリミナル・フォージの構想に独自の色彩を与えている。座右の銘は「Veni, vidi,
                   vici」であり、人生を主観的に捉えるスタンスを持つ。
                 </p>
                 <p>
-                  AI研究員としての専門性を背景に、彼女は
-                  <span className="text-edu-accent2 hover:underline">ペルセポネ</span>
-                  仮想宇宙の構築や
-                  <span className="text-edu-accent2 hover:underline">
+                  AI研究員としての専門性を背景に、彼女は{" "}
+                  <Link href={`/wiki/${encodeURIComponent("ペルセポネ")}`} className="text-edu-accent2 hover:underline">
+                    ペルセポネ
+                  </Link>
+                  {" "}仮想宇宙の構築や{" "}
+                  <Link href={`/wiki/${encodeURIComponent("次元極地平")}`} className="text-edu-accent2 hover:underline">
                     次元極地平（Dimension Horizon）
-                  </span>
-                  の研究に深く関わっている。その研究成果がリミナル・フォージの基盤技術となり、E528年からAD
-                  2026年への情報伝達を可能にした。現在はナシゴレンを楽しみながら宇宙連合会合をモニタリングする日々を送っている。
+                  </Link>
+                  {" "}の研究に深く関わっている。その研究成果がリミナル・フォージの基盤技術となり、E528年からAD
+                  2026年への情報伝達を可能にした。現在はナシゴレンを楽しみながら{" "}
+                  <Link href={`/wiki/${encodeURIComponent("宇宙連合会合")}`} className="text-edu-accent2 hover:underline">
+                    宇宙連合会合
+                  </Link>
+                  {" "}をモニタリングする日々を送っている。
                 </p>
               </div>
             </div>
@@ -103,7 +116,7 @@ export default function MinaPage() {
                           "出生地",
                           <Link
                             key="wl"
-                            href="/wiki#ノスタルジア・コロニー"
+                            href={`/wiki/${encodeURIComponent("ノスタルジア・コロニー")}`}
                             className="text-edu-accent2 hover:underline"
                           >
                             ノスタルジア・コロニー

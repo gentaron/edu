@@ -55,7 +55,7 @@ export default function FactionsPage() {
           icon={<Swords className="w-6 h-6 text-red-400" />}
           title="勢力系譜"
           subtitle="全宇宙の主要勢力の系統図 — E16・Eros-7・銀河規模組織"
-          wikiHref="/wiki#テクロサス"
+          wikiHref={`/wiki/${encodeURIComponent("テクロサス")}`}
         />
 
         <RevealSection>
@@ -67,25 +67,25 @@ export default function FactionsPage() {
               </h2>
               <div className="space-y-3 text-sm text-edu-muted leading-relaxed">
                 <p>
-                  E16連星系の政治地图は、多数の国家・組織・勢力が複雑に絡み合う多極的な構造を持つ。
-                  <span className="text-edu-accent2 font-medium">テクロサス帝国</span>
+                  <Link href={`/wiki/${encodeURIComponent("E16連星系")}`} className="text-edu-accent2 font-medium hover:underline">E16連星系</Link>の政治地图は、多数の国家・組織・勢力が複雑に絡み合う多極的な構造を持つ。
+                  <Link href={`/wiki/${encodeURIComponent("テクロサス")}`} className="text-edu-accent2 font-medium hover:underline">テクロサス帝国</Link>
                   を始祖とする勢力系統は、古代からの血脈を受け継ぎながらも、分裂・統合・再編を繰り返してきた。各勢力は独自のイデオロギーと目的を持ち、時には同盟を結び、時には激しい対立を繰り広げている。
                 </p>
                 <p>
                   現代のE16星系は、大きく三つの陣営に分かれている。
-                  <span className="text-cyan-400 font-medium">トリニティ・アライアンス</span>
-                  （アイリス指導）はヴァーミリオン・ミエルテンガ・ボグダス・ジャベリンの3勢力連合であり、星系の安定を図る最大の勢力である。
-                  <span className="text-blue-400 font-medium">V7（Vital Seven）</span>
-                  はフィオナが急先鋒の7カ国連合で、ブルーローズやSSレンジ、アイアン・シンジケートなどが参加している。そして
-                  <span className="text-red-400 font-medium">アルファ・ヴェノム</span>
-                  はイズミ率いる暗黒組織であり、シルバー・ヴェノムの後継として星系の秩序を脅かす存在である。
+                  <Link href={`/wiki/${encodeURIComponent("トリニティ・アライアンス")}`} className="text-cyan-400 font-medium hover:underline">トリニティ・アライアンス</Link>
+                  （<Link href={`/wiki/${encodeURIComponent("アイリス")}`} className="text-cyan-400 hover:underline">アイリス</Link>指導）は<Link href={`/wiki/${encodeURIComponent("ヴァーミリオン")}`} className="text-cyan-400 hover:underline">ヴァーミリオン</Link>・<Link href={`/wiki/${encodeURIComponent("ミエルテンガ")}`} className="text-cyan-400 hover:underline">ミエルテンガ</Link>・<Link href={`/wiki/${encodeURIComponent("ボグダス・ジャベリン")}`} className="text-cyan-400 hover:underline">ボグダス・ジャベリン</Link>の3勢力連合であり、星系の安定を図る最大の勢力である。
+                  <Link href={`/wiki/${encodeURIComponent("V7")}`} className="text-blue-400 font-medium hover:underline">V7（Vital Seven）</Link>
+                  は<Link href={`/wiki/${encodeURIComponent("フィオナ")}`} className="text-blue-400 hover:underline">フィオナ</Link>が急先鋒の7カ国連合で、<Link href={`/wiki/${encodeURIComponent("ブルーローズ")}`} className="text-blue-400 hover:underline">ブルーローズ</Link>や<Link href={`/wiki/${encodeURIComponent("SSレンジ")}`} className="text-blue-400 hover:underline">SSレンジ</Link>、<Link href={`/wiki/${encodeURIComponent("アイアン・シンジケート")}`} className="text-blue-400 hover:underline">アイアン・シンジケート</Link>などが参加している。そして
+                  <Link href={`/wiki/${encodeURIComponent("アルファ・ヴェノム")}`} className="text-red-400 font-medium hover:underline">アルファ・ヴェノム</Link>
+                  は<Link href={`/wiki/${encodeURIComponent("イズミ")}`} className="text-red-400 hover:underline">イズミ</Link>率いる暗黒組織であり、<Link href={`/wiki/${encodeURIComponent("シルバー・ヴェノム")}`} className="text-red-400 hover:underline">シルバー・ヴェノム</Link>の後継として星系の秩序を脅かす存在である。
                 </p>
                 <p>
                   さらにE16の枠を超え、
-                  <span className="text-pink-400 font-medium">Eros-7</span>
-                  ではマトリカル・カウンシルとシャドウ・ユニオンが独自の社会制度を巡って対立し、銀河規模では
-                  <span className="text-cyan-400 font-medium">銀河系コンソーシアム</span>
-                  がバーズ帝国から続く壮大な統合の歴史の到達点として機能している。以下の系統図は、E16・Eros-7・銀河全域にわたる各勢力の歴史的変遷を視覚的に整理したものである。
+                  <Link href={`/wiki/${encodeURIComponent("Eros-7")}`} className="text-pink-400 font-medium hover:underline">Eros-7</Link>
+                  では<Link href={`/wiki/${encodeURIComponent("マトリカル・カウンシル")}`} className="text-pink-400 hover:underline">マトリカル・カウンシル</Link>と<Link href={`/wiki/${encodeURIComponent("シャドウ・ユニオン")}`} className="text-pink-400 hover:underline">シャドウ・ユニオン</Link>が独自の社会制度を巡って対立し、銀河規模では
+                  <Link href={`/wiki/${encodeURIComponent("銀河系コンソーシアム")}`} className="text-cyan-400 font-medium hover:underline">銀河系コンソーシアム</Link>
+                  が<Link href={`/wiki/${encodeURIComponent("バーズ帝国")}`} className="text-cyan-400 hover:underline">バーズ帝国</Link>から<Link href={`/wiki/${encodeURIComponent("テクロサス")}`} className="text-cyan-400 hover:underline">テクロサス</Link>を経て続く壮大な統合の歴史の到達点として機能している。以下の系統図は、E16・Eros-7・銀河全域にわたる各勢力の歴史的変遷を視覚的に整理したものである。
                 </p>
               </div>
             </div>

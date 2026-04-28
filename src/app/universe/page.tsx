@@ -22,7 +22,7 @@ function PlanetCard({
   borderColor: string
   wikiHref: string
   stats: [string, React.ReactNode][]
-  description: string
+  description: React.ReactNode
   regions?: { name: string; wiki: string | null }[][]
 }) {
   return (
@@ -81,7 +81,7 @@ export default function UniversePage() {
           icon={<Globe2 className="w-6 h-6 text-edu-accent2" />}
           title="全宇宙・星系構造"
           subtitle="M104銀河全域 — E16連星系・Eros-7・惑星ビブリオ・惑星Solaris"
-          wikiHref="/wiki#E16連星系"
+          wikiHref={`/wiki/${encodeURIComponent("E16連星系")}`}
         />
 
         <RevealSection>
@@ -95,25 +95,25 @@ export default function UniversePage() {
               <div className="space-y-3 text-sm text-edu-muted leading-relaxed">
                 <p>
                   Eternal Dominion Universe は、
-                  <span className="text-edu-accent2 font-medium">M104（NGC 4594）銀河</span>
+                  <Link href={`/wiki/${encodeURIComponent("M104銀河")}`} className="text-edu-accent2 font-medium hover:underline">M104（NGC 4594）銀河</Link>
                   を舞台とする壮大な文明圏である。AD
-                  3500年に地球を離脱した人類は、M104銀河のハロー領域に到達し、E16連星系を第一の故郷として文明を築き上げた。しかし、人類の活動はE16に留まらず、周辺の惑星や星系へと拡大していった。
+                  3500年に地球を離脱した人類は、M104銀河のハロー領域に到達し、<Link href={`/wiki/${encodeURIComponent("E16連星系")}`} className="hover:text-edu-accent2 hover:underline">E16連星系</Link>を第一の故郷として文明を築き上げた。しかし、人類の活動はE16に留まらず、周辺の惑星や星系へと拡大していった。
                 </p>
                 <p>
                   現在、M104銀河内には
-                  <span className="text-edu-accent2 font-medium">E16連星系</span>
+                  <Link href={`/wiki/${encodeURIComponent("E16連星系")}`} className="text-edu-accent2 font-medium hover:underline">E16連星系</Link>
                   のほかに、女性主導のマトリカル社会を持つ
-                  <span className="text-pink-400 font-medium">Eros-7</span>
+                  <Link href={`/wiki/${encodeURIComponent("Eros-7")}`} className="text-pink-400 font-medium hover:underline">Eros-7</Link>
                   、学術・研究の中心地である
-                  <span className="text-emerald-400 font-medium">惑星ビブリオ</span>、そして
-                  <span className="text-orange-400 font-medium">惑星Solaris</span>
+                  <Link href={`/wiki/${encodeURIComponent("惑星ビブリオ")}`} className="text-emerald-400 font-medium hover:underline">惑星ビブリオ</Link>、そして
+                  <Link href={`/wiki/${encodeURIComponent("惑星Solaris")}`} className="text-orange-400 font-medium hover:underline">惑星Solaris</Link>
                   など、複数の居住世界が存在する。それぞれの惑星は独自の政治体制・文化・歴史を持ちながらも、星間経済協同組合
-                  <span className="text-cyan-400 font-medium">UECO</span>や
-                  <span className="text-cyan-400 font-medium">銀河系コンソーシアム</span>
+                  <Link href={`/wiki/${encodeURIComponent("UECO")}`} className="text-cyan-400 font-medium hover:underline">UECO</Link>や
+                  <Link href={`/wiki/${encodeURIComponent("銀河系コンソーシアム")}`} className="text-cyan-400 font-medium hover:underline">銀河系コンソーシアム</Link>
                   を通じて緩やかに結合されている。
                 </p>
                 <p>
-                  この宇宙の政治は多極的であり、E16内ではトリニティ・アライアンスとV7が東西大陸の覇権を争い、Eros-7ではマトリカル・カウンシルとシャドウ・ユニオンが社会制度を巡って対立している。さらに銀河規模では、バーズ帝国からテクロサスを経て銀河系コンソーシアムに至る壮大な政治変遷の歴史が刻まれている。
+                  この宇宙の政治は多極的であり、E16内では<Link href={`/wiki/${encodeURIComponent("トリニティ・アライアンス")}`} className="hover:text-edu-accent2 hover:underline">トリニティ・アライアンス</Link>と<Link href={`/wiki/${encodeURIComponent("V7")}`} className="hover:text-edu-accent2 hover:underline">V7</Link>が東西大陸の覇権を争い、Eros-7では<Link href={`/wiki/${encodeURIComponent("マトリカル・カウンシル")}`} className="hover:text-edu-accent2 hover:underline">マトリカル・カウンシル</Link>と<Link href={`/wiki/${encodeURIComponent("シャドウ・ユニオン")}`} className="hover:text-edu-accent2 hover:underline">シャドウ・ユニオン</Link>が社会制度を巡って対立している。さらに銀河規模では、<Link href={`/wiki/${encodeURIComponent("バーズ帝国")}`} className="hover:text-edu-accent2 hover:underline">バーズ帝国</Link>から<Link href={`/wiki/${encodeURIComponent("テクロサス")}`} className="hover:text-edu-accent2 hover:underline">テクロサス</Link>を経て<Link href={`/wiki/${encodeURIComponent("銀河系コンソーシアム")}`} className="hover:text-edu-accent2 hover:underline">銀河系コンソーシアム</Link>に至る壮大な政治変遷の歴史が刻まれている。
                 </p>
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function UniversePage() {
                 <div className="bg-edu-bg/50 rounded-lg p-4 border border-cyan-500/20">
                   <h4 className="text-sm font-bold text-cyan-400 mb-2 flex items-center gap-2">
                     <Zap className="w-4 h-4" />
-                    <Link href="/wiki#UECO" className="text-cyan-400 hover:underline">
+                    <Link href={`/wiki/${encodeURIComponent("UECO")}`} className="text-cyan-400 hover:underline">
                       UECO
                     </Link>
                   </h4>
@@ -140,7 +140,7 @@ export default function UniversePage() {
                   <h4 className="text-sm font-bold text-cyan-400 mb-2 flex items-center gap-2">
                     <Users className="w-4 h-4" />
                     <Link
-                      href="/wiki#銀河系コンソーシアム"
+                      href={`/wiki/${encodeURIComponent("銀河系コンソーシアム")}`}
                       className="text-cyan-400 hover:underline"
                     >
                       銀河系コンソーシアム
@@ -153,7 +153,7 @@ export default function UniversePage() {
                 <div className="bg-edu-bg/50 rounded-lg p-4 border border-cyan-500/20">
                   <h4 className="text-sm font-bold text-cyan-400 mb-2 flex items-center gap-2">
                     <Star className="w-4 h-4" />
-                    <Link href="/wiki#M104銀河" className="text-cyan-400 hover:underline">
+                    <Link href={`/wiki/${encodeURIComponent("M104銀河")}`} className="text-cyan-400 hover:underline">
                       M104銀河（NGC 4594）
                     </Link>
                   </h4>
@@ -174,7 +174,7 @@ export default function UniversePage() {
                 titleEn="E16 Binary System"
                 color="text-edu-accent2"
                 borderColor="border-edu-accent2/20"
-                wikiHref="/wiki#E16連星系"
+                wikiHref={`/wiki/${encodeURIComponent("E16連星系")}`}
                 stats={[
                   ["所在", "M104銀河ハロー某所"],
                   ["主星", "Ea16（黄白色巨星）"],
@@ -183,7 +183,7 @@ export default function UniversePage() {
                     "主要惑星",
                     <Link
                       key="s"
-                      href="/wiki#シンフォニー・オブ・スターズ"
+                      href={`/wiki/${encodeURIComponent("シンフォニー・オブ・スターズ")}`}
                       className="text-edu-muted hover:text-edu-accent2 hover:underline"
                     >
                       シンフォニー・オブ・スターズ
@@ -195,18 +195,18 @@ export default function UniversePage() {
                 description="人類が最初に到達した星系。西大陸のGigapolis圈と東大陸のクレセント大地方の二大文明圏を擁し、E16文明の中心地。"
                 regions={[
                   [
-                    { name: "Gigapolis", wiki: "/wiki#ギガポリス" },
+                    { name: "Gigapolis", wiki: `/wiki/${encodeURIComponent("ギガポリス")}` },
                     { name: "Chem", wiki: null },
                     { name: "Abrivo", wiki: null },
                     { name: "Troyane", wiki: null },
                     { name: "Ronve", wiki: null },
-                    { name: "Valoria", wiki: "/wiki#Valoria連合圏" },
+                    { name: "Valoria", wiki: `/wiki/${encodeURIComponent("Valoria")}` },
                     { name: "Persepolis", wiki: null },
                   ],
                   [
-                    { name: "ヴァーミリオン", wiki: "/wiki#ヴァーミリオン" },
-                    { name: "ブルー・ローズ", wiki: "/wiki#ブルーローズ" },
-                    { name: "ミエルテンガ", wiki: "/wiki#ミエルテンガ" },
+                    { name: "ヴァーミリオン", wiki: `/wiki/${encodeURIComponent("ヴァーミリオン")}` },
+                    { name: "ブルー・ローズ", wiki: `/wiki/${encodeURIComponent("ブルーローズ")}` },
+                    { name: "ミエルテンガ", wiki: `/wiki/${encodeURIComponent("ミエルテンガ")}` },
                     { name: "クロセヴィア", wiki: null },
                     { name: "アイアン・シンジケート", wiki: null },
                     { name: "ファティマ連邦", wiki: null },
@@ -221,7 +221,7 @@ export default function UniversePage() {
                 titleEn="Eros-7"
                 color="text-pink-400"
                 borderColor="border-pink-400/20"
-                wikiHref="/wiki#Eros-7"
+                wikiHref={`/wiki/${encodeURIComponent("Eros-7")}`}
                 stats={[
                   ["所在", "E16外縁"],
                   ["重力", "1.1G"],
@@ -230,7 +230,7 @@ export default function UniversePage() {
                     "社会体制",
                     <Link
                       key="mc"
-                      href="/wiki#マトリカル・カウンシル"
+                      href={`/wiki/${encodeURIComponent("マトリカル・カウンシル")}`}
                       className="text-edu-muted hover:text-pink-400 hover:underline"
                     >
                       マトリカル社会（女性主導）
@@ -240,7 +240,7 @@ export default function UniversePage() {
                     "統治機関",
                     <Link
                       key="ms"
-                      href="/wiki#男性指令省"
+                      href={`/wiki/${encodeURIComponent("男性指令省")}`}
                       className="text-edu-muted hover:text-pink-400 hover:underline"
                     >
                       男性指令省
@@ -250,20 +250,20 @@ export default function UniversePage() {
                     "対立組織",
                     <Link
                       key="su"
-                      href="/wiki#シャドウ・ユニオン"
+                      href={`/wiki/${encodeURIComponent("シャドウ・ユニオン")}`}
                       className="text-edu-muted hover:text-pink-400 hover:underline"
                     >
                       シャドウ・ユニオン
                     </Link>,
                   ],
                 ]}
-                description="女性主導のマトリカル社会が形成された惑星。搾取生物とエスパー能力をめぐる独自の文明を発展させ、E525年にはマトリカル・リフォーム運動が勃発。リリス・ヴェイン、シルヴィア・クロウ、アヤカ・リンなどの英雄を輩出。"
+                description={<>女性主導のマトリカル社会が形成された惑星。<Link href={`/wiki/${encodeURIComponent("搾取生物")}`} className="hover:text-pink-400 hover:underline">搾取生物</Link>と<Link href={`/wiki/${encodeURIComponent("エスパー能力")}`} className="hover:text-pink-400 hover:underline">エスパー能力</Link>をめぐる独自の文明を発展させ、E525年には<Link href={`/wiki/${encodeURIComponent("マトリカル・リフォーム運動")}`} className="hover:text-pink-400 hover:underline">マトリカル・リフォーム運動</Link>が勃発。<Link href={`/wiki/${encodeURIComponent("リリス・ヴェイン")}`} className="hover:text-pink-400 hover:underline">リリス・ヴェイン</Link>、<Link href={`/wiki/${encodeURIComponent("シルヴィア・クロウ")}`} className="hover:text-pink-400 hover:underline">シルヴィア・クロウ</Link>、<Link href={`/wiki/${encodeURIComponent("アヤカ・リン")}`} className="hover:text-pink-400 hover:underline">アヤカ・リン</Link>などの英雄を輩出。</>}
                 regions={[
                   [
-                    { name: "ネオンクレーター宮殿", wiki: "/wiki#ネオンクレーター宮殿" },
-                    { name: "スクイーズ・アビス", wiki: "/wiki#スクイーズ・アビス" },
-                    { name: "アンダーグリッド", wiki: "/wiki#アンダーグリッド" },
-                    { name: "セントラル・タワー", wiki: "/wiki#セントラル・タワー" },
+                    { name: "ネオンクレーター宮殿", wiki: `/wiki/${encodeURIComponent("ネオンクレーター宮殿")}` },
+                    { name: "スクイーズ・アビス", wiki: `/wiki/${encodeURIComponent("スクイーズ・アビス")}` },
+                    { name: "アンダーグリッド", wiki: `/wiki/${encodeURIComponent("アンダーグリッド")}` },
+                    { name: "セントラル・タワー", wiki: `/wiki/${encodeURIComponent("セントラル・タワー")}` },
                   ],
                 ]}
               />
@@ -275,7 +275,7 @@ export default function UniversePage() {
                 titleEn="Planet Bibliotheca"
                 color="text-emerald-400"
                 borderColor="border-emerald-400/20"
-                wikiHref="/wiki#惑星ビブリオ"
+                wikiHref={`/wiki/${encodeURIComponent("惑星ビブリオ")}`}
                 stats={[
                   ["所在", "M104銀河内"],
                   ["特徴", "学術・研究の中心地"],
@@ -283,7 +283,7 @@ export default function UniversePage() {
                     "主要施設",
                     <Link
                       key="uu"
-                      href="/wiki#ビブリオ国際大学"
+                      href={`/wiki/${encodeURIComponent("ロレンツィオ国際大学")}`}
                       className="text-edu-muted hover:text-emerald-400 hover:underline"
                     >
                       ビブリオ国際大学
@@ -293,14 +293,14 @@ export default function UniversePage() {
                     "関連人物",
                     <Link
                       key="mi"
-                      href="/wiki#ミナ・エウレカ・エルンスト"
+                      href={`/wiki/${encodeURIComponent("ミナ・エウレカ・エルンスト")}`}
                       className="text-edu-muted hover:text-emerald-400 hover:underline"
                     >
                       ミナ（E514年入学）
                     </Link>,
                   ],
                 ]}
-                description="M104銀河内に位置する学術惑星。ビブリオ国際大学を擁し、AI学部をはじめとする高度な教育・研究機関が集積している。ミナ・エウレカ・エルンストはE514年にこの惑星のAI学部に入学し、後のリミナル・フォージ構想の種を育んだ。"
+                description={<>M104銀河内に位置する学術惑星。ビブリオ国際大学を擁し、AI学部をはじめとする高度な教育・研究機関が集積している。<Link href={`/wiki/${encodeURIComponent("ミナ・エウレカ・エルンスト")}`} className="hover:text-emerald-400 hover:underline">ミナ・エウレカ・エルンスト</Link>はE514年にこの惑星のAI学部に入学し、後の<Link href={`/wiki/${encodeURIComponent("リミナル・フォージ")}`} className="hover:text-emerald-400 hover:underline">リミナル・フォージ</Link>構想の種を育んだ。</>}
               />
 
               {/* 惑星Solaris */}
@@ -310,12 +310,12 @@ export default function UniversePage() {
                 titleEn="Planet Solaris"
                 color="text-orange-400"
                 borderColor="border-orange-400/20"
-                wikiHref="/wiki#惑星Solaris"
+                wikiHref={`/wiki/${encodeURIComponent("惑星Solaris")}`}
                 stats={[
                   ["所在", "M104銀河内"],
                   ["特徴", "恒星エネルギー研究"],
                 ]}
-                description="M104銀河内に位置する惑星。恒星エネルギーの研究拠点として機能し、銀河系コンソーシアムの技術基盤を支える一翼を担っている。"
+                description={<>M104銀河内に位置する惑星。恒星エネルギーの研究拠点として機能し、<Link href={`/wiki/${encodeURIComponent("銀河系コンソーシアム")}`} className="hover:text-orange-400 hover:underline">銀河系コンソーシアム</Link>の技術基盤を支える一翼を担っている。</>}
               />
             </div>
 

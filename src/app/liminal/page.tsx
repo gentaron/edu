@@ -14,12 +14,12 @@ export default function LiminalPage() {
         <PageHeader
           icon={<Radio className="w-6 h-6 text-edu-accent" />}
           title={
-            <Link href="/wiki#リミナル・フォージ" className="text-edu-text hover:underline">
+            <Link href={`/wiki/${encodeURIComponent("リミナル・フォージ")}`} className="text-edu-text hover:underline">
               リミナル・フォージ
             </Link>
           }
           subtitle="Liminal Forge — E528からAD2026へ、時空を超えた放送プロジェクト"
-          wikiHref="/wiki#リミナル・フォージ"
+          wikiHref={`/wiki/${encodeURIComponent("リミナル・フォージ")}`}
         />
 
         <RevealSection>
@@ -35,19 +35,28 @@ export default function LiminalPage() {
                     リミナル・フォージ（Liminal Forge）
                   </span>
                   は、E528年の現代からAD
-                  2026年の地球へ情報を送信する画期的な時空放送プロジェクトである。このプロジェクトは
-                  AURALIS Collective
-                  第二世代のメンバーであるミナ・エウレカ・エルンストが創設し、E16文明が到達した高度な技術を駆使して実現された。
+                  2026年の地球へ情報を送信する画期的な時空放送プロジェクトである。このプロジェクトは{" "}
+                  <Link href={`/wiki/${encodeURIComponent("AURALIS")}`} className="text-edu-accent2 hover:underline">
+                    AURALIS Collective
+                  </Link>
+                  {" "}第二世代のメンバーである{" "}
+                  <Link href={`/wiki/${encodeURIComponent("ミナ・エウレカ・エルンスト")}`} className="text-edu-accent2 hover:underline">
+                    ミナ・エウレカ・エルンスト
+                  </Link>
+                  {" "}が創設し、E16文明が到達した高度な技術を駆使して実現された。
                 </p>
                 <p>
                   放送の経路は非常に複雑である。まず
                   <span className="text-edu-accent2 font-medium">AURALIS 本部</span>
-                  （E528年）から信号が発信され、
-                  <span className="text-edu-accent2 font-medium">ペルセポネ仮想宇宙</span>と
-                  <span className="text-edu-accent2 font-medium">
+                  （E528年）から信号が発信され、{" "}
+                  <Link href={`/wiki/${encodeURIComponent("ペルセポネ")}`} className="text-edu-accent2 hover:underline">
+                    ペルセポネ仮想宇宙
+                  </Link>
+                  と{" "}
+                  <Link href={`/wiki/${encodeURIComponent("次元極地平")}`} className="text-edu-accent2 hover:underline">
                     次元極地平（Dimension Horizon）
-                  </span>
-                  を経由して時空を超え、AD
+                  </Link>
+                  {" "}を経由して時空を超え、AD
                   2026年の地球インターネットに到達する。この仕組みは、E16文明が開発した高次元通信技術と量子演算に基づいている。
                 </p>
                 <p>
@@ -67,7 +76,7 @@ export default function LiminalPage() {
                   <p className="text-xs text-edu-muted mb-1">起点</p>
                   <p className="text-sm font-bold text-edu-accent2">E528</p>
                   <p className="text-xs text-edu-muted">
-                    <Link href="/wiki#AURALIS" className="hover:text-edu-accent2 hover:underline">
+                    <Link href={`/wiki/${encodeURIComponent("AURALIS")}`} className="hover:text-edu-accent2 hover:underline">
                       AURALIS
                     </Link>
                     本部
@@ -77,14 +86,14 @@ export default function LiminalPage() {
                 <div className="bg-edu-accent2/15 border border-edu-accent2/30 rounded-lg p-4 min-w-[200px]">
                   <p className="text-xs text-edu-muted mb-1">経由</p>
                   <p className="text-sm font-bold text-edu-accent2">
-                    <Link href="/wiki#ペルセポネ" className="text-edu-accent2 hover:underline">
+                    <Link href={`/wiki/${encodeURIComponent("ペルセポネ")}`} className="text-edu-accent2 hover:underline">
                       ペルセポネ
                     </Link>
                     仮想宇宙
                   </p>
                   <p className="text-xs text-edu-muted">
                     ×{" "}
-                    <Link href="/wiki#次元極地平" className="text-edu-accent2 hover:underline">
+                    <Link href={`/wiki/${encodeURIComponent("次元極地平")}`} className="text-edu-accent2 hover:underline">
                       Dimension Horizon
                     </Link>
                   </p>

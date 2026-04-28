@@ -4,6 +4,14 @@ import { StarField } from "@/components/edu/star-field"
 import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
 import { PageHeader } from "@/components/edu/page-header"
 import { ALL_CARDS, type GameCard } from "@/lib/card-data"
+import { ALL_ENTRIES } from "@/lib/wiki-data"
+
+/* Build a lookup from card display name → wiki entry id */
+const nameToWikiId = new Map<string, string>()
+ALL_ENTRIES.forEach((e) => {
+  nameToWikiId.set(e.name, e.id)
+  if (e.nameEn) nameToWikiId.set(e.nameEn, e.id)
+})
 
 export default function CharactersPage() {
   const srCards = ALL_CARDS.filter((c) => c.rarity === "SR").sort(
@@ -149,7 +157,15 @@ export default function CharactersPage() {
                                   >
                                     {card.rarity}
                                   </span>
-                                  <span className="text-edu-text font-medium">{card.name}</span>
+                                  <span className="text-edu-text font-medium">
+                                    {nameToWikiId.has(card.name) ? (
+                                      <Link href={`/wiki/${encodeURIComponent(nameToWikiId.get(card.name)!)}`} className="hover:text-edu-accent2 hover:underline">
+                                        {card.name}
+                                      </Link>
+                                    ) : (
+                                      card.name
+                                    )}
+                                  </span>
                                 </div>
                               </td>
                               <td className="py-2 px-2 text-edu-muted text-xs hidden sm:table-cell">
@@ -186,11 +202,11 @@ export default function CharactersPage() {
                 </h3>
                 <div className="flex flex-wrap gap-3">
                   {[
-                    { rank: 1, name: "アイリス", color: "text-edu-accent" },
-                    { rank: 2, name: "フィオナ", color: "text-gray-300" },
-                    { rank: 3, name: "マリーナ", color: "text-amber-700" },
-                    { rank: 4, name: "セバスチャン", color: "text-edu-muted" },
-                    { rank: 5, name: "カスチーナ", color: "text-edu-muted" },
+                    { rank: 1, name: "アイリス", wikiId: "アイリス", color: "text-edu-accent" },
+                    { rank: 2, name: "フィオナ", wikiId: "フィオナ", color: "text-gray-300" },
+                    { rank: 3, name: "マリーナ", wikiId: "マリーナ・ボビン", color: "text-amber-700" },
+                    { rank: 4, name: "セバスチャン", wikiId: "セバスチャン・ヴァレリウス", color: "text-edu-muted" },
+                    { rank: 5, name: "カスチーナ", wikiId: "カスチーナ・テンペスト", color: "text-edu-muted" },
                   ].map((r) => (
                     <div
                       key={r.rank}
@@ -199,7 +215,9 @@ export default function CharactersPage() {
                       <span className={`text-lg font-black ${r.color} w-6 text-center`}>
                         {r.rank}
                       </span>
-                      <span className="text-sm text-edu-text font-medium">{r.name}</span>
+                      <Link href={`/wiki/${encodeURIComponent(r.wikiId)}`} className="text-sm text-edu-text font-medium hover:text-edu-accent2 hover:underline">
+                        {r.name}
+                      </Link>
                     </div>
                   ))}
                 </div>
@@ -261,7 +279,13 @@ export default function CharactersPage() {
                               {card.rarity}
                             </span>
                             <span className="text-xs sm:text-sm text-edu-text font-medium flex-1 truncate">
-                              {card.name}
+                              {nameToWikiId.has(card.name) ? (
+                                <Link href={`/wiki/${encodeURIComponent(nameToWikiId.get(card.name)!)}`} className="hover:text-edu-accent2 hover:underline">
+                                  {card.name}
+                                </Link>
+                              ) : (
+                                card.name
+                              )}
                             </span>
                             <div className="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[10px] shrink-0">
                               <span className="text-red-400 font-bold">{card.attack}</span>

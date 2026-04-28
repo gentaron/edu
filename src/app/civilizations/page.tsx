@@ -27,7 +27,7 @@ export default function CivilizationsPage() {
           icon={<Globe2 className="w-6 h-6 text-amber-400" />}
           title="宇宙5大文明圏"
           subtitle="グランベル・エレシオン・ティエリア・ファルージャ・ディオクレニス — 宇宙勢力の全貌"
-          wikiHref="/wiki#グランベル"
+          wikiHref={`/wiki/${encodeURIComponent("グランベル")}`}
         />
 
         <main className="px-4 pb-20">
@@ -39,8 +39,8 @@ export default function CivilizationsPage() {
                   宇宙には多様な文明圏が存在し、それぞれが独自の技術・文化・政治体制で繁栄している。
                   中でも<span className="text-amber-400 font-medium">グランベル</span>を頂点とする5大文明圏は、
                   宇宙の政治・経済・軍事の均衡を左右する重要な勢力である。
-                  第一回<a href="/wiki#宇宙連合会合" className="text-edu-accent hover:underline">宇宙連合会合</a>では、
-                  全勢力の指導者がオルダシティに集い、宇宙の将来について議論した。
+                  第一回<a href={`/wiki/${encodeURIComponent("宇宙連合会合")}`} className="text-edu-accent hover:underline">宇宙連合会合</a>では、
+                  全勢力の指導者が<a href={`/wiki/${encodeURIComponent("オルダシティ")}`} className="text-edu-accent hover:underline">オルダシティ</a>に集い、宇宙の将来について議論した。
                 </p>
               </div>
             </RevealSection>
@@ -180,9 +180,9 @@ export default function CivilizationsPage() {
               <div className="edu-card rounded-xl p-6">
                 <h3 className="text-sm font-bold text-edu-text mb-4">関連ページ</h3>
                 <div className="flex flex-wrap gap-3">
-                  <Link href="/wiki#トゥキディデスの罠" className="text-xs text-edu-accent hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50">トゥキディデスの罠</Link>
-                  <Link href="/wiki#宇宙連合会合" className="text-xs text-edu-accent hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50">宇宙連合会合</Link>
-                  <Link href="/wiki#アポロン・Dominion大戦" className="text-xs text-edu-accent hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50">アポロン・Dominion大戦</Link>
+                  <Link href={`/wiki/${encodeURIComponent("トゥキディデスの罠")}`} className="text-xs text-edu-accent hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50">トゥキディデスの罠</Link>
+                  <Link href={`/wiki/${encodeURIComponent("宇宙連合会合")}`} className="text-xs text-edu-accent hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50">宇宙連合会合</Link>
+                  <Link href={`/wiki/${encodeURIComponent("アポロン・Dominion大戦")}`} className="text-xs text-edu-accent hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50">アポロン・Dominion大戦</Link>
                   <Link href="/ranking" className="text-xs text-emerald-400 hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50">長者番付</Link>
                   <Link href="/card-game" className="text-xs text-orange-400 hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50">Card Game</Link>
                 </div>

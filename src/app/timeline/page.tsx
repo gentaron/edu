@@ -41,7 +41,7 @@ export default function TimelinePage() {
                   <span className="text-edu-text font-medium">開拓期</span>、
                   <span className="text-edu-text font-medium">E16文明の発展期</span>、そして
                   <span className="text-edu-text font-medium">現代（E520年代）</span>
-                  の主要なフェーズに分けられる。開拓期にはテクロサス帝国やセリア・ドミニクスのような初期国家が台頭し、その後のE16文明の政治・文化・技術の基盤を形成した。E400年代のエヴァトロン弾圧は文明全体に深い傷跡を残し、その余波は現代の国際情勢にも影響を及ぼしている。
+                  の主要なフェーズに分けられる。開拓期には<Link href={`/wiki/${encodeURIComponent("テクロサス")}`} className="hover:text-edu-accent2 hover:underline">テクロサス帝国</Link>や<Link href={`/wiki/${encodeURIComponent("セリア・ドミニクス")}`} className="hover:text-edu-accent2 hover:underline">セリア・ドミニクス</Link>のような初期国家が台頭し、その後のE16文明の政治・文化・技術の基盤を形成した。E400年代の<Link href={`/wiki/${encodeURIComponent("エヴァトロン")}`} className="hover:text-edu-accent2 hover:underline">エヴァトロン弾圧</Link>は文明全体に深い傷跡を残し、その余波は現代の国際情勢にも影響を及ぼしている。
                 </p>
                 <p>
                   各イベントには場所情報が付与されており、対応するバッジをクリックすることで Wiki
@@ -72,7 +72,7 @@ export default function TimelinePage() {
                           <span className="text-edu-muted mt-0.5 shrink-0">▸</span>
                           {ev.loc && (
                             <Link
-                              href={`/wiki#${encodeURIComponent(ev.loc)}`}
+                              href={`/wiki/${encodeURIComponent(ev.loc)}`}
                               className={`inline-flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded border shrink-0 hover:opacity-80 transition-opacity ${locColor[ev.loc] || "bg-gray-500/20 text-gray-300 border-gray-500/30"}`}
                             >
                               {ev.loc}

@@ -18,17 +18,17 @@ export default function IrisPage() {
           subtitle={
             <>
               Iris —{" "}
-              <Link href="/wiki#ヴァーミリオン" className="text-rose-400 hover:underline">
+              <Link href={`/wiki/${encodeURIComponent("ヴァーミリオン")}`} className="text-rose-400 hover:underline">
                 ヴァーミリオン
               </Link>{" "}
               の英雄、{" "}
-              <Link href="/wiki#トリニティ・アライアンス" className="text-rose-400 hover:underline">
+              <Link href={`/wiki/${encodeURIComponent("トリニティ・アライアンス")}`} className="text-rose-400 hover:underline">
                 トリニティ・アライアンス
               </Link>{" "}
               指導者
             </>
           }
-          wikiHref="/wiki#アイリス"
+          wikiHref={`/wiki/${encodeURIComponent("アイリス")}`}
         />
 
         <RevealSection>
@@ -42,11 +42,15 @@ export default function IrisPage() {
                 <p>
                   <span className="text-rose-400 font-medium">アイリス</span>は、E16連星系において
                   <span className="text-edu-text font-medium">Tier 1（現役最強）</span>
-                  の戦闘能力を持つ英雄である。かつては
-                  <span className="text-edu-accent2 hover:underline">ヴァーミリオン</span>
-                  の諜報機関長を務めていたが、現在は
-                  <span className="text-cyan-400 hover:underline">トリニティ・アライアンス</span>
-                  の指導者として、E16星系全体の秩序維持と平和構築に奔走している。その冷徹かつ
+                  の戦闘能力を持つ英雄である。かつては{" "}
+                  <Link href={`/wiki/${encodeURIComponent("ヴァーミリオン")}`} className="text-edu-accent2 hover:underline">
+                    ヴァーミリオン
+                  </Link>
+                  {" "}の諜報機関長を務めていたが、現在は{" "}
+                  <Link href={`/wiki/${encodeURIComponent("トリニティ・アライアンス")}`} className="text-cyan-400 hover:underline">
+                    トリニティ・アライアンス
+                  </Link>
+                  {" "}の指導者として、E16星系全体の秩序維持と平和構築に奔走している。その冷徹かつ
                   strategic な性格は、複雑な国際情勢の中で的確な判断を下す原動力となっている。
                 </p>
                 <p>
@@ -54,11 +58,23 @@ export default function IrisPage() {
                   ランキングにおいて不動の1位を獲得しているが、その力を私的な利益ではなく星系全体の安定のために用いている点が、彼女を真の英雄たらしめている。
                 </p>
                 <p>
-                  E520年に結成されたトリニティ・アライアンスは、ヴァーミリオン・ミエルテンガ・ボグダス・ジャベリンの3勢力による連合である。一方、フィオナが率いる
-                  <span className="text-blue-400 hover:underline">V7（Vital Seven）</span>
-                  は7カ国連合として対抗勢力を形成しており、さらに
-                  <span className="text-red-400 hover:underline">アルファ・ヴェノム</span>
-                  を率いるイズミの暗黒組織が暗躍するなど、E16星系は三つどもえ以上の複雑な力学の中にある。アイリスはこれらの勢力間の均衡を図りながら、アルファ・ヴェノムの脅威に立ち向かっている。
+                  E520年に結成されたトリニティ・アライアンスは、ヴァーミリオン・ミエルテンガ・ボグダス・ジャベリンの3勢力による連合である。一方、
+                  <Link href={`/wiki/${encodeURIComponent("フィオナ")}`} className="text-edu-accent2 hover:underline">
+                    フィオナ
+                  </Link>
+                  が率いる{" "}
+                  <Link href={`/wiki/${encodeURIComponent("V7")}`} className="text-blue-400 hover:underline">
+                    V7（Vital Seven）
+                  </Link>
+                  {" "}は7カ国連合として対抗勢力を形成しており、さらに{" "}
+                  <Link href={`/wiki/${encodeURIComponent("アルファ・ヴェノム")}`} className="text-red-400 hover:underline">
+                    アルファ・ヴェノム
+                  </Link>
+                  {" "}を率いる{" "}
+                  <Link href={`/wiki/${encodeURIComponent("イズミ")}`} className="text-red-400 hover:underline">
+                    イズミ
+                  </Link>
+                  {" "}の暗黒組織が暗躍するなど、E16星系は三つどもえ以上の複雑な力学の中にある。アイリスはこれらの勢力間の均衡を図りながら、アルファ・ヴェノムの脅威に立ち向かっている。
                 </p>
               </div>
             </div>
@@ -103,7 +119,7 @@ export default function IrisPage() {
                           "所属",
                           <Link
                             key="wl1"
-                            href="/wiki#トリニティ・アライアンス"
+                            href={`/wiki/${encodeURIComponent("トリニティ・アライアンス")}`}
                             className="text-edu-accent2 hover:underline"
                           >
                             トリニティ・アライアンス
@@ -113,7 +129,7 @@ export default function IrisPage() {
                           "前所属",
                           <React.Fragment key="wl2">
                             <Link
-                              href="/wiki#ヴァーミリオン"
+                              href={`/wiki/${encodeURIComponent("ヴァーミリオン")}`}
                               className="text-edu-accent2 hover:underline"
                             >
                               ヴァーミリオン
@@ -202,7 +218,7 @@ export default function IrisPage() {
                 <h4 className="text-sm font-bold text-cyan-400 mb-3 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-cyan-400" />
                   <Link
-                    href="/wiki#トリニティ・アライアンス"
+                    href={`/wiki/${encodeURIComponent("トリニティ・アライアンス")}`}
                     className="text-cyan-400 hover:underline"
                   >
                     トリニティ・アライアンス
@@ -212,26 +228,31 @@ export default function IrisPage() {
                   アイリスが指導する3勢力連合。E520年結成。
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {["ヴァーミリオン", "ミエルテンガ", "ボグダス・ジャベリン"].map((n) => (
-                    <span
-                      key={n}
-                      className="text-[10px] bg-cyan-500/15 text-cyan-300 px-2 py-0.5 rounded border border-cyan-500/20"
+                  {[
+                    { name: "ヴァーミリオン", id: "ヴァーミリオン" },
+                    { name: "ミエルテンガ", id: "ミエルテンガ" },
+                    { name: "ボグダス・ジャベリン", id: "ボグダス・ジャベリン" },
+                  ].map((n) => (
+                    <Link
+                      key={n.name}
+                      href={`/wiki/${encodeURIComponent(n.id)}`}
+                      className="text-[10px] bg-cyan-500/15 text-cyan-300 px-2 py-0.5 rounded border border-cyan-500/20 hover:bg-cyan-500/25 transition-colors"
                     >
-                      {n}
-                    </span>
+                      {n.name}
+                    </Link>
                   ))}
                 </div>
               </div>
               <div className="edu-card rounded-xl p-5 border border-blue-400/20">
                 <h4 className="text-sm font-bold text-blue-400 mb-3 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-blue-400" />
-                  <Link href="/wiki#V7" className="text-blue-400 hover:underline">
+                  <Link href={`/wiki/${encodeURIComponent("V7")}`} className="text-blue-400 hover:underline">
                     V7
                   </Link>{" "}
                   (Vital Seven)
                 </h4>
                 <p className="text-xs text-edu-muted mb-3">
-                  <Link href="/wiki#フィオナ" className="hover:text-edu-accent2 hover:underline">
+                  <Link href={`/wiki/${encodeURIComponent("フィオナ")}`} className="hover:text-edu-accent2 hover:underline">
                     フィオナ
                   </Link>
                   が急先鋒の7カ国連合。E515年設立。
@@ -256,15 +277,19 @@ export default function IrisPage() {
               <div className="edu-card rounded-xl p-5 border border-red-400/20">
                 <h4 className="text-sm font-bold text-red-400 mb-3 flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-red-400" />
-                  <Link href="/wiki#アルファ・ヴェノム" className="text-red-400 hover:underline">
+                  <Link href={`/wiki/${encodeURIComponent("アルファ・ヴェノム")}`} className="text-red-400 hover:underline">
                     アルファ・ヴェノム
                   </Link>
                 </h4>
                 <p className="text-xs text-edu-muted mb-3">
-                  <Link href="/wiki#イズミ" className="hover:text-edu-accent2 hover:underline">
+                  <Link href={`/wiki/${encodeURIComponent("イズミ")}`} className="hover:text-edu-accent2 hover:underline">
                     イズミ
                   </Link>
-                  率いる暗黒組織。シルバー・ヴェノムの後継。
+                  率いる暗黒組織。{" "}
+                  <Link href={`/wiki/${encodeURIComponent("シルバー・ヴェノム")}`} className="hover:text-edu-accent2 hover:underline">
+                    シルバー・ヴェノム
+                  </Link>
+                  の後継。
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {["イズミ", "ボブリスティ", "ギル", "カタリナ", "ゴルディロックス", "AJ"].map(

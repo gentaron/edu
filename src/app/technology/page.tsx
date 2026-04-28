@@ -35,12 +35,12 @@ export default function TechnologyPage() {
                   世界観の技術的側面に科学的な厚みと信憑性が与えられている。
                 </p>
                 <p>
-                  技術体系は<span className="text-edu-text font-medium">次元ピラミッド</span>
+                  技術体系は<span className="text-edu-text font-medium"><Link href={`/wiki/${encodeURIComponent("次元ピラミッド")}`} className="hover:text-edu-accent2 hover:underline">次元ピラミッド</Link></span>
                   として4層構造で整理されている。
                   <span className="text-green-400 font-medium">Tier Δ</span>（地球
                   AD2026）が基盤となり、<span className="text-blue-400 font-medium">Tier Ε</span>
                   （E16通常次元）、<span className="text-purple-400 font-medium">Tier Σ</span>
-                  （ペルセポネ仮想宇宙）、<span className="text-cyan-400 font-medium">Tier Ω</span>
+                  （<Link href={`/wiki/${encodeURIComponent("ペルセポネ")}`} className="text-purple-400 hover:underline">ペルセポネ</Link>仮想宇宙）、<span className="text-cyan-400 font-medium">Tier Ω</span>
                   （高次元世界）へと階層化されている。それぞれの階層は異なる物理法則の適用領域を表し、階層間の相互作用がE16技術の核心をなしている。
                 </p>
                 <p>
