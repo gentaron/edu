@@ -19,6 +19,7 @@ const SECTIONS = [
   { id: "wiki-link", label: "Wiki", href: "/wiki" },
   { id: "story-link", label: "Story", href: "/story" },
   { id: "ranking-link", label: "番付", href: "/ranking" },
+  { id: "nexus", label: "Nexus", href: "/nexus" },
 ]
 
 export function Navigation() {
@@ -29,7 +30,10 @@ export function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-edu-border bg-edu-bg/90 backdrop-blur-sm">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-12">
-          <Link href="/" className="text-sm font-medium text-edu-text hover:text-edu-accent transition-colors shrink-0 tracking-wide">
+          <Link
+            href="/"
+            className="text-sm font-medium text-edu-text hover:text-edu-accent transition-colors shrink-0 tracking-wide"
+          >
             EDU
           </Link>
 
@@ -42,7 +46,9 @@ export function Navigation() {
                   key={s.id}
                   href={s.href}
                   className={`px-2.5 py-1 text-xs tracking-wide transition-colors rounded ${
-                    isActive ? "text-edu-text bg-edu-surface" : "text-edu-muted hover:text-edu-accent"
+                    isActive
+                      ? "text-edu-text bg-edu-surface"
+                      : "text-edu-muted hover:text-edu-accent"
                   }`}
                 >
                   {s.label}
@@ -72,7 +78,9 @@ export function Navigation() {
                   href={s.href}
                   onClick={() => setMobileOpen(false)}
                   className={`px-3 py-1.5 text-xs rounded transition-colors ${
-                    isActive ? "text-edu-text bg-edu-surface" : "text-edu-muted hover:text-edu-accent hover:bg-edu-surface"
+                    isActive
+                      ? "text-edu-text bg-edu-surface"
+                      : "text-edu-muted hover:text-edu-accent hover:bg-edu-surface"
                   }`}
                 >
                   {s.label}
