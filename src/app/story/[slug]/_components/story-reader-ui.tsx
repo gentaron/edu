@@ -14,154 +14,13 @@ import {
   Library,
   Feather,
 } from "lucide-react"
-import {
-  type StoryMeta,
-  type ChapterMeta,
-  ENTRY_IMAGE_MAP,
-  getStoriesForEntry,
-  getStoryBySlug,
-  getStoryTitle,
-} from "@/lib/stories"
+import { type StoryMeta, type ChapterMeta, ENTRY_IMAGE_MAP, getStoryTitle } from "@/lib/stories"
 import { type Lang, tl } from "@/lib/lang"
 import ReadingProgress from "./reading-progress"
 import { StarField } from "@/components/edu/star-field"
-
-function toRoman(n: number): string {
-  const map: [number, string][] = [
-    [10, "X"],
-    [9, "IX"],
-    [5, "V"],
-    [4, "IV"],
-    [1, "I"],
-  ]
-  let result = ""
-  for (const [value, numeral] of map) {
-    while (n >= value) {
-      result += numeral
-      n -= value
-    }
-  }
-  return result
-}
-
-/* ─── Detect scene breaks / section markers ─── */
-function isSceneBreak(text: string): boolean {
-  const t = text.trim()
-  return (
-    t.startsWith("─") ||
-    t.startsWith("━") ||
-    t.startsWith("==") ||
-    t.startsWith("**") ||
-    t.startsWith("##") ||
-    t.startsWith("＊") ||
-    (t.length < 5 && !t.match(/[a-zA-Z\u3040-\u30ff\u4e00-\u9faf]/))
-  )
-}
-
-/* ─── Detect chapter-like headings within text ─── */
-function isChapterHeading(text: string): boolean {
-  const t = text.trim()
-  // Very short lines (1-15 chars) that don't end with typical sentence punctuation
-  return (
-    t.length > 0 &&
-    t.length <= 20 &&
-    !t.endsWith("。") &&
-    !t.endsWith(".") &&
-    !t.endsWith("！") &&
-    !t.endsWith("？") &&
-    !t.endsWith("!") &&
-    !t.endsWith("?") &&
-    !t.endsWith("」") &&
-    !t.endsWith("'") &&
-    !t.endsWith('"') &&
-    !t.endsWith(")") &&
-    !t.startsWith("「") &&
-    !t.startsWith('"') &&
-    !t.startsWith("(") &&
-    !t.startsWith("「") &&
-    t !== ""
-  )
-}
-
-/* ─── Lang Toggle ─── */
-function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
-  return (
-    <div className="flex items-center border border-white/10 rounded-full overflow-hidden shrink-0 backdrop-blur-md bg-white/5">
-      <button
-        type="button"
-        onClick={() => setLang("ja")}
-        className={`px-3 py-1 text-[11px] font-semibold tracking-wider uppercase transition-all duration-300 ${
-          lang === "ja"
-            ? "bg-white/15 text-white shadow-inner"
-            : "text-white/40 hover:text-white/70"
-        }`}
-      >
-        JP
-      </button>
-      <button
-        type="button"
-        onClick={() => setLang("en")}
-        className={`px-3 py-1 text-[11px] font-semibold tracking-wider uppercase transition-all duration-300 ${
-          lang === "en"
-            ? "bg-white/15 text-white shadow-inner"
-            : "text-white/40 hover:text-white/70"
-        }`}
-      >
-        EN
-      </button>
-    </div>
-  )
-}
-
-/* ─── Related Stories Section ─── */
-function RelatedStoriesSection({
-  currentSlug,
-  entryIds,
-  lang,
-}: {
-  currentSlug: string
-  entryIds: string[]
-  lang: Lang
-}) {
-  const relatedSlugs = new Set<string>()
-  entryIds.forEach((eid) => {
-    getStoriesForEntry(eid).forEach((s) => {
-      if (s.slug !== currentSlug) relatedSlugs.add(s.slug)
-    })
-  })
-  const stories = Array.from(relatedSlugs)
-    .map((slug) => getStoryBySlug(slug))
-    .filter(Boolean)
-
-  if (stories.length === 0) return null
-  return (
-    <div className="mt-16 pt-10 border-t border-white/8">
-      <h3 className="text-xs font-semibold text-white/30 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-        <BookOpen className="w-3.5 h-3.5" />
-        {tl("関連作品", "Related Stories", lang)}
-      </h3>
-      <div className="flex flex-col gap-1.5">
-        {stories.map(
-          (s) =>
-            s && (
-              <Link
-                key={s.slug}
-                href={`/story/${s.slug}`}
-                className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-white/50 hover:text-white/80 hover:bg-white/5 transition-all duration-300 group"
-              >
-                <BookOpen className="w-3.5 h-3.5 shrink-0 opacity-40" />
-                <div className="flex-1 min-w-0">
-                  <span className="truncate block">{getStoryTitle(s, lang)}</span>
-                  {s.era && <span className="text-[10px] text-white/25">{s.era}</span>}
-                </div>
-                <ChevronRight className="w-3 h-3 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </Link>
-            )
-        )}
-      </div>
-    </div>
-  )
-}
+import { toRoman, isSceneBreak, isChapterHeading } from "../_lib/parser"
+import { LangToggle } from "./lang-toggle"
+import { RelatedStoriesSection } from "./related-stories"
 
 /* ─── Props ─── */
 export type StoryReaderUIProps = {
@@ -215,7 +74,12 @@ export function StoryReaderUI({
     paragraphs.forEach((p, i) => {
       if (isSceneBreak(p)) {
         result.push({ type: "scene", content: p, index: i })
-      } else if (isChapterHeading(p) && i > 0 && !!paragraphs[i - 1] && isSceneBreak(paragraphs[i - 1]!)) {
+      } else if (
+        isChapterHeading(p) &&
+        i > 0 &&
+        !!paragraphs[i - 1] &&
+        isSceneBreak(paragraphs[i - 1]!)
+      ) {
         result.push({ type: "heading", content: p, index: i })
       } else {
         result.push({ type: "paragraph", content: p, index: i })
