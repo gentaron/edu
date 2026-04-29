@@ -1,77 +1,102 @@
-# Worklog — wiki-data.ts Comprehensive Edits
+# Worklog: Add `leaders` arrays to wiki-data.ts
 
-## Date: 2025-07-20
+## Date: 2025-01-01
 
-## Summary
+## Task
 
-Performed comprehensive edits to `/home/z/my-project/src/lib/wiki-data.ts` (3086 → 3297 lines, +211 lines).
+Add `leaders` arrays to ALL organization/civilization/nation Wiki entries in `/home/z/my-project/src/lib/wiki-data.ts`.
 
-## Task A: New Character Entries (9 entries added to CHARACTERS array)
+## Changes Made
 
-Added before CHARACTERS `]` closing bracket, in new sections:
+### 1. New Character Entries Added to CHARACTERS Array (7 entries)
 
-### ZAMLT 企業リーダー (7 entries)
+Added before the closing `]` of the CHARACTERS array (after オメガ＝ユリシア):
 
-1. **ラファエル・ドレイク** (Rafael Drake) — トロン・コーポレーションCEO
-2. **アイリス・ノヴァ** (Iris Nova) — アロエオイル・コーポレーションリーダー
-3. **カルロス・ヴァンダム** (Carlos Vandam) — マモン・コーポレーションリーダー
-4. **アーサー・グリム** (Arthur Grim) — ゼブラ・コーポレーションリーダー
-5. **エリザベス・リンドバーグ** (Elizabeth Lindberg) — ルレンツ・コーポレーションリーダー
-6. **レイ・ヴァンデルト** (Ray Vandelte) — ゼブラ・コーポレーション工作員
-7. **リンダ** (Linda) — ルレンツ・コーポレーション研究員
+| ID                     | Name          | Role                       | Affiliation          |
+| ---------------------- | ------------- | -------------------------- | -------------------- |
+| ファランクス           | Phalanx       | バーズ帝国初代皇帝         | バーズ帝国           |
+| セルヴァ・ドーン       | Selva Dawn    | SUDOM初代医療総裁          | SUDOM                |
+| ハシーム・ファティマ   | Hashim Fatima | ファティマ連邦初代連邦議長 | ファティマ連邦       |
+| トリスタン・スターク   | Tristan Stark | スターク三国軍事理事長     | スターク三国         |
+| オーギュスト・ゴールド | August Gold   | ゴールデン・ヴェノム創設者 | ゴールデン・ヴェノム |
+| ルシア・ネオ           | Lucia Neo     | ネオクラン同盟初代代表     | ネオクラン同盟       |
+| ヘクトル・ヴァン       | Hector Van    | UECO初代議長               | UECO                 |
 
-### テクロサス系譜 (1 entry)
+### 2. Leaders Arrays Added to TERMINOLOGY Entries (43 entries)
 
-8. **クロノ・ヴァーレント** (Chrono Valeint) — テクロサス指導者
+**Main Organizations:**
 
-### 宇宙勢力（歴史） (1 entry)
+- AURALIS (4 leaders: Kate Claudia, Lily Steiner, Kate Patton, Lillie Ardent)
+- ZAMLT (6 leaders: エリオット・シュトラス + 5 CEOs)
+- ネオクラン同盟 (1 leader: ルシア・ネオ)
+- UECO (1 leader: ヘクトル・ヴァン)
+- シャドウ・リベリオン (1 leader: アルファ・ケイン)
+- コーポラタムパブリカ (1 leader: エリオット・シュトラス)
+- EVILS (1 leader: オメガ＝ユリシア)
 
-9. **オメガ＝ユリシス** (Omega=Ulysses) — EVILSリーダー
+**Crescent Region Nations:**
 
-## Task B: Leader History Appended to Organization Descriptions (4 edits)
+- ヴァーミリオン (1 leader: アザゼル)
+- ブルーローズ (1 leader: フィオナ)
+- ミエルテンガ (1 leader: マリーナ・ボビン)
+- クロセヴィア (1 leader: カスチーナ・テンペスト)
+- SSレンジ (1 leader: アイク・ロペス)
+- アイアン・シンジケート (1 leader: レイド・カキザキ)
+- SUDOM (1 leader: セルヴァ・ドーン)
+- ファティマ連邦 (1 leader: ハシーム・ファティマ)
+- スターク三国 (1 leader: トリスタン・スターク)
 
-1. **UECO** — Appended: 初代議長情報、E495〜E500年移行期主導、惑星ビブリオ保管記録
-2. **ネオクラン同盟** — Appended: 初代共同代表、ZAMLT崩壊後民主化運動指導者
-3. **コーポラタムパブリカ** — Appended: 最高執行官制度、14兆ドルGDP、シュトラスによる解任
-4. **銀河系コンソーシアム** — Appended: グランベル・ティエリア共同議長体制
+**Military/Opposition Organizations:**
 
-## Task C: New Terminology Entries (10 entries added to TERMINOLOGY array)
+- シルバー・ヴェノム (2 leaders: マスター・ヴェノム, レオン)
+- アルファ・ヴェノム (1 leader: イズミ)
+- ゴールデン・ヴェノム (1 leader: オーギュスト・ゴールド)
+- ボグダス・ジャベリン (1 leader: セバスチャン・ヴァレリウス)
+- V7 (5 leaders: フィオナ, カスチーナ, アイク, レイド, ヨニック)
+- トリニティ・アライアンス (1 leader: アイリス)
+- テクロサス (1 leader: クロノ・ヴァーレント)
 
-### 西大陸都市 (4 entries)
+**Planets & Civilizations:**
 
-1. **ギガポリス** (Gigapolis) — 西大陸最大都市の完全な歴史
-2. **Poitiers** — 文化・学術都市「音の都」
-3. **Chem** — 化学工業都市
-4. **Troyane** — 宗教都市
+- Eros-7 (3 leaders: リリス・ヴェイン, シルヴィア・クロウ, カーラ・ヴェルム)
+- バーズ帝国 (1 leader: ファランクス)
+- ファールージャ社 (1 leader: ミカエル・ガブリエリ)
+- エヴァトロン (2 leaders: グリム・ダルゴス, ヴァイロン・デアクス)
 
-### 歴史・時代 (1 entry)
+**Space Civilizations (宇宙勢力):**
 
-5. **第五次繁栄期** — メルディア戦争後の繁栄期
+- グランベル (2 leaders: アルゼン・カーリーン, マスター・クインシアス)
+- ティエリア (1 leader: グレイモンド・ハウザー)
+- エレシオン (1 leader: 女王リアナ・ソリス)
+- ファルージャ (1 leader: マドリス・カーネル)
+- ディオクレニス (1 leader: ネイサン・コリンド)
+- アポロン文明圏 (1 leader: ロナン・アーサ)
+- Selinopolis (1 leader: セリア・ドミニクス)
+- エレシュ (1 leader: 大司教)
+- プロキオ (1 leader: 商工会議長)
+- ロースター (1 leader: 通信長官)
 
-### 組織・制度 (1 entry)
+**ZAMLT Sub-Entries:**
 
-6. **戦士決定戦** — ヒーローエージェンシー選抜大会
+- トロン・コーポレーション (1 leader: ラファエル・ドレイク)
+- アロエオイル・コーポレーション (1 leader: アイリス・ノヴァ)
+- マモン・コーポレーション (1 leader: カルロス・ヴァンダム)
+- ゼブラ・コーポレーション (1 leader: アーサー・グリム)
+- ルレンツ・コーポレーション (1 leader: エリザベス・リンドバーグ)
+- ストロベリー (1 leader: アレン)
 
-### 技術・概念 (4 entries)
+### 3. Entries Intentionally NOT Given Leaders
 
-7. **次元ピラミッド** (Dimension Pyramid) — 宇宙論的框架
-8. **搾取生物** (Extraction Creature) — Eros-7原生生物群
-9. **G4ファントムパルス** — セリアの次元エネルギー兵器
-10. **ケンタウロスレーザー** — アポロンの超巨大レーザー兵器
+- クレセント大地方 (geographical region)
+- 企業国家 (concept/term)
+- A-Registry (system)
+- nトークン (currency)
+- All technology entries
+- All city/location entries
+- All event/war entries (historical events don't have leadership)
 
-## Task D: Geographic Description Verification
+## Verification
 
-1. **セントラル・タワー** — "Gigapolisの中心部" → ✅ CORRECT, no change needed
-2. **ギガポリス解放戦** — "メガタワー（ZAMLT本社）" → ✅ CORRECT, no change needed
-3. **シンフォニー・オブ・スターズ** — Entry at line 1270 confirms "E16連星系の中心惑星" (planet) → ✅ CORRECT
-
-## TypeScript Verification
-
-- `npx tsc --noEmit` — ✅ PASSED (no errors)
-
-## Notes
-
-- All existing entries preserved intact
-- All new entries follow existing WikiEntry interface
-- No type definitions, array structures, or exports modified
-- No trailing commas or syntax issues
+- `bun run lint` passes with no errors
+- File grew from ~3176 lines to 3450 lines (+274 lines)
+- All 43 leaders arrays properly formatted with `LeaderEntry` interface fields

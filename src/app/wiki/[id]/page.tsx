@@ -4,7 +4,7 @@ import React from "react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, User, Scroll, BookOpen, Star } from "lucide-react"
+import { ArrowLeft, User, Scroll, BookOpen, Star, Crown } from "lucide-react"
 import { ALL_ENTRIES } from "@/lib/wiki-data"
 import { getStoriesForEntry } from "@/lib/stories"
 import WikiDescription from "./_components/wiki-description"
@@ -135,6 +135,59 @@ export default function WikiEntryPage() {
                   <p className="text-sm text-white/65 font-light">{entry.category}</p>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Leaders Section */}
+          {entry.leaders && entry.leaders.length > 0 && (
+            <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-6 sm:p-8 mb-8">
+              <h2 className="text-[11px] font-light text-white/25 mb-5 uppercase tracking-widest flex items-center gap-2">
+                <Crown className="w-3.5 h-3.5 text-white/15" />
+                歴代指導者
+              </h2>
+              <div className="space-y-2">
+                {entry.leaders.map((leader) => {
+                  const leaderEntry = ALL_ENTRIES.find((e) => e.id === leader.id)
+                  return (
+                    <Link
+                      key={leader.id}
+                      href={`/wiki/${encodeURIComponent(leader.id)}`}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.01] hover:bg-white/[0.04] hover:border-white/[0.1] transition-all duration-300 group"
+                    >
+                      <div className="shrink-0 w-9 h-9 rounded-full overflow-hidden border border-white/[0.08] bg-white/[0.02] flex items-center justify-center">
+                        {leaderEntry?.image ? (
+                          <Image
+                            src={leaderEntry.image}
+                            alt={leader.name}
+                            width={36}
+                            height={36}
+                            unoptimized
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <User className="w-4 h-4 text-white/20" />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm text-white/55 font-light group-hover:text-white/75 transition-colors truncate">
+                          {leader.name}
+                        </p>
+                        <p className="text-[10px] text-white/25 font-light truncate">
+                          {leader.role}
+                          {leader.era ? ` (${leader.era})` : ""}
+                        </p>
+                      </div>
+                      {leaderEntry && (
+                        <span className="shrink-0 text-[9px] text-white/15 font-light">
+                          {leaderEntry.category === "キャラクター"
+                            ? leaderEntry.tier || ""
+                            : leaderEntry.category}
+                        </span>
+                      )}
+                    </Link>
+                  )
+                })}
+              </div>
             </div>
           )}
 
