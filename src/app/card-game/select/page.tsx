@@ -1,21 +1,14 @@
-"use client";
+"use client"
 
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { m } from "framer-motion";
-import {
-  Swords,
-  ArrowLeft,
-  Shield,
-  Skull,
-  AlertTriangle,
-  ChevronRight,
-  Crown,
-} from "lucide-react";
-import { ENEMIES, type Enemy } from "@/lib/card-data";
-import { useDeckStore } from "@/lib/game-store";
+import React from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { m } from "framer-motion"
+import { Swords, ArrowLeft, Shield, Skull, AlertTriangle, ChevronRight, Crown } from "lucide-react"
+import { ENEMIES } from "@/lib/card-data"
+import type { Enemy } from "@/types"
+import { useDeckStore } from "@/lib/game-store"
 
 const diffColors: Record<string, { border: string; badge: string; icon: React.ReactNode }> = {
   NORMAL: {
@@ -38,24 +31,18 @@ const diffColors: Record<string, { border: string; badge: string; icon: React.Re
     badge: "text-yellow-400 bg-yellow-500/10 border-yellow-500/40",
     icon: <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />,
   },
-};
+}
 
-const DIFF_ORDER: Enemy["difficulty"][] = ["NORMAL", "HARD", "BOSS", "FINAL"];
+const DIFF_ORDER: Enemy["difficulty"][] = ["NORMAL", "HARD", "BOSS", "FINAL"]
 const DIFF_LABELS: Record<string, string> = {
   NORMAL: "NORMAL — 標準敵",
   HARD: "HARD — 上級敵",
   BOSS: "BOSS — ボス敵",
   FINAL: "FINAL — 最終ボス",
-};
+}
 
-function EnemyCard({
-  enemy,
-  onBattle,
-}: {
-  enemy: Enemy;
-  onBattle: () => void;
-}) {
-  const dc = diffColors[enemy.difficulty] ?? { border: "border-edu-border", badge: "", icon: <></> };
+function EnemyCard({ enemy, onBattle }: { enemy: Enemy; onBattle: () => void }) {
+  const dc = diffColors[enemy.difficulty] ?? { border: "border-edu-border", badge: "", icon: <></> }
 
   return (
     <m.div
@@ -66,7 +53,14 @@ function EnemyCard({
     >
       {/* Header bar */}
       <div className="relative h-20 sm:h-28 bg-edu-bg flex items-center justify-center">
-        <Image src={enemy.imageUrl} alt={enemy.name} width={64} height={64} loading="lazy" className="w-14 h-14 sm:w-16 sm:h-16 object-contain opacity-60" />
+        <Image
+          src={enemy.imageUrl}
+          alt={enemy.name}
+          width={64}
+          height={64}
+          loading="lazy"
+          className="w-14 h-14 sm:w-16 sm:h-16 object-contain opacity-60"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-edu-bg via-edu-bg/40 to-transparent" />
         <div className="absolute top-2 right-2">
           <span className={`text-[9px] font-bold px-2 py-0.5 rounded border ${dc.badge}`}>
@@ -82,9 +76,15 @@ function EnemyCard({
       <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
         {/* Stats */}
         <div className="flex items-center gap-3 sm:gap-4 text-xs text-edu-muted">
-          <span>HP: <span className="text-rose-400 font-bold">{enemy.maxHp}</span></span>
-          <span>ATK: <span className="text-orange-400 font-bold">{enemy.attackPower}</span></span>
-          <span>Phase: <span className="text-yellow-400 font-bold">{enemy.phases.length + 1}</span></span>
+          <span>
+            HP: <span className="text-rose-400 font-bold">{enemy.maxHp}</span>
+          </span>
+          <span>
+            ATK: <span className="text-orange-400 font-bold">{enemy.attackPower}</span>
+          </span>
+          <span>
+            Phase: <span className="text-yellow-400 font-bold">{enemy.phases.length + 1}</span>
+          </span>
         </div>
 
         {/* Description */}
@@ -113,12 +113,12 @@ function EnemyCard({
         </div>
       </div>
     </m.div>
-  );
+  )
 }
 
 export default function EnemySelectPage() {
-  const router = useRouter();
-  const deck = useDeckStore((s) => s.deck);
+  const router = useRouter()
+  const deck = useDeckStore((s) => s.deck)
 
   if (deck.length < 5) {
     return (
@@ -127,7 +127,8 @@ export default function EnemySelectPage() {
           <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto mb-4" />
           <h2 className="text-lg font-bold text-edu-text mb-2">デッキが未完成です</h2>
           <p className="text-xs text-edu-muted mb-6">
-            デッキは5枚必要です。現在 <span className="text-rose-400 font-bold">{deck.length}</span>/5枚
+            デッキは5枚必要です。現在 <span className="text-rose-400 font-bold">{deck.length}</span>
+            /5枚
           </p>
           <Link
             href="/card-game"
@@ -137,7 +138,7 @@ export default function EnemySelectPage() {
           </Link>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -145,8 +146,12 @@ export default function EnemySelectPage() {
       {/* Header */}
       <div className="edu-card border-b border-edu-border/50">
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center gap-2 sm:gap-3">
-          <Link href="/card-game" className="text-xs text-edu-muted hover:text-edu-text transition-colors">
-            <ArrowLeft className="w-4 h-4 inline" /> <span className="hidden sm:inline">デッキ構築に戻る</span>
+          <Link
+            href="/card-game"
+            className="text-xs text-edu-muted hover:text-edu-text transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 inline" />{" "}
+            <span className="hidden sm:inline">デッキ構築に戻る</span>
           </Link>
           <span className="text-edu-border hidden sm:inline">|</span>
           <Swords className="w-4 h-4 sm:w-5 sm:h-5 text-rose-400" />
@@ -156,8 +161,8 @@ export default function EnemySelectPage() {
 
       <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {DIFF_ORDER.map((diff) => {
-          const enemies = ENEMIES.filter((e) => e.difficulty === diff);
-          if (enemies.length === 0) return null;
+          const enemies = ENEMIES.filter((e) => e.difficulty === diff)
+          if (enemies.length === 0) return null
           return (
             <div key={diff} className="mb-8 sm:mb-10">
               <div className="flex items-center gap-2 mb-3 sm:mb-4">
@@ -168,25 +173,27 @@ export default function EnemySelectPage() {
                 <div className="flex-1 h-px bg-edu-border/20" />
               </div>
 
-              <div className={`grid gap-3 sm:gap-4 ${
-                diff === "FINAL"
-                  ? "grid-cols-1 max-w-md mx-auto"
-                  : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-              }`}>
+              <div
+                className={`grid gap-3 sm:gap-4 ${
+                  diff === "FINAL"
+                    ? "grid-cols-1 max-w-md mx-auto"
+                    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+                }`}
+              >
                 {enemies.map((enemy) => (
                   <EnemyCard
                     key={enemy.id}
                     enemy={enemy}
                     onBattle={() => {
-                      router.push(`/card-game/battle?enemy=${enemy.id}`);
+                      router.push(`/card-game/battle?enemy=${enemy.id}`)
                     }}
                   />
                 ))}
               </div>
             </div>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

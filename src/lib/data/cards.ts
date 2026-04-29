@@ -1,5 +1,5 @@
 import { ALL_CARDS, ENEMIES } from "../card-data"
-import type { GameCard, Enemy } from "../card-data"
+import type { GameCard, Enemy } from "@/types"
 
 export function getAllCards(): GameCard[] {
   return ALL_CARDS

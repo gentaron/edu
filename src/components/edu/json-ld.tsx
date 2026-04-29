@@ -1,4 +1,4 @@
-import type { WikiEntry } from "@/lib/wiki-data"
+import type { WikiEntry } from "@/types"
 
 const BASE_URL = "https://edu-eternal-dominion-universe.vercel.app"
 
@@ -55,11 +55,7 @@ export function WikiArticleJsonLd({ entry }: { entry: WikiEntry }) {
   )
 }
 
-export function BreadcrumbJsonLd({
-  items,
-}: {
-  items: Array<{ name: string; url: string }>
-}) {
+export function BreadcrumbJsonLd({ items }: { items: Array<{ name: string; url: string }> }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",

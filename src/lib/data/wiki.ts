@@ -1,5 +1,5 @@
 import { ALL_ENTRIES } from "../wiki-data"
-import type { WikiEntry } from "../wiki-data"
+import type { WikiEntry } from "@/types"
 
 export function getAllWikiEntries(): WikiEntry[] {
   return ALL_ENTRIES

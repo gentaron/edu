@@ -3,44 +3,10 @@
    Prisma-free, works in Netlify static build
    ═══════════════════════════════════════════════════════ */
 
-export type AbilityType = "攻撃" | "防御" | "効果" | "必殺"
+import type { GameCard, Enemy, EnemyPhase } from "@/types"
 
-export interface GameCard {
-  id: string
-  name: string
-  imageUrl: string
-  flavorText: string
-  rarity: "C" | "R" | "SR"
-  affiliation: string
-  // 4 abilities per card
-  attack: number
-  defense: number
-  effect: string
-  effectValue: number
-  ultimate: number
-  ultimateName: string
-}
-
-export interface EnemyPhase {
-  triggerHpPercent: number
-  message: string
-  attackBonus: number
-  selfHealPerTurn?: number
-}
-
-export interface Enemy {
-  id: string
-  name: string
-  title: string
-  maxHp: number
-  attackPower: number
-  imageUrl: string
-  description: string
-  difficulty: "NORMAL" | "HARD" | "BOSS" | "FINAL"
-  reward: string
-  phases: EnemyPhase[]
-  specialRule?: string
-}
+export type { GameCard, Enemy, EnemyPhase }
+export type { AbilityType } from "@/types"
 
 /* ═══════════════════════════════════════════════════════
    64枚のキャラクターカードプール

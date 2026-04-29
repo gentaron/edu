@@ -1,32 +1,4 @@
-type Category = "キャラクター" | "用語" | "組織" | "地理" | "技術" | "歴史"
-
-interface SourceLink {
-  url: string
-  label: string
-}
-
-export interface LeaderEntry {
-  id: string
-  name: string
-  nameEn?: string
-  role: string
-  era?: string
-}
-
-interface WikiEntry {
-  id: string
-  name: string
-  nameEn?: string
-  category: Category
-  subCategory?: string
-  description: string
-  era?: string
-  affiliation?: string
-  tier?: string
-  image?: string
-  sourceLinks?: SourceLink[]
-  leaders?: LeaderEntry[]
-}
+import type { WikiEntry } from "@/types"
 
 /* ═══════════════════════════════════════════════════════════════
    WIKI DATA — CHARACTERS
@@ -3847,5 +3819,5 @@ const TERMINOLOGY: WikiEntry[] = [
 
 const ALL_ENTRIES: WikiEntry[] = [...CHARACTERS, ...TERMINOLOGY]
 
-export type { Category, SourceLink, WikiEntry }
+export type { Category, SourceLink, LeaderEntry, WikiEntry } from "@/types"
 export { CHARACTERS, TERMINOLOGY, ALL_ENTRIES }

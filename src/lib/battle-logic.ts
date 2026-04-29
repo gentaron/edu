@@ -3,8 +3,7 @@
  * These functions take inputs and return outputs without depending on Zustand state.
  */
 
-import { type GameCard, type Enemy, type AbilityType } from "./card-data"
-import type { FieldChar } from "./game-store"
+import { type GameCard, type Enemy, type AbilityType, type FieldChar } from "@/types"
 
 /* ── HP Calculation ── */
 
@@ -53,7 +52,9 @@ export function hitRandomChar(
 
   let logMessages: string[] = []
   if (newHp <= 0) {
-    logMessages.push(`${emoji} ${msgPrefix}${target.card.name}を撃破！ ${target.card.name}は戦闘不能！`)
+    logMessages.push(
+      `${emoji} ${msgPrefix}${target.card.name}を撃破！ ${target.card.name}は戦闘不能！`
+    )
   } else {
     logMessages.push(`${emoji} ${msgPrefix}${target.card.name}に${damage}ダメージ！`)
   }

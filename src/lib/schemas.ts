@@ -13,17 +13,25 @@ export const WikiEntrySchema = z.object({
   affiliation: z.string().optional(),
   tier: z.string().optional(),
   image: z.string().optional(),
-  sourceLinks: z.array(z.object({
-    url: z.string(),
-    label: z.string(),
-  })).optional(),
-  leaders: z.array(z.object({
-    id: z.string(),
-    name: z.string(),
-    nameEn: z.string().optional(),
-    role: z.string(),
-    era: z.string().optional(),
-  })).optional(),
+  sourceLinks: z
+    .array(
+      z.object({
+        url: z.string(),
+        label: z.string(),
+      })
+    )
+    .optional(),
+  leaders: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        nameEn: z.string().optional(),
+        role: z.string(),
+        era: z.string().optional(),
+      })
+    )
+    .optional(),
 })
 
 export const AbilityTypeSchema = z.enum(["攻撃", "防御", "効果", "必殺"])
@@ -68,6 +76,6 @@ export const EnemySchema = z.object({
 })
 
 // Type exports derived from schemas
-export type WikiEntry = z.infer<typeof WikiEntrySchema>
-export type GameCard = z.infer<typeof GameCardSchema>
-export type Enemy = z.infer<typeof EnemySchema>
+export type { WikiEntry } from "@/types"
+export type { GameCard } from "@/types"
+export type { Enemy } from "@/types"

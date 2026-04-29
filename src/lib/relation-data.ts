@@ -7,29 +7,10 @@ import {
   TOP_CIVILIZATIONS,
   OTHER_CIVILIZATIONS,
   HISTORICAL_CIVILIZATIONS,
-  type Civilization,
 } from "./civilization-data"
+import type { Civilization, RelationNode, RelationEdge } from "@/types"
 
-/* ── 型定義 ── */
-
-export interface RelationNode {
-  id: string
-  name: string
-  nameEn?: string
-  category: "キャラクター" | "組織" | "文明"
-  tier?: string
-  image?: string
-  description: string
-  era?: string
-  subCategory?: string
-}
-
-export interface RelationEdge {
-  source: string
-  target: string
-  type: "所属" | "指導" | "同盟" | "対立" | "関連" | "歴史的"
-  description: string
-}
+export type { RelationNode, RelationEdge } from "@/types"
 
 /* ── ノード構築 ── */
 

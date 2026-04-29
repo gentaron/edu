@@ -3,7 +3,8 @@ import { Crown, Swords, Shield, Users } from "lucide-react"
 import { StarField } from "@/components/edu/star-field"
 import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
 import { PageHeader } from "@/components/edu/page-header"
-import { ALL_CARDS, type GameCard } from "@/lib/card-data"
+import { ALL_CARDS } from "@/lib/card-data"
+import type { GameCard } from "@/types"
 import { ALL_ENTRIES } from "@/lib/wiki-data"
 
 /* Build a lookup from card display name → wiki entry id */

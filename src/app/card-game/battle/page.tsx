@@ -6,8 +6,10 @@ import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
 import { m, AnimatePresence } from "framer-motion"
 import { Swords, Heart, Shield, Crown, Zap, Sparkles, Crosshair, Skull, User } from "lucide-react"
-import { ENEMIES, type GameCard, type AbilityType } from "@/lib/card-data"
-import { useDeckStore, useBattleStore, type FieldChar } from "@/lib/game-store"
+import { ENEMIES } from "@/lib/card-data"
+import type { GameCard, AbilityType } from "@/types"
+import { useDeckStore, useBattleStore } from "@/lib/game-store"
+import type { FieldChar } from "@/types"
 
 /* ── Particle Burst ── */
 function ParticleBurst({
@@ -302,7 +304,14 @@ function FieldCharSlot({
       <div
         className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-edu-bg/50 border shrink-0 ${isActing && actingAbility === "必殺" ? "border-yellow-400 shadow-lg shadow-yellow-500/40" : isActing && actingAbility === "攻撃" ? "border-red-400 shadow-lg shadow-red-500/30" : "border-edu-border/20"}`}
       >
-        <Image src={char.card.imageUrl} alt={char.card.name} width={48} height={48} sizes="(max-width: 640px) 100vw, 200px" className="w-full h-full object-cover" />
+        <Image
+          src={char.card.imageUrl}
+          alt={char.card.name}
+          width={48}
+          height={48}
+          sizes="(max-width: 640px) 100vw, 200px"
+          className="w-full h-full object-cover"
+        />
       </div>
       <p
         className={`text-[7px] sm:text-[8px] font-bold text-center leading-tight line-clamp-1 ${char.isDown ? "text-edu-muted/30" : "text-edu-text"}`}
@@ -418,7 +427,9 @@ function AbilityButton({
       )}
       {icon}
       <span className="text-[10px] sm:text-xs font-bold text-edu-text relative z-10">{label}</span>
-      <span className="text-[8px] sm:text-[10px] font-bold text-edu-muted relative z-10">{value}</span>
+      <span className="text-[8px] sm:text-[10px] font-bold text-edu-muted relative z-10">
+        {value}
+      </span>
       {subLabel && (
         <span className="text-[7px] sm:text-[8px] text-edu-muted/70 leading-tight text-center line-clamp-2 max-w-full relative z-10">
           {subLabel}
@@ -660,7 +671,9 @@ function BattleContent() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <h3 className="text-xs sm:text-sm font-bold text-edu-text">{selectedEnemy.name}</h3>
+                  <h3 className="text-xs sm:text-sm font-bold text-edu-text">
+                    {selectedEnemy.name}
+                  </h3>
                   <span className="text-[10px] text-edu-muted">{selectedEnemy.title}</span>
                   <span
                     className={`text-[7px] sm:text-[8px] font-bold px-1.5 py-0.5 rounded border ${diffColors[selectedEnemy.difficulty]?.badge ?? ""}`}
@@ -841,12 +854,8 @@ function BattleContent() {
                       />
                     </m.div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-xs font-bold text-edu-text">
-                        {selectedChar.card.name}
-                      </h3>
-                      <p className="text-[9px] text-edu-muted">
-                        {selectedChar.card.affiliation}
-                      </p>
+                      <h3 className="text-xs font-bold text-edu-text">{selectedChar.card.name}</h3>
+                      <p className="text-[9px] text-edu-muted">{selectedChar.card.affiliation}</p>
                     </div>
                     <div className="flex items-center gap-2 text-[9px]">
                       <span className="text-red-400 font-bold">⚔ {selectedChar.card.attack}</span>
@@ -933,7 +942,9 @@ function BattleContent() {
               <div className="edu-card rounded-xl p-3 flex-1 min-h-0 overflow-hidden flex flex-col">
                 <div className="flex items-center gap-1.5 mb-2 shrink-0">
                   <Swords className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-edu-muted" />
-                  <span className="text-[8px] sm:text-[9px] font-bold text-edu-muted">バトルログ</span>
+                  <span className="text-[8px] sm:text-[9px] font-bold text-edu-muted">
+                    バトルログ
+                  </span>
                 </div>
                 <div
                   ref={logRef}
@@ -988,9 +999,7 @@ function BattleContent() {
                 <>
                   <Skull className="w-12 h-12 text-rose-400" />
                   <h2 className="text-xl font-black text-rose-400">敗北...</h2>
-                  <p className="text-sm text-edu-muted">
-                    味方が全員戦闘不能になった…
-                  </p>
+                  <p className="text-sm text-edu-muted">味方が全員戦闘不能になった…</p>
                   <p className="text-xs text-edu-muted">
                     敵残りHP: <span className="text-rose-400 font-bold">{enemyHp}</span>/
                     {selectedEnemy.maxHp}

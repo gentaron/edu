@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import React, { useState, useMemo } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { m, AnimatePresence } from "framer-motion";
+import React, { useState, useMemo } from "react"
+import Link from "next/link"
+import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { m, AnimatePresence } from "framer-motion"
 import {
   Swords,
   ArrowLeft,
@@ -14,35 +14,47 @@ import {
   ChevronUp,
   ChevronDown,
   Info,
-} from "lucide-react";
-import { ALL_CARDS, type GameCard } from "@/lib/card-data";
-import { useDeckStore } from "@/lib/game-store";
-import { useShallow } from "zustand/react/shallow";
+} from "lucide-react"
+import { ALL_CARDS } from "@/lib/card-data"
+import type { GameCard } from "@/types"
+import { useDeckStore } from "@/lib/game-store"
+import { useShallow } from "zustand/react/shallow"
 
-type RarityFilter = "全て" | "C" | "R" | "SR";
+type RarityFilter = "全て" | "C" | "R" | "SR"
 
 const rarityColors: Record<string, { border: string; label: string }> = {
   C: { border: "border-edu-border bg-edu-surface", label: "text-edu-muted" },
   R: { border: "border-blue-400/50 bg-blue-500/10", label: "text-blue-400" },
   SR: { border: "border-yellow-400/50 bg-yellow-500/10", label: "text-yellow-400" },
-};
+}
 
 const rarityCardClass: Record<string, string> = {
   SR: "card-sr",
   R: "card-r",
   C: "card-c",
-};
+}
 
 const rarityBadgeClass: Record<string, string> = {
   SR: "rarity-badge-sr",
   R: "rarity-badge-r",
   C: "bg-edu-surface/50 text-edu-muted border border-edu-border/30",
-};
+}
 
-function CardInPool({ card, inDeck, onAdd }: { card: GameCard; inDeck: boolean; onAdd: () => void }) {
-  const rc = rarityColors[card.rarity] ?? { border: "border-edu-border bg-edu-surface", label: "text-edu-muted" };
-  const cardClass = rarityCardClass[card.rarity] ?? "";
-  const badgeClass = rarityBadgeClass[card.rarity] ?? "";
+function CardInPool({
+  card,
+  inDeck,
+  onAdd,
+}: {
+  card: GameCard
+  inDeck: boolean
+  onAdd: () => void
+}) {
+  const rc = rarityColors[card.rarity] ?? {
+    border: "border-edu-border bg-edu-surface",
+    label: "text-edu-muted",
+  }
+  const cardClass = rarityCardClass[card.rarity] ?? ""
+  const badgeClass = rarityBadgeClass[card.rarity] ?? ""
 
   return (
     <m.button
@@ -64,14 +76,26 @@ function CardInPool({ card, inDeck, onAdd }: { card: GameCard; inDeck: boolean; 
 
       {/* Image */}
       <div className="h-16 sm:h-20 w-full overflow-hidden bg-edu-bg/50 relative z-10">
-        <Image src={card.imageUrl} alt={card.name} width={144} height={80} sizes="(max-width: 640px) 100vw, 200px" loading="lazy" className="w-full h-full object-cover" />
+        <Image
+          src={card.imageUrl}
+          alt={card.name}
+          width={144}
+          height={80}
+          sizes="(max-width: 640px) 100vw, 200px"
+          loading="lazy"
+          className="w-full h-full object-cover"
+        />
       </div>
 
       {/* Info */}
       <div className="flex-1 flex flex-col items-center justify-between p-1.5 sm:p-2 min-h-0 relative z-10">
         <div className="text-center">
-          <p className="text-[8px] sm:text-[9px] font-bold text-edu-text leading-tight line-clamp-2">{card.name}</p>
-          <span className={`inline-block text-[7px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${badgeClass}`}>
+          <p className="text-[8px] sm:text-[9px] font-bold text-edu-text leading-tight line-clamp-2">
+            {card.name}
+          </p>
+          <span
+            className={`inline-block text-[7px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${badgeClass}`}
+          >
             {card.rarity}
           </span>
         </div>
@@ -85,7 +109,7 @@ function CardInPool({ card, inDeck, onAdd }: { card: GameCard; inDeck: boolean; 
         </div>
       </div>
     </m.button>
-  );
+  )
 }
 
 function DeckSlot({
@@ -95,14 +119,17 @@ function DeckSlot({
   onMoveUp,
   onMoveDown,
 }: {
-  card: GameCard;
-  index: number;
-  onRemove: () => void;
-  onMoveUp: () => void;
-  onMoveDown: () => void;
+  card: GameCard
+  index: number
+  onRemove: () => void
+  onMoveUp: () => void
+  onMoveDown: () => void
 }) {
-  const rc = rarityColors[card.rarity] ?? { border: "border-edu-border bg-edu-surface", label: "text-edu-muted" };
-  const badgeClass = rarityBadgeClass[card.rarity] ?? "";
+  const rc = rarityColors[card.rarity] ?? {
+    border: "border-edu-border bg-edu-surface",
+    label: "text-edu-muted",
+  }
+  const badgeClass = rarityBadgeClass[card.rarity] ?? ""
 
   return (
     <m.div
@@ -116,15 +143,27 @@ function DeckSlot({
       </span>
 
       {/* Card image */}
-      <div className={`w-7 h-7 rounded border ${rc.border} flex items-center justify-center shrink-0 overflow-hidden`}>
-        <Image src={card.imageUrl} alt="" width={24} height={24} sizes="28px" loading="lazy" className="w-6 h-6 rounded object-cover" />
+      <div
+        className={`w-7 h-7 rounded border ${rc.border} flex items-center justify-center shrink-0 overflow-hidden`}
+      >
+        <Image
+          src={card.imageUrl}
+          alt=""
+          width={24}
+          height={24}
+          sizes="28px"
+          loading="lazy"
+          className="w-6 h-6 rounded object-cover"
+        />
       </div>
 
       {/* Name */}
       <span className="text-[10px] font-medium text-edu-text flex-1 truncate">{card.name}</span>
 
       {/* Rarity */}
-      <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${badgeClass}`}>{card.rarity}</span>
+      <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${badgeClass}`}>
+        {card.rarity}
+      </span>
 
       {/* Reorder buttons */}
       <div className="flex flex-col gap-0 shrink-0">
@@ -152,26 +191,34 @@ function DeckSlot({
         ×
       </button>
     </m.div>
-  );
+  )
 }
 
 export default function DeckBuildPage() {
-  const router = useRouter();
+  const router = useRouter()
   const { deck, deckName, addCard, removeCard, moveCard, clearDeck, setDeckName } = useDeckStore(
-    useShallow((s) => ({ deck: s.deck, deckName: s.deckName, addCard: s.addCard, removeCard: s.removeCard, moveCard: s.moveCard, clearDeck: s.clearDeck, setDeckName: s.setDeckName }))
-  );
-  const [rarityFilter, setRarityFilter] = useState<RarityFilter>("全て");
+    useShallow((s) => ({
+      deck: s.deck,
+      deckName: s.deckName,
+      addCard: s.addCard,
+      removeCard: s.removeCard,
+      moveCard: s.moveCard,
+      clearDeck: s.clearDeck,
+      setDeckName: s.setDeckName,
+    }))
+  )
+  const [rarityFilter, setRarityFilter] = useState<RarityFilter>("全て")
 
-  const deckIds = useMemo(() => new Set(deck.map((c) => c.id)), [deck]);
+  const deckIds = useMemo(() => new Set(deck.map((c) => c.id)), [deck])
 
   const filteredCards = useMemo(() => {
     return ALL_CARDS.filter((c) => {
-      if (rarityFilter !== "全て" && c.rarity !== rarityFilter) return false;
-      return true;
-    });
-  }, [rarityFilter]);
+      if (rarityFilter !== "全て" && c.rarity !== rarityFilter) return false
+      return true
+    })
+  }, [rarityFilter])
 
-  const isReady = deck.length >= 5;
+  const isReady = deck.length >= 5
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -179,7 +226,8 @@ export default function DeckBuildPage() {
       <div className="edu-card border-b border-edu-border/50">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center gap-2 sm:gap-3">
           <Link href="/" className="text-xs text-edu-muted hover:text-edu-text transition-colors">
-            <ArrowLeft className="w-4 h-4 inline" /> <span className="hidden sm:inline">ホームへ</span>
+            <ArrowLeft className="w-4 h-4 inline" />{" "}
+            <span className="hidden sm:inline">ホームへ</span>
           </Link>
           <span className="text-edu-border">|</span>
           <Swords className="w-4 h-4 sm:w-5 sm:h-5 text-rose-400" />
@@ -192,7 +240,8 @@ export default function DeckBuildPage() {
         <div className="flex items-start gap-2 mb-4 sm:mb-6">
           <Info className="w-4 h-4 text-edu-accent2 shrink-0 mt-0.5" />
           <p className="text-xs text-edu-muted">
-            64種のキャラクターから<strong className="text-edu-text">5枚</strong>を選び、順番を決めてバトルに挑もう。
+            64種のキャラクターから<strong className="text-edu-text">5枚</strong>
+            を選び、順番を決めてバトルに挑もう。
             各カードは攻撃・防御・効果・必殺の4つの能力を持っています。順番は戦略の要です！
           </p>
         </div>
@@ -248,7 +297,9 @@ export default function DeckBuildPage() {
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs text-edu-muted">
                 デッキ枚数:{" "}
-                <span className={isReady ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}>
+                <span
+                  className={isReady ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}
+                >
                   {deck.length}
                 </span>
                 /5
@@ -290,7 +341,9 @@ export default function DeckBuildPage() {
                       key={`empty-${i}`}
                       className="flex items-center justify-center px-2 py-1.5 rounded-lg border border-dashed border-edu-border/20"
                     >
-                      <span className="text-[9px] text-edu-muted/40">空きスロット {deck.length + i + 1}</span>
+                      <span className="text-[9px] text-edu-muted/40">
+                        空きスロット {deck.length + i + 1}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -314,5 +367,5 @@ export default function DeckBuildPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }

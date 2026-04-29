@@ -2,40 +2,9 @@
    civilization-data.ts — 宇宙5大文明圏データ
    ═══════════════════════════════════════════════════════ */
 
-export interface Civilization {
-  id: string
-  rank: number
-  name: string
-  nameEn: string
-  color: string
-  borderColor: string
-  bgColor: string
-  icon: string
-  leader: string
-  leaderWikiId: string
-  capital?: string
-  gdp?: string
-  specialization: string
-  description: string
-  history: string
-  currentStatus: string
-  relationships: string[]
-  wikiId: string
-  href: string
-  isHistorical?: boolean
-  planets?: string[]
-}
+import type { Civilization, CivilizationLeader } from "@/types"
 
-export interface CivilizationLeader {
-  name: string
-  title: string
-  civilization: string
-  civilizationColor: string
-  wealth: string
-  source: string
-  era: string
-  wikiId: string
-}
+export type { Civilization, CivilizationLeader }
 
 /* ── 現在の宇宙5大文明圏 ── */
 export const TOP_CIVILIZATIONS: Civilization[] = [

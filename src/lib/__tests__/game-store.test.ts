@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { useBattleStore } from "../game-store"
-import type { GameCard, Enemy } from "../card-data"
+import type { GameCard, Enemy } from "@/types"
 
 /* Minimal test fixtures */
 const mockCard: GameCard = {
