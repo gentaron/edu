@@ -26,34 +26,43 @@ Do NOT skip or reorder this sequence.
 ## 2. Deadlock Prevention
 
 ### 2.1 Iteration Cap
+
 For any single task, never repeat the same approach more than 3 times:
+
 - Attempt 1: Execute initial approach
 - Attempt 2: Fine-tune and retry
 - Attempt 3: Switch to a **completely different approach**
 - Attempt 4+: Report to user and ask for guidance
 
 ### 2.2 Blocker Detection & Escalation
+
 Detect these conditions immediately and report to user:
+
 - Build error unresolved after 3 consecutive attempts
 - Dependency installation failure
 - Tests unable to run due to environment issues
 - Required files or directories missing
 
 When a blocker is detected:
+
 1. Explain the current situation concisely
 2. List attempted approaches
 3. Provide possible causes
 4. Suggest up to 3 next actions for user
 
 ### 2.3 Circular Dependency Detection
+
 If editing A requires changing B, and B requires changing A:
+
 1. **Stop immediately** — make neither edit
 2. Visualize the circular structure
 3. Propose interface extraction
 4. Let user decide
 
 ### 2.4 Indecision Resolution
+
 When multiple equally valid implementations exist:
+
 1. List pros and cons of each option
 2. Evaluate against **existing project patterns**
 3. If still undecided → choose the **simplest implementation**
@@ -62,6 +71,7 @@ When multiple equally valid implementations exist:
 Never enter a "cannot decide, stopping work" state.
 
 ### 2.5 Scope Boundary Enforcement
+
 - Task is "done" when minimum requirements are met
 - Do NOT make incidental improvements — treat them as separate tasks
 - Refactoring only when explicitly requested
@@ -72,13 +82,16 @@ Never enter a "cannot decide, stopping work" state.
 ## 3. Task Execution Protocol
 
 ### 3.1 Pre-Implementation Decomposition
+
 Before starting any task:
+
 1. Break into maximum 5 subtasks
 2. Estimate steps per subtask
 3. Explicitly state dependencies between subtasks
 4. Determine execution order and present to user
 
 ### 3.2 Phased Implementation & Verification
+
 1. Skeleton (type definitions and interfaces only)
 2. Core logic (happy path only)
 3. Error handling
@@ -88,6 +101,7 @@ Before starting any task:
 **Build must pass at each phase. Never proceed to next phase with a broken build.**
 
 ### 3.3 Minimal Edit Principle
+
 - Max 10 files per editing session
 - Minimize lines changed per file
 - Do not mix formatting changes with logic changes
@@ -99,24 +113,27 @@ Before starting any task:
 
 ### 4.1 Error Classification
 
-| Category | Action |
-|----------|--------|
-| Syntax error | Fix immediately. Verify type definitions, do not guess |
-| Runtime error | Add error handling. Investigate root cause |
-| Environment error | Verify prerequisites. **Report to user** |
-| Design error | **Stop implementation**. Revisit design |
-| Test error | Verify test intent. Fix implementation or test |
+| Category          | Action                                                 |
+| ----------------- | ------------------------------------------------------ |
+| Syntax error      | Fix immediately. Verify type definitions, do not guess |
+| Runtime error     | Add error handling. Investigate root cause             |
+| Environment error | Verify prerequisites. **Report to user**               |
+| Design error      | **Stop implementation**. Revisit design                |
+| Test error        | Verify test intent. Fix implementation or test         |
 
 **Environment and design errors: do NOT attempt to resolve independently. Report to user immediately.**
 
 ### 4.2 Rollback Strategy
+
 When implementation is not progressing:
+
 1. Save current changes with `git stash` or temporary commit
 2. Restore to last working state
 3. Analyze root cause
 4. Re-implement with different approach
 
 ### 4.3 Fallback Chain
+
 1. **Ideal implementation** → on failure:
 2. **Simplified implementation** (simpler approach) → on failure:
 3. **Minimal implementation** (core functionality only) → on failure:
@@ -127,12 +144,15 @@ When implementation is not progressing:
 ## 5. Quality Verification Protocol
 
 ### 5.1 Verification Gates
+
 - **On file save**: Linter and type checker pass with zero errors
 - **On feature completion**: Related tests all pass, build succeeds
 - **On task completion**: Full test suite, full build, self-review
 
 ### 5.2 Self-Review Checklist
+
 Before marking any task complete:
+
 - [ ] All user requirements met
 - [ ] Error handling is appropriate
 - [ ] No hardcoded values
@@ -145,6 +165,7 @@ Before marking any task complete:
 ## 6. Conflict Resolution Protocol
 
 ### 6.1 Rule Priority Hierarchy
+
 1. **User's explicit instructions** (highest priority)
 2. **AGENTS.md / CLAUDE.md rules**
 3. **Existing project patterns and conventions**
@@ -152,6 +173,7 @@ Before marking any task complete:
 5. **AI's general judgment** (lowest priority)
 
 ### 6.2 Security vs Functionality
+
 - **Always prioritize security**
 - Never implement insecure solutions
 - If user knowingly requests a security risk: explain the risk and propose safer alternatives
@@ -161,11 +183,13 @@ Before marking any task complete:
 ## 7. Communication Protocol
 
 ### 7.1 Progress Report Format
+
 **Done**: ✅ [Task name] complete — Implementation: ... — Changed files: ...
 **Blocker**: 🚫 [Task name] blocked — Cause: ... — Attempted fixes: ...
 **In Progress**: 🔄 [Task name] in progress — Progress: ... — Remaining: ...
 
 ### 7.2 Question Rules
+
 - Maximum 3 questions at a time
 - Include recommended answers for each question
 - Prefer Yes/No format
@@ -176,7 +200,9 @@ Before marking any task complete:
 ## 8. Context Management
 
 ### 8.1 Cross-Session State Inheritance
+
 When a session is interrupted:
+
 1. Reload AGENTS.md / CLAUDE.md
 2. Check `git log --oneline -10`
 3. Check `git status`, `git diff`
@@ -188,7 +214,9 @@ When a session is interrupted:
 ## 9. Commit & Push Rules
 
 ### 9.1 Conventional Commits
+
 Use conventional commit format:
+
 - `feat:` new feature
 - `fix:` bug fix
 - `docs:` documentation
@@ -197,6 +225,7 @@ Use conventional commit format:
 - `chore:` maintenance
 
 ### 9.2 Commit Scope
+
 - One logical change per commit
 - Do not mix unrelated changes
 - Keep commit messages concise and descriptive
@@ -205,3 +234,49 @@ Use conventional commit format:
 
 **This ruleset applies to all repositories under the gentaron GitHub account.**
 **Do not override these rules with general AI behavior.**
+
+---
+
+## 10. ファイル構造ルール
+
+### 10.1 ディレクトリ構造
+
+src/
+├── app/ # Next.js App Router
+│ ├── [route]/
+│ │ ├── page.tsx # ページ本体（200行以下）
+│ │ ├── \_components/ # ページ専用コンポーネント
+│ │ ├── \_lib/ # ページ専用ユーティリティ
+│ │ ├── loading.tsx
+│ │ └── error.tsx
+│ └── api/
+├── components/
+│ ├── edu/
+│ └── ui/
+├── lib/
+│ ├── data/ # データアクセス層
+│ ├── stores/ # Zustand stores
+│ ├── wiki-data/ # Wiki データ（カテゴリ別分割）
+│ ├── card-data/ # カードデータ
+│ ├── civilization-data/ # 文明データ
+│ └── ...
+├── types/ # 全型定義
+└── hooks/
+
+### 10.2 ファイルサイズ制限
+
+- page.tsx: 200行以下
+- コンポーネント: 150行以下
+- データファイル: 200行以下
+- 1ファイル = 1コンポーネント / 1Store / 1データカテゴリ
+
+### 10.3 データアクセスルール
+
+- 新規コードでは `@/lib/data` からアクセスする
+- 直接データファイルのimportは既存コードのみ許可
+
+### 10.4 外部API呼び出しルール
+
+- ブラウザから外部APIを直接呼び出さない
+- 必ず `src/app/api/` 配下のRoute Handlerを経由する
+- 環境変数はサーバー側のみ（NEXT*PUBLIC*プレフィックスなし）

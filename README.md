@@ -20,25 +20,43 @@ Env: `DATABASE_URL` (PostgreSQL or SQLite), Sentry DSNs (optional).
 ## Architecture
 
 ```
-src/app/          # Next.js App Router
-├── wiki/         # Encyclopedia (204 entries, SSG)
-├── story/        # Story reader (20 stories, SSG + ISR 1h)
-├── card-game/    # PvE deck builder + battle (CSR)
-├── characters/   # Character browser
-├── civilizations/ # Civilization pages
-├── timeline/     # Interactive timeline
-└── universe/     # Universe overview
+src/
+├── app/                     # Next.js App Router
+│   ├── wiki/                # Encyclopedia (204 entries, SSG)
+│   ├── story/               # Story reader (20 stories, SSG + ISR 1h)
+│   ├── card-game/           # PvE deck builder + battle (CSR)
+│   ├── characters/          # Character browser
+│   ├── civilizations/       # Civilization pages
+│   ├── timeline/            # Interactive timeline
+│   └── universe/            # Universe overview
+├── components/
+│   ├── edu/                 # App-specific shared components
+│   └── ui/                  # shadcn/ui components
+├── lib/
+│   ├── data/                # Data access layer (unified API)
+│   ├── stores/              # Zustand stores (battle-store, deck-store)
+│   ├── wiki-data/           # Wiki data (split by category)
+│   ├── card-data/           # Card data (cards, enemies)
+│   ├── civilization-data/   # Civilization data (split by tier)
+│   ├── stories.ts           # Story metadata + chapter definitions
+│   └── battle-logic.ts      # Battle logic utilities
+├── types/                   # Shared type definitions
+└── hooks/                   # Custom React hooks
 ```
 
 **Data sources (single source of truth):**
 
-| File                    | Content                                                              |
-| ----------------------- | -------------------------------------------------------------------- |
-| `src/lib/wiki-data.ts`  | 204 wiki entries (characters, orgs, geography, tech, history, terms) |
-| `src/lib/stories.ts`    | 20 story metadata + 5 chapter definitions                            |
-| `src/lib/card-data.ts`  | 64 character cards + 10 PvE enemies                                  |
-| `src/lib/game-store.ts` | Zustand battle state machine                                         |
-| `lore/*.txt`            | Raw story text (JP/EN pairs)                                         |
+| Path                             | Content                                                                                |
+| -------------------------------- | -------------------------------------------------------------------------------------- |
+| `src/lib/wiki-data/`             | 204 wiki entries split by category (characters, orgs, geography, tech, history, terms) |
+| `src/lib/data/wiki.ts`           | Unified wiki data access API                                                           |
+| `src/lib/stories.ts`             | 20 story metadata + 5 chapter definitions                                              |
+| `src/lib/card-data/`             | 64 character cards + 10 PvE enemies (split into cards.ts, enemies.ts)                  |
+| `src/lib/data/cards.ts`          | Unified card data access API                                                           |
+| `src/lib/stores/battle-store.ts` | Zustand battle state machine                                                           |
+| `src/lib/stores/deck-store.ts`   | Zustand deck management store                                                          |
+| `src/lib/civilization-data/`     | Civilization data split by tier (top, historical, leaders, other)                      |
+| `lore/*.txt`                     | Raw story text (JP/EN pairs)                                                           |
 
 Story content is fetched at build time from `gentaron/edutext` (GitHub raw) and cached with ISR.
 
@@ -89,7 +107,7 @@ Timeline: E1 (founding) → E522+ (present)
 
 ## Contributing
 
-**Adding wiki entries:** Edit `src/lib/wiki-data.ts`. Schema:
+**Adding wiki entries:** Edit files under `src/lib/wiki-data/`. Schema:
 
 ```ts
 { id: string, name: string, nameEn?: string, category: Category,
