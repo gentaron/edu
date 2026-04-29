@@ -417,7 +417,7 @@ function FooterNotes() {
    MAIN PAGE
    ═══════════════════════════════════════════ */
 export default function RankingPage() {
-  const maxWealth = RANKING_DATA[0].wealthNum
+  const maxWealth = RANKING_DATA[0]?.wealthNum ?? 0
 
   return (
     <div className="relative min-h-screen bg-edu-bg">

@@ -72,7 +72,8 @@ export default function WikiEntryPage() {
                   alt={entry.name}
                   width={208}
                   height={208}
-                  unoptimized
+                  sizes="(max-width: 768px) 80vw, 400px"
+                  loading="lazy"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -161,7 +162,8 @@ export default function WikiEntryPage() {
                             alt={leader.name}
                             width={36}
                             height={36}
-                            unoptimized
+                            sizes="36px"
+                            loading="lazy"
                             className="w-full h-full object-cover"
                           />
                         ) : (

@@ -103,9 +103,9 @@ function isKatakanaLike(ch: string): boolean {
 
 function isEmbeddedInWord(text: string, index: number, length: number): boolean {
   // Check the character BEFORE the match
-  const before = index > 0 ? text[index - 1] : ""
+  const before = index > 0 ? text[index - 1]! : ""
   // Check the character AFTER the match
-  const after = index + length < text.length ? text[index + length] : ""
+  const after = index + length < text.length ? text[index + length]! : ""
 
   // Only katakana and kanji (NOT hiragana particles) on BOTH sides indicates
   // the match is embedded in a longer proper-noun compound.

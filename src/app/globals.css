@@ -244,3 +244,83 @@
 
 /* em:lang(ja) bold instead of italic */
 em:lang(ja) { font-style: normal; font-weight: bolder; }
+
+/* Phase 3: Accessibility improvements */
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  background: #c8a44e;
+  color: #0c0f1a;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0.5rem;
+}
+
+/* Focus ring visibility */
+*:focus-visible {
+  outline: 2px solid #c8a44e;
+  outline-offset: 2px;
+}
+
+/* Touch target minimum size */
+button, a, input, select, textarea {
+  min-height: 44px;
+}
+@media (pointer: fine) {
+  button, a, input, select, textarea {
+    min-height: auto;
+  }
+}
+
+/* Container query support */
+@supports (container-type: inline-size) {
+  .wiki-card-grid {
+    container-type: inline-size;
+  }
+}
+
+/* View Transitions */
+@supports (view-transition-name: none) {
+  ::view-transition-old(root) {
+    animation: 0.25s ease-out both fade-out;
+  }
+  ::view-transition-new(root) {
+    animation: 0.25s ease-in both fade-in;
+  }
+  .view-transition-fade {
+    view-transition-name: page-content;
+  }
+}
+
+/* Scroll-driven animations (progressive enhancement) */
+@supports (animation-timeline: scroll()) {
+  .scroll-progress-bar {
+    animation: scroll-progress linear;
+    animation-timeline: scroll();
+  }
+  @keyframes scroll-progress {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-section {
+    opacity: 1;
+    transform: none;
+  }
+}

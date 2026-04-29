@@ -100,3 +100,27 @@ Added before the closing `]` of the CHARACTERS array (after オメガ＝ユリ�
 - `bun run lint` passes with no errors
 - File grew from ~3176 lines to 3450 lines (+274 lines)
 - All 43 leaders arrays properly formatted with `LeaderEntry` interface fields
+
+---
+Task ID: 1
+Agent: full-stack-developer
+Task: Phase 1 Core Performance Optimization
+
+Work Log:
+- Updated next.config.ts with image optimization settings (formats, deviceSizes, imageSizes, unoptimized: false, bundle analyzer integration)
+- Removed modularizeImports for lucide-react due to incompatibility with shadcn/ui's ChevronDownIcon import pattern
+- Converted all `<img>` tags to next/image `<Image>` components across 5 files (auralis, card-game/select, card-game/battle, wiki/page, wiki/[id])
+- Added proper width/height/sizes/loading attributes to all Image components
+- Optimized font loading in layout.tsx: added display:"swap" and preload:true for Noto_Sans_JP
+- Created MotionProvider wrapper component using LazyMotion with domMax features for framer-motion lazy loading
+- Converted all framer-motion `motion.xxx` to `m.xxx` components in 3 files (card-game/page, card-game/select, card-game/battle)
+- Battle page already had Suspense boundary for useSearchParams SSR handling; kept as-is
+- Created 6 loading.tsx skeleton files: root, wiki, story, card-game, characters, timeline
+
+Stage Summary:
+- All `<img>` tags eliminated in favor of next/image with proper optimization attributes
+- Framer-motion lazy-loaded via LazyMotion wrapper in root layout, reducing initial JS bundle
+- Font loading optimized with font-display:swap and preloading to prevent FOIT
+- Build passes successfully with `npx next build` (46 static pages generated)
+- 6 skeleton loading states added for major routes
+- Note: modularizeImports for lucide-react removed due to shadcn/ui ChevronDownIcon incompatibility; lucide-react is already tree-shakeable by default

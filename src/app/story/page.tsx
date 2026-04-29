@@ -117,6 +117,8 @@ function StoryCard({
                     alt={entry}
                     width={12}
                     height={12}
+                    sizes="12px"
+                    loading="lazy"
                     className="rounded-full"
                   />
                 )}
@@ -348,7 +350,7 @@ export default function StoryArchivePage() {
               chapter={data.chapter}
               stories={data.stories}
               lang={lang}
-              sectionRef={chapterRefs[data.chapter.id]}
+              sectionRef={chapterRefs[data.chapter.id]!}
             />
           ))}
         </div>

@@ -2,8 +2,9 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
   Swords,
   ArrowLeft,
@@ -54,10 +55,10 @@ function EnemyCard({
   enemy: Enemy;
   onBattle: () => void;
 }) {
-  const dc = diffColors[enemy.difficulty];
+  const dc = diffColors[enemy.difficulty] ?? { border: "border-edu-border", badge: "", icon: <></> };
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{ scale: 1.02 }}
@@ -65,7 +66,7 @@ function EnemyCard({
     >
       {/* Header bar */}
       <div className="relative h-20 sm:h-28 bg-edu-bg flex items-center justify-center">
-        <img src={enemy.imageUrl} alt={enemy.name} className="w-14 h-14 sm:w-16 sm:h-16 object-contain opacity-60" />
+        <Image src={enemy.imageUrl} alt={enemy.name} width={64} height={64} loading="lazy" className="w-14 h-14 sm:w-16 sm:h-16 object-contain opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-t from-edu-bg via-edu-bg/40 to-transparent" />
         <div className="absolute top-2 right-2">
           <span className={`text-[9px] font-bold px-2 py-0.5 rounded border ${dc.badge}`}>
@@ -111,7 +112,7 @@ function EnemyCard({
           </button>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -160,9 +161,9 @@ export default function EnemySelectPage() {
           return (
             <div key={diff} className="mb-8 sm:mb-10">
               <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                {diffColors[diff].icon}
+                {diffColors[diff]?.icon}
                 <h2 className="text-[10px] sm:text-xs font-bold text-edu-muted uppercase tracking-widest">
-                  {DIFF_LABELS[diff]}
+                  {DIFF_LABELS[diff] ?? ""}
                 </h2>
                 <div className="flex-1 h-px bg-edu-border/20" />
               </div>

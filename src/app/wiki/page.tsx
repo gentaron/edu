@@ -186,7 +186,7 @@ export default function WikiPage() {
           {filteredEntries.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredEntries.map((entry) => {
-                const catConfig = CATEGORY_CONFIG[entry.category] || CATEGORY_CONFIG["用語"]
+                const catConfig = CATEGORY_CONFIG[entry.category] ?? CATEGORY_CONFIG["用語"]!
                 const preview =
                   entry.description.length > 80
                     ? entry.description.slice(0, 80) + "…"
@@ -206,7 +206,8 @@ export default function WikiPage() {
                               alt={entry.name}
                               width={48}
                               height={48}
-                              unoptimized
+                              sizes="(max-width: 768px) 50vw, 25vw"
+                              loading="lazy"
                               className="w-full h-full object-cover"
                             />
                           ) : (

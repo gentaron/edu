@@ -2,8 +2,9 @@
 
 import React, { useEffect, useRef, useCallback, Suspense } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter, useSearchParams } from "next/navigation"
-import { motion, AnimatePresence } from "framer-motion"
+import { m, AnimatePresence } from "framer-motion"
 import { Swords, Heart, Shield, Crown, Zap, Sparkles, Crosshair, Skull, User } from "lucide-react"
 import { ENEMIES, type GameCard, type AbilityType } from "@/lib/card-data"
 import { useDeckStore, useBattleStore, type FieldChar } from "@/lib/game-store"
@@ -34,7 +35,7 @@ function ParticleBurst({
   return (
     <div className="absolute pointer-events-none z-50" style={{ left: x, top: y }}>
       {particles.map((p, i) => (
-        <motion.div
+        <m.div
           key={i}
           initial={{ opacity: 1, x: 0, y: 0, scale: 1 }}
           animate={{ opacity: 0, x: p.tx, y: p.ty, scale: 0 }}
@@ -58,7 +59,7 @@ function SlashEffect({ type, x, y }: { type: "attack" | "ultimate"; x: number; y
   return (
     <div className="absolute pointer-events-none z-50" style={{ left: x, top: y }}>
       {Array.from({ length: isUlt ? 3 : 1 }, (_, i) => (
-        <motion.div
+        <m.div
           key={i}
           initial={{ opacity: 0, rotate: -45 + i * 30, scaleX: 0 }}
           animate={{ opacity: [0, 1, 1, 0], rotate: -45 + i * 30 + 15, scaleX: [0, 1.5, 1.5, 0] }}
@@ -76,7 +77,7 @@ function ShieldDomeEffect({ active }: { active: boolean }) {
   return (
     <AnimatePresence>
       {active && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: [0, 0.15, 0.3, 0.15, 0], scale: [0.8, 1, 1.1, 1, 0.9] }}
           exit={{ opacity: 0 }}
@@ -98,7 +99,7 @@ function HealWaveEffect({ active }: { active: boolean }) {
   return (
     <AnimatePresence>
       {active && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: [0, 0.5, 0.3, 0], y: [-10, -20, -30] }}
           exit={{ opacity: 0 }}
@@ -106,7 +107,7 @@ function HealWaveEffect({ active }: { active: boolean }) {
           className="absolute inset-0 rounded-xl pointer-events-none z-20 overflow-hidden"
         >
           {Array.from({ length: 8 }, (_, i) => (
-            <motion.div
+            <m.div
               key={i}
               initial={{ opacity: 0, y: 40, scale: 0.5 }}
               animate={{ opacity: [0, 0.6, 0], y: -30, scale: [0.5, 1.2, 0.8] }}
@@ -115,9 +116,9 @@ function HealWaveEffect({ active }: { active: boolean }) {
               style={{ left: `${10 + i * 12}%`, bottom: "30%" }}
             >
               +
-            </motion.div>
+            </m.div>
           ))}
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )
@@ -136,7 +137,7 @@ function ScreenFlash({
   return (
     <AnimatePresence>
       {active && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, intensity, 0] }}
           exit={{ opacity: 0 }}
@@ -167,7 +168,7 @@ function HpBar({
   return (
     <div className="w-full h-3 bg-edu-bg rounded-full overflow-hidden border border-edu-border/30 relative">
       {pct > 0 && (
-        <motion.div
+        <m.div
           className={`h-full rounded-full ${cls} shadow-lg`}
           initial={{ width: "100%" }}
           animate={{ width: `${pct}%` }}
@@ -175,7 +176,7 @@ function HpBar({
         />
       )}
       {pct > 0 && pct <= 25 && (
-        <motion.div
+        <m.div
           className="absolute inset-0 rounded-full bg-rose-500/20"
           animate={{ opacity: [0.3, 0.6, 0.3] }}
           transition={{ duration: 0.8, repeat: Infinity }}
@@ -236,7 +237,7 @@ function FieldCharSlot({
   }
 
   return (
-    <motion.button
+    <m.button
       onClick={onSelect}
       disabled={!isPlayerTurn || char.isDown}
       whileHover={isPlayerTurn && !char.isDown ? { scale: 1.06, y: -5 } : {}}
@@ -266,17 +267,17 @@ function FieldCharSlot({
       }`}
     >
       {isSelected && !isActing && (
-        <motion.div
+        <m.div
           initial={{ scale: 0 }}
           animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
           transition={{ duration: 0.5 }}
           className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-yellow-400 border-2 border-edu-bg flex items-center justify-center z-10"
         >
           <span className="text-[8px] font-black text-edu-bg">&#9660;</span>
-        </motion.div>
+        </m.div>
       )}
       {isActing && actingAbility && (
-        <motion.div
+        <m.div
           initial={{ scale: 0, y: 10 }}
           animate={{ scale: 1, y: 0 }}
           className="absolute -top-3 left-1/2 -translate-x-1/2 z-20"
@@ -286,22 +287,22 @@ function FieldCharSlot({
           >
             {actingAbility === "必殺" ? "必殺！" : actingAbility}
           </span>
-        </motion.div>
+        </m.div>
       )}
       {char.isDown && (
         <div className="absolute inset-0 flex items-center justify-center z-10 bg-edu-bg/60 rounded-xl">
-          <motion.div
+          <m.div
             animate={{ rotate: [0, 10, -10, 0] }}
             transition={{ duration: 2, repeat: Infinity }}
           >
             <Skull className="w-5 h-5 text-rose-400/60" />
-          </motion.div>
+          </m.div>
         </div>
       )}
       <div
         className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-edu-bg/50 border shrink-0 ${isActing && actingAbility === "必殺" ? "border-yellow-400 shadow-lg shadow-yellow-500/40" : isActing && actingAbility === "攻撃" ? "border-red-400 shadow-lg shadow-red-500/30" : "border-edu-border/20"}`}
       >
-        <img src={char.card.imageUrl} alt={char.card.name} className="w-full h-full object-cover" />
+        <Image src={char.card.imageUrl} alt={char.card.name} width={48} height={48} sizes="(max-width: 640px) 100vw, 200px" className="w-full h-full object-cover" />
       </div>
       <p
         className={`text-[7px] sm:text-[8px] font-bold text-center leading-tight line-clamp-1 ${char.isDown ? "text-edu-muted/30" : "text-edu-text"}`}
@@ -316,12 +317,12 @@ function FieldCharSlot({
       {!char.isDown && (
         <div className="w-full">
           <div className="w-full h-1.5 bg-edu-bg rounded-full overflow-hidden relative">
-            <motion.div
+            <m.div
               className={`h-full rounded-full bg-gradient-to-r ${hpColor} transition-all duration-500`}
               style={{ width: `${hpPct}%` }}
             />
             {hpPct <= 25 && hpPct > 0 && (
-              <motion.div
+              <m.div
                 className="absolute inset-0 rounded-full bg-rose-500/20"
                 animate={{ opacity: [0.3, 0.7, 0.3] }}
                 transition={{ duration: 0.8, repeat: Infinity }}
@@ -335,7 +336,7 @@ function FieldCharSlot({
           </p>
         </div>
       )}
-    </motion.button>
+    </m.button>
   )
 }
 
@@ -354,7 +355,7 @@ function FloatingText({
   isCrit?: boolean
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 1, y: 0, scale: isCrit ? 0.3 : 0.5 }}
       animate={{
         opacity: 0,
@@ -371,7 +372,7 @@ function FloatingText({
       >
         {text}
       </span>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -396,7 +397,7 @@ function AbilityButton({
   disabled: boolean
 }) {
   return (
-    <motion.button
+    <m.button
       whileHover={disabled ? {} : { scale: 1.06, y: -3 }}
       whileTap={disabled ? {} : { scale: 0.94 }}
       onClick={onClick}
@@ -408,7 +409,7 @@ function AbilityButton({
       }`}
     >
       {!disabled && (
-        <motion.div
+        <m.div
           className={`absolute inset-0 rounded-xl bg-gradient-to-br ${glowColor}`}
           initial={{ opacity: 0 }}
           whileHover={{ opacity: 0.2 }}
@@ -423,7 +424,7 @@ function AbilityButton({
           {subLabel}
         </span>
       )}
-    </motion.button>
+    </m.button>
   )
 }
 
@@ -551,7 +552,7 @@ function BattleContent() {
         intensity={lastAbilityUsed === "必殺" ? 0.3 : 0.15}
       />
 
-      <motion.div
+      <m.div
         animate={
           screenShake
             ? { x: [0, -8, 8, -6, 6, -4, 4, -2, 2, 0], y: [0, 2, -2, 1, -1, 0] }
@@ -563,7 +564,7 @@ function BattleContent() {
         {/* BG Particles */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
           {Array.from({ length: 6 }, (_, i) => (
-            <motion.div
+            <m.div
               key={i}
               className="absolute w-1 h-1 rounded-full bg-white/10"
               initial={{ x: `${Math.random() * 100}%`, y: `${Math.random() * 100}%` }}
@@ -598,7 +599,7 @@ function BattleContent() {
 
         <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-2 sm:px-3 py-2 sm:py-3 gap-2 sm:gap-3 overflow-y-auto relative z-10">
           {/* Enemy Area */}
-          <motion.div
+          <m.div
             animate={
               enemyFlash
                 ? {
@@ -617,14 +618,14 @@ function BattleContent() {
             className="edu-card rounded-xl p-3 sm:p-4 shrink-0 relative overflow-hidden"
           >
             {selectedEnemy.difficulty === "BOSS" && (
-              <motion.div
+              <m.div
                 className="absolute inset-0 bg-gradient-to-r from-red-500/8 via-transparent to-red-500/8"
                 animate={{ opacity: [0.3, 0.8, 0.3] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
             )}
             {selectedEnemy.difficulty === "FINAL" && (
-              <motion.div
+              <m.div
                 className="absolute inset-0 pointer-events-none"
                 animate={{
                   background: [
@@ -637,7 +638,7 @@ function BattleContent() {
               />
             )}
             {enemyFlash && (
-              <motion.div
+              <m.div
                 initial={{ opacity: 0.6 }}
                 animate={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
@@ -648,12 +649,13 @@ function BattleContent() {
               <div
                 className={`w-14 h-14 sm:w-20 sm:h-20 rounded-xl bg-edu-bg/50 border flex items-center justify-center shrink-0 overflow-hidden ${selectedEnemy.difficulty === "FINAL" ? "border-yellow-400/60 shadow-lg shadow-yellow-500/20" : selectedEnemy.difficulty === "BOSS" ? "border-red-400/50 shadow-lg shadow-red-500/20" : "border-edu-border/30"}`}
               >
-                <motion.img
+                <Image
                   src={selectedEnemy.imageUrl}
                   alt={selectedEnemy.name}
+                  width={80}
+                  height={80}
+                  sizes="(max-width: 640px) 100vw, 200px"
                   className="w-16 h-16 object-contain"
-                  animate={phase === "enemyTurn" ? { scale: [1, 1.1, 1] } : {}}
-                  transition={{ duration: 0.3, repeat: phase === "enemyTurn" ? 2 : 0 }}
                 />
               </div>
               <div className="flex-1 min-w-0">
@@ -661,18 +663,18 @@ function BattleContent() {
                   <h3 className="text-xs sm:text-sm font-bold text-edu-text">{selectedEnemy.name}</h3>
                   <span className="text-[10px] text-edu-muted">{selectedEnemy.title}</span>
                   <span
-                    className={`text-[7px] sm:text-[8px] font-bold px-1.5 py-0.5 rounded border ${diffColors[selectedEnemy.difficulty].badge}`}
+                    className={`text-[7px] sm:text-[8px] font-bold px-1.5 py-0.5 rounded border ${diffColors[selectedEnemy.difficulty]?.badge ?? ""}`}
                   >
                     {selectedEnemy.difficulty}
                   </span>
                   {enemyCurrentPhase > 0 && (
-                    <motion.span
+                    <m.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       className="text-[8px] font-bold px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-400/30"
                     >
                       Phase {enemyCurrentPhase + 1}
-                    </motion.span>
+                    </m.span>
                   )}
                 </div>
                 <div className="flex items-center gap-2 mb-1.5">
@@ -685,14 +687,14 @@ function BattleContent() {
                 <div className="min-h-[1.2rem]">
                   <AnimatePresence>
                     {lastPhaseMsg.map((msg, i) => (
-                      <motion.p
+                      <m.p
                         key={`${turn}-${i}`}
                         initial={{ opacity: 0, y: -5, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         className="text-[10px] text-red-400 font-medium"
                       >
                         {msg}
-                      </motion.p>
+                      </m.p>
                     ))}
                   </AnimatePresence>
                 </div>
@@ -732,7 +734,7 @@ function BattleContent() {
                 />
               )}
             </AnimatePresence>
-          </motion.div>
+          </m.div>
 
           {/* Status Buffs */}
           <div className="flex items-center gap-1.5 px-1 shrink-0 relative overflow-hidden">
@@ -745,13 +747,13 @@ function BattleContent() {
                 </span>
               )}
               {poisonActive && (
-                <motion.span
+                <m.span
                   animate={{ opacity: [0.6, 1, 0.6] }}
                   transition={{ duration: 1, repeat: Infinity }}
                   className="text-[9px] text-amber-400 bg-amber-500/10 border border-amber-400/20 rounded px-1.5 py-0.5"
                 >
                   ☠️ 毒
-                </motion.span>
+                </m.span>
               )}
               {enemyAttackReduction > 0 && (
                 <span className="text-[9px] text-cyan-400 bg-cyan-500/10 border border-cyan-400/20 rounded px-1.5 py-0.5">
@@ -759,13 +761,13 @@ function BattleContent() {
                 </span>
               )}
               {isDefenseBlocked && (
-                <motion.span
+                <m.span
                   animate={{ opacity: [0.6, 1, 0.6] }}
                   transition={{ duration: 1, repeat: Infinity }}
                   className="text-[9px] text-orange-400 bg-orange-500/10 border border-orange-400/20 rounded px-1.5 py-0.5"
                 >
                   🕸️ 防御封じ
-                </motion.span>
+                </m.span>
               )}
             </div>
           </div>
@@ -778,13 +780,13 @@ function BattleContent() {
                 <div className="flex items-center gap-1.5 mb-2">
                   <User className="w-3 h-3 text-edu-muted" />
                   <span className="text-[9px] font-bold text-edu-muted">味方パーティ</span>
-                  <motion.span
+                  <m.span
                     className="text-[8px] text-edu-accent2 ml-1"
                     animate={isPlayerTurn ? { opacity: [0.4, 1, 0.4] } : {}}
                     transition={{ duration: 1.5, repeat: Infinity }}
                   >
                     {isPlayerTurn ? "クリックしてキャラを選択 →" : ""}
-                  </motion.span>
+                  </m.span>
                 </div>
                 <div className="flex gap-2 justify-center flex-wrap">
                   {fieldCharacters.map((fc, i) => (
@@ -806,7 +808,7 @@ function BattleContent() {
 
               {/* Selected Character Panel */}
               {selectedChar && !selectedChar.isDown && (
-                <motion.div
+                <m.div
                   key={selectedCharIndex}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -814,7 +816,7 @@ function BattleContent() {
                   className="edu-card rounded-xl p-4 shrink-0"
                 >
                   <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                    <motion.div
+                    <m.div
                       className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden bg-edu-bg/50 border border-yellow-400/30 shrink-0"
                       animate={
                         isPlayerTurn
@@ -829,12 +831,15 @@ function BattleContent() {
                       }
                       transition={{ duration: 2, repeat: Infinity }}
                     >
-                      <img
+                      <Image
                         src={selectedChar.card.imageUrl}
                         alt=""
+                        width={40}
+                        height={40}
+                        sizes="(max-width: 640px) 100vw, 200px"
                         className="w-full h-full object-cover"
                       />
-                    </motion.div>
+                    </m.div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-xs font-bold text-edu-text">
                         {selectedChar.card.name}
@@ -908,19 +913,19 @@ function BattleContent() {
                       disabled={!isPlayerTurn}
                     />
                   </div>
-                </motion.div>
+                </m.div>
               )}
 
               {/* Hint */}
               {!selectedChar && isPlayerTurn && (
                 <div className="text-center shrink-0 py-4">
-                  <motion.p
+                  <m.p
                     animate={{ opacity: [0.4, 1, 0.4] }}
                     transition={{ duration: 1.5, repeat: Infinity }}
                     className="text-[10px] text-edu-muted"
                   >
                     味方キャラをクリックして選択してください
-                  </motion.p>
+                  </m.p>
                 </div>
               )}
 
@@ -1009,7 +1014,7 @@ function BattleContent() {
             </div>
           )}
         </div>
-      </motion.div>
+      </m.div>
     </>
   )
 }

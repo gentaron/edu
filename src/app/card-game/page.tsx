@@ -4,7 +4,7 @@ import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import {
   Swords,
   ArrowLeft,
@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { ALL_CARDS, type GameCard } from "@/lib/card-data";
 import { useDeckStore } from "@/lib/game-store";
+import { useShallow } from "zustand/react/shallow";
 
 type RarityFilter = "全て" | "C" | "R" | "SR";
 
@@ -39,12 +40,12 @@ const rarityBadgeClass: Record<string, string> = {
 };
 
 function CardInPool({ card, inDeck, onAdd }: { card: GameCard; inDeck: boolean; onAdd: () => void }) {
-  const rc = rarityColors[card.rarity];
-  const cardClass = rarityCardClass[card.rarity];
-  const badgeClass = rarityBadgeClass[card.rarity];
+  const rc = rarityColors[card.rarity] ?? { border: "border-edu-border bg-edu-surface", label: "text-edu-muted" };
+  const cardClass = rarityCardClass[card.rarity] ?? "";
+  const badgeClass = rarityBadgeClass[card.rarity] ?? "";
 
   return (
-    <motion.button
+    <m.button
       layout
       whileHover={!inDeck ? { scale: 1.05 } : {}}
       whileTap={!inDeck ? { scale: 0.95 } : {}}
@@ -63,7 +64,7 @@ function CardInPool({ card, inDeck, onAdd }: { card: GameCard; inDeck: boolean; 
 
       {/* Image */}
       <div className="h-16 sm:h-20 w-full overflow-hidden bg-edu-bg/50 relative z-10">
-        <Image src={card.imageUrl} alt={card.name} width={144} height={80} className="w-full h-full object-cover" />
+        <Image src={card.imageUrl} alt={card.name} width={144} height={80} sizes="(max-width: 640px) 100vw, 200px" loading="lazy" className="w-full h-full object-cover" />
       </div>
 
       {/* Info */}
@@ -83,7 +84,7 @@ function CardInPool({ card, inDeck, onAdd }: { card: GameCard; inDeck: boolean; 
           <span className="text-yellow-400">💥{card.ultimate}</span>
         </div>
       </div>
-    </motion.button>
+    </m.button>
   );
 }
 
@@ -100,11 +101,11 @@ function DeckSlot({
   onMoveUp: () => void;
   onMoveDown: () => void;
 }) {
-  const rc = rarityColors[card.rarity];
-  const badgeClass = rarityBadgeClass[card.rarity];
+  const rc = rarityColors[card.rarity] ?? { border: "border-edu-border bg-edu-surface", label: "text-edu-muted" };
+  const badgeClass = rarityBadgeClass[card.rarity] ?? "";
 
   return (
-    <motion.div
+    <m.div
       layout
       exit={{ opacity: 0, x: 20 }}
       className="flex items-center gap-2 px-2 py-1.5 rounded-lg bg-edu-bg/30 border border-edu-border/20"
@@ -116,7 +117,7 @@ function DeckSlot({
 
       {/* Card image */}
       <div className={`w-7 h-7 rounded border ${rc.border} flex items-center justify-center shrink-0 overflow-hidden`}>
-        <Image src={card.imageUrl} alt="" width={24} height={24} className="w-6 h-6 rounded object-cover" />
+        <Image src={card.imageUrl} alt="" width={24} height={24} sizes="28px" loading="lazy" className="w-6 h-6 rounded object-cover" />
       </div>
 
       {/* Name */}
@@ -150,13 +151,15 @@ function DeckSlot({
       >
         ×
       </button>
-    </motion.div>
+    </m.div>
   );
 }
 
 export default function DeckBuildPage() {
   const router = useRouter();
-  const { deck, deckName, addCard, removeCard, moveCard, clearDeck, setDeckName } = useDeckStore();
+  const { deck, deckName, addCard, removeCard, moveCard, clearDeck, setDeckName } = useDeckStore(
+    useShallow((s) => ({ deck: s.deck, deckName: s.deckName, addCard: s.addCard, removeCard: s.removeCard, moveCard: s.moveCard, clearDeck: s.clearDeck, setDeckName: s.setDeckName }))
+  );
   const [rarityFilter, setRarityFilter] = useState<RarityFilter>("全て");
 
   const deckIds = useMemo(() => new Set(deck.map((c) => c.id)), [deck]);

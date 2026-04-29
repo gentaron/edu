@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Sparkles } from "lucide-react"
 import { StarField } from "@/components/edu/star-field"
 import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
@@ -366,7 +367,7 @@ export default function AuralisPage() {
                         className={`flex items-center gap-3 p-2.5 rounded-lg border ${m.color} group transition-all duration-200 cursor-default`}
                       >
                         <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-edu-border/50 shrink-0 group-hover:border-edu-accent2/50 transition-colors">
-                          <img src={m.img} alt={m.name} className="w-full h-full object-cover" />
+                          <Image src={m.img} alt={m.name} width={40} height={40} loading="lazy" className="w-full h-full object-cover" />
                         </div>
                         <div className="min-w-0">
                           <p className="text-sm font-medium text-edu-text truncate">

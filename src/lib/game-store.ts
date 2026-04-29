@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { type GameCard, type Enemy, type AbilityType } from "./card-data";
+import { charMaxHp, calculateEffectDamage, calculateEnemyDamage } from "./battle-logic";
 
 /* ═══════════════════════════════════════════════════════
    Deck Store
@@ -37,7 +38,7 @@ export const useDeckStore = create<DeckState>()(
           if (toIndex < 0 || toIndex >= s.deck.length) return s;
           const next = [...s.deck];
           const [moved] = next.splice(fromIndex, 1);
-          next.splice(toIndex, 0, moved);
+          next.splice(toIndex, 0, moved!);
           return { deck: next };
         }),
       clearDeck: () => set({ deck: [] }),
@@ -95,11 +96,6 @@ interface BattleState {
   resetBattle: () => void;
 }
 
-function charMaxHp(card: GameCard): number {
-  const base = card.rarity === "SR" ? 14 : card.rarity === "R" ? 10 : 8;
-  return base + card.defense;
-}
-
 function addLog(
   setter: (fn: (s: BattleState) => Partial<BattleState>) => void,
   msg: string
@@ -117,7 +113,7 @@ function hitRandomChar(
 ): { fieldChars: FieldChar[]; hitIndex: number | null } {
   const alive = fieldChars.filter((fc) => !fc.isDown);
   if (alive.length === 0) return { fieldChars, hitIndex: null };
-  const target = alive[Math.floor(Math.random() * alive.length)];
+  const target = alive[Math.floor(Math.random() * alive.length)]!;
   const idx = fieldChars.findIndex((fc) => fc.card.id === target.card.id);
   const newHp = Math.max(0, target.hp - damage);
   const updated = [...fieldChars];
@@ -252,7 +248,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
           newShield += defValue;
           if (enemyId === "flame-spirit") {
             // Self-damage goes to selected character
-            const selChar = newFieldChars[selIdx];
+            const selChar = newFieldChars[selIdx]!;
             const newHp = Math.max(0, selChar.hp - 1);
             newFieldChars[selIdx] = { ...selChar, hp: newHp, isDown: newHp <= 0 };
             logMsg += ` 🔥熱で${card.name}に1ダメージ！`;
@@ -261,71 +257,19 @@ export const useBattleStore = create<BattleState>((set, get) => ({
         break;
       }
       case "効果": {
-        const eff = card.effect;
-        const val = card.effectValue;
-        const canDamage = !isVoidKingPhase3;
+        const result = calculateEffectDamage(
+          card.effect, card.effectValue, card.name, enemyId, isVoidKingPhase3
+        );
+        newEnemyHp = Math.max(0, newEnemyHp - result.damage);
+        newShield += result.shield;
+        newEnemyAttackReduction = Math.min(newEnemyAttackReduction + result.attackReduction, 10);
+        logMsg = result.log;
 
-        // Helper: heal selected character
-        function healSelected(amount: number) {
-          const selChar = newFieldChars[selIdx];
-          const newHp = Math.min(selChar.maxHp, selChar.hp + amount);
+        // Apply healing to selected character
+        if (result.heal > 0) {
+          const selChar = newFieldChars[selIdx]!;
+          const newHp = Math.min(selChar.maxHp, selChar.hp + result.heal);
           newFieldChars[selIdx] = { ...selChar, hp: newHp, isDown: false };
-          return newHp - selChar.hp; // actual healed amount
-        }
-
-        if (eff.includes("回復") && eff.includes("ダメージ") && eff.includes("シールド")) {
-          const actual = healSelected(val);
-          const shieldVal = Math.max(1, Math.floor(val * 0.7));
-          newShield += shieldVal;
-          logMsg = `✨ ${card.name}の${card.effect}！ ${card.name}のHP${actual}回復＋シールド+${shieldVal}`;
-        } else if (eff.includes("ダメージ") && eff.includes("回復")) {
-          const dmg = val;
-          const actual = healSelected(Math.max(1, Math.floor(val * 0.5)));
-          if (canDamage) newEnemyHp = Math.max(0, newEnemyHp - dmg);
-          if (canDamage) {
-            logMsg = `✨ ${card.name}の${card.effect}！ 敵に${dmg}ダメージ＋${card.name}のHP${actual}回復！`;
-          } else {
-            logMsg = `✨ ${card.name}の効果！ ${card.name}のHP${actual}回復！（ダメージは吸収）`;
-          }
-        } else if (eff.includes("ダメージ") && eff.includes("シールド")) {
-          const dmg = val;
-          const shieldVal = Math.max(1, Math.floor(val * 0.7));
-          if (canDamage) newEnemyHp = Math.max(0, newEnemyHp - dmg);
-          newShield += shieldVal;
-          if (canDamage) {
-            logMsg = `✨ ${card.name}の${card.effect}！ 敵に${dmg}ダメージ＋シールド+${shieldVal}！`;
-          } else {
-            logMsg = `✨ ${card.name}の効果！ シールド+${shieldVal}！（ダメージは吸収）`;
-          }
-        } else if (eff.includes("回復")) {
-          const actual = healSelected(val);
-          logMsg = `✨ ${card.name}の${card.effect}！ ${card.name}のHP${actual}回復！`;
-        } else if (eff.includes("ダメージ")) {
-          const dmg = val;
-          if (canDamage) {
-            newEnemyHp = Math.max(0, newEnemyHp - dmg);
-            logMsg = `✨ ${card.name}の${card.effect}！ 敵に${dmg}ダメージ！`;
-          } else {
-            logMsg = `✨ ${card.name}の効果…虚無に吸収された！`;
-          }
-        } else if (eff.includes("シールド")) {
-          const shieldVal = val;
-          newShield += shieldVal;
-          logMsg = `✨ ${card.name}の${card.effect}！ シールド+${shieldVal}！`;
-        } else if (eff.includes("低下")) {
-          newEnemyAttackReduction = Math.min(newEnemyAttackReduction + val, 10);
-          logMsg = `✨ ${card.name}の${card.effect}！ 敵の攻撃力-${val}！`;
-        } else if (eff.includes("次元ピラミッド")) {
-          if (canDamage) newEnemyHp = Math.max(0, newEnemyHp - 5);
-          const actual = healSelected(3);
-          if (canDamage) {
-            logMsg = `✨ 次元ピラミッド展開！ 敵に5ダメージ＋${card.name}のHP${actual}回復！`;
-          } else {
-            logMsg = `✨ 次元ピラミッド展開！ ${card.name}のHP${actual}回復！（ダメージは吸収）`;
-          }
-        } else {
-          const actual = healSelected(val);
-          logMsg = `✨ ${card.name}の${card.effect}！ ${card.name}のHP${actual}回復！`;
         }
         break;
       }
@@ -391,16 +335,10 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       charHitIndex: null,
     });
 
-    // Calculate total phase bonus
-    let totalBonus = 0;
-    for (const p of enemy.phases) {
-      if (hpPercent <= p.triggerHpPercent) {
-        totalBonus += p.attackBonus;
-      }
-    }
-
-    const baseAttack = Math.max(0, enemy.attackPower + totalBonus - s.enemyAttackReduction);
-    const effectiveDamage = Math.max(0, baseAttack - s.shieldBuffer);
+    // Calculate enemy base damage using pure function
+    const { damage: effectiveDamage } = calculateEnemyDamage(
+      enemy, s.enemyHp, s.shieldBuffer, s.enemyAttackReduction
+    );
     addLog(set, `💥 ${enemy.name}の攻撃！ ${effectiveDamage}ダメージ！`);
 
     // Main attack → random alive character
@@ -409,7 +347,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
     if (effectiveDamage > 0) {
       const alive = newFieldChars.filter((fc) => !fc.isDown);
       if (alive.length > 0) {
-        const target = alive[Math.floor(Math.random() * alive.length)];
+        const target = alive[Math.floor(Math.random() * alive.length)]!;
         const idx = newFieldChars.findIndex((fc) => fc.card.id === target.card.id);
         if (idx !== -1) {
           const newHp = Math.max(0, target.hp - effectiveDamage);
@@ -428,7 +366,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
     if (s.poisonActive) {
       const alive = newFieldChars.filter((fc) => !fc.isDown);
       if (alive.length > 0) {
-        const target = alive[Math.floor(Math.random() * alive.length)];
+        const target = alive[Math.floor(Math.random() * alive.length)]!;
         const idx = newFieldChars.findIndex((fc) => fc.card.id === target.card.id);
         if (idx !== -1) {
           const newHp = Math.max(0, target.hp - 1);
@@ -475,7 +413,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       for (let i = 0; i < targets; i++) {
         const remainingAlive = newFieldChars.filter((fc) => !fc.isDown);
         if (remainingAlive.length === 0) break;
-        const target = remainingAlive[Math.floor(Math.random() * remainingAlive.length)];
+        const target = remainingAlive[Math.floor(Math.random() * remainingAlive.length)]!;
         const idx = newFieldChars.findIndex((fc) => fc.card.id === target.card.id);
         if (idx === -1) continue;
         const dmg = 2 + s.enemyCurrentPhase;
@@ -536,19 +474,19 @@ export const useBattleStore = create<BattleState>((set, get) => ({
     const hpPercent = (s.enemyHp / s.selectedEnemy.maxHp) * 100;
     let newPhase = 0;
     for (let i = s.selectedEnemy.phases.length - 1; i >= 0; i--) {
-      if (hpPercent <= s.selectedEnemy.phases[i].triggerHpPercent) {
+      if (hpPercent <= s.selectedEnemy.phases[i]!.triggerHpPercent) {
         if (i >= newPhase) newPhase = i + 1;
       }
     }
     if (newPhase > s.enemyCurrentPhase) {
-      addLog(set, `⚠️ ${s.selectedEnemy.phases[newPhase - 1].message}`);
+      addLog(set, `⚠️ ${s.selectedEnemy.phases[newPhase - 1]!.message}`);
       set({ enemyCurrentPhase: newPhase });
       if (s.selectedEnemy.id === "void-reaper") {
         // Phase transition damage → random character (previously was playerHp)
         const updatedChars = [...get().fieldCharacters];
         const aliveChars = updatedChars.filter((fc) => !fc.isDown);
         if (aliveChars.length > 0) {
-          const target = aliveChars[Math.floor(Math.random() * aliveChars.length)];
+          const target = aliveChars[Math.floor(Math.random() * aliveChars.length)]!;
           const idx = updatedChars.findIndex((fc) => fc.card.id === target.card.id);
           const charHp = Math.max(0, target.hp - 4);
           updatedChars[idx] = { ...target, hp: charHp, isDown: charHp <= 0 };
@@ -559,7 +497,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
           // Additional 3 damage to another character
           const remainingAlive = updatedChars.filter((fc) => !fc.isDown);
           if (remainingAlive.length > 0) {
-            const target2 = remainingAlive[Math.floor(Math.random() * remainingAlive.length)];
+            const target2 = remainingAlive[Math.floor(Math.random() * remainingAlive.length)]!;
             const idx2 = updatedChars.findIndex((fc) => fc.card.id === target2.card.id);
             const charHp2 = Math.max(0, target2.hp - 3);
             updatedChars[idx2] = { ...target2, hp: charHp2, isDown: charHp2 <= 0 };

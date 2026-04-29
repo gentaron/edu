@@ -215,7 +215,7 @@ export function StoryReaderUI({
     paragraphs.forEach((p, i) => {
       if (isSceneBreak(p)) {
         result.push({ type: "scene", content: p, index: i })
-      } else if (isChapterHeading(p) && i > 0 && isSceneBreak(paragraphs[i - 1])) {
+      } else if (isChapterHeading(p) && i > 0 && !!paragraphs[i - 1] && isSceneBreak(paragraphs[i - 1]!)) {
         result.push({ type: "heading", content: p, index: i })
       } else {
         result.push({ type: "paragraph", content: p, index: i })
@@ -333,9 +333,9 @@ export function StoryReaderUI({
                   className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium rounded-full border border-white/6 bg-white/3 text-white/40 hover:text-white/60 hover:border-white/12 transition-all duration-300"
                 >
                   <div className="w-5 h-5 rounded-full overflow-hidden border border-white/8 bg-white/5 flex items-center justify-center shrink-0">
-                    {ENTRY_IMAGE_MAP[entry.name] ? (
+                    {(ENTRY_IMAGE_MAP as Record<string, string>)[entry.name] ? (
                       <Image
-                        src={ENTRY_IMAGE_MAP[entry.name]}
+                        src={(ENTRY_IMAGE_MAP as Record<string, string>)[entry.name]!}
                         alt={entry.name}
                         width={20}
                         height={20}
@@ -472,12 +472,12 @@ export function StoryReaderUI({
               <>
                 <span className="text-white/8 mx-3">|</span>
                 <Link
-                  href={`/wiki/${encodeURIComponent(relatedEntries[0].id)}`}
+                  href={`/wiki/${encodeURIComponent(relatedEntries[0]!.id)}`}
                   className="inline-flex items-center gap-1.5 text-[11px] text-white/15 hover:text-white/35 transition-colors"
                 >
                   {tl(
-                    `「${relatedEntries[0].name}」のWiki`,
-                    `${relatedEntries[0].name} Wiki`,
+                    `「${relatedEntries[0]!.name}」のWiki`,
+                    `${relatedEntries[0]!.name} Wiki`,
                     lang
                   )}
                 </Link>

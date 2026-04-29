@@ -4,11 +4,15 @@ import { Noto_Sans_JP } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import { Navigation } from "@/components/edu/navigation"
+import { MotionProvider } from "@/components/edu/motion-provider"
+import { WebsiteJsonLd } from "@/components/edu/json-ld"
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-sans",
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
+  display: "swap",
+  preload: true,
 })
 
 export const metadata: Metadata = {
@@ -35,12 +39,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
+        <WebsiteJsonLd />
+        <a href="#main-content" className="skip-link">
+          メインコンテンツへスキップ
+        </a>
       <body
         className={`${notoSansJP.variable} font-sans`}
         style={{ fontFamily: "var(--font-sans), 'Noto Sans JP', sans-serif" }}
       >
         <Navigation />
-        {children}
+        <div id="main-content">
+        <MotionProvider>{children}</MotionProvider>
+        </div>
         <Toaster />
       </body>
     </html>

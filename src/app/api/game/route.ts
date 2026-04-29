@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
     let idx = 0;
     while (deckCards.reduce((s, d) => s + d.count, 0) < targetSize) {
       const card = cards[idx % cards.length];
+      if (!card) break;
       const existing = deckCards.find((d) => d.cardId === card.id);
       if (existing) {
         if (existing.count < 3) existing.count++;
