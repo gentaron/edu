@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
+import React, { useState, useMemo, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
@@ -108,6 +108,122 @@ const TIER_BADGES: Record<string, { color: string; bg: string }> = {
 
 type CategoryFilter = "all" | "キャラクター" | "組織" | "文明"
 
+/* ── Gemini AI 解析 (クライアント直接呼び出し) ── */
+
+const SYSTEM_PROMPT = `あなたは「Eternal Dominion Universe (EDU)」というSF宇宙の専門分析AIです。
+EDUは以下の特徴を持つ架空のSF世界です：
+
+## 世界観概要
+- E0年を起点とする独自の紀年法（東暦）を持つ
+- E16連星系を中心に、シンフォニー・オブ・スターズ銀河に複数の文明圏が存在
+- 現代はE520年代、銀河系コンソーシアムによる宇宙規模の統合ガバナンスが進行中
+
+## 分析指示
+選択されたエンティティ（キャラクター、組織、文明）間の関係を分析してください。
+以下の点に焦点を当ててください：
+1. **権力構造**: 組織内の指導体制と権力の流れ
+2. **歴史的経緯**: 過去の出来事が現在の関係にどう影響しているか
+3. **勢力力学**: 同盟・対立の構図とその原因
+4. **個人的つながり**: キャラクター間の信頼・対抗関係
+5. **未来への影響**: 現在の関係がEDUの未来にどう影響するか
+
+## 出力形式
+日本語で、以下の構造で出力してください：
+
+## 分析概要
+（全体の要約）
+
+## 関係ネットワーク
+（エンティティ間の関係を整理）
+
+## 権力動態
+（力関係と影響力の分析）
+
+## 歴史的文脈
+（歴史的背景と展開）
+
+## 今後の展望
+（将来の展開予測）
+
+※ 提供されたデータに基づき、推測が含まれる場合は「推測」と明記してください。
+※ EDUの公式設定に基づいた分析を行ってください。`
+
+function buildAnalysisPrompt(entityIds: string[]): string {
+  const entityInfos: string[] = []
+  const relationInfos: string[] = []
+
+  for (const id of entityIds) {
+    const entity = getEntityById(id)
+    if (!entity) continue
+
+    let info = `### ${entity.name}${entity.nameEn ? ` (${entity.nameEn})` : ""}\n`
+    info += `- カテゴリ: ${entity.category}\n`
+    if (entity.tier) info += `- Tier: ${entity.tier}\n`
+    if (entity.era) info += `- 時代: ${entity.era}\n`
+    info += `- 概要: ${entity.description.substring(0, 400)}\n`
+
+    const relations = getRelationsForEntity(id)
+    if (relations.length > 0) {
+      info += `- 関連 (${relations.length}件):\n`
+      for (const r of relations.slice(0, 10)) {
+        info += `  - [${r.edge.type}] ${r.node.name}: ${r.edge.description}\n`
+      }
+    }
+
+    entityInfos.push(info)
+
+    for (const r of relations.slice(0, 5)) {
+      if (!entityIds.includes(r.node.id)) {
+        const rel = getEntityById(r.node.id)
+        if (rel) {
+          relationInfos.push(`${rel.name}: ${rel.description.substring(0, 200)}`)
+        }
+      }
+    }
+  }
+
+  let prompt = `以下のEDUエンティティの関係を分析してください：\n\n`
+  prompt += entityInfos.join("\n\n")
+
+  if (relationInfos.length > 0) {
+    prompt += `\n\n## 関連する他エンティティ情報\n${relationInfos.join("\n")}`
+  }
+
+  prompt += `\n\n上記の情報に基づき、エンティティ間の関係構造・権力動態・歴史的背景を分析してください。`
+  return prompt
+}
+
+async function callGeminiDirect(userPrompt: string): Promise<string> {
+  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
+  if (!apiKey) throw new Error("Gemini APIキーが設定されていません")
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    signal: AbortSignal.timeout(60000),
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      contents: [{ parts: [{ text: userPrompt }] }],
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 2048,
+      },
+    }),
+  })
+
+  if (!res.ok) {
+    const errText = await res.text().catch(() => "Unknown error")
+    throw new Error(`Gemini API エラー (${res.status}): ${errText.substring(0, 200)}`)
+  }
+
+  const data = await res.json()
+  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text
+  if (!text) throw new Error("Gemini APIから空のレスポンスが返されました")
+  return text
+}
+
 /* ── メインコンポーネント ── */
 
 export default function NexusPage() {
@@ -196,19 +312,13 @@ export default function NexusPage() {
     setAnalysisError("")
 
     try {
-      const res = await fetch("/api/analyze-relations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ entityIds }),
-      })
-      const data = await res.json()
-      if (data.error) {
-        setAnalysisError(data.error)
-      } else {
-        setAnalysis(data.analysis)
-      }
-    } catch {
-      setAnalysisError("通信エラーが発生しました。もう一度お試しください。")
+      const userPrompt = buildAnalysisPrompt(entityIds)
+      const result = await callGeminiDirect(userPrompt)
+      setAnalysis(result)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "不明なエラー"
+      console.error("[Nexus] Gemini analysis failed:", message)
+      setAnalysisError(message)
     } finally {
       setIsAnalyzing(false)
     }
@@ -365,10 +475,10 @@ export default function NexusPage() {
                             </div>
                           ) : catConfig ? (
                             <div className="w-8 h-8 rounded bg-edu-card border border-edu-border flex items-center justify-center shrink-0">
-                              {React.createElement(catConfig.icon, {
-                                className: "w-3.5 h-3.5",
-                                style: { color: "#c8a44e" },
-                              })}
+                              <catConfig.icon
+                                className="w-3.5 h-3.5"
+                                style={{ color: "#c8a44e" }}
+                              />
                             </div>
                           ) : null}
                           <div className="min-w-0 flex-1">
@@ -439,12 +549,9 @@ export default function NexusPage() {
                         <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg bg-edu-card border border-edu-border flex items-center justify-center shrink-0">
                           {(() => {
                             const cfg = CATEGORY_CONFIG[selectedNode.category]
-                            return cfg
-                              ? React.createElement(cfg.icon, {
-                                  className: "w-8 h-8",
-                                  style: { color: "#c8a44e" },
-                                })
-                              : null
+                            return cfg ? (
+                              <cfg.icon className="w-8 h-8" style={{ color: "#c8a44e" }} />
+                            ) : null
                           })()}
                         </div>
                       )}
@@ -635,7 +742,7 @@ export default function NexusPage() {
             )}
 
             {/* ── AI Analysis Panel ── */}
-            {(isAnalyzing || analysis || analysisError) && (
+            {isAnalyzing && (
               <motion.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -644,29 +751,61 @@ export default function NexusPage() {
                 <div className="px-4 py-3 border-b border-edu-border flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-edu-accent" />
                   <span className="text-sm font-medium text-edu-text">AI解析結果</span>
-                  {analysis && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 ml-auto" />}
                 </div>
                 <div className="p-4">
-                  {isAnalyzing && (
-                    <div className="flex flex-col items-center py-8">
-                      <Loader2 className="w-8 h-8 text-edu-accent animate-spin mb-3" />
-                      <p className="text-xs text-edu-muted">Gemini AIが関係性を解析中...</p>
-                    </div>
-                  )}
-                  {analysisError && (
-                    <div className="flex items-start gap-2 py-2">
-                      <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-                      <p className="text-xs text-red-300">{analysisError}</p>
-                    </div>
-                  )}
-                  {analysis && (
-                    <div className="prose prose-invert prose-sm max-w-none">
-                      <div
-                        className="text-xs text-edu-text leading-relaxed whitespace-pre-wrap [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-edu-accent [&_h2]:mt-4 [&_h2]:mb-2 [&_h2]:border-b [&_h2]:border-edu-border [&_h2]:pb-1 [&_h3]:text-xs [&_h3]:font-semibold [&_h3]:text-edu-text [&_h3]:mt-3 [&_h3]:mb-1 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:text-edu-muted [&_ul]:text-xs [&_li]:mb-1 [&_p]:mb-2"
-                        dangerouslySetInnerHTML={{ __html: formatAnalysis(analysis) }}
-                      />
-                    </div>
-                  )}
+                  <div className="flex flex-col items-center py-8">
+                    <Loader2 className="w-8 h-8 text-edu-accent animate-spin mb-3" />
+                    <p className="text-xs text-edu-muted">Gemini AIが関係性を解析中...</p>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {analysisError && (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6 bg-edu-surface border border-red-500/30 rounded-lg overflow-hidden"
+              >
+                <div className="px-4 py-3 border-b border-edu-border flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 text-red-400" />
+                  <span className="text-sm font-medium text-red-300">エラー</span>
+                </div>
+                <div className="p-4">
+                  <div className="flex items-start gap-2 py-2">
+                    <p className="text-xs text-red-300 leading-relaxed">{analysisError}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setAnalysisError("")
+                      setAnalysis("")
+                    }}
+                    className="mt-2 text-[10px] text-edu-muted hover:text-edu-text transition-colors underline"
+                  >
+                    閉じる
+                  </button>
+                </div>
+              </motion.div>
+            )}
+
+            {analysis && !isAnalyzing && (
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-6 bg-edu-surface border border-edu-border rounded-lg overflow-hidden"
+              >
+                <div className="px-4 py-3 border-b border-edu-border flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-edu-accent" />
+                  <span className="text-sm font-medium text-edu-text">AI解析結果</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 ml-auto" />
+                </div>
+                <div className="p-4">
+                  <div className="prose prose-invert prose-sm max-w-none">
+                    <div
+                      className="text-xs text-edu-text leading-relaxed whitespace-pre-wrap [&_h2]:text-sm [&_h2]:font-bold [&_h2]:text-edu-accent [&_h2]:mt-4 [&_h2]:mb-2 [&_h2]:border-b [&_h2]:border-edu-border [&_h2]:pb-1 [&_h3]:text-xs [&_h3]:font-semibold [&_h3]:text-edu-text [&_h3]:mt-3 [&_h3]:mb-1 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:text-edu-muted [&_ul]:text-xs [&_li]:mb-1 [&_p]:mb-2"
+                      dangerouslySetInnerHTML={{ __html: formatAnalysis(analysis) }}
+                    />
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -690,6 +829,3 @@ function formatAnalysis(text: string): string {
   result = result.replace(/((?:<li>.*?<\/li>(?:<br\/>)?)+)/g, "<ul>$1</ul>")
   return result
 }
-
-/* React import needed for createElement */
-import React from "react"
