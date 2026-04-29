@@ -107,10 +107,25 @@ function isEmbeddedInWord(text: string, index: number, length: number): boolean 
   // Check the character AFTER the match
   const after = index + length < text.length ? text[index + length] : ""
 
-  // If both sides have Japanese characters, this is embedded in a larger word
-  const beforeIsJP = before !== "" && isKatakanaLike(before)
-  const afterIsJP = after !== "" && isKatakanaLike(after)
-  return beforeIsJP || afterIsJP
+  // Only katakana and kanji (NOT hiragana particles) on BOTH sides indicates
+  // the match is embedded in a longer proper-noun compound.
+  // Hiragana (の、に、で、が…) are grammatical particles and should NOT block linking.
+  const isKanaOrKanji = (ch: string) => {
+    const code = ch.codePointAt(0) ?? 0
+    return (
+      (code >= 0x30a0 && code <= 0x30ff) || // Katakana
+      (code >= 0x4e00 && code <= 0x9fff) || // CJK ideographs (kanji)
+      (code >= 0x3400 && code <= 0x4dbf) || // CJK Extension A
+      code === 0x30fc || // prolongation mark ー
+      code === 0x3005 || // repetition mark 々
+      code === 0x3006 // cjk iteration mark 〆
+    )
+  }
+
+  const beforeSticky = before !== "" && isKanaOrKanji(before)
+  const afterSticky = after !== "" && isKanaOrKanji(after)
+  // Only reject if BOTH sides are "sticky" — truly embedded in a compound
+  return beforeSticky && afterSticky
 }
 
 function tokenize(text: string, currentEntryId?: string): Segment[] {
