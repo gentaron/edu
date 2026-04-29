@@ -17,7 +17,7 @@ import {
 } from "lucide-react"
 import { ALL_CARDS } from "@/lib/card-data"
 import type { GameCard } from "@/types"
-import { useDeckStore } from "@/lib/game-store"
+import { useDeckStore } from "@/lib/stores"
 import { useShallow } from "zustand/react/shallow"
 
 type RarityFilter = "全て" | "C" | "R" | "SR"

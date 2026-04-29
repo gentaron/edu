@@ -8,7 +8,7 @@ import { m, AnimatePresence } from "framer-motion"
 import { Swords, Heart, Shield, Crown, Zap, Sparkles, Crosshair, Skull, User } from "lucide-react"
 import { ENEMIES } from "@/lib/card-data"
 import type { GameCard, AbilityType } from "@/types"
-import { useDeckStore, useBattleStore } from "@/lib/game-store"
+import { useDeckStore, useBattleStore } from "@/lib/stores"
 import type { FieldChar } from "@/types"
 
 /* ── Particle Burst ── */

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest"
-import { useBattleStore } from "../game-store"
+import { useBattleStore } from "../stores"
 import type { GameCard, Enemy } from "@/types"
 
 /* Minimal test fixtures */

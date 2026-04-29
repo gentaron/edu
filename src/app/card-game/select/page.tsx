@@ -8,7 +8,7 @@ import { m } from "framer-motion"
 import { Swords, ArrowLeft, Shield, Skull, AlertTriangle, ChevronRight, Crown } from "lucide-react"
 import { ENEMIES } from "@/lib/card-data"
 import type { Enemy } from "@/types"
-import { useDeckStore } from "@/lib/game-store"
+import { useDeckStore } from "@/lib/stores"
 
 const diffColors: Record<string, { border: string; badge: string; icon: React.ReactNode }> = {
   NORMAL: {
