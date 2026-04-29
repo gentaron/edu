@@ -87,35 +87,20 @@ export function buildAnalysisPrompt(entityIds: string[]): string {
   return prompt
 }
 
-/* ── Gemini API 直接呼び出し ── */
+/* ── Gemini API サーバーサイドルート経由呼び出し ── */
 
 export async function callGeminiDirect(userPrompt: string): Promise<string> {
-  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY
-  if (!apiKey) throw new Error("Gemini APIキーが設定されていません")
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`
-
-  const res = await fetch(url, {
+  const res = await fetch("/api/ai/analyze", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    signal: AbortSignal.timeout(60000),
-    body: JSON.stringify({
-      system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-      contents: [{ parts: [{ text: userPrompt }] }],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 2048,
-      },
-    }),
+    body: JSON.stringify({ systemPrompt: SYSTEM_PROMPT, userPrompt }),
   })
 
   if (!res.ok) {
-    const errText = await res.text().catch(() => "Unknown error")
-    throw new Error(`Gemini API エラー (${res.status}): ${errText.substring(0, 200)}`)
+    const errData = await res.json().catch(() => ({ error: `HTTP ${res.status}` }))
+    throw new Error(errData.error || `API error: ${res.status}`)
   }
 
   const data = await res.json()
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text
-  if (!text) throw new Error("Gemini APIから空のレスポンスが返されました")
-  return text
+  return data.text
 }
