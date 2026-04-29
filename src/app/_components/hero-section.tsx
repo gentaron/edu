@@ -1,16 +1,13 @@
 import React from "react"
 import { Star, Globe2, Zap, Radio, Shield } from "lucide-react"
+import { TypewriterTitle } from "./typewriter-title"
 
 export function HeroSection() {
   return (
     <section className="min-h-screen flex items-center justify-center">
       <div className="text-center px-4 max-w-4xl mx-auto">
-        <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-wider text-edu-text mb-4 leading-tight">
-          Eternal Dominion
-          <br />
-          Universe
-        </h1>
-        <hr className="edu-divider mx-auto w-24 mb-6" />
+        <TypewriterTitle />
+        <hr className="edu-divider mx-auto w-24 mb-6 mt-4" />
         <p className="text-lg sm:text-xl text-edu-muted font-light tracking-widest mb-2">
           統合時空構造書 v3.0
         </p>
