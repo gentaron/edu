@@ -28,7 +28,11 @@ export const metadata: Metadata = {
     "ユニバース",
   ],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/icon.png", type: "image/png", sizes: "1024x1024" },
+    ],
+    apple: "/apple-icon.png",
   },
 }
 
@@ -39,17 +43,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-        <WebsiteJsonLd />
-        <a href="#main-content" className="skip-link">
-          メインコンテンツへスキップ
-        </a>
+      <WebsiteJsonLd />
+      <a href="#main-content" className="skip-link">
+        メインコンテンツへスキップ
+      </a>
       <body
         className={`${notoSansJP.variable} font-sans`}
         style={{ fontFamily: "var(--font-sans), 'Noto Sans JP', sans-serif" }}
       >
         <Navigation />
         <div id="main-content">
-        <MotionProvider>{children}</MotionProvider>
+          <MotionProvider>{children}</MotionProvider>
         </div>
         <Toaster />
       </body>

@@ -57,7 +57,7 @@ describe("stories", () => {
     const chapter1 = getStoriesByChapter(1)
     expect(chapter1.length).toBeGreaterThanOrEqual(1)
     for (let i = 1; i < chapter1.length; i++) {
-      expect(chapter1[i].chapterOrder).toBeGreaterThanOrEqual(chapter1[i - 1].chapterOrder)
+      expect(chapter1[i]?.chapterOrder).toBeGreaterThanOrEqual(chapter1[i - 1]?.chapterOrder ?? -1)
     }
   })
 
