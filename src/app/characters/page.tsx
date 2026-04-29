@@ -102,7 +102,7 @@ export default function CharactersPage() {
         <PageHeader
           icon={<Crown className="w-6 h-6 text-edu-accent" />}
           title="キャラクターTier表"
-          subtitle="Eternal Dominion Universe — 全66キャラクターのカードデータ"
+          subtitle={`Eternal Dominion Universe — 全${ALL_CARDS.length}キャラクターのカードデータ`}
         />
 
         <section className="pb-20">
@@ -246,7 +246,7 @@ export default function CharactersPage() {
               <SectionHeader
                 icon={<Users className="w-6 h-6 text-red-400" />}
                 title="勢力別キャラクター一覧"
-                subtitle="E528現代における主要勢力と所属キャラクターの完全リスト（全66体）"
+                subtitle={`E528現代における主要勢力と所属キャラクターの完全リスト（全${ALL_CARDS.length}体）`}
               />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {cardsByAffiliation.map((faction) => {
