@@ -102,7 +102,7 @@ export default function CharactersPage() {
         <PageHeader
           icon={<Crown className="w-6 h-6 text-edu-accent" />}
           title="キャラクターTier表"
-          subtitle="Eternal Dominion Universe — 全64キャラクターのカードデータ"
+          subtitle="Eternal Dominion Universe — 全66キャラクターのカードデータ"
         />
 
         <section className="pb-20">
@@ -126,9 +126,7 @@ export default function CharactersPage() {
                     <table className="w-full text-xs sm:text-sm">
                       <thead>
                         <tr className="border-b border-edu-border/30">
-                          <th className="text-left py-2 px-2 text-edu-muted font-medium">
-                            キャラ
-                          </th>
+                          <th className="text-left py-2 px-2 text-edu-muted font-medium">キャラ</th>
                           <th className="text-left py-2 px-2 text-edu-muted font-medium hidden sm:table-cell">
                             勢力
                           </th>
@@ -136,9 +134,7 @@ export default function CharactersPage() {
                           <th className="text-center py-2 px-2 text-blue-400 font-medium">🛡</th>
                           <th className="text-center py-2 px-2 text-purple-300 font-medium">✨</th>
                           <th className="text-center py-2 px-2 text-yellow-400 font-medium">💥</th>
-                          <th className="text-center py-2 px-2 text-edu-muted font-medium">
-                            合計
-                          </th>
+                          <th className="text-center py-2 px-2 text-edu-muted font-medium">合計</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -159,7 +155,10 @@ export default function CharactersPage() {
                                   </span>
                                   <span className="text-edu-text font-medium">
                                     {nameToWikiId.has(card.name) ? (
-                                      <Link href={`/wiki/${encodeURIComponent(nameToWikiId.get(card.name)!)}`} className="hover:text-edu-accent2 hover:underline">
+                                      <Link
+                                        href={`/wiki/${encodeURIComponent(nameToWikiId.get(card.name)!)}`}
+                                        className="hover:text-edu-accent2 hover:underline"
+                                      >
                                         {card.name}
                                       </Link>
                                     ) : (
@@ -204,9 +203,24 @@ export default function CharactersPage() {
                   {[
                     { rank: 1, name: "アイリス", wikiId: "アイリス", color: "text-edu-accent" },
                     { rank: 2, name: "フィオナ", wikiId: "フィオナ", color: "text-gray-300" },
-                    { rank: 3, name: "マリーナ", wikiId: "マリーナ・ボビン", color: "text-amber-700" },
-                    { rank: 4, name: "セバスチャン", wikiId: "セバスチャン・ヴァレリウス", color: "text-edu-muted" },
-                    { rank: 5, name: "カスチーナ", wikiId: "カスチーナ・テンペスト", color: "text-edu-muted" },
+                    {
+                      rank: 3,
+                      name: "マリーナ",
+                      wikiId: "マリーナ・ボビン",
+                      color: "text-amber-700",
+                    },
+                    {
+                      rank: 4,
+                      name: "セバスチャン",
+                      wikiId: "セバスチャン・ヴァレリウス",
+                      color: "text-edu-muted",
+                    },
+                    {
+                      rank: 5,
+                      name: "カスチーナ",
+                      wikiId: "カスチーナ・テンペスト",
+                      color: "text-edu-muted",
+                    },
                   ].map((r) => (
                     <div
                       key={r.rank}
@@ -215,7 +229,10 @@ export default function CharactersPage() {
                       <span className={`text-lg font-black ${r.color} w-6 text-center`}>
                         {r.rank}
                       </span>
-                      <Link href={`/wiki/${encodeURIComponent(r.wikiId)}`} className="text-sm text-edu-text font-medium hover:text-edu-accent2 hover:underline">
+                      <Link
+                        href={`/wiki/${encodeURIComponent(r.wikiId)}`}
+                        className="text-sm text-edu-text font-medium hover:text-edu-accent2 hover:underline"
+                      >
                         {r.name}
                       </Link>
                     </div>
@@ -229,7 +246,7 @@ export default function CharactersPage() {
               <SectionHeader
                 icon={<Users className="w-6 h-6 text-red-400" />}
                 title="勢力別キャラクター一覧"
-                subtitle="E528現代における主要勢力と所属キャラクターの完全リスト（全64体）"
+                subtitle="E528現代における主要勢力と所属キャラクターの完全リスト（全66体）"
               />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {cardsByAffiliation.map((faction) => {
@@ -280,7 +297,10 @@ export default function CharactersPage() {
                             </span>
                             <span className="text-xs sm:text-sm text-edu-text font-medium flex-1 truncate">
                               {nameToWikiId.has(card.name) ? (
-                                <Link href={`/wiki/${encodeURIComponent(nameToWikiId.get(card.name)!)}`} className="hover:text-edu-accent2 hover:underline">
+                                <Link
+                                  href={`/wiki/${encodeURIComponent(nameToWikiId.get(card.name)!)}`}
+                                  className="hover:text-edu-accent2 hover:underline"
+                                >
                                   {card.name}
                                 </Link>
                               ) : (
