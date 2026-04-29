@@ -19,7 +19,6 @@ const SECTIONS = [
   { id: "wiki-link", label: "Wiki", href: "/wiki" },
   { id: "story-link", label: "Story", href: "/story" },
   { id: "ranking-link", label: "番付", href: "/ranking" },
-  { id: "nexus", label: "Nexus", href: "/nexus" },
 ]
 
 export function Navigation() {
