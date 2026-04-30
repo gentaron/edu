@@ -1,319 +1,320 @@
 "use client"
 
-import React, { useState, useMemo, useRef } from "react"
-import Image from "next/image"
+import React, { useState, useMemo, Suspense } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import {
   Search,
-  ArrowLeft,
-  Star,
   Users,
-  BookOpen,
   Crown,
+  Star,
   Sparkles,
-  X,
   Scroll,
-  User,
-  ExternalLink,
+  BookOpen,
+  ChevronRight,
+  ArrowLeft,
 } from "lucide-react"
 import { ALL_ENTRIES } from "@/lib/wiki-data"
-import { StarField } from "@/components/edu/star-field"
-import { RevealGrid } from "@/components/edu/reveal-section"
-
-const CATEGORY_CONFIG: Record<string, { label: string; icon: React.ReactNode }> = {
-  キャラクター: {
-    label: "キャラクター",
-    icon: <Users className="w-3.5 h-3.5" />,
-  },
-  用語: {
-    label: "用語",
-    icon: <BookOpen className="w-3.5 h-3.5" />,
-  },
-  組織: {
-    label: "組織",
-    icon: <Crown className="w-3.5 h-3.5" />,
-  },
-  地理: {
-    label: "地理",
-    icon: <Star className="w-3.5 h-3.5" />,
-  },
-  技術: {
-    label: "技術",
-    icon: <Sparkles className="w-3.5 h-3.5" />,
-  },
-  歴史: {
-    label: "歴史",
-    icon: <Scroll className="w-3.5 h-3.5" />,
-  },
-}
-
-// Category → border accent class
-const CATEGORY_BORDER: Record<string, string> = {
-  キャラクター: "wiki-card-char",
-  組織: "wiki-card-org",
-  技術: "wiki-card-tech",
-  歴史: "wiki-card-hist",
-  地理: "wiki-card-geo",
-  用語: "wiki-card-term",
-}
-
-// Featured: Tier 1 or 神格 characters
-const isFeatured = (entry: (typeof ALL_ENTRIES)[number]) =>
-  entry.tier === "Tier 1" || entry.tier === "神格・歴史的人物"
 
 type Category = "キャラクター" | "用語" | "組織" | "地理" | "技術" | "歴史"
-const FILTER_CATEGORIES: ("全て" | Category)[] = [
-  "全て",
-  "キャラクター",
-  "用語",
-  "組織",
-  "地理",
-  "技術",
-  "歴史",
+
+const CATEGORIES: {
+  key: Category
+  label: string
+  labelEn: string
+  icon: React.ComponentType<{ className?: string }>
+  color: string
+}[] = [
+  {
+    key: "キャラクター",
+    label: "キャラクター",
+    labelEn: "Characters",
+    icon: Users,
+    color: "text-amber-400",
+  },
+  { key: "組織", label: "組織", labelEn: "Organizations", icon: Crown, color: "text-indigo-400" },
+  { key: "地理", label: "地理", labelEn: "Geography", icon: Star, color: "text-emerald-400" },
+  { key: "技術", label: "技術", labelEn: "Technology", icon: Sparkles, color: "text-cyan-400" },
+  { key: "用語", label: "用語", labelEn: "Terms", icon: BookOpen, color: "text-pink-400" },
+  { key: "歴史", label: "歴史", labelEn: "History", icon: Scroll, color: "text-orange-400" },
 ]
 
-export default function WikiPage() {
+const BORDER_COLORS: Record<Category, string> = {
+  キャラクター: "border-l-amber-400",
+  組織: "border-l-indigo-400",
+  地理: "border-l-emerald-400",
+  技術: "border-l-cyan-400",
+  用語: "border-l-pink-400",
+  歴史: "border-l-orange-400",
+}
+
+function WikiLoading() {
+  return (
+    <main className="min-h-screen bg-edu-bg pt-16 pb-20">
+      <div className="max-w-3xl mx-auto px-4 pt-8">
+        <div className="animate-pulse">
+          <div className="h-7 w-48 bg-edu-surface rounded mb-2" />
+          <div className="h-4 w-64 bg-edu-surface rounded mb-6" />
+          <div className="h-10 bg-edu-surface rounded-lg mb-8" />
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-40 bg-edu-surface rounded-lg mb-4" />
+          ))}
+        </div>
+      </div>
+    </main>
+  )
+}
+
+function WikiPage() {
+  const searchParams = useSearchParams()
+  const categoryParam = searchParams.get("category") as Category | null
   const [search, setSearch] = useState("")
-  const [activeCategory, setActiveCategory] = useState<"全て" | Category>("全て")
-  const searchRef = useRef<HTMLInputElement>(null)
 
-  const filteredEntries = useMemo(() => {
-    let entries = ALL_ENTRIES
-    if (activeCategory !== "全て") {
-      entries = entries.filter((e) => e.category === activeCategory)
-    }
-    if (search.trim()) {
-      const q = search.toLowerCase().trim()
-      entries = entries.filter(
-        (e) =>
-          e.name.toLowerCase().includes(q) ||
-          (e.nameEn && e.nameEn.toLowerCase().includes(q)) ||
-          e.description.toLowerCase().includes(q) ||
-          (e.subCategory && e.subCategory.toLowerCase().includes(q)) ||
-          (e.affiliation && e.affiliation.toLowerCase().includes(q)) ||
-          (e.era && e.era.toLowerCase().includes(q))
-      )
-    }
-    return entries
-  }, [search, activeCategory])
+  const isSearching = search.trim().length > 0
+  const showCategory = !isSearching && categoryParam
 
-  const totalEntries = ALL_ENTRIES.length
-  const charCount = ALL_ENTRIES.filter((e) => e.category === "キャラクター").length
-  const termCount = totalEntries - charCount
+  const searchResults = useMemo(() => {
+    if (!isSearching) return []
+    const q = search.toLowerCase().trim()
+    return ALL_ENTRIES.filter(
+      (e) =>
+        e.name.toLowerCase().includes(q) ||
+        (e.nameEn && e.nameEn.toLowerCase().includes(q)) ||
+        e.description.toLowerCase().includes(q)
+    )
+  }, [search, isSearching])
+
+  const categoryEntries = useMemo(() => {
+    if (!showCategory || !categoryParam) return []
+    return ALL_ENTRIES.filter((e) => e.category === categoryParam)
+  }, [showCategory, categoryParam])
+
+  const grouped = useMemo(() => {
+    const map: Partial<Record<Category, typeof ALL_ENTRIES>> = {}
+    for (const cat of CATEGORIES.map((c) => c.key)) {
+      map[cat] = ALL_ENTRIES.filter((e) => e.category === cat)
+    }
+    return map
+  }, [])
+
+  function getRepresentatives(category: Category, count: number) {
+    const entries = grouped[category] || []
+    const tierOrder: Record<string, number> = {
+      "神格・歴史的人物": 0,
+      "Tier 1": 1,
+      "Tier 2": 2,
+      "Tier 3": 3,
+    }
+    return [...entries]
+      .sort((a, b) => {
+        const ta = tierOrder[a.tier || ""] ?? 9
+        const tb = tierOrder[b.tier || ""] ?? 9
+        return ta - tb || a.name.localeCompare(b.name)
+      })
+      .slice(0, count)
+  }
+
+  function getTierCounts(category: Category) {
+    const entries = grouped[category] || []
+    const counts: Record<string, number> = {}
+    for (const e of entries) {
+      const tier = e.tier || "未分類"
+      counts[tier] = (counts[tier] || 0) + 1
+    }
+    return Object.entries(counts).sort(([a], [b]) => {
+      const order: Record<string, number> = {
+        "神格・歴史的人物": 0,
+        "Tier 1": 1,
+        "Tier 2": 2,
+        "Tier 3": 3,
+      }
+      return (order[a] ?? 9) - (order[b] ?? 9)
+    })
+  }
+
+  // Find the category label for category param
+  const activeCategoryConfig = categoryParam
+    ? CATEGORIES.find((c) => c.key === categoryParam)
+    : null
 
   return (
-    <div className="relative min-h-screen bg-edu-bg">
-      <StarField />
+    <main className="min-h-screen bg-edu-bg pt-16 pb-20">
+      {/* Header + Search */}
+      <div className="max-w-3xl mx-auto px-4 pt-8 pb-6">
+        <h1 className="text-xl font-bold text-edu-text mb-1">EDU Wiki 百科事典</h1>
+        <p className="text-xs text-edu-muted mb-6">
+          {ALL_ENTRIES.length} entries — キャラクター・組織・地理・技術・用語・歴史
+        </p>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-edu-muted" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Wiki内を検索..."
+            className="w-full bg-edu-surface border border-edu-border rounded-lg pl-10 pr-4 py-2.5 text-sm text-edu-text placeholder:text-edu-muted focus:outline-none focus:border-edu-accent"
+          />
+        </div>
+      </div>
 
-      <main className="relative z-10 pt-20 pb-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          {/* Hero */}
-          <div className="text-center mb-12">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extralight text-edu-text mb-4 tracking-wider">
-              EDU 百科事典
-            </h1>
-            <p className="text-sm text-edu-muted font-light max-w-xl mx-auto leading-relaxed">
-              Eternal Dominion Universe — キャラクター・用語・組織・地理の全データ
+      <div className="max-w-3xl mx-auto px-4">
+        {/* Search results */}
+        {isSearching ? (
+          <div>
+            <p className="text-xs text-edu-muted mb-4">
+              「{search}」の検索結果: {searchResults.length}件
             </p>
-            <div className="flex justify-center gap-4 mt-5 text-xs text-edu-muted font-light tracking-wide">
-              <span className="flex items-center gap-1.5">
-                <Users className="w-3 h-3 text-edu-muted" />
-                キャラクター {charCount}
-              </span>
-              <span className="text-edu-border">|</span>
-              <span className="flex items-center gap-1.5">
-                <BookOpen className="w-3 h-3 text-edu-muted" />
-                用語・その他 {termCount}
-              </span>
-              <span className="text-edu-border">|</span>
-              <span>計 {totalEntries}項目</span>
-            </div>
-          </div>
-
-          {/* Search Bar */}
-          <div className="mb-8 max-w-2xl mx-auto">
-            <div className="bg-edu-card border border-edu-border rounded-xl flex items-center gap-3 px-4 py-3 transition-all duration-300 focus-within:border-edu-accent/40 focus-within:bg-edu-card">
-              <Search className="w-4 h-4 text-edu-muted shrink-0" />
-              <input
-                ref={searchRef}
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="検索…（名前、英語名、説明文など）"
-                className="flex-1 bg-transparent text-sm text-edu-text placeholder:text-edu-muted outline-none font-light"
-              />
-              {search && (
-                <button
-                  onClick={() => {
-                    setSearch("")
-                    searchRef.current?.focus()
-                  }}
-                  className="text-edu-muted hover:text-edu-text transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Category Filter */}
-          <div className="mb-8 flex flex-wrap justify-center gap-2">
-            {FILTER_CATEGORIES.map((cat) => {
-              const isActive = activeCategory === cat
-              const config = cat !== "全て" ? CATEGORY_CONFIG[cat] : null
-              const count =
-                cat === "全て" ? totalEntries : ALL_ENTRIES.filter((e) => e.category === cat).length
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-light rounded-full border transition-all duration-300 ${
-                    isActive
-                      ? "bg-edu-accent/15 text-edu-accent border-edu-accent/30"
-                      : "bg-edu-card border-edu-border text-edu-muted hover:bg-edu-surface hover:text-edu-text hover:border-edu-accent/20"
-                  }`}
-                >
-                  {cat === "全て" ? <Sparkles className="w-3 h-3" /> : config?.icon}
-                  {cat === "全て" ? `全て (${count})` : `${cat} (${count})`}
-                </button>
-              )
-            })}
-          </div>
-
-          {/* Results info */}
-          <div className="mb-6 text-xs text-edu-muted font-light tracking-wide">
-            {search || activeCategory !== "全て" ? (
-              <span>
-                {filteredEntries.length} 件の結果
-                {search && (
-                  <span>
-                    {" "}
-                    — 「<span className="text-edu-accent">{search}</span>」で検索中
-                  </span>
-                )}
-              </span>
+            {searchResults.length === 0 ? (
+              <p className="text-xs text-edu-muted text-center py-12">
+                該当するエントリがありません
+              </p>
             ) : (
-              <span>全 {filteredEntries.length} 項目を表示中</span>
-            )}
-          </div>
-
-          {/* Cards Grid with stagger animation */}
-          {filteredEntries.length > 0 ? (
-            <RevealGrid
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
-              staggerMs={50}
-            >
-              {filteredEntries.map((entry) => {
-                const catConfig = CATEGORY_CONFIG[entry.category] ?? CATEGORY_CONFIG["用語"]!
-                const preview =
-                  entry.description.length > 80
-                    ? entry.description.slice(0, 80) + "…"
-                    : entry.description
-                const featured = isFeatured(entry)
-                const borderClass = CATEGORY_BORDER[entry.category] || ""
-                return (
+              <div className="space-y-2">
+                {searchResults.map((entry) => (
                   <Link
                     key={entry.id}
                     href={`/wiki/${encodeURIComponent(entry.id)}`}
-                    className={`edu-card rounded-xl overflow-hidden transition-all duration-300 group block ${borderClass} ${
-                      featured ? "sm:row-span-2" : ""
-                    }`}
+                    className={`block edu-card p-3 border-l-[3px] ${BORDER_COLORS[entry.category] || "border-l-edu-border"} hover:border-edu-accent transition-colors`}
                   >
-                    <div className="p-5">
-                      <div className="flex items-start gap-3.5 mb-3.5">
-                        <div className="shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-full overflow-hidden border border-edu-border bg-edu-surface flex items-center justify-center">
-                          {entry.image ? (
-                            <Image
-                              src={entry.image}
-                              alt={entry.name}
-                              width={48}
-                              height={48}
-                              sizes="(max-width: 768px) 50vw, 25vw"
-                              loading="lazy"
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <User className="w-4 h-4 text-edu-muted" />
-                          )}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-1.5 mb-1.5 flex-wrap">
-                            <span className="edu-tag text-edu-muted">
-                              {catConfig.icon}
-                              {entry.subCategory || catConfig.label}
-                            </span>
-                            {entry.tier && (
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-edu-surface text-edu-muted border border-edu-border font-light">
-                                {entry.tier}
-                              </span>
-                            )}
-                          </div>
-                          <h3 className="text-sm font-light text-edu-text leading-tight group-hover:text-edu-accent transition-colors">
-                            {entry.name}
-                            {entry.nameEn && (
-                              <span className="text-[11px] font-light text-edu-muted ml-1.5">
-                                {entry.nameEn}
-                              </span>
-                            )}
-                          </h3>
-                        </div>
-                      </div>
-                      <p className="text-xs text-edu-muted font-light leading-relaxed line-clamp-2">
-                        {preview}
-                      </p>
-                      {(entry.era || entry.affiliation) && (
-                        <div className="flex flex-wrap gap-1.5 mt-3">
-                          {entry.era && (
-                            <span className="text-[10px] text-edu-muted bg-edu-surface px-1.5 py-0.5 rounded font-light">
-                              {entry.era}
-                            </span>
-                          )}
-                          {entry.affiliation && (
-                            <span className="text-[10px] text-edu-muted bg-edu-surface px-1.5 py-0.5 rounded truncate max-w-[180px] font-light">
-                              {entry.affiliation}
-                            </span>
-                          )}
-                        </div>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-xs font-medium text-edu-text">{entry.name}</span>
+                      {entry.nameEn && (
+                        <span className="text-[10px] text-edu-muted">{entry.nameEn}</span>
                       )}
                     </div>
+                    <p className="text-[11px] text-edu-muted leading-relaxed line-clamp-2">
+                      {entry.description}
+                    </p>
                   </Link>
-                )
-              })}
-            </RevealGrid>
-          ) : (
-            <div className="text-center py-20">
-              <Search className="w-12 h-12 text-edu-muted mx-auto mb-4" />
-              <p className="text-edu-muted text-sm font-light">該当する項目が見つかりません</p>
-              <button
-                onClick={() => {
-                  setSearch("")
-                  setActiveCategory("全て")
-                }}
-                className="mt-4 text-xs text-edu-muted hover:text-edu-accent transition-colors font-light"
-              >
-                フィルターをリセット
-              </button>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : showCategory && activeCategoryConfig ? (
+          /* Category detail view */
+          <div>
+            <Link
+              href="/wiki"
+              className="inline-flex items-center gap-1 text-xs text-edu-muted hover:text-edu-accent transition-colors mb-4"
+            >
+              <ChevronRight className="w-3 h-3 rotate-180" />
+              カテゴリ一覧に戻る
+            </Link>
+            <div className="flex items-center gap-2 mb-6">
+              <activeCategoryConfig.icon className={`w-4 h-4 ${activeCategoryConfig.color}`} />
+              <h2 className="text-sm font-bold text-edu-text">{activeCategoryConfig.label}</h2>
+              <span className="text-[10px] text-edu-muted">{categoryEntries.length}件</span>
             </div>
-          )}
-        </div>
-      </main>
+            {categoryEntries.length === 0 ? (
+              <p className="text-xs text-edu-muted text-center py-12">
+                該当するエントリがありません
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {categoryEntries.map((entry) => (
+                  <Link
+                    key={entry.id}
+                    href={`/wiki/${encodeURIComponent(entry.id)}`}
+                    className={`block edu-card p-3 border-l-[3px] ${BORDER_COLORS[entry.category] || "border-l-edu-border"} hover:border-edu-accent transition-colors`}
+                  >
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-xs font-medium text-edu-text">{entry.name}</span>
+                      {entry.nameEn && (
+                        <span className="text-[10px] text-edu-muted">{entry.nameEn}</span>
+                      )}
+                      {entry.tier && (
+                        <span className="text-[10px] text-edu-muted bg-edu-surface px-1.5 py-0.5 rounded">
+                          {entry.tier}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-edu-muted leading-relaxed line-clamp-2">
+                      {entry.description}
+                    </p>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Default: category summaries */
+          <div className="space-y-6">
+            {CATEGORIES.map((cat) => {
+              const entries = grouped[cat.key] || []
+              if (entries.length === 0) return null
+              const representatives = getRepresentatives(cat.key, 8)
+              const tierCounts = getTierCounts(cat.key)
+              const Icon = cat.icon
+
+              return (
+                <section key={cat.key} className="edu-card p-5">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Icon className={`w-4 h-4 ${cat.color}`} />
+                      <h2 className="text-sm font-bold text-edu-text">{cat.label}</h2>
+                      <span className="text-[10px] text-edu-muted">{entries.length}</span>
+                    </div>
+                  </div>
+
+                  {tierCounts.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mb-3">
+                      {tierCounts.map(([tier, count]) => (
+                        <span
+                          key={tier}
+                          className="text-[10px] text-edu-muted bg-edu-surface px-2 py-0.5 rounded"
+                        >
+                          {tier}: {count}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 mb-3">
+                    {representatives.map((entry) => (
+                      <Link
+                        key={entry.id}
+                        href={`/wiki/${encodeURIComponent(entry.id)}`}
+                        className="text-xs text-edu-accent hover:text-edu-accent2 transition-colors"
+                      >
+                        {entry.name}
+                      </Link>
+                    ))}
+                    <span className="text-xs text-edu-muted">...</span>
+                  </div>
+
+                  <Link
+                    href={`/wiki?category=${encodeURIComponent(cat.key)}`}
+                    className="inline-flex items-center gap-1 text-[10px] text-edu-muted hover:text-edu-accent transition-colors"
+                  >
+                    全{entries.length}件を見る <ChevronRight className="w-3 h-3" />
+                  </Link>
+                </section>
+              )
+            })}
+          </div>
+        )}
+      </div>
 
       {/* Footer */}
-      <footer className="relative border-t border-edu-border py-8 px-4">
-        <div className="max-w-4xl mx-auto text-center space-y-3">
-          <div className="w-12 h-px mx-auto bg-gradient-to-r from-transparent via-edu-border to-transparent" />
-          <p className="text-xs text-edu-muted font-light tracking-wide">
-            EDU 百科事典 — Eternal Dominion Universe 統合時空構造書 v3.0
-          </p>
+      <footer className="border-t border-edu-border mt-12 py-8 px-4">
+        <div className="max-w-3xl mx-auto text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs text-edu-muted hover:text-edu-accent transition-colors font-light"
+            className="inline-flex items-center gap-1.5 text-xs text-edu-muted hover:text-edu-accent transition-colors"
           >
             <ArrowLeft className="w-3 h-3" />
             メインページに戻る
           </Link>
         </div>
       </footer>
-    </div>
+    </main>
+  )
+}
+
+export default function WikiPageWrapper() {
+  return (
+    <Suspense fallback={<WikiLoading />}>
+      <WikiPage />
+    </Suspense>
   )
 }

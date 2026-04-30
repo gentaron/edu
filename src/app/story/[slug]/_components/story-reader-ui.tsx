@@ -17,7 +17,6 @@ import {
 import { type StoryMeta, type ChapterMeta, ENTRY_IMAGE_MAP, getStoryTitle } from "@/lib/stories"
 import { type Lang, tl } from "@/lib/lang"
 import ReadingProgress from "./reading-progress"
-import { StarField } from "@/components/edu/star-field"
 import { toRoman, isSceneBreak, isChapterHeading } from "../_lib/parser"
 import { LangToggle } from "./lang-toggle"
 import { RelatedStoriesSection } from "./related-stories"
@@ -97,8 +96,7 @@ export function StoryReaderUI({
     : ""
 
   return (
-    <div className="relative min-h-screen bg-edu-bg">
-      <StarField />
+    <div className="min-h-screen bg-edu-bg">
       <ReadingProgress />
 
       {/* Top Nav */}
@@ -151,7 +149,7 @@ export function StoryReaderUI({
         </div>
       </nav>
 
-      <main className="relative z-10 pt-28 pb-24 px-6">
+      <main className="pt-28 pb-24 px-6">
         <div className="max-w-[680px] mx-auto">
           {/* Chapter Indicator */}
           {chapter && (

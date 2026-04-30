@@ -4,9 +4,14 @@ import React, { useState, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { BookOpen, ArrowLeft, Clock, Users, ChevronDown, Library, Feather } from "lucide-react"
-import { ALL_STORIES, CHAPTERS, ENTRY_IMAGE_MAP, getStoriesByChapter, getStoryTitle } from "@/lib/stories"
+import {
+  ALL_STORIES,
+  CHAPTERS,
+  ENTRY_IMAGE_MAP,
+  getStoriesByChapter,
+  getStoryTitle,
+} from "@/lib/stories"
 import { type Lang, tl } from "@/lib/lang"
-import { StarField } from "@/components/edu/star-field"
 
 /* ─── Roman numerals ─── */
 function toRoman(n: number): string {
@@ -35,9 +40,7 @@ function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void 
         type="button"
         onClick={() => setLang("ja")}
         className={`px-3 py-1 text-[11px] font-semibold tracking-wider uppercase transition-all duration-300 ${
-          lang === "ja"
-            ? "bg-edu-accent/15 text-edu-accent"
-            : "text-edu-muted hover:text-edu-text"
+          lang === "ja" ? "bg-edu-accent/15 text-edu-accent" : "text-edu-muted hover:text-edu-text"
         }`}
       >
         JP
@@ -46,9 +49,7 @@ function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void 
         type="button"
         onClick={() => setLang("en")}
         className={`px-3 py-1 text-[11px] font-semibold tracking-wider uppercase transition-all duration-300 ${
-          lang === "en"
-            ? "bg-edu-accent/15 text-edu-accent"
-            : "text-edu-muted hover:text-edu-text"
+          lang === "en" ? "bg-edu-accent/15 text-edu-accent" : "text-edu-muted hover:text-edu-text"
         }`}
       >
         EN
@@ -255,10 +256,8 @@ export default function StoryArchivePage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-edu-bg">
-      <StarField />
-
-      <main className="relative z-10 pt-24 pb-20 px-6">
+    <div className="min-h-screen bg-edu-bg">
+      <main className="pt-24 pb-20 px-6">
         <div className="max-w-5xl mx-auto">
           {/* Hero */}
           <div className="text-center mb-16">

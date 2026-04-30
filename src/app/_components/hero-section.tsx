@@ -1,6 +1,6 @@
 import React from "react"
 import Link from "next/link"
-import { Star, Globe2, Zap, Radio, Shield, ChevronDown } from "lucide-react"
+import { Star, Globe2, Zap, Radio, Shield } from "lucide-react"
 import { TypewriterTitle } from "./typewriter-title"
 
 const TAGS = [
@@ -13,26 +13,8 @@ const TAGS = [
 
 export function HeroSection() {
   return (
-    <section className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* Radial gradient — subtle center glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 50% at 50% 45%, rgba(129, 140, 248, 0.06) 0%, transparent 70%)",
-        }}
-      />
-
-      {/* Bottom horizontal gradient line */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-px"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(200, 164, 78, 0.3), rgba(129, 140, 248, 0.3), transparent)",
-        }}
-      />
-
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+    <section className="min-h-screen flex items-center justify-center">
+      <div className="text-center px-4 max-w-4xl mx-auto">
         <TypewriterTitle />
 
         <div
@@ -56,11 +38,6 @@ export function HeroSection() {
               {tag.label}
             </span>
           ))}
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <ChevronDown className="w-5 h-5 text-edu-muted/40" />
         </div>
       </div>
     </section>

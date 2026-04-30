@@ -54,9 +54,6 @@
   --color-edu-accent: #c8a44e;
   --color-edu-accent2: #818cf8;
   --color-edu-cyan: #22d3ee;
-  --color-edu-glow-gold: rgba(200, 164, 78, 0.15);
-  --color-edu-glow-blue: rgba(129, 140, 248, 0.12);
-  --color-edu-glow-cyan: rgba(34, 211, 238, 0.1);
 }
 
 :root {
@@ -143,34 +140,8 @@
     transform: translateY(0);
   }
 }
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: 0.15;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.1);
-  }
-}
-@keyframes float-nebula {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  33% {
-    transform: translate(10px, -5px) scale(1.02);
-  }
-  66% {
-    transform: translate(-5px, 8px) scale(0.98);
-  }
-}
 .animate-fade-in {
   animation: fade-in 0.4s ease-out forwards;
-}
-.animate-twinkle {
-  animation: twinkle 4s ease-in-out infinite;
 }
 
 /* Reveal on scroll */
@@ -186,62 +157,27 @@
   transform: translateY(0);
 }
 
-/* Card — v2 with micro-gradient + glow */
+/* Card — flat */
 .edu-card {
-  background: linear-gradient(135deg, var(--color-edu-card) 0%, var(--color-edu-card-alt) 100%);
+  background: var(--color-edu-card);
   border: 1px solid var(--color-edu-border);
-  border-radius: 0.75rem;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.edu-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
-  pointer-events: none;
+  border-radius: 0.5rem;
+  transition: border-color 0.2s;
 }
 .edu-card:hover {
   border-color: var(--color-edu-border-bright);
-  box-shadow:
-    0 0 20px var(--color-edu-glow-blue),
-    0 4px 20px rgba(0, 0, 0, 0.3);
-  transform: translateY(-1px);
 }
 
-/* Card accent variations */
-.edu-card-accent:hover {
-  border-color: var(--color-edu-accent);
-  box-shadow:
-    0 0 20px var(--color-edu-glow-gold),
-    0 4px 20px rgba(0, 0, 0, 0.3);
-}
-.edu-card-cyan:hover {
-  border-color: var(--color-edu-cyan);
-  box-shadow:
-    0 0 20px var(--color-edu-glow-cyan),
-    0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-/* Tag chip — v2 pill with glow */
+/* Tag chip */
 .edu-tag {
   display: inline-flex;
   align-items: center;
   gap: 0.25rem;
-  padding: 0.25rem 0.625rem;
+  padding: 0.2em 0.5em;
   border-radius: 9999px;
-  background: rgba(200, 164, 78, 0.08);
-  border: 1px solid rgba(200, 164, 78, 0.2);
+  background: var(--color-edu-border);
+  font-size: x-small;
   color: var(--color-edu-accent);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  transition: all 0.2s;
-}
-.edu-tag:hover {
-  background: rgba(200, 164, 78, 0.15);
-  border-color: rgba(200, 164, 78, 0.4);
 }
 
 /* Link */

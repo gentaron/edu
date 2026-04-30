@@ -1,5 +1,4 @@
 import React from "react"
-import { StarField } from "@/components/edu/star-field"
 import { RevealSection } from "@/components/edu/reveal-section"
 import { HeroSection } from "./_components/hero-section"
 import { QuickAccessSection } from "./_components/quick-access-section"
@@ -10,8 +9,7 @@ import { FooterSection } from "./_components/footer-section"
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-edu-bg flex flex-col">
-      <StarField />
-      <main className="relative z-10 flex-1">
+      <main className="flex-1">
         <HeroSection />
         <RevealSection>
           <QuickAccessSection />
