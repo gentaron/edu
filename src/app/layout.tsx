@@ -52,9 +52,9 @@ export default function RootLayout({
         style={{ fontFamily: "var(--font-sans), 'Noto Sans JP', sans-serif" }}
       >
         <Navigation />
-        <div id="main-content">
+        <main id="main-content">
           <MotionProvider>{children}</MotionProvider>
-        </div>
+        </main>
         <Toaster />
       </body>
     </html>
