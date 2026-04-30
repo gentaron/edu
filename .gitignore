@@ -71,3 +71,6 @@ upload/
 # Skills directory
 /skills/db/custom.db
 edu\nedutext
+
+# Rust build artifacts
+crates/edu-battle-engine/target/

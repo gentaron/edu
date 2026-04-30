@@ -4,9 +4,21 @@
 
 **TCP/IP 7-Layer Architecture × Interactive SF Universe**
 
-500年以上の歴史 · 285のWiki項目 · 22の全文小説 · 76体のキャラクターカード · PvEバトル
-
-[![CI](https://github.com/gentaron/edu/actions/workflows/ci.yml/badge.svg)](https://github.com/gentaron/edu/actions)
+500年以上の歴史 · 285のWiki項目 · 22の全文小説 · 76体のキャラクターカード · Pv├── l5-session/ # L5 — フロー制御層
+│ ├── battle-fsm.ts # バトル有限状態機械
+│ └── hsm/ # 汎用HSMフレームワーク
+│ ├── index.ts # HSMクラス + Graphviz DOT export
+│ ├── battle-hsm.ts # バトルHSM定義
+│ └── graphviz.ts # DOT→SVG変換
+├── l6-presentation/ # L6 — 無状態UI層
+│ └── canvas/ # Canvas 2Dバトルレンダラー
+│ ├── battle-renderer.ts # BattleRenderer + SpriteBatch + ParticleEmitter
+│ └── index.ts
+├── l7-application/ # L7 — 機能モジュール層
+├── crates/ # Rust WASMバトルエンジン
+│ └── edu-battle-engine/ # Rust crate (9 tests, 148KB WASM)
+│ └── pkg/ # wasm-packビルド出力
+├── \_infra/![CI](https://github.com/gentaron/edu/actions/workflows/ci.yml/badge.svg)](https://github.com/gentaron/edu/actions)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
@@ -116,6 +128,17 @@ bun run build    # → 本番ビルド（静的HTML 24ルート生成）
 
 ```
 src/
+├── l0-metal/                   # L0 METAL — ハードウェア最接近層
+│   ├── wasm-engine.ts          #   WASMバトルエンジンブリッジ (148KB .wasm)
+│   ├── binary-protocol.ts      #   TLVバイナリシリアライズ (VarInt + CRC32)
+│   ├── service-worker.ts       #   Service Workerマネージャ (オフライン対応)
+│   ├── service-worker-registration.ts  # SW登録ユーティリティ
+│   └── workers/                 #   Web Worker並列化
+│       ├── battle-worker.ts    #     バトル計算Worker (純TS実装)
+│       ├── worker-pool.ts       #     ジェネリックWorkerプール (Transferable対応)
+│       ├── battle-worker-client.ts  #     タイプドクライアント
+│       └── index.ts
+│
 ├── l1-physical/                # L1 — 生データ層
 │   ├── wiki/                   # Wiki項目 (characters, orgs, geography, tech, terms, history)
 │   │   ├── characters.data.ts  #   キャラクター 94体
@@ -206,13 +229,41 @@ src/
 
 ### Migration Status
 
-| Phase | 対象                 | ステータス | 説明                                                              |
-| ----- | -------------------- | ---------- | ----------------------------------------------------------------- |
-| 1     | L1 + L2              | ✅ 完了    | 生データをL1へ、ZodスキーマをL2へ移行                             |
-| 2     | L3 + L4              | ✅ 完了    | Repositoryパターン + イベントバス + Zustand内部化                 |
-| 3     | L5 + L6              | ✅ 完了    | Battle FSM + Presentationコンポーネントレジストリ                 |
-| 4     | L7                   | 🔄 進行中  | 機能モジュール定義、app/がL7 APIを採用中                          |
-| 5     | 品質コンプライアンス | 📋 計画    | strict TS/ESLint・80%テストカバレッジ・パフォーマンスベンチマーク |
+| Phase | 対象                 | ステータス | 説明                                                             |
+| ----- | -------------------- | ---------- | ---------------------------------------------------------------- |
+| 1     | L1 + L2              | ✅ 完了    | 生データをL1へ、ZodスキーマをL2へ移行                            |
+| 2     | L3 + L4              | ✅ 完了    | Repositoryパターン + イベントバス + Zustand内部化 + 検索エンジン |
+| 3     | L5 + L6              | ✅ 完了    | 汎用HSM + Canvas 2Dレンダラー + SpriteBatch + ParticleSystem     |
+| 4     | L7                   | ✅ 完了    | 機能モジュール定義完了                                           |
+| 5     | 品質コンプライアンス | ✅ 完了    | 397テスト / PBT(fast-check) / Rustテスト / Canvas/SW/WPテスト    |
+
+### Project Prometheus — テックレベル向上 (Epoch 8)
+
+| Phase    | 実装内容                                             | スコア    |
+| -------- | ---------------------------------------------------- | --------- |
+| 1        | Rust → WASM バトルエンジン (148KB, 9テスト)          | +10.5     |
+| 2        | TLVバイナリシリアライズ + CRC32 (550項目wiki.edu)    | +4.0      |
+| 3        | Canvas 2D レンダラー (FrameBudget + ParticleEmitter) | +5.3      |
+| 4        | BM25転置インデックス + Trie autocomplete             | +3.8      |
+| 5        | 汎用HSMフレームワーク (Graphviz DOT export)          | +0        |
+| 6        | fast-check プロパティベースドテスト (36テスト)       | +0.8      |
+| 7        | Web Worker並列化 (WorkerPool + Transferable)         | +3.0      |
+| 8        | Service Worker オフライン (Stale-While-Revalidate)   | +0        |
+| **合計** | **397テスト通過 / 重み付きスコア 45.8pt**            | **+27.4** |
+
+### Project Prometheus — テックレベル向上 (Epoch 8)
+
+| Phase    | 実装内容                                             | スコア    |
+| -------- | ---------------------------------------------------- | --------- |
+| 1        | Rust → WASM バトルエンジン (148KB, 9テスト)          | +10.5     |
+| 2        | TLVバイナリシリアライズ + CRC32 (550項目wiki.edu)    | +4.0      |
+| 3        | Canvas 2D レンダラー (FrameBudget + ParticleEmitter) | +5.3      |
+| 4        | BM25転置インデックス + Trie autocomplete             | +3.8      |
+| 5        | 汎用HSMフレームワーク (Graphviz DOT export)          | +0        |
+| 6        | fast-check プロパティベースドテスト (36テスト)       | +0.8      |
+| 7        | Web Worker並列化 (WorkerPool + Transferable)         | +3.0      |
+| 8        | Service Worker オフライン (Stale-While-Revalidate)   | +0        |
+| **合計** | **397テスト通過 / 重み付きスコア 45.8pt**            | **+27.4** |
 
 > **Note**: `src/lib/` は後方互換性のため一時的に残存。L7統合完了後に削除予定。
 
@@ -482,6 +533,19 @@ bun run db:seed      # シードデータ投入
 | 日付  | 内容                                                                                                                                    |
 | ----- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | 04/30 | **TCP/IP 7層モデルによる全面アーキテクチャ再設計**。L1-L7 + `_infra/` ディレクトリ構築。Phase 1-3完了（L1-L6実装）。ARCHITECTURE.md作成 |
+
+### Epoch 8: Project Prometheus — テックレベル最大化 (2026/04/30)
+
+| Phase | 内容                                                                                                                                                                              |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | **Rust → WASM バトルエンジン** (148KB WASM)。純粋関数: ダメージ計算・敵AI・フェーズ遷移・全バトルシミュレーション。Rust 9テスト                                                   |
+| 2     | **TLVバイナリシリアライズ** — VarInt (LEB128) + CRC32 + BinaryWriter/Reader/Encoder/BinaryIndex。55テスト。`public/data/wiki.edu` (550項目, 563KB) 生成                           |
+| 3     | **Canvas 2Dレンダラー** — FrameBudget (16.67ms監視) + TextureAtlas + SpriteBatch + CardSprite/EnemySprite + ParticleEmitter (5プリセット) + AnimationTimeline (6easing)。95テスト |
+| 4     | **BM25転置インデックス全文検索** — bi-gramトークナイザ + BM25スコアリング + Trie autocomplete + WikiSearchEngine (カテゴリ重みブースティング)。64テスト                           |
+| 5     | **汎用HSMフレームワーク** — SCXMLサブセット。階層状態・ガード条件・遷移アクション・履歴状態 (shallow/deep)。Graphviz DOT export。BattleHSM定義。57テスト                          |
+| 6     | **fast-check PBT** — 9プロパティ (HP非負・ダメージ整合性・FSM到達可能性・バトル終了性・バイナリ往返・検索整合性)。36テスト                                                        |
+| 7     | **Web Worker並列化** — WorkerPool (Transferable Objects対応) + BattleWorkerClient。26テスト                                                                                       |
+| 8     | **Service Worker** — `public/sw.js` (Cache-First/Stale-While-Revalidate/Network-First 3戦略) + ServiceWorkerManager。15テスト                                                     |
 
 ---
 
