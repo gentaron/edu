@@ -1,5 +1,12 @@
-export { TOP_CIVILIZATIONS } from "./top.data"
-export { OTHER_CIVILIZATIONS } from "./other.data"
-export { HISTORICAL_CIVILIZATIONS } from "./historical.data"
-export { CIVILIZATION_LEADERS } from "./leaders.data"
+/* ═══════════════════════════════════════════
+   L1 PHYSICAL — Civilizations Data (deprecated)
+   Re-exports from domains/civilizations for backward compatibility.
+   ═══════════════════════════════════════════ */
+
+export {
+  TOP_CIVILIZATIONS,
+  OTHER_CIVILIZATIONS,
+  HISTORICAL_CIVILIZATIONS,
+  CIVILIZATION_LEADERS,
+} from "@/domains/civilizations/civ.data"
 export type { Civilization, CivilizationLeader } from "@/types"

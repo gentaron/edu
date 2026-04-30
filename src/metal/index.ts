@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   L0 METAL — Public API
+   Metal — Public API
    Re-exports from the WASM engine bridge.
    ═══════════════════════════════════════════ */
 
@@ -13,7 +13,7 @@ export {
   abilityTypeToIndex,
   indexToAbilityType,
   resetWasmEngine,
-} from "./wasm-engine"
+} from "./wasm-bridge"
 
 export type {
   WasmBattleModule,
@@ -24,7 +24,7 @@ export type {
   CalculateDamageParams,
   ExecuteEnemyTurnParams,
   CheckPhaseTransitionParams,
-} from "./wasm-engine"
+} from "./wasm-bridge"
 
 export { swManager } from "./service-worker"
 

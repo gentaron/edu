@@ -29,14 +29,14 @@ import {
   WIKI_TECHNOLOGY,
   WIKI_TERMS,
   WIKI_HISTORY,
-} from "@/l1-physical/wiki"
-import { ALL_CARDS, ENEMIES } from "@/l1-physical/cards"
+} from "@/domains/wiki/wiki.data"
+import { ALL_CARDS, ENEMIES } from "@/domains/cards/cards.data"
 import {
   TOP_CIVILIZATIONS,
   OTHER_CIVILIZATIONS,
   HISTORICAL_CIVILIZATIONS,
-} from "@/l1-physical/civilizations"
-import { ALL_STORIES } from "@/lib/stories"
+} from "@/domains/civilizations/civ.data"
+import { ALL_STORIES } from "@/domains/stories/stories.meta"
 import { TIMELINE_DATA } from "@/lib/timeline-data"
 import { TECH_DATA } from "@/lib/tech-data"
 import { FACTION_TREES } from "@/lib/faction-data"

@@ -44,9 +44,14 @@ export {
   ChapterMetaSchema,
   type StoryMeta,
   type ChapterMeta,
-} from "./story.schema"
+} from "@/domains/stories/stories.schema"
 
-export { TlEvSchema, TimelinePeriodSchema, type TlEv, type TimelinePeriod } from "./timeline.schema"
+export {
+  TlEvSchema,
+  TimelinePeriodSchema,
+  type TlEv,
+  type TimelinePeriod,
+} from "@/platform/schemas/timeline.schema"
 
 export { TechEntrySchema, type TechEntry } from "./tech.schema"
 
@@ -61,18 +66,18 @@ export {
   type IrisRelation,
   type MinaTimelineEntry,
   type PlatformEntry,
-} from "./character-detail.schema"
+} from "@/platform/schemas/character-detail.schema"
 
 export {
   FactionNodeSchema,
   FactionTreeSchema,
   type FactionNode,
   type FactionTree,
-} from "./faction.schema"
+} from "@/platform/schemas/faction.schema"
 
 export {
   RelationNodeSchema,
   RelationEdgeSchema,
   type RelationNode,
   type RelationEdge,
-} from "./relation.schema"
+} from "@/platform/schemas/relation.schema"

@@ -7,6 +7,7 @@ import { charMaxHp, calculateEffectDamage, calculateEnemyDamage } from "../battl
    ═══════════════════════════════════════════════════════ */
 
 type BattlePhase = "idle" | "playerTurn" | "resolving" | "enemyTurn" | "victory" | "defeat"
+export type { BattlePhase }
 
 interface BattleState {
   phase: BattlePhase

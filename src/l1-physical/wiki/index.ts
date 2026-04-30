@@ -1,16 +1,16 @@
 /* ═══════════════════════════════════════════
-   L1 PHYSICAL — Wiki Raw Data
-   Pure data only. No logic, no dependencies beyond type assertions.
-   Each file exports const arrays with `as const satisfies` for full literal type inference.
+   L1 PHYSICAL — Wiki Raw Data (deprecated)
+   Re-exports from domains/wiki for backward compatibility.
    ═══════════════════════════════════════════ */
 
-export { WIKI_CHARACTERS } from "./characters.data"
-export { WIKI_CHARACTERS_NEW } from "./characters-new.data"
-export { WIKI_ORGANIZATIONS } from "./organizations.data"
-export { WIKI_GEOGRAPHY } from "./geography.data"
-export { WIKI_TECHNOLOGY } from "./technology.data"
-export { WIKI_TERMS } from "./terms.data"
-export { WIKI_HISTORY } from "./history.data"
+export {
+  WIKI_CHARACTERS,
+  WIKI_CHARACTERS_NEW,
+  WIKI_ORGANIZATIONS,
+  WIKI_GEOGRAPHY,
+  WIKI_TECHNOLOGY,
+  WIKI_TERMS,
+  WIKI_HISTORY,
+} from "@/domains/wiki/wiki.data"
 
-// Re-export types for backward compatibility
 export type { Category, SourceLink, LeaderEntry } from "@/types"

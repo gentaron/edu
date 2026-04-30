@@ -4,7 +4,7 @@
    Rust/WASM battle engine for use by L1+ layers.
    ═══════════════════════════════════════════ */
 
-import type { FieldChar, Enemy, AbilityType } from "@/l2-datalink"
+import type { FieldChar, Enemy, AbilityType } from "@/types"
 
 // ── WASM Module Interface ──
 // Matches the exported Rust #[wasm_bindgen] signatures.

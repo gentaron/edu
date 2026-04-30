@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════
-   L5 SESSION — Public API
-   Finite state machines for flow control.
+   L5 SESSION — Public API (deprecated)
+   Re-exports from domains/battle FSM.
    ═══════════════════════════════════════════ */
 
 export {
@@ -9,4 +9,4 @@ export {
   type BattleFSMState,
   type BattleFSMAction,
   type AbilityResult,
-} from "./battle-fsm"
+} from "@/domains/battle/battle.fsm"

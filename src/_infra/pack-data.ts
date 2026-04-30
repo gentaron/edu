@@ -7,7 +7,7 @@
 
 import * as fs from "node:fs"
 import * as path from "node:path"
-import { BinaryEncoder, crc32 } from "../l0-metal/binary-protocol"
+import { BinaryEncoder, crc32 } from "@/metal/binary-protocol"
 
 // L1 Physical data imports (relative paths since tsx resolves tsconfig aliases)
 import {
@@ -18,14 +18,14 @@ import {
   WIKI_TECHNOLOGY,
   WIKI_TERMS,
   WIKI_HISTORY,
-} from "../l1-physical/wiki"
-import { ALL_CARDS, ENEMIES } from "../l1-physical/cards"
+} from "@/domains/wiki/wiki.data"
+import { ALL_CARDS, ENEMIES } from "@/domains/cards/cards.data"
 import {
   TOP_CIVILIZATIONS,
   OTHER_CIVILIZATIONS,
   HISTORICAL_CIVILIZATIONS,
   CIVILIZATION_LEADERS,
-} from "../l1-physical/civilizations"
+} from "@/domains/civilizations/civ.data"
 
 // ─── Helpers ──────────────────────────────────────────────────
 
