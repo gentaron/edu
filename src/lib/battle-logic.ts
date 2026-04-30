@@ -246,12 +246,12 @@ export function calculateEffectDamage(
     }
   }
 
-  if (eff.includes("次元ピラミッド")) {
+  if (eff.includes("次元階梯パンディクト")) {
     const damage = canDamage ? 5 : 0
     const heal = 3
     const log = canDamage
-      ? `✨ 次元ピラミッド展開！ 敵に5ダメージ＋${cardName}のHP3回復！`
-      : `✨ 次元ピラミッド展開！ ${cardName}のHP3回復！（ダメージは吸収）`
+      ? `✨ 次元階梯パンディクト展開！ 敵に5ダメージ＋${cardName}のHP3回復！`
+      : `✨ 次元階梯パンディクト展開！ ${cardName}のHP3回復！（ダメージは吸収）`
     return { damage, heal, shield: 0, attackReduction: 0, log }
   }
 

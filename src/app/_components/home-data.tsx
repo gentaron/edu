@@ -72,7 +72,7 @@ export const SECTION_PAGES = [
     href: "/technology",
     icon: <Atom className="w-6 h-6" />,
     title: "技術体系",
-    desc: "7つのコア技術の物理学的解説と次元ピラミッド",
+    desc: "7つのコア技術の物理学的解説と次元階梯パンディクト",
   },
 ]
 

@@ -117,7 +117,7 @@ export const ALL_CARDS: GameCard[] = [
     affiliation: "AURALIS第二世代",
     attack: 8,
     defense: 3,
-    effect: "次元ピラミッド展開",
+    effect: "次元階梯パンディクト展開",
     effectValue: 5,
     ultimate: 18,
     ultimateName: "超次元弾",

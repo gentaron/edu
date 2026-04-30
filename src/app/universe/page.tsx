@@ -235,7 +235,7 @@ export default function UniversePage() {
                   </Link>
                 </h4>
                 <p className="text-xs text-edu-muted leading-relaxed">
-                  E495〜E500年に設立された統合体。ネオクラン同盟・UECO・ヒーローエージェンシーが統合。トゥキディデスの罠回避を志向する全宇宙規模の協力枠組み。
+                  E495〜E500年に設立された統合体。ネオクラン同盟・UECO・ヒーローエージェンシーが統合。ヘゲモニー・パラドックス回避を志向する全宇宙規模の協力枠組み。
                 </p>
               </div>
               <div className="bg-edu-bg/50 rounded-lg p-4 border border-cyan-500/20">
@@ -352,10 +352,10 @@ export default function UniversePage() {
                 <>
                   女性主導のマトリカル社会が形成された惑星。
                   <Link
-                    href={`/wiki/${encodeURIComponent("搾取生物")}`}
+                    href={`/wiki/${encodeURIComponent("リーチ・ドレイン")}`}
                     className="hover:text-pink-400 hover:underline"
                   >
-                    搾取生物
+                    リーチ・ドレイン
                   </Link>
                   と
                   <Link

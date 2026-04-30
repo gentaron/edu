@@ -50,10 +50,10 @@ export default function DioclenisPage() {
                 </Link>
                 科学宰相の下、「
                 <Link
-                  href={`/wiki/${encodeURIComponent("トゥキディデスの罠")}`}
+                  href={`/wiki/${encodeURIComponent("ヘゲモニー・パラドックス")}`}
                   className="text-edu-accent hover:underline"
                 >
-                  トゥキディデスの罠
+                  ヘゲモニー・パラドックス
                 </Link>
                 」を提起し、宇宙共同探査プロジェクトを提案するなど、先見性のある政策を展開している。
               </p>
@@ -110,7 +110,7 @@ export default function DioclenisPage() {
 
           <RevealSection>
             <div className="edu-card rounded-xl p-6">
-              <h2 className="text-lg font-bold text-edu-text mb-4">トゥキディデスの罠</h2>
+              <h2 className="text-lg font-bold text-edu-text mb-4">ヘゲモニー・パラドックス</h2>
               <div className="p-4 rounded-lg bg-red-500/5 border border-red-500/20 mb-4">
                 <p className="text-sm text-edu-muted leading-relaxed">
                   <span className="text-red-400 font-medium">警告:</span>{" "}
@@ -130,10 +130,10 @@ export default function DioclenisPage() {
                   </Link>
                   （軍事3位）の間に「
                   <Link
-                    href={`/wiki/${encodeURIComponent("トゥキディデスの罠")}`}
+                    href={`/wiki/${encodeURIComponent("ヘゲモニー・パラドックス")}`}
                     className="text-edu-accent hover:underline"
                   >
-                    トゥキディデスの罠
+                    ヘゲモニー・パラドックス
                   </Link>
                   」が成立する危険性を指摘。かつての
                   <Link
@@ -157,7 +157,7 @@ export default function DioclenisPage() {
               >
                 <h3 className="text-sm font-bold text-cyan-400">科学宰相ネイサン・コリンド</h3>
                 <p className="text-xs text-edu-muted mt-1">
-                  「トゥキディデスの罠」を提起。宇宙共同探査プロジェクトと4つの具体的提案を行った先見の科学者。
+                  「ヘゲモニー・パラドックス」を提起。宇宙共同探査プロジェクトと4つの具体的提案を行った先見の科学者。
                 </p>
               </Link>
             </div>
@@ -173,7 +173,7 @@ export default function DioclenisPage() {
                 >
                   <span className="text-amber-400 font-medium">グランベル</span>
                   <span className="text-edu-muted text-xs ml-2">
-                    — トゥキディデスの罠の一方の当事者
+                    — ヘゲモニー・パラドックスの一方の当事者
                   </span>
                 </Link>
                 <Link
@@ -182,7 +182,7 @@ export default function DioclenisPage() {
                 >
                   <span className="text-rose-400 font-medium">ティエリア</span>
                   <span className="text-edu-muted text-xs ml-2">
-                    — トゥキディデスの罠のもう一方の当事者
+                    — ヘゲモニー・パラドックスのもう一方の当事者
                   </span>
                 </Link>
                 <Link

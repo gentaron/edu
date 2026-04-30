@@ -170,10 +170,10 @@ export default function GranbellPage() {
                   </Link>
                   は「
                   <Link
-                    href={`/wiki/${encodeURIComponent("トゥキディデスの罠")}`}
+                    href={`/wiki/${encodeURIComponent("ヘゲモニー・パラドックス")}`}
                     className="text-edu-accent hover:underline"
                   >
-                    トゥキディデスの罠
+                    ヘゲモニー・パラドックス
                   </Link>
                   」の危険性を指摘している。
                 </p>
@@ -242,7 +242,7 @@ export default function GranbellPage() {
                 >
                   <span className="text-rose-400 font-medium">ティエリア</span>
                   <span className="text-edu-muted text-xs ml-2">
-                    — トゥキディデスの罠の危険性が指摘される対立関係
+                    — ヘゲモニー・パラドックスの危険性が指摘される対立関係
                   </span>
                 </Link>
                 <Link

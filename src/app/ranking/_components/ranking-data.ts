@@ -187,7 +187,7 @@ export const RANKING_DATA: RankingEntry[] = [
     title: "シャドウ・リベリオンのリーダー",
     wealth: "1,200億n",
     wealthNum: 1200,
-    source: "量子ファイナンス・コア掌握",
+    source: "オムニバス・エンジン掌握",
     affiliation: "シャドウ・リベリオン（歴史的人物）",
     era: "E318",
     isHistorical: true,

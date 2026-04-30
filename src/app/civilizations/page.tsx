@@ -223,10 +223,10 @@ export default function CivilizationsPage() {
               <h3 className="text-sm font-bold text-edu-text mb-4">関連ページ</h3>
               <div className="flex flex-wrap gap-3">
                 <Link
-                  href={`/wiki/${encodeURIComponent("トゥキディデスの罠")}`}
+                  href={`/wiki/${encodeURIComponent("ヘゲモニー・パラドックス")}`}
                   className="text-xs text-edu-accent hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50"
                 >
-                  トゥキディデスの罠
+                  ヘゲモニー・パラドックス
                 </Link>
                 <Link
                   href={`/wiki/${encodeURIComponent("宇宙連合会合")}`}

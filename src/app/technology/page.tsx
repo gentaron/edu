@@ -35,10 +35,10 @@ export default function TechnologyPage() {
                 技術体系は
                 <span className="text-edu-text font-medium">
                   <Link
-                    href={`/wiki/${encodeURIComponent("次元ピラミッド")}`}
+                    href={`/wiki/${encodeURIComponent("次元階梯パンディクト")}`}
                     className="hover:text-edu-accent2 hover:underline"
                   >
-                    次元ピラミッド
+                    次元階梯パンディクト
                   </Link>
                 </span>
                 として4層構造で整理されている。
@@ -119,11 +119,11 @@ export default function TechnologyPage() {
             ))}
           </div>
 
-          {/* Dimension Pyramid Diagram */}
+          {/* Pandict Dimension Ladder Diagram */}
           <div className="edu-card rounded-xl border border-cyan-500/20 p-6 mt-6 transition-all duration-300">
             <h3 className="text-base font-bold text-edu-text mb-4 flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
-              次元ピラミッド — Dimension Pyramid (4-Layer Structure)
+              次元階梯パンディクト — Pandict Dimension Ladder (4-Layer Structure)
             </h3>
             <div className="flex flex-col items-center gap-1">
               {[
@@ -154,7 +154,8 @@ export default function TechnologyPage() {
                 {
                   tier: "Tier Δ",
                   label: "地球 AD2026",
-                  detail: "地球の物理的現実 — リミナル・フォージの時相放送でE528年情報を受信中",
+                  detail:
+                    "地球の物理的現実 — リミナル・フォージのクロノキャストでE528年情報を受信中",
                   color: "bg-green-500/20 border-green-500/40 text-green-300",
                   width: "w-9/12",
                 },

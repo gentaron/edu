@@ -82,7 +82,7 @@ export default function LiminalPage() {
 
           {/* Broadcasting mechanism */}
           <div className="edu-card rounded-xl p-6 mb-6">
-            <h3 className="text-lg font-bold text-edu-accent mb-4">時相放送の仕組み</h3>
+            <h3 className="text-lg font-bold text-edu-accent mb-4">クロノキャストの仕組み</h3>
             <div className="flex flex-col sm:flex-row items-center gap-4 justify-center text-center">
               <div className="bg-edu-accent2/15 border border-edu-accent2/30 rounded-lg p-4 min-w-[160px]">
                 <p className="text-xs text-edu-muted mb-1">起点</p>

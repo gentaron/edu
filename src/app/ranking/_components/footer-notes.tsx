@@ -15,7 +15,7 @@ export function FooterNotes() {
         </li>
         <li className="flex items-start gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-edu-accent2 mt-1.5 shrink-0" />
-          <span>nトークン: E16連星系の基軸通貨。ZAMLT量子ファイナンス・コアで95%の取引を処理</span>
+          <span>nトークン: E16連星系の基軸通貨。ZAMLTオムニバス・エンジンで95%の取引を処理</span>
         </li>
         <li className="flex items-start gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-edu-accent mt-1.5 shrink-0" />

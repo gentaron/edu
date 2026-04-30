@@ -83,10 +83,10 @@ export default function TyeriaPage() {
                 </Link>
                 によって「
                 <Link
-                  href={`/wiki/${encodeURIComponent("トゥキディデスの罠")}`}
+                  href={`/wiki/${encodeURIComponent("ヘゲモニー・パラドックス")}`}
                   className="text-edu-accent hover:underline"
                 >
-                  トゥキディデスの罠
+                  ヘゲモニー・パラドックス
                 </Link>
                 」として指摘されている。
               </p>
@@ -148,7 +148,7 @@ export default function TyeriaPage() {
                 >
                   <span className="text-amber-400 font-medium">グランベル</span>
                   <span className="text-edu-muted text-xs ml-2">
-                    — 経済vs軍事の構造的対立（トゥキディデスの罠）
+                    — 経済vs軍事の構造的対立（ヘゲモニー・パラドックス）
                   </span>
                 </Link>
                 <Link
