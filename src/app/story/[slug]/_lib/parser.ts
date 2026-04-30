@@ -27,7 +27,7 @@ export function isSceneBreak(text: string): boolean {
     t.startsWith("**") ||
     t.startsWith("##") ||
     t.startsWith("＊") ||
-    (t.length < 5 && !t.match(/[a-zA-Z\u3040-\u30ff\u4e00-\u9faf]/))
+    (t.length < 5 && !/[A-Za-z\u3040-\u30FF\u4E00-\u9FAF]/.test(t))
   )
 }
 

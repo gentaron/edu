@@ -74,7 +74,7 @@ function WikiPage() {
   const showCategory = !isSearching && categoryParam
 
   const searchResults = useMemo(() => {
-    if (!isSearching) return []
+    if (!isSearching) {return []}
     const q = search.toLowerCase().trim()
     return ALL_ENTRIES.filter(
       (e) =>
@@ -85,7 +85,7 @@ function WikiPage() {
   }, [search, isSearching])
 
   const categoryEntries = useMemo(() => {
-    if (!showCategory || !categoryParam) return []
+    if (!showCategory || !categoryParam) {return []}
     return ALL_ENTRIES.filter((e) => e.category === categoryParam)
   }, [showCategory, categoryParam])
 
@@ -190,7 +190,7 @@ function WikiPage() {
               </div>
             )}
           </div>
-        ) : showCategory && activeCategoryConfig ? (
+        ) : (showCategory && activeCategoryConfig ? (
           /* Category detail view */
           <div>
             <Link
@@ -241,7 +241,7 @@ function WikiPage() {
           <div className="space-y-6">
             {CATEGORIES.map((cat) => {
               const entries = grouped[cat.key] || []
-              if (entries.length === 0) return null
+              if (entries.length === 0) {return null}
               const representatives = getRepresentatives(cat.key, 8)
               const tierCounts = getTierCounts(cat.key)
               const Icon = cat.icon
@@ -292,7 +292,7 @@ function WikiPage() {
               )
             })}
           </div>
-        )}
+        ))}
       </div>
 
       {/* Footer */}

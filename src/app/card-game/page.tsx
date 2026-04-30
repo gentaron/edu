@@ -59,8 +59,8 @@ function CardInPool({
   return (
     <m.button
       layout
-      whileHover={!inDeck ? { scale: 1.05 } : {}}
-      whileTap={!inDeck ? { scale: 0.95 } : {}}
+      whileHover={inDeck ? {} : { scale: 1.05 }}
+      whileTap={inDeck ? {} : { scale: 0.95 }}
       onClick={onAdd}
       disabled={inDeck}
       className={`relative w-28 h-40 sm:w-36 sm:h-52 rounded-xl ${rc.border} backdrop-blur-sm flex flex-col overflow-hidden transition-all duration-200 shrink-0 ${cardClass} ${
@@ -213,7 +213,7 @@ export default function DeckBuildPage() {
 
   const filteredCards = useMemo(() => {
     return ALL_CARDS.filter((c) => {
-      if (rarityFilter !== "全て" && c.rarity !== rarityFilter) return false
+      if (rarityFilter !== "全て" && c.rarity !== rarityFilter) {return false}
       return true
     })
   }, [rarityFilter])

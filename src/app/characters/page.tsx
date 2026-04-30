@@ -8,10 +8,10 @@ import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 
 /* Build a lookup from card display name → wiki entry id */
 const nameToWikiId = new Map<string, string>()
-ALL_ENTRIES.forEach((e) => {
+for (const e of ALL_ENTRIES) {
   nameToWikiId.set(e.name, e.id)
-  if (e.nameEn) nameToWikiId.set(e.nameEn, e.id)
-})
+  if (e.nameEn) {nameToWikiId.set(e.nameEn, e.id)}
+}
 
 export default function CharactersPage() {
   const srCards = ALL_CARDS.filter((c) => c.rarity === "SR").sort(
@@ -41,19 +41,19 @@ export default function CharactersPage() {
 
   const cardsByAffiliation = (() => {
     const map = new Map<string, GameCard[]>()
-    ALL_CARDS.forEach((card) => {
+    for (const card of ALL_CARDS) {
       const list = map.get(card.affiliation) || []
       list.push(card)
       map.set(card.affiliation, list)
-    })
-    return Array.from(map.entries())
+    }
+    return [...map.entries()]
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([affiliation, cards]) => ({
         affiliation,
         cards: cards.sort((a, b) => {
           const rarityOrder = { SR: 0, R: 1, C: 2 }
           if (rarityOrder[a.rarity] !== rarityOrder[b.rarity])
-            return rarityOrder[a.rarity] - rarityOrder[b.rarity]
+            {return rarityOrder[a.rarity] - rarityOrder[b.rarity]}
           return (
             b.attack +
             b.defense +
@@ -286,7 +286,7 @@ export default function CharactersPage() {
                           className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-edu-bg/50 transition-colors"
                         >
                           <span
-                            className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${card.rarity === "SR" ? "rarity-badge-sr" : card.rarity === "R" ? "rarity-badge-r" : "bg-edu-bg/50 text-edu-muted border border-edu-border/30"}`}
+                            className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${card.rarity === "SR" ? "rarity-badge-sr" : (card.rarity === "R" ? "rarity-badge-r" : "bg-edu-bg/50 text-edu-muted border border-edu-border/30")}`}
                           >
                             {card.rarity}
                           </span>

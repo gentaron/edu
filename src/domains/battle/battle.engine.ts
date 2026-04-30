@@ -9,7 +9,7 @@ import { type GameCard, type Enemy, type AbilityType, type FieldChar } from "@/t
 
 /** Calculate max HP for a card based on rarity and defense */
 export function charMaxHp(card: GameCard): number {
-  const base = card.rarity === "SR" ? 14 : card.rarity === "R" ? 10 : 8
+  const base = card.rarity === "SR" ? 14 : (card.rarity === "R" ? 10 : 8)
   return base + card.defense
 }
 
@@ -50,7 +50,7 @@ export function hitRandomChar(
     i === idx ? { ...target, hp: newHp, isDown: newHp <= 0 } : fc
   )
 
-  let logMessages: string[] = []
+  const logMessages: string[] = []
   if (newHp <= 0) {
     logMessages.push(
       `${emoji} ${msgPrefix}${target.card.name}を撃破！ ${target.card.name}は戦闘不能！`
@@ -82,9 +82,7 @@ export function calculatePhaseTransition(
 ): PhaseTransitionResult {
   let newPhase = 0
   for (let i = enemy.phases.length - 1; i >= 0; i--) {
-    if (hpPercent <= enemy.phases[i]!.triggerHpPercent) {
-      if (i >= newPhase) newPhase = i + 1
-    }
+    if (hpPercent <= enemy.phases[i]!.triggerHpPercent && i >= newPhase) {newPhase = i + 1}
   }
 
   if (newPhase <= currentPhase) {

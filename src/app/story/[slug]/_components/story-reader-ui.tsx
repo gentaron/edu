@@ -56,7 +56,7 @@ export function StoryReaderUI({
   const [lang, setLangState] = useState<Lang>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("edu-lang") as Lang | null
-      if (saved === "en" || saved === "ja") return saved
+      if (saved === "en" || saved === "ja") {return saved}
     }
     return "ja"
   })
@@ -75,7 +75,7 @@ export function StoryReaderUI({
       content: string
       index: number
     }> = []
-    paragraphs.forEach((p, i) => {
+    for (const [i, p] of paragraphs.entries()) {
       if (isSceneBreak(p)) {
         result.push({ type: "scene", content: p, index: i })
       } else if (
@@ -88,7 +88,7 @@ export function StoryReaderUI({
       } else {
         result.push({ type: "paragraph", content: p, index: i })
       }
-    })
+    }
     return result
   }, [paragraphs])
 
@@ -200,9 +200,9 @@ export function StoryReaderUI({
                   className="inline-flex items-center gap-2 px-3 py-1.5 text-[11px] font-medium rounded-full border border-white/6 bg-white/3 text-white/40 hover:text-white/60 hover:border-white/12 transition-all duration-300"
                 >
                   <div className="w-5 h-5 rounded-full overflow-hidden border border-white/8 bg-white/5 flex items-center justify-center shrink-0">
-                    {(ENTRY_IMAGE_MAP as Record<string, string>)[entry.name] ? (
+                    {(ENTRY_IMAGE_MAP)[entry.name] ? (
                       <Image
-                        src={(ENTRY_IMAGE_MAP as Record<string, string>)[entry.name]!}
+                        src={(ENTRY_IMAGE_MAP)[entry.name]!}
                         alt={entry.name}
                         width={20}
                         height={20}

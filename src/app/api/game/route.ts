@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest} from "next/server";
+import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -23,11 +24,11 @@ export async function POST(req: NextRequest) {
     let idx = 0;
     while (deckCards.reduce((s, d) => s + d.count, 0) < targetSize) {
       const card = cards[idx % cards.length];
-      if (!card) break;
+      if (!card) {break;}
       const existing = deckCards.find((d) => d.cardId === card.id);
       if (existing) {
-        if (existing.count < 3) existing.count++;
-        else idx++;
+        if (existing.count < 3) {existing.count++;}
+        else {idx++;}
       } else {
         deckCards.push({ cardId: card.id, count: 1 });
       }
@@ -45,8 +46,8 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(deck);
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
     return NextResponse.json({ error: "Failed to create deck" }, { status: 500 });
   }
 }

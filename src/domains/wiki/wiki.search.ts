@@ -41,16 +41,16 @@ const CATEGORY_WEIGHTS: Record<string, number> = {
   キャラクター: 1.3,
   用語: 1.1,
   組織: 1.1,
-  地理: 1.0,
-  技術: 1.0,
-  歴史: 1.0,
+  地理: 1,
+  技術: 1,
+  歴史: 1,
   card: 0.9,
 }
 
 export class WikiSearchEngine {
   private index: InvertedIndex
   private _autocomplete: Trie
-  private initialized: boolean = false
+  private initialized = false
   private categorySet: Set<string> = new Set()
 
   constructor() {
@@ -63,7 +63,7 @@ export class WikiSearchEngine {
    * Call once at startup.
    */
   async initialize(): Promise<void> {
-    if (this.initialized) return
+    if (this.initialized) {return}
 
     const allWiki: readonly WikiEntry[] = [
       ...WIKI_CHARACTERS,
@@ -80,7 +80,7 @@ export class WikiSearchEngine {
       title: `${entry.name}${entry.nameEn ? ` (${entry.nameEn})` : ""}`,
       content: entry.description,
       category: entry.category,
-      weight: CATEGORY_WEIGHTS[entry.category] ?? 1.0,
+      weight: CATEGORY_WEIGHTS[entry.category] ?? 1,
     }))
 
     // Also add the English name as separate searchable content for wiki entries
@@ -131,7 +131,7 @@ export class WikiSearchEngine {
    * Supports multi-category filtering and BM25 scoring.
    */
   search(query: string, options: WikiSearchOptions = {}): SearchResult[] {
-    if (!this.initialized) return []
+    if (!this.initialized) {return []}
 
     const { categories, includeCards = false, ...baseOptions } = options
 
@@ -175,21 +175,21 @@ export class WikiSearchEngine {
   /**
    * Autocomplete: returns matching document titles grouped by category.
    */
-  autocomplete(prefix: string, limit: number = 10): AutocompleteSuggestion[] {
-    if (!this.initialized || prefix.trim().length === 0) return []
+  autocomplete(prefix: string, limit = 10): AutocompleteSuggestion[] {
+    if (!this.initialized || prefix.trim().length === 0) {return []}
 
     const completions = this._autocomplete.getCompletions(prefix, limit * 2)
     const suggestions: AutocompleteSuggestion[] = []
     const seen = new Set<string>()
 
     for (const word of completions) {
-      if (suggestions.length >= limit) break
+      if (suggestions.length >= limit) {break}
 
       // Determine category from the docId
       const docIds = this._autocomplete.search(word)
       for (const docId of docIds) {
         const key = `${word}:${docId}`
-        if (seen.has(key)) continue
+        if (seen.has(key)) {continue}
         seen.add(key)
 
         let category = "unknown"
@@ -199,14 +199,14 @@ export class WikiSearchEngine {
           // Use the original entry's category
           const originalId = docId.slice(6)
           const doc = this._findWikiCategory(originalId)
-          if (doc) category = doc
+          if (doc) {category = doc}
         } else {
           const cat = this._findWikiCategory(docId)
-          if (cat) category = cat
+          if (cat) {category = cat}
         }
 
         suggestions.push({ text: word, category })
-        if (suggestions.length >= limit) break
+        if (suggestions.length >= limit) {break}
       }
     }
 
@@ -239,7 +239,7 @@ export class WikiSearchEngine {
     ] as const
 
     for (const entry of allEntries) {
-      if (entry.id === docId) return entry.category
+      if (entry.id === docId) {return entry.category}
     }
 
     return null

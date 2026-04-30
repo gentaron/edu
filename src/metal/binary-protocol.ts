@@ -22,21 +22,17 @@ const CRC32_TABLE = new Uint32Array(256)
 for (let i = 0; i < 256; i++) {
   let c = i
   for (let j = 0; j < 8; j++) {
-    if (c & 1) {
-      c = (c >>> 1) ^ 0xedb88320
-    } else {
-      c = c >>> 1
-    }
+    c = c & 1 ? (c >>> 1) ^ 0xED_B8_83_20 : c >>> 1;
   }
   CRC32_TABLE[i] = c
 }
 
 function crc32(data: Uint8Array): number {
-  let crc = 0xffffffff
+  let crc = 0xFF_FF_FF_FF
   for (let i = 0; i < data.length; i++) {
-    crc = (crc >>> 8) ^ CRC32_TABLE[(crc ^ data[i]!) & 0xff]!
+    crc = (crc >>> 8) ^ CRC32_TABLE[(crc ^ data[i]!) & 0xFF]!
   }
-  return (crc ^ 0xffffffff) >>> 0
+  return (crc ^ 0xFF_FF_FF_FF) >>> 0
 }
 
 export { crc32 }
@@ -79,7 +75,7 @@ export class BinaryWriter {
 
   private grow(needed: number): void {
     const required = this.pos + needed
-    if (required <= this.buf.length) return
+    if (required <= this.buf.length) {return}
     const next = Math.max(required * 2, 1024)
     const grown = new Uint8Array(next)
     grown.set(this.buf)
@@ -118,16 +114,16 @@ export class BinaryWriter {
   }
 
   writeByte(value: number): void {
-    this.u8(value & 0xff)
+    this.u8(value & 0xFF)
   }
 
   writeVarInt(value: number): void {
-    if (value < 0) throw new RangeError("VarInt value must be non-negative")
+    if (value < 0) {throw new RangeError("VarInt value must be non-negative")}
     let v = value >>> 0
     do {
-      let byte = v & 0x7f
+      let byte = v & 0x7F
       v >>>= 7
-      if (v !== 0) byte |= 0x80
+      if (v !== 0) {byte |= 0x80}
       this.u8(byte)
     } while (v !== 0)
   }
@@ -187,7 +183,7 @@ export class BinaryWriter {
         break
       }
       case "number": {
-        if (Number.isInteger(value) && value >= -2147483648 && value <= 2147483647) {
+        if (Number.isInteger(value) && value >= -2_147_483_648 && value <= 2_147_483_647) {
           this.writeTag(TypeTag.I32)
           this.writeI32(value)
         } else {
@@ -221,8 +217,9 @@ export class BinaryWriter {
         }
         break
       }
-      default:
+      default: {
         throw new TypeError(`Unsupported type for binary serialization: ${typeof value}`)
+      }
     }
   }
 
@@ -290,8 +287,8 @@ export class BinaryReader {
     let shift = 0
     while (true) {
       const byte = this.u8()
-      result |= (byte & 0x7f) << shift
-      if ((byte & 0x80) === 0) break
+      result |= (byte & 0x7F) << shift
+      if ((byte & 0x80) === 0) {break}
       shift += 7
       if (shift >= 35) {
         throw new RangeError("VarInt too large")
@@ -331,20 +328,25 @@ export class BinaryReader {
     const tag = this.readTag()
 
     switch (tag) {
-      case TypeTag.Null:
+      case TypeTag.Null: {
         return null
+      }
 
-      case TypeTag.String:
+      case TypeTag.String: {
         return this.readString()
+      }
 
-      case TypeTag.I32:
+      case TypeTag.I32: {
         return this.readI32()
+      }
 
-      case TypeTag.F64:
+      case TypeTag.F64: {
         return this.readF64()
+      }
 
-      case TypeTag.Bool:
+      case TypeTag.Bool: {
         return this.readBool()
+      }
 
       case TypeTag.ArrayStart: {
         const count = this.readVarInt()
@@ -377,8 +379,9 @@ export class BinaryReader {
         return obj
       }
 
-      default:
+      default: {
         throw new TypeError(`Unexpected type tag during readValue: 0x${tag.toString(16)}`)
+      }
     }
   }
 
@@ -409,10 +412,10 @@ interface OffsetEntry {
 
 // ─── BinaryEncoder ────────────────────────────────────────────
 
-export class BinaryEncoder {
+export const BinaryEncoder = {
   /** Encode a collection of named entries into the EDU binary format. */
-  static encode(entries: Map<string, unknown>): ArrayBuffer {
-    const entryIds = Array.from(entries.keys())
+  encode(entries: Map<string, unknown>): ArrayBuffer {
+    const entryIds = [...entries.keys()]
     const entryCount = entryIds.length
 
     // 1. Serialize each entry: id (string) + value as a TLV blob
@@ -468,8 +471,8 @@ export class BinaryEncoder {
     new DataView(final.buffer).setUint32(raw.length, checksum, true)
 
     return final.buffer
-  }
-}
+  },
+};
 
 // ─── BinaryIndex ──────────────────────────────────────────────
 
@@ -503,7 +506,7 @@ export class BinaryIndex {
     const entryCount = this.view.getUint32(6, true)
 
     // Verify CRC32 first (everything except last 4 bytes)
-    const dataWithoutCrc = this.buf.slice(0, this.buf.length - 4)
+    const dataWithoutCrc = this.buf.slice(0, - 4)
     const storedCrc = this.view.getUint32(this.buf.length - 4, true)
     const computedCrc = crc32(dataWithoutCrc)
     if (storedCrc !== computedCrc) {
@@ -537,13 +540,13 @@ export class BinaryIndex {
 
   /** Get all entry ids in the file. */
   getAllIds(): string[] {
-    return Array.from(this.indexMap.keys())
+    return [...this.indexMap.keys()]
   }
 
   /** Read and deserialize a single entry by id. */
   getEntry(id: string): unknown {
     const entry = this.indexMap.get(id)
-    if (entry === undefined) return undefined
+    if (entry === undefined) {return undefined}
     const entryBuf = this.buf.buffer.slice(entry.offset, entry.offset + entry.length) as ArrayBuffer
     const reader = new BinaryReader(entryBuf)
     reader.readTag() // skip String tag
@@ -554,7 +557,7 @@ export class BinaryIndex {
   /** Read and deserialize all entries, returning them as an array. */
   readAllEntries(): unknown[] {
     const results: unknown[] = []
-    for (const id of Array.from(this.indexMap.keys())) {
+    for (const id of this.indexMap.keys()) {
       results.push(this.getEntry(id))
     }
     return results

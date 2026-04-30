@@ -59,7 +59,7 @@ function BattleContent() {
   const playAbility = useBattleStore((s) => s.playAbility)
   const resetBattle = useBattleStore((s) => s.resetBattle)
 
-  const selectedChar = selectedCharIndex !== null ? fieldCharacters[selectedCharIndex] : null
+  const selectedChar = selectedCharIndex === null ? null : fieldCharacters[selectedCharIndex]
 
   useEffect(() => {
     const enemyId = searchParams.get("enemy")
@@ -78,7 +78,7 @@ function BattleContent() {
   useEffect(() => {
     if (phase === "resolving" && lastCharIndex !== null) {
       setActingCharIndex(lastCharIndex)
-      if (lastAbilityUsed === "攻撃" || lastAbilityUsed === "必殺") setShowSlash(true)
+      if (lastAbilityUsed === "攻撃" || lastAbilityUsed === "必殺") {setShowSlash(true)}
     } else {
       setActingCharIndex(null)
       setShowSlash(false)
@@ -86,7 +86,7 @@ function BattleContent() {
   }, [phase, lastCharIndex, lastAbilityUsed])
 
   useEffect(() => {
-    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
+    if (logRef.current) {logRef.current.scrollTop = logRef.current.scrollHeight}
   }, [log])
 
   const handleRetry = useCallback(() => {
@@ -98,7 +98,7 @@ function BattleContent() {
     router.push("/card-game")
   }, [resetBattle, router])
 
-  if (!selectedEnemy) return null
+  if (!selectedEnemy) {return null}
 
   const isPlayerTurn = phase === "playerTurn"
   const isResolving = phase === "resolving"
@@ -117,15 +117,15 @@ function BattleContent() {
   let floatingText: { text: string; color: string; isCrit?: boolean } | null = null
   if (isResolving && lastCharIndex !== null && fieldCharacters[lastCharIndex]) {
     const card = fieldCharacters[lastCharIndex].card
-    if (playerAbility === "攻撃") floatingText = { text: `-${card.attack}`, color: "text-red-400" }
+    if (playerAbility === "攻撃") {floatingText = { text: `-${card.attack}`, color: "text-red-400" }}
     else if (playerAbility === "必殺")
-      floatingText = { text: `-${card.ultimate}`, color: "text-yellow-400", isCrit: true }
+      {floatingText = { text: `-${card.ultimate}`, color: "text-yellow-400", isCrit: true }}
     else if (playerAbility === "防御")
-      floatingText = { text: `+${card.defense}`, color: "text-blue-400" }
+      {floatingText = { text: `+${card.defense}`, color: "text-blue-400" }}
     else if (playerAbility === "効果")
-      floatingText = { text: "✨", color: "text-purple-400", isCrit: true }
+      {floatingText = { text: "✨", color: "text-purple-400", isCrit: true }}
   }
-  if (phase === "enemyTurn") floatingText = { text: "-💥", color: "text-rose-400", isCrit: true }
+  if (phase === "enemyTurn") {floatingText = { text: "-💥", color: "text-rose-400", isCrit: true }}
 
   return (
     <>
@@ -134,9 +134,9 @@ function BattleContent() {
         color={
           lastAbilityUsed === "必殺"
             ? "rgba(250,204,21,0.3)"
-            : lastAbilityUsed === "攻撃"
+            : (lastAbilityUsed === "攻撃"
               ? "rgba(239,68,68,0.15)"
-              : "transparent"
+              : "transparent")
         }
         active={isResolving}
         intensity={lastAbilityUsed === "必殺" ? 0.3 : 0.15}
@@ -237,7 +237,7 @@ function BattleContent() {
             )}
             <div className="flex items-center gap-2 sm:gap-3 sm:items-start relative z-10">
               <div
-                className={`w-14 h-14 sm:w-20 sm:h-20 rounded-xl bg-edu-bg/50 border flex items-center justify-center shrink-0 overflow-hidden ${selectedEnemy.difficulty === "FINAL" ? "border-yellow-400/60 shadow-lg shadow-yellow-500/20" : selectedEnemy.difficulty === "BOSS" ? "border-red-400/50 shadow-lg shadow-red-500/20" : "border-edu-border/30"}`}
+                className={`w-14 h-14 sm:w-20 sm:h-20 rounded-xl bg-edu-bg/50 border flex items-center justify-center shrink-0 overflow-hidden ${selectedEnemy.difficulty === "FINAL" ? "border-yellow-400/60 shadow-lg shadow-yellow-500/20" : (selectedEnemy.difficulty === "BOSS" ? "border-red-400/50 shadow-lg shadow-red-500/20" : "border-edu-border/30")}`}
               >
                 <Image
                   src={selectedEnemy.imageUrl}

@@ -42,24 +42,24 @@ for (const entry of ALL_ENTRIES) {
   }
 }
 
-export class WikiRepository {
+export const WikiRepository = {
   /** Find a wiki entry by its ID */
-  static findById(id: string): WikiEntry | undefined {
+  findById(id: string): WikiEntry | undefined {
     return entryById.get(id)
-  }
+  },
 
   /** Get all wiki entries */
-  static getAll(): readonly WikiEntry[] {
+  getAll(): readonly WikiEntry[] {
     return ALL_ENTRIES
-  }
+  },
 
   /** Find entries by category (sorted by category display order) */
-  static findByCategory(category: Category): readonly WikiEntry[] {
+  findByCategory(category: Category): readonly WikiEntry[] {
     return entriesByCategory.get(category) ?? []
-  }
+  },
 
   /** Get entries grouped by category */
-  static getGroupedByCategory(): Map<Category, WikiEntry[]> {
+  getGroupedByCategory(): Map<Category, WikiEntry[]> {
     const grouped = new Map<Category, WikiEntry[]>()
     for (const cat of CATEGORY_ORDER) {
       const entries = entriesByCategory.get(cat)
@@ -68,19 +68,19 @@ export class WikiRepository {
       }
     }
     return grouped
-  }
+  },
 
   /** Get category summary with counts */
-  static getCategorySummary(): Array<{ category: Category; count: number; entries: WikiEntry[] }> {
+  getCategorySummary(): Array<{ category: Category; count: number; entries: WikiEntry[] }> {
     return CATEGORY_ORDER.map((cat) => ({
       category: cat,
       count: entriesByCategory.get(cat)?.length ?? 0,
       entries: entriesByCategory.get(cat) ?? [],
     })).filter((s) => s.count > 0)
-  }
+  },
 
   /** Search entries by name (partial match, both JA and EN) */
-  static search(query: string): WikiEntry[] {
+  search(query: string): WikiEntry[] {
     const q = query.toLowerCase()
     return ALL_ENTRIES.filter(
       (e) =>
@@ -88,21 +88,21 @@ export class WikiRepository {
         (e.nameEn && e.nameEn.toLowerCase().includes(q)) ||
         e.description.toLowerCase().includes(q)
     )
-  }
+  },
 
   /** Resolve wiki links — check that referenced IDs exist */
-  static resolveLinks(ids: string[]): Array<{ id: string; exists: boolean; entry?: WikiEntry }> {
+  resolveLinks(ids: string[]): Array<{ id: string; exists: boolean; entry?: WikiEntry }> {
     return ids.map((id) => {
       const entry = entryById.get(id)
       return { id, exists: !!entry, entry }
     })
-  }
+  },
 
   /** Total count of all entries */
-  static get totalCount(): number {
+  get totalCount(): number {
     return ALL_ENTRIES.length
-  }
-}
+  },
+};
 
 /** Re-export for backward compatibility */
 export { ALL_ENTRIES }

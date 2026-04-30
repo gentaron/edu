@@ -378,12 +378,12 @@ export function getStoryUrlForLang(story: StoryMeta, lang: "ja" | "en"): string 
 
 export function getStoryTitle(story: StoryMeta, lang: "ja" | "en"): string {
   return story.isEnSource
-    ? lang === "en"
+    ? (lang === "en"
       ? story.title
-      : story.titleJa
-    : lang === "ja"
+      : story.titleJa)
+    : (lang === "ja"
       ? story.titleJa
-      : story.title
+      : story.title)
 }
 
 export function getStoryBySlug(slug: string): StoryMeta | undefined {

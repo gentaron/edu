@@ -28,66 +28,66 @@ import type {
   RelationEdge,
 } from "@/platform/schemas"
 
-export class ContentRepository {
+export const ContentRepository = {
   // ── Timeline ──
-  static getTimeline(): readonly TimelinePeriod[] {
+  getTimeline(): readonly TimelinePeriod[] {
     return TIMELINE_DATA
-  }
+  },
 
-  static getTimelineLocationColors(): Readonly<Record<string, string>> {
+  getTimelineLocationColors(): Readonly<Record<string, string>> {
     return locColor
-  }
+  },
 
   // ── Technology ──
-  static getTechEntries(): readonly TechEntry[] {
+  getTechEntries(): readonly TechEntry[] {
     return TECH_DATA as unknown as readonly TechEntry[]
-  }
+  },
 
-  static findTechById(id: string): TechEntry | undefined {
+  findTechById(id: string): TechEntry | undefined {
     return (TECH_DATA as unknown as TechEntry[]).find((t) => t.id === id)
-  }
+  },
 
   // ── Character Details ──
-  static getIrisTimeline(): readonly IrisTimelineEntry[] {
+  getIrisTimeline(): readonly IrisTimelineEntry[] {
     return IRIS_TIMELINE
-  }
+  },
 
-  static getIrisAbilities(): readonly IrisAbility[] {
+  getIrisAbilities(): readonly IrisAbility[] {
     return IRIS_ABILITIES
-  }
+  },
 
-  static getIrisRelations(): readonly IrisRelation[] {
+  getIrisRelations(): readonly IrisRelation[] {
     return IRIS_RELATIONS
-  }
+  },
 
-  static getMinaTimeline(): readonly MinaTimelineEntry[] {
+  getMinaTimeline(): readonly MinaTimelineEntry[] {
     return MINA_TIMELINE
-  }
+  },
 
   // ── Liminal / Platforms ──
-  static getPlatforms(): readonly PlatformEntry[] {
+  getPlatforms(): readonly PlatformEntry[] {
     return PLATFORMS as unknown as readonly PlatformEntry[]
-  }
+  },
 
   // ── Factions ──
-  static getFactionTrees(): readonly FactionTree[] {
+  getFactionTrees(): readonly FactionTree[] {
     return FACTION_TREES
-  }
+  },
 
   // ── Relations ──
-  static getRelationNodes(): RelationNode[] {
+  getRelationNodes(): RelationNode[] {
     return getRelationNodes()
-  }
+  },
 
-  static getRelationEdges(): RelationEdge[] {
+  getRelationEdges(): RelationEdge[] {
     return getRelationEdges()
-  }
+  },
 
-  static getEntityById(id: string): RelationNode | undefined {
+  getEntityById(id: string): RelationNode | undefined {
     return getEntityById(id)
-  }
+  },
 
-  static getRelationsForEntity(id: string): { node: RelationNode; edge: RelationEdge }[] {
+  getRelationsForEntity(id: string): { node: RelationNode; edge: RelationEdge }[] {
     return getRelationsForEntity(id)
-  }
-}
+  },
+};

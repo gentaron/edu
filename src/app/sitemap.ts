@@ -6,7 +6,7 @@ const BASE_URL = "https://edu-eternal-dominion-universe.vercel.app"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
-    { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
+    { url: BASE_URL, lastModified: new Date(), changeFrequency: "weekly", priority: 1 },
     {
       url: `${BASE_URL}/universe`,
       lastModified: new Date(),

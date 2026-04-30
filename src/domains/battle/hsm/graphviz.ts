@@ -3,7 +3,7 @@
    Standalone functions for DOT generation and SVG rendering.
    ═══════════════════════════════════════════════════════════════ */
 
-import { Hsm } from "./index"
+import type { Hsm } from "./index"
 
 /**
  * Generate a Graphviz DOT string from an Hsm instance.

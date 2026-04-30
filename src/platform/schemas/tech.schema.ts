@@ -1,7 +1,7 @@
 import { z } from "zod/v4"
 
 export const TechEntrySchema = z.object({
-  id: z.string().regex(/^[a-z0-9-]+$/),
+  id: z.string().regex(/^[\da-z-]+$/),
   name: z.string().min(1),
   nameEn: z.string().min(1),
   icon: z.string().min(1),

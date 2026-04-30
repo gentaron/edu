@@ -92,10 +92,12 @@ function getEnemy(state: BattleFSMState): Enemy | null {
     case "turn-resolve":
     case "enemy-turn":
     case "phase-transition":
-    case "battle-end":
+    case "battle-end": {
       return state.enemy
-    default:
+    }
+    default: {
       return null
+    }
   }
 }
 
@@ -103,9 +105,10 @@ function getEnemy(state: BattleFSMState): Enemy | null {
 
 export function battleFSMReducer(state: BattleFSMState, action: BattleFSMAction): BattleFSMState {
   switch (action.type) {
-    case "SELECT_DECK":
-      if (action.deck.length !== 5) return state
+    case "SELECT_DECK": {
+      if (action.deck.length !== 5) {return state}
       return { state: "deck-building", deck: action.deck }
+    }
 
     case "START_BATTLE": {
       const field: FieldChar[] = action.deck.map((c) => ({
@@ -122,9 +125,9 @@ export function battleFSMReducer(state: BattleFSMState, action: BattleFSMAction)
     }
 
     case "SELECT_CHARACTER": {
-      if (state.state !== "turn-start") return state
+      if (state.state !== "turn-start") {return state}
       const fc = state.fieldCharacters[action.index]
-      if (!fc || fc.isDown) return state
+      if (!fc || fc.isDown) {return state}
       return {
         state: "ability-select",
         selectedCharIndex: action.index,
@@ -136,7 +139,7 @@ export function battleFSMReducer(state: BattleFSMState, action: BattleFSMAction)
     }
 
     case "PLAY_ABILITY": {
-      if (state.state !== "ability-select") return state
+      if (state.state !== "ability-select") {return state}
       return {
         state: "turn-resolve",
         ability: action.ability,
@@ -149,7 +152,7 @@ export function battleFSMReducer(state: BattleFSMState, action: BattleFSMAction)
     }
 
     case "END_ENEMY_TURN": {
-      if (state.state !== "enemy-turn") return state
+      if (state.state !== "enemy-turn") {return state}
       if (action.allDown) {
         return {
           state: "battle-end",
@@ -173,7 +176,7 @@ export function battleFSMReducer(state: BattleFSMState, action: BattleFSMAction)
 
     case "PHASE_TRANSITION": {
       const enemy = getEnemy(state)
-      if (!enemy) return state
+      if (!enemy) {return state}
       const turn =
         state.state === "turn-start"
           ? state.turn
@@ -197,14 +200,14 @@ export function battleFSMReducer(state: BattleFSMState, action: BattleFSMAction)
     }
 
     case "END_BATTLE": {
-      if (state.state !== "turn-resolve" && state.state !== "phase-transition") return state
+      if (state.state !== "turn-resolve" && state.state !== "phase-transition") {return state}
       const enemy = getEnemy(state)!
       const turn =
         state.state === "turn-resolve"
           ? state.turn
-          : state.state === "phase-transition"
+          : (state.state === "phase-transition"
             ? state.turn
-            : 0
+            : 0)
       return {
         state: "battle-end",
         outcome: action.outcome,
@@ -214,11 +217,13 @@ export function battleFSMReducer(state: BattleFSMState, action: BattleFSMAction)
       }
     }
 
-    case "RESET":
+    case "RESET": {
       return { state: "idle" }
+    }
 
-    default:
+    default: {
       return state
+    }
   }
 }
 

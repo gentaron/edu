@@ -52,25 +52,25 @@ function formatZodError(error: unknown): Array<{ path: string; message: string }
 
 export function validateWikiEntries(entries: unknown[]): ValidateResult<WikiEntry[]> {
   const result = z.array(WikiEntrySchema).safeParse(entries)
-  if (result.success) return { success: true, data: result.data }
+  if (result.success) {return { success: true, data: result.data }}
   return { success: false, errors: formatZodError(result.error) }
 }
 
 export function validateGameCards(cards: unknown[]): ValidateResult<GameCard[]> {
   const result = z.array(GameCardSchema).safeParse(cards)
-  if (result.success) return { success: true, data: result.data }
+  if (result.success) {return { success: true, data: result.data }}
   return { success: false, errors: formatZodError(result.error) }
 }
 
 export function validateEnemies(enemies: unknown[]): ValidateResult<Enemy[]> {
   const result = z.array(EnemySchema).safeParse(enemies)
-  if (result.success) return { success: true, data: result.data }
+  if (result.success) {return { success: true, data: result.data }}
   return { success: false, errors: formatZodError(result.error) }
 }
 
 export function validateCivilizations(civs: unknown[]): ValidateResult<Civilization[]> {
   const result = z.array(CivilizationSchema).safeParse(civs)
-  if (result.success) return { success: true, data: result.data }
+  if (result.success) {return { success: true, data: result.data }}
   return { success: false, errors: formatZodError(result.error) }
 }
 
@@ -78,36 +78,36 @@ export function validateCivilizationLeaders(
   leaders: unknown[]
 ): ValidateResult<CivilizationLeader[]> {
   const result = z.array(CivilizationLeaderSchema).safeParse(leaders)
-  if (result.success) return { success: true, data: result.data }
+  if (result.success) {return { success: true, data: result.data }}
   return { success: false, errors: formatZodError(result.error) }
 }
 
 export function validateStoryMetas(stories: unknown[]): ValidateResult<StoryMeta[]> {
   const result = z.array(StoryMetaSchema).safeParse(stories)
-  if (result.success) return { success: true, data: result.data }
+  if (result.success) {return { success: true, data: result.data }}
   return { success: false, errors: formatZodError(result.error) }
 }
 
 export function validateChapterMetas(chapters: unknown[]): ValidateResult<ChapterMeta[]> {
   const result = z.array(ChapterMetaSchema).safeParse(chapters)
-  if (result.success) return { success: true, data: result.data }
+  if (result.success) {return { success: true, data: result.data }}
   return { success: false, errors: formatZodError(result.error) }
 }
 
 export function validateTimelinePeriods(periods: unknown[]): ValidateResult<TimelinePeriod[]> {
   const result = z.array(TimelinePeriodSchema).safeParse(periods)
-  if (result.success) return { success: true, data: result.data }
+  if (result.success) {return { success: true, data: result.data }}
   return { success: false, errors: formatZodError(result.error) }
 }
 
 export function validateTechEntries(entries: unknown[]): ValidateResult<TechEntry[]> {
   const result = z.array(TechEntrySchema).safeParse(entries)
-  if (result.success) return { success: true, data: result.data }
+  if (result.success) {return { success: true, data: result.data }}
   return { success: false, errors: formatZodError(result.error) }
 }
 
 export function validateFactionTrees(trees: unknown[]): ValidateResult<FactionTree[]> {
   const result = z.array(FactionTreeSchema).safeParse(trees)
-  if (result.success) return { success: true, data: result.data }
+  if (result.success) {return { success: true, data: result.data }}
   return { success: false, errors: formatZodError(result.error) }
 }

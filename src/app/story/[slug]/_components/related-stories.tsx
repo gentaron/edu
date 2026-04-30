@@ -15,16 +15,16 @@ export function RelatedStoriesSection({
   lang: Lang
 }) {
   const relatedSlugs = new Set<string>()
-  entryIds.forEach((eid) => {
-    getStoriesForEntry(eid).forEach((s) => {
-      if (s.slug !== currentSlug) relatedSlugs.add(s.slug)
-    })
-  })
-  const stories = Array.from(relatedSlugs)
+  for (const eid of entryIds) {
+    for (const s of getStoriesForEntry(eid)) {
+      if (s.slug !== currentSlug) {relatedSlugs.add(s.slug)}
+    }
+  }
+  const stories = [...relatedSlugs]
     .map((slug) => getStoryBySlug(slug))
     .filter(Boolean)
 
-  if (stories.length === 0) return null
+  if (stories.length === 0) {return null}
   return (
     <div className="mt-16 pt-10 border-t border-white/8">
       <h3 className="text-xs font-semibold text-white/30 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">

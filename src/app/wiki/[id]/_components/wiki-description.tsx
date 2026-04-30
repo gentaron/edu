@@ -42,7 +42,7 @@ const NAME_MAP: NameEntry[] = (() => {
 
 // Regex alternation of all names (longest first), escaped for safety
 const NAME_PATTERN = new RegExp(
-  `(${NAME_MAP.map((n) => n.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
+  `(${NAME_MAP.map((n) => n.name.replace(/[$()*+.?[\\\]^{|}]/g, String.raw`\$&`)).join("|")})`,
   "g"
 )
 
@@ -91,13 +91,13 @@ function isKatakanaLike(ch: string): boolean {
   // Katakana (30A0-30FF), Hiragana (3040-309F), CJK unified ideographs (4E00-9FFF),
   // Katakana-hiragana prolonged sound mark (30FC), CJK Extension A (3400-4DBF)
   return (
-    (code >= 0x30a0 && code <= 0x30ff) ||
-    (code >= 0x3040 && code <= 0x309f) ||
-    (code >= 0x4e00 && code <= 0x9fff) ||
-    (code >= 0x3400 && code <= 0x4dbf) ||
-    code === 0x30fc || // prolongation mark ー
-    code === 0x3005 || // repetition mark 々
-    code === 0x3006 // cjk iteration mark 〆
+    (code >= 0x30_A0 && code <= 0x30_FF) ||
+    (code >= 0x30_40 && code <= 0x30_9F) ||
+    (code >= 0x4E_00 && code <= 0x9F_FF) ||
+    (code >= 0x34_00 && code <= 0x4D_BF) ||
+    code === 0x30_FC || // prolongation mark ー
+    code === 0x30_05 || // repetition mark 々
+    code === 0x30_06 // cjk iteration mark 〆
   )
 }
 
@@ -113,12 +113,12 @@ function isEmbeddedInWord(text: string, index: number, length: number): boolean 
   const isKanaOrKanji = (ch: string) => {
     const code = ch.codePointAt(0) ?? 0
     return (
-      (code >= 0x30a0 && code <= 0x30ff) || // Katakana
-      (code >= 0x4e00 && code <= 0x9fff) || // CJK ideographs (kanji)
-      (code >= 0x3400 && code <= 0x4dbf) || // CJK Extension A
-      code === 0x30fc || // prolongation mark ー
-      code === 0x3005 || // repetition mark 々
-      code === 0x3006 // cjk iteration mark 〆
+      (code >= 0x30_A0 && code <= 0x30_FF) || // Katakana
+      (code >= 0x4E_00 && code <= 0x9F_FF) || // CJK ideographs (kanji)
+      (code >= 0x34_00 && code <= 0x4D_BF) || // CJK Extension A
+      code === 0x30_FC || // prolongation mark ー
+      code === 0x30_05 || // repetition mark 々
+      code === 0x30_06 // cjk iteration mark 〆
     )
   }
 

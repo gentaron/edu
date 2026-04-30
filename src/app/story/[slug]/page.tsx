@@ -18,7 +18,7 @@ export function generateStaticParams() {
 async function fetchStoryText(url: string): Promise<string | null> {
   try {
     const res = await fetch(url, { next: { revalidate: 3600 } })
-    if (!res.ok) return null
+    if (!res.ok) {return null}
     return await res.text()
   } catch {
     return null
@@ -28,7 +28,7 @@ async function fetchStoryText(url: string): Promise<string | null> {
 export default async function StoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const story = getStoryBySlug(slug)
-  if (!story) return notFound()
+  if (!story) {return notFound()}
 
   // Fetch both language versions in parallel
   const [textJa, textEn] = await Promise.all([

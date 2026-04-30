@@ -35,7 +35,7 @@ export const useDeckStore = create<DeckState>()(
 
       addCard: (card) =>
         set((s) => {
-          if (s.deck.some((c) => c.id === card.id) || s.deck.length >= MAX_DECK_SIZE) return s
+          if (s.deck.some((c) => c.id === card.id) || s.deck.length >= MAX_DECK_SIZE) {return s}
           eventBus.publish({
             type: "deck:card-added",
             cardId: card.id,
@@ -56,8 +56,8 @@ export const useDeckStore = create<DeckState>()(
 
       moveCard: (fromIndex, toIndex) =>
         set((s) => {
-          if (fromIndex < 0 || fromIndex >= s.deck.length) return s
-          if (toIndex < 0 || toIndex >= s.deck.length) return s
+          if (fromIndex < 0 || fromIndex >= s.deck.length) {return s}
+          if (toIndex < 0 || toIndex >= s.deck.length) {return s}
           const next = [...s.deck]
           const [moved] = next.splice(fromIndex, 1)
           next.splice(toIndex, 0, moved!)

@@ -48,7 +48,7 @@ export class WorkerPool<TRequest = unknown, TResponse = unknown> {
   constructor(options: PoolOptions) {
     const count =
       options.workerCount ??
-      (typeof navigator !== "undefined" ? (navigator.hardwareConcurrency ?? 4) : 4)
+      (typeof navigator === "undefined" ? 4 : (navigator.hardwareConcurrency ?? 4))
 
     this.workers = []
     this.taskQueue = []
@@ -85,7 +85,7 @@ export class WorkerPool<TRequest = unknown, TResponse = unknown> {
     const id = generateTaskId()
     let timeoutId: ReturnType<typeof setTimeout> | undefined
 
-    const promise = new Promise<TResponse>((resolve, reject) => {
+    return new Promise<TResponse>((resolve, reject) => {
       if (timeout !== undefined && timeout > 0) {
         timeoutId = setTimeout(() => {
           // Remove from active tasks
@@ -110,19 +110,17 @@ export class WorkerPool<TRequest = unknown, TResponse = unknown> {
 
       // Try to dispatch immediately to an idle worker
       const idleWorker = this.idleWorkers.shift()
-      if (idleWorker !== undefined) {
-        this.dispatchTask(idleWorker, task)
-      } else {
+      if (idleWorker === undefined) {
         this.taskQueue.push(task)
+      } else {
+        this.dispatchTask(idleWorker, task)
       }
     })
-
-    return promise
   }
 
   /** Terminate all workers and reject all pending/active tasks. */
   terminate(): void {
-    if (this.terminated) return
+    if (this.terminated) {return}
     this.terminated = true
 
     // Reject all queued tasks
@@ -206,10 +204,10 @@ export class WorkerPool<TRequest = unknown, TResponse = unknown> {
     if (data.type === "ERROR") {
       const payload = data.payload as Record<string, unknown> | undefined
       const errorMsg =
-        payload?.error !== undefined ? String(payload.error) : "Worker returned ERROR"
+        payload?.error === undefined ? "Worker returned ERROR" : String(payload.error)
       task.reject(new Error(errorMsg))
     } else {
-      task.resolve(event.data as TResponse)
+      task.resolve(event.data)
     }
 
     // Worker is now idle — dispatch next queued task
@@ -219,9 +217,7 @@ export class WorkerPool<TRequest = unknown, TResponse = unknown> {
 
   private handleWorkerError(worker: Worker, event: ErrorEvent): void {
     // Find the task associated with this worker (if any)
-    const firstTask = this.activeTasks.values().next().value as
-      | WorkerTask<TRequest, TResponse>
-      | undefined
+    const firstTask = this.activeTasks.values().next().value
 
     if (firstTask !== undefined) {
       this.activeTasks.delete(firstTask.id)
@@ -236,14 +232,14 @@ export class WorkerPool<TRequest = unknown, TResponse = unknown> {
 
   private dispatchNextQueuedTask(): void {
     const nextTask = this.taskQueue.shift()
-    if (nextTask === undefined) return
+    if (nextTask === undefined) {return}
 
     const idleWorker = this.idleWorkers.shift()
-    if (idleWorker !== undefined) {
-      this.dispatchTask(idleWorker, nextTask)
-    } else {
+    if (idleWorker === undefined) {
       // No idle workers — put it back at the front of the queue
       this.taskQueue.unshift(nextTask)
+    } else {
+      this.dispatchTask(idleWorker, nextTask)
     }
   }
 

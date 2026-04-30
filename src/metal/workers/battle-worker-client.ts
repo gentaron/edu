@@ -9,7 +9,7 @@ import type { BattleWorkerMessage, BattleWorkerResponse } from "./battle-worker"
 
 // ── Worker URL (Next.js compatible) ──
 
-const WORKER_URL = new URL("./battle-worker.ts", import.meta.url)
+const WORKER_URL = new URL("battle-worker.ts", import.meta.url)
 
 // ── Result Types (mirror WasmBattleResult, WasmEnemyTurnResult, etc.) ──
 
@@ -242,7 +242,7 @@ class BattleWorkerClient {
 
     const response = await this.pool.submit(message)
     if (response.type === "ERROR") {
-      throw new Error(String((response.payload as Record<string, unknown>).error))
+      throw new Error(String((response.payload).error))
     }
 
     const p = response.payload
@@ -277,7 +277,7 @@ class BattleWorkerClient {
 
     const response = await this.pool.submit(message)
     if (response.type === "ERROR") {
-      throw new Error(String((response.payload as Record<string, unknown>).error))
+      throw new Error(String((response.payload).error))
     }
 
     const p = response.payload
@@ -304,7 +304,7 @@ class BattleWorkerClient {
 
     const response = await this.pool.submit(message)
     if (response.type === "ERROR") {
-      throw new Error(String((response.payload as Record<string, unknown>).error))
+      throw new Error(String((response.payload).error))
     }
 
     const p = response.payload
@@ -328,7 +328,7 @@ class BattleWorkerClient {
 
     const response = await this.pool.submit(message)
     if (response.type === "ERROR") {
-      throw new Error(String((response.payload as Record<string, unknown>).error))
+      throw new Error(String((response.payload).error))
     }
 
     const p = response.payload

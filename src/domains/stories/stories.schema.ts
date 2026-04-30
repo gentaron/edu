@@ -1,7 +1,7 @@
 import { z } from "zod/v4"
 
 export const StoryMetaSchema = z.object({
-  slug: z.string().regex(/^[a-z0-9-]+$/),
+  slug: z.string().regex(/^[\da-z-]+$/),
   title: z.string().min(1),
   titleJa: z.string().min(1),
   label: z.string().min(1),

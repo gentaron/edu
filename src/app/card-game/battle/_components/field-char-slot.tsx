@@ -31,15 +31,16 @@ export function FieldCharSlot({
   const hpColor =
     hpPct > 50
       ? "from-emerald-500 to-green-400"
-      : hpPct > 25
+      : (hpPct > 25
         ? "from-yellow-500 to-amber-400"
-        : "from-red-500 to-rose-400"
+        : "from-red-500 to-rose-400")
 
   useEffect(() => {
-    if (isActing) {
-      const t = setTimeout(onActionEnd, 1200)
-      return () => clearTimeout(t)
+    if (!isActing) {
+      return
     }
+    const t = setTimeout(onActionEnd, 1200)
+    return () => clearTimeout(t)
   }, [isActing, onActionEnd])
 
   const abilityGlow: Record<string, string> = {
@@ -64,11 +65,11 @@ export function FieldCharSlot({
       animate={
         isActing
           ? { scale: [1, 1.15, 1], y: [0, -8, 0] }
-          : isCharHit
+          : (isCharHit
             ? { x: [0, -6, 6, -4, 0] }
-            : {}
+            : {})
       }
-      transition={isActing ? { duration: 0.6, repeat: 1 } : isCharHit ? { duration: 0.4 } : {}}
+      transition={isActing ? { duration: 0.6, repeat: 1 } : (isCharHit ? { duration: 0.4 } : {})}
       className={`relative flex flex-col items-center gap-0.5 sm:gap-1 p-1.5 sm:p-2 rounded-xl border backdrop-blur-sm transition-all duration-300 min-w-[60px] sm:min-w-[72px] max-w-[76px] sm:max-w-[92px] ${
         char.isDown
           ? "opacity-30 border-edu-border/10 bg-edu-bg/20 cursor-not-allowed"
@@ -119,7 +120,7 @@ export function FieldCharSlot({
         </div>
       )}
       <div
-        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-edu-bg/50 border shrink-0 ${isActing && actingAbility === "必殺" ? "border-yellow-400 shadow-lg shadow-yellow-500/40" : isActing && actingAbility === "攻撃" ? "border-red-400 shadow-lg shadow-red-500/30" : "border-edu-border/20"}`}
+        className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg overflow-hidden bg-edu-bg/50 border shrink-0 ${isActing && actingAbility === "必殺" ? "border-yellow-400 shadow-lg shadow-yellow-500/40" : (isActing && actingAbility === "攻撃" ? "border-red-400 shadow-lg shadow-red-500/30" : "border-edu-border/20")}`}
       >
         <Image
           src={char.card.imageUrl}
@@ -136,7 +137,7 @@ export function FieldCharSlot({
         {char.card.name}
       </p>
       <span
-        className={`text-[6px] sm:text-[7px] font-black px-1 py-px rounded ${char.card.rarity === "SR" ? "rarity-badge-sr" : char.card.rarity === "R" ? "rarity-badge-r" : "bg-edu-bg/50 text-edu-muted border border-edu-border/30"}`}
+        className={`text-[6px] sm:text-[7px] font-black px-1 py-px rounded ${char.card.rarity === "SR" ? "rarity-badge-sr" : (char.card.rarity === "R" ? "rarity-badge-r" : "bg-edu-bg/50 text-edu-muted border border-edu-border/30")}`}
       >
         {char.card.rarity}
       </span>

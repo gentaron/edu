@@ -140,8 +140,8 @@ let initPromise: Promise<WasmBattleModule | null> | null = null
  * Never throws — returns null if WASM cannot be loaded.
  */
 export async function initWasmEngine(): Promise<WasmBattleModule | null> {
-  if (wasmModule !== null) return wasmModule
-  if (initPromise !== null) return initPromise
+  if (wasmModule !== null) {return wasmModule}
+  if (initPromise !== null) {return initPromise}
 
   initPromise = (async () => {
     try {
@@ -155,10 +155,10 @@ export async function initWasmEngine(): Promise<WasmBattleModule | null> {
       const mod = await dynamicImport("/wasm/edu_battle_engine.js")
       wasmModule = mod
       return mod
-    } catch (err) {
+    } catch (error) {
       console.warn(
         "[L0 METAL] WASM battle engine could not be loaded.",
-        err instanceof Error ? err.message : String(err)
+        error instanceof Error ? error.message : String(error)
       )
       return null
     }
@@ -253,7 +253,7 @@ export interface CalculateDamageParams {
  * Returns null if WASM is not available (never throws).
  */
 export function wasmCalculateDamage(params: CalculateDamageParams): WasmBattleResult | null {
-  if (wasmModule === null) return null
+  if (wasmModule === null) {return null}
 
   try {
     const flat = fieldCharToFlatParams(params.character)
@@ -272,10 +272,10 @@ export function wasmCalculateDamage(params: CalculateDamageParams): WasmBattleRe
       flat.effect,
       abilityIdx
     )
-  } catch (err) {
+  } catch (error) {
     console.warn(
       "[L0 METAL] wasmCalculateDamage failed:",
-      err instanceof Error ? err.message : String(err)
+      error instanceof Error ? error.message : String(error)
     )
     return null
   }
@@ -299,7 +299,7 @@ export interface ExecuteEnemyTurnParams {
  * Returns null if WASM is not available (never throws).
  */
 export function wasmExecuteEnemyTurn(params: ExecuteEnemyTurnParams): WasmEnemyTurnResult | null {
-  if (wasmModule === null) return null
+  if (wasmModule === null) {return null}
 
   try {
     const fieldJson = fieldCharsToWasmJson(params.field)
@@ -315,10 +315,10 @@ export function wasmExecuteEnemyTurn(params: ExecuteEnemyTurnParams): WasmEnemyT
       params.poisonActive,
       params.enemyAttackReduction
     )
-  } catch (err) {
+  } catch (error) {
     console.warn(
       "[L0 METAL] wasmExecuteEnemyTurn failed:",
-      err instanceof Error ? err.message : String(err)
+      error instanceof Error ? error.message : String(error)
     )
     return null
   }
@@ -337,7 +337,7 @@ export interface CheckPhaseTransitionParams {
  * Returns the transition message string, or null if no transition / WASM unavailable.
  */
 export function wasmCheckPhaseTransition(params: CheckPhaseTransitionParams): string | null {
-  if (wasmModule === null) return null
+  if (wasmModule === null) {return null}
 
   try {
     const enemyJson = enemyToWasmJson(params.enemy)
@@ -347,10 +347,10 @@ export function wasmCheckPhaseTransition(params: CheckPhaseTransitionParams): st
       params.enemyPhase,
       enemyJson
     )
-  } catch (err) {
+  } catch (error) {
     console.warn(
       "[L0 METAL] wasmCheckPhaseTransition failed:",
-      err instanceof Error ? err.message : String(err)
+      error instanceof Error ? error.message : String(error)
     )
     return null
   }
@@ -364,16 +364,16 @@ export function wasmSimulateBattle(
   field: readonly FieldChar[],
   enemy: Enemy
 ): WasmSimResult | null {
-  if (wasmModule === null) return null
+  if (wasmModule === null) {return null}
 
   try {
     const fieldJson = fieldCharsToWasmJson(field)
     const enemyJson = enemyToWasmJson(enemy)
     return wasmModule.simulate_battle_wasm(fieldJson, enemyJson)
-  } catch (err) {
+  } catch (error) {
     console.warn(
       "[L0 METAL] wasmSimulateBattle failed:",
-      err instanceof Error ? err.message : String(err)
+      error instanceof Error ? error.message : String(error)
     )
     return null
   }
