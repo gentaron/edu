@@ -18,6 +18,7 @@ import {
 } from "lucide-react"
 import { ALL_ENTRIES } from "@/lib/wiki-data"
 import { StarField } from "@/components/edu/star-field"
+import { RevealGrid } from "@/components/edu/reveal-section"
 
 const CATEGORY_CONFIG: Record<string, { label: string; icon: React.ReactNode }> = {
   キャラクター: {
@@ -45,6 +46,20 @@ const CATEGORY_CONFIG: Record<string, { label: string; icon: React.ReactNode }> 
     icon: <Scroll className="w-3.5 h-3.5" />,
   },
 }
+
+// Category → border accent class
+const CATEGORY_BORDER: Record<string, string> = {
+  キャラクター: "wiki-card-char",
+  組織: "wiki-card-org",
+  技術: "wiki-card-tech",
+  歴史: "wiki-card-hist",
+  地理: "wiki-card-geo",
+  用語: "wiki-card-term",
+}
+
+// Featured: Tier 1 or 神格 characters
+const isFeatured = (entry: (typeof ALL_ENTRIES)[number]) =>
+  entry.tier === "Tier 1" || entry.tier === "神格・歴史的人物"
 
 type Category = "キャラクター" | "用語" | "組織" | "地理" | "技術" | "歴史"
 const FILTER_CATEGORIES: ("全て" | Category)[] = [
@@ -182,20 +197,27 @@ export default function WikiPage() {
             )}
           </div>
 
-          {/* Cards Grid */}
+          {/* Cards Grid with stagger animation */}
           {filteredEntries.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <RevealGrid
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+              staggerMs={50}
+            >
               {filteredEntries.map((entry) => {
                 const catConfig = CATEGORY_CONFIG[entry.category] ?? CATEGORY_CONFIG["用語"]!
                 const preview =
                   entry.description.length > 80
                     ? entry.description.slice(0, 80) + "…"
                     : entry.description
+                const featured = isFeatured(entry)
+                const borderClass = CATEGORY_BORDER[entry.category] || ""
                 return (
                   <Link
                     key={entry.id}
                     href={`/wiki/${encodeURIComponent(entry.id)}`}
-                    className="edu-card rounded-xl overflow-hidden transition-all duration-300 group block"
+                    className={`edu-card rounded-xl overflow-hidden transition-all duration-300 group block ${borderClass} ${
+                      featured ? "sm:row-span-2" : ""
+                    }`}
                   >
                     <div className="p-5">
                       <div className="flex items-start gap-3.5 mb-3.5">
@@ -257,7 +279,7 @@ export default function WikiPage() {
                   </Link>
                 )
               })}
-            </div>
+            </RevealGrid>
           ) : (
             <div className="text-center py-20">
               <Search className="w-12 h-12 text-edu-muted mx-auto mb-4" />

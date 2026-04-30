@@ -4,11 +4,13 @@ import { withSentryConfig } from "@sentry/nextjs"
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  /* config options here */
   typescript: {
     ignoreBuildErrors: false,
   },
   reactStrictMode: true,
+  experimental: {
+    viewTransition: true,
+  },
   images: {
     unoptimized: false,
     formats: ["image/avif", "image/webp"],

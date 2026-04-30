@@ -2,12 +2,16 @@ import React from "react"
 import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 import { QUICK_ACCESS_CARDS } from "./home-data"
+import { RevealGrid } from "@/components/edu/reveal-section"
 
 export function QuickAccessSection() {
   return (
     <section className="py-16 px-4">
       <div className="max-w-5xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <RevealGrid
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          staggerMs={100}
+        >
           {QUICK_ACCESS_CARDS.map((card) => (
             <Link
               key={card.href}
@@ -29,7 +33,7 @@ export function QuickAccessSection() {
               </div>
             </Link>
           ))}
-        </div>
+        </RevealGrid>
       </div>
     </section>
   )

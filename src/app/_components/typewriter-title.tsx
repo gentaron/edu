@@ -101,11 +101,15 @@ export function TypewriterTitle() {
         letterSpacing: font.spacing,
         opacity: fontFading ? 0 : 1,
         transition: "opacity 0.3s ease",
+        textShadow: "0 0 40px rgba(129, 140, 248, 0.15), 0 0 80px rgba(200, 164, 78, 0.08)",
       }}
     >
       {line1 ?? ""}
       {!cursorOnLine2 && (
-        <span className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-edu-accent ml-1 align-middle animate-pulse" />
+        <span
+          className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-edu-accent ml-1 align-middle animate-pulse"
+          style={{ boxShadow: "0 0 8px rgba(200, 164, 78, 0.5)" }}
+        />
       )}
       {line1 !== undefined && (
         <>
@@ -113,7 +117,10 @@ export function TypewriterTitle() {
           <span className={cursorOnLine2 ? "" : "opacity-0"}>
             {line2 ?? ""}
             {cursorOnLine2 && (
-              <span className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-edu-accent ml-1 align-middle animate-pulse" />
+              <span
+                className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-edu-accent ml-1 align-middle animate-pulse"
+                style={{ boxShadow: "0 0 8px rgba(200, 164, 78, 0.5)" }}
+              />
             )}
           </span>
         </>
