@@ -203,11 +203,11 @@ bun run lint         # ESLint + Prettier
 
 ```
 gentaron/edutext (raw .txt)
-       ↓  git push
-gentaron/edu/lore (mirror)
        ↓  build time fetch
 src/app/story/[slug]/page.tsx (SSG + ISR 1h)
 ```
+
+※ lore/ ミラーは使用しない。全てedutextリポジトリから直接fetch。
 
 - JP原典: `filename.txt` → EN翻訳: `filename_EN.txt`
 - EN原典: `filename.txt` → JP翻訳: `filename_JP.txt`

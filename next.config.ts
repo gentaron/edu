@@ -1,6 +1,5 @@
 import type { NextConfig } from "next"
 import withBundleAnalyzer from "@next/bundle-analyzer"
-import { withSentryConfig } from "@sentry/nextjs"
 
 const nextConfig: NextConfig = {
   output: "standalone",
@@ -30,6 +29,4 @@ const withAnalyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 })
 
-export default withSentryConfig(withAnalyzer(nextConfig), {
-  silent: true,
-})
+export default withAnalyzer(nextConfig)

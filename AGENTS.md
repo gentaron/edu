@@ -280,3 +280,47 @@ src/
 - 本プロジェクトは外部APIに依存しない（静的サイト）
 - 小説本文の取得はビルド時のGitHub raw fetch + ISRのみ
 - 新たに外部APIを追加する場合はユーザーの明示的な承認が必要
+
+---
+
+## 11. マルチリポジトリ連携ルール
+
+### 11.1 リポジトリ構成
+
+| リポジトリ       | 役割                     | AI編集権限                                     |
+| ---------------- | ------------------------ | ---------------------------------------------- |
+| gentaron/edu     | メインアプリ             | 直接編集OK                                     |
+| gentaron/edutext | ストーリー原稿（.txt）   | 直接編集OK（テキスト追加時）                   |
+| gentaron/image   | キャラクター画像（.png） | ファイル追加の指示のみ（AIは画像生成できない） |
+
+### 11.2 新キャラクター追加フロー
+
+1. edu: `src/lib/wiki-data/characters.ts` にWikiEntry追加
+2. edu: `src/lib/relation-data.ts` に関係性追加
+3. edu: `src/lib/card-data/cards.ts` にカード追加（バトル参加時）
+4. image: キャラ画像を追加するようユーザーに指示
+5. edutext: ストーリー原稿を追加するようユーザーに指示
+6. 実行: `bash .zscripts/sync-check.sh` で整合性確認
+
+### 11.3 新ストーリー追加フロー
+
+1. edutext: .txtファイルを追加（JP + EN）
+2. edu: `src/lib/stories.ts` にStoryMetaを追加
+3. 実行: `bash .zscripts/sync-check.sh` で整合性確認
+
+### 11.4 整合性チェック
+
+- 新規エンティティ追加後は必ず `bash .zscripts/sync-check.sh` を実行
+- MISSINGファイルがある場合は、対応するリポジトリにファイルを追加してからコミット
+- ORPHANファイルは削除ではなく、edu側からの参照を追加するか確認
+
+### 11.5 画像命名規則
+
+- ファイル名: キャラクターの英語名をPascalCase（例: `MinaEurekaErnst.png`）
+- サイズ: 400x400px以上、正方形推奨
+- edu内参照URL: `https://raw.githubusercontent.com/gentaron/image/main/{filename}`
+
+### 11.6 ヘルパースクリプト
+
+- `.zscripts/sync-check.sh` — 3リポジトリ間の整合性チェック
+- `.zscripts/new-entity.sh` — 新エンティティ追加時のTODO出力

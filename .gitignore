@@ -50,6 +50,24 @@ test
 prompt
 
 server.log
+
+# AI dev artifacts
+.zscripts/dev.pid
+.dev.log
+
+# Build analysis
+.next/analyze/
+
+# OS artifacts
+Thumbs.db
+
+# Editor artifacts
+*.swp
+*.swo
+*~
+
+# Upload staging (moved to separate repos)
+upload/
 # Skills directory
 /skills/db/custom.db
 edu\nedutext
