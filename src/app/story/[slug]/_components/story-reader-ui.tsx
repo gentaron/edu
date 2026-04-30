@@ -14,7 +14,12 @@ import {
   Library,
   Feather,
 } from "lucide-react"
-import { type StoryMeta, type ChapterMeta, ENTRY_IMAGE_MAP, getStoryTitle } from "@/lib/stories"
+import {
+  type StoryMeta,
+  type ChapterMeta,
+  ENTRY_IMAGE_MAP,
+  getStoryTitle,
+} from "@/domains/stories/stories.meta"
 import { type Lang, tl } from "@/lib/lang"
 import ReadingProgress from "./reading-progress"
 import { toRoman, isSceneBreak, isChapterHeading } from "../_lib/parser"

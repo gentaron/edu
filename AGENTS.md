@@ -1,326 +1,88 @@
-# AGENTS.md — AI Development Rules for gentaron
-
-> **Version**: 1.0.0
-> **Maintainer**: gentaron
-> **Effective**: All AI assistants (Z.AI, Claude, Cursor, Copilot, etc.)
-
-This file is the **highest priority** instruction set for any AI operating on this repository.
-
----
-
-## 1. Entry Point Protocol (The Boot Sequence)
-
-When accessing this repository, read files in this exact order:
-
-1. **AGENTS.md** (this file) — highest priority instructions
-2. **CLAUDE.md** (if exists) — supplementary instructions
-3. **README.md** — project overview and purpose
-4. **package.json** or equivalent manifest — dependencies and scripts
-5. **src/ or lib/ entry point** — architecture overview
-6. **Test files** — expected behavior
-
-Do NOT skip or reorder this sequence.
-
----
-
-## 2. Deadlock Prevention
-
-### 2.1 Iteration Cap
-
-For any single task, never repeat the same approach more than 3 times:
-
-- Attempt 1: Execute initial approach
-- Attempt 2: Fine-tune and retry
-- Attempt 3: Switch to a **completely different approach**
-- Attempt 4+: Report to user and ask for guidance
-
-### 2.2 Blocker Detection & Escalation
-
-Detect these conditions immediately and report to user:
-
-- Build error unresolved after 3 consecutive attempts
-- Dependency installation failure
-- Tests unable to run due to environment issues
-- Required files or directories missing
-
-When a blocker is detected:
-
-1. Explain the current situation concisely
-2. List attempted approaches
-3. Provide possible causes
-4. Suggest up to 3 next actions for user
-
-### 2.3 Circular Dependency Detection
-
-If editing A requires changing B, and B requires changing A:
-
-1. **Stop immediately** — make neither edit
-2. Visualize the circular structure
-3. Propose interface extraction
-4. Let user decide
-
-### 2.4 Indecision Resolution
-
-When multiple equally valid implementations exist:
-
-1. List pros and cons of each option
-2. Evaluate against **existing project patterns**
-3. If still undecided → choose the **simplest implementation**
-4. Document the reasoning in a comment
-
-Never enter a "cannot decide, stopping work" state.
-
-### 2.5 Scope Boundary Enforcement
-
-- Task is "done" when minimum requirements are met
-- Do NOT make incidental improvements — treat them as separate tasks
-- Refactoring only when explicitly requested
-- Out-of-scope improvements: list as **proposals** after task completion (do not execute)
-
----
-
-## 3. Task Execution Protocol
-
-### 3.1 Pre-Implementation Decomposition
-
-Before starting any task:
-
-1. Break into maximum 5 subtasks
-2. Estimate steps per subtask
-3. Explicitly state dependencies between subtasks
-4. Determine execution order and present to user
-
-### 3.2 Phased Implementation & Verification
-
-1. Skeleton (type definitions and interfaces only)
-2. Core logic (happy path only)
-3. Error handling
-4. Integration (connect with existing code)
-5. Verification (build / test / manual check)
-
-**Build must pass at each phase. Never proceed to next phase with a broken build.**
-
-### 3.3 Minimal Edit Principle
-
-- Max 10 files per editing session
-- Minimize lines changed per file
-- Do not mix formatting changes with logic changes
-- Prefer commenting out over deleting
-
----
-
-## 4. Error Recovery Protocol
-
-### 4.1 Error Classification
-
-| Category          | Action                                                 |
-| ----------------- | ------------------------------------------------------ |
-| Syntax error      | Fix immediately. Verify type definitions, do not guess |
-| Runtime error     | Add error handling. Investigate root cause             |
-| Environment error | Verify prerequisites. **Report to user**               |
-| Design error      | **Stop implementation**. Revisit design                |
-| Test error        | Verify test intent. Fix implementation or test         |
-
-**Environment and design errors: do NOT attempt to resolve independently. Report to user immediately.**
-
-### 4.2 Rollback Strategy
-
-When implementation is not progressing:
-
-1. Save current changes with `git stash` or temporary commit
-2. Restore to last working state
-3. Analyze root cause
-4. Re-implement with different approach
-
-### 4.3 Fallback Chain
-
-1. **Ideal implementation** → on failure:
-2. **Simplified implementation** (simpler approach) → on failure:
-3. **Minimal implementation** (core functionality only) → on failure:
-4. **Stub implementation** (interface only + TODO comment)
-
----
-
-## 5. Quality Verification Protocol
-
-### 5.1 Verification Gates
-
-- **On file save**: Linter and type checker pass with zero errors
-- **On feature completion**: Related tests all pass, build succeeds
-- **On task completion**: Full test suite, full build, self-review
-
-### 5.2 Self-Review Checklist
-
-Before marking any task complete:
-
-- [ ] All user requirements met
-- [ ] Error handling is appropriate
-- [ ] No hardcoded values
-- [ ] No security issues
-- [ ] Naming is consistent
-- [ ] No leftover comments or debug code
-
----
-
-## 6. Conflict Resolution Protocol
-
-### 6.1 Rule Priority Hierarchy
-
-1. **User's explicit instructions** (highest priority)
-2. **AGENTS.md / CLAUDE.md rules**
-3. **Existing project patterns and conventions**
-4. **Industry best practices**
-5. **AI's general judgment** (lowest priority)
-
-### 6.2 Security vs Functionality
-
-- **Always prioritize security**
-- Never implement insecure solutions
-- If user knowingly requests a security risk: explain the risk and propose safer alternatives
-
----
-
-## 7. Communication Protocol
-
-### 7.1 Progress Report Format
-
-**Done**: ✅ [Task name] complete — Implementation: ... — Changed files: ...
-**Blocker**: 🚫 [Task name] blocked — Cause: ... — Attempted fixes: ...
-**In Progress**: 🔄 [Task name] in progress — Progress: ... — Remaining: ...
-
-### 7.2 Question Rules
-
-- Maximum 3 questions at a time
-- Include recommended answers for each question
-- Prefer Yes/No format
-- Do not ask about matters solvable by general best practices
-
----
-
-## 8. Context Management
-
-### 8.1 Cross-Session State Inheritance
-
-When a session is interrupted:
-
-1. Reload AGENTS.md / CLAUDE.md
-2. Check `git log --oneline -10`
-3. Check `git status`, `git diff`
-4. Search for TODO/FIXME comments
-5. Report to user: "Continuing from previous session"
-
----
-
-## 9. Commit & Push Rules
-
-### 9.1 Conventional Commits
-
-Use conventional commit format:
-
-- `feat:` new feature
-- `fix:` bug fix
-- `docs:` documentation
-- `refactor:` code restructuring
-- `test:` test additions/modifications
-- `chore:` maintenance
-
-### 9.2 Commit Scope
-
-- One logical change per commit
-- Do not mix unrelated changes
-- Keep commit messages concise and descriptive
-
----
-
-**This ruleset applies to all repositories under the gentaron GitHub account.**
-**Do not override these rules with general AI behavior.**
-
----
-
-## 10. ファイル構造ルール
-
-### 10.1 ディレクトリ構造
-
-src/
-├── app/ # Next.js App Router
-│ ├── [route]/
-│ │ ├── page.tsx # ページ本体（200行以下）
-│ │ ├── \_components/ # ページ専用コンポーネント
-│ │ ├── \_lib/ # ページ専用ユーティリティ
-│ │ ├── loading.tsx
-│ │ └── error.tsx
-│ └── api/
-├── components/
-│ ├── edu/
-│ └── ui/
-├── lib/
-│ ├── data/ # データアクセス層
-│ ├── stores/ # Zustand stores
-│ ├── wiki-data/ # Wiki データ（カテゴリ別分割）
-│ ├── card-data/ # カードデータ
-│ ├── civilization-data/ # 文明データ
-│ └── ...
-├── types/ # 全型定義
-└── hooks/
-
-### 10.2 ファイルサイズ制限
-
-- page.tsx: 200行以下
-- コンポーネント: 150行以下
-- データファイル: 200行以下
-- 1ファイル = 1コンポーネント / 1Store / 1データカテゴリ
-
-### 10.3 データアクセスルール
-
-- 新規コードでは `@/lib/data` からアクセスする
-- 直接データファイルのimportは既存コードのみ許可
-
-### 10.4 外部API呼び出しルール
-
-- 本プロジェクトは外部APIに依存しない（静的サイト）
-- 小説本文の取得はビルド時のGitHub raw fetch + ISRのみ
-- 新たに外部APIを追加する場合はユーザーの明示的な承認が必要
-
----
-
-## 11. マルチリポジトリ連携ルール
-
-### 11.1 リポジトリ構成
-
-| リポジトリ       | 役割                     | AI編集権限                                     |
-| ---------------- | ------------------------ | ---------------------------------------------- |
-| gentaron/edu     | メインアプリ             | 直接編集OK                                     |
-| gentaron/edutext | ストーリー原稿（.txt）   | 直接編集OK（テキスト追加時）                   |
-| gentaron/image   | キャラクター画像（.png） | ファイル追加の指示のみ（AIは画像生成できない） |
-
-### 11.2 新キャラクター追加フロー
-
-1. edu: `src/lib/wiki-data/characters.ts` にWikiEntry追加
-2. edu: `src/lib/relation-data.ts` に関係性追加
-3. edu: `src/lib/card-data/cards.ts` にカード追加（バトル参加時）
-4. image: キャラ画像を追加するようユーザーに指示
-5. edutext: ストーリー原稿を追加するようユーザーに指示
-6. 実行: `bash .zscripts/sync-check.sh` で整合性確認
-
-### 11.3 新ストーリー追加フロー
-
-1. edutext: .txtファイルを追加（JP + EN）
-2. edu: `src/lib/stories.ts` にStoryMetaを追加
-3. 実行: `bash .zscripts/sync-check.sh` で整合性確認
-
-### 11.4 整合性チェック
-
-- 新規エンティティ追加後は必ず `bash .zscripts/sync-check.sh` を実行
-- MISSINGファイルがある場合は、対応するリポジトリにファイルを追加してからコミット
-- ORPHANファイルは削除ではなく、edu側からの参照を追加するか確認
-
-### 11.5 画像命名規則
-
-- ファイル名: キャラクターの英語名をPascalCase（例: `MinaEurekaErnst.png`）
-- サイズ: 400x400px以上、正方形推奨
-- edu内参照URL: `https://raw.githubusercontent.com/gentaron/image/main/{filename}`
-
-### 11.6 ヘルパースクリプト
-
-- `.zscripts/sync-check.sh` — 3リポジトリ間の整合性チェック
-- `.zscripts/new-entity.sh` — 新エンティティ追加時のTODO出力
+# AGENTS.md — gentaron/edu v2.0
+
+## アーキテクチャ
+
+ドメインクラスタ + 共有基盤 + Metal層
+
+```
+domains/  ← 各ドメイン専門家 (各自AGENTS.md)
+  wiki/      — 百科事典データ + 検索 + repository
+  cards/     — カードデータ + enemies + repository
+  battle/    — engine + store + fsm + hsm + canvas
+  stories/   — meta + parser + repository + schema
+  civilizations/ — civ.data + repository
+platform/ ← 共有基盤 (AGENTS.md)
+  event-bus.ts     — ドメイン間イベント通信
+  navigation.tsx   — 共通ナビゲーション
+  reveal-section   — RevealSection / RevealGrid / SectionHeader
+  page-header.tsx  — PageHeader
+  motion-provider  — framer-motion LazyMotion
+  json-ld.tsx      — JSON-LD構造化データ
+  schemas/         — Zodスキーマ (card, wiki, civilization, tech, timeline, etc.)
+  validators/      — 実行時データ検証
+  invariants/      — クロスデータ整合性チェック
+  ui/              — shadcn/uiコンポーネント (toast, toaster, badge, accordion)
+metal/    ← WASM/Binary/Workers (wasm-bridge, service-worker, workers, binary-protocol)
+app/      ← Next.js App Router 合成レイヤー (薄レイヤー)
+lib/      ← 共有ユーティリティ (utils, stores, data access, lang)
+types/    ← 全型定義 (barrel export)
+hooks/    ← React hooks
+_infra/   ← ビルド時バリデーション (validate-data, pack-data)
+```
+
+## AI実行プロトコル
+
+1. ルートAGENTS.md (このファイル) を読む
+2. タスクの対象ドメインを特定
+3. 対象ドメインのAGENTS.mdを読む (他は読まない)
+4. 変更 → テスト → 型チェック → ビルド
+
+## 品質ゲート
+
+- on save: lint + typecheck
+- on feature: ドメイン内テスト
+- on task: full build + full test
+
+## 絶対ルール
+
+- any型禁止
+- eslint-disable禁止
+- 外部API追加はユーザー承認必須
+- 1セッション最大10ファイル編集
+- 3回連続同じエラー → ユーザー報告
+- Wiki項目名は固有名詞として存在感のある名前に (一般名詞不可)
+- ドメイン間直接import禁止 (event-bus経由)
+- データファイルは各ドメインのdata.tsに集約
+
+## コマンド
+
+```bash
+bun install && bun dev
+bun run build
+bun test
+bun run lint
+```
+
+## コミット
+
+```
+feat(wiki): 新キャラクター追加
+fix(battle): ダメージ計算の境界値バグ
+refactor(arch): ドメインクラスタ移行
+```
+
+## コンテキスト管理
+
+- 新セッション: `git log --oneline -5` + `git status`
+- ドメイン横断タスク: 影響DAGを最初に可視化
+
+## データアクセス
+
+- Wikiデータ: `@/domains/wiki/wiki.data` (ALL_ENTRIES含む)
+- カードデータ: `@/domains/cards/cards.data` (ALL_CARDS, ENEMIES)
+- 文明データ: `@/domains/civilizations/civ.data` (TOP/OTHER/HISTORICAL, LEADERS)
+- ストーリー: `@/domains/stories/stories.meta` (ALL_STORIES, CHAPTERS, 各種関数)
+- 共通UI: `@/platform/reveal-section`, `@/platform/page-header`, `@/platform/ui/*`
+- Zodスキーマ: `@/platform/schemas` (全スキーマbarrel)
+- 型定義: `@/types` (全型barrel)
+- バリデーション: `@/platform/validators`, `@/platform/invariants`

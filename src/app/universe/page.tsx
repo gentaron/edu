@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Globe2, Star, Users, Zap } from "lucide-react"
-import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
-import { PageHeader } from "@/components/edu/page-header"
+import { RevealSection, SectionHeader } from "@/platform/reveal-section"
+import { PageHeader } from "@/platform/page-header"
 
 function PlanetCard({
   icon,

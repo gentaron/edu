@@ -26,7 +26,7 @@ import type {
   FactionTree,
   RelationNode,
   RelationEdge,
-} from "@/l2-datalink"
+} from "@/platform/schemas"
 
 export class ContentRepository {
   // ── Timeline ──

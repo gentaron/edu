@@ -2,10 +2,10 @@ import type { Metadata } from "next"
 import type { ReactNode } from "react"
 import { Noto_Sans_JP } from "next/font/google"
 import "./globals.css"
-import { Toaster } from "@/components/ui/toaster"
-import { Navigation } from "@/components/edu/navigation"
-import { MotionProvider } from "@/components/edu/motion-provider"
-import { WebsiteJsonLd } from "@/components/edu/json-ld"
+import { Toaster } from "@/platform/ui/toaster"
+import { Navigation } from "@/platform/navigation"
+import { MotionProvider } from "@/platform/motion-provider"
+import { WebsiteJsonLd } from "@/platform/json-ld"
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-sans",

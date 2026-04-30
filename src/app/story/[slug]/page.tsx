@@ -7,8 +7,8 @@ import {
   getStoryUrlForLang,
   getStoriesByChapter,
   getAdjacentStories,
-} from "@/lib/stories"
-import { ALL_ENTRIES } from "@/lib/wiki-data"
+} from "@/domains/stories/stories.meta"
+import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import { StoryReaderUI } from "./_components/story-reader-ui"
 
 export function generateStaticParams() {

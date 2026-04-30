@@ -5,9 +5,9 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
-import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
-import { PageHeader } from "@/components/edu/page-header"
+} from "@/platform/ui/accordion"
+import { RevealSection, SectionHeader } from "@/platform/reveal-section"
+import { PageHeader } from "@/platform/page-header"
 import { TIMELINE_DATA, locColor } from "@/lib/timeline-data"
 
 export default function TimelinePage() {

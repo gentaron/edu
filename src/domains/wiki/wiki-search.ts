@@ -15,8 +15,8 @@ import {
   WIKI_TECHNOLOGY,
   WIKI_TERMS,
   WIKI_HISTORY,
-} from "@/l1-physical/wiki"
-import { ALL_CARDS } from "@/l1-physical/cards"
+} from "@/domains/wiki/wiki.data"
+import { ALL_CARDS } from "@/domains/cards/cards.data"
 import type { WikiEntry, GameCard } from "@/types"
 
 // ─── Types ────────────────────────────────────────────────────────────────

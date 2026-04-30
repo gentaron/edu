@@ -14,7 +14,7 @@ import {
   ChevronRight,
   ArrowLeft,
 } from "lucide-react"
-import { ALL_ENTRIES } from "@/lib/wiki-data"
+import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 
 type Category = "キャラクター" | "用語" | "組織" | "地理" | "技術" | "歴史"
 

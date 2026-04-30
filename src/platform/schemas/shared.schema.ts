@@ -13,7 +13,7 @@ export {
   type Rarity,
   type EnemyDifficulty,
   type EnemyPhase,
-} from "@/l2-datalink/schemas/card.schema"
+} from "./card.schema"
 
 // Re-export wiki schema types for cross-domain usage
-export { CategorySchema, type Category } from "@/l2-datalink/schemas/wiki.schema"
+export { CategorySchema, type Category } from "./wiki.schema"

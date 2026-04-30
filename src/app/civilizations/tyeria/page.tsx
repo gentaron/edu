@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Shield, Globe2 } from "lucide-react"
-import { PageHeader } from "@/components/edu/page-header"
-import { RevealSection } from "@/components/edu/reveal-section"
+import { PageHeader } from "@/platform/page-header"
+import { RevealSection } from "@/platform/reveal-section"
 
 export default function TyeriaPage() {
   return (

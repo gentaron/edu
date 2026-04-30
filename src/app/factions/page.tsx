@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Swords, Users, Globe2 } from "lucide-react"
-import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
-import { PageHeader } from "@/components/edu/page-header"
+import { RevealSection, SectionHeader } from "@/platform/reveal-section"
+import { PageHeader } from "@/platform/page-header"
 import { FACTION_TREES } from "@/lib/faction-data"
 
 function FactionNode({

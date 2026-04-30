@@ -1,8 +1,8 @@
 import Link from "next/link"
 import { Radio, ArrowDown, Zap, Star } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
-import { PageHeader } from "@/components/edu/page-header"
+import { Badge } from "@/platform/ui/badge"
+import { RevealSection, SectionHeader } from "@/platform/reveal-section"
+import { PageHeader } from "@/platform/page-header"
 import { PLATFORMS } from "@/lib/liminal-data"
 
 export default function LiminalPage() {

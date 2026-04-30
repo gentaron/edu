@@ -1,8 +1,8 @@
 import Link from "next/link"
 import React from "react"
 import { Users } from "lucide-react"
-import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
-import { PageHeader } from "@/components/edu/page-header"
+import { RevealSection, SectionHeader } from "@/platform/reveal-section"
+import { PageHeader } from "@/platform/page-header"
 import { MINA_TIMELINE } from "@/lib/mina-data"
 
 export default function MinaPage() {

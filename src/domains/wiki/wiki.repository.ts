@@ -12,7 +12,7 @@ import {
   WIKI_TERMS,
   WIKI_HISTORY,
 } from "./wiki.data"
-import type { WikiEntry, Category } from "@/l2-datalink/schemas"
+import type { WikiEntry, Category } from "@/types"
 
 /** Combined wiki entries from all source files */
 const ALL_ENTRIES: WikiEntry[] = [

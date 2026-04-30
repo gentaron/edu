@@ -5,11 +5,11 @@ import Image from "next/image"
 import { useParams } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, User, Scroll, BookOpen, Crown } from "lucide-react"
-import { ALL_ENTRIES } from "@/lib/wiki-data"
-import { getStoriesForEntry } from "@/lib/stories"
+import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
+import { getStoriesForEntry } from "@/domains/stories/stories.meta"
 import WikiDescription from "./_components/wiki-description"
-import { RevealSection } from "@/components/edu/reveal-section"
-import { PageHeader } from "@/components/edu/page-header"
+import { RevealSection } from "@/platform/reveal-section"
+import { PageHeader } from "@/platform/page-header"
 
 export default function WikiEntryPage() {
   const params = useParams<{ id: string }>()

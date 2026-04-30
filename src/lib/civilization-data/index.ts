@@ -1,5 +1,0 @@
-export { TOP_CIVILIZATIONS } from "./top"
-export { OTHER_CIVILIZATIONS } from "./other"
-export { HISTORICAL_CIVILIZATIONS } from "./historical"
-export { CIVILIZATION_LEADERS } from "./leaders"
-export type { Civilization, CivilizationLeader } from "@/types"

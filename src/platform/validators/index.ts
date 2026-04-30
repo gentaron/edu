@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   L2 DATALINK — Validators
+   Platform — Validators
    Runtime validation functions using Zod schemas.
    Returns parsed data or throws structured errors.
    ═══════════════════════════════════════════ */
@@ -26,7 +26,7 @@ import {
   type TimelinePeriod,
   type TechEntry,
   type FactionTree,
-} from "../schemas"
+} from "@/platform/schemas"
 
 export interface ValidationResult<T> {
   success: true

@@ -13,13 +13,13 @@ import {
   Globe2,
   ExternalLink,
 } from "lucide-react"
-import { PageHeader } from "@/components/edu/page-header"
-import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
+import { PageHeader } from "@/platform/page-header"
+import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 import {
   TOP_CIVILIZATIONS,
   OTHER_CIVILIZATIONS,
   HISTORICAL_CIVILIZATIONS,
-} from "@/lib/civilization-data"
+} from "@/domains/civilizations/civ.data"
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Crown: <Crown className="w-6 h-6" />,

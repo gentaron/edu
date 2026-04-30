@@ -15,8 +15,8 @@ import {
   getStoriesByChapter,
   getAdjacentStories,
   ENTRY_IMAGE_MAP,
-} from "@/lib/stories"
-import type { StoryMeta, ChapterMeta } from "@/l2-datalink"
+} from "@/domains/stories/stories.meta"
+import type { StoryMeta, ChapterMeta } from "@/domains/stories/stories.schema"
 
 export class StoryRepository {
   /** Find a story by slug */

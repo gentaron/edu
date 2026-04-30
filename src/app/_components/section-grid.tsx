@@ -1,7 +1,7 @@
 import React from "react"
 import Link from "next/link"
 import { Globe2 } from "lucide-react"
-import { RevealSection, RevealGrid, SectionHeader } from "@/components/edu/reveal-section"
+import { RevealSection, RevealGrid, SectionHeader } from "@/platform/reveal-section"
 import { SECTION_PAGES } from "./home-data"
 
 export function SectionGrid() {

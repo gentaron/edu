@@ -10,7 +10,7 @@ import {
   ENTRY_IMAGE_MAP,
   getStoriesByChapter,
   getStoryTitle,
-} from "@/lib/stories"
+} from "@/domains/stories/stories.meta"
 import { type Lang, tl } from "@/lib/lang"
 
 /* ─── Roman numerals ─── */

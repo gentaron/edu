@@ -1,10 +1,10 @@
 import Link from "next/link"
 import { Crown, Swords, Shield, Users } from "lucide-react"
-import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
-import { PageHeader } from "@/components/edu/page-header"
-import { ALL_CARDS } from "@/lib/card-data"
+import { RevealSection, SectionHeader } from "@/platform/reveal-section"
+import { PageHeader } from "@/platform/page-header"
+import { ALL_CARDS } from "@/domains/cards/cards.data"
 import type { GameCard } from "@/types"
-import { ALL_ENTRIES } from "@/lib/wiki-data"
+import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 
 /* Build a lookup from card display name → wiki entry id */
 const nameToWikiId = new Map<string, string>()

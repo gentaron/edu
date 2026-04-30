@@ -2,7 +2,7 @@
 
 import React, { useMemo } from "react"
 import Link from "next/link"
-import { ALL_ENTRIES } from "@/lib/wiki-data"
+import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 
 // ── Build the name→id lookup map ONCE at module level ──────────────────
 // Each entry maps both its Japanese `name` and English `nameEn` (if present)

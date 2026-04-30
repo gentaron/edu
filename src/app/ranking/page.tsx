@@ -1,7 +1,7 @@
 import React from "react"
 import Link from "next/link"
 import { TrendingUp, Globe2 } from "lucide-react"
-import { CIVILIZATION_LEADERS } from "@/lib/civilization-data"
+import { CIVILIZATION_LEADERS } from "@/domains/civilizations/civ.data"
 import { RANKING_DATA } from "./_components/ranking-data"
 import { RankingCard } from "./_components/ranking-card"
 import { FooterNotes } from "./_components/footer-notes"

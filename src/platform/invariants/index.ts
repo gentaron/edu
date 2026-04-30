@@ -1,10 +1,11 @@
 /* ═══════════════════════════════════════════
-   L2 DATALINK — Invariants
+   Platform — Invariants
    Cross-data consistency checks.
    These ensure referential integrity across data domains.
    ═══════════════════════════════════════════ */
 
-import type { WikiEntry, GameCard, Enemy, Civilization, StoryMeta } from "../schemas"
+import type { WikiEntry, GameCard, Enemy, Civilization } from "@/types"
+import type { StoryMeta } from "@/domains/stories/stories.schema"
 
 export interface InvariantViolation {
   rule: string

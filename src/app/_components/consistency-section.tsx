@@ -1,6 +1,6 @@
 import React from "react"
 import { AlertTriangle } from "lucide-react"
-import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
+import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 
 export function ConsistencySection() {
   return (

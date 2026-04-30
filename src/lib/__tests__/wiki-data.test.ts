@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest"
-import { ALL_ENTRIES } from "../wiki-data"
+import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 
 const VALID_CATEGORIES = ["キャラクター", "用語", "組織", "地理", "技術", "歴史"]
 

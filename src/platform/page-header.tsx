@@ -2,16 +2,24 @@ import type { ReactNode } from "react"
 import Link from "next/link"
 import { ChevronLeft } from "lucide-react"
 
-export function PageHeader({ icon, title, subtitle, wikiHref }: {
-  icon: ReactNode;
-  title: ReactNode;
-  subtitle?: ReactNode;
-  wikiHref?: string;
+export function PageHeader({
+  icon,
+  title,
+  subtitle,
+  wikiHref,
+}: {
+  icon: ReactNode
+  title: ReactNode
+  subtitle?: ReactNode
+  wikiHref?: string
 }) {
   return (
     <div className="pt-20 pb-8 px-4">
       <div className="max-w-4xl mx-auto">
-        <Link href="/" className="inline-flex items-center gap-1 text-xs text-edu-muted hover:text-edu-accent transition-colors mb-6">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1 text-xs text-edu-muted hover:text-edu-accent transition-colors mb-6"
+        >
           <ChevronLeft className="w-3 h-3" /> トップ
         </Link>
         <div>
@@ -21,7 +29,10 @@ export function PageHeader({ icon, title, subtitle, wikiHref }: {
           </div>
           {subtitle && <p className="text-sm text-edu-muted leading-relaxed">{subtitle}</p>}
           {wikiHref && (
-            <Link href={wikiHref} className="inline-flex items-center gap-1 text-xs text-edu-accent hover:text-edu-accent2 mt-3 transition-colors">
+            <Link
+              href={wikiHref}
+              className="inline-flex items-center gap-1 text-xs text-edu-accent hover:text-edu-accent2 mt-3 transition-colors"
+            >
               Wiki で詳しく →
             </Link>
           )}

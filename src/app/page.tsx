@@ -1,5 +1,5 @@
 import React from "react"
-import { RevealSection } from "@/components/edu/reveal-section"
+import { RevealSection } from "@/platform/reveal-section"
 import { HeroSection } from "./_components/hero-section"
 import { QuickAccessSection } from "./_components/quick-access-section"
 import { SectionGrid } from "./_components/section-grid"

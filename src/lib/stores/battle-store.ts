@@ -1,6 +1,10 @@
 import { create } from "zustand"
 import type { GameCard, Enemy, AbilityType, FieldChar } from "@/types"
-import { charMaxHp, calculateEffectDamage, calculateEnemyDamage } from "../battle-logic"
+import {
+  charMaxHp,
+  calculateEffectDamage,
+  calculateEnemyDamage,
+} from "@/domains/battle/battle.engine"
 
 /* ═══════════════════════════════════════════════════════
    Field-based Battle Store — Individual Character HP

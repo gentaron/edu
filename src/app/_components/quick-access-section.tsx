@@ -2,7 +2,7 @@ import React from "react"
 import Link from "next/link"
 import { ExternalLink } from "lucide-react"
 import { QUICK_ACCESS_CARDS } from "./home-data"
-import { RevealGrid } from "@/components/edu/reveal-section"
+import { RevealGrid } from "@/platform/reveal-section"
 
 export function QuickAccessSection() {
   return (

@@ -13,14 +13,9 @@ import {
   validateTimelinePeriods,
   validateTechEntries,
   validateFactionTrees,
-  runAllInvariants,
-  type InvariantViolation,
-  type WikiEntry,
-  type GameCard,
-  type Enemy,
-  type Civilization,
-  type StoryMeta,
-} from "@/l2-datalink"
+} from "@/platform/validators"
+import { runAllInvariants, type InvariantViolation } from "@/platform/invariants"
+import type { WikiEntry, GameCard, Enemy, Civilization, StoryMeta } from "@/platform/schemas"
 import {
   WIKI_CHARACTERS,
   WIKI_CHARACTERS_NEW,

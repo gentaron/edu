@@ -1,44 +1,23 @@
-# Wiki ドメイン — 百科事典専門家
+# Wiki Domain
 
-## 境界
+## 役割
 
-- Wikiデータの読み取り・検証・変換・検索はこのディレクトリ内で完結
-- 他ドメインは `wiki.repository.ts` の公開APIのみ使用
-- UIコンポーネントは `app/wiki/` に配置
+百科事典専門家 — EDUプロジェクトの全知識体系を統合管理するドメイン。
 
-## データ形状
+## 思想統合ルール
 
-```ts
-interface WikiEntry {
-  id
-  name
-  nameEn?
-  category
-  subCategory?
-  description
-  era?
-  affiliation?
-  tier?
-  image?
-  sourceLinks?
-  leaders?
-}
-```
+- 各Wikiエントリのdescription末尾には対応する思想地層(D1-D5, L1-L3)のパラグラフが含まれる
+- 追記フォーマット: `この[項目名]の根底には、[地層ID]の思想的地層が横たわっている。[2-3文]`
+- 8思想地層: D1超未来第一主義, D2安全の監視者, D3国家=株式会社, D4倫理の解除, D5脱人間化, L1防衛的加速主義, L2多元性民主主義, L3第2のゲーム
 
-## 編集ルール
+## データ構造
 
-- 新項目: idは既存と重複不可 (`validate-data.ts`が検証)
-- 画像: `gentaron/image` にPNG追加 → imageフィールドにURL
-- 説明文内リンク: `[[id]]` 記法
-- Wiki項目名は一般的な名詞を避け、固有名詞としての存在感のある名前に
+- wiki.data.ts — 全Wikiエントリの統合barrel (ALL_ENTRIES含む)
+- wiki.repository.ts — 検索・取得ロジック
+- wiki-search.ts — BM25転置インデックス
+- content.repository.ts — timeline, tech, character-detail等のコンテンツデータ
 
-## テスト
+## 品質ゲート
 
-```bash
-bun test domains/wiki/
-```
-
-## 思想統合ルール (Epoch 9)
-
-各項目のdescription末尾に思想地層パラグラフを追加可能。
-闇の地層(D1-D5)と光の地層(L1-L3)の該当するものを関連付ける。
+- id/name/nameEnはSF固有名詞（一般名詞禁止）
+- description末尾に必ず思想地層パラグラフ

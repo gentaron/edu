@@ -1,7 +1,6 @@
 /* ═══════════════════════════════════════════
-   L2 DATALINK — Schema Registry
+   Platform — Schema Registry
    All Zod schemas and derived types.
-   Each layer Ln depends only on Ln-1 schemas.
    ═══════════════════════════════════════════ */
 
 export {
@@ -46,12 +45,7 @@ export {
   type ChapterMeta,
 } from "@/domains/stories/stories.schema"
 
-export {
-  TlEvSchema,
-  TimelinePeriodSchema,
-  type TlEv,
-  type TimelinePeriod,
-} from "@/platform/schemas/timeline.schema"
+export { TlEvSchema, TimelinePeriodSchema, type TlEv, type TimelinePeriod } from "./timeline.schema"
 
 export { TechEntrySchema, type TechEntry } from "./tech.schema"
 
@@ -66,18 +60,18 @@ export {
   type IrisRelation,
   type MinaTimelineEntry,
   type PlatformEntry,
-} from "@/platform/schemas/character-detail.schema"
+} from "./character-detail.schema"
 
 export {
   FactionNodeSchema,
   FactionTreeSchema,
   type FactionNode,
   type FactionTree,
-} from "@/platform/schemas/faction.schema"
+} from "./faction.schema"
 
 export {
   RelationNodeSchema,
   RelationEdgeSchema,
   type RelationNode,
   type RelationEdge,
-} from "@/platform/schemas/relation.schema"
+} from "./relation.schema"

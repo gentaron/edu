@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { BookOpen, ChevronRight } from "lucide-react"
-import { getStoriesForEntry, getStoryBySlug, getStoryTitle } from "@/lib/stories"
+import { getStoriesForEntry, getStoryBySlug, getStoryTitle } from "@/domains/stories/stories.meta"
 import { type Lang, tl } from "@/lib/lang"
 
 export function RelatedStoriesSection({

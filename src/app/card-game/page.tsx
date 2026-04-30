@@ -15,7 +15,7 @@ import {
   ChevronDown,
   Info,
 } from "lucide-react"
-import { ALL_CARDS } from "@/lib/card-data"
+import { ALL_CARDS } from "@/domains/cards/cards.data"
 import type { GameCard } from "@/types"
 import { useDeckStore } from "@/lib/stores"
 import { useShallow } from "zustand/react/shallow"

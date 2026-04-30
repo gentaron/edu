@@ -2,12 +2,12 @@
    relation-data.ts — 組織・人物相関グラフ構築
    ═══════════════════════════════════════════════════════════════ */
 
-import { ALL_ENTRIES } from "./wiki-data"
+import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import {
   TOP_CIVILIZATIONS,
   OTHER_CIVILIZATIONS,
   HISTORICAL_CIVILIZATIONS,
-} from "./civilization-data"
+} from "@/domains/civilizations/civ.data"
 import type { Civilization, RelationNode, RelationEdge } from "@/types"
 
 export type { RelationNode, RelationEdge } from "@/types"

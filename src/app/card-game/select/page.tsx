@@ -6,7 +6,7 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { m } from "framer-motion"
 import { Swords, ArrowLeft, Shield, Skull, AlertTriangle, ChevronRight, Crown } from "lucide-react"
-import { ENEMIES } from "@/lib/card-data"
+import { ENEMIES } from "@/domains/cards/cards.data"
 import type { Enemy } from "@/types"
 import { useDeckStore } from "@/lib/stores"
 

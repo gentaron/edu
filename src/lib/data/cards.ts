@@ -1,7 +1,7 @@
-import { ALL_CARDS, ENEMIES } from "../card-data"
+import { ALL_CARDS, ENEMIES } from "@/domains/cards/cards.data"
 import type { GameCard, Enemy } from "@/types"
 
-export function getAllCards(): GameCard[] {
+export function getAllCards(): readonly GameCard[] {
   return ALL_CARDS
 }
 
@@ -10,14 +10,14 @@ export function getCardById(id: string): GameCard | undefined {
 }
 
 export function getCardsByRarity(rarity: string): GameCard[] {
-  return ALL_CARDS.filter((card) => card.rarity === rarity)
+  return [...ALL_CARDS.filter((card) => card.rarity === rarity)]
 }
 
 export function getCardsByAffiliation(affiliation: string): GameCard[] {
-  return ALL_CARDS.filter((card) => card.affiliation.includes(affiliation))
+  return [...ALL_CARDS.filter((card) => card.affiliation.includes(affiliation))]
 }
 
-export function getAllEnemies(): Enemy[] {
+export function getAllEnemies(): readonly Enemy[] {
   return ENEMIES
 }
 

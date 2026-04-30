@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Atom, Zap, Globe2, ChevronDown } from "lucide-react"
-import { RevealSection, SectionHeader } from "@/components/edu/reveal-section"
-import { PageHeader } from "@/components/edu/page-header"
+import { RevealSection, SectionHeader } from "@/platform/reveal-section"
+import { PageHeader } from "@/platform/page-header"
 import { TECH_DATA } from "@/lib/tech-data"
 
 export default function TechnologyPage() {

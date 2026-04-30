@@ -5,7 +5,7 @@ import {
   getStoryBySlug,
   getStoriesByChapter,
   getAdjacentStories,
-} from "../stories"
+} from "@/domains/stories/stories.meta"
 
 describe("stories", () => {
   it("ALL_STORIES should have no duplicate slugs", () => {
