@@ -135,7 +135,7 @@ describe("getStoriesByChapter", () => {
     for (let ch = 1; ch <= 5; ch++) {
       const stories = getStoriesByChapter(ch)
       for (let i = 1; i < stories.length; i++) {
-        expect(stories[i - 1].chapterOrder).toBeLessThan(stories[i].chapterOrder)
+        expect(stories[i - 1]!.chapterOrder).toBeLessThan(stories[i]!.chapterOrder)
       }
     }
   })

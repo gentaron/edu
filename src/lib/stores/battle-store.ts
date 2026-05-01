@@ -204,6 +204,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       }
       case "効果": {
         const result = calculateEffectDamage(
+          card.effectType,
           card.effect,
           card.effectValue,
           card.name,

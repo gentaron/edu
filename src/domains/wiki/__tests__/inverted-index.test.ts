@@ -208,7 +208,7 @@ describe("Trie", () => {
       trie.insert("hello", "d1")
       const results = trie.searchPrefix("hello")
       expect(results.length).toBe(1)
-      expect(results[0].word).toBe("hello")
+      expect(results[0]!.word).toBe("hello")
     })
   })
 
@@ -327,7 +327,7 @@ describe("InvertedIndex", () => {
     it("results sorted by score descending", () => {
       const results = index.search("document")
       for (let i = 1; i < results.length; i++) {
-        expect(results[i - 1].score).toBeGreaterThanOrEqual(results[i].score)
+        expect(results[i - 1]!.score).toBeGreaterThanOrEqual(results[i]!.score)
       }
     })
   })

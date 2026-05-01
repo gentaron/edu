@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import fc from "fast-check"
 import { charMaxHp, appendLog, hitRandomChar, calculatePhaseTransition, calculateEnemySelfHeal, calculateEffectDamage, calculateEnemyDamage } from "@/domains/battle/battle.engine"
+import { EffectType, classifyEffect } from "@/types"
 import type { GameCard, Enemy, FieldChar } from "@/types"
 
 /* ═══════════════════════════════════════════
@@ -25,6 +26,7 @@ describe("PBT: battle.engine", () => {
             attack: 5,
             defense,
             effect: "test",
+            effectType: EffectType.HEAL,
             effectValue: 3,
             ultimate: 10,
             ultimateName: "test",
@@ -42,9 +44,9 @@ describe("PBT: battle.engine", () => {
   it("SR cards always have higher base HP than R and C (same defense)", () => {
     fc.assert(
       fc.property(fc.integer({ min: 0, max: 10 }), (defense) => {
-        const srCard: GameCard = { id: "a", name: "A", imageUrl: "", flavorText: "", rarity: "SR", affiliation: "t", attack: 5, defense, effect: "t", effectValue: 3, ultimate: 10, ultimateName: "t" }
-        const rCard: GameCard = { id: "b", name: "B", imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense, effect: "t", effectValue: 3, ultimate: 10, ultimateName: "t" }
-        const cCard: GameCard = { id: "c", name: "C", imageUrl: "", flavorText: "", rarity: "C", affiliation: "t", attack: 5, defense, effect: "t", effectValue: 3, ultimate: 10, ultimateName: "t" }
+        const srCard: GameCard = { id: "a", name: "A", imageUrl: "", flavorText: "", rarity: "SR", affiliation: "t", attack: 5, defense, effect: "t", effectType: EffectType.HEAL, effectValue: 3, ultimate: 10, ultimateName: "t" }
+        const rCard: GameCard = { id: "b", name: "B", imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense, effect: "t", effectType: EffectType.HEAL, effectValue: 3, ultimate: 10, ultimateName: "t" }
+        const cCard: GameCard = { id: "c", name: "C", imageUrl: "", flavorText: "", rarity: "C", affiliation: "t", attack: 5, defense, effect: "t", effectType: EffectType.HEAL, effectValue: 3, ultimate: 10, ultimateName: "t" }
         expect(charMaxHp(srCard)).toBeGreaterThan(charMaxHp(rCard))
         expect(charMaxHp(rCard)).toBeGreaterThan(charMaxHp(cCard))
       })
@@ -77,7 +79,7 @@ describe("PBT: battle.engine", () => {
     fc.assert(
       fc.property(fc.integer({ min: 1, max: 5 }), fc.integer({ min: 1, max: 20 }), (numAlive, damage) => {
         const fieldChars: FieldChar[] = Array.from({ length: 5 }, (_, i) => ({
-          card: { id: `c${i}`, name: `Char${i}`, imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense: 3, effect: "t", effectValue: 3, ultimate: 10, ultimateName: "t" },
+          card: { id: `c${i}`, name: `Char${i}`, imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense: 3, effect: "t", effectType: EffectType.HEAL, effectValue: 3, ultimate: 10, ultimateName: "t" },
           hp: 20,
           maxHp: 20,
           isDown: i >= numAlive,
@@ -88,7 +90,7 @@ describe("PBT: battle.engine", () => {
         } else {
           expect(result.hitIndex).toBeGreaterThanOrEqual(0)
           expect(result.hitIndex).toBeLessThan(5)
-          expect(result.fieldChars[result.hitIndex!].hp).toBeLessThan(20)
+          expect(result.fieldChars[result.hitIndex!]!.hp).toBeLessThan(20)
         }
       })
     )
@@ -98,7 +100,7 @@ describe("PBT: battle.engine", () => {
   it("calculateEffectDamage always returns non-negative values", () => {
     fc.assert(
       fc.property(fc.string(), fc.integer({ min: 0, max: 20 }), fc.boolean(), (effect, value, voidKing) => {
-        const result = calculateEffectDamage(effect, value, "TestCard", "test", voidKing)
+        const result = calculateEffectDamage(classifyEffect(effect), effect, value, "TestCard", "test", voidKing)
         expect(result.damage).toBeGreaterThanOrEqual(0)
         expect(result.heal).toBeGreaterThanOrEqual(0)
         expect(result.shield).toBeGreaterThanOrEqual(0)
@@ -151,7 +153,7 @@ describe("PBT: battle.engine", () => {
       phases: [{ triggerHpPercent: 50, message: "Phase!", attackBonus: 2 }],
     }
     const fieldChars: FieldChar[] = Array.from({ length: 5 }, (_, i) => ({
-      card: { id: `c${i}`, name: `C${i}`, imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense: 3, effect: "t", effectValue: 3, ultimate: 10, ultimateName: "t" },
+      card: { id: `c${i}`, name: `C${i}`, imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense: 3, effect: "t", effectType: EffectType.HEAL, effectValue: 3, ultimate: 10, ultimateName: "t" },
       hp: 10, maxHp: 10, isDown: false,
     }))
     fc.assert(

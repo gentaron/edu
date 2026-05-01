@@ -99,7 +99,7 @@ const allWiki = [
 const allCivs = [...TOP_CIVILIZATIONS, ...OTHER_CIVILIZATIONS, ...HISTORICAL_CIVILIZATIONS]
 const violations = runAllInvariants({
   wikiEntries: allWiki as WikiEntry[],
-  cards: [...ALL_CARDS] as GameCard[],
+  cards: [...ALL_CARDS],
   enemies: [...ENEMIES] as Enemy[],
   civilizations: allCivs as Civilization[],
   stories: [...ALL_STORIES] as StoryMeta[],

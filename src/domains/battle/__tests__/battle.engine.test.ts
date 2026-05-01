@@ -7,9 +7,9 @@ import {
   calculateEnemySelfHeal,
   calculateEffectDamage,
   calculateEnemyDamage,
-  type FieldChar,
 } from "@/domains/battle/battle.engine"
-import type { GameCard, Enemy } from "@/types"
+import { EffectType } from "@/types"
+import type { GameCard, Enemy, FieldChar } from "@/types"
 
 /* ═══════════════════════════════════════════
    1. charMaxHp — HP Calculation
@@ -26,6 +26,7 @@ describe("charMaxHp", () => {
       attack: 5,
       defense,
       effect: "test",
+      effectType: EffectType.HEAL,
       effectValue: 3,
       ultimate: 10,
       ultimateName: "test",
@@ -157,6 +158,7 @@ describe("hitRandomChar", () => {
       attack: 5,
       defense: 3,
       effect: "test",
+      effectType: EffectType.HEAL,
       effectValue: 3,
       ultimate: 10,
       ultimateName: "test",
@@ -218,21 +220,21 @@ describe("hitRandomChar", () => {
   it("applies damage to the target", () => {
     const fieldChars = [makeFieldChar("a", "A", 10)]
     const result = hitRandomChar(fieldChars, 3, "⚔️", "敵の")
-    expect(result.fieldChars[0].hp).toBe(7)
+    expect(result.fieldChars[0]!.hp).toBe(7)
   })
 
   it("clamps HP to 0 minimum", () => {
     const fieldChars = [makeFieldChar("a", "A", 2)]
     const result = hitRandomChar(fieldChars, 10, "⚔️", "")
-    expect(result.fieldChars[0].hp).toBe(0)
-    expect(result.fieldChars[0].isDown).toBe(true)
+    expect(result.fieldChars[0]!.hp).toBe(0)
+    expect(result.fieldChars[0]!.isDown).toBe(true)
   })
 
   it("sets isDown when HP reaches 0", () => {
     const fieldChars = [makeFieldChar("a", "A", 5)]
     const result = hitRandomChar(fieldChars, 5, "⚔️", "")
-    expect(result.fieldChars[0].hp).toBe(0)
-    expect(result.fieldChars[0].isDown).toBe(true)
+    expect(result.fieldChars[0]!.hp).toBe(0)
+    expect(result.fieldChars[0]!.isDown).toBe(true)
   })
 
   it("generates defeat log message when character is downed", () => {
@@ -253,7 +255,7 @@ describe("hitRandomChar", () => {
     const original = [...fieldChars]
     hitRandomChar(fieldChars, 3, "⚔️", "")
     // The function returns a new array, so original should be unchanged
-    expect(original[0].hp).toBe(10)
+    expect(original[0]!.hp).toBe(10)
   })
 
   it("includes emoji in log message", () => {
@@ -271,15 +273,15 @@ describe("hitRandomChar", () => {
   it("zero damage does not down character", () => {
     const fieldChars = [makeFieldChar("a", "A", 10)]
     const result = hitRandomChar(fieldChars, 0, "⚔️", "")
-    expect(result.fieldChars[0].hp).toBe(10)
-    expect(result.fieldChars[0].isDown).toBe(false)
+    expect(result.fieldChars[0]!.hp).toBe(10)
+    expect(result.fieldChars[0]!.isDown).toBe(false)
   })
 
   it("returns correct fieldChars structure", () => {
     const fieldChars = [makeFieldChar("a", "A", 10)]
     const result = hitRandomChar(fieldChars, 3, "⚔️", "")
     expect(result.fieldChars).toHaveLength(1)
-    expect(result.fieldChars[0].card.id).toBe("a")
+    expect(result.fieldChars[0]!.card.id).toBe("a")
   })
 })
 
@@ -303,11 +305,11 @@ describe("calculatePhaseTransition", () => {
 
   const aliveFieldChars: FieldChar[] = [
     {
-      card: { id: "c1", name: "Char1", imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense: 3, effect: "t", effectValue: 3, ultimate: 10, ultimateName: "t" },
+      card: { id: "c1", name: "Char1", imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense: 3, effect: "t", effectType: EffectType.HEAL, effectValue: 3, ultimate: 10, ultimateName: "t" },
       hp: 10, maxHp: 10, isDown: false,
     },
     {
-      card: { id: "c2", name: "Char2", imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense: 3, effect: "t", effectValue: 3, ultimate: 10, ultimateName: "t" },
+      card: { id: "c2", name: "Char2", imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense: 3, effect: "t", effectType: EffectType.HEAL, effectValue: 3, ultimate: 10, ultimateName: "t" },
       hp: 10, maxHp: 10, isDown: false,
     },
   ]
@@ -434,7 +436,7 @@ describe("calculateEnemySelfHeal", () => {
       description: "test",
       difficulty: "NORMAL",
       reward: "test",
-      phases: [{ triggerHpPercent, attackBonus: 1, ...(selfHealPerTurn ? { selfHealPerTurn } : {}) }],
+      phases: [{ triggerHpPercent, attackBonus: 1, message: "test", ...(selfHealPerTurn ? { selfHealPerTurn } : {}) }],
     } satisfies Enemy)
 
   it("returns current HP when no self-heal phase", () => {
@@ -479,8 +481,8 @@ describe("calculateEnemySelfHeal", () => {
       difficulty: "NORMAL",
       reward: "test",
       phases: [
-        { triggerHpPercent: 50, attackBonus: 1, selfHealPerTurn: 3 },
-        { triggerHpPercent: 25, attackBonus: 2, selfHealPerTurn: 5 },
+        { triggerHpPercent: 50, attackBonus: 1, selfHealPerTurn: 3, message: "test" },
+        { triggerHpPercent: 25, attackBonus: 2, selfHealPerTurn: 5, message: "test" },
       ],
     }
     const result = calculateEnemySelfHeal(enemy, 20, 30)
@@ -500,102 +502,102 @@ describe("calculateEnemySelfHeal", () => {
    ═══════════════════════════════════════════ */
 describe("calculateEffectDamage", () => {
   it("heal-only effect returns correct heal", () => {
-    const result = calculateEffectDamage("HPを5回復", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(EffectType.HEAL, "HPを5回復", 5, "Char", "enemy", false)
     expect(result.heal).toBe(5)
     expect(result.damage).toBe(0)
     expect(result.shield).toBe(0)
   })
 
   it("damage-only effect returns correct damage", () => {
-    const result = calculateEffectDamage("敵に5ダメージ", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(EffectType.DAMAGE, "敵に5ダメージ", 5, "Char", "enemy", false)
     expect(result.damage).toBe(5)
     expect(result.heal).toBe(0)
     expect(result.shield).toBe(0)
   })
 
   it("shield-only effect returns correct shield", () => {
-    const result = calculateEffectDamage("シールド+5", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(EffectType.SHIELD, "シールド+5", 5, "Char", "enemy", false)
     expect(result.shield).toBe(5)
     expect(result.damage).toBe(0)
     expect(result.heal).toBe(0)
   })
 
   it("attack-reduction effect returns correct reduction", () => {
-    const result = calculateEffectDamage("敵の攻撃力低下", 3, "Char", "enemy", false)
+    const result = calculateEffectDamage(EffectType.ATTACK_REDUCTION, "敵の攻撃力低下", 3, "Char", "enemy", false)
     expect(result.attackReduction).toBe(3)
     expect(result.damage).toBe(0)
   })
 
   it("damage+heal effect returns both values", () => {
-    const result = calculateEffectDamage("敵に5ダメージ＋HPを2回復", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(EffectType.DAMAGE_HEAL, "敵に5ダメージ＋HPを2回復", 5, "Char", "enemy", false)
     expect(result.damage).toBe(5)
     expect(result.heal).toBeGreaterThan(0)
   })
 
   it("damage+shield effect returns both values", () => {
-    const result = calculateEffectDamage("敵に5ダメージ＋シールド+3", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(EffectType.DAMAGE_SHIELD, "敵に5ダメージ＋シールド+3", 5, "Char", "enemy", false)
     expect(result.damage).toBe(5)
     expect(result.shield).toBeGreaterThan(0)
   })
 
   it("heal+damage+shield effect returns all three", () => {
-    const result = calculateEffectDamage("回復＋ダメージ＋シールド", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(EffectType.HEAL_DAMAGE_SHIELD, "回復＋ダメージ＋シールド", 5, "Char", "enemy", false)
     expect(result.heal).toBeGreaterThan(0)
     expect(result.shield).toBeGreaterThan(0)
     expect(result.damage).toBe(0) // This specific combo heals + shields
   })
 
   it("damage is 0 when isVoidKingPhase3 is true", () => {
-    const result = calculateEffectDamage("敵に5ダメージ", 5, "Char", "void-king", true)
+    const result = calculateEffectDamage(EffectType.DAMAGE, "敵に5ダメージ", 5, "Char", "void-king", true)
     expect(result.damage).toBe(0)
   })
 
   it("damage+heal still heals when isVoidKingPhase3 is true", () => {
-    const result = calculateEffectDamage("敵に5ダメージ＋HPを2回復", 5, "Char", "void-king", true)
+    const result = calculateEffectDamage(EffectType.DAMAGE_HEAL, "敵に5ダメージ＋HPを2回復", 5, "Char", "void-king", true)
     expect(result.heal).toBeGreaterThan(0)
     expect(result.damage).toBe(0)
   })
 
   it("次元階梯パンディクト special effect", () => {
-    const result = calculateEffectDamage("次元階梯パンディクト", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(EffectType.SPECIAL_PANDICT, "次元階梯パンディクト", 5, "Char", "enemy", false)
     expect(result.damage).toBe(5)
     expect(result.heal).toBe(3)
   })
 
   it("次元階梯パンディクト damage absorbed in void king phase 3", () => {
-    const result = calculateEffectDamage("次元階梯パンディクト", 5, "Char", "void-king", true)
+    const result = calculateEffectDamage(EffectType.SPECIAL_PANDICT, "次元階梯パンディクト", 5, "Char", "void-king", true)
     expect(result.damage).toBe(0)
     expect(result.heal).toBe(3)
   })
 
   it("returns non-negative damage", () => {
-    const result = calculateEffectDamage("test", 5, "Char", "enemy", true)
+    const result = calculateEffectDamage(EffectType.HEAL, "test", 5, "Char", "enemy", true)
     expect(result.damage).toBeGreaterThanOrEqual(0)
   })
 
   it("returns non-negative heal", () => {
-    const result = calculateEffectDamage("test", 5, "Char", "enemy", true)
+    const result = calculateEffectDamage(EffectType.HEAL, "test", 5, "Char", "enemy", true)
     expect(result.heal).toBeGreaterThanOrEqual(0)
   })
 
   it("returns non-negative shield", () => {
-    const result = calculateEffectDamage("test", 5, "Char", "enemy", true)
+    const result = calculateEffectDamage(EffectType.HEAL, "test", 5, "Char", "enemy", true)
     expect(result.shield).toBeGreaterThanOrEqual(0)
   })
 
   it("log includes card name", () => {
-    const result = calculateEffectDamage("HPを5回復", 5, "テストキャラ", "enemy", false)
+    const result = calculateEffectDamage(EffectType.HEAL, "HPを5回復", 5, "テストキャラ", "enemy", false)
     expect(result.log).toContain("テストキャラ")
   })
 
   it("default effect treats unknown as heal", () => {
-    const result = calculateEffectDamage("未知の効果", 7, "Char", "enemy", false)
+    const result = calculateEffectDamage(EffectType.HEAL, "未知の効果", 7, "Char", "enemy", false)
     expect(result.heal).toBe(7)
     expect(result.damage).toBe(0)
   })
 
   it("returns valid EffectResult structure", () => {
-    const result = calculateEffectDamage("test", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(EffectType.HEAL, "test", 5, "Char", "enemy", false)
     expect(result).toHaveProperty("damage")
     expect(result).toHaveProperty("heal")
     expect(result).toHaveProperty("shield")

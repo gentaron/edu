@@ -189,8 +189,8 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       lastCharIndex: s.selectedCharIndex,
       screenShake: ability === "必殺",
       enemyFlash: ability === "攻撃" || ability === "必殺",
-      healFlash: ability === "効果" && card.effect.includes("回復"),
-      shieldFlash: ability === "防御" || (ability === "効果" && card.effect.includes("シールド")),
+      healFlash: ability === "効果" && (card.effectType === "HEAL" || card.effectType === "DAMAGE_HEAL" || card.effectType === "HEAL_DAMAGE" || card.effectType === "HEAL_SHIELD" || card.effectType === "HEAL_DAMAGE_SHIELD" || card.effectType === "SPECIAL_PANDICT"),
+      shieldFlash: ability === "防御" || (ability === "効果" && (card.effectType === "SHIELD" || card.effectType === "DAMAGE_SHIELD" || card.effectType === "HEAL_SHIELD" || card.effectType === "HEAL_DAMAGE_SHIELD")),
       charHitIndex: null,
     })
 
@@ -245,6 +245,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       }
       case "効果": {
         const result = calculateEffectDamage(
+          card.effectType,
           card.effect,
           card.effectValue,
           card.name,

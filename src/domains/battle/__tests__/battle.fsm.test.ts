@@ -5,6 +5,7 @@ import {
   type BattleFSMState,
   type BattleFSMAction,
 } from "@/domains/battle/battle.fsm"
+import { EffectType } from "@/types"
 import type { GameCard, Enemy, FieldChar } from "@/types"
 
 /* ═══════════════════════════════════════════
@@ -22,6 +23,7 @@ const makeCard = (id: string, name: string, rarity: "SR" | "R" | "C" = "R"): Gam
     attack: 5,
     defense: 3,
     effect: "test",
+    effectType: EffectType.HEAL,
     effectValue: 3,
     ultimate: 10,
     ultimateName: "test",
@@ -154,7 +156,7 @@ describe("SELECT_CHARACTER action", () => {
 
   it("rejects downed character selection", () => {
     const chars = makeFieldChars()
-    chars[0] = { ...chars[0], isDown: true }
+    chars[0] = { card: chars[0]!.card, hp: chars[0]!.hp, maxHp: chars[0]!.maxHp, isDown: true }
     const turnStartState: BattleFSMState = {
       state: "turn-start",
       turn: 1,
@@ -197,7 +199,7 @@ describe("PLAY_ABILITY action", () => {
       turn: 1,
     }
     const result = makeAbilityResult()
-    const state = battleFSMReducer(abilityState, { type: "PLAY_ABILITY", ability: "effect", result })
+    const state = battleFSMReducer(abilityState, { type: "PLAY_ABILITY", ability: "効果", result })
     expect(state.state).toBe("turn-resolve")
     if (state.state === "turn-resolve") {
       expect(state.result.damage).toBe(5)
@@ -208,7 +210,7 @@ describe("PLAY_ABILITY action", () => {
   it("rejects from non-ability-select state", () => {
     const state = battleFSMReducer(initialBattleFSMState, {
       type: "PLAY_ABILITY",
-      ability: "effect",
+      ability: "効果",
       result: makeAbilityResult(),
     })
     expect(state.state).toBe("idle")
@@ -335,7 +337,7 @@ describe("END_BATTLE action", () => {
   it("transitions turn-resolve → battle-end (victory)", () => {
     const turnResolveState: BattleFSMState = {
       state: "turn-resolve",
-      ability: "ultimate",
+      ability: "必殺",
       result: makeAbilityResult({ newEnemyHp: 0 }),
       fieldCharacters: makeFieldChars(),
       enemy: makeEnemy(),
@@ -373,7 +375,7 @@ describe("END_BATTLE action", () => {
   it("stores correct turnsUsed", () => {
     const turnResolveState: BattleFSMState = {
       state: "turn-resolve",
-      ability: "ultimate",
+      ability: "必殺",
       result: makeAbilityResult(),
       fieldCharacters: makeFieldChars(),
       enemy: makeEnemy(),
@@ -417,7 +419,7 @@ describe("RESET action", () => {
   it("resets from turn-resolve → idle", () => {
     const resolveState: BattleFSMState = {
       state: "turn-resolve",
-      ability: "effect",
+      ability: "効果",
       result: makeAbilityResult(),
       fieldCharacters: makeFieldChars(),
       enemy: makeEnemy(),
@@ -464,7 +466,7 @@ describe("Invalid transitions", () => {
     }
     const state = battleFSMReducer(turnStartState, {
       type: "PLAY_ABILITY",
-      ability: "effect",
+      ability: "効果",
       result: makeAbilityResult(),
     })
     expect(state.state).toBe("turn-start")

@@ -7,9 +7,12 @@
 import type { FieldChar, Enemy, AbilityType } from "@/types"
 
 // ── WASM Module Interface ──
-// Matches the exported Rust #[wasm_bindgen] signatures.
-// Each function returns a JsValue (serde_wasm_bindgen serialized).
 
+/**
+ * Interface for the WASM battle engine module.
+ * Matches the exported Rust `#[wasm_bindgen]` function signatures.
+ * Each function returns a JsValue (serde_wasm_bindgen serialized).
+ */
 export interface WasmBattleModule {
   calculate_damage_wasm(
     id: string,
@@ -50,7 +53,7 @@ export interface WasmBattleModule {
 
 // ── WASM Return Types (mirror Rust structs) ──
 
-/** Mirror of Rust `BattleResult` */
+/** Mirror of Rust `BattleResult` — result of a player ability calculation. */
 export interface WasmBattleResult {
   readonly damage: number
   readonly heal: number
@@ -59,14 +62,14 @@ export interface WasmBattleResult {
   readonly log: string
 }
 
-/** Mirror of Rust `EnemyTurnResult` */
+/** Mirror of Rust `EnemyTurnResult` — result of an enemy turn execution. */
 export interface WasmEnemyTurnResult {
   readonly updated_field: readonly WasmFieldChar[]
   readonly new_enemy_hp: number
   readonly logs: readonly string[]
 }
 
-/** Mirror of Rust `FieldChar` as returned by WASM */
+/** Mirror of Rust `FieldChar` as returned by WASM (snake_case fields). */
 export interface WasmFieldChar {
   readonly id: string
   readonly name: string
@@ -81,7 +84,7 @@ export interface WasmFieldChar {
   readonly effect: string
 }
 
-/** Mirror of Rust `SimResult` */
+/** Mirror of Rust `SimResult` — result of a full battle simulation. */
 export interface WasmSimResult {
   readonly victory: boolean
   readonly turns: number
@@ -117,12 +120,29 @@ const ABILITY_TYPE_TO_INDEX: Readonly<Record<AbilityType, number>> = {
 
 const INDEX_TO_ABILITY_TYPE: readonly AbilityType[] = ["攻撃", "防御", "効果", "必殺"] as const
 
-/** Map L2 Japanese ability type → WASM u8 index */
+/**
+ * Map an L2 Japanese ability type string to its WASM u8 index.
+ * Used to bridge the TypeScript domain layer (Japanese strings) with the Rust WASM layer (numeric indices).
+ *
+ * @param ability - The Japanese ability type ('攻撃', '防御', '効果', or '必殺').
+ * @returns The corresponding WASM index (0=攻撃, 1=防御, 2=効果, 3=必殺).
+ * @example
+ * abilityTypeToIndex('必殺') // → 3
+ */
 export function abilityTypeToIndex(ability: AbilityType): number {
   return ABILITY_TYPE_TO_INDEX[ability]
 }
 
-/** Map WASM u8 index → L2 Japanese ability type */
+/**
+ * Map a WASM u8 index back to its L2 Japanese ability type string.
+ * Returns null for invalid indices.
+ *
+ * @param idx - The WASM ability type index (0–3).
+ * @returns The Japanese ability type string, or `null` if the index is out of range.
+ * @example
+ * indexToAbilityType(2) // → '効果'
+ * indexToAbilityType(99) // → null
+ */
 export function indexToAbilityType(idx: number): AbilityType | null {
   return INDEX_TO_ABILITY_TYPE[idx] ?? null
 }
@@ -135,9 +155,16 @@ let initPromise: Promise<WasmBattleModule | null> | null = null
 // ── Public API ──
 
 /**
- * Load and initialize the WASM battle engine.
- * Safe to call multiple times; subsequent calls return the same promise.
- * Never throws — returns null if WASM cannot be loaded.
+ * Load and initialize the WASM battle engine from `/wasm/edu_battle_engine.js`.
+ * Safe to call multiple times — subsequent calls return the same promise (idempotent).
+ * Never throws — returns null if WASM cannot be loaded (graceful degradation).
+ * Uses an indirect dynamic import via `Function` constructor to bypass Vite/Rollup
+ * static analysis of the WASM glue module.
+ *
+ * @returns A promise resolving to the loaded {@link WasmBattleModule}, or `null` if loading fails.
+ * @example
+ * const wasm = await initWasmEngine()
+ * if (wasm) { console.log('WASM engine ready') }
  */
 export async function initWasmEngine(): Promise<WasmBattleModule | null> {
   if (wasmModule !== null) {return wasmModule}
@@ -167,7 +194,12 @@ export async function initWasmEngine(): Promise<WasmBattleModule | null> {
   return initPromise
 }
 
-/** Check whether the WASM engine has been successfully loaded. */
+/**
+ * Check whether the WASM battle engine has been successfully loaded.
+ * Does not trigger loading — only checks if a module is already cached.
+ *
+ * @returns `true` if the WASM module is available and ready for use.
+ */
 export function isWasmReady(): boolean {
   return wasmModule !== null
 }
@@ -216,9 +248,9 @@ function fieldCharsToWasmJson(field: readonly FieldChar[]): string {
       defense: fc.card.defense,
       is_down: fc.isDown,
       rarity: fc.card.rarity,
-      ultimate_name: fc.card.ultimateName,
-      ultimate_damage: fc.card.ultimate,
-      effect: fc.card.effect,
+      ultimate_name: fc.ultimateName,
+      ultimate_damage: fc.ultimate,
+      effect: fc.effect,
     }))
   )
 }
@@ -242,15 +274,21 @@ function enemyToWasmJson(enemy: Enemy): string {
 
 // ── Bridge Functions ──
 
-/** Parameters for damage calculation */
+/** Parameters for the WASM damage calculation bridge function. */
 export interface CalculateDamageParams {
   readonly character: FieldChar
   readonly ability: AbilityType
 }
 
 /**
- * Calculate damage/effect for a player ability via WASM.
- * Returns null if WASM is not available (never throws).
+ * Calculate damage/effect for a player ability via the WASM battle engine.
+ * Returns null if WASM is not available — never throws (graceful degradation).
+ *
+ * @param params - The character and ability type to calculate damage for.
+ * @returns The battle result (damage, heal, shield, etc.), or `null` if WASM is unavailable.
+ * @example
+ * const result = wasmCalculateDamage({ character: myChar, ability: '必殺' })
+ * if (result) { console.log(result.damage) }
  */
 export function wasmCalculateDamage(params: CalculateDamageParams): WasmBattleResult | null {
   if (wasmModule === null) {return null}
@@ -281,7 +319,7 @@ export function wasmCalculateDamage(params: CalculateDamageParams): WasmBattleRe
   }
 }
 
-/** Parameters for enemy turn execution */
+/** Parameters for the WASM enemy turn execution bridge function. */
 export interface ExecuteEnemyTurnParams {
   readonly turn: number
   readonly enemyHp: number
@@ -295,8 +333,11 @@ export interface ExecuteEnemyTurnParams {
 }
 
 /**
- * Execute enemy turn via WASM.
- * Returns null if WASM is not available (never throws).
+ * Execute an enemy turn via the WASM battle engine.
+ * Returns null if WASM is not available — never throws (graceful degradation).
+ *
+ * @param params - The current battle state for the enemy turn.
+ * @returns The enemy turn result (updated field, new HP, logs), or `null` if WASM is unavailable.
  */
 export function wasmExecuteEnemyTurn(params: ExecuteEnemyTurnParams): WasmEnemyTurnResult | null {
   if (wasmModule === null) {return null}
@@ -324,7 +365,7 @@ export function wasmExecuteEnemyTurn(params: ExecuteEnemyTurnParams): WasmEnemyT
   }
 }
 
-/** Parameters for phase transition check */
+/** Parameters for the WASM phase transition check bridge function. */
 export interface CheckPhaseTransitionParams {
   readonly enemyHp: number
   readonly enemyMaxHp: number
@@ -333,8 +374,11 @@ export interface CheckPhaseTransitionParams {
 }
 
 /**
- * Check enemy phase transition via WASM.
- * Returns the transition message string, or null if no transition / WASM unavailable.
+ * Check enemy phase transition via the WASM battle engine.
+ * Returns null if WASM is not available or no transition occurs.
+ *
+ * @param params - The enemy state to check for phase transitions.
+ * @returns The transition message string, or `null` if no transition or WASM unavailable.
  */
 export function wasmCheckPhaseTransition(params: CheckPhaseTransitionParams): string | null {
   if (wasmModule === null) {return null}
@@ -357,8 +401,12 @@ export function wasmCheckPhaseTransition(params: CheckPhaseTransitionParams): st
 }
 
 /**
- * Simulate entire battle via WASM (for benchmarking).
- * Returns null if WASM is not available (never throws).
+ * Simulate an entire battle via the WASM battle engine (for benchmarking/testing).
+ * Returns null if WASM is not available — never throws (graceful degradation).
+ *
+ * @param field - The initial player field characters.
+ * @param enemy - The enemy to battle against.
+ * @returns The simulation result (victory, turns, HP, survivors), or `null` if WASM unavailable.
  */
 export function wasmSimulateBattle(
   field: readonly FieldChar[],
@@ -380,8 +428,8 @@ export function wasmSimulateBattle(
 }
 
 /**
- * Reset the WASM engine state (for testing).
- * Clears the cached module so initWasmEngine() can be called again.
+ * Reset the WASM engine state (for testing only).
+ * Clears the cached module and init promise so {@link initWasmEngine} can be called again.
  */
 export function resetWasmEngine(): void {
   wasmModule = null
@@ -389,8 +437,10 @@ export function resetWasmEngine(): void {
 }
 
 /**
- * Inject a WASM module directly (for testing only).
- * Bypasses the dynamic import, allowing unit tests to provide mock modules.
+ * Inject a WASM module directly for testing purposes.
+ * Bypasses the dynamic import mechanism, allowing unit tests to provide mock modules.
+ *
+ * @param mod - The mock or real WasmBattleModule to inject.
  */
 export function __injectWasmModuleForTesting(mod: WasmBattleModule): void {
   wasmModule = mod

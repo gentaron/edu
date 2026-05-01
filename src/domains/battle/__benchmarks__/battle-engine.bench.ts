@@ -6,6 +6,7 @@ import {
   charMaxHp,
   appendLog,
 } from '@/domains/battle/battle.engine'
+import { EffectType } from '@/types'
 import { ENEMIES } from '@/domains/cards/enemies'
 
 const sampleEnemy = ENEMIES.find(e => e.id === 'void-king') ?? ENEMIES[0]
@@ -13,13 +14,13 @@ const sampleEnemy = ENEMIES.find(e => e.id === 'void-king') ?? ENEMIES[0]
 describe('Battle Engine — pure function benchmarks', () => {
   bench('calculateEffectDamage — ダメージ+回復 pattern', () => {
     for (let i = 0; i < 1000; i++) {
-      calculateEffectDamage('ダメージ回復', 8, 'テスト', 'void-king', false)
+      calculateEffectDamage(EffectType.DAMAGE_HEAL, 'ダメージ回復', 8, 'テスト', 'void-king', false)
     }
   })
 
   bench('calculateEffectDamage — シールド pattern (void king phase 3)', () => {
     for (let i = 0; i < 1000; i++) {
-      calculateEffectDamage('シールド', 10, 'テスト', 'void-king', true)
+      calculateEffectDamage(EffectType.SHIELD, 'シールド', 10, 'テスト', 'void-king', true)
     }
   })
 
@@ -46,7 +47,7 @@ describe('Battle Engine — pure function benchmarks', () => {
 
   bench('charMaxHp — 1000 iterations', () => {
     for (let i = 0; i < 1000; i++) {
-      void charMaxHp({ id: 'c1', name: 'Test', rarity: 'SR' as const, defense: 15, attack: 10, effect: '', effectValue: 0, ultimateName: '', ultimate: 0, imageUrl: '', flavorText: '', affiliation: '' })
+      void charMaxHp({ id: 'c1', name: 'Test', rarity: 'SR' as const, defense: 15, attack: 10, effect: '', effectType: EffectType.HEAL, effectValue: 0, ultimateName: '', ultimate: 0, imageUrl: '', flavorText: '', affiliation: '' })
     }
   })
 

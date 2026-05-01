@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest"
 import { useBattleStore } from "../stores"
+import { EffectType } from "@/types"
 import type { GameCard, Enemy } from "@/types"
 
 /* Minimal test fixtures */
@@ -13,6 +14,7 @@ const mockCard: GameCard = {
   attack: 5,
   defense: 3,
   effect: "HPを3回復",
+  effectType: EffectType.HEAL,
   effectValue: 3,
   ultimate: 10,
   ultimateName: "テスト必殺技",
@@ -28,6 +30,7 @@ const mockCard2: GameCard = {
   attack: 3,
   defense: 5,
   effect: "シールド+4",
+  effectType: EffectType.SHIELD,
   effectValue: 4,
   ultimate: 7,
   ultimateName: "テスト防御技",

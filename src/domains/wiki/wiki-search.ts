@@ -21,13 +21,24 @@ import type { WikiEntry, GameCard } from "@/types"
 
 // ─── Types ────────────────────────────────────────────────────────────────
 
+/**
+ * Search options specific to the wiki search engine.
+ * Extends base {@link SearchOptions} with wiki-specific category filtering.
+ */
 export interface WikiSearchOptions extends SearchOptions {
+  /** Restrict search to these category names (e.g. 'キャラクター', 'card') */
   categories?: string[]
+  /** Whether to include card results in the search output (default: false) */
   includeCards?: boolean
 }
 
+/**
+ * An autocomplete suggestion result containing the matching text and its category.
+ */
 export interface AutocompleteSuggestion {
+  /** The matched term/text */
   text: string
+  /** The category of the document (e.g. 'キャラクター', 'card', 'unknown') */
   category: string
 }
 
@@ -47,20 +58,36 @@ const CATEGORY_WEIGHTS: Record<string, number> = {
   card: 0.9,
 }
 
+/**
+ * Wiki-specific search engine that builds an inverted index from wiki data
+ * and card data, with category-aware boosting and autocomplete support.
+ *
+ * Usage: call {@link initialize} once at startup, then use {@link search} and
+ * {@link autocomplete} for querying. All methods are safe to call before
+ * initialization — they will simply return empty results.
+ */
 export class WikiSearchEngine {
   private index: InvertedIndex
   private _autocomplete: Trie
   private initialized = false
   private categorySet: Set<string> = new Set()
 
+  /**
+   * Create a new WikiSearchEngine instance.
+   * Does not index any data yet — call {@link initialize} first.
+   */
   constructor() {
     this.index = new InvertedIndex()
     this._autocomplete = new Trie()
   }
 
   /**
-   * Build the index from wiki and (optionally) card data.
-   * Call once at startup.
+   * Build the search index from wiki and card data.
+   * Call once at startup. Subsequent calls are no-ops (idempotent).
+   * Indexes both Japanese and English names for wiki entries, and card data
+   * with flavor text and effects. Also builds the autocomplete trie.
+   *
+   * @returns A promise that resolves when indexing is complete.
    */
   async initialize(): Promise<void> {
     if (this.initialized) {return}
@@ -127,8 +154,15 @@ export class WikiSearchEngine {
   }
 
   /**
-   * Search the wiki index.
-   * Supports multi-category filtering and BM25 scoring.
+   * Search the wiki index using BM25 scoring.
+   * Supports multi-category filtering by running one search per category
+   * and merging results. By default, card results are excluded unless
+   * `includeCards` is set to true.
+   *
+   * @param query - The search query string.
+   * @param options - Optional search configuration (categories, limit, offset, includeCards).
+   * @returns Array of search results sorted by relevance score (descending).
+   *          Empty array if not initialized or no matches found.
    */
   search(query: string, options: WikiSearchOptions = {}): SearchResult[] {
     if (!this.initialized) {return []}
@@ -173,7 +207,13 @@ export class WikiSearchEngine {
   }
 
   /**
-   * Autocomplete: returns matching document titles grouped by category.
+   * Get autocomplete suggestions matching a prefix string.
+   * Returns matching document titles from the trie, with categories resolved.
+   * Deduplicates by word+docId combination.
+   *
+   * @param prefix - The text prefix to match against indexed terms.
+   * @param limit - Maximum number of suggestions to return (default 10).
+   * @returns Array of suggestions with text and category. Empty if not initialized or empty prefix.
    */
   autocomplete(prefix: string, limit = 10): AutocompleteSuggestion[] {
     if (!this.initialized || prefix.trim().length === 0) {return []}
@@ -214,7 +254,11 @@ export class WikiSearchEngine {
   }
 
   /**
-   * Return stats about the index.
+   * Return statistics about the search index.
+   * Useful for debugging and monitoring index health.
+   *
+   * @returns An object containing document count, vocabulary size (terms),
+   *          and the sorted list of indexed categories.
    */
   getStats(): { documents: number; terms: number; categories: string[] } {
     return {

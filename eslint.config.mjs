@@ -2,6 +2,8 @@ import tseslint from "typescript-eslint";
 import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
 import sonarjs from "eslint-plugin-sonarjs";
 import unicorn from "eslint-plugin-unicorn";
+import noCrossDomainImport from "./eslint-rules/no-cross-domain-import.js";
+import requireJSDoc from "./eslint-rules/require-jsdoc.js";
 
 const eslintConfig = tseslint.config(
   {
@@ -16,6 +18,7 @@ const eslintConfig = tseslint.config(
       "crates/**",
       "prisma/**",
       "public/**",
+      "eslint-rules/**",
     ],
   },
   ...nextCoreWebVitals,
@@ -34,6 +37,12 @@ const eslintConfig = tseslint.config(
     plugins: {
       sonarjs,
       unicorn,
+      "edu": {
+        rules: {
+          "no-cross-domain-import": noCrossDomainImport,
+          "require-jsdoc": requireJSDoc,
+        },
+      },
     },
     rules: {
       // ─── TypeScript strict ───
@@ -202,6 +211,10 @@ const eslintConfig = tseslint.config(
       "unicorn/template-indent": "warn",
       "unicorn/text-encoding-identifier-case": "error",
       "unicorn/throw-new-error": "error",
+
+      // ─── Custom architecture rules ───
+      "edu/no-cross-domain-import": "error",
+      "edu/require-jsdoc": "warn",
     },
   },
 );

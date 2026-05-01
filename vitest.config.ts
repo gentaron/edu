@@ -17,7 +17,7 @@ export default defineConfig({
         'src/metal/**/!(*.test|*.spec|*.pbt|setup).*.{ts,tsx}',
         'src/lib/**/!(*.test|*.spec|*.pbt|setup).*.{ts,tsx}',
       ],
-      exclude: ['src/**/__tests__/**', 'src/**/*.data.ts', 'src/**/*.meta.ts', 'src/app/**'],
+      exclude: ['src/**/__tests__/**', 'src/**/*.data.ts', 'src/**/*.meta.ts', 'src/app/**', 'src/**/__benchmarks__/**'],
       thresholds: { lines: 60, functions: 60, branches: 50, statements: 60 },
     },
   },

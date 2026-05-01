@@ -42,8 +42,8 @@ describe("Data Integrity", () => {
 
     it("image URLs start with https:// when present", () => {
       for (const entry of ALL_ENTRIES) {
-        if (entry.imageUrl && entry.imageUrl.length > 0) {
-          expect(entry.imageUrl).toMatch(/^https:\/\//)
+        if (entry.image && entry.image.length > 0) {
+          expect(entry.image).toMatch(/^https:\/\//)
         }
       }
     })

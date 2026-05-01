@@ -45,8 +45,8 @@ describe("PBT: wiki.data integrity", () => {
     fc.assert(
       fc.property(fc.integer({ min: 0, max: ALL_ENTRIES.length - 1 }), (idx) => {
         const entry = ALL_ENTRIES[idx]!
-        if (entry.imageUrl && entry.imageUrl.length > 0) {
-          expect(entry.imageUrl).toMatch(/^https:\/\//)
+        if (entry.image && entry.image.length > 0) {
+          expect(entry.image).toMatch(/^https:\/\//)
         }
       })
     )

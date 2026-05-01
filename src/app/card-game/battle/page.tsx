@@ -3,20 +3,41 @@
 import React, { useEffect, useRef, useCallback, Suspense } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import dynamic from "next/dynamic"
 import { useRouter, useSearchParams } from "next/navigation"
 import { m, AnimatePresence } from "framer-motion"
 import { Swords, Heart, Shield, Crown, Zap, Sparkles, Crosshair, Skull, User } from "lucide-react"
 import { ENEMIES } from "@/domains/cards/cards.data"
 import { useDeckStore, useBattleStore } from "@/lib/stores"
-import { ParticleBurst } from "./_components/particle-burst"
-import { SlashEffect } from "./_components/slash-effect"
-import { ShieldDomeEffect } from "./_components/shield-dome-effect"
-import { HealWaveEffect } from "./_components/heal-wave-effect"
-import { ScreenFlash } from "./_components/screen-flash"
 import { HpBar } from "./_components/hp-bar"
 import { FieldCharSlot } from "./_components/field-char-slot"
 import { FloatingText } from "./_components/floating-text"
 import { AbilityButton } from "./_components/ability-button"
+
+// ─── Dynamic imports for heavy visual effect components ───
+// These are client-only animation components that add visual weight.
+// Lazy-loading them reduces the initial battle page JS chunk and avoids
+// SSR issues with framer-motion AnimatePresence.
+const ParticleBurst = dynamic(
+  () => import("./_components/particle-burst").then((mod) => mod.ParticleBurst),
+  { ssr: false },
+)
+const SlashEffect = dynamic(
+  () => import("./_components/slash-effect").then((mod) => mod.SlashEffect),
+  { ssr: false },
+)
+const ShieldDomeEffect = dynamic(
+  () => import("./_components/shield-dome-effect").then((mod) => mod.ShieldDomeEffect),
+  { ssr: false },
+)
+const HealWaveEffect = dynamic(
+  () => import("./_components/heal-wave-effect").then((mod) => mod.HealWaveEffect),
+  { ssr: false },
+)
+const ScreenFlash = dynamic(
+  () => import("./_components/screen-flash").then((mod) => mod.ScreenFlash),
+  { ssr: false },
+)
 
 const diffColors: Record<string, { badge: string }> = {
   NORMAL: { badge: "text-green-400 bg-green-500/10 border-green-500/40" },

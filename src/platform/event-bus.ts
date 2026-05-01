@@ -23,7 +23,7 @@ export type AppEvent =
   | { type: "navigation:route-changed"; path: string }
   | { type: "ui:theme-toggled" }
 
-/** Type-safe event handler */
+/** Type-safe event handler for a specific event type */
 export type EventHandler<T extends AppEvent["type"]> =
   Extract<AppEvent, { type: T }> extends never
     ? () => void
@@ -31,9 +31,33 @@ export type EventHandler<T extends AppEvent["type"]> =
 
 type Subscriber = (event: AppEvent) => void
 
+/**
+ * Type-safe event bus for cross-component communication.
+ * Supports subscribing to specific event types, subscribing to all events (wildcard),
+ * and publishing events to all matching subscribers.
+ *
+ * @example
+ * const unsub = eventBus.subscribe('battle:victory', (e) => {
+ *   console.log(`Victory against ${e.enemyId} in ${e.turnsUsed} turns!`)
+ * })
+ * // Later: unsub() to stop listening
+ */
 class EventBus {
   private subscribers = new Map<string, Set<Subscriber>>()
 
+  /**
+   * Subscribe to a specific event type with a type-safe handler.
+   * The handler receives the full event payload matching the specified type.
+   *
+   * @param eventType - The event type to subscribe to (discriminated union key).
+   * @param handler - Type-safe callback invoked when the event is published.
+   * @returns An unsubscribe function that removes this handler from the event type.
+   * @example
+   * const unsub = eventBus.subscribe('deck:card-added', (e) => {
+   *   console.log(`Card ${e.cardId} added, deck size: ${e.deckSize}`)
+   * })
+   * unsub() // stop listening
+   */
   subscribe<T extends AppEvent["type"]>(eventType: T, handler: EventHandler<T>): () => void {
     if (!this.subscribers.has(eventType)) {
       this.subscribers.set(eventType, new Set())
@@ -47,6 +71,14 @@ class EventBus {
     }
   }
 
+  /**
+   * Publish an event to all subscribers of that event type and all wildcard subscribers.
+   * Handlers are invoked synchronously in the order they were subscribed.
+   *
+   * @param event - The full event object (must include a `type` field matching an {@link AppEvent}).
+   * @example
+   * eventBus.publish({ type: 'battle:start', enemyId: 'void-king', deckSize: 5 })
+   */
   publish(event: AppEvent): void {
     const handlers = this.subscribers.get(event.type)
     if (handlers) {
@@ -63,7 +95,13 @@ class EventBus {
     }
   }
 
-  /** Subscribe to all events */
+  /**
+   * Subscribe to all events regardless of type (wildcard listener).
+   * Useful for logging, analytics, or debugging.
+   *
+   * @param handler - Callback invoked for every published event.
+   * @returns An unsubscribe function that removes this wildcard handler.
+   */
   subscribeAll(handler: (event: AppEvent) => void): () => void {
     if (!this.subscribers.has("*")) {
       this.subscribers.set("*", new Set())
@@ -74,7 +112,10 @@ class EventBus {
     }
   }
 
-  /** Clear all subscribers (useful for cleanup in tests) */
+  /**
+   * Remove all subscribers for all event types.
+   * Primarily useful for cleanup in test teardown or hot module replacement.
+   */
   clear(): void {
     this.subscribers.clear()
   }

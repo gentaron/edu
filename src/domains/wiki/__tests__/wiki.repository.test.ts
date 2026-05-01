@@ -193,13 +193,13 @@ describe("WikiRepository", () => {
       if (!first) return
       const result = WikiRepository.resolveLinks([first.id])
       expect(result).toHaveLength(1)
-      expect(result[0].exists).toBe(true)
+      expect(result[0]!.exists).toBe(true)
     })
 
     it("marks missing links as non-existent", () => {
       const result = WikiRepository.resolveLinks(["nonexistent-id"])
       expect(result).toHaveLength(1)
-      expect(result[0].exists).toBe(false)
+      expect(result[0]!.exists).toBe(false)
     })
 
     it("handles empty array", () => {
