@@ -1,0 +1,10 @@
+[package]
+name = "edu-pqc"
+version = "0.1.0"
+edition = "2021"
+description = "Post-quantum cryptography — CRYSTALS-Kyber-768 + CRYSTALS-Dilithium (ML-DSA)"
+
+[dependencies]
+pqcrypto-mlkem = "0.1"
+pqcrypto-mldsa = "0.1"
+pqcrypto-traits = "0.3"

@@ -1,0 +1,16 @@
+[package]
+name = "edu-quasi"
+version = "0.1.0"
+edition = "2021"
+description = "no_std QASM-2 subset interpreter — Apolonium Runtime Kernel"
+
+[features]
+default = []
+std = ["serde/std", "alloc"]
+alloc = []
+
+[dependencies]
+serde = { version = "1", default-features = false, features = ["derive"] }
+
+[dev-dependencies]
+serde_json = "1"

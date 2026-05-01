@@ -6,4 +6,6 @@ members = [
     "edu-engine-wasm",
     "edu-engine-native",
     "edu-engine-embedded",
+    "edu-quasi",
+    "edu-pqc",
 ]

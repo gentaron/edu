@@ -192,26 +192,79 @@ Benchmarks are deterministic and reproducible:
 
 ### no_std Core Extraction
 
-| Metric | Before (Epoch 11) | After (Epoch 12, Phase α) | Delta |
-|--------|--------------------|---------------------------|-------|
-| Rust crates | 1 (`edu-battle-engine`) | 5 (core, wasm, native, embedded, original) | +4 |
-| Rust tests | 9 | 61 (+9 unit + 9 proof + 8 RNG) | +52 |
-| no_std compatible | No | Yes (`edu-engine-core`) | New |
-| RISC-V target | N/A | `riscv64gc-unknown-none-elf` | New |
-| RISC-V binary size | N/A | 5,768 bytes (78 bytes text) | New |
-| Kani harnesses | 0 | 6 proof targets | +6 |
-| Property-based proofs | 0 | 9 exhaustive fuzz tests | +9 |
-| Deterministic RNG | No (Math.random) | xoshiro256++ (no_std) | New |
-| EffectType variants (Rust) | N/A (string-based) | 10 exhaustive enum | New |
-| Fixed-point arithmetic | No | u16 multiplier (/100) | New |
+| Metric                     | Before (Epoch 11)       | After (Epoch 12, Phase α)                  | Delta |
+| -------------------------- | ----------------------- | ------------------------------------------ | ----- |
+| Rust crates                | 1 (`edu-battle-engine`) | 5 (core, wasm, native, embedded, original) | +4    |
+| Rust tests                 | 9                       | 61 (+9 unit + 9 proof + 8 RNG)             | +52   |
+| no_std compatible          | No                      | Yes (`edu-engine-core`)                    | New   |
+| RISC-V target              | N/A                     | `riscv64gc-unknown-none-elf`               | New   |
+| RISC-V binary size         | N/A                     | 5,768 bytes (78 bytes text)                | New   |
+| Kani harnesses             | 0                       | 6 proof targets                            | +6    |
+| Property-based proofs      | 0                       | 9 exhaustive fuzz tests                    | +9    |
+| Deterministic RNG          | No (Math.random)        | xoshiro256++ (no_std)                      | New   |
+| EffectType variants (Rust) | N/A (string-based)      | 10 exhaustive enum                         | New   |
+| Fixed-point arithmetic     | No                      | u16 multiplier (/100)                      | New   |
 
 ### TypeScript CI (No Regression)
 
-| Metric | Before | After | Status |
-|--------|--------|-------|--------|
-| TypeScript tests | 854 | 854 | No change |
-| tsc | Pass | Pass | No change |
-| ESLint | 0 errors, 0 warnings | 0 errors, 0 warnings | No change |
-| Next.js build | 51 pages | 51 pages | No change |
-| Max JS chunk (gzip) | 158KB | 158KB | No change |
+| Metric              | Before               | After                | Status    |
+| ------------------- | -------------------- | -------------------- | --------- |
+| TypeScript tests    | 854                  | 854                  | No change |
+| tsc                 | Pass                 | Pass                 | No change |
+| ESLint              | 0 errors, 0 warnings | 0 errors, 0 warnings | No change |
+| Next.js build       | 51 pages             | 51 pages             | No change |
+| Max JS chunk (gzip) | 158KB                | 158KB                | No change |
 
+## Epoch 12 — Phase β Benchmark Delta (Quantum Substrate)
+
+### Qiskit Apolonium Field Simulation
+
+| Metric          | Value                                                |
+| --------------- | ---------------------------------------------------- |
+| Circuit         | 8-qubit Hadamard + CNOT entanglement chain           |
+| Backend         | StatevectorSampler (qiskit-aer)                      |
+| Shots           | 8192                                                 |
+| Wall-clock time | ~27ms                                                |
+| Unique outcomes | 32                                                   |
+| Entropy         | 4.998132 bits                                        |
+| Max probability | 0.034424                                             |
+| Determinism     | Byte-identical across runs (md5: `a1cf5b990d41175b`) |
+| Output          | `src/domains/battle/quantum-distributions.json`      |
+
+### edu-quasi — no_std QASM-2 Interpreter
+
+| Metric                  | Value                                            |
+| ----------------------- | ------------------------------------------------ |
+| Supported gates         | H, X, Z, CNOT, MEASURE                           |
+| Max qubits              | 12 (4096 complex amplitudes = 64KB stack)        |
+| Tests                   | 74 unit + 2 doc-tests = **76 total**             |
+| Zero-heap               | Yes (stack-only `[Complex; 4096]`)               |
+| Bell state verification | H(0); CX(0,1) → ~50% \|00⟩ + ~50% \|11⟩ ✅       |
+| GHZ state verification  | H(0); CX chain → correct 3-qubit entanglement ✅ |
+| 12-qubit circuit        | Compiles and executes successfully ✅            |
+
+### edu-pqc — Post-Quantum Cryptography
+
+| Metric                    | Value                                                          |
+| ------------------------- | -------------------------------------------------------------- |
+| KEM algorithm             | CRYSTALS-Kyber-768 (ML-KEM)                                    |
+| Signature algorithm       | CRYSTALS-Dilithium (ML-DSA-44)                                 |
+| Tests                     | **15 total** (7 Kyber + 8 Dilithium)                           |
+| Property tests            | 7 (50-key Kyber roundtrip, 50-key Dilithium, 30 full pipeline) |
+| Shared secret size        | 32 bytes                                                       |
+| Kyber public key size     | 1,184 bytes                                                    |
+| Kyber ciphertext size     | 1,088 bytes                                                    |
+| Dilithium public key size | 1,312 bytes                                                    |
+| Dilithium signature size  | ~2,420 bytes                                                   |
+| FFI boundary              | C bindings (Kani cannot verify) — PBT mitigation               |
+
+### Cumulative Rust Metrics (Phase α + β)
+
+| Metric              | Phase α       | Phase β                                   | Total Delta   |
+| ------------------- | ------------- | ----------------------------------------- | ------------- |
+| Rust crates         | 5             | 7 (+edu-quasi, edu-pqc)                   | +2            |
+| Rust tests          | 61            | 161 (+74 quasi + 15 pqc + 11 wasm/native) | +100          |
+| Kani proofs         | 6             | 6                                         | No change     |
+| SIMD module         | Yes (nightly) | Yes (nightly)                             | No change     |
+| TypeScript tests    | 854           | 854                                       | No regression |
+| TypeScript coverage | 91.72%        | 91.72%                                    | No regression |
