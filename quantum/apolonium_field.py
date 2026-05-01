@@ -24,9 +24,8 @@ import math
 import time
 from pathlib import Path
 
-from qiskit import QuantumCircuit
-from qiskit.primitives import StatevectorSampler
-from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import AerSimulator
 
 
 APOLONIUM_QUBITS = 8
@@ -129,16 +128,15 @@ def run_simulation(
 
     start_time = time.perf_counter()
 
-    sampler = StatevectorSampler(seed=seed)
-    result = sampler.run([qc], shots=shots).result()
+    backend = AerSimulator(seed_simulator=seed)
+    compiled = transpile(qc, backend)
+    job = backend.run(compiled, shots=shots)
+    result = job.result()
 
     elapsed_ms = (time.perf_counter() - start_time) * 1000
 
     # Extract measurement counts
-    pub_result = result[0]
-    data = pub_result.data
-    meas_name = list(data.keys())[0]
-    raw_counts: dict[str, int] = data[meas_name].get_counts()
+    raw_counts: dict[str, int] = dict(result.get_counts())
 
     # Normalize to probabilities
     total = sum(raw_counts.values())
@@ -149,12 +147,12 @@ def run_simulation(
     unique_outcomes = len(raw_counts)
     max_prob = max(normalized.values())
 
-    return {
+    result = {
         "metadata": {
             "seed": seed,
             "shots": shots,
             "n_qubits": n_qubits,
-            "backend": "StatevectorSampler (qiskit-aer)",
+            "backend": "AerSimulator (qiskit-aer)",
             "qiskit_version": _get_qiskit_version(),
         },
         "circuit_text": format_circuit_text(qc),
@@ -167,8 +165,9 @@ def run_simulation(
             "max_probability": round(max_prob, 6),
             "total_measurements": total,
         },
-        "timing_ms": round(elapsed_ms, 2),
     }
+    # timing_ms excluded from deterministic output (print to stdout only)
+    return result, elapsed_ms
 
 
 def _get_qiskit_version() -> str:
@@ -198,11 +197,11 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    result = run_simulation(seed=args.seed, shots=args.shots)
+    result, elapsed_ms = run_simulation(seed=args.seed, shots=args.shots)
 
     output_path = Path(args.output)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n")
+    output_path.write_text(json.dumps(result, indent=2, ensure_ascii=False, sort_keys=True) + "\n")
 
     stats = result["statistics"]
     print(f"Apolonium Field Simulation Complete")
@@ -211,7 +210,7 @@ def main() -> None:
     print(f"  Outcomes:  {stats['unique_outcomes']}")
     print(f"  Entropy:   {stats['entropy_bits']} bits")
     print(f"  Max prob:  {stats['max_probability']}")
-    print(f"  Time:      {result['timing_ms']}ms")
+    print(f"  Time:      {round(elapsed_ms, 2)}ms")
     print(f"  Output:    {output_path}")
 
 

@@ -8,8 +8,9 @@ use edu_engine_core::types::*;
 
 /// WASM bridge: calculate damage for a player ability.
 #[wasm_bindgen]
+#[allow(clippy::too_many_arguments)]
 pub fn calculate_damage_wasm(
-    id: &str,
+    _id: &str,
     _name: &str,
     hp: i32,
     max_hp: i32,
@@ -42,13 +43,14 @@ pub fn calculate_damage_wasm(
 
 /// WASM bridge: execute enemy turn.
 #[wasm_bindgen]
+#[allow(clippy::too_many_arguments)]
 pub fn execute_enemy_turn_wasm(
     turn: u32,
     enemy_hp: i32,
     enemy_max_hp: i32,
     enemy_phase: u32,
     shield_buffer: i32,
-    field_json: &str,
+    _field_json: &str,
     enemy_json: &str,
     poison_active: bool,
     enemy_attack_reduction: i32,

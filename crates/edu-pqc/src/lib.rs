@@ -74,7 +74,7 @@ pub fn dilithium_verify(
 mod tests {
     use super::*;
     use pqcrypto_traits::kem::{Ciphertext as _, PublicKey as KemPk, SecretKey as KemSk, SharedSecret as _};
-    use pqcrypto_traits::sign::{DetachedSignature as _, PublicKey as _, SecretKey as _};
+    use pqcrypto_traits::sign::{PublicKey as _, SecretKey as _};
 
     #[test]
     fn test_kyber_keypair_valid() {

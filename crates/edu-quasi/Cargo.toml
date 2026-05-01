@@ -6,11 +6,8 @@ description = "no_std QASM-2 subset interpreter — Apolonium Runtime Kernel"
 
 [features]
 default = []
-std = ["serde/std", "alloc"]
+std = ["alloc"]
 alloc = []
-
-[dependencies]
-serde = { version = "1", default-features = false, features = ["derive"] }
 
 [dev-dependencies]
 serde_json = "1"

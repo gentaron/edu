@@ -6,6 +6,7 @@ use types::*;
 
 /// WASM bridge: calculate damage for a player ability.
 #[wasm_bindgen]
+#[allow(clippy::too_many_arguments)]
 pub fn calculate_damage_wasm(
     id: &str,
     name: &str,
@@ -46,6 +47,7 @@ pub fn calculate_damage_wasm(
 
 /// WASM bridge: execute enemy turn.
 #[wasm_bindgen]
+#[allow(clippy::too_many_arguments)]
 pub fn execute_enemy_turn_wasm(
     turn: u32,
     enemy_hp: i32,

@@ -13,11 +13,13 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
 [![Rust](https://img.shields.io/badge/Rust-no_std-CE422B?style=flat-square&logo=rust)](https://www.rust-lang.org)
-[![Tests](https://img.shields.io/badge/Tests-854_%2B_61_pass-22C55E?style=flat-square)]()
+[![Tests](https://img.shields.io/badge/Tests-854_%2B_161_pass-22C55E?style=flat-square)]()
 [![Coverage](https://img.shields.io/badge/Coverage-91.72%25-4CAF50?style=flat-square)]()
 [![PBT](https://img.shields.io/badge/PBT-56_%2B_9_properties-F59E0B?style=flat-square)]()
 [![Kani](https://img.shields.io/badge/Kani-6_proofs-9333EA?style=flat-square)]()
 [![RISC-V](https://img.shields.io/badge/RISC--V-bare_metal-1DACD6?style=flat-square)]()
+[![Quantum](https://img.shields.io/badge/Quantum-8_qubits-6366F1?style=flat-square)]()
+[![PQC](https://img.shields.io/badge/PQC-ML--KEM_%2B_ML--DSA-EF4444?style=flat-square)]()
 [![Deploy](https://img.shields.io/badge/Deploy-Netlify-00C7B7?style=flat-square&logo=netlify)](https://netlify.com)
 
 </div>
@@ -70,7 +72,7 @@ bun run bench      # TS + Rust benchmarks
 | **metal/**    | ~2.3K  | WASM bridge, TLV binary protocol, Service Worker, Web Workers  |
 | **platform/** | ~863   | Event bus, Zod schemas, shadcn/ui, validators, invariants      |
 | **lib/**      | ~3K    | 後方互換ユーティリティ                                         |
-| **crates/**   | 1,400+ | Rust → WASM/native/RISC-V バトルエンジン (no_std core)         |
+| **crates/**   | 5,300+ | Rust → WASM/native/RISC-V/Quantum/PQC (7 crates, no_std core)  |
 
 ### Dependency Rules
 
@@ -275,7 +277,7 @@ Naming: English PascalCase (e.g. `MinaEurekaErnst.png`) · 400x400px+ · Square 
 | `any` type count          | 0 (enforced by ESLint)                                           |
 | `eslint-disable`          | 0 (enforced)                                                     |
 | Zod build-time validation | validate-data.ts (285 Wiki ID uniqueness, etc.)                  |
-| Test suite                | 854 TS tests + 61 Rust tests, all passing                        |
+| Test suite                | 854 TS tests + 161 Rust tests, all passing                       |
 | Coverage                  | 91.72% (V8 provider)                                             |
 | PBT properties            | 56 (fast-check) + 9 (Rust)                                       |
 | Formal verification       | 6 Kani bounded model checking proofs                             |
@@ -315,20 +317,22 @@ Detailed results in [BENCHMARKS.md](BENCHMARKS.md).
 
 ## Metrics Summary
 
-| Metric                  | Value                                                                |
-| ----------------------- | -------------------------------------------------------------------- |
-| **Total commits**       | 157                                                                  |
-| **TypeScript**          | 59,020 lines, 226 files                                              |
-| **Rust**                | 1,400+ lines, 5 crates (no_std core, WASM, native, embedded, legacy) |
-| **Test suite**          | 854 TS + 61 Rust tests                                               |
-| **Coverage**            | 91.72%                                                               |
-| **PBT properties**      | 56 (fast-check) + 9 (Rust)                                           |
-| **Formal verification** | 6 Kani proofs + Creusot/Prusti contracts                             |
-| **Benchmarks**          | 27 (TS) + 16 (Rust criterion.rs)                                     |
-| **Build output**        | 51 pages (39 static, 12 SSG)                                         |
-| **Max bundle (gzip)**   | 158KB                                                                |
-| **Wiki entries**        | 285+ (6 categories)                                                  |
-| **Cards**               | 76 player cards, 10 enemies                                          |
-| **Stories**             | 22 chapters, EN/JP                                                   |
-| **Domains**             | 5 (wiki, cards, battle, stories, civilizations)                      |
-| **Development period**  | 2026/04/12 — 2026/05/01 (20 days)                                    |
+| Metric                  | Value                                                                     |
+| ----------------------- | ------------------------------------------------------------------------- |
+| **Total commits**       | 157                                                                       |
+| **TypeScript**          | 59,020 lines, 226 files                                                   |
+| **Rust**                | 5,300+ lines, 7 crates (core, WASM, native, embedded, battle, quasi, pqc) |
+| **Test suite**          | 854 TS + 161 Rust tests                                                   |
+| **Coverage**            | 91.72%                                                                    |
+| **PBT properties**      | 56 (fast-check) + 9 (Rust)                                                |
+| **Formal verification** | 6 Kani proofs + Creusot/Prusti contracts                                  |
+| **Quantum**             | 8-qubit AerSimulator, byte-identical PMF (Qiskit + edu-quasi)             |
+| **PQC**                 | ML-KEM-768 (Kyber) + ML-DSA-44 (Dilithium), 15 PBT properties             |
+| **Benchmarks**          | 27 (TS) + 16 (Rust criterion.rs)                                          |
+| **Build output**        | 51 pages (39 static, 12 SSG)                                              |
+| **Max bundle (gzip)**   | 158KB                                                                     |
+| **Wiki entries**        | 285+ (6 categories)                                                       |
+| **Cards**               | 76 player cards, 10 enemies                                               |
+| **Stories**             | 22 chapters, EN/JP                                                        |
+| **Domains**             | 5 (wiki, cards, battle, stories, civilizations)                           |
+| **Development period**  | 2026/04/12 — 2026/05/01 (20 days)                                         |

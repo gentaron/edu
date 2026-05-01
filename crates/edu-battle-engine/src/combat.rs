@@ -171,7 +171,7 @@ pub fn execute_enemy_turn(
 fn execute_enemy_specials(
     state: &BattleState,
     enemy: &Enemy,
-    field: &mut Vec<FieldChar>,
+    field: &mut [FieldChar],
     logs: &mut Vec<String>,
 ) {
     let hp_pct = if enemy.max_hp > 0 {
@@ -181,7 +181,7 @@ fn execute_enemy_specials(
     };
 
     match enemy.id.as_str() {
-        "frost-guardian" if hp_pct <= 50.0 && state.turn % 2 == 0 => {
+        "frost-guardian" if hp_pct <= 50.0 && state.turn.is_multiple_of(2) => {
             apply_damage_to_random(field, state.turn, 3, "\u{2744}\u{FE0F}", "絶対零度の冷気が", logs);
         }
         "flame-spirit" if hp_pct <= 50.0 => {
@@ -218,7 +218,7 @@ fn execute_enemy_specials(
 
 /// Apply damage to a deterministic random alive character.
 fn apply_damage_to_random(
-    field: &mut Vec<FieldChar>,
+    field: &mut [FieldChar],
     seed: u32,
     damage: i32,
     emoji: &str,
