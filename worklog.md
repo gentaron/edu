@@ -102,11 +102,13 @@ Added before the closing `]` of the CHARACTERS array (after オメガ＝ユリ�
 - All 43 leaders arrays properly formatted with `LeaderEntry` interface fields
 
 ---
+
 Task ID: 1
 Agent: full-stack-developer
 Task: Phase 1 Core Performance Optimization
 
 Work Log:
+
 - Updated next.config.ts with image optimization settings (formats, deviceSizes, imageSizes, unoptimized: false, bundle analyzer integration)
 - Removed modularizeImports for lucide-react due to incompatibility with shadcn/ui's ChevronDownIcon import pattern
 - Converted all `<img>` tags to next/image `<Image>` components across 5 files (auralis, card-game/select, card-game/battle, wiki/page, wiki/[id])
@@ -118,9 +120,38 @@ Work Log:
 - Created 6 loading.tsx skeleton files: root, wiki, story, card-game, characters, timeline
 
 Stage Summary:
+
 - All `<img>` tags eliminated in favor of next/image with proper optimization attributes
 - Framer-motion lazy-loaded via LazyMotion wrapper in root layout, reducing initial JS bundle
 - Font loading optimized with font-display:swap and preloading to prevent FOIT
 - Build passes successfully with `npx next build` (46 static pages generated)
 - 6 skeleton loading states added for major routes
 - Note: modularizeImports for lucide-react removed due to shadcn/ui ChevronDownIcon incompatibility; lucide-react is already tree-shakeable by default
+
+---
+
+Task ID: epoch-11-polish
+Agent: main
+Task: Epoch 11 Verification & Polishing — final quality pass, Stryker config, require-jsdoc enforcement, README update
+
+Work Log:
+
+- Pulled latest from origin main (already up to date at 5129fcb)
+- Verified 8-GAP implementation status: all 8 GAPs implemented (EffectType, Branded Types, Battle Engine, Event Bus, Binary Protocol, Wiki Search, JSDoc, ESLint)
+- Ran all quality checks: 1708 tests pass, tsc clean, eslint clean, build success
+- Coverage: 92.37% statements, 93.92% lines (exceeds 80% target)
+- Confirmed any=0 in source code (all occurrences are in comments/strings)
+- Created stryker.conf.json with threshold 70% covering battle/metal/wiki modules
+- Enabled edu/require-jsdoc ESLint rule from "off" to "error"
+- Fixed require-jsdoc rule: improved JSDoc detection with /^\s\*\*/ regex and parent node check
+- Added JSDoc to 4 remaining exported functions (battleFSMReducer, hsmToDotString, isSceneBreak, isChapterHeading)
+- Excluded shared.schema.ts (pure re-exports, 0% coverage) from vitest coverage
+- Removed edu-repo directory from git staging, added to .gitignore
+- Fixed unicorn/number-literal-case errors in binary-protocol.ts and test file
+- Updated README.md Metrics Summary with Epoch 11 data (1708 tests, 92.37% coverage, all quality gates)
+- Committed (249ad67) and pushed to main via PAT
+
+Stage Summary:
+
+- All 9 quality checkboxes passing: any=0, coverage≥80%, eslint --max-warnings=0, tsc --noEmit, build success, JSDoc on all exported functions, require-jsdoc enforced, Stryker config created, EffectType exhaustive check verified
+- Commit 249ad67 pushed to gentaron/edu main
