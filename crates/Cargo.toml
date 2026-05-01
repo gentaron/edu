@@ -8,4 +8,5 @@ members = [
     "edu-engine-embedded",
     "edu-quasi",
     "edu-pqc",
+    "apolon-compiler",
 ]

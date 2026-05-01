@@ -267,6 +267,16 @@ impl Parser {
                 Some(TokenKind::Stats) => CardBodyItem::Stats(self.parse_stats_block()),
                 Some(TokenKind::Ability) => CardBodyItem::Ability(self.parse_ability_def()),
                 Some(TokenKind::Passive) => CardBodyItem::Passive(self.parse_passive_def()),
+                // Keywords that start a different top-level item — break out
+                // so the parent parser can recover, avoiding infinite loops.
+                Some(
+                    TokenKind::Card
+                    | TokenKind::Effect
+                    | TokenKind::Fn
+                    | TokenKind::Const
+                    | TokenKind::Use
+                    | TokenKind::Module
+                ) => break,
                 _ => {
                     self.error_and_sync("expected stats, ability, or passive in card body");
                     continue;
@@ -526,14 +536,8 @@ impl Parser {
             Vec::new()
         };
 
-        let return_type = if self.at(&TokenKind::Arrow) {
-            self.advance();
-            Some(self.parse_type_ann())
-        } else {
-            None
-        };
-
         // Effect annotation with colon: `: pure | : random | : mutating`
+        // Must be checked before return type so `: pure -> int` parses correctly.
         let effect = if self.at(&TokenKind::Colon)
             && self.peek_at(1).is_some_and(|t| {
                 matches!(
@@ -544,6 +548,13 @@ impl Parser {
         {
             self.advance(); // consume ':'
             self.parse_effect_ann()
+        } else {
+            None
+        };
+
+        let return_type = if self.at(&TokenKind::Arrow) {
+            self.advance();
+            Some(self.parse_type_ann())
         } else {
             None
         };
@@ -696,7 +707,15 @@ impl Parser {
                 if self.is_assign_stmt() {
                     Stmt::Assign(self.parse_assign_stmt())
                 } else {
-                    Stmt::Expr(self.parse_expr_stmt())
+                    let pos_before = self.pos;
+                    let stmt = Stmt::Expr(self.parse_expr_stmt());
+                    // If the parser didn't advance, we're stuck on an
+                    // unrecognised token. Synchronize to prevent
+                    // infinite loops inside `parse_block`.
+                    if self.pos == pos_before {
+                        self.synchronize();
+                    }
+                    stmt
                 }
             }
         }

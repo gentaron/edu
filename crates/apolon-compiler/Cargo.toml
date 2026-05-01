@@ -5,7 +5,7 @@ edition = "2021"
 description = "Compiler for the Apolon DSL — card ability language for the edu battle system"
 
 [dependencies]
-
-[dev-dependencies]
 wasm-encoder = "0.220"
 wasmparser = "0.220"
+
+[dev-dependencies]
