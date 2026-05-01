@@ -1,0 +1,9 @@
+[workspace]
+resolver = "2"
+members = [
+    "edu-battle-engine",
+    "edu-engine-core",
+    "edu-engine-wasm",
+    "edu-engine-native",
+    "edu-engine-embedded",
+]

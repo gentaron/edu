@@ -75,3 +75,4 @@ edu\nedutext
 # Rust build artifacts
 crates/edu-battle-engine/target/
 edu-repo/
+crates/target/

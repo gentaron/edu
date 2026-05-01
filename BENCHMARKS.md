@@ -187,3 +187,31 @@ Benchmarks are deterministic and reproducible:
 | Benchmark regression > 20% | Investigate required |
 | Test count decrease        | CI failure           |
 | Coverage threshold miss    | CI failure           |
+
+## Epoch 12 — Phase α Benchmark Delta
+
+### no_std Core Extraction
+
+| Metric | Before (Epoch 11) | After (Epoch 12, Phase α) | Delta |
+|--------|--------------------|---------------------------|-------|
+| Rust crates | 1 (`edu-battle-engine`) | 5 (core, wasm, native, embedded, original) | +4 |
+| Rust tests | 9 | 61 (+9 unit + 9 proof + 8 RNG) | +52 |
+| no_std compatible | No | Yes (`edu-engine-core`) | New |
+| RISC-V target | N/A | `riscv64gc-unknown-none-elf` | New |
+| RISC-V binary size | N/A | 5,768 bytes (78 bytes text) | New |
+| Kani harnesses | 0 | 6 proof targets | +6 |
+| Property-based proofs | 0 | 9 exhaustive fuzz tests | +9 |
+| Deterministic RNG | No (Math.random) | xoshiro256++ (no_std) | New |
+| EffectType variants (Rust) | N/A (string-based) | 10 exhaustive enum | New |
+| Fixed-point arithmetic | No | u16 multiplier (/100) | New |
+
+### TypeScript CI (No Regression)
+
+| Metric | Before | After | Status |
+|--------|--------|-------|--------|
+| TypeScript tests | 854 | 854 | No change |
+| tsc | Pass | Pass | No change |
+| ESLint | 0 errors, 0 warnings | 0 errors, 0 warnings | No change |
+| Next.js build | 51 pages | 51 pages | No change |
+| Max JS chunk (gzip) | 158KB | 158KB | No change |
+
