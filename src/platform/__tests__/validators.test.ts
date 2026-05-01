@@ -33,9 +33,7 @@ describe("Validators", () => {
     })
 
     it("rejects entries with missing required fields", () => {
-      const result = validateWikiEntries([
-        { id: "test" } as unknown[],
-      ])
+      const result = validateWikiEntries([{ id: "test" }])
       expect(result.success).toBe(false)
       if (!result.success) {
         expect(result.errors.length).toBeGreaterThan(0)
@@ -118,6 +116,7 @@ describe("Validators", () => {
           attack: 10,
           defense: 5,
           effect: "Heal",
+          effectType: "HEAL",
           effectValue: 3,
           ultimate: 20,
           ultimateName: "Ultimate Test",
@@ -163,6 +162,7 @@ describe("Validators", () => {
             attack: 5,
             defense: 3,
             effect: "Effect",
+            effectType: "HEAL",
             effectValue: 0,
             ultimate: 10,
             ultimateName: "Ult",
@@ -184,6 +184,7 @@ describe("Validators", () => {
           attack: -1,
           defense: 0,
           effect: "Effect",
+          effectType: "HEAL",
           effectValue: 0,
           ultimate: 0,
           ultimateName: "Ult",
@@ -237,7 +238,9 @@ describe("Validators", () => {
       const result = validateEnemies([
         {
           ...validEnemy,
-          phases: [{ triggerHpPercent: 50, message: "Heal phase", attackBonus: 10, selfHealPerTurn: 5 }],
+          phases: [
+            { triggerHpPercent: 50, message: "Heal phase", attackBonus: 10, selfHealPerTurn: 5 },
+          ],
         },
       ])
       expect(result.success).toBe(true)
@@ -278,7 +281,13 @@ describe("Validators", () => {
 
     it("accepts optional fields", () => {
       const result = validateCivilizations([
-        { ...validCiv, capital: "Test Capital", gdp: "100T", isHistorical: true, planets: ["Earth", "Mars"] },
+        {
+          ...validCiv,
+          capital: "Test Capital",
+          gdp: "100T",
+          isHistorical: true,
+          planets: ["Earth", "Mars"],
+        },
       ])
       expect(result.success).toBe(true)
     })
@@ -453,7 +462,10 @@ describe("Validators", () => {
 
     it("accepts nodes with children", () => {
       const result = validateFactionTrees([
-        { ...validFaction, nodes: [{ year: "E300", name: "Parent", children: ["child1", "child2"] }] },
+        {
+          ...validFaction,
+          nodes: [{ year: "E300", name: "Parent", children: ["child1", "child2"] }],
+        },
       ])
       expect(result.success).toBe(true)
     })

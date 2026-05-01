@@ -16,7 +16,7 @@ import {
   WIKI_TERMS,
   WIKI_HISTORY,
 } from "@/domains/wiki/wiki.data"
-import { ALL_CARDS } from "@/domains/cards/cards.data"
+import { ALL_CARDS } from "@/lib/data"
 import type { WikiEntry, GameCard } from "@/types"
 
 // ─── Types ────────────────────────────────────────────────────────────────
@@ -90,7 +90,9 @@ export class WikiSearchEngine {
    * @returns A promise that resolves when indexing is complete.
    */
   async initialize(): Promise<void> {
-    if (this.initialized) {return}
+    if (this.initialized) {
+      return
+    }
 
     const allWiki: readonly WikiEntry[] = [
       ...WIKI_CHARACTERS,
@@ -165,7 +167,9 @@ export class WikiSearchEngine {
    *          Empty array if not initialized or no matches found.
    */
   search(query: string, options: WikiSearchOptions = {}): SearchResult[] {
-    if (!this.initialized) {return []}
+    if (!this.initialized) {
+      return []
+    }
 
     const { categories, includeCards = false, ...baseOptions } = options
 
@@ -216,20 +220,26 @@ export class WikiSearchEngine {
    * @returns Array of suggestions with text and category. Empty if not initialized or empty prefix.
    */
   autocomplete(prefix: string, limit = 10): AutocompleteSuggestion[] {
-    if (!this.initialized || prefix.trim().length === 0) {return []}
+    if (!this.initialized || prefix.trim().length === 0) {
+      return []
+    }
 
     const completions = this._autocomplete.getCompletions(prefix, limit * 2)
     const suggestions: AutocompleteSuggestion[] = []
     const seen = new Set<string>()
 
     for (const word of completions) {
-      if (suggestions.length >= limit) {break}
+      if (suggestions.length >= limit) {
+        break
+      }
 
       // Determine category from the docId
       const docIds = this._autocomplete.search(word)
       for (const docId of docIds) {
         const key = `${word}:${docId}`
-        if (seen.has(key)) {continue}
+        if (seen.has(key)) {
+          continue
+        }
         seen.add(key)
 
         let category = "unknown"
@@ -239,14 +249,20 @@ export class WikiSearchEngine {
           // Use the original entry's category
           const originalId = docId.slice(6)
           const doc = this._findWikiCategory(originalId)
-          if (doc) {category = doc}
+          if (doc) {
+            category = doc
+          }
         } else {
           const cat = this._findWikiCategory(docId)
-          if (cat) {category = cat}
+          if (cat) {
+            category = cat
+          }
         }
 
         suggestions.push({ text: word, category })
-        if (suggestions.length >= limit) {break}
+        if (suggestions.length >= limit) {
+          break
+        }
       }
     }
 
@@ -283,7 +299,9 @@ export class WikiSearchEngine {
     ] as const
 
     for (const entry of allEntries) {
-      if (entry.id === docId) {return entry.category}
+      if (entry.id === docId) {
+        return entry.category
+      }
     }
 
     return null

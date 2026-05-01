@@ -41,5 +41,17 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "examples", "skills", "prisma", "edu", "crates"]
+  "exclude": [
+    "node_modules",
+    "examples",
+    "skills",
+    "prisma",
+    "edu",
+    "edu-repo",
+    "crates",
+    "src/**/*.data.ts",
+    "src/**/*.meta.ts",
+    "scripts/validate-data.ts",
+    "src/_infra/validate-data.ts"
+  ]
 }

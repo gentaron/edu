@@ -10,21 +10,25 @@
  * Safe to call multiple times.
  */
 export function registerServiceWorker(): void {
-  if (typeof window === "undefined") {return}
-  if (navigator.serviceWorker === undefined) {return}
+  if (typeof window === "undefined") {
+    return
+  }
+  if (navigator.serviceWorker === undefined) {
+    return
+  }
 
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/sw.js")
       .then((registration) => {
-        console.log("[EDU] Service Worker registered:", registration.scope)
+        console.info("[EDU] Service Worker registered:", registration.scope)
 
         registration.addEventListener("updatefound", () => {
           const newWorker = registration.installing
           if (newWorker) {
             newWorker.addEventListener("statechange", () => {
               if (newWorker.state === "activated") {
-                console.log("[EDU] New Service Worker activated")
+                console.info("[EDU] New Service Worker activated")
               }
             })
           }

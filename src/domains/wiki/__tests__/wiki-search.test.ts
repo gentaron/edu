@@ -9,7 +9,7 @@ describe("WikiSearchEngine (wiki-search.ts)", () => {
   beforeEach(async () => {
     engine = new WikiSearchEngine()
     await engine.initialize()
-  }, 60000)
+  }, 60_000)
 
   /* ── Initialization ── */
   describe("initialize", () => {
@@ -94,7 +94,7 @@ describe("WikiSearchEngine (wiki-search.ts)", () => {
     })
 
     it("respects offset option", () => {
-      const results1 = engine.search(" ", { limit: 10 })
+      const _results1 = engine.search(" ", { limit: 10 })
       const results2 = engine.search(" ", { limit: 5, offset: 2 })
       expect(results2.length).toBeLessThanOrEqual(5)
     })
@@ -179,7 +179,9 @@ describe("WikiSearchEngine (wiki-search.ts)", () => {
     it("categories include card for card names", () => {
       // Search for a known card character prefix
       const suggestions = engine.autocomplete("ケ")
-      const hasCategory = suggestions.some((s) => s.category === "card" || s.category === "unknown" || s.category === "キャラクター")
+      const hasCategory = suggestions.some(
+        (s) => s.category === "card" || s.category === "unknown" || s.category === "キャラクター"
+      )
       expect(hasCategory).toBe(true)
     })
   })
@@ -221,19 +223,19 @@ describe("WikiSearchEngine (wiki.search.ts)", () => {
     await e.initialize()
     const stats = e.getStats()
     expect(stats.documents).toBeGreaterThan(0)
-  }, 60000)
+  }, 60_000)
 
   it("search works on wiki.search version", async () => {
     const e = new WikiSearchEngine2()
     await e.initialize()
     const results = e.search("ディアナ")
     expect(results.length).toBeGreaterThan(0)
-  }, 60000)
+  }, 60_000)
 
   it("autocomplete works on wiki.search version", async () => {
     const e = new WikiSearchEngine2()
     await e.initialize()
     const suggestions = e.autocomplete("ディ")
     expect(suggestions.length).toBeGreaterThan(0)
-  }, 60000)
+  }, 60_000)
 })

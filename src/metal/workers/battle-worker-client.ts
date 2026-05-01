@@ -242,7 +242,7 @@ class BattleWorkerClient {
 
     const response = await this.pool.submit(message)
     if (response.type === "ERROR") {
-      throw new Error(String((response.payload).error))
+      throw new Error(String(response.payload.error))
     }
 
     const p = response.payload
@@ -277,7 +277,7 @@ class BattleWorkerClient {
 
     const response = await this.pool.submit(message)
     if (response.type === "ERROR") {
-      throw new Error(String((response.payload).error))
+      throw new Error(String(response.payload.error))
     }
 
     const p = response.payload
@@ -304,7 +304,7 @@ class BattleWorkerClient {
 
     const response = await this.pool.submit(message)
     if (response.type === "ERROR") {
-      throw new Error(String((response.payload).error))
+      throw new Error(String(response.payload.error))
     }
 
     const p = response.payload
@@ -328,7 +328,7 @@ class BattleWorkerClient {
 
     const response = await this.pool.submit(message)
     if (response.type === "ERROR") {
-      throw new Error(String((response.payload).error))
+      throw new Error(String(response.payload.error))
     }
 
     const p = response.payload
@@ -375,7 +375,7 @@ export let battleWorkerClient: BattleWorkerClient | null = null
  * Safe to call multiple times — returns the existing instance if already initialized.
  */
 export function initBattleWorker(workerCount?: number): BattleWorkerClient {
-  if (battleWorkerClient !== null) {
+  if (battleWorkerClient != null) {
     return battleWorkerClient
   }
   battleWorkerClient = new BattleWorkerClient(workerCount)
@@ -387,7 +387,7 @@ export function initBattleWorker(workerCount?: number): BattleWorkerClient {
  * Allows re-initialization via initBattleWorker().
  */
 export function terminateBattleWorker(): void {
-  if (battleWorkerClient !== null) {
+  if (battleWorkerClient != null) {
     battleWorkerClient.terminate()
     battleWorkerClient = null
   }

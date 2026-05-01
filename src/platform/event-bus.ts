@@ -4,21 +4,23 @@
    Uses discriminated union for type-safe events.
    ═══════════════════════════════════════════ */
 
+import type { EnemyId, CardId, WikiId, StorySlug } from "@/platform/schemas/branded"
+
 /** All application events as a discriminated union */
 export type AppEvent =
-  | { type: "battle:start"; enemyId: string; deckSize: number }
-  | { type: "battle:ability"; ability: string; characterId: string }
+  | { type: "battle:start"; enemyId: EnemyId; deckSize: number }
+  | { type: "battle:ability"; ability: string; characterId: CardId }
   | { type: "battle:turn"; turn: number }
   | { type: "battle:phase-change"; from: string; to: string }
-  | { type: "battle:victory"; enemyId: string; turnsUsed: number }
-  | { type: "battle:defeat"; enemyId: string; turnsUsed: number }
+  | { type: "battle:victory"; enemyId: EnemyId; turnsUsed: number }
+  | { type: "battle:defeat"; enemyId: EnemyId; turnsUsed: number }
   | { type: "battle:reset" }
-  | { type: "deck:card-added"; cardId: string; deckSize: number }
-  | { type: "deck:card-removed"; cardId: string; deckSize: number }
+  | { type: "deck:card-added"; cardId: CardId; deckSize: number }
+  | { type: "deck:card-removed"; cardId: CardId; deckSize: number }
   | { type: "deck:cleared" }
   | { type: "deck:reordered"; deckSize: number }
-  | { type: "wiki:entry-viewed"; entryId: string }
-  | { type: "story:opened"; slug: string }
+  | { type: "wiki:entry-viewed"; entryId: WikiId }
+  | { type: "story:opened"; slug: StorySlug }
   | { type: "story:lang-changed"; lang: "ja" | "en" }
   | { type: "navigation:route-changed"; path: string }
   | { type: "ui:theme-toggled" }

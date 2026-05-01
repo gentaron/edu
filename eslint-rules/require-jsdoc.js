@@ -23,8 +23,14 @@ module.exports = {
       filePath.includes('\\metal\\')
 
     function hasJSDoc(node) {
-      const comments = context.getSourceCode().getCommentsBefore(node)
-      return comments.some((c) => c.type === 'Block' && c.value.startsWith('*'))
+      // JSDoc is typically attached to the parent ExportNamedDeclaration,
+      // not to the inner FunctionDeclaration. Check both.
+      const src = context.getSourceCode()
+      const comments = [
+        ...src.getCommentsBefore(node),
+        ...(node.parent ? src.getCommentsBefore(node.parent) : []),
+      ]
+      return comments.some((c) => c.type === 'Block' && /^\s*\*/.test(c.value))
     }
 
     return shouldCheck

@@ -12,6 +12,7 @@ import {
   WIKI_TERMS,
   WIKI_HISTORY,
 } from "./wiki.data"
+import type { WikiId } from "@/platform/schemas/branded"
 import type { WikiEntry, Category } from "@/types"
 
 /** Combined wiki entries from all source files */
@@ -29,7 +30,7 @@ const ALL_ENTRIES: WikiEntry[] = [
 const CATEGORY_ORDER: Category[] = ["キャラクター", "組織", "地理", "技術", "用語", "歴史"]
 
 /** In-memory index for fast lookups */
-const entryById = new Map<string, WikiEntry>()
+const entryById = new Map<WikiId, WikiEntry>()
 const entriesByCategory = new Map<Category, WikiEntry[]>()
 
 for (const entry of ALL_ENTRIES) {
@@ -58,7 +59,7 @@ export const WikiRepository = {
    * const entry = WikiRepository.findById('char-lin')
    * // → { id: 'char-lin', name: 'リン', category: 'キャラクター', ... }
    */
-  findById(id: string): WikiEntry | undefined {
+  findById(id: WikiId): WikiEntry | undefined {
     return entryById.get(id)
   },
 
@@ -148,7 +149,7 @@ export const WikiRepository = {
    * @returns Array of resolution results indicating whether each ID exists,
    *          with the full entry attached if found.
    */
-  resolveLinks(ids: string[]): Array<{ id: string; exists: boolean; entry?: WikiEntry }> {
+  resolveLinks(ids: WikiId[]): Array<{ id: WikiId; exists: boolean; entry?: WikiEntry }> {
     return ids.map((id) => {
       const entry = entryById.get(id)
       return { id, exists: !!entry, entry }
@@ -164,7 +165,7 @@ export const WikiRepository = {
   get totalCount(): number {
     return ALL_ENTRIES.length
   },
-};
+}
 
 /**
  * Re-export of the combined wiki entries array for backward compatibility.

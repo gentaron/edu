@@ -57,7 +57,7 @@ export function asCivilizationId(s: string): CivilizationId {
 /** Validate and brand a string as StorySlug */
 export function asStorySlug(s: string): StorySlug {
   if (!/^[\da-z-]+$/.test(s)) {
-    throw new Error(`Invalid StorySlug: "${s}" must match [\\da-z-]+`)
+    throw new Error(String.raw`Invalid StorySlug: "${s}" must match [\da-z-]+`)
   }
   return s as StorySlug
 }

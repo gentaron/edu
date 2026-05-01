@@ -71,14 +71,22 @@ export const Easing = {
   bounce: (t: number): number => {
     const n1 = 7.5625
     const d1 = 2.75
-    if (t < 1 / d1) {return n1 * t * t}
-    if (t < 2 / d1) {return n1 * (t -= 1.5 / d1) * t + 0.75}
-    if (t < 2.5 / d1) {return n1 * (t -= 2.25 / d1) * t + 0.9375}
+    if (t < 1 / d1) {
+      return n1 * t * t
+    }
+    if (t < 2 / d1) {
+      return n1 * (t -= 1.5 / d1) * t + 0.75
+    }
+    if (t < 2.5 / d1) {
+      return n1 * (t -= 2.25 / d1) * t + 0.9375
+    }
     return n1 * (t -= 2.625 / d1) * t + 0.984_375
   },
 
   elastic: (t: number): number => {
-    if (t === 0 || t === 1) {return t}
+    if (t === 0 || t === 1) {
+      return t
+    }
     return -Math.pow(2, 10 * t - 10) * Math.sin((t * 10 - 10.75) * ((2 * Math.PI) / 3))
   },
 } as const satisfies Record<string, EasingFunction>
@@ -116,13 +124,17 @@ export class FrameBudget {
   }
 
   getAverageFps(): number {
-    if (this.history.length === 0) {return 0}
+    if (this.history.length === 0) {
+      return 0
+    }
     const avgMs = this.history.reduce((a, b) => a + b, 0) / this.history.length
     return avgMs > 0 ? 1000 / avgMs : 0
   }
 
   getAverageFrameTime(): number {
-    if (this.history.length === 0) {return 0}
+    if (this.history.length === 0) {
+      return 0
+    }
     return this.history.reduce((a, b) => a + b, 0) / this.history.length
   }
 
@@ -146,7 +158,7 @@ export class TextureAtlas {
     return new Promise<void>((resolve, reject) => {
       const img = new Image()
       img.crossOrigin = "anonymous"
-      img.addEventListener('load', () => {
+      img.addEventListener("load", () => {
         this.textures.set(key, img)
         resolve()
       })
@@ -168,7 +180,9 @@ export class TextureAtlas {
     h: number
   ): void {
     const img = this.textures.get(key)
-    if (!img) {return}
+    if (!img) {
+      return
+    }
     try {
       ctx.drawImage(img, x, y, w, h)
     } catch {
@@ -178,13 +192,17 @@ export class TextureAtlas {
 
   /** Build an offscreen canvas atlas from all loaded textures. */
   buildAtlas(): void {
-    if (this.textures.size === 0) {return}
+    if (this.textures.size === 0) {
+      return
+    }
     const padding = 2
     let totalWidth = 0
     let maxHeight = 0
     for (const img of this.textures.values()) {
       totalWidth += img.naturalWidth + padding
-      if (img.naturalHeight > maxHeight) {maxHeight = img.naturalHeight}
+      if (img.naturalHeight > maxHeight) {
+        maxHeight = img.naturalHeight
+      }
     }
     const offscreen = document.createElement("canvas")
     offscreen.width = totalWidth
@@ -226,7 +244,9 @@ export class Tween {
   }
 
   update(deltaMs: number): boolean {
-    if (this._completed) {return true}
+    if (this._completed) {
+      return true
+    }
     this.elapsed += deltaMs
     const t = this.duration > 0 ? Math.min(this.elapsed / this.duration, 1) : 1
     const easedValue = this.from + (this.to - this.from) * this.easing(t)
@@ -254,7 +274,9 @@ export class AnimationTimeline {
   update(deltaMs: number): void {
     for (let i = this.tweens.length - 1; i >= 0; i--) {
       const tween = this.tweens[i]
-      if (tween === undefined) {continue}
+      if (tween === undefined) {
+        continue
+      }
       if (tween.update(deltaMs)) {
         this.tweens.splice(i, 1)
       }
@@ -314,7 +336,9 @@ export class SpriteBatch {
     // Sort by depth before drawing
     const sorted = [...this.sprites.values()].sort((a, b) => a.depth - b.depth)
     for (const sprite of sorted) {
-      if (!sprite.visible) {continue}
+      if (!sprite.visible) {
+        continue
+      }
       sprite.update(deltaMs)
       ctx.globalAlpha = sprite.alpha
       sprite.draw(ctx)
@@ -370,7 +394,7 @@ export class CardSprite extends Sprite {
     // Load image
     const img = new Image()
     img.crossOrigin = "anonymous"
-    img.addEventListener('load', () => {
+    img.addEventListener("load", () => {
       this.image = img
       this.imageLoaded = true
     })
@@ -466,7 +490,7 @@ export class CardSprite extends Sprite {
     }
     ctx.fillStyle = gradient
     ctx.fill()
-    ctx.strokeStyle = this.rarity === "SR" ? "#a855f7" : (this.rarity === "R" ? "#3b82f6" : "#6b7280")
+    ctx.strokeStyle = this.rarity === "SR" ? "#a855f7" : this.rarity === "R" ? "#3b82f6" : "#6b7280"
     ctx.lineWidth = 1.5
     ctx.stroke()
 
@@ -620,7 +644,7 @@ export class EnemySprite extends Sprite {
 
     const img = new Image()
     img.crossOrigin = "anonymous"
-    img.addEventListener('load', () => {
+    img.addEventListener("load", () => {
       this.image = img
       this.imageLoaded = true
     })
@@ -630,7 +654,10 @@ export class EnemySprite extends Sprite {
   setHp(current: number, max: number, animated = true): void {
     this.hp = current
     this.maxHp = max
-    if (!animated) {this.displayHp = current}
+    if (animated) {
+      return
+    }
+    this.displayHp = current
   }
 
   setPhase(phase: number): void {
@@ -828,7 +855,9 @@ export class Particle {
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    if (this.alpha <= 0) {return}
+    if (this.alpha <= 0) {
+      return
+    }
     ctx.save()
     ctx.globalAlpha = this.alpha
     ctx.fillStyle = this.color
@@ -1020,7 +1049,9 @@ export class BattleRenderer {
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas
     const ctx = canvas.getContext("2d")
-    if (!ctx) {throw new Error("Failed to get 2D rendering context from canvas")}
+    if (!ctx) {
+      throw new Error("Failed to get 2D rendering context from canvas")
+    }
     this.ctx = ctx
 
     this.spriteBatch = new SpriteBatch()
@@ -1034,14 +1065,18 @@ export class BattleRenderer {
   // ─── Lifecycle ───
 
   start(): void {
-    if (this.running) {return}
+    if (this.running) {
+      return
+    }
     this.running = true
     this.lastTime = performance.now()
     this.loop(this.lastTime)
   }
 
   stop(): void {
-    if (!this.running) {return}
+    if (!this.running) {
+      return
+    }
     this.running = false
     if (this.rafId !== 0) {
       cancelAnimationFrame(this.rafId)
@@ -1056,7 +1091,9 @@ export class BattleRenderer {
   }
 
   private loop = (timestamp: number): void => {
-    if (!this.running) {return}
+    if (!this.running) {
+      return
+    }
 
     const frameStart = this.frameBudget.beginFrame()
     const deltaMs = Math.min(timestamp - this.lastTime, 100) // clamp to prevent spiral
@@ -1108,9 +1145,15 @@ export class BattleRenderer {
       card.y = startY
       card.depth = state.cardIndex
       card.setHp(state.hp, state.maxHp, false)
-      if (state.isDown) {card.setDown(true)}
-      if (state.hasShield) {card.showShield(state.shieldValue)}
-      if (state.hasPoison) {card.showPoison()}
+      if (state.isDown) {
+        card.setDown(true)
+      }
+      if (state.hasShield) {
+        card.showShield(state.shieldValue)
+      }
+      if (state.hasPoison) {
+        card.showPoison()
+      }
 
       this.playerCards.set(state.cardIndex, card)
       this.spriteBatch.addSprite(`card-${state.cardIndex}`, card)
@@ -1122,7 +1165,7 @@ export class BattleRenderer {
       this.spriteBatch.removeSprite("enemy")
     }
 
-    const { width, height } = this.canvas
+    const { width } = this.canvas
     const sprite = new EnemySprite({
       id: enemy.id,
       name: enemy.name,
@@ -1416,7 +1459,7 @@ export class BattleRenderer {
       })
 
       // Log the message to console (in real usage this would render text overlay)
-      console.log(`[PhaseTransition] ${message}`)
+      console.info(`[PhaseTransition] ${message}`)
 
       setTimeout(resolve, 1500)
     })
@@ -1448,11 +1491,15 @@ export class BattleRenderer {
 
   updateHp(charIndex: number, hp: number, maxHp: number): void {
     const card = this.playerCards.get(charIndex)
-    if (card) {card.setHp(hp, maxHp)}
+    if (card) {
+      card.setHp(hp, maxHp)
+    }
   }
 
   updateEnemyHp(hp: number, maxHp: number): void {
-    if (this.enemySprite) {this.enemySprite.setHp(hp, maxHp)}
+    if (this.enemySprite) {
+      this.enemySprite.setHp(hp, maxHp)
+    }
   }
 
   updateShieldBuffer(value: number): void {
@@ -1478,7 +1525,9 @@ export class BattleRenderer {
   private generateStars(): void {
     this.backgroundStars = []
     const { width, height } = this.canvas
-    if (width === 0 || height === 0) {return}
+    if (width === 0 || height === 0) {
+      return
+    }
     for (let i = 0; i < 80; i++) {
       this.backgroundStars.push({
         x: Math.random() * width,
@@ -1491,7 +1540,9 @@ export class BattleRenderer {
 
   drawBackground(): void {
     const { width, height } = this.canvas
-    if (width === 0 || height === 0) {return}
+    if (width === 0 || height === 0) {
+      return
+    }
 
     // Gradient background
     const gradient = this.ctx.createLinearGradient(0, 0, 0, height)

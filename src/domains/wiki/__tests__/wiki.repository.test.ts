@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { WikiRepository, ALL_ENTRIES } from "@/domains/wiki/wiki.repository"
 import type { Category } from "@/types"
+import type { WikiId } from "@/platform/schemas/branded"
 
 /* ═══════════════════════════════════════════
    Wiki Repository Tests
@@ -12,19 +13,21 @@ describe("WikiRepository", () => {
     it("returns entry for existing ID", () => {
       // Use first entry as test
       const first = ALL_ENTRIES[0]
-      if (!first) return
+      if (!first) {
+        return
+      }
       const result = WikiRepository.findById(first.id)
       expect(result).toBeDefined()
       expect(result!.id).toBe(first.id)
     })
 
     it("returns undefined for non-existent ID", () => {
-      const result = WikiRepository.findById("nonexistent-id-xyz")
+      const result = WikiRepository.findById("nonexistent-id-xyz" as WikiId)
       expect(result).toBeUndefined()
     })
 
     it("returns undefined for empty string ID", () => {
-      const result = WikiRepository.findById("")
+      const result = WikiRepository.findById("" as WikiId)
       expect(result).toBeUndefined()
     })
   })
@@ -150,7 +153,7 @@ describe("WikiRepository", () => {
     it("counts match findByCategory results", () => {
       const summary = WikiRepository.getCategorySummary()
       for (const s of summary) {
-        const catEntries = WikiRepository.findByCategory(s.category as Category)
+        const catEntries = WikiRepository.findByCategory(s.category)
         expect(catEntries.length).toBe(s.count)
       }
     })
@@ -161,7 +164,9 @@ describe("WikiRepository", () => {
     it("finds entries by partial name match", () => {
       // Search for a known character name
       const first = ALL_ENTRIES[0]
-      if (!first) return
+      if (!first) {
+        return
+      }
       const results = WikiRepository.search(first.name.slice(0, 3))
       expect(results.length).toBeGreaterThan(0)
     })
@@ -178,7 +183,9 @@ describe("WikiRepository", () => {
 
     it("search is case-insensitive", () => {
       const first = ALL_ENTRIES[0]
-      if (!first) return
+      if (!first) {
+        return
+      }
       const lowerResults = WikiRepository.search(first.name.toLowerCase())
       const upperResults = WikiRepository.search(first.name.toUpperCase())
       expect(lowerResults.length).toBeGreaterThan(0)
@@ -190,14 +197,16 @@ describe("WikiRepository", () => {
   describe("resolveLinks", () => {
     it("resolves existing link", () => {
       const first = ALL_ENTRIES[0]
-      if (!first) return
+      if (!first) {
+        return
+      }
       const result = WikiRepository.resolveLinks([first.id])
       expect(result).toHaveLength(1)
       expect(result[0]!.exists).toBe(true)
     })
 
     it("marks missing links as non-existent", () => {
-      const result = WikiRepository.resolveLinks(["nonexistent-id"])
+      const result = WikiRepository.resolveLinks(["nonexistent-id" as WikiId])
       expect(result).toHaveLength(1)
       expect(result[0]!.exists).toBe(false)
     })

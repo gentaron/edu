@@ -1,4 +1,4 @@
-import type { GameCard } from "@/types"
+import type { CardId, GameCard } from "@/types"
 import { EffectType } from "@/types"
 
 /* ═══════════════════════════════════════════════════════
@@ -12,7 +12,7 @@ export const ALL_CARDS = [
      SR ×14 — 伝説級キャラクター
      ════════════════════════════════════════ */
   {
-    id: "char-diana",
+    id: "char-diana" as CardId,
     name: "ディアナ",
     imageUrl: I("Diana.png"),
     flavorText: "「初代Wonder Woman。光の裁きが悪を断つ。」",
@@ -27,7 +27,7 @@ export const ALL_CARDS = [
     ultimateName: "光の裁き",
   },
   {
-    id: "char-jen",
+    id: "char-jen" as CardId,
     name: "ジェン",
     imageUrl: I("Jen.png"),
     flavorText: "「Lv938+。Valoriaの覇者が放つ絶対的一撃。」",
@@ -42,7 +42,7 @@ export const ALL_CARDS = [
     ultimateName: "覇王の絶対一撃",
   },
   {
-    id: "char-celia",
+    id: "char-celia" as CardId,
     name: "セリア・ドミニクス",
     imageUrl: I("CeliaDminix.png"),
     flavorText: "「黄金期の女王。一撃に全ての栄光を込めて。」",
@@ -57,7 +57,7 @@ export const ALL_CARDS = [
     ultimateName: "黄金の皇劍",
   },
   {
-    id: "char-alpha-kane",
+    id: "char-alpha-kane" as CardId,
     name: "アルファ・ケイン",
     imageUrl: I("AlphaKane.png"),
     flavorText: "「シャドウ・リベリオンの魂。量子ハックで世界を変えた。」",
@@ -72,7 +72,7 @@ export const ALL_CARDS = [
     ultimateName: "量子ハック・カオス",
   },
   {
-    id: "char-layla",
+    id: "char-layla" as CardId,
     name: "レイラ・ヴィレル・ノヴァ",
     imageUrl: I("LaylaVirelNova.png"),
     flavorText: "「Pink Voltageの最終演舞。プラズマが全てを焼き尽くす。」",
@@ -87,7 +87,7 @@ export const ALL_CARDS = [
     ultimateName: "プラズマ・フィナーレ",
   },
   {
-    id: "char-kate-claudia",
+    id: "char-kate-claudia" as CardId,
     name: "ケイト・クラウディア",
     imageUrl: I("KateClaudia.png"),
     flavorText: "「AURALIS創設者。共鳴の極致が敵を滅ぼす。」",
@@ -102,7 +102,7 @@ export const ALL_CARDS = [
     ultimateName: "共鳴の極致",
   },
   {
-    id: "char-lily-steiner",
+    id: "char-lily-steiner" as CardId,
     name: "リリー・スタイナー",
     imageUrl: I("LillieSteiner.png"),
     flavorText: "「最終章の歌。旋律が刃となり敵を貫く。」",
@@ -117,7 +117,7 @@ export const ALL_CARDS = [
     ultimateName: "終章の鎮魂歌",
   },
   {
-    id: "char-mina",
+    id: "char-mina" as CardId,
     name: "ミナ・エウレカ・エルンスト",
     imageUrl: I("MinaEurekaErnst.png"),
     flavorText: "「超次元弾発射。次元を超えた一撃が標的を消滅させる。」",
@@ -132,7 +132,7 @@ export const ALL_CARDS = [
     ultimateName: "超次元弾",
   },
   {
-    id: "char-iris",
+    id: "char-iris" as CardId,
     name: "アイリス",
     imageUrl: I("Iris.png"),
     flavorText: "「トリニティの指導者。次元の刃で運命を断ち切る。」",
@@ -147,7 +147,7 @@ export const ALL_CARDS = [
     ultimateName: "次元斬り",
   },
   {
-    id: "char-sylvia-crow",
+    id: "char-sylvia-crow" as CardId,
     name: "シルヴィア・クロウ",
     imageUrl: I("SylviaCrow.png"),
     flavorText: "「Eros-7のエスパー。念動力の嵐が敵を圧倒する。」",
@@ -162,7 +162,7 @@ export const ALL_CARDS = [
     ultimateName: "念動嵐撃",
   },
   {
-    id: "char-ayaka-rin",
+    id: "char-ayaka-rin" as CardId,
     name: "アヤカ・リン",
     imageUrl: I("AyakaRin.png"),
     flavorText: "「Lv.842搾精ハンター。カウパー波が全てを狩る。」",
@@ -177,7 +177,7 @@ export const ALL_CARDS = [
     ultimateName: "カウパー波・インフィニティ",
   },
   {
-    id: "char-fariel",
+    id: "char-fariel" as CardId,
     name: "ファリエル",
     imageUrl: I("Fariel.png"),
     flavorText: "「ボグダス最強の戦力。旋風の一撃が山を断つ。」",
@@ -192,7 +192,7 @@ export const ALL_CARDS = [
     ultimateName: "旋風断山撃",
   },
   {
-    id: "char-ninigis",
+    id: "char-ninigis" as CardId,
     name: "ニニギス・カラス",
     imageUrl: I("NinigisKaras.png"),
     flavorText: "「ボグダスの切り札。カラスの如き速さで標的を屠る。」",
@@ -207,7 +207,7 @@ export const ALL_CARDS = [
     ultimateName: "鴉魔一閃",
   },
   {
-    id: "char-slime-woman",
+    id: "char-slime-woman" as CardId,
     name: "スライム・ウーマン",
     imageUrl: I("SlimeWoman.png"),
     flavorText: "「高次元からの干渉。スライムの波が全てを飲み込む。」",
@@ -226,7 +226,7 @@ export const ALL_CARDS = [
      R ×32 — 中堅キャラクター
      ════════════════════════════════════════ */
   {
-    id: "char-erios-wald",
+    id: "char-erios-wald" as CardId,
     name: "エリオス・ウォルド",
     imageUrl: I("EriosWald.png"),
     flavorText: "「テリアン反乱軍の旗手。自由のための剣。」",
@@ -241,7 +241,7 @@ export const ALL_CARDS = [
     ultimateName: "自由の反乱剣",
   },
   {
-    id: "char-gentaro",
+    id: "char-gentaro" as CardId,
     name: "弦太郎",
     imageUrl: I("Gentaro.png"),
     flavorText: "「Lv569。AURALISを支える不屈の戦士。」",
@@ -256,7 +256,7 @@ export const ALL_CARDS = [
     ultimateName: "不屈の居合斬り",
   },
   {
-    id: "char-sebastian",
+    id: "char-sebastian" as CardId,
     name: "セバスチャン・ヴァレリウス",
     imageUrl: I("SebastianValerius.png"),
     flavorText: "「ボグダス・ジャベリンの指揮官。正確無比な一射。」",
@@ -271,7 +271,7 @@ export const ALL_CARDS = [
     ultimateName: "精密狙撃弾",
   },
   {
-    id: "char-gareth",
+    id: "char-gareth" as CardId,
     name: "ガレス",
     imageUrl: I("Gareth.png"),
     flavorText: "「ボグダスの猛将。正面突破を信条とする。」",
@@ -286,7 +286,7 @@ export const ALL_CARDS = [
     ultimateName: "正面突破・粉砕",
   },
   {
-    id: "char-leon",
+    id: "char-leon" as CardId,
     name: "レオン",
     imageUrl: I("Leon.png"),
     flavorText: "「シルバー・ヴェノム幹部。冷酷な一撃。」",
@@ -301,7 +301,7 @@ export const ALL_CARDS = [
     ultimateName: "毒牙の冷刃",
   },
   {
-    id: "char-izumi",
+    id: "char-izumi" as CardId,
     name: "イズミ",
     imageUrl: I("Izumi.png"),
     flavorText: "「アルファ・ヴェノムのリーダー。両性具有の戦闘力。」",
@@ -316,7 +316,7 @@ export const ALL_CARDS = [
     ultimateName: "双極のヴェノム・ストライク",
   },
   {
-    id: "char-goldilocks",
+    id: "char-goldilocks" as CardId,
     name: "ゴルディロックス",
     imageUrl: I("Goldilocks.png"),
     flavorText: "「アルファ・ヴェノムの破壊担当。」",
@@ -331,7 +331,7 @@ export const ALL_CARDS = [
     ultimateName: "暴走破壊衝動",
   },
   {
-    id: "char-lastman",
+    id: "char-lastman" as CardId,
     name: "ラストマン",
     imageUrl: I("Lastman.png"),
     flavorText: "「シルバー・ヴェノム残党。最後の力を振り絞る一撃。」",
@@ -346,7 +346,7 @@ export const ALL_CARDS = [
     ultimateName: "ラスト・リベンジャー",
   },
   {
-    id: "char-temirtaron",
+    id: "char-temirtaron" as CardId,
     name: "テミルタロン",
     imageUrl: I("Temirtaron.png"),
     flavorText: "「サイケデリック・コスモロジーの具現化。」",
@@ -361,7 +361,7 @@ export const ALL_CARDS = [
     ultimateName: "幻覚波動・コスモロジー",
   },
   {
-    id: "char-lilith-vane",
+    id: "char-lilith-vane" as CardId,
     name: "リリス・ヴェイン",
     imageUrl: I("LilithVane.png"),
     flavorText: "「Eros-7の女性リーダー。搾取技術の制圧者。」",
@@ -376,7 +376,7 @@ export const ALL_CARDS = [
     ultimateName: "搾取の支配者・インペリアル",
   },
   {
-    id: "char-garo",
+    id: "char-garo" as CardId,
     name: "ガロ",
     imageUrl: I("Garo.png"),
     flavorText: "「シャドウ・ユニオンの男性リーダー。反逆の剣。」",
@@ -391,7 +391,7 @@ export const ALL_CARDS = [
     ultimateName: "反逆者の漆黒剣",
   },
   {
-    id: "char-karla-velm",
+    id: "char-karla-velm" as CardId,
     name: "カーラ・ヴェルム",
     imageUrl: I("KarlaVelm.png"),
     flavorText: "「スクイーズ・アビスの建設者。搾取プラズマ弾。」",
@@ -406,7 +406,7 @@ export const ALL_CARDS = [
     ultimateName: "搾取プラズマカノン",
   },
   {
-    id: "char-aria-sol",
+    id: "char-aria-sol" as CardId,
     name: "アリア・ソル",
     imageUrl: I("AriaSol.png"),
     flavorText: "「惑星連邦構想の推進者。次元の光で敵を射抜く。」",
@@ -421,7 +421,7 @@ export const ALL_CARDS = [
     ultimateName: "次元光線・フェデレーション",
   },
   {
-    id: "char-tina-gue",
+    id: "char-tina-gue" as CardId,
     name: "ティナ/グエ",
     imageUrl: I("TinaGue.png"),
     flavorText: "「地下街の支配者。深い闇が仲間を守る。」",
@@ -436,7 +436,7 @@ export const ALL_CARDS = [
     ultimateName: "地下街の深淵結界",
   },
   {
-    id: "char-kate-patton",
+    id: "char-kate-patton" as CardId,
     name: "ケイト・パットン",
     imageUrl: I("KatePatton.png"),
     flavorText: "「AURALIS第二世代。癒やしの共鳴で隊を守る。」",
@@ -451,7 +451,7 @@ export const ALL_CARDS = [
     ultimateName: "共鳴の癒やし・リジェネ",
   },
   {
-    id: "char-castina",
+    id: "char-castina" as CardId,
     name: "カスチーナ・テンペスト",
     imageUrl: I("CastinaTempest.png"),
     flavorText: "「クロセヴィアの守護者。嵐の如き防壁。」",
@@ -466,7 +466,7 @@ export const ALL_CARDS = [
     ultimateName: "嵐の絶対防壁",
   },
   {
-    id: "char-elena",
+    id: "char-elena" as CardId,
     name: "エレナ",
     imageUrl: I("Elena.png"),
     flavorText: "「ヴァーミリオン元機関長。経験に裏打ちされた結界。」",
@@ -481,7 +481,7 @@ export const ALL_CARDS = [
     ultimateName: "経験の鉄壁結界",
   },
   {
-    id: "char-aina",
+    id: "char-aina" as CardId,
     name: "アイナ・フォン・リースフェルト",
     imageUrl: I("AinaVonRiesfeld.png"),
     flavorText: "「ボグダス歴戦の防衛兵。堅牢な盾。」",
@@ -496,7 +496,7 @@ export const ALL_CARDS = [
     ultimateName: "リースフェルト大盾陣",
   },
   {
-    id: "char-casteria",
+    id: "char-casteria" as CardId,
     name: "カステリア・グレンヴェルト",
     imageUrl: I("CasteriaGrenvelt.png"),
     flavorText: "「Gigapolis西大陸の防衛者。」",
@@ -511,7 +511,7 @@ export const ALL_CARDS = [
     ultimateName: "西大陸防衛陣",
   },
   {
-    id: "char-timur-shah",
+    id: "char-timur-shah" as CardId,
     name: "ティムール・シャー",
     imageUrl: I("TimurShah.png"),
     flavorText: "「移民団のリーダー。10次元理論の防壁。」",
@@ -526,7 +526,7 @@ export const ALL_CARDS = [
     ultimateName: "10次元理論の防壁",
   },
   {
-    id: "char-zena",
+    id: "char-zena" as CardId,
     name: "ゼナ",
     imageUrl: I("Zena.png"),
     flavorText: "「Eros-7の女性商人。商売の利益で軍資金を供給。」",
@@ -541,7 +541,7 @@ export const ALL_CARDS = [
     ultimateName: "利潤の補給戦略",
   },
   {
-    id: "char-el-forhaus",
+    id: "char-el-forhaus" as CardId,
     name: "エル・フォルハウス",
     imageUrl: I("ElForhaus.png"),
     flavorText: "「新時代のルーキー。経済改革の先駆者。」",
@@ -556,7 +556,7 @@ export const ALL_CARDS = [
     ultimateName: "経済改革ショックウェーブ",
   },
   {
-    id: "char-lillie-ardent",
+    id: "char-lillie-ardent" as CardId,
     name: "リリー・アーデント",
     imageUrl: I("LillieArdent.png"),
     flavorText: "「AURALIS第二世代。献身的な癒やしの手。」",
@@ -571,7 +571,7 @@ export const ALL_CARDS = [
     ultimateName: "献身の聖なる手",
   },
   {
-    id: "char-ninny",
+    id: "char-ninny" as CardId,
     name: "ニニー・オッフェンバッハ",
     imageUrl: I("NinnyOffenbach.png"),
     flavorText: "「クローン継承のハッカー。計算された一撃。」",
@@ -586,7 +586,7 @@ export const ALL_CARDS = [
     ultimateName: "クローン・ハック・オーバーロード",
   },
   {
-    id: "char-fiona",
+    id: "char-fiona" as CardId,
     name: "フィオナ",
     imageUrl: I("Fiona.png"),
     flavorText: "「ブルーローズのCOO。計算高い策略。」",
@@ -601,7 +601,7 @@ export const ALL_CARDS = [
     ultimateName: "策略の青薔薇一撃",
   },
   {
-    id: "char-marina",
+    id: "char-marina" as CardId,
     name: "マリーナ・ボビン",
     imageUrl: I("MarinaBobbin.png"),
     flavorText: "「ミエルテンガ総統。国を癒やす手。」",
@@ -616,7 +616,7 @@ export const ALL_CARDS = [
     ultimateName: "総統の癒やしの手",
   },
   {
-    id: "char-levilia",
+    id: "char-levilia" as CardId,
     name: "レヴィリア・サーペンティナ",
     imageUrl: I("LeviliaSerpentina.png"),
     flavorText: "「シルバー・ヴェノムの毒蛇。見えない毒牙。」",
@@ -631,7 +631,7 @@ export const ALL_CARDS = [
     ultimateName: "毒蛇の幻影牙",
   },
   {
-    id: "char-willie",
+    id: "char-willie" as CardId,
     name: "ウィリー",
     imageUrl: I("Willie.png"),
     flavorText: "「アイリスのパートナー。常に側で支える。」",
@@ -646,7 +646,7 @@ export const ALL_CARDS = [
     ultimateName: "絆の共鳴シールド",
   },
   {
-    id: "char-white-noise",
+    id: "char-white-noise" as CardId,
     name: "ホワイトノイズ",
     imageUrl: I("WhiteNoise.png"),
     flavorText: "「ボグダスの通信兵。情報の流れが勝利を導く。」",
@@ -661,7 +661,7 @@ export const ALL_CARDS = [
     ultimateName: "ノイズ・ジャミング・ウェーブ",
   },
   {
-    id: "char-wadrina",
+    id: "char-wadrina" as CardId,
     name: "ワドリナ",
     imageUrl: I("Wadrina.png"),
     flavorText: "「ボグダスの後方要員。」",
@@ -676,7 +676,7 @@ export const ALL_CARDS = [
     ultimateName: "後方支援プロトコル",
   },
   {
-    id: "char-azazel",
+    id: "char-azazel" as CardId,
     name: "アザゼル・ヘクトパス",
     imageUrl: I("AzazelHectopus.png"),
     flavorText: "「ヴァーミリオンの異形戦力。触手の一撃。」",
@@ -691,7 +691,7 @@ export const ALL_CARDS = [
     ultimateName: "触手の異形捕縛",
   },
   {
-    id: "char-jun",
+    id: "char-jun" as CardId,
     name: "ジュン",
     imageUrl: I("Jun.png"),
     flavorText: "「スライム・ウーマンと関わりを持つ者。不可解な力。」",
@@ -708,7 +708,7 @@ export const ALL_CARDS = [
 
   /* ── 宇宙文明圏カード ── */
   {
-    id: "char-alzen-carlin",
+    id: "char-alzen-carlin" as CardId,
     name: "アルゼン・カーリーン",
     imageUrl: "/logo.svg",
     flavorText: "「グランベル大統領。宇宙最大の経済帝国を率いる。」",
@@ -723,7 +723,7 @@ export const ALL_CARDS = [
     ultimateName: "経済帝国の絶対支配",
   },
   {
-    id: "char-greymond-houser",
+    id: "char-greymond-houser" as CardId,
     name: "グレイモンド・ハウザー",
     imageUrl: "/logo.svg",
     flavorText: "「ティエリア総帥。宇宙最強の軍事力を指揮する。」",
@@ -738,7 +738,7 @@ export const ALL_CARDS = [
     ultimateName: "軍事力の絶対防衛",
   },
   {
-    id: "char-liana-solis",
+    id: "char-liana-solis" as CardId,
     name: "女王リアナ・ソリス",
     imageUrl: "/logo.svg",
     flavorText: "「エレシオン女王。医療と再生の力で宇宙を癒す。」",
@@ -753,7 +753,7 @@ export const ALL_CARDS = [
     ultimateName: "再生の女王の慈悲",
   },
   {
-    id: "char-madris-kernel",
+    id: "char-madris-kernel" as CardId,
     name: "マドリス・カーネル",
     imageUrl: "/logo.svg",
     flavorText: "「ファルージャ代表。文化の力で争いを鎮める。」",
@@ -768,7 +768,7 @@ export const ALL_CARDS = [
     ultimateName: "文化調停の外交術",
   },
   {
-    id: "char-nathan-corind",
+    id: "char-nathan-corind" as CardId,
     name: "ネイサン・コリンド",
     imageUrl: "/logo.svg",
     flavorText: "「ディオクレニス宰相。科学で宇宙の未来を拓く。」",
@@ -783,7 +783,7 @@ export const ALL_CARDS = [
     ultimateName: "科学の結晶シールド",
   },
   {
-    id: "char-ronan-arthur",
+    id: "char-ronan-arthur" as CardId,
     name: "ロナン・アーサ",
     imageUrl: "/logo.svg",
     flavorText: "「アポロンの騎士王。ケンタウロスレーザーの英雄。」",
@@ -802,7 +802,7 @@ export const ALL_CARDS = [
      C ×18 — 一般キャラクター
      ════════════════════════════════════════ */
   {
-    id: "char-vivietta",
+    id: "char-vivietta" as CardId,
     name: "ヴィヴィエッタ",
     imageUrl: I("Vivietta.png"),
     flavorText: "「四楓院ヴィヴィエッタ。救出された後も力を尽くす。」",
@@ -817,7 +817,7 @@ export const ALL_CARDS = [
     ultimateName: "四楓院の慈悲",
   },
   {
-    id: "char-sheron",
+    id: "char-sheron" as CardId,
     name: "シェロン・ジェラス",
     imageUrl: I("SheronJeras.png"),
     flavorText: "「ボグダスの後方支援兵。」",
@@ -832,7 +832,7 @@ export const ALL_CARDS = [
     ultimateName: "支援兵の陣太鼓",
   },
   {
-    id: "char-ilmise",
+    id: "char-ilmise" as CardId,
     name: "イルミーゼ",
     imageUrl: I("Ilmise.png"),
     flavorText: "「ボグダスの衛生兵。負傷者を守る。」",
@@ -847,7 +847,7 @@ export const ALL_CARDS = [
     ultimateName: "衛生兵の救急処置",
   },
   {
-    id: "char-piatrino",
+    id: "char-piatrino" as CardId,
     name: "ピアトリーノ",
     imageUrl: I("Piatrino.png"),
     flavorText: "「ブルーローズの防衛兵。」",
@@ -862,7 +862,7 @@ export const ALL_CARDS = [
     ultimateName: "青薔薇の守護陣",
   },
   {
-    id: "char-myu",
+    id: "char-myu" as CardId,
     name: "ミュー",
     imageUrl: I("Myu.png"),
     flavorText: "「Gigapolisの守護存在。」",
@@ -877,7 +877,7 @@ export const ALL_CARDS = [
     ultimateName: "守護ミュー・バリア",
   },
   {
-    id: "char-gil",
+    id: "char-gil" as CardId,
     name: "ギル",
     imageUrl: I("Gil.png"),
     flavorText: "「アルファ・ヴェノムの盾役。」",
@@ -892,7 +892,7 @@ export const ALL_CARDS = [
     ultimateName: "ヴェノム・ガード",
   },
   {
-    id: "char-aj",
+    id: "char-aj" as CardId,
     name: "AJ",
     imageUrl: I("AJ.png"),
     flavorText: "「アルファ・ヴェノムの情報屋。」",
@@ -907,7 +907,7 @@ export const ALL_CARDS = [
     ultimateName: "情報ハック・クラック",
   },
   {
-    id: "char-sitra",
+    id: "char-sitra" as CardId,
     name: "シトラ・セレス",
     imageUrl: I("SitraCeles.png"),
     flavorText: "「Gigapolisの謎めいた存在。」",
@@ -922,7 +922,7 @@ export const ALL_CARDS = [
     ultimateName: "セレスの神秘光",
   },
   {
-    id: "char-master-venom",
+    id: "char-master-venom" as CardId,
     name: "マスター・ヴェノム",
     imageUrl: I("MasterVenom.png"),
     flavorText: "「シルバー・ヴェノムの創設者。毒の知識。」",
@@ -937,7 +937,7 @@ export const ALL_CARDS = [
     ultimateName: "マスターヴェノム・エキス",
   },
   {
-    id: "char-gabby",
+    id: "char-gabby" as CardId,
     name: "フレデリック・ギャビー",
     imageUrl: I("FredericGabby.png"),
     flavorText: "「ボグダスの歴戦の兵。着実な一撃。」",
@@ -952,7 +952,7 @@ export const ALL_CARDS = [
     ultimateName: "歴戦のベテラン斬り",
   },
   {
-    id: "char-miyushari",
+    id: "char-miyushari" as CardId,
     name: "ミユシャリ",
     imageUrl: I("Miyushari.png"),
     flavorText: "「ボグダス・ジャベリンの歩兵部隊。」",
@@ -967,7 +967,7 @@ export const ALL_CARDS = [
     ultimateName: "ジャベリン突撃陣形",
   },
   {
-    id: "char-yeshibato",
+    id: "char-yeshibato" as CardId,
     name: "イェシバトー",
     imageUrl: I("Yeshibato.png"),
     flavorText: "「ボグダス・ジャベリンの斥候兵。」",
@@ -982,7 +982,7 @@ export const ALL_CARDS = [
     ultimateName: "斥候の隠密射撃",
   },
   {
-    id: "char-yonik",
+    id: "char-yonik" as CardId,
     name: "ヨニック",
     imageUrl: I("Yonik.png"),
     flavorText: "「ブルーローズの戦士。堅実な剣術。」",
@@ -997,7 +997,7 @@ export const ALL_CARDS = [
     ultimateName: "ブルーローズの剣舞",
   },
   {
-    id: "char-bobristy",
+    id: "char-bobristy" as CardId,
     name: "ボブリスティ",
     imageUrl: I("Bobristy.png"),
     flavorText: "「アルファ・ヴェノムの突撃兵。」",
@@ -1012,7 +1012,7 @@ export const ALL_CARDS = [
     ultimateName: "ヴェノム・ラッシュ",
   },
   {
-    id: "char-aike-lopez",
+    id: "char-aike-lopez" as CardId,
     name: "アイク・ロペス",
     imageUrl: I("AikeLopez.png"),
     flavorText: "「SSレンジ / V7の戦闘要員。」",
@@ -1027,7 +1027,7 @@ export const ALL_CARDS = [
     ultimateName: "SSレンジ・アサルト",
   },
   {
-    id: "char-katarina",
+    id: "char-katarina" as CardId,
     name: "カタリナ",
     imageUrl: I("Katarina.png"),
     flavorText: "「アルファ・ヴェノムの暗殺者。速い一撃。」",
@@ -1042,7 +1042,7 @@ export const ALL_CARDS = [
     ultimateName: "暗殺者の疾風ナイフ",
   },
   {
-    id: "char-rafael-drake",
+    id: "char-rafael-drake" as CardId,
     name: "ラファエル・ドレイク",
     imageUrl: "/logo.svg",
     flavorText: "「トロン・コーポレーションCEO。ZAMLTの宇宙軍事力を統括。旗艦カリバーンを指揮。」",
@@ -1057,7 +1057,7 @@ export const ALL_CARDS = [
     ultimateName: "重工業の鉄槌",
   },
   {
-    id: "char-carlos-vandam",
+    id: "char-carlos-vandam" as CardId,
     name: "カルロス・ヴァンダム",
     imageUrl: "/logo.svg",
     flavorText: "「マモン・コーポレーションCEO。ZAMLTの経済的基盤を構築。慎重な戦略家。」",
@@ -1072,7 +1072,7 @@ export const ALL_CARDS = [
     ultimateName: "金融の支配者",
   },
   {
-    id: "char-arthur-grimm",
+    id: "char-arthur-grimm" as CardId,
     name: "アーサー・グリム",
     imageUrl: "/logo.svg",
     flavorText: "「ゼブラ・コーポレーションCEO。次元技術を独占するZAMLT最危険の企業。」",
@@ -1087,7 +1087,7 @@ export const ALL_CARDS = [
     ultimateName: "情報操作の黒幕",
   },
   {
-    id: "char-elizabeth-lindberg",
+    id: "char-elizabeth-lindberg" as CardId,
     name: "エリザベス・リンドバーグ",
     imageUrl: "/logo.svg",
     flavorText: "「ルレンツ・コーポレーションCEO。次元の塔とカタリスト・コア建造を主導。」",
@@ -1102,7 +1102,7 @@ export const ALL_CARDS = [
     ultimateName: "Registryの絶対管理",
   },
   {
-    id: "char-iris-nova",
+    id: "char-iris-nova" as CardId,
     name: "アイリス・ノヴァ",
     imageUrl: "/logo.svg",
     flavorText: "「アロエオイル・コーポレーションCEO。次元エネルギー兵器開発の専門家。」",
@@ -1117,7 +1117,7 @@ export const ALL_CARDS = [
     ultimateName: "インフラ掌握の一手",
   },
   {
-    id: "char-elliot-strass",
+    id: "char-elliot-strass" as CardId,
     name: "エリオット・シュトラス",
     imageUrl: "/logo.svg",
     flavorText: "「ZAMLT総帥。経済支配の絶対権力。」",
@@ -1132,7 +1132,7 @@ export const ALL_CARDS = [
     ultimateName: "経済支配の絶対命令",
   },
   {
-    id: "char-reid-kakizaki",
+    id: "char-reid-kakizaki" as CardId,
     name: "レイド・カキザキ",
     imageUrl: I("ReidKakizaki.png"),
     flavorText: "「アイアン・シンジケートの戦士。」",
@@ -1147,7 +1147,7 @@ export const ALL_CARDS = [
     ultimateName: "シンジケート・アイアンパンチ",
   },
   {
-    id: "char-mikael-gabrieli",
+    id: "char-mikael-gabrieli" as CardId,
     name: "ミカエル・ガブリエリ",
     imageUrl: I("MikaelGabrieli.png"),
     flavorText: "「ファールージャ社の警備員。」",

@@ -34,17 +34,17 @@ const CRC32_TABLE = new Uint32Array(256)
 for (let i = 0; i < 256; i++) {
   let c = i
   for (let j = 0; j < 8; j++) {
-    c = c & 1 ? (c >>> 1) ^ 0xED_B8_83_20 : c >>> 1;
+    c = c & 1 ? (c >>> 1) ^ 0xed_b8_83_20 : c >>> 1
   }
   CRC32_TABLE[i] = c
 }
 
 function crc32(data: Uint8Array): number {
-  let crc = 0xFF_FF_FF_FF
+  let crc = 0xff_ff_ff_ff
   for (let i = 0; i < data.length; i++) {
-    crc = (crc >>> 8) ^ CRC32_TABLE[(crc ^ data[i]!) & 0xFF]!
+    crc = (crc >>> 8) ^ CRC32_TABLE[(crc ^ data[i]!) & 0xff]!
   }
-  return (crc ^ 0xFF_FF_FF_FF) >>> 0
+  return (crc ^ 0xff_ff_ff_ff) >>> 0
 }
 
 /**
@@ -108,7 +108,9 @@ export class BinaryWriter {
 
   private grow(needed: number): void {
     const required = this.pos + needed
-    if (required <= this.buf.length) {return}
+    if (required <= this.buf.length) {
+      return
+    }
     const next = Math.max(required * 2, 1024)
     const grown = new Uint8Array(next)
     grown.set(this.buf)
@@ -152,7 +154,7 @@ export class BinaryWriter {
    * @param value - The byte value to write (only lower 8 bits used).
    */
   writeByte(value: number): void {
-    this.u8(value & 0xFF)
+    this.u8(value & 0xff)
   }
 
   /**
@@ -164,12 +166,16 @@ export class BinaryWriter {
    * @throws {RangeError} If value is negative.
    */
   writeVarInt(value: number): void {
-    if (value < 0) {throw new RangeError("VarInt value must be non-negative")}
+    if (value < 0) {
+      throw new RangeError("VarInt value must be non-negative")
+    }
     let v = value >>> 0
     do {
-      let byte = v & 0x7F
+      let byte = v & 0x7f
       v >>>= 7
-      if (v !== 0) {byte |= 0x80}
+      if (v !== 0) {
+        byte |= 0x80
+      }
       this.u8(byte)
     } while (v !== 0)
   }
@@ -267,7 +273,7 @@ export class BinaryWriter {
    * @throws {TypeError} If the value type is unsupported (e.g. function, symbol).
    */
   writeValue(value: unknown): void {
-    if (value === null) {
+    if (value == null) {
       this.writeTag(TypeTag.Null)
       return
     }
@@ -313,7 +319,10 @@ export class BinaryWriter {
         }
         break
       }
-      default: {
+      case "bigint":
+      case "symbol":
+      case "undefined":
+      case "function": {
         throw new TypeError(`Unsupported type for binary serialization: ${typeof value}`)
       }
     }
@@ -422,8 +431,10 @@ export class BinaryReader {
     let shift = 0
     while (true) {
       const byte = this.u8()
-      result |= (byte & 0x7F) << shift
-      if ((byte & 0x80) === 0) {break}
+      result |= (byte & 0x7f) << shift
+      if ((byte & 0x80) === 0) {
+        break
+      }
       shift += 7
       if (shift >= 35) {
         throw new RangeError("VarInt too large")
@@ -547,8 +558,15 @@ export class BinaryReader {
         return obj
       }
 
+      case TypeTag.End: {
+        throw new TypeError("Unexpected End tag during readValue")
+      }
+
       default: {
-        throw new TypeError(`Unexpected type tag during readValue: 0x${tag.toString(16)}`)
+        const _exhaustive: never = tag
+        throw new TypeError(
+          `Unexpected type tag during readValue: 0x${(_exhaustive as number).toString(16)}`
+        )
       }
     }
   }
@@ -672,7 +690,7 @@ export const BinaryEncoder = {
 
     return final.buffer
   },
-};
+}
 
 // ─── BinaryIndex ──────────────────────────────────────────────
 
@@ -719,7 +737,7 @@ export class BinaryIndex {
     const entryCount = this.view.getUint32(6, true)
 
     // Verify CRC32 first (everything except last 4 bytes)
-    const dataWithoutCrc = this.buf.slice(0, - 4)
+    const dataWithoutCrc = this.buf.slice(0, -4)
     const storedCrc = this.view.getUint32(this.buf.length - 4, true)
     const computedCrc = crc32(dataWithoutCrc)
     if (storedCrc !== computedCrc) {
@@ -774,7 +792,9 @@ export class BinaryIndex {
    */
   getEntry(id: string): unknown {
     const entry = this.indexMap.get(id)
-    if (entry === undefined) {return undefined}
+    if (entry === undefined) {
+      return undefined
+    }
     const entryBuf = this.buf.buffer.slice(entry.offset, entry.offset + entry.length) as ArrayBuffer
     const reader = new BinaryReader(entryBuf)
     reader.readTag() // skip String tag

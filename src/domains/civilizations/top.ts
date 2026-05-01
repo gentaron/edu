@@ -1,8 +1,9 @@
+import type { CivilizationId, WikiId } from "../../platform/schemas/branded"
 import type { Civilization } from "@/types"
 
 export const TOP_CIVILIZATIONS: Civilization[] = [
   {
-    id: "granbell",
+    id: "granbell" as CivilizationId,
     rank: 1,
     name: "グランベル",
     nameEn: "Granbell",
@@ -11,7 +12,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
     bgColor: "from-amber-500/20 via-amber-600/10 to-amber-700/20",
     icon: "Crown",
     leader: "アルゼン・カーリーン大統領",
-    leaderWikiId: "アルゼン・カーリーン",
+    leaderWikiId: "アルゼン・カーリーン" as WikiId,
     capital: "オルダシティ",
     gdp: "150京ドル（宇宙全体の約25%）",
     specialization: "量子経済・次元間技術・マルチバース開拓",
@@ -29,11 +30,11 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
       "エヴァトロン — 武器供与を通じた影響力拡大",
     ],
     planets: ["グランベル・プライム", "ノヴァ・エコー", "クインシアス", "ヴェルディ・ステーション"],
-    wikiId: "グランベル",
+    wikiId: "グランベル" as WikiId,
     href: "/civilizations/granbell",
   },
   {
-    id: "elyseon",
+    id: "elyseon" as CivilizationId,
     rank: 2,
     name: "エレシオン",
     nameEn: "Elyseon",
@@ -42,7 +43,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
     bgColor: "from-emerald-500/20 via-emerald-600/10 to-emerald-700/20",
     icon: "Heart",
     leader: "女王リアナ・ソリス",
-    leaderWikiId: "女王リアナ・ソリス",
+    leaderWikiId: "女王リアナ・ソリス" as WikiId,
     specialization: "医療技術・環境再生技術・平和外交",
     description:
       "医療技術と環境再生技術で宇宙をリードする平和主義文明圏。支配ではなく「生命の維持と再生」を根幹理念とし、他文明圏からの尊敬を集めている。",
@@ -57,11 +58,11 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
       "ファルージャ — 平和外交で連携",
     ],
     planets: ["エレシオン・プライム", "ソラリス", "ヴィータ", "リーファ"],
-    wikiId: "エレシオン",
+    wikiId: "エレシオン" as WikiId,
     href: "/civilizations/elyseon",
   },
   {
-    id: "tyeria",
+    id: "tyeria" as CivilizationId,
     rank: 3,
     name: "ティエリア",
     nameEn: "Tyeria",
@@ -70,7 +71,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
     bgColor: "from-rose-500/20 via-rose-600/10 to-rose-700/20",
     icon: "Shield",
     leader: "総帥グレイモンド・ハウザー",
-    leaderWikiId: "グレイモンド・ハウザー",
+    leaderWikiId: "グレイモンド・ハウザー" as WikiId,
     specialization: "軍事力・防衛ネットワーク・軍事技術輸出",
     description:
       "宇宙最強の軍事力を誇る文明圏。軍事技術の輸出を経済基盤とし、その防衛ネットワークは宇宙随一と言われる。グレイモンド・ハウザー総帥の下、「軍事力なくして平和は守れない」という信条に基づき強大な軍備を維持している。",
@@ -85,11 +86,11 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
       "ディオクレニス — ヘゲモニー・パラドックスの提起者",
     ],
     planets: ["ティエリア・フォートレス", "シールド・バース", "アーミーナ", "ヴァンガード"],
-    wikiId: "ティエリア",
+    wikiId: "ティエリア" as WikiId,
     href: "/civilizations/tyeria",
   },
   {
-    id: "fallujah",
+    id: "fallujah" as CivilizationId,
     rank: 4,
     name: "ファルージャ",
     nameEn: "Fallujah",
@@ -98,7 +99,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
     bgColor: "from-violet-500/20 via-violet-600/10 to-violet-700/20",
     icon: "Scale",
     leader: "評議会代表マドリス・カーネル",
-    leaderWikiId: "マドリス・カーネル",
+    leaderWikiId: "マドリス・カーネル" as WikiId,
     specialization: "文化的影響力・外交・勢力間調停",
     description:
       "文化的影響力と外交力で宇宙に君臨する文明圏。対立する勢力間の調停役として重要な地位を占め、「文化の力が宇宙全体を結びつける鍵」という理念を掲げている。",
@@ -113,11 +114,11 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
       "ディオクレニス — 文化交流で協力",
     ],
     planets: ["ファルージャ・ハブ", "アーティザ", "ビブロ", "メロディ"],
-    wikiId: "ファルージャ",
+    wikiId: "ファルージャ" as WikiId,
     href: "/civilizations/fallujah",
   },
   {
-    id: "dioclenis",
+    id: "dioclenis" as CivilizationId,
     rank: 5,
     name: "ディオクレニス",
     nameEn: "Dioclenis",
@@ -126,7 +127,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
     bgColor: "from-cyan-500/20 via-cyan-600/10 to-cyan-700/20",
     icon: "Telescope",
     leader: "科学宰相ネイサン・コリンド",
-    leaderWikiId: "ネイサン・コリンド",
+    leaderWikiId: "ネイサン・コリンド" as WikiId,
     specialization: "宇宙探査・科学技術研究",
     description:
       "宇宙探査と科学技術研究の最前線に立つ文明圏。科学宰相ネイサン・コリンドの下、「ヘゲモニー・パラドックス」を提起し、宇宙共同探査プロジェクトを提案するなど、先見性のある政策を展開。",
@@ -141,7 +142,7 @@ export const TOP_CIVILIZATIONS: Civilization[] = [
       "ファルージャ — 文化交流で協力",
     ],
     planets: ["コリンド・ステーション", "ネオ・フロンティア", "オデッセイ", "スペクトラ"],
-    wikiId: "ディオクレニス",
+    wikiId: "ディオクレニス" as WikiId,
     href: "/civilizations/dioclenis",
   },
 ]

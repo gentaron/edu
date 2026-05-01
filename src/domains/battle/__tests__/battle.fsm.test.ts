@@ -3,10 +3,10 @@ import {
   battleFSMReducer,
   initialBattleFSMState,
   type BattleFSMState,
-  type BattleFSMAction,
 } from "@/domains/battle/battle.fsm"
 import { EffectType } from "@/types"
 import type { GameCard, Enemy, FieldChar } from "@/types"
+import type { CardId, EnemyId } from "@/platform/schemas/branded"
 
 /* ═══════════════════════════════════════════
    Helpers
@@ -14,7 +14,7 @@ import type { GameCard, Enemy, FieldChar } from "@/types"
 
 const makeCard = (id: string, name: string, rarity: "SR" | "R" | "C" = "R"): GameCard =>
   ({
-    id,
+    id: id as CardId,
     name,
     imageUrl: "",
     flavorText: "",
@@ -27,11 +27,11 @@ const makeCard = (id: string, name: string, rarity: "SR" | "R" | "C" = "R"): Gam
     effectValue: 3,
     ultimate: 10,
     ultimateName: "test",
-  } satisfies GameCard)
+  }) satisfies GameCard
 
 const makeEnemy = (): Enemy =>
   ({
-    id: "test-enemy",
+    id: "test-enemy" as EnemyId,
     name: "Test Enemy",
     title: "Test",
     maxHp: 50,
@@ -41,20 +41,19 @@ const makeEnemy = (): Enemy =>
     difficulty: "NORMAL",
     reward: "test",
     phases: [{ triggerHpPercent: 50, message: "Phase 2!", attackBonus: 2 }],
-  } satisfies Enemy)
+  }) satisfies Enemy
 
 const deck5: GameCard[] = Array.from({ length: 5 }, (_, i) => makeCard(`c${i}`, `Card ${i}`))
 
-const makeAbilityResult = (overrides?: Partial<{ newEnemyHp: number }>) =>
-  ({
-    damage: 5,
-    heal: 0,
-    shield: 0,
-    attackReduction: 0,
-    log: "test",
-    newEnemyHp: 45,
-    ...overrides,
-  })
+const makeAbilityResult = (overrides?: Partial<{ newEnemyHp: number }>) => ({
+  damage: 5,
+  heal: 0,
+  shield: 0,
+  attackReduction: 0,
+  log: "test",
+  newEnemyHp: 45,
+  ...overrides,
+})
 
 const makeFieldChars = (): FieldChar[] =>
   deck5.map((c) => ({
@@ -114,13 +113,21 @@ describe("START_BATTLE action", () => {
 
   it("can start from idle state", () => {
     const enemy = makeEnemy()
-    const state = battleFSMReducer(initialBattleFSMState, { type: "START_BATTLE", enemy, deck: deck5 })
+    const state = battleFSMReducer(initialBattleFSMState, {
+      type: "START_BATTLE",
+      enemy,
+      deck: deck5,
+    })
     expect(state.state).toBe("battle-init")
   })
 
   it("stores enemy in state", () => {
     const enemy = makeEnemy()
-    const state = battleFSMReducer(initialBattleFSMState, { type: "START_BATTLE", enemy, deck: deck5 })
+    const state = battleFSMReducer(initialBattleFSMState, {
+      type: "START_BATTLE",
+      enemy,
+      deck: deck5,
+    })
     if (state.state === "battle-init") {
       expect(state.enemy.name).toBe("Test Enemy")
       expect(state.enemy.maxHp).toBe(50)
@@ -368,7 +375,10 @@ describe("END_BATTLE action", () => {
   })
 
   it("rejects from non-valid states", () => {
-    const state = battleFSMReducer(initialBattleFSMState, { type: "END_BATTLE", outcome: "victory" })
+    const state = battleFSMReducer(initialBattleFSMState, {
+      type: "END_BATTLE",
+      outcome: "victory",
+    })
     expect(state.state).toBe("idle")
   })
 

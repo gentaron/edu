@@ -1,3 +1,5 @@
+import type { WikiId } from "@/platform/schemas/branded"
+
 export type Category = "キャラクター" | "用語" | "組織" | "地理" | "技術" | "歴史"
 
 export interface SourceLink {
@@ -6,7 +8,7 @@ export interface SourceLink {
 }
 
 export interface LeaderEntry {
-  id: string
+  id: WikiId
   name: string
   nameEn?: string
   role: string
@@ -14,7 +16,7 @@ export interface LeaderEntry {
 }
 
 export interface WikiEntry {
-  id: string
+  id: WikiId
   name: string
   nameEn?: string
   category: Category

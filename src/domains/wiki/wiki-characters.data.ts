@@ -1,9 +1,9 @@
-import type { WikiEntry } from "../../types"
+import type { WikiId, WikiEntry } from "../../types"
 
 export const WIKI_CHARACTERS = [
   /* Gigapolis/West Continent */
   {
-    id: "Diana",
+    id: "Diana" as WikiId,
     name: "ディアナ",
     nameEn: "Diana",
     category: "キャラクター",
@@ -22,7 +22,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "Jen",
+    id: "Jen" as WikiId,
     name: "ジェン",
     nameEn: "Jen",
     category: "キャラクター",
@@ -49,7 +49,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "Tina/Gue",
+    id: "Tina/Gue" as WikiId,
     name: "ティナ/グエ",
     nameEn: "Tina / Gue",
     category: "キャラクター",
@@ -68,7 +68,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "セリア・ドミニクス",
+    id: "セリア・ドミニクス" as WikiId,
     name: "セリア・ドミニクス",
     nameEn: "Celia Dminix",
     category: "キャラクター",
@@ -87,7 +87,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "アルファ・ケイン",
+    id: "アルファ・ケイン" as WikiId,
     name: "アルファ・ケイン",
     nameEn: "Alpha Kane",
     category: "キャラクター",
@@ -106,7 +106,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "エリオス・ウォルド",
+    id: "エリオス・ウォルド" as WikiId,
     name: "エリオス・ウォルド",
     nameEn: "Elios Wald",
     category: "キャラクター",
@@ -119,7 +119,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/EriosWald.png",
   },
   {
-    id: "エル・フォルハウス",
+    id: "エル・フォルハウス" as WikiId,
     name: "エル・フォルハウス",
     nameEn: "El Folhaus",
     category: "キャラクター",
@@ -132,7 +132,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/ElForhaus.png",
   },
   {
-    id: "ティムール・シャー",
+    id: "ティムール・シャー" as WikiId,
     name: "ティムール・シャー",
     nameEn: "Timur Shah",
     category: "キャラクター",
@@ -145,7 +145,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/TimurShah.png",
   },
   {
-    id: "レイラ・ヴィレル・ノヴァ",
+    id: "レイラ・ヴィレル・ノヴァ" as WikiId,
     name: "レイラ・ヴィレル・ノヴァ",
     nameEn: "Layla Virell Nova",
     category: "キャラクター",
@@ -172,7 +172,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "弦太郎",
+    id: "弦太郎" as WikiId,
     name: "弦太郎",
     nameEn: "Gentaro",
     category: "キャラクター",
@@ -193,7 +193,7 @@ export const WIKI_CHARACTERS = [
 
   /* AURALIS */
   {
-    id: "Kate Claudia",
+    id: "Kate Claudia" as WikiId,
     name: "ケイト・クラウディア",
     nameEn: "Kate Claudia",
     category: "キャラクター",
@@ -212,7 +212,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "Kate Patton",
+    id: "Kate Patton" as WikiId,
     name: "ケイト・パットン",
     nameEn: "Kate Patton",
     category: "キャラクター",
@@ -231,7 +231,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "Lily Steiner",
+    id: "Lily Steiner" as WikiId,
     name: "リリー・スタイナー",
     nameEn: "Lily Steiner",
     category: "キャラクター",
@@ -250,7 +250,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "Lillie Ardent",
+    id: "Lillie Ardent" as WikiId,
     name: "リリー・アーデント",
     nameEn: "Lillie Ardent",
     category: "キャラクター",
@@ -269,7 +269,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "ミナ・エウレカ・エルンスト",
+    id: "ミナ・エウレカ・エルンスト" as WikiId,
     name: "ミナ・エウレカ・エルンスト",
     nameEn: "Mina Eureka Ernst",
     category: "キャラクター",
@@ -288,7 +288,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "Ninny Offenbach",
+    id: "Ninny Offenbach" as WikiId,
     name: "ニニー・オッフェンバッハ",
     nameEn: "Ninny Offenbach",
     category: "キャラクター",
@@ -309,7 +309,7 @@ export const WIKI_CHARACTERS = [
 
   /* Iris/Crescent */
   {
-    id: "アイリス",
+    id: "アイリス" as WikiId,
     name: "アイリス",
     nameEn: "Iris",
     category: "キャラクター",
@@ -340,7 +340,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "ウィリー",
+    id: "ウィリー" as WikiId,
     name: "ウィリー",
     nameEn: "Willy",
     category: "キャラクター",
@@ -353,7 +353,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Willie.png",
   },
   {
-    id: "エレナ",
+    id: "エレナ" as WikiId,
     name: "エレナ",
     nameEn: "Elena",
     category: "キャラクター",
@@ -366,7 +366,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Elena.png",
   },
   {
-    id: "セバスチャン・ヴァレリウス",
+    id: "セバスチャン・ヴァレリウス" as WikiId,
     name: "セバスチャン・ヴァレリウス",
     nameEn: "Sebastian Valerius",
     category: "キャラクター",
@@ -379,7 +379,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/SebastianValerius.png",
   },
   {
-    id: "ガレス",
+    id: "ガレス" as WikiId,
     name: "ガレス",
     nameEn: "Gareth",
     category: "キャラクター",
@@ -392,7 +392,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Gareth.png",
   },
   {
-    id: "フィオナ",
+    id: "フィオナ" as WikiId,
     name: "フィオナ",
     nameEn: "Klaus Fiona",
     category: "キャラクター",
@@ -405,7 +405,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Fiona.png",
   },
   {
-    id: "マリーナ・ボビン",
+    id: "マリーナ・ボビン" as WikiId,
     name: "マリーナ・ボビン",
     nameEn: "Marina Bobbin",
     category: "キャラクター",
@@ -418,7 +418,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/MarinaBobbin.png",
   },
   {
-    id: "カスチーナ・テンペスト",
+    id: "カスチーナ・テンペスト" as WikiId,
     name: "カスチーナ・テンペスト",
     nameEn: "Castina Tempest",
     category: "キャラクター",
@@ -431,7 +431,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/CastinaTempest.png",
   },
   {
-    id: "イズミ",
+    id: "イズミ" as WikiId,
     name: "イズミ",
     nameEn: "Izumi",
     category: "キャラクター",
@@ -444,7 +444,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Izumi.png",
   },
   {
-    id: "レオン",
+    id: "レオン" as WikiId,
     name: "レオン",
     nameEn: "Leon",
     category: "キャラクター",
@@ -457,7 +457,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Leon.png",
   },
   {
-    id: "ヴィヴィエッタ",
+    id: "ヴィヴィエッタ" as WikiId,
     name: "ヴィヴィエッタ",
     nameEn: "四楓院ヴィヴィエッタ",
     category: "キャラクター",
@@ -470,7 +470,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Vivietta.png",
   },
   {
-    id: "レヴィリア・サーペンティナ",
+    id: "レヴィリア・サーペンティナ" as WikiId,
     name: "レヴィリア・サーペンティナ",
     nameEn: "Levilia Serpentina",
     category: "キャラクター",
@@ -484,7 +484,7 @@ export const WIKI_CHARACTERS = [
   },
 
   {
-    id: "ミユシャリ",
+    id: "ミユシャリ" as WikiId,
     name: "ミユシャリ",
     nameEn: "Miyushari",
     category: "キャラクター",
@@ -496,7 +496,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Miyushari.png",
   },
   {
-    id: "ファリエル",
+    id: "ファリエル" as WikiId,
     name: "ファリエル",
     nameEn: "Fariel",
     category: "キャラクター",
@@ -508,7 +508,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Fariel.png",
   },
   {
-    id: "アイナ",
+    id: "アイナ" as WikiId,
     name: "アイナ・フォン・リースフェルト",
     nameEn: "Aina von Riesfeldt",
     category: "キャラクター",
@@ -520,7 +520,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/AinaVonRiesfeld.png",
   },
   {
-    id: "ギャビー",
+    id: "ギャビー" as WikiId,
     name: "フレデリック・ギャビー",
     nameEn: "Frederick Gabby",
     category: "キャラクター",
@@ -532,7 +532,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/FredericGabby.png",
   },
   {
-    id: "シェロン",
+    id: "シェロン" as WikiId,
     name: "シェロン・ジェラス",
     nameEn: "Sheron Jeras",
     category: "キャラクター",
@@ -544,7 +544,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/SheronJeras.png",
   },
   {
-    id: "イルミーゼ",
+    id: "イルミーゼ" as WikiId,
     name: "イルミーゼ",
     nameEn: "Ilmise",
     category: "キャラクター",
@@ -556,7 +556,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Ilmise.png",
   },
   {
-    id: "ホワイトノイズ",
+    id: "ホワイトノイズ" as WikiId,
     name: "ホワイトノイズ",
     nameEn: "White Noise",
     category: "キャラクター",
@@ -568,7 +568,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/WhiteNoise.png",
   },
   {
-    id: "ワドリナ",
+    id: "ワドリナ" as WikiId,
     name: "ワドリナ",
     nameEn: "Wadorina",
     category: "キャラクター",
@@ -580,7 +580,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Wadrina.png",
   },
   {
-    id: "ニニギス",
+    id: "ニニギス" as WikiId,
     name: "ニニギス・カラス",
     nameEn: "Ninigisu Karasu",
     category: "キャラクター",
@@ -592,7 +592,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/NinigisKaras.png",
   },
   {
-    id: "イェシバトー",
+    id: "イェシバトー" as WikiId,
     name: "イェシバトー",
     nameEn: "Yeshibato",
     category: "キャラクター",
@@ -604,7 +604,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Yeshibato.png",
   },
   {
-    id: "アザゼル",
+    id: "アザゼル" as WikiId,
     name: "アザゼル・ヘクトパス",
     nameEn: "Azazel Hectopass",
     category: "キャラクター",
@@ -616,7 +616,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/AzazelHectopus.png",
   },
   {
-    id: "ピアトリーノ",
+    id: "ピアトリーノ" as WikiId,
     name: "ピアトリーノ",
     nameEn: "Piatorino",
     category: "キャラクター",
@@ -628,7 +628,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Piatrino.png",
   },
   {
-    id: "アイク・ロペス",
+    id: "アイク・ロペス" as WikiId,
     name: "アイク・ロペス",
     nameEn: "Ike Lopez",
     category: "キャラクター",
@@ -640,7 +640,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/AikeLopez.png",
   },
   {
-    id: "レイド・カキザキ",
+    id: "レイド・カキザキ" as WikiId,
     name: "レイド・カキザキ",
     nameEn: "Raid Kakizaki",
     category: "キャラクター",
@@ -652,7 +652,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/ReidKakizaki.png",
   },
   {
-    id: "ミカエル・ガブリエリ",
+    id: "ミカエル・ガブリエリ" as WikiId,
     name: "ミカエル・ガブリエリ",
     nameEn: "Mikael Gabrieli",
     category: "キャラクター",
@@ -664,7 +664,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/MikaelGabrieli.png",
   },
   {
-    id: "ヨニック",
+    id: "ヨニック" as WikiId,
     name: "ヨニック",
     nameEn: "Yonick",
     category: "キャラクター",
@@ -676,7 +676,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Yonik.png",
   },
   {
-    id: "マスター・ヴェノム",
+    id: "マスター・ヴェノム" as WikiId,
     name: "マスター・ヴェノム",
     nameEn: "Master Venom",
     category: "キャラクター",
@@ -689,7 +689,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/MasterVenom.png",
   },
   {
-    id: "ゴルディロックス",
+    id: "ゴルディロックス" as WikiId,
     name: "ゴルディロックス",
     nameEn: "Goldilocks",
     category: "キャラクター",
@@ -701,7 +701,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Goldilocks.png",
   },
   {
-    id: "カタリナ",
+    id: "カタリナ" as WikiId,
     name: "カタリナ",
     nameEn: "Catalina",
     category: "キャラクター",
@@ -713,7 +713,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Katarina.png",
   },
   {
-    id: "ボブリスティ",
+    id: "ボブリスティ" as WikiId,
     name: "ボブリスティ",
     nameEn: "Boblisti",
     category: "キャラクター",
@@ -725,7 +725,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Bobristy.png",
   },
   {
-    id: "ギル",
+    id: "ギル" as WikiId,
     name: "ギル",
     nameEn: "Gil",
     category: "キャラクター",
@@ -737,7 +737,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Gil.png",
   },
   {
-    id: "ラストマン",
+    id: "ラストマン" as WikiId,
     name: "ラストマン",
     nameEn: "Lastman",
     category: "キャラクター",
@@ -749,7 +749,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Lastman.png",
   },
   {
-    id: "AJ",
+    id: "AJ" as WikiId,
     name: "アルフレッド・ジュース",
     nameEn: "Alfred Juce",
     category: "キャラクター",
@@ -761,7 +761,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/AJ.png",
   },
   {
-    id: "Slime_Woman",
+    id: "Slime_Woman" as WikiId,
     name: "スライム・ウーマン",
     nameEn: "Slime Woman",
     category: "キャラクター",
@@ -780,7 +780,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "テミルタロン",
+    id: "テミルタロン" as WikiId,
     name: "テミルタロン",
     nameEn: "Temirtalon",
     category: "キャラクター",
@@ -793,7 +793,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Temirtaron.png",
   },
   {
-    id: "アリア・ソル",
+    id: "アリア・ソル" as WikiId,
     name: "アリア・ソル",
     nameEn: "Aria Sol",
     category: "キャラクター",
@@ -806,7 +806,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/AriaSol.png",
   },
   {
-    id: "ゼナ",
+    id: "ゼナ" as WikiId,
     name: "ゼナ",
     nameEn: "Zena",
     category: "キャラクター",
@@ -820,7 +820,7 @@ export const WIKI_CHARACTERS = [
 
   /* Eros-7 */
   {
-    id: "リリス・ヴェイン",
+    id: "リリス・ヴェイン" as WikiId,
     name: "リリス・ヴェイン",
     nameEn: "Lilith Vaine",
     category: "キャラクター",
@@ -833,7 +833,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/LilithVane.png",
   },
   {
-    id: "シルヴィア・クロウ",
+    id: "シルヴィア・クロウ" as WikiId,
     name: "シルヴィア・クロウ",
     nameEn: "Sylvia Crow",
     category: "キャラクター",
@@ -846,7 +846,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/SylviaCrow.png",
   },
   {
-    id: "カーラ・ヴェルム",
+    id: "カーラ・ヴェルム" as WikiId,
     name: "カーラ・ヴェルム",
     nameEn: "Cara Verm",
     category: "キャラクター",
@@ -859,7 +859,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/KarlaVelm.png",
   },
   {
-    id: "ガロ",
+    id: "ガロ" as WikiId,
     name: "ガロ",
     nameEn: "Garo",
     category: "キャラクター",
@@ -872,7 +872,7 @@ export const WIKI_CHARACTERS = [
     image: "https://raw.githubusercontent.com/gentaron/image/main/Garo.png",
   },
   {
-    id: "アヤカ・リン",
+    id: "アヤカ・リン" as WikiId,
     name: "アヤカ・リン",
     nameEn: "Ayaka Rin",
     category: "キャラクター",
@@ -887,7 +887,7 @@ export const WIKI_CHARACTERS = [
 
   /* 新規キャラクター */
   {
-    id: "カステリア・グレンヴェルト",
+    id: "カステリア・グレンヴェルト" as WikiId,
     name: "カステリア・グレンヴェルト",
     nameEn: "Casteria Grenvelt",
     category: "キャラクター",
@@ -906,7 +906,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "シトラ・セレス",
+    id: "シトラ・セレス" as WikiId,
     name: "シトラ・セレス",
     nameEn: "Sitra Celes",
     category: "キャラクター",
@@ -925,7 +925,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "ミュー",
+    id: "ミュー" as WikiId,
     name: "ミュー",
     nameEn: "Myu",
     category: "キャラクター",
@@ -944,7 +944,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "ジュン",
+    id: "ジュン" as WikiId,
     name: "ジュン",
     nameEn: "Jun",
     category: "キャラクター",
@@ -965,7 +965,7 @@ export const WIKI_CHARACTERS = [
 
   /* 宇宙勢力 — eduuni.txt */
   {
-    id: "アルゼン・カーリーン",
+    id: "アルゼン・カーリーン" as WikiId,
     name: "アルゼン・カーリーン",
     nameEn: "Alzen Carine",
     category: "キャラクター",
@@ -982,7 +982,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "グレイモンド・ハウザー",
+    id: "グレイモンド・ハウザー" as WikiId,
     name: "グレイモンド・ハウザー",
     nameEn: "Greymond Hauser",
     category: "キャラクター",
@@ -999,7 +999,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "女王リアナ・ソリス",
+    id: "女王リアナ・ソリス" as WikiId,
     name: "女王リアナ・ソリス",
     nameEn: "Queen Liana Solis",
     category: "キャラクター",
@@ -1016,7 +1016,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "マドリス・カーネル",
+    id: "マドリス・カーネル" as WikiId,
     name: "マドリス・カーネル",
     nameEn: "Madrisernel",
     category: "キャラクター",
@@ -1033,7 +1033,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "ネイサン・コリンド",
+    id: "ネイサン・コリンド" as WikiId,
     name: "ネイサン・コリンド",
     nameEn: "Nathan Corlind",
     category: "キャラクター",
@@ -1050,7 +1050,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "ロナン・アーサ",
+    id: "ロナン・アーサ" as WikiId,
     name: "ロナン・アーサ",
     nameEn: "Ronan Arthur",
     category: "キャラクター",
@@ -1067,7 +1067,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "グリム・ダルゴス",
+    id: "グリム・ダルゴス" as WikiId,
     name: "グリム・ダルゴス",
     nameEn: "Grim Dargos",
     category: "キャラクター",
@@ -1084,7 +1084,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "マスター・クインシアス",
+    id: "マスター・クインシアス" as WikiId,
     name: "マスター・クインシアス",
     nameEn: "Master Quinsias",
     category: "キャラクター",
@@ -1101,7 +1101,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "ヴァイロン・デアクス",
+    id: "ヴァイロン・デアクス" as WikiId,
     name: "ヴァイロン・デアクス",
     nameEn: "Vylon Deax",
     category: "キャラクター",
@@ -1120,7 +1120,7 @@ export const WIKI_CHARACTERS = [
 
   /* ZAMLT / コーポラトクラシー */
   {
-    id: "エリオット・シュトラス",
+    id: "エリオット・シュトラス" as WikiId,
     name: "エリオット・シュトラス",
     nameEn: "Elliot Strauss",
     category: "キャラクター",
@@ -1132,7 +1132,7 @@ export const WIKI_CHARACTERS = [
     tier: "歴史的人物",
   },
   {
-    id: "アレン",
+    id: "アレン" as WikiId,
     name: "アレン",
     nameEn: "Allen",
     category: "キャラクター",
@@ -1152,7 +1152,7 @@ export const WIKI_CHARACTERS = [
 
   /* 宇宙文明指導者 */
   {
-    id: "大司教",
+    id: "大司教" as WikiId,
     name: "大司教",
     nameEn: "Archbishop",
     category: "キャラクター",
@@ -1169,7 +1169,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "商工会議長",
+    id: "商工会議長" as WikiId,
     name: "商工会議長",
     nameEn: "Chamber of Commerce Chairman",
     category: "キャラクター",
@@ -1186,7 +1186,7 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "通信長官",
+    id: "通信長官" as WikiId,
     name: "通信長官",
     nameEn: "Communications Commissioner",
     category: "キャラクター",
@@ -1205,7 +1205,7 @@ export const WIKI_CHARACTERS = [
 
   /* ZAMLT 企業リーダー */
   {
-    id: "ラファエル・ドレイク",
+    id: "ラファエル・ドレイク" as WikiId,
     name: "ラファエル・ドレイク",
     nameEn: "Rafael Drake",
     category: "キャラクター",
@@ -1217,7 +1217,7 @@ export const WIKI_CHARACTERS = [
     tier: "歴史的人物",
   },
   {
-    id: "アイリス・ノヴァ",
+    id: "アイリス・ノヴァ" as WikiId,
     name: "アイリス・ノヴァ",
     nameEn: "Iris Nova",
     category: "キャラクター",
@@ -1229,7 +1229,7 @@ export const WIKI_CHARACTERS = [
     tier: "歴史的人物",
   },
   {
-    id: "カルロス・ヴァンダム",
+    id: "カルロス・ヴァンダム" as WikiId,
     name: "カルロス・ヴァンダム",
     nameEn: "Carlos Vandam",
     category: "キャラクター",
@@ -1241,7 +1241,7 @@ export const WIKI_CHARACTERS = [
     tier: "歴史的人物",
   },
   {
-    id: "アーサー・グリム",
+    id: "アーサー・グリム" as WikiId,
     name: "アーサー・グリム",
     nameEn: "Arthur Grim",
     category: "キャラクター",
@@ -1253,7 +1253,7 @@ export const WIKI_CHARACTERS = [
     tier: "歴史的人物",
   },
   {
-    id: "エリザベス・リンドバーグ",
+    id: "エリザベス・リンドバーグ" as WikiId,
     name: "エリザベス・リンドバーグ",
     nameEn: "Elizabeth Lindberg",
     category: "キャラクター",
@@ -1265,7 +1265,7 @@ export const WIKI_CHARACTERS = [
     tier: "歴史的人物",
   },
   {
-    id: "レイ・ヴァンデルト",
+    id: "レイ・ヴァンデルト" as WikiId,
     name: "レイ・ヴァンデルト",
     nameEn: "Ray Vandelte",
     category: "キャラクター",
@@ -1277,7 +1277,7 @@ export const WIKI_CHARACTERS = [
     tier: "歴史的人物",
   },
   {
-    id: "リンダ",
+    id: "リンダ" as WikiId,
     name: "リンダ",
     nameEn: "Linda",
     category: "キャラクター",
@@ -1291,7 +1291,7 @@ export const WIKI_CHARACTERS = [
 
   /* テクロサス系譜 */
   {
-    id: "クロノ・ヴァーレント",
+    id: "クロノ・ヴァーレント" as WikiId,
     name: "クロノ・ヴァーレント",
     nameEn: "Chrono Valeint",
     category: "キャラクター",
@@ -1305,7 +1305,7 @@ export const WIKI_CHARACTERS = [
 
   /* 宇宙勢力（歴史） */
   {
-    id: "オメガ＝ユリシス",
+    id: "オメガ＝ユリシス" as WikiId,
     name: "オメガ＝ユリシス",
     nameEn: "Omega=Ulysses",
     category: "キャラクター",
@@ -1319,8 +1319,8 @@ export const WIKI_CHARACTERS = [
 
   /* 追加: 共同体指導者 */
   {
-    id: "ファランクス",
-    name: "ファランクス",
+    id: "ファランクス（初代皇帝）" as WikiId,
+    name: "ファランクス（初代皇帝）",
     nameEn: "Phalanx",
     category: "キャラクター",
     subCategory: "宇宙勢力",
@@ -1331,7 +1331,7 @@ export const WIKI_CHARACTERS = [
     tier: "歴史的人物",
   },
   {
-    id: "セルヴァ・ドーン",
+    id: "セルヴァ・ドーン" as WikiId,
     name: "セルヴァ・ドーン",
     nameEn: "Selva Dawn",
     category: "キャラクター",
@@ -1343,7 +1343,7 @@ export const WIKI_CHARACTERS = [
     tier: "Tier 2",
   },
   {
-    id: "ハシーム・ファティマ",
+    id: "ハシーム・ファティマ" as WikiId,
     name: "ハシーム・ファティマ",
     nameEn: "Hashim Fatima",
     category: "キャラクター",
@@ -1355,7 +1355,7 @@ export const WIKI_CHARACTERS = [
     tier: "Tier 2",
   },
   {
-    id: "トリスタン・スターク",
+    id: "トリスタン・スターク" as WikiId,
     name: "トリスタン・スターク",
     nameEn: "Tristan Stark",
     category: "キャラクター",
@@ -1367,7 +1367,7 @@ export const WIKI_CHARACTERS = [
     tier: "Tier 2",
   },
   {
-    id: "オーギュスト・ゴールド",
+    id: "オーギュスト・ゴールド" as WikiId,
     name: "オーギュスト・ゴールド",
     nameEn: "August Gold",
     category: "キャラクター",
@@ -1379,7 +1379,7 @@ export const WIKI_CHARACTERS = [
     tier: "Tier 2",
   },
   {
-    id: "ルシア・ネオ",
+    id: "ルシア・ネオ" as WikiId,
     name: "ルシア・ネオ",
     nameEn: "Lucia Neo",
     category: "キャラクター",
@@ -1391,7 +1391,7 @@ export const WIKI_CHARACTERS = [
     tier: "歴史的人物",
   },
   {
-    id: "ヘクトル・ヴァン",
+    id: "ヘクトル・ヴァン" as WikiId,
     name: "ヘクトル・ヴァン",
     nameEn: "Hector Van",
     category: "キャラクター",

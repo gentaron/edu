@@ -36,19 +36,19 @@ describe("VarInt round-trip", () => {
   })
 
   it("encodes/decodes 16383", () => {
-    expect(roundTrip(16383)).toBe(16383)
+    expect(roundTrip(16_383)).toBe(16_383)
   })
 
   it("encodes/decodes 16384 (3-byte boundary)", () => {
-    expect(roundTrip(16384)).toBe(16384)
+    expect(roundTrip(16_384)).toBe(16_384)
   })
 
   it("encodes/decodes 2097151", () => {
-    expect(roundTrip(2097151)).toBe(2097151)
+    expect(roundTrip(2_097_151)).toBe(2_097_151)
   })
 
   it("encodes/decodes max u32", () => {
-    expect(roundTrip(0xFFFFFFFF)).toBe(0xFFFFFFFF)
+    expect(roundTrip(0xff_ff_ff_ff)).toBe(0xff_ff_ff_ff)
   })
 
   it("throws on negative value", () => {
@@ -58,8 +58,10 @@ describe("VarInt round-trip", () => {
 
   it("multi-value round-trip", () => {
     const w = new BinaryWriter()
-    const values = [0, 1, 127, 128, 255, 300, 16384, 1000000]
-    for (const v of values) w.writeVarInt(v)
+    const values = [0, 1, 127, 128, 255, 300, 16_384, 1_000_000]
+    for (const v of values) {
+      w.writeVarInt(v)
+    }
     const r = new BinaryReader(w.toBuffer())
     for (const v of values) {
       expect(r.readVarInt()).toBe(v)
@@ -99,7 +101,7 @@ describe("String round-trip", () => {
   })
 
   it("encodes/decodes long string", () => {
-    const long = "a".repeat(10000)
+    const long = "a".repeat(10_000)
     expect(roundTrip(long)).toBe(long)
   })
 
@@ -110,7 +112,9 @@ describe("String round-trip", () => {
   it("multi-string round-trip", () => {
     const w = new BinaryWriter()
     const strings = ["", "a", "hello", "ディアナ", "⚔️"]
-    for (const s of strings) w.writeString(s)
+    for (const s of strings) {
+      w.writeString(s)
+    }
     const r = new BinaryReader(w.toBuffer())
     for (const s of strings) {
       expect(r.readString()).toBe(s)
@@ -142,17 +146,19 @@ describe("I32 round-trip", () => {
   })
 
   it("encodes/decodes max i32", () => {
-    expect(roundTrip(2147483647)).toBe(2147483647)
+    expect(roundTrip(2_147_483_647)).toBe(2_147_483_647)
   })
 
   it("encodes/decodes min i32", () => {
-    expect(roundTrip(-2147483648)).toBe(-2147483648)
+    expect(roundTrip(-2_147_483_648)).toBe(-2_147_483_648)
   })
 
   it("multi-i32 round-trip", () => {
     const w = new BinaryWriter()
-    const values = [0, 1, -1, 100, -100, 2147483647, -2147483648]
-    for (const v of values) w.writeI32(v)
+    const values = [0, 1, -1, 100, -100, 2_147_483_647, -2_147_483_648]
+    for (const v of values) {
+      w.writeI32(v)
+    }
     const r = new BinaryReader(w.toBuffer())
     for (const v of values) {
       expect(r.readI32()).toBe(v)
@@ -202,7 +208,9 @@ describe("F64 round-trip", () => {
   it("multi-f64 round-trip", () => {
     const w = new BinaryWriter()
     const values = [0, 1.5, -3.14, 100.999, 1e10]
-    for (const v of values) w.writeF64(v)
+    for (const v of values) {
+      w.writeF64(v)
+    }
     const r = new BinaryReader(w.toBuffer())
     for (const v of values) {
       expect(r.readF64()).toBeCloseTo(v, 10)
@@ -232,7 +240,9 @@ describe("Bool round-trip", () => {
   it("multi-bool round-trip", () => {
     const w = new BinaryWriter()
     const values = [true, false, true, true, false]
-    for (const v of values) w.writeBool(v)
+    for (const v of values) {
+      w.writeBool(v)
+    }
     const r = new BinaryReader(w.toBuffer())
     for (const v of values) {
       expect(r.readBool()).toBe(v)
@@ -262,7 +272,7 @@ describe("crc32", () => {
   it("returns u32 (unsigned)", () => {
     const result = crc32(new Uint8Array([255, 255, 255, 255]))
     expect(result).toBeGreaterThanOrEqual(0)
-    expect(result).toBeLessThanOrEqual(0xFFFFFFFF)
+    expect(result).toBeLessThanOrEqual(0xff_ff_ff_ff)
   })
 })
 
@@ -411,6 +421,6 @@ describe("BinaryEncoder round-trip", () => {
     // Compute CRC for the bad data
     const checksum = crc32(badBuffer)
     new DataView(crcBuf.buffer).setUint32(badBuffer.length, checksum, true)
-    expect(() => new BinaryIndex(crcBuf.buffer as ArrayBuffer)).toThrow(TypeError)
+    expect(() => new BinaryIndex(crcBuf.buffer)).toThrow(TypeError)
   })
 })

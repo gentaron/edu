@@ -1,3 +1,4 @@
+import type { WikiId } from "../../platform/schemas/branded"
 import type { CivilizationLeader } from "@/types"
 
 export const CIVILIZATION_LEADERS: CivilizationLeader[] = [
@@ -9,7 +10,7 @@ export const CIVILIZATION_LEADERS: CivilizationLeader[] = [
     wealth: "150兆ドル（国家GDP）",
     source: "宇宙最大経済圏の指導",
     era: "現在",
-    wikiId: "アルゼン・カーリーン",
+    wikiId: "アルゼン・カーリーン" as WikiId,
   },
   {
     name: "女王リアナ・ソリス",
@@ -19,7 +20,7 @@ export const CIVILIZATION_LEADERS: CivilizationLeader[] = [
     wealth: "医療技術・環境再生（非公開）",
     source: "宇宙第2位の医療大国",
     era: "現在",
-    wikiId: "女王リアナ・ソリス",
+    wikiId: "女王リアナ・ソリス" as WikiId,
   },
   {
     name: "総帥グレイモンド・ハウザー",
@@ -29,7 +30,7 @@ export const CIVILIZATION_LEADERS: CivilizationLeader[] = [
     wealth: "軍事技術輸出（非公開）",
     source: "宇宙最強の軍事力",
     era: "現在",
-    wikiId: "グレイモンド・ハウザー",
+    wikiId: "グレイモンド・ハウザー" as WikiId,
   },
   {
     name: "マドリス・カーネル",
@@ -39,7 +40,7 @@ export const CIVILIZATION_LEADERS: CivilizationLeader[] = [
     wealth: "文化外交収入（非公開）",
     source: "宇宙第4位の文化的影響力",
     era: "現在",
-    wikiId: "マドリス・カーネル",
+    wikiId: "マドリス・カーネル" as WikiId,
   },
   {
     name: "ネイサン・コリンド",
@@ -49,7 +50,7 @@ export const CIVILIZATION_LEADERS: CivilizationLeader[] = [
     wealth: "科学技術研究費（非公開）",
     source: "宇宙探査の最前線",
     era: "現在",
-    wikiId: "ネイサン・コリンド",
+    wikiId: "ネイサン・コリンド" as WikiId,
   },
   {
     name: "大司教",
@@ -59,7 +60,7 @@ export const CIVILIZATION_LEADERS: CivilizationLeader[] = [
     wealth: "宗教的影響力（非公開）",
     source: "宇宙最大の信仰共同体",
     era: "現在",
-    wikiId: "大司教",
+    wikiId: "大司教" as WikiId,
   },
   {
     name: "商工会議長",
@@ -69,7 +70,7 @@ export const CIVILIZATION_LEADERS: CivilizationLeader[] = [
     wealth: "全宇宙貿易取引（非公開）",
     source: "宇宙全貿易ルートの掌握",
     era: "現在",
-    wikiId: "商工会議長",
+    wikiId: "商工会議長" as WikiId,
   },
   {
     name: "通信長官",
@@ -79,6 +80,6 @@ export const CIVILIZATION_LEADERS: CivilizationLeader[] = [
     wealth: "通信インフラ収入（非公開）",
     source: "全宇宙通信インフラの管理",
     era: "現在",
-    wikiId: "通信長官",
+    wikiId: "通信長官" as WikiId,
   },
 ]

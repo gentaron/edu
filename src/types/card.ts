@@ -1,3 +1,5 @@
+import type { CardId, EnemyId } from "@/platform/schemas/branded"
+
 export type AbilityType = "攻撃" | "防御" | "効果" | "必殺"
 
 /** Effect classification enum — O(1) switch dispatch instead of string.includes() */
@@ -14,6 +16,7 @@ export const EffectType = {
   SPECIAL_PANDICT: "SPECIAL_PANDICT",
 } as const
 
+// eslint-disable-next-line no-redeclare
 export type EffectType = (typeof EffectType)[keyof typeof EffectType]
 
 /** Classify a Japanese effect string into an EffectType enum value. */
@@ -24,22 +27,40 @@ export function classifyEffect(effect: string): EffectType {
   const hasReduction = effect.includes("低下")
   const hasPandict = effect.includes("次元階梯パンディクト")
 
-  if (hasPandict) return EffectType.SPECIAL_PANDICT
-  if (hasReduction) return EffectType.ATTACK_REDUCTION
-  if (hasHeal && hasDamage && hasShield) return EffectType.HEAL_DAMAGE_SHIELD
-  if (hasDamage && hasHeal) return EffectType.DAMAGE_HEAL
-  if (hasDamage && hasShield) return EffectType.DAMAGE_SHIELD
-  if (hasHeal && hasShield) return EffectType.HEAL_SHIELD
-  if (hasHeal) return EffectType.HEAL
-  if (hasDamage) return EffectType.DAMAGE
-  if (hasShield) return EffectType.SHIELD
+  if (hasPandict) {
+    return EffectType.SPECIAL_PANDICT
+  }
+  if (hasReduction) {
+    return EffectType.ATTACK_REDUCTION
+  }
+  if (hasHeal && hasDamage && hasShield) {
+    return EffectType.HEAL_DAMAGE_SHIELD
+  }
+  if (hasDamage && hasHeal) {
+    return EffectType.DAMAGE_HEAL
+  }
+  if (hasDamage && hasShield) {
+    return EffectType.DAMAGE_SHIELD
+  }
+  if (hasHeal && hasShield) {
+    return EffectType.HEAL_SHIELD
+  }
+  if (hasHeal) {
+    return EffectType.HEAL
+  }
+  if (hasDamage) {
+    return EffectType.DAMAGE
+  }
+  if (hasShield) {
+    return EffectType.SHIELD
+  }
 
   // Default: treat unknown as heal (preserves original behavior)
   return EffectType.HEAL
 }
 
 export interface GameCard {
-  id: string
+  id: CardId
   name: string
   imageUrl: string
   flavorText: string
@@ -62,7 +83,7 @@ export interface EnemyPhase {
 }
 
 export interface Enemy {
-  id: string
+  id: EnemyId
   name: string
   title: string
   maxHp: number

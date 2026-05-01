@@ -120,7 +120,9 @@ export class WorkerPool<TRequest = unknown, TResponse = unknown> {
 
   /** Terminate all workers and reject all pending/active tasks. */
   terminate(): void {
-    if (this.terminated) {return}
+    if (this.terminated) {
+      return
+    }
     this.terminated = true
 
     // Reject all queued tasks
@@ -204,7 +206,7 @@ export class WorkerPool<TRequest = unknown, TResponse = unknown> {
     if (data.type === "ERROR") {
       const payload = data.payload as Record<string, unknown> | undefined
       const errorMsg =
-        payload?.error === undefined ? "Worker returned ERROR" : String(payload.error)
+        payload?.error === undefined ? "Worker returned ERROR" : JSON.stringify(payload.error)
       task.reject(new Error(errorMsg))
     } else {
       task.resolve(event.data)
@@ -232,7 +234,9 @@ export class WorkerPool<TRequest = unknown, TResponse = unknown> {
 
   private dispatchNextQueuedTask(): void {
     const nextTask = this.taskQueue.shift()
-    if (nextTask === undefined) {return}
+    if (nextTask === undefined) {
+      return
+    }
 
     const idleWorker = this.idleWorkers.shift()
     if (idleWorker === undefined) {

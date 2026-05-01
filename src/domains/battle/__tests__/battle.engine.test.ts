@@ -10,6 +10,7 @@ import {
 } from "@/domains/battle/battle.engine"
 import { EffectType } from "@/types"
 import type { GameCard, Enemy, FieldChar } from "@/types"
+import type { CardId, EnemyId } from "@/platform/schemas/branded"
 
 /* ═══════════════════════════════════════════
    1. charMaxHp — HP Calculation
@@ -17,7 +18,7 @@ import type { GameCard, Enemy, FieldChar } from "@/types"
 describe("charMaxHp", () => {
   const makeCard = (rarity: "SR" | "R" | "C", defense: number): GameCard =>
     ({
-      id: "test",
+      id: "test" as CardId,
       name: "Test",
       imageUrl: "",
       flavorText: "",
@@ -30,7 +31,7 @@ describe("charMaxHp", () => {
       effectValue: 3,
       ultimate: 10,
       ultimateName: "test",
-    } satisfies GameCard)
+    }) satisfies GameCard
 
   it("SR card gets base HP 14 + defense", () => {
     expect(charMaxHp(makeCard("SR", 4))).toBe(18)
@@ -149,7 +150,7 @@ describe("appendLog", () => {
 describe("hitRandomChar", () => {
   const makeCard = (id: string, name: string): GameCard =>
     ({
-      id,
+      id: id as CardId,
       name,
       imageUrl: "",
       flavorText: "",
@@ -162,7 +163,7 @@ describe("hitRandomChar", () => {
       effectValue: 3,
       ultimate: 10,
       ultimateName: "test",
-    } satisfies GameCard)
+    }) satisfies GameCard
 
   const makeFieldChar = (id: string, name: string, hp: number, isDown = false): FieldChar => ({
     card: makeCard(id, name),
@@ -198,10 +199,7 @@ describe("hitRandomChar", () => {
   })
 
   it("returns null hitIndex when all chars are downed", () => {
-    const fieldChars = [
-      makeFieldChar("a", "A", 0, true),
-      makeFieldChar("b", "B", 0, true),
-    ]
+    const fieldChars = [makeFieldChar("a", "A", 0, true), makeFieldChar("b", "B", 0, true)]
     const result = hitRandomChar(fieldChars, 5, "⚔️", "")
     expect(result.hitIndex).toBeNull()
     expect(result.logMessages).toEqual([])
@@ -291,7 +289,7 @@ describe("hitRandomChar", () => {
 describe("calculatePhaseTransition", () => {
   const makeEnemy = (phases: Enemy["phases"]): Enemy =>
     ({
-      id: "test",
+      id: "test" as EnemyId,
       name: "Test",
       title: "Test Enemy",
       maxHp: 50,
@@ -301,16 +299,48 @@ describe("calculatePhaseTransition", () => {
       difficulty: "NORMAL",
       reward: "test",
       phases,
-    } satisfies Enemy)
+    }) satisfies Enemy
 
   const aliveFieldChars: FieldChar[] = [
     {
-      card: { id: "c1", name: "Char1", imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense: 3, effect: "t", effectType: EffectType.HEAL, effectValue: 3, ultimate: 10, ultimateName: "t" },
-      hp: 10, maxHp: 10, isDown: false,
+      card: {
+        id: "c1" as CardId,
+        name: "Char1",
+        imageUrl: "",
+        flavorText: "",
+        rarity: "R",
+        affiliation: "t",
+        attack: 5,
+        defense: 3,
+        effect: "t",
+        effectType: EffectType.HEAL,
+        effectValue: 3,
+        ultimate: 10,
+        ultimateName: "t",
+      },
+      hp: 10,
+      maxHp: 10,
+      isDown: false,
     },
     {
-      card: { id: "c2", name: "Char2", imageUrl: "", flavorText: "", rarity: "R", affiliation: "t", attack: 5, defense: 3, effect: "t", effectType: EffectType.HEAL, effectValue: 3, ultimate: 10, ultimateName: "t" },
-      hp: 10, maxHp: 10, isDown: false,
+      card: {
+        id: "c2" as CardId,
+        name: "Char2",
+        imageUrl: "",
+        flavorText: "",
+        rarity: "R",
+        affiliation: "t",
+        attack: 5,
+        defense: 3,
+        effect: "t",
+        effectType: EffectType.HEAL,
+        effectValue: 3,
+        ultimate: 10,
+        ultimateName: "t",
+      },
+      hp: 10,
+      maxHp: 10,
+      isDown: false,
     },
   ]
 
@@ -378,14 +408,14 @@ describe("calculatePhaseTransition", () => {
 
   it("void-reaper applies transition damage", () => {
     const enemy = makeEnemy([{ triggerHpPercent: 50, message: "次元切断！", attackBonus: 3 }])
-    enemy.id = "void-reaper"
+    enemy.id = "void-reaper" as EnemyId
     const result = calculatePhaseTransition(enemy, 40, 0, aliveFieldChars)
     expect(result.damageToApply.length).toBeGreaterThanOrEqual(1)
   })
 
   it("void-reaper damage has correct structure", () => {
     const enemy = makeEnemy([{ triggerHpPercent: 50, message: "Phase!", attackBonus: 3 }])
-    enemy.id = "void-reaper"
+    enemy.id = "void-reaper" as EnemyId
     const result = calculatePhaseTransition(enemy, 40, 0, aliveFieldChars)
     for (const dmg of result.damageToApply) {
       expect(dmg).toHaveProperty("charName")
@@ -427,7 +457,7 @@ describe("calculatePhaseTransition", () => {
 describe("calculateEnemySelfHeal", () => {
   const makeEnemy = (selfHealPerTurn?: number, triggerHpPercent = 50): Enemy =>
     ({
-      id: "test",
+      id: "test" as EnemyId,
       name: "Test",
       title: "Test",
       maxHp: 50,
@@ -436,8 +466,15 @@ describe("calculateEnemySelfHeal", () => {
       description: "test",
       difficulty: "NORMAL",
       reward: "test",
-      phases: [{ triggerHpPercent, attackBonus: 1, message: "test", ...(selfHealPerTurn ? { selfHealPerTurn } : {}) }],
-    } satisfies Enemy)
+      phases: [
+        {
+          triggerHpPercent,
+          attackBonus: 1,
+          message: "test",
+          ...(selfHealPerTurn ? { selfHealPerTurn } : {}),
+        },
+      ],
+    }) satisfies Enemy
 
   it("returns current HP when no self-heal phase", () => {
     const enemy = makeEnemy()
@@ -471,7 +508,7 @@ describe("calculateEnemySelfHeal", () => {
 
   it("handles multiple phases with self-heal", () => {
     const enemy: Enemy = {
-      id: "test",
+      id: "test" as EnemyId,
       name: "Test",
       title: "Test",
       maxHp: 100,
@@ -509,7 +546,14 @@ describe("calculateEffectDamage", () => {
   })
 
   it("damage-only effect returns correct damage", () => {
-    const result = calculateEffectDamage(EffectType.DAMAGE, "敵に5ダメージ", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(
+      EffectType.DAMAGE,
+      "敵に5ダメージ",
+      5,
+      "Char",
+      "enemy",
+      false
+    )
     expect(result.damage).toBe(5)
     expect(result.heal).toBe(0)
     expect(result.shield).toBe(0)
@@ -523,49 +567,105 @@ describe("calculateEffectDamage", () => {
   })
 
   it("attack-reduction effect returns correct reduction", () => {
-    const result = calculateEffectDamage(EffectType.ATTACK_REDUCTION, "敵の攻撃力低下", 3, "Char", "enemy", false)
+    const result = calculateEffectDamage(
+      EffectType.ATTACK_REDUCTION,
+      "敵の攻撃力低下",
+      3,
+      "Char",
+      "enemy",
+      false
+    )
     expect(result.attackReduction).toBe(3)
     expect(result.damage).toBe(0)
   })
 
   it("damage+heal effect returns both values", () => {
-    const result = calculateEffectDamage(EffectType.DAMAGE_HEAL, "敵に5ダメージ＋HPを2回復", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(
+      EffectType.DAMAGE_HEAL,
+      "敵に5ダメージ＋HPを2回復",
+      5,
+      "Char",
+      "enemy",
+      false
+    )
     expect(result.damage).toBe(5)
     expect(result.heal).toBeGreaterThan(0)
   })
 
   it("damage+shield effect returns both values", () => {
-    const result = calculateEffectDamage(EffectType.DAMAGE_SHIELD, "敵に5ダメージ＋シールド+3", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(
+      EffectType.DAMAGE_SHIELD,
+      "敵に5ダメージ＋シールド+3",
+      5,
+      "Char",
+      "enemy",
+      false
+    )
     expect(result.damage).toBe(5)
     expect(result.shield).toBeGreaterThan(0)
   })
 
   it("heal+damage+shield effect returns all three", () => {
-    const result = calculateEffectDamage(EffectType.HEAL_DAMAGE_SHIELD, "回復＋ダメージ＋シールド", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(
+      EffectType.HEAL_DAMAGE_SHIELD,
+      "回復＋ダメージ＋シールド",
+      5,
+      "Char",
+      "enemy",
+      false
+    )
     expect(result.heal).toBeGreaterThan(0)
     expect(result.shield).toBeGreaterThan(0)
     expect(result.damage).toBe(0) // This specific combo heals + shields
   })
 
   it("damage is 0 when isVoidKingPhase3 is true", () => {
-    const result = calculateEffectDamage(EffectType.DAMAGE, "敵に5ダメージ", 5, "Char", "void-king", true)
+    const result = calculateEffectDamage(
+      EffectType.DAMAGE,
+      "敵に5ダメージ",
+      5,
+      "Char",
+      "void-king",
+      true
+    )
     expect(result.damage).toBe(0)
   })
 
   it("damage+heal still heals when isVoidKingPhase3 is true", () => {
-    const result = calculateEffectDamage(EffectType.DAMAGE_HEAL, "敵に5ダメージ＋HPを2回復", 5, "Char", "void-king", true)
+    const result = calculateEffectDamage(
+      EffectType.DAMAGE_HEAL,
+      "敵に5ダメージ＋HPを2回復",
+      5,
+      "Char",
+      "void-king",
+      true
+    )
     expect(result.heal).toBeGreaterThan(0)
     expect(result.damage).toBe(0)
   })
 
   it("次元階梯パンディクト special effect", () => {
-    const result = calculateEffectDamage(EffectType.SPECIAL_PANDICT, "次元階梯パンディクト", 5, "Char", "enemy", false)
+    const result = calculateEffectDamage(
+      EffectType.SPECIAL_PANDICT,
+      "次元階梯パンディクト",
+      5,
+      "Char",
+      "enemy",
+      false
+    )
     expect(result.damage).toBe(5)
     expect(result.heal).toBe(3)
   })
 
   it("次元階梯パンディクト damage absorbed in void king phase 3", () => {
-    const result = calculateEffectDamage(EffectType.SPECIAL_PANDICT, "次元階梯パンディクト", 5, "Char", "void-king", true)
+    const result = calculateEffectDamage(
+      EffectType.SPECIAL_PANDICT,
+      "次元階梯パンディクト",
+      5,
+      "Char",
+      "void-king",
+      true
+    )
     expect(result.damage).toBe(0)
     expect(result.heal).toBe(3)
   })
@@ -586,7 +686,14 @@ describe("calculateEffectDamage", () => {
   })
 
   it("log includes card name", () => {
-    const result = calculateEffectDamage(EffectType.HEAL, "HPを5回復", 5, "テストキャラ", "enemy", false)
+    const result = calculateEffectDamage(
+      EffectType.HEAL,
+      "HPを5回復",
+      5,
+      "テストキャラ",
+      "enemy",
+      false
+    )
     expect(result.log).toContain("テストキャラ")
   })
 
@@ -613,7 +720,7 @@ describe("calculateEffectDamage", () => {
 describe("calculateEnemyDamage", () => {
   const makeEnemy = (phases: Enemy["phases"], attackPower: number): Enemy =>
     ({
-      id: "test",
+      id: "test" as EnemyId,
       name: "Test",
       title: "Test",
       maxHp: 100,
@@ -623,7 +730,7 @@ describe("calculateEnemyDamage", () => {
       difficulty: "NORMAL",
       reward: "test",
       phases,
-    } satisfies Enemy)
+    }) satisfies Enemy
 
   it("returns base attack when no phase bonuses", () => {
     const enemy = makeEnemy([], 5)
@@ -671,10 +778,13 @@ describe("calculateEnemyDamage", () => {
   })
 
   it("phase bonus is 0 when above all thresholds", () => {
-    const enemy = makeEnemy([
-      { triggerHpPercent: 50, message: "!", attackBonus: 2 },
-      { triggerHpPercent: 25, message: "!", attackBonus: 3 },
-    ], 5)
+    const enemy = makeEnemy(
+      [
+        { triggerHpPercent: 50, message: "!", attackBonus: 2 },
+        { triggerHpPercent: 25, message: "!", attackBonus: 3 },
+      ],
+      5
+    )
     const result = calculateEnemyDamage(enemy, 80, 0, 0)
     expect(result.phaseBonus).toBe(0)
   })
@@ -689,10 +799,13 @@ describe("calculateEnemyDamage", () => {
   })
 
   it("accumulates multiple phase bonuses", () => {
-    const enemy = makeEnemy([
-      { triggerHpPercent: 66, message: "!", attackBonus: 1 },
-      { triggerHpPercent: 33, message: "!", attackBonus: 2 },
-    ], 5)
+    const enemy = makeEnemy(
+      [
+        { triggerHpPercent: 66, message: "!", attackBonus: 1 },
+        { triggerHpPercent: 33, message: "!", attackBonus: 2 },
+      ],
+      5
+    )
     // At 20% HP: both phases trigger
     const result = calculateEnemyDamage(enemy, 20, 0, 0)
     expect(result.phaseBonus).toBe(3)

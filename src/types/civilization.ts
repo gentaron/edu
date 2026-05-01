@@ -1,5 +1,7 @@
+import type { CivilizationId, WikiId } from "@/platform/schemas/branded"
+
 export interface Civilization {
-  id: string
+  id: CivilizationId
   rank: number
   name: string
   nameEn: string
@@ -8,7 +10,7 @@ export interface Civilization {
   bgColor: string
   icon: string
   leader: string
-  leaderWikiId: string
+  leaderWikiId: WikiId
   capital?: string
   gdp?: string
   specialization: string
@@ -16,7 +18,7 @@ export interface Civilization {
   history: string
   currentStatus: string
   relationships: string[]
-  wikiId: string
+  wikiId: WikiId
   href: string
   isHistorical?: boolean
   planets?: string[]
@@ -30,5 +32,5 @@ export interface CivilizationLeader {
   wealth: string
   source: string
   era: string
-  wikiId: string
+  wikiId: WikiId
 }

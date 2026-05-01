@@ -1,9 +1,9 @@
-import type { WikiEntry } from "@/types"
+import type { WikiId, WikiEntry } from "@/types"
 
 export const WIKI_HISTORY = [
   /* 歴史・時代 */
   {
-    id: "東暦",
+    id: "東暦" as WikiId,
     name: "東暦（E暦）",
     nameEn: "Eastern Calendar (E Calendar)",
     category: "歴史",
@@ -13,7 +13,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "バーズ帝国",
+    id: "バーズ帝国" as WikiId,
     name: "バーズ帝国",
     nameEn: "Birds Empire",
     category: "歴史",
@@ -23,7 +23,7 @@ export const WIKI_HISTORY = [
 
     leaders: [
       {
-        id: "ファランクス",
+        id: "ファランクス" as WikiId as WikiId,
         name: "ファランクス",
         nameEn: "Phalanx",
         role: "バーズ帝国初代皇帝",
@@ -33,7 +33,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "セリア黄金期",
+    id: "セリア黄金期" as WikiId,
     name: "セリア黄金期",
     nameEn: "Celia Golden Age",
     category: "歴史",
@@ -43,7 +43,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "パクス・ロンバルディカ",
+    id: "パクス・ロンバルディカ" as WikiId,
     name: "パクス・ロンバルディカ",
     nameEn: "Pax Lombardica",
     category: "歴史",
@@ -53,7 +53,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "スライム危機",
+    id: "スライム危機" as WikiId,
     name: "スライム危機",
     nameEn: "Slime Crisis",
     category: "歴史",
@@ -63,7 +63,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "テクノ文化ルネサンス",
+    id: "テクノ文化ルネサンス" as WikiId,
     name: "テクノ文化ルネサンス",
     nameEn: "Techno-Cultural Renaissance",
     category: "歴史",
@@ -74,7 +74,7 @@ export const WIKI_HISTORY = [
 
   /* 戦争・歴史事件 */
   {
-    id: "エルトナ戦争",
+    id: "エルトナ戦争" as WikiId,
     name: "エルトナ戦争",
     nameEn: "Eltna War",
     category: "歴史",
@@ -84,7 +84,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "アフター戦争",
+    id: "アフター戦争" as WikiId,
     name: "アフター戦争",
     nameEn: "After War",
     category: "歴史",
@@ -94,7 +94,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "チョンクォン戦争",
+    id: "チョンクォン戦争" as WikiId,
     name: "チョンクォン戦争",
     nameEn: "Chonkwon War",
     category: "歴史",
@@ -104,7 +104,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "テラン朝共和制",
+    id: "テラン朝共和制" as WikiId,
     name: "テラン朝共和制",
     nameEn: "Terran Republic",
     category: "歴史",
@@ -114,7 +114,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "ロンバルディア戦争",
+    id: "ロンバルディア戦争" as WikiId,
     name: "ロンバルディア戦争",
     nameEn: "Lombardia War",
     category: "歴史",
@@ -124,7 +124,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "メルディア戦争",
+    id: "メルディア戦争" as WikiId,
     name: "メルディア戦争",
     nameEn: "Meldia War",
     category: "歴史",
@@ -134,7 +134,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "マーストリヒト革命",
+    id: "マーストリヒト革命" as WikiId,
     name: "マーストリヒト革命",
     nameEn: "Maastricht Revolution",
     category: "歴史",
@@ -144,7 +144,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "クワンナラ革命",
+    id: "クワンナラ革命" as WikiId,
     name: "クワンナラ革命",
     nameEn: "Kwannara Revolution",
     category: "歴史",
@@ -154,7 +154,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "新ヘルシンキ宣言",
+    id: "新ヘルシンキ宣言" as WikiId,
     name: "新ヘルシンキ宣言",
     nameEn: "New Helsinki Declaration",
     category: "歴史",
@@ -164,7 +164,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "コーラの疫病",
+    id: "コーラの疫病" as WikiId,
     name: "コーラの疫病",
     nameEn: "Corra Plague",
     category: "歴史",
@@ -174,7 +174,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "テリアン反乱",
+    id: "テリアン反乱" as WikiId,
     name: "テリアン反乱",
     nameEn: "Terrian Rebellion",
     category: "歴史",
@@ -184,7 +184,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "技術啓蒙時代",
+    id: "技術啓蒙時代" as WikiId,
     name: "技術啓蒙時代",
     nameEn: "Technological Enlightenment Era",
     category: "歴史",
@@ -194,7 +194,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "テクノ宗教運動",
+    id: "テクノ宗教運動" as WikiId,
     name: "テクノ宗教運動",
     nameEn: "Techno-Religious Movement",
     category: "歴史",
@@ -204,7 +204,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "ギガポリス解放戦",
+    id: "ギガポリス解放戦" as WikiId,
     name: "ギガポリス解放戦",
     nameEn: "Gigapolis Liberation War",
     category: "歴史",
@@ -215,7 +215,7 @@ export const WIKI_HISTORY = [
 
   /* 歴史・時代 */
   {
-    id: "第五次繁栄期",
+    id: "第五次繁栄期" as WikiId,
     name: "第五次繁栄期",
     nameEn: "Fifth Prosperity Period",
     category: "歴史",
@@ -230,7 +230,7 @@ export const WIKI_HISTORY = [
 
   /* 入植期・帝国建国 (E0〜E15) */
   {
-    id: "hist-入植船団の到達",
+    id: "hist-入植船団の到達" as WikiId,
     name: "入植船団の到達",
     nameEn: "Arrival of the Colonization Fleet",
     category: "歴史",
@@ -240,7 +240,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-初期入植者社会",
+    id: "hist-初期入植者社会" as WikiId,
     name: "初期入植者社会",
     nameEn: "Early Settler Society",
     category: "歴史",
@@ -250,7 +250,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-ファランクスによる統一",
+    id: "hist-ファランクスによる統一" as WikiId,
     name: "ファランクスによる統一戦争",
     nameEn: "Phalanx Unification Wars",
     category: "歴史",
@@ -261,7 +261,7 @@ export const WIKI_HISTORY = [
 
   /* バーズ帝国・暗黒時代 (E15〜E90) */
   {
-    id: "hist-帝国内乱と分裂",
+    id: "hist-帝国内乱と分裂" as WikiId,
     name: "帝国内乱と分裂",
     nameEn: "Imperial Civil War and Fragmentation",
     category: "歴史",
@@ -271,7 +271,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-第二次移民波の到達",
+    id: "hist-第二次移民波の到達" as WikiId,
     name: "第二次移民波の到達",
     nameEn: "Second Wave of Immigration",
     category: "歴史",
@@ -281,7 +281,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-第一次星間航海",
+    id: "hist-第一次星間航海" as WikiId,
     name: "第一次星間航海",
     nameEn: "First Interstellar Voyages",
     category: "歴史",
@@ -292,7 +292,7 @@ export const WIKI_HISTORY = [
 
   /* コーポラトクラシー台頭 (E90〜E205) */
   {
-    id: "hist-コーポラタムパブリカ設立",
+    id: "hist-コーポラタムパブリカ設立" as WikiId,
     name: "コーポラタムパブリカの設立",
     nameEn: "Founding of Corporatumpublica",
     category: "歴史",
@@ -302,7 +302,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-テクノ宗教運動の台頭",
+    id: "hist-テクノ宗教運動の台頭" as WikiId,
     name: "テクノ宗教運動の台頭",
     nameEn: "Rise of Techno-Religious Movement",
     category: "歴史",
@@ -312,7 +312,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-ギガポリス都市計画",
+    id: "hist-ギガポリス都市計画" as WikiId,
     name: "ギガポリス都市計画",
     nameEn: "Gigapolis Urban Planning",
     category: "歴史",
@@ -323,7 +323,7 @@ export const WIKI_HISTORY = [
 
   /* パクス〜繁栄 (E150〜E288) */
   {
-    id: "hist-パクス・ロンバルディカの成立",
+    id: "hist-パクス・ロンバルディカの成立" as WikiId,
     name: "パクス・ロンバルディカの成立",
     nameEn: "Establishment of Pax Lombardica",
     category: "歴史",
@@ -333,7 +333,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-惑星ビブリオの建設",
+    id: "hist-惑星ビブリオの建設" as WikiId,
     name: "惑星ビブリオの建設",
     nameEn: "Construction of Planet Biblio",
     category: "歴史",
@@ -343,7 +343,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-ダイアナの台頭",
+    id: "hist-ダイアナの台頭" as WikiId,
     name: "ダイアナの台頭",
     nameEn: "Rise of Diana",
     category: "歴史",
@@ -354,7 +354,7 @@ export const WIKI_HISTORY = [
 
   /* ZAMLT〜黄金期 (E270〜E335) */
   {
-    id: "hist-AURALISの誕生",
+    id: "hist-AURALISの誕生" as WikiId,
     name: "AURALISの誕生",
     nameEn: "Birth of AURALIS",
     category: "歴史",
@@ -364,7 +364,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-AURALIS正式設立",
+    id: "hist-AURALIS正式設立" as WikiId,
     name: "AURALIS正式設立",
     nameEn: "Official Establishment of AURALIS",
     category: "歴史",
@@ -374,7 +374,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-ZAMLT設立",
+    id: "hist-ZAMLT設立" as WikiId,
     name: "ZAMLT設立と5企業覇権",
     nameEn: "Establishment of ZAMLT",
     category: "歴史",
@@ -384,7 +384,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-アルファ・ケインの覚醒",
+    id: "hist-アルファ・ケインの覚醒" as WikiId,
     name: "アルファ・ケインの覚醒",
     nameEn: "Awakening of Alpha Kane",
     category: "歴史",
@@ -394,7 +394,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-シルバープラント攻略戦",
+    id: "hist-シルバープラント攻略戦" as WikiId,
     name: "シルバープラント攻略戦",
     nameEn: "Silver Plant Assault",
     category: "歴史",
@@ -405,7 +405,7 @@ export const WIKI_HISTORY = [
 
   /* セリア黄金期 (E335〜E400) */
   {
-    id: "hist-セリアによるSelinopolis宣言",
+    id: "hist-セリアによるSelinopolis宣言" as WikiId,
     name: "セリアによるSelinopolis宣言",
     nameEn: "Celia's Selinopolis Declaration",
     category: "歴史",
@@ -415,7 +415,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-フェルミ音楽の最盛期",
+    id: "hist-フェルミ音楽の最盛期" as WikiId,
     name: "フェルミ音楽の最盛期",
     nameEn: "Peak of Fermi Music",
     category: "歴史",
@@ -425,7 +425,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-アポロンとの同盟拒絶と開戦",
+    id: "hist-アポロンとの同盟拒絶と開戦" as WikiId,
     name: "アポロンとの同盟拒絶と開戦",
     nameEn: "Rejection of Apollon Alliance and Outbreak of War",
     category: "歴史",
@@ -435,7 +435,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-G4ファントムパルスと勝利",
+    id: "hist-G4ファントムパルスと勝利" as WikiId,
     name: "G4ファントムパルスと大戦勝利",
     nameEn: "G4 Phantom Pulse and War Victory",
     category: "歴史",
@@ -445,7 +445,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-エヴァトロンによるGigapolis占領",
+    id: "hist-エヴァトロンによるGigapolis占領" as WikiId,
     name: "エヴァトロンによるGigapolis占領",
     nameEn: "Evatron Occupation of Gigapolis",
     category: "歴史",
@@ -456,7 +456,7 @@ export const WIKI_HISTORY = [
 
   /* エヴァトロン支配〜崩壊 (E400〜E475) */
   {
-    id: "hist-AURALIS弾圧と逮捕",
+    id: "hist-AURALIS弾圧と逮捕" as WikiId,
     name: "AURALIS弾圧とメンバー逮捕",
     nameEn: "AURALIS Suppression and Arrests",
     category: "歴史",
@@ -466,7 +466,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-Σ-Unitの設立",
+    id: "hist-Σ-Unitの設立" as WikiId,
     name: "Σ-Unit (Sigma Unit)",
     nameEn: "Establishment of Sigma Unit",
     category: "歴史",
@@ -476,7 +476,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-テリアン処刑",
+    id: "hist-テリアン処刑" as WikiId,
     name: "テリアン処刑",
     nameEn: "Execution of Elios Wald",
     category: "歴史",
@@ -486,7 +486,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-エヴァトロン崩壊",
+    id: "hist-エヴァトロン崩壊" as WikiId,
     name: "エヴァトロン崩壊",
     nameEn: "Fall of Evatron",
     category: "歴史",
@@ -497,7 +497,7 @@ export const WIKI_HISTORY = [
 
   /* 復興〜現代 (E475〜E550) */
   {
-    id: "hist-ネオクラン同盟の台頭",
+    id: "hist-ネオクラン同盟の台頭" as WikiId,
     name: "ネオクラン同盟の台頭",
     nameEn: "Rise of Neo-Clan Alliance",
     category: "歴史",
@@ -507,7 +507,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-スライム危機の収束",
+    id: "hist-スライム危機の収束" as WikiId,
     name: "スライム危機の収束",
     nameEn: "Resolution of Slime Crisis",
     category: "歴史",
@@ -517,7 +517,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-テクノ文化ルネサンスの始まり",
+    id: "hist-テクノ文化ルネサンスの始まり" as WikiId,
     name: "テクノ文化ルネサンスの始まり",
     nameEn: "Beginning of Techno-Cultural Renaissance",
     category: "歴史",
@@ -527,7 +527,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-V7設立",
+    id: "hist-V7設立" as WikiId,
     name: "V7（Vital Seven）の設立",
     nameEn: "Founding of V7 (Vital Seven)",
     category: "歴史",
@@ -537,7 +537,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-トリニティ・アライアンス結成",
+    id: "hist-トリニティ・アライアンス結成" as WikiId,
     name: "トリニティ・アライアンス結成",
     nameEn: "Formation of Trinity Alliance",
     category: "歴史",
@@ -547,7 +547,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-銀河系コンソーシアム設立",
+    id: "hist-銀河系コンソーシアム設立" as WikiId,
     name: "銀河系コンソーシアム設立",
     nameEn: "Establishment of Galactic Consortium",
     category: "歴史",
@@ -557,7 +557,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-第一回宇宙連合会合",
+    id: "hist-第一回宇宙連合会合" as WikiId,
     name: "第一回宇宙連合会合",
     nameEn: "First Universal Federation Summit",
     category: "歴史",
@@ -567,7 +567,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-AURALIS第二世代の設立",
+    id: "hist-AURALIS第二世代の設立" as WikiId,
     name: "AURALIS Collective第二世代の設立",
     nameEn: "Establishment of AURALIS Collective 2nd Gen",
     category: "歴史",
@@ -577,7 +577,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-シルバー・ヴェノムの台頭",
+    id: "hist-シルバー・ヴェノムの台頭" as WikiId,
     name: "シルバー・ヴェノムの台頭",
     nameEn: "Rise of Silver Venom",
     category: "歴史",
@@ -587,7 +587,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-アルファ・ヴェノムの台頭",
+    id: "hist-アルファ・ヴェノムの台頭" as WikiId,
     name: "アルファ・ヴェノムの台頭",
     nameEn: "Rise of Alpha Venom",
     category: "歴史",
@@ -597,7 +597,7 @@ export const WIKI_HISTORY = [
   },
 
   {
-    id: "hist-現代のE16連星系",
+    id: "hist-現代のE16連星系" as WikiId,
     name: "現代のE16連星系",
     nameEn: "Modern E16 Binary System",
     category: "歴史",

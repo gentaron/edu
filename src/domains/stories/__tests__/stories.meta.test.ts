@@ -99,7 +99,9 @@ describe("ALL_STORIES", () => {
 describe("getStoryBySlug", () => {
   it("returns story for existing slug", () => {
     const first = ALL_STORIES[0]
-    if (!first) return
+    if (!first) {
+      return
+    }
     const result = getStoryBySlug(first.slug)
     expect(result).toBeDefined()
     expect(result!.slug).toBe(first.slug)
@@ -178,7 +180,9 @@ describe("getStoriesForEntry", () => {
 describe("getAdjacentStories", () => {
   it("first story in chapter has no prev", () => {
     const chapter1 = getStoriesByChapter(1)
-    if (chapter1.length === 0) return
+    if (chapter1.length === 0) {
+      return
+    }
     const adj = getAdjacentStories(chapter1[0]!)
     expect(adj.prev).toBeUndefined()
     expect(adj.next).toBeDefined()
@@ -186,7 +190,9 @@ describe("getAdjacentStories", () => {
 
   it("last story in chapter has no next", () => {
     const chapter1 = getStoriesByChapter(1)
-    if (chapter1.length === 0) return
+    if (chapter1.length === 0) {
+      return
+    }
     const last = chapter1[chapter1.length - 1]!
     const adj = getAdjacentStories(last)
     expect(adj.next).toBeUndefined()
@@ -194,7 +200,9 @@ describe("getAdjacentStories", () => {
 
   it("middle story has both prev and next", () => {
     const chapter2 = getStoriesByChapter(2)
-    if (chapter2.length < 3) return
+    if (chapter2.length < 3) {
+      return
+    }
     const adj = getAdjacentStories(chapter2[1]!)
     expect(adj.prev).toBeDefined()
     expect(adj.next).toBeDefined()
@@ -202,10 +210,16 @@ describe("getAdjacentStories", () => {
 
   it("adjacent stories are in the same chapter", () => {
     const chapter1 = getStoriesByChapter(1)
-    if (chapter1.length < 2) return
+    if (chapter1.length < 2) {
+      return
+    }
     const adj = getAdjacentStories(chapter1[1]!)
-    if (adj.prev) expect(adj.prev.chapter).toBe(1)
-    if (adj.next) expect(adj.next.chapter).toBe(1)
+    if (adj.prev) {
+      expect(adj.prev.chapter).toBe(1)
+    }
+    if (adj.next) {
+      expect(adj.next.chapter).toBe(1)
+    }
   })
 
   it("correctly identifies single-story chapter", () => {

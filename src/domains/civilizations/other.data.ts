@@ -1,8 +1,9 @@
+import type { CivilizationId, WikiId } from "../../platform/schemas/branded"
 import type { Civilization } from "@/types"
 
 export const OTHER_CIVILIZATIONS = [
   {
-    id: "eresh",
+    id: "eresh" as CivilizationId,
     rank: 6,
     name: "エレシュ",
     nameEn: "Eresh",
@@ -11,7 +12,7 @@ export const OTHER_CIVILIZATIONS = [
     bgColor: "from-purple-500/20 via-purple-600/10 to-purple-700/20",
     icon: "Sparkles",
     leader: "大司教",
-    leaderWikiId: "大司教",
+    leaderWikiId: "大司教" as WikiId,
     specialization: "宗教・精神的影響力",
     description:
       "宇宙規模の信仰共同体を形成する宗教・精神的文明圏。大司教と神官長から成るオラクルが最高意思決定機関として機能し、その予言は極めて高い的中率を誇る。中枢聖星ヴェズレル（『真理の星』）を中心に、次元境界近くに建造されたサンクチュアリを主たる聖地としている。次元共鳴を用いた瞑想と予言の伝統が他文明圏にも広く影響を与えている。",
@@ -26,12 +27,12 @@ export const OTHER_CIVILIZATIONS = [
       "プロキオ — サンクチュアリへの巡礼ルートを通じた経済的つながり",
       "ロースター — 次元共鳴通信技術の共同研究",
     ],
-    wikiId: "エレシュ",
+    wikiId: "エレシュ" as WikiId,
     href: "/civilizations/eresh",
     planets: ["エレシュ・サンクチュアリ", "オラクル", "ヴェズレル", "セラフィム"],
   },
   {
-    id: "prokio",
+    id: "prokio" as CivilizationId,
     rank: 7,
     name: "プロキオ",
     nameEn: "Prokio",
@@ -40,7 +41,7 @@ export const OTHER_CIVILIZATIONS = [
     bgColor: "from-orange-500/20 via-orange-600/10 to-orange-700/20",
     icon: "Package",
     leader: "商工会議長",
-    leaderWikiId: "商工会議長",
+    leaderWikiId: "商工会議長" as WikiId,
     specialization: "宇宙規模の交易・物流",
     description:
       "宇宙中のあらゆる貿易ルートを掌握する交易・物流文明圏。商工会議長を最高責任者とし、プロキオ・ネクサスを中心拠点として全宇宙の商取引を管理している。コマース部門が全商業取引を統轄し、AI物流ルーティングネットワーク『Lane System』が最適な輸送経路を算出。オープンアーキテクチャによりグランベルやエレシオンにも統合されている。プロキオ・ネクサスでの価格設定が宇宙全体のベースライン価格を決定する。",
@@ -57,11 +58,11 @@ export const OTHER_CIVILIZATIONS = [
       "エレシュ — サンクチュアリへの巡礼ルート運営",
     ],
     planets: ["プロキオ・ネクサス", "コマース", "レーン", "バザール"],
-    wikiId: "プロキオ",
+    wikiId: "プロキオ" as WikiId,
     href: "/civilizations/prokio",
   },
   {
-    id: "roastar",
+    id: "roastar" as CivilizationId,
     rank: 8,
     name: "ロースター",
     nameEn: "Roastar",
@@ -70,7 +71,7 @@ export const OTHER_CIVILIZATIONS = [
     bgColor: "from-pink-500/20 via-pink-600/10 to-pink-700/20",
     icon: "Radio",
     leader: "通信長官",
-    leaderWikiId: "通信長官",
+    leaderWikiId: "通信長官" as WikiId,
     specialization: "次元間通信・量子ネットワーク",
     description:
       "次元間通信と量子ネットワーク技術の革新に特化した技術文明圏。通信長官を最高責任者とし、ロースター・コアを中心拠点として量子コンピューティング研究を推進している。シグナル・オペレーションが全宇宙の衛星通信ネットワークを管理し、クアンタ・ラボで最先端の量子プロトコル研究を実施。『Link Protocol』は全文明圏で使用される唯一の汎用通信規格であり、現在のバージョンはLink 7.2。オープンイノベーションモデルにより、新技術は数ヶ月で全宇宙に展開される。",
@@ -87,7 +88,7 @@ export const OTHER_CIVILIZATIONS = [
       "エレシュ — 次元共鳴通信技術の共同研究",
     ],
     planets: ["ロースター・コア", "シグナル", "クアンタ", "リンク"],
-    wikiId: "ロースター",
+    wikiId: "ロースター" as WikiId,
     href: "/civilizations/roastar",
   },
 ] as const satisfies readonly Civilization[]

@@ -13,7 +13,8 @@
 [![Rust](https://img.shields.io/badge/Rust-WASM-CE422B?style=flat-square&logo=rust)](https://www.rust-lang.org)
 [![Zod](https://img.shields.io/badge/Zod-4-3068B7?style=flat-square&logo=zod)](https://zod.dev)
 [![Netlify](https://img.shields.io/badge/Deploy-Netlify-00C7B7?style=flat-square&logo=netlify)](https://netlify.com)
-[![Tests](https://img.shields.io/badge/Tests-499_pass-22C55E?style=flat-square)](https://github.com/gentaron/edu/actions)
+[![Tests](https://img.shields.io/badge/Tests-1708_pass-22C55E?style=flat-square)](https://github.com/gentaron/edu/actions)
+[![Coverage](https://img.shields.io/badge/Coverage-92.39%25-4CAF50?style=flat-square)](BENCHMARKS.md)/
 [![PBT](https://img.shields.io/badge/PBT-56_properties-F59E0B?style=flat-square)]()
 [![Bench](https://img.shields.io/badge/Bench-criterion.rs+%2B+Vitest-9333EA?style=flat-square)](BENCHMARKS.md)
 
@@ -69,7 +70,7 @@ git clone https://github.com/gentaron/edu.git && cd edu
 bun install
 bun dev          # → http://localhost:3000
 bun run build    # → 本番ビルド（静的HTML 26ルート生成）
-bun test         # → 499テスト実行
+bun test         # → 1708テスト実行
 bun run bench     # → TypeScript + Rust ベンチマーク
 ```
 
@@ -466,7 +467,7 @@ bun run db:seed      # シードデータ投入
 | `any` 型                       | 禁止                            |
 | `eslint-disable`               | 禁止                            |
 | Zodスキーマ検証                | ビルド時実行                    |
-| テスト                         | 全499テスト通過                 |
+| テスト                         | 全1708テスト通過                |
 | LCP (Largest Contentful Paint) | 1.5秒以下                       |
 | バトルアニメーション           | 60fps                           |
 | ページバンドルサイズ           | 100KB以下                       |
@@ -1000,42 +1001,41 @@ Phase 3で移行しきれなかった旧L層ファイルの完全削除と、pla
 
 科学的ベンチマークインフラを導入済み。詳細は [BENCHMARKS.md](BENCHMARKS.md) を参照。
 
-| ツール | 対象 | 実行コマンド |
-|--------|------|-------------|
-| Vitest bench | TS: Binary Protocol, Wiki Search, Battle Engine | `bun run bench` |
-| Criterion.rs | Rust: WASMバトルエンジン全関数 | `bun run bench:rust` |
-| Bundle Analyzer | Next.jsチャンク + WASM | `ANALYZE=true bun run build` |
-| Bundle Size | JS/WASMサイズ監視 | `bun run size` |
-| Baseline | 全メトリクス一括取得 | `bun run baseline` |
+| ツール          | 対象                                            | 実行コマンド                 |
+| --------------- | ----------------------------------------------- | ---------------------------- |
+| Vitest bench    | TS: Binary Protocol, Wiki Search, Battle Engine | `bun run bench`              |
+| Criterion.rs    | Rust: WASMバトルエンジン全関数                  | `bun run bench:rust`         |
+| Bundle Analyzer | Next.jsチャンク + WASM                          | `ANALYZE=true bun run build` |
+| Bundle Size     | JS/WASMサイズ監視                               | `bun run size`               |
+| Baseline        | 全メトリクス一括取得                            | `bun run baseline`           |
 
 ### ハイライト
 
-| モジュール | 最速パス | ボトルネック | 倍率差 |
-|-----------|---------|-------------|-------|
-| Binary Protocol | writeVarInt: ~12.6M ops/s | writeValue(complex): ~43K ops/s | 288x |
-| Battle Engine | phaseTransition: ~2.0M ops/s | effectDamage: ~6.8K ops/s | 289x |
-| Wiki Search | autocomplete: ~28K ops/s | multi-cat search: ~300 ops/s | 93x |
-| WASM Binary | 148.5 KB (gzipped: ~45 KB) | — | — |
+| モジュール      | 最速パス                     | ボトルネック                    | 倍率差 |
+| --------------- | ---------------------------- | ------------------------------- | ------ |
+| Binary Protocol | writeVarInt: ~12.6M ops/s    | writeValue(complex): ~43K ops/s | 288x   |
+| Battle Engine   | phaseTransition: ~2.0M ops/s | effectDamage: ~6.8K ops/s       | 289x   |
+| Wiki Search     | autocomplete: ~28K ops/s     | multi-cat search: ~300 ops/s    | 93x    |
+| WASM Binary     | 148.5 KB (gzipped: ~45 KB)   | —                               | —      |
 
 ---
 
 ## Metrics Summary
 
-### コードベース規模 (Epoch 9 現在)
+### コードベース規模 (Epoch 11 現在)
 
-| 指標                 | 数値               |
-| -------------------- | ------------------ |
-| 総コミット数         | 149                |
-| 開発期間             | 20日               |
-| 総差分               | 69,661+ / 126,410- |
-| TypeScript/TSX総行数 | 48,663             |
-| Rust行数             | 806                |
-| ドメイン層行数       | 33,050             |
-| アプリ層行数         | 8,995              |
-| Metal層行数          | 2,338              |
-| Platform層行数       | 863                |
-| テストファイル行数   | 244                |
-| WASMバイナリサイズ   | 148KB              |
+| 指標                 | 数値   |
+| -------------------- | ------ |
+| 総コミット数         | 150+   |
+| 開発期間             | 20日   |
+| TypeScript/TSX総行数 | 48,663 |
+| Rust行数             | 806    |
+| ドメイン層行数       | 33,050 |
+| アプリ層行数         | 8,995  |
+| Metal層行数          | 2,338  |
+| Platform層行数       | 863    |
+| テストファイル行数   | ~500   |
+| WASMバイナリサイズ   | 148KB  |
 
 ### コンテンツ規模
 
@@ -1048,15 +1048,42 @@ Phase 3で移行しきれなかった旧L層ファイルの完全削除と、pla
 | 文明         | 5大文明 + その他 |
 | 思想地層     | 8 (闇5 + 光3)    |
 
+### テスト・品質 (Epoch 11)
+
+| 指標                | 数値   | 目標 |
+| ------------------- | ------ | ---- |
+| テストファイル      | 58     | —    |
+| テストケース        | 1,708  | 500+ |
+| PBT プロパティ      | 56     | 56   |
+| Statements Coverage | 92.37% | 80%+ |
+| Branches Coverage   | 81.01% | 80%+ |
+| Functions Coverage  | 95.62% | 80%+ |
+| Lines Coverage      | 93.92% | 80%+ |
+
 ### 品質ゲート (通過状況)
 
-| チェック                  | ステータス |
-| ------------------------- | ---------- |
-| `tsc --noEmit`            | ✅ パス    |
-| `eslint --max-warnings=0` | ✅ パス    |
-| `prettier --check`        | ✅ パス    |
-| `bun test`                | ✅ 17/17   |
-| `bun run build`           | ✅ 成功    |
+| チェック                  | ステータス       |
+| ------------------------- | ---------------- |
+| `tsc --noEmit`            | ✅ パス          |
+| `eslint --max-warnings=0` | ✅ パス          |
+| `prettier --check`        | ✅ パス          |
+| `bun test`                | ✅ 58/58         |
+| `bun run build`           | ✅ 成功          |
+| `any` 型ゼロ              | ✅ ソース0       |
+| Branded Types (5種)       | ✅ 37file        |
+| require-jsdoc (ESLint)    | ✅ 強制          |
+| no-cross-domain-import    | ✅ 強制          |
+| Stryker config            | ✅ threshold 70% |
+| EffectType exhaustive     | ✅ 10値+check    |
+
+### バンドルサイズ
+
+| コンポーネント | サイズ   |
+| -------------- | -------- |
+| JS Chunks 合計 | 2.3 MB   |
+| 最大チャンク   | 544 KB   |
+| WASM バイナリ  | 148.5 KB |
+| WASM gzipped   | ~45 KB   |
 
 ---
 

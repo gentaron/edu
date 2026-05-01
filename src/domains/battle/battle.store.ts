@@ -56,7 +56,9 @@ function hitRandomChar(
   msgPrefix: string
 ): { fieldChars: FieldChar[]; hitIndex: number | null } {
   const alive = fieldChars.filter((fc) => !fc.isDown)
-  if (alive.length === 0) {return { fieldChars, hitIndex: null }}
+  if (alive.length === 0) {
+    return { fieldChars, hitIndex: null }
+  }
   const target = alive[Math.floor(Math.random() * alive.length)]!
   const idx = fieldChars.findIndex((fc) => fc.card.id === target.card.id)
   const newHp = Math.max(0, target.hp - damage)
@@ -162,21 +164,33 @@ export const useBattleStore = create<BattleState>((set, get) => ({
 
   selectCharacter: (index) => {
     const s = get()
-    if (s.phase !== "playerTurn") {return}
+    if (s.phase !== "playerTurn") {
+      return
+    }
     const fc = s.fieldCharacters[index]
-    if (!fc || fc.isDown) {return}
+    if (!fc || fc.isDown) {
+      return
+    }
     set({ selectedCharIndex: index })
   },
 
   playAbility: (ability) => {
     const s = get()
-    if (s.phase !== "playerTurn") {return}
-    if (s.selectedCharIndex === null) {return}
+    if (s.phase !== "playerTurn") {
+      return
+    }
+    if (s.selectedCharIndex == null) {
+      return
+    }
     const fc = s.fieldCharacters[s.selectedCharIndex]
-    if (!fc || fc.isDown) {return}
+    if (!fc || fc.isDown) {
+      return
+    }
     const card = fc.card
     const enemy = s.selectedEnemy
-    if (!enemy) {return}
+    if (!enemy) {
+      return
+    }
 
     // Working copy of field characters (for healing)
     const newFieldChars = s.fieldCharacters.map((c) => ({ ...c }))
@@ -189,8 +203,21 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       lastCharIndex: s.selectedCharIndex,
       screenShake: ability === "必殺",
       enemyFlash: ability === "攻撃" || ability === "必殺",
-      healFlash: ability === "効果" && (card.effectType === "HEAL" || card.effectType === "DAMAGE_HEAL" || card.effectType === "HEAL_DAMAGE" || card.effectType === "HEAL_SHIELD" || card.effectType === "HEAL_DAMAGE_SHIELD" || card.effectType === "SPECIAL_PANDICT"),
-      shieldFlash: ability === "防御" || (ability === "効果" && (card.effectType === "SHIELD" || card.effectType === "DAMAGE_SHIELD" || card.effectType === "HEAL_SHIELD" || card.effectType === "HEAL_DAMAGE_SHIELD")),
+      healFlash:
+        ability === "効果" &&
+        (card.effectType === "HEAL" ||
+          card.effectType === "DAMAGE_HEAL" ||
+          card.effectType === "HEAL_DAMAGE" ||
+          card.effectType === "HEAL_SHIELD" ||
+          card.effectType === "HEAL_DAMAGE_SHIELD" ||
+          card.effectType === "SPECIAL_PANDICT"),
+      shieldFlash:
+        ability === "防御" ||
+        (ability === "効果" &&
+          (card.effectType === "SHIELD" ||
+            card.effectType === "DAMAGE_SHIELD" ||
+            card.effectType === "HEAL_SHIELD" ||
+            card.effectType === "HEAL_DAMAGE_SHIELD")),
       charHitIndex: null,
     })
 
@@ -323,8 +350,12 @@ export const useBattleStore = create<BattleState>((set, get) => ({
 
   executeEnemyTurn: () => {
     const s = get()
-    if (!s.selectedEnemy) {return}
-    if (s.phase === "victory" || s.phase === "defeat") {return}
+    if (!s.selectedEnemy) {
+      return
+    }
+    if (s.phase === "victory" || s.phase === "defeat") {
+      return
+    }
 
     const enemy = s.selectedEnemy
     const hpPercent = (s.enemyHp / enemy.maxHp) * 100
@@ -394,7 +425,9 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       msgPrefix: string
     ) {
       const result = hitRandomChar(fieldChars, dmg, set, emoji, msgPrefix)
-      if (result.hitIndex !== null) {hitCharIdx = result.hitIndex}
+      if (result.hitIndex != null) {
+        hitCharIdx = result.hitIndex
+      }
       return result.fieldChars
     }
 
@@ -422,10 +455,14 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       const targets = Math.min(alive.length, s.enemyCurrentPhase)
       for (let i = 0; i < targets; i++) {
         const remainingAlive = newFieldChars.filter((fc) => !fc.isDown)
-        if (remainingAlive.length === 0) {break}
+        if (remainingAlive.length === 0) {
+          break
+        }
         const target = remainingAlive[Math.floor(Math.random() * remainingAlive.length)]!
         const idx = newFieldChars.findIndex((fc) => fc.card.id === target.card.id)
-        if (idx === -1) {continue}
+        if (idx === -1) {
+          continue
+        }
         const dmg = 2 + s.enemyCurrentPhase
         const newHp = Math.max(0, target.hp - dmg)
         newFieldChars[idx] = { ...target, hp: newHp, isDown: newHp <= 0 }
@@ -490,11 +527,15 @@ export const useBattleStore = create<BattleState>((set, get) => ({
 
   checkPhaseTransition: () => {
     const s = get()
-    if (!s.selectedEnemy) {return}
+    if (!s.selectedEnemy) {
+      return
+    }
     const hpPercent = (s.enemyHp / s.selectedEnemy.maxHp) * 100
     let newPhase = 0
     for (let i = s.selectedEnemy.phases.length - 1; i >= 0; i--) {
-      if (hpPercent <= s.selectedEnemy.phases[i]!.triggerHpPercent && i >= newPhase) {newPhase = i + 1}
+      if (hpPercent <= s.selectedEnemy.phases[i]!.triggerHpPercent && i >= newPhase) {
+        newPhase = i + 1
+      }
     }
     if (newPhase > s.enemyCurrentPhase) {
       addLog(set, `⚠️ ${s.selectedEnemy.phases[newPhase - 1]!.message}`)

@@ -9,20 +9,26 @@ import {
 } from "@/platform/invariants"
 import type { WikiEntry, GameCard, Enemy, Civilization } from "@/types"
 import type { StoryMeta } from "@/domains/stories/stories.schema"
+import type { Category } from "@/types/wiki"
+import type { WikiId, CardId, EnemyId, CivilizationId } from "@/platform/schemas/branded"
 
 // ── Test fixtures ──
 
-const makeWikiEntry = (id: string, category: string = "キャラクター", overrides?: Partial<WikiEntry>): WikiEntry => ({
-  id,
+const makeWikiEntry = (
+  id: string,
+  category = "キャラクター",
+  overrides?: Partial<WikiEntry>
+): WikiEntry => ({
+  id: id as WikiId,
   name: `Entry ${id}`,
   nameEn: `Entry ${id} EN`,
-  category,
+  category: category as Category,
   description: `Description for ${id}`,
   ...overrides,
 })
 
 const makeCard = (id: string, overrides?: Partial<GameCard>): GameCard => ({
-  id,
+  id: id as CardId,
   name: `Card ${id}`,
   imageUrl: `/card-${id}.png`,
   flavorText: `Flavor for ${id}`,
@@ -31,6 +37,7 @@ const makeCard = (id: string, overrides?: Partial<GameCard>): GameCard => ({
   attack: 10,
   defense: 5,
   effect: "Heal",
+  effectType: "HEAL" as const,
   effectValue: 3,
   ultimate: 20,
   ultimateName: "Ultimate",
@@ -38,7 +45,7 @@ const makeCard = (id: string, overrides?: Partial<GameCard>): GameCard => ({
 })
 
 const makeEnemy = (id: string, overrides?: Partial<Enemy>): Enemy => ({
-  id,
+  id: id as EnemyId,
   name: `Enemy ${id}`,
   title: "The Tester",
   maxHp: 1000,
@@ -52,7 +59,7 @@ const makeEnemy = (id: string, overrides?: Partial<Enemy>): Enemy => ({
 })
 
 const makeCiv = (id: string, overrides?: Partial<Civilization>): Civilization => ({
-  id,
+  id: id as CivilizationId,
   rank: 1,
   name: `Civ ${id}`,
   nameEn: `Civilization ${id}`,
@@ -61,18 +68,22 @@ const makeCiv = (id: string, overrides?: Partial<Civilization>): Civilization =>
   bgColor: "#FFE0E0",
   icon: "⚔️",
   leader: "Leader",
-  leaderWikiId: `wiki-${id}-leader`,
+  leaderWikiId: `wiki-${id}-leader` as WikiId,
   specialization: "Test",
   description: `Description for civ ${id}`,
   history: `History for civ ${id}`,
   currentStatus: "Active",
   relationships: [],
-  wikiId: `wiki-${id}`,
+  wikiId: `wiki-${id}` as WikiId,
   href: `/civ/${id}`,
   ...overrides,
 })
 
-const makeStory = (slug: string, relatedEntries: string[] = [], overrides?: Partial<StoryMeta>): StoryMeta => ({
+const makeStory = (
+  slug: string,
+  relatedEntries: string[] = [],
+  overrides?: Partial<StoryMeta>
+): StoryMeta => ({
   slug,
   title: `Story ${slug}`,
   titleJa: `ストーリー ${slug}`,
@@ -105,7 +116,12 @@ describe("Invariants", () => {
     })
 
     it("returns multiple violations for multiple duplicate pairs", () => {
-      const entries = [makeWikiEntry("a"), makeWikiEntry("a"), makeWikiEntry("b"), makeWikiEntry("b")]
+      const entries = [
+        makeWikiEntry("a"),
+        makeWikiEntry("a"),
+        makeWikiEntry("b"),
+        makeWikiEntry("b"),
+      ]
       const violations = checkWikiIdUniqueness(entries)
       expect(violations).toHaveLength(2)
     })
@@ -165,7 +181,10 @@ describe("Invariants", () => {
     it("returns no violations for valid references", () => {
       const wikiEntries = [makeWikiEntry("wiki-civ-leader"), makeWikiEntry("wiki-civ")]
       const civs = [
-        makeCiv("civ-1", { leaderWikiId: "wiki-civ-leader", wikiId: "wiki-civ" }),
+        makeCiv("civ-1", {
+          leaderWikiId: "wiki-civ-leader" as WikiId,
+          wikiId: "wiki-civ" as WikiId,
+        }),
       ]
       const violations = checkCivilizationLeaderReferences(civs, wikiEntries)
       expect(violations).toHaveLength(0)
@@ -174,7 +193,10 @@ describe("Invariants", () => {
     it("returns violations for missing leaderWikiId", () => {
       const wikiEntries = [makeWikiEntry("wiki-civ")]
       const civs = [
-        makeCiv("civ-1", { leaderWikiId: "nonexistent-leader", wikiId: "wiki-civ" }),
+        makeCiv("civ-1", {
+          leaderWikiId: "nonexistent-leader" as WikiId,
+          wikiId: "wiki-civ" as WikiId,
+        }),
       ]
       const violations = checkCivilizationLeaderReferences(civs, wikiEntries)
       expect(violations).toHaveLength(1)
@@ -186,7 +208,10 @@ describe("Invariants", () => {
     it("returns violations for missing wikiId", () => {
       const wikiEntries = [makeWikiEntry("wiki-leader")]
       const civs = [
-        makeCiv("civ-1", { leaderWikiId: "wiki-leader", wikiId: "nonexistent-wiki" }),
+        makeCiv("civ-1", {
+          leaderWikiId: "wiki-leader" as WikiId,
+          wikiId: "nonexistent-wiki" as WikiId,
+        }),
       ]
       const violations = checkCivilizationLeaderReferences(civs, wikiEntries)
       expect(violations).toHaveLength(1)
@@ -197,7 +222,10 @@ describe("Invariants", () => {
     it("returns violations for both missing references", () => {
       const wikiEntries = [makeWikiEntry("other")]
       const civs = [
-        makeCiv("civ-1", { leaderWikiId: "missing-leader", wikiId: "missing-wiki" }),
+        makeCiv("civ-1", {
+          leaderWikiId: "missing-leader" as WikiId,
+          wikiId: "missing-wiki" as WikiId,
+        }),
       ]
       const violations = checkCivilizationLeaderReferences(civs, wikiEntries)
       expect(violations).toHaveLength(2)
@@ -259,10 +287,7 @@ describe("Invariants", () => {
 
     it("returns multiple violations for multiple issues", () => {
       const cards = [makeCard("dup"), makeCard("dup")]
-      const enemies = [
-        makeEnemy("e1", { maxHp: 0 }),
-        makeEnemy("e2", { phases: [] }),
-      ]
+      const enemies = [makeEnemy("e1", { maxHp: 0 }), makeEnemy("e2", { phases: [] })]
       const violations = checkCardDataConsistency(cards, enemies)
       expect(violations.length).toBeGreaterThanOrEqual(3)
     })
@@ -310,7 +335,9 @@ describe("Invariants", () => {
         wikiEntries: [makeWikiEntry("wiki-1")],
         cards: [makeCard("card-1")],
         enemies: [makeEnemy("enemy-1")],
-        civilizations: [makeCiv("civ-1", { leaderWikiId: "wiki-1", wikiId: "wiki-1" })],
+        civilizations: [
+          makeCiv("civ-1", { leaderWikiId: "wiki-1" as WikiId, wikiId: "wiki-1" as WikiId }),
+        ],
         stories: [makeStory("story-1", ["wiki-1"])],
       }
       const violations = runAllInvariants(data)
@@ -322,7 +349,9 @@ describe("Invariants", () => {
         wikiEntries: [makeWikiEntry("dup"), makeWikiEntry("dup")],
         cards: [makeCard("c1"), makeCard("c1")],
         enemies: [makeEnemy("e1", { maxHp: 0, phases: [] })],
-        civilizations: [makeCiv("civ-1", { leaderWikiId: "missing", wikiId: "missing" })],
+        civilizations: [
+          makeCiv("civ-1", { leaderWikiId: "missing" as WikiId, wikiId: "missing" as WikiId }),
+        ],
         stories: [makeStory("s1", ["nonexistent-wiki"])],
       }
       const violations = runAllInvariants(data)

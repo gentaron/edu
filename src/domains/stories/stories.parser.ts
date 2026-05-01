@@ -18,6 +18,14 @@ export function toRoman(n: number): string {
 }
 
 /* ─── Detect scene breaks / section markers ─── */
+
+/**
+ * Detect whether a line of text is a scene break or section marker.
+ * Checks for common visual separators (─, ━, ==, **, ##, ＊) and very short non-text lines.
+ *
+ * @param text - The text line to check.
+ * @returns True if the line is a scene break marker.
+ */
 export function isSceneBreak(text: string): boolean {
   const t = text.trim()
   return (
@@ -32,6 +40,14 @@ export function isSceneBreak(text: string): boolean {
 }
 
 /* ─── Detect chapter-like headings within text ─── */
+
+/**
+ * Detect whether a line of text is a chapter heading.
+ * Chapter headings are short lines (1-20 chars) that don't end with sentence punctuation.
+ *
+ * @param text - The text line to check.
+ * @returns True if the line looks like a chapter heading.
+ */
 export function isChapterHeading(text: string): boolean {
   const t = text.trim()
   // Very short lines (1-15 chars) that don't end with typical sentence punctuation

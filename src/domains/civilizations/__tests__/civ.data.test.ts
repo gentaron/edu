@@ -1,8 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { TOP_CIVILIZATIONS } from "@/domains/civilizations/top.data"
-import {
-  CivilizationRepository,
-} from "@/domains/civilizations/civ.repository"
+import { CivilizationRepository } from "@/domains/civilizations/civ.repository"
+import type { CivilizationId } from "@/platform/schemas/branded"
 
 /* ═══════════════════════════════════════════
    TOP_CIVILIZATIONS Data Tests
@@ -20,9 +19,19 @@ describe("TOP_CIVILIZATIONS", () => {
 
   it("every civilization has required fields", () => {
     const requiredFields = [
-      "id", "rank", "name", "nameEn", "color", "borderColor",
-      "bgColor", "icon", "leader", "specialization",
-      "description", "history", "currentStatus",
+      "id",
+      "rank",
+      "name",
+      "nameEn",
+      "color",
+      "borderColor",
+      "bgColor",
+      "icon",
+      "leader",
+      "specialization",
+      "description",
+      "history",
+      "currentStatus",
     ] as const
     for (const civ of TOP_CIVILIZATIONS) {
       for (const field of requiredFields) {
@@ -94,13 +103,13 @@ describe("TOP_CIVILIZATIONS", () => {
    ═══════════════════════════════════════════ */
 describe("CivilizationRepository", () => {
   it("findById returns civilization for valid ID", () => {
-    const result = CivilizationRepository.findById("granbell")
+    const result = CivilizationRepository.findById("granbell" as CivilizationId)
     expect(result).toBeDefined()
     expect(result!.name).toBe("グランベル")
   })
 
   it("findById returns undefined for non-existent ID", () => {
-    expect(CivilizationRepository.findById("nonexistent")).toBeUndefined()
+    expect(CivilizationRepository.findById("nonexistent" as CivilizationId)).toBeUndefined()
   })
 
   it("getAll returns all civilizations", () => {

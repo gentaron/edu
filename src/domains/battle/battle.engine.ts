@@ -3,7 +3,13 @@
  * These functions take inputs and return outputs without depending on Zustand state.
  */
 
-import { type GameCard, type Enemy, type AbilityType, type FieldChar, type EffectType, EffectType as ET } from "@/types"
+import {
+  type GameCard,
+  type Enemy,
+  type FieldChar,
+  type EffectType,
+  EffectType as ET,
+} from "@/types"
 
 /* ── HP Calculation ── */
 
@@ -20,7 +26,7 @@ import { type GameCard, type Enemy, type AbilityType, type FieldChar, type Effec
  * // → 19 (14 + 5)
  */
 export function charMaxHp(card: GameCard): number {
-  const base = card.rarity === "SR" ? 14 : (card.rarity === "R" ? 10 : 8)
+  const base = card.rarity === "SR" ? 14 : card.rarity === "R" ? 10 : 8
   return base + card.defense
 }
 
@@ -123,7 +129,9 @@ export function calculatePhaseTransition(
 ): PhaseTransitionResult {
   let newPhase = 0
   for (let i = enemy.phases.length - 1; i >= 0; i--) {
-    if (hpPercent <= enemy.phases[i]!.triggerHpPercent && i >= newPhase) {newPhase = i + 1}
+    if (hpPercent <= enemy.phases[i]!.triggerHpPercent && i >= newPhase) {
+      newPhase = i + 1
+    }
   }
 
   if (newPhase <= currentPhase) {
@@ -246,7 +254,10 @@ export function calculateEffectDamage(
       const heal = val
       const shield = Math.max(1, Math.floor(val * 0.7))
       return {
-        damage: 0, heal, shield, attackReduction: 0,
+        damage: 0,
+        heal,
+        shield,
+        attackReduction: 0,
         log: `✨ ${cardName}の${eff}！ ${cardName}のHP${heal}回復＋シールド+${shield}`,
       }
     }
@@ -266,11 +277,15 @@ export function calculateEffectDamage(
         : `✨ ${cardName}の効果！ シールド+${shield}！（ダメージは吸収）`
       return { damage, heal: 0, shield, attackReduction: 0, log }
     }
-    case ET.HEAL:
+    case ET.HEAL: {
       return {
-        damage: 0, heal: val, shield: 0, attackReduction: 0,
+        damage: 0,
+        heal: val,
+        shield: 0,
+        attackReduction: 0,
         log: `✨ ${cardName}の${eff}！ ${cardName}のHP${val}回復！`,
       }
+    }
     case ET.DAMAGE: {
       const damage = canDamage ? val : 0
       const log = canDamage
@@ -278,16 +293,24 @@ export function calculateEffectDamage(
         : `✨ ${cardName}の効果…虚無に吸収された！`
       return { damage, heal: 0, shield: 0, attackReduction: 0, log }
     }
-    case ET.SHIELD:
+    case ET.SHIELD: {
       return {
-        damage: 0, heal: 0, shield: val, attackReduction: 0,
+        damage: 0,
+        heal: 0,
+        shield: val,
+        attackReduction: 0,
         log: `✨ ${cardName}の${eff}！ シールド+${val}！`,
       }
-    case ET.ATTACK_REDUCTION:
+    }
+    case ET.ATTACK_REDUCTION: {
       return {
-        damage: 0, heal: 0, shield: 0, attackReduction: val,
+        damage: 0,
+        heal: 0,
+        shield: 0,
+        attackReduction: val,
         log: `✨ ${cardName}の${eff}！ 敵の攻撃力-${val}！`,
       }
+    }
     case ET.SPECIAL_PANDICT: {
       const damage = canDamage ? 5 : 0
       const heal = 3
@@ -296,29 +319,33 @@ export function calculateEffectDamage(
         : `✨ 次元階梯パンディクト展開！ ${cardName}のHP3回復！（ダメージは吸収）`
       return { damage, heal, shield: 0, attackReduction: 0, log }
     }
-    case ET.HEAL_DAMAGE:
-      // Same as DAMAGE_HEAL but heal is primary (used by jun card)
-      {
-        const heal = Math.max(1, Math.floor(val * 0.5))
-        const damage = canDamage ? Math.max(1, Math.floor(val * 0.4)) : 0
-        const log = canDamage
-          ? `✨ ${cardName}の${eff}！ 敵に${damage}ダメージ＋${cardName}のHP${heal}回復！`
-          : `✨ ${cardName}の効果！ ${cardName}のHP${heal}回復！（ダメージは吸収）`
-        return { damage, heal, shield: 0, attackReduction: 0, log }
-      }
-    case ET.HEAL_SHIELD:
+    case ET.HEAL_DAMAGE: // Same as DAMAGE_HEAL but heal is primary (used by jun card)
+    {
+      const heal = Math.max(1, Math.floor(val * 0.5))
+      const damage = canDamage ? Math.max(1, Math.floor(val * 0.4)) : 0
+      const log = canDamage
+        ? `✨ ${cardName}の${eff}！ 敵に${damage}ダメージ＋${cardName}のHP${heal}回復！`
+        : `✨ ${cardName}の効果！ ${cardName}のHP${heal}回復！（ダメージは吸収）`
+      return { damage, heal, shield: 0, attackReduction: 0, log }
+    }
+    case ET.HEAL_SHIELD: {
       return {
-        damage: 0, heal: val, shield: Math.max(1, Math.floor(val * 0.7)), attackReduction: 0,
+        damage: 0,
+        heal: val,
+        shield: Math.max(1, Math.floor(val * 0.7)),
+        attackReduction: 0,
         log: `✨ ${cardName}の${eff}！ ${cardName}のHP${val}回復＋シールド+${Math.max(1, Math.floor(val * 0.7))}！`,
       }
+    }
     default: {
-      // Fallback: treat unknown as heal
-      return {
-        damage: 0, heal: val, shield: 0, attackReduction: 0,
-        log: `✨ ${cardName}の${eff}！ ${cardName}のHP${val}回復！`,
-      }
+      return exhaustiveCheck(effectType)
     }
   }
+}
+
+/** Runtime exhaustive check — should never be reached if all enum values are handled. */
+function exhaustiveCheck(_type: never): never {
+  throw new Error(`Unhandled EffectType: ${String(_type)}`)
 }
 
 /* ── Enemy Damage Calculation ── */

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest"
 import { useDeckStore } from "@/domains/cards/cards.store"
 import { eventBus } from "@/platform/event-bus"
 import type { GameCard } from "@/types"
+import type { CardId } from "@/platform/schemas/branded"
 
 // Mock the event bus to avoid side effects in tests
 vi.mock("@/platform/event-bus", () => ({
@@ -14,7 +15,7 @@ vi.mock("@/platform/event-bus", () => ({
 }))
 
 const makeCard = (id: string, overrides?: Partial<GameCard>): GameCard => ({
-  id,
+  id: id as CardId,
   name: `Card ${id}`,
   imageUrl: `/card-${id}.png`,
   flavorText: `Flavor for ${id}`,
@@ -23,6 +24,7 @@ const makeCard = (id: string, overrides?: Partial<GameCard>): GameCard => ({
   attack: 10,
   defense: 5,
   effect: "Heal",
+  effectType: "HEAL" as const,
   effectValue: 3,
   ultimate: 20,
   ultimateName: "Ultimate",
@@ -83,6 +85,7 @@ describe("useDeckStore", () => {
 
     it("publishes deck:card-added event", () => {
       useDeckStore.getState().addCard(makeCard("card-1"))
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(eventBus.publish).toHaveBeenCalledWith(
         expect.objectContaining({ type: "deck:card-added", cardId: "card-1" })
       )
@@ -94,25 +97,26 @@ describe("useDeckStore", () => {
     it("removes a card from the deck", () => {
       useDeckStore.getState().addCard(makeCard("card-1"))
       useDeckStore.getState().addCard(makeCard("card-2"))
-      useDeckStore.getState().removeCard("card-1")
+      useDeckStore.getState().removeCard("card-1" as CardId)
       expect(useDeckStore.getState().deck).toHaveLength(1)
       expect(useDeckStore.getState().deck[0]!.id).toBe("card-2")
     })
 
     it("handles removing non-existent card gracefully", () => {
       useDeckStore.getState().addCard(makeCard("card-1"))
-      useDeckStore.getState().removeCard("nonexistent")
+      useDeckStore.getState().removeCard("nonexistent" as CardId)
       expect(useDeckStore.getState().deck).toHaveLength(1)
     })
 
     it("handles removing from empty deck gracefully", () => {
-      useDeckStore.getState().removeCard("card-1")
+      useDeckStore.getState().removeCard("card-1" as CardId)
       expect(useDeckStore.getState().deck).toHaveLength(0)
     })
 
     it("publishes deck:card-removed event", () => {
       useDeckStore.getState().addCard(makeCard("card-1"))
-      useDeckStore.getState().removeCard("card-1")
+      useDeckStore.getState().removeCard("card-1" as CardId)
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(eventBus.publish).toHaveBeenCalledWith(
         expect.objectContaining({ type: "deck:card-removed", cardId: "card-1" })
       )
@@ -170,6 +174,7 @@ describe("useDeckStore", () => {
       useDeckStore.getState().addCard(makeCard("card-1"))
       useDeckStore.getState().addCard(makeCard("card-2"))
       useDeckStore.getState().moveCard(0, 1)
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(eventBus.publish).toHaveBeenCalledWith(
         expect.objectContaining({ type: "deck:reordered" })
       )
@@ -193,6 +198,7 @@ describe("useDeckStore", () => {
     it("publishes deck:cleared event", () => {
       useDeckStore.getState().addCard(makeCard("card-1"))
       useDeckStore.getState().clearDeck()
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(eventBus.publish).toHaveBeenCalledWith({ type: "deck:cleared" })
     })
   })
@@ -234,16 +240,16 @@ describe("useDeckStore", () => {
   describe("isCardInDeck", () => {
     it("returns true for card in deck", () => {
       useDeckStore.getState().addCard(makeCard("card-1"))
-      expect(useDeckStore.getState().isCardInDeck("card-1")).toBe(true)
+      expect(useDeckStore.getState().isCardInDeck("card-1" as CardId)).toBe(true)
     })
 
     it("returns false for card not in deck", () => {
       useDeckStore.getState().addCard(makeCard("card-1"))
-      expect(useDeckStore.getState().isCardInDeck("card-2")).toBe(false)
+      expect(useDeckStore.getState().isCardInDeck("card-2" as CardId)).toBe(false)
     })
 
     it("returns false for empty deck", () => {
-      expect(useDeckStore.getState().isCardInDeck("card-1")).toBe(false)
+      expect(useDeckStore.getState().isCardInDeck("card-1" as CardId)).toBe(false)
     })
   })
 

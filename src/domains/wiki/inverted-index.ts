@@ -50,8 +50,12 @@ export interface SearchOptions {
  */
 export function bigramTokenize(text: string): string[] {
   const normalized = text.toUpperCase()
-  if (normalized.length === 0) {return []}
-  if (normalized.length === 1) {return [normalized]}
+  if (normalized.length === 0) {
+    return []
+  }
+  if (normalized.length === 1) {
+    return [normalized]
+  }
   const grams: string[] = []
   // Use Array.from to correctly handle surrogate pairs (emoji, rare CJK)
   const chars = [...normalized]
@@ -95,7 +99,9 @@ export function bm25Score(
   k1: number = DEFAULT_K1,
   b: number = DEFAULT_B
 ): number {
-  if (totalDocs === 0 || avgDocLength === 0) {return 0}
+  if (totalDocs === 0 || avgDocLength === 0) {
+    return 0
+  }
 
   const idf = Math.log(1 + (totalDocs - df + 0.5) / (df + 0.5))
   const numerator = tf * (k1 + 1)
@@ -130,7 +136,9 @@ export function generateSnippet(
   if (matchIndex === -1) {
     // Fallback: try matching individual query words
     const queryWords = wordTokenize(query)
-    if (queryWords.length === 0) {return content.slice(0, contextLength)}
+    if (queryWords.length === 0) {
+      return content.slice(0, contextLength)
+    }
 
     let bestIndex = -1
     for (const word of queryWords) {
@@ -140,7 +148,9 @@ export function generateSnippet(
       }
     }
 
-    if (bestIndex === -1) {return content.slice(0, contextLength)}
+    if (bestIndex === -1) {
+      return content.slice(0, contextLength)
+    }
 
     // Highlight individual words
     return highlightWords(content, queryWords, bestIndex, contextLength)
@@ -151,8 +161,12 @@ export function generateSnippet(
   let start = matchIndex - half
   let end = matchIndex + lowerQuery.length + half
 
-  if (start < 0) {start = 0}
-  if (end > content.length) {end = content.length}
+  if (start < 0) {
+    start = 0
+  }
+  if (end > content.length) {
+    end = content.length
+  }
 
   // Adjust start to word boundary
   if (start > 0) {
@@ -200,16 +214,24 @@ function highlightWords(
   let start = anchorIndex - half
   let end = anchorIndex + half
 
-  if (start < 0) {start = 0}
-  if (end > content.length) {end = content.length}
+  if (start < 0) {
+    start = 0
+  }
+  if (end > content.length) {
+    end = content.length
+  }
 
   if (start > 0) {
     const spaceIdx = content.indexOf(" ", start)
-    if (spaceIdx !== -1 && spaceIdx < start + 20) {start = spaceIdx + 1}
+    if (spaceIdx !== -1 && spaceIdx < start + 20) {
+      start = spaceIdx + 1
+    }
   }
   if (end < content.length) {
     const spaceIdx = content.lastIndexOf(" ", end)
-    if (spaceIdx !== -1 && spaceIdx > end - 20) {end = spaceIdx}
+    if (spaceIdx !== -1 && spaceIdx > end - 20) {
+      end = spaceIdx
+    }
   }
 
   const prefix = start > 0 ? "..." : ""
@@ -247,7 +269,9 @@ export class Trie {
 
   /** Insert a word and associate it with a document. */
   insert(word: string, docId: string): void {
-    if (word.length === 0) {return}
+    if (word.length === 0) {
+      return
+    }
     const chars = [...word]
     let node = this.root
 
@@ -269,7 +293,9 @@ export class Trie {
 
   /** Exact-match lookup: returns the docIds associated with the word, or an empty array. */
   search(word: string): string[] {
-    if (word.length === 0) {return []}
+    if (word.length === 0) {
+      return []
+    }
     const node = this._traverse(word)
     return node ? [...node.docIds] : []
   }
@@ -277,7 +303,9 @@ export class Trie {
   /** Returns all completions for a given prefix, each with its associated docIds. */
   searchPrefix(prefix: string): Array<{ word: string; docIds: string[] }> {
     const startNode = this._traverse(prefix)
-    if (!startNode) {return []}
+    if (!startNode) {
+      return []
+    }
 
     const results: Array<{ word: string; docIds: string[] }> = []
     this._collectAll(startNode, prefix, results)
@@ -297,14 +325,18 @@ export class Trie {
    */
   getCompletions(prefix: string, limit = 10): string[] {
     const startNode = this._traverse(prefix)
-    if (!startNode) {return []}
+    if (!startNode) {
+      return []
+    }
 
     const candidates: Array<{ word: string; frequency: number }> = []
     this._collectEndWords(startNode, prefix, candidates)
 
     // Sort by frequency descending, then alphabetically
     candidates.sort((a, b) => {
-      if (b.frequency !== a.frequency) {return b.frequency - a.frequency}
+      if (b.frequency !== a.frequency) {
+        return b.frequency - a.frequency
+      }
       return a.word.localeCompare(b.word)
     })
 
@@ -318,7 +350,9 @@ export class Trie {
     let node = this.root
     for (const ch of chars) {
       const child = node.children.get(ch)
-      if (!child) {return null}
+      if (!child) {
+        return null
+      }
       node = child
     }
     return node
@@ -437,12 +471,14 @@ export class InvertedIndex {
   /** Remove a document from the index by ID. */
   removeDocument(id: string): void {
     const doc = this.documents.get(id)
-    if (!doc) {return}
+    if (!doc) {
+      return
+    }
 
     // Remove from all posting lists that reference this doc
     const tokensToRemove: string[] = []
     for (const [token, pl] of this.postings) {
-      const before = pl.postings.length
+      const _before = pl.postings.length
       pl.postings = pl.postings.filter((p) => p.docId !== id)
       pl.df = pl.postings.length
       if (pl.postings.length === 0) {
@@ -478,7 +514,9 @@ export class InvertedIndex {
   search(query: string, options: SearchOptions = {}): SearchResult[] {
     const { limit = 20, category, offset = 0, minScore = 0 } = options
 
-    if (query.trim().length === 0) {return []}
+    if (query.trim().length === 0) {
+      return []
+    }
 
     const queryWords = wordTokenize(query)
     const queryBigrams = bigramTokenize(query)
@@ -491,15 +529,21 @@ export class InvertedIndex {
 
     for (const token of allTokens) {
       const pl = this.postings.get(token)
-      if (!pl) {continue}
+      if (!pl) {
+        continue
+      }
 
       for (const posting of pl.postings) {
         const docId = posting.docId
         const doc = this.documents.get(docId)
-        if (!doc) {continue}
+        if (!doc) {
+          continue
+        }
 
         // Category filter
-        if (category && doc.category !== category) {continue}
+        if (category && doc.category !== category) {
+          continue
+        }
 
         const docLength = this.docLengths.get(docId) ?? 0
         const score = bm25Score(posting.tf, pl.df, this.totalDocs, docLength, this.avgDocLength)
@@ -514,10 +558,14 @@ export class InvertedIndex {
     // Build results, sort by score descending
     const results: SearchResult[] = []
     for (const [docId, score] of scores) {
-      if (score < minScore) {continue}
+      if (score < minScore) {
+        continue
+      }
 
       const doc = this.documents.get(docId)
-      if (!doc) {continue}
+      if (!doc) {
+        continue
+      }
 
       results.push({
         id: docId,
@@ -547,7 +595,9 @@ export class InvertedIndex {
   getTermFrequency(term: string): number {
     const normalized = term.toLowerCase()
     const pl = this.postings.get(normalized)
-    if (!pl) {return 0}
+    if (!pl) {
+      return 0
+    }
     return pl.postings.reduce((sum, p) => sum + p.tf, 0)
   }
 

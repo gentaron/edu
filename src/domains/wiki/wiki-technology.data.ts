@@ -1,9 +1,9 @@
-import type { WikiEntry } from "@/types"
+import type { WikiId, WikiEntry } from "@/types"
 
 export const WIKI_TECHNOLOGY = [
   /* 技術・概念 */
   {
-    id: "次元極地平",
+    id: "次元極地平" as WikiId,
     name: "次元極地平",
     nameEn: "Dimension Horizon",
     category: "技術",
@@ -13,7 +13,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ペルセポネ",
+    id: "ペルセポネ" as WikiId,
     name: "ペルセポネ",
     nameEn: "Persephone",
     category: "技術",
@@ -23,7 +23,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "リミナル・フォージ",
+    id: "リミナル・フォージ" as WikiId,
     name: "リミナル・フォージ",
     category: "技術",
     subCategory: "技術・概念",
@@ -33,7 +33,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "Genesis_Vault",
+    id: "Genesis_Vault" as WikiId,
     name: "ジェネシス・ヴォールト",
     nameEn: "Genesis Vault",
     category: "技術",
@@ -43,7 +43,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ホライゾン・ゲート",
+    id: "ホライゾン・ゲート" as WikiId,
     name: "ホライゾン・ゲート",
     nameEn: "Horizon Gate",
     category: "技術",
@@ -53,7 +53,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "次元階梯パンディクト",
+    id: "次元階梯パンディクト" as WikiId,
     name: "次元階梯パンディクト",
     nameEn: "Pandict Dimension Ladder",
     category: "技術",
@@ -63,7 +63,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "リーチ・ドレイン",
+    id: "リーチ・ドレイン" as WikiId,
     name: "リーチ・ドレイン",
     nameEn: "Leechdrain",
     category: "技術",
@@ -74,7 +74,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* 技術・概念（追加） */
   {
-    id: "Apolonium",
+    id: "Apolonium" as WikiId,
     name: "アポロニウム",
     nameEn: "Apolonium",
     category: "技術",
@@ -84,7 +84,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "クロノキャスト",
+    id: "クロノキャスト" as WikiId,
     name: "クロノキャスト",
     nameEn: "Chronocast",
     category: "技術",
@@ -94,7 +94,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "クオリア・コア",
+    id: "クオリア・コア" as WikiId,
     name: "クオリア・コア",
     nameEn: "Qualia Core",
     category: "技術",
@@ -104,7 +104,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "オルタ・フィールド",
+    id: "オルタ・フィールド" as WikiId,
     name: "オルタ・フィールド",
     nameEn: "Altera Field",
     category: "技術",
@@ -114,7 +114,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "オムニバス・エンジン",
+    id: "オムニバス・エンジン" as WikiId,
     name: "オムニバス・エンジン",
     nameEn: "Omnibus Engine",
     category: "技術",
@@ -124,7 +124,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "クロマ・アーカイブ",
+    id: "クロマ・アーカイブ" as WikiId,
     name: "クロマ・アーカイブ",
     nameEn: "Chroma Archive",
     category: "技術",
@@ -134,7 +134,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "セル・ウィーヴ",
+    id: "セル・ウィーヴ" as WikiId,
     name: "セル・ウィーヴ",
     nameEn: "Cell Weave",
     category: "技術",
@@ -144,7 +144,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ナノハッキング技術",
+    id: "ナノハッキング技術" as WikiId,
     name: "ナノハッキング技術",
     nameEn: "Nano-Hacking Technology",
     category: "技術",
@@ -154,7 +154,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "搾取触手",
+    id: "搾取触手" as WikiId,
     name: "搾取触手",
     nameEn: "Extraction Tentacle",
     category: "技術",
@@ -164,7 +164,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "搾取ヒル",
+    id: "搾取ヒル" as WikiId,
     name: "搾取ヒル",
     nameEn: "Extraction Leech",
     category: "技術",
@@ -174,7 +174,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "搾取バクテリア",
+    id: "搾取バクテリア" as WikiId,
     name: "搾取バクテリア",
     nameEn: "Extraction Bacteria",
     category: "技術",
@@ -184,7 +184,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "搾取プラズマ弾",
+    id: "搾取プラズマ弾" as WikiId,
     name: "搾取プラズマ弾",
     nameEn: "Extraction Plasma Shell",
     category: "技術",
@@ -194,7 +194,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ナノメディシン",
+    id: "ナノメディシン" as WikiId,
     name: "ナノメディシン",
     nameEn: "Nanomedicine",
     category: "技術",
@@ -204,7 +204,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ナノファイバーブーツ",
+    id: "ナノファイバーブーツ" as WikiId,
     name: "ナノファイバーブーツ",
     nameEn: "Nanofiber Boots",
     category: "技術",
@@ -214,7 +214,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "強化グローブ",
+    id: "強化グローブ" as WikiId,
     name: "強化グローブ",
     nameEn: "Power Glove",
     category: "技術",
@@ -224,7 +224,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "プラズマカノン",
+    id: "プラズマカノン" as WikiId,
     name: "プラズマカノン",
     nameEn: "Plasma Cannon",
     category: "技術",
@@ -234,7 +234,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ビキニバリア",
+    id: "ビキニバリア" as WikiId,
     name: "ビキニバリア",
     nameEn: "Bikini Barrier",
     category: "技術",
@@ -244,7 +244,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "カウパー波",
+    id: "カウパー波" as WikiId,
     name: "カウパー波",
     nameEn: "Couper Wave",
     category: "技術",
@@ -254,7 +254,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ニューロリンク・インターフェース",
+    id: "ニューロリンク・インターフェース" as WikiId,
     name: "ニューロリンク・インターフェース",
     nameEn: "Neurolink Interface",
     category: "技術",
@@ -264,7 +264,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "量子演算コア",
+    id: "量子演算コア" as WikiId,
     name: "量子演算コア",
     nameEn: "Quantum Computing Core",
     category: "技術",
@@ -274,7 +274,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "曲率航法",
+    id: "曲率航法" as WikiId,
     name: "曲率航法",
     nameEn: "Warp Navigation",
     category: "技術",
@@ -284,7 +284,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "量子テレポーテーション",
+    id: "量子テレポーテーション" as WikiId,
     name: "量子テレポーテーション",
     nameEn: "Quantum Teleportation",
     category: "技術",
@@ -294,7 +294,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "重力崩壊弾頭",
+    id: "重力崩壊弾頭" as WikiId,
     name: "重力崩壊弾頭",
     nameEn: "Gravity Collapse Warhead",
     category: "技術",
@@ -304,7 +304,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "次元兵器",
+    id: "次元兵器" as WikiId,
     name: "次元兵器",
     nameEn: "Dimension Weapon",
     category: "技術",
@@ -314,7 +314,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ディメンション・ブリッジ",
+    id: "ディメンション・ブリッジ" as WikiId,
     name: "ディメンション・ブリッジ",
     nameEn: "Dimension Bridge",
     category: "技術",
@@ -324,7 +324,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "バイオリアクター",
+    id: "バイオリアクター" as WikiId,
     name: "バイオリアクター",
     nameEn: "Bioreactor",
     category: "技術",
@@ -334,7 +334,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ブラックダイス",
+    id: "ブラックダイス" as WikiId,
     name: "ブラックダイス",
     nameEn: "Black Dice",
     category: "技術",
@@ -344,7 +344,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ブルーワイヤ",
+    id: "ブルーワイヤ" as WikiId,
     name: "ブルーワイヤ",
     nameEn: "Blue Wire",
     category: "技術",
@@ -354,7 +354,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ウォーター・オーブ",
+    id: "ウォーター・オーブ" as WikiId,
     name: "ウォーター・オーブ",
     nameEn: "Water Orb",
     category: "技術",
@@ -364,7 +364,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "エスパー能力",
+    id: "エスパー能力" as WikiId,
     name: "エスパー能力",
     nameEn: "Esper Ability",
     category: "技術",
@@ -374,7 +374,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "10次元ホラズム理論",
+    id: "10次元ホラズム理論" as WikiId,
     name: "10次元ホラズム理論",
     nameEn: "10-Dimensional Horasm Theory",
     category: "技術",
@@ -384,7 +384,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "マルチバース開拓",
+    id: "マルチバース開拓" as WikiId,
     name: "マルチバース開拓",
     nameEn: "Multiverse Exploration",
     category: "技術",
@@ -394,7 +394,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "レーン",
+    id: "レーン" as WikiId,
     name: "レーン・システム",
     nameEn: "Lane System",
     category: "技術",
@@ -404,7 +404,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "クアンタ",
+    id: "クアンタ" as WikiId,
     name: "クアンタ・ラボ",
     nameEn: "Quanta Lab",
     category: "技術",
@@ -414,7 +414,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "プロトコルX",
+    id: "プロトコルX" as WikiId,
     name: "プロトコルX",
     nameEn: "Protocol X",
     category: "技術",
@@ -424,7 +424,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "カタリスト・コア",
+    id: "カタリスト・コア" as WikiId,
     name: "カタリスト・コア",
     nameEn: "Catalyst Core",
     category: "技術",
@@ -434,7 +434,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "伴共役",
+    id: "伴共役" as WikiId,
     name: "伴共役",
     nameEn: "Ban-Kyōyaku",
     category: "技術",
@@ -444,7 +444,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "クリストッフェル次元",
+    id: "クリストッフェル次元" as WikiId,
     name: "クリストッフェル次元",
     nameEn: "Christoffel Dimension",
     category: "技術",
@@ -458,7 +458,7 @@ export const WIKI_TECHNOLOGY = [
      ═══════════════════════════════════════════════════════════════ */
 
   {
-    id: "プロキオ・クリア",
+    id: "プロキオ・クリア" as WikiId,
     name: "プロキオ・クリア",
     nameEn: "Prokio Clear",
     category: "技術",
@@ -468,7 +468,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "G4ファントムパルス",
+    id: "G4ファントムパルス" as WikiId,
     name: "G4ファントムパルス",
     nameEn: "G4 Phantom Pulse",
     category: "技術",
@@ -478,7 +478,7 @@ export const WIKI_TECHNOLOGY = [
   },
 
   {
-    id: "ケンタウロスレーザー",
+    id: "ケンタウロスレーザー" as WikiId,
     name: "ケンタウロスレーザー",
     nameEn: "Centaur Laser",
     category: "技術",
@@ -495,7 +495,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Propulsion (5) --- */
   {
-    id: "tech-antimatter-engine",
+    id: "tech-antimatter-engine" as WikiId,
     name: "反物質エンジン",
     nameEn: "Antimatter Engine",
     category: "技術",
@@ -504,7 +504,7 @@ export const WIKI_TECHNOLOGY = [
       "物質と反物質の対消滅反応をエネルギー源とする推進システムであり、アインシュタインの質量エネルギー等価性 E=mc² に従い、反物質の全質量をエネルギーに変換する理論上の最高効率を誇る。陽電子と電子の対消滅、または反陽子と陽子の対消滅によってガンマ線とニュートリノを放出し、このガンマ線を磁気鏡で反射・収束させることで推力を得る。反物質の貯蔵にはペニングトラップを用いた磁気閉じ込めが必要であり、真空容器内の超伝導磁石が反物質プラズマを浮上させて容器壁との接触による対消滅を防ぐ。E16文明圏においては大型宇宙船の主推進機として採用されているが、反物質の生産コストが極めて高く、粒子加速器での反物質生成効率の向上が持続的な技術課題となっている。反物質エンジンの安全性管理は厳格であり、偶発的な対消滅による爆発は核兵器に匹敵する破壊力を持つため、多層的な安全装置が義務付けられている。",
   },
   {
-    id: "tech-solar-sail",
+    id: "tech-solar-sail" as WikiId,
     name: "太陽帆推進",
     nameEn: "Solar Sail Propulsion",
     category: "技術",
@@ -513,7 +513,7 @@ export const WIKI_TECHNOLOGY = [
       "太陽光や恒星からの輻射圧を推力として利用する推進方式であり、光子が持つ運動量を反射面で受けることで得られる微小な推力を長期間蓄積して加速する。帆の材質には厚さ数ナノメートルのカーボンナノチューブ薄膜や反射率の高い金属蒸着膜が使用され、1平方キロメートルの帆面積で太陽附近において約6ニュートンの推力を得ることができる。太陽帆推進の最大の利点は推進剤を搭載する必要がないことであり、ロケット方程式における質量比の制約から解放される。E16文明圏では短距離の貨物輸送や深宇宙探査機の初期加速に広く利用されており、恒星の重力レンズ効果を利用した加速軌道との組み合わせにより、亜光速域への到達が理論的に可能となっている。帆の展開機構と微小隕石に対する自己修復機能が技術的な課題である。",
   },
   {
-    id: "tech-warp-drive",
+    id: "tech-warp-drive" as WikiId,
     name: "空間歪曲推進",
     nameEn: "Space Warp Drive",
     category: "技術",
@@ -522,7 +522,7 @@ export const WIKI_TECHNOLOGY = [
       "一般相対性理論のアインシュタイン方程式における Alcubierre解を工学的に実装し、宇宙船の周囲に時空の歪曲バブルを形成して超光速移動を実現する推進技術である。船体前方の空間を圧縮し後方の空間を膨張させることで、船体そのものは局所的に光速未満のまま、実効的な超光速移動を達成する。空間歪曲の形成には負のエネルギー密度を持つエキゾチック物質が必要であり、カシミール効果や量子真空の零点エネルギーを利用した負エネルギー生成が技術的核心となっている。曲率航法の次世代発展型として位置づけられ、従来の曲率航法より大きな速度域と効率を実現している。空間歪曲バブルの形成と解除に伴う時空の波紋が周辺の天体に影響を与える可能性があり、居住惑星からの安全距離での起動が規制されている。",
   },
   {
-    id: "tech-ion-thruster",
+    id: "tech-ion-thruster" as WikiId,
     name: "イオンスラスター",
     nameEn: "Ion Thruster",
     category: "技術",
@@ -531,7 +531,7 @@ export const WIKI_TECHNOLOGY = [
       "荷電粒子を電界によって加速して推力を得る電気推進方式であり、キセノンやアルゴンなどの希ガスをイオン化して電磁加速器で高速に噴射する。推力は化学ロケットに比べて極めて小さいが、比推力が化学ロケットの10倍以上に達し、長期間の連続稼働によって最終的に化学ロケットを上回る速度增量を実現する。ホール効果スラスターと磁気プラズマ力学（MPD）スラスターの二つの主流方式があり、E16文明圏では軌道間輸送船や惑星間探査機の推進機として標準的に採用されている。イオンスラスターの効率はプラズマ温度と磁場閉じ込めの性能に依存し、超伝導磁石を用いた高温プラズマの閉じ込め技術の向上が持続的な課題となっている。電源には太陽電池パネルまたは小型の核融合炉が使用される。",
   },
   {
-    id: "tech-gravity-slingshot",
+    id: "tech-gravity-slingshot" as WikiId,
     name: "重力アシスト・スリングショット",
     nameEn: "Gravity Assist Slingshot",
     category: "技術",
@@ -542,7 +542,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Communications (4) --- */
   {
-    id: "tech-quantum-entangle-comm",
+    id: "tech-quantum-entangle-comm" as WikiId,
     name: "量子もつれ通信",
     nameEn: "Quantum Entanglement Communication",
     category: "技術",
@@ -551,7 +551,7 @@ export const WIKI_TECHNOLOGY = [
       "量子もつれの非局所性を利用した超光速通信プロトコルであり、事前に共有された量子もつれペアの測定結果を用いて遠隔地間で同期情報を伝達する。量子テレポーテーションと同様に古典通信チャネルを補助として使用するため、情報の伝達速度は光速を超えないという相対性理論の制約を満たしているが、量子鍵配送の安全性は情報理論的に保証される。E16文明圏では軍事通信と外交暗号において最重要の通信インフラとして位置づけられ、量子もつれペアの遠距離分配には宇宙空間を経由する光通信が利用されている。量子もつれのデコヒーレンスを防ぐための量子エラー訂正符号の性能向上が継続的な課題であり、ロースターのクアンタ・ラボが次世代の大容量量子もつれ通信網の開発を主導している。",
   },
   {
-    id: "tech-gravitational-wave-comm",
+    id: "tech-gravitational-wave-comm" as WikiId,
     name: "重力波通信",
     nameEn: "Gravitational Wave Communication",
     category: "技術",
@@ -560,7 +560,7 @@ export const WIKI_TECHNOLOGY = [
       "一般相対性理論が予言する重力波を情報キャリアとして利用する通信方式であり、電磁波とは異なり物質をほとんど透過する重力波の性質を活かして、惑星内部や恒星の裏側などの電磁波通信が困難な環境での通信を可能にする。重力波の生成には高質量天体の連星回転を人為的に模した回転する非対称質量分布が必要であり、超伝導振動子を用いた小型重力波発生器が開発されている。重力波の検出にはレーザー干渉計を用いた高感度の重力波アンテナが使用され、量子雑音限界に近い感度で微弱な重力波信号を検出する。E16文明圏では海底や地下深部の通信インフラとして実用化が進んでおり、電磁波シールド環境における補完通信手段として機能している。",
   },
   {
-    id: "tech-neutrino-comm",
+    id: "tech-neutrino-comm" as WikiId,
     name: "ニュートリノ通信",
     nameEn: "Neutrino Communication",
     category: "技術",
@@ -569,7 +569,7 @@ export const WIKI_TECHNOLOGY = [
       "標準模型における弱い相互作用を媒介するニュートリノの通信キャリアとしての利用であり、ニュートリノが物質との相互作用断面積が極めて小さいことを活かして、惑星の核心部を貫通するような長距離通信を可能にする。ニュートリノビームの生成には粒子加速器における陽子の標的衝突が使用され、ニュートリノの検出には巨大な水チェレンコフ検出器や液体アルゴン時間投影室が使用される。ニュートリノ通信の最大の課題は検出効率の低さであり、送信されたニュートリノのうち検出される割合は10のマイナス18乗以下と極めて小さい。このため、高出力のニュートリノビーム生成と超低ノイズの検出器開発が技術的な課題となっている。E16文明圏では特殊用途の軍事通信として限定的に実用化されており、恒星間距離の緊急通信のバックアップチャネルとしての役割が期待されている。",
   },
   {
-    id: "tech-dimensional-comm",
+    id: "tech-dimensional-comm" as WikiId,
     name: "次元穿越通信",
     nameEn: "Dimensional Transit Communication",
     category: "技術",
@@ -580,7 +580,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Energy (5) --- */
   {
-    id: "tech-fusion-reactor",
+    id: "tech-fusion-reactor" as WikiId,
     name: "核融合炉",
     nameEn: "Fusion Reactor",
     category: "技術",
@@ -589,7 +589,7 @@ export const WIKI_TECHNOLOGY = [
       "軽元素の原子核融合反応からエネルギーを抽出する発電システムであり、太陽を含む恒星のエネルギー生成メカニズムを地球上で人為的に再現したものである。E16文明圏では磁気閉じ込め方式のトカマク型核融合炉と慣性閉じ込め方式のレーザー核融合炉の二つの主流方式が併用されている。トカマク型は超伝導磁石によって高温プラズマをドーナツ形状に磁気閉じ込め、重水素と三重水素のD-T反応により約1億度のプラズマ温度を維持して発電する。レーザー型は高パワー レーザーを燃料ペレットに集光照射し、慣性閉じ込めによる爆縮で融合反応を誘発する。核融合炉は反応生成物としてヘリウムを排出するのみで温室効果ガスを発生せず、燃料の重水素は海水中に豊富に存在するため、E16文明圏における主力エネルギー源として機能している。",
   },
   {
-    id: "tech-antimatter-power",
+    id: "tech-antimatter-power" as WikiId,
     name: "反物質発電",
     nameEn: "Antimatter Power Generation",
     category: "技術",
@@ -598,7 +598,7 @@ export const WIKI_TECHNOLOGY = [
       "物質と反物質の対消滅反応で発生するエネルギーを電力に変換する発電方式であり、質量の100パーセントがエネルギーに変換される理論上の最高効率を持つ。対消滅で放出される高エネルギーガンマ線を熱電変換素子または磁気流体力学発電機（MHD発電機）で電力に変換する。反物質の貯蔵と輸送にはペニングトラップによる磁気閉じ込めが不可欠であり、反物質プラズマの熱的振動による磁力線からの逸脱を防ぐための精密な制御システムが要求される。E16文明圏では大型宇宙ステーションや軌道工場の主電源として採用されているが、反物質の生産コストが極めて高く、宇宙規模のエネルギーインフラとしては核融合炉が主力である。反物質発電の安全性管理は核融合炉以上に厳格で、偶発的な対消滅のリスクを最小化する多層安全システムが義務付けられている。",
   },
   {
-    id: "tech-vacuum-energy",
+    id: "tech-vacuum-energy" as WikiId,
     name: "真空エネルギー抽出",
     nameEn: "Vacuum Energy Extraction",
     category: "技術",
@@ -607,7 +607,7 @@ export const WIKI_TECHNOLOGY = [
       "量子力学における真空の零点エネルギーを有用なエネルギーとして抽出する技術であり、ハイゼンベルクの不確定性原理に基づき、真空状態でも残存する電磁場の量子ゆらぎ（零点振動）のエネルギーを利用する。カシミール効果として知られる二つの導体板間の引き合い現象は、真空の零点エネルギーの直接的な証拠であり、この効果を応用して微弱ながら実測可能なエネルギー抽出が実証されている。真空エネルギー抽出技術は理論的に膨大なエネルギーを提供する可能性を秘めているが、宇宙定数問題とも関連し、真空エネルギー密度の理論値と観測値の不一致が根本的な課題となっている。E16文明圏ではグランベルが最先端の研究を進めており、超弦理論の余剰次元の真空エネルギー構造を操作する手法の開発に注力している。",
   },
   {
-    id: "tech-dyson-sphere",
+    id: "tech-dyson-sphere" as WikiId,
     name: "ダイソン・スフィア",
     nameEn: "Dyson Sphere",
     category: "技術",
@@ -616,7 +616,7 @@ export const WIKI_TECHNOLOGY = [
       "恒星の全放射エネルギーを捕捉して利用するための巨大構造物であり、物理学者フリーマン・ダイソンが提唱した宇宙文明のエネルギー利用の指標（カルダシェフのスケール Type II）の実現手段である。ダイソン・スフィアは恒星を完全に包囲する球殻構造、または恒星の周囲を巡る密集した衛星群（ダイソン・スウォーム）として構築され、恒星の光度に相当する膨大なエネルギーを電力に変換する。E16文明圏では一部の先進文明がダイソン・スウォームの部分構築を実施しており、太陽電池パネルを組み込んだ自律型衛星を恒星周囲に大量配置してエネルギーを収集している。ダイソン・スフィアの構築には恒星系全体の物質リソースを動員する必要があり、小惑星帯やガス巨星の資源採掘が前提条件となる。構造物の放射冷却と赤外線放射による通信網の構築も技術的な課題である。",
   },
   {
-    id: "tech-zero-point-energy",
+    id: "tech-zero-point-energy" as WikiId,
     name: "ゼロ点エネルギー",
     nameEn: "Zero-Point Energy",
     category: "技術",
@@ -627,7 +627,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Medical (4) --- */
   {
-    id: "tech-nanomachine-therapy",
+    id: "tech-nanomachine-therapy" as WikiId,
     name: "ナノマシン治療",
     nameEn: "Nanomachine Therapy",
     category: "技術",
@@ -636,7 +636,7 @@ export const WIKI_TECHNOLOGY = [
       "ナノスケールの自律型機械を生体内に導入して、細胞レベルでの診断と治療を同時に行う医療技術である。ナノマシンはカーボンナノチューブ骨格にタンパク質センサーと薬剤送達システムを組み込んだ構造を持ち、血流に乗って全身を巡りながら異常細胞を特定して治療薬を局所的に放出する。ナノマシンの動力源は生体内のグルコースの化学エネルギーを利用する生体燃料電池であり、外部からの充電を必要としない。DNAの損傷部位を量子センサーで検出し、酵素を用いた分子レベルの修復を行う機能により、がん細胞の選択的破壊や動脈硬化のプラーク除去などの治療が可能である。E16文明圏ではナノマシン治療は標準的な医療技術として広く普及しており、特にナノメディシンの基盤技術として機能している。",
   },
   {
-    id: "tech-gene-editing",
+    id: "tech-gene-editing" as WikiId,
     name: "遺伝子編集",
     nameEn: "Gene Editing",
     category: "技術",
@@ -645,7 +645,7 @@ export const WIKI_TECHNOLOGY = [
       "CRISPR-Cas9システムをはじめとするゲノム編集技術を高度化し、DNA配列の任意の位置を精密に修復・置換・挿入・削除する医療技術である。量子ドットを用いた高精度な塩基対認識システムと、DNA二重らせんの局所的融解を制御する熱制御機構を組み合わせることで、オフターゲット効果を最小限に抑えた遺伝子編集を実現する。E16文明圏では先天性の遺伝子疾患の根治治療から、宇宙環境への適応を目的とした遺伝子強化まで幅広い応用が進んでいる。特に宇宙放射線に対する耐性向上や、低重力環境での骨密度維持に関連する遺伝子の最適化が宇宙植民地において重要な応用分野となっている。遺伝子編集の倫理的側面については、E16文明圏の生命倫理委員会が厳格なガイドラインを設けており、ヒト生殖細胞系列への遺伝子改変には国際的な同意手続きが義務付けられている。",
   },
   {
-    id: "tech-consciousness-transfer",
+    id: "tech-consciousness-transfer" as WikiId,
     name: "意識転送",
     nameEn: "Consciousness Transfer",
     category: "技術",
@@ -654,7 +654,7 @@ export const WIKI_TECHNOLOGY = [
       "人間の意識と記憶をデジタル情報として抽出し、別の媒体（人工身体や仮想空間）に転送する技術である。意識の物理的基盤が脳内の量子コヒーレント状態にあるという仮説に基づき、ニューロリンク・インターフェースを通じて脳内の全シナプス結合の状態を量子ビットの配列として読み取り、目標媒体に再構築する。意識転送の成功は哲学的な人格同一性の問題を提起しており、「転送された意識は元の意識と同一か」という問いはE16文明圏における最重要の倫理的議論の一つである。クオリア・コア技術との統合により、転送された意識は主観的体験の質的側面を含めて完全に再現されると主張されている。意識転送技術はペルセポネ仮想宇宙での永続的な存在を可能にする一方で、生体からデジタルへの完全移行がもたらす社会的影響の評価が進められている。",
   },
   {
-    id: "tech-cryopreservation",
+    id: "tech-cryopreservation" as WikiId,
     name: "人体冷凍保存",
     nameEn: "Human Cryopreservation",
     category: "技術",
@@ -665,7 +665,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Architecture (4) --- */
   {
-    id: "tech-self-healing-materials",
+    id: "tech-self-healing-materials" as WikiId,
     name: "自己修復材料",
     nameEn: "Self-Healing Materials",
     category: "技術",
@@ -674,7 +674,7 @@ export const WIKI_TECHNOLOGY = [
       "損傷を検知して自律的に修復機能を発揮する先進材料であり、生体組織の創傷治癒プロセスを工学的に模倣したものである。マイクロカプセルに封入された修復剤が亀裂の発生により放出されて化学反応を起こし、ポリマー鎖の再結合によって亀裂を自動的に修復する。また、形状記憶合金を用いた構造材料は熱エネルギーを与えることで変形前の形状に自己復帰し、トポロジカル絶縁体を組み込んだ電子材料は欠陥の発生を自動的に補償して電気的特性を維持する。E16文明圏では宇宙ステーションの外壁、軌道エレベーターのケーブル、居住モジュールの気密壁など、人命に関わる構造物への応用が進んでいる。自己修復機能の耐久性と修復回数の限界が技術的な課題であり、纳米スケールのセンサーネットワークを組み込んだ次世代の材料開発が進められている。",
   },
   {
-    id: "tech-orbital-elevator",
+    id: "tech-orbital-elevator" as WikiId,
     name: "軌道エレベーター",
     nameEn: "Orbital Elevator",
     category: "技術",
@@ -683,7 +683,7 @@ export const WIKI_TECHNOLOGY = [
       "惑星の地表と静止軌道上のステーションをケーブルで接続し、エレベーター式の輸送システムによって地上と宇宙空間の間の低コストな物資・人員輸送を実現する巨大構造物である。軌道エレベーターのケーブルには炭素ナノチューブの超高引張強度が不可欠であり、直径数センチメートルのケーブルで数万トンの張力に耐える必要がある。ケーブルの全長は静止軌道高度（地球の場合約36,000km）の約2倍に達し、重心が静止軌道上に位置するようにカウンターウェイトを配置する。軌道エレベーターの実現により、化学ロケットによる打ち上げコストの数百分の一という極めて低コストでの宇宙輸送が可能となる。E16文明圏では主要な植民惑星に軌道エレベーターの建設が進んでおり、宇宙港機能と物流ハブ機能を統合した複合施設として機能している。",
   },
   {
-    id: "tech-dome-city",
+    id: "tech-dome-city" as WikiId,
     name: "ドーム都市建設",
     nameEn: "Dome City Construction",
     category: "技術",
@@ -692,7 +692,7 @@ export const WIKI_TECHNOLOGY = [
       "大気の維持されていない惑星や衛星の地表に、巨大な透明ドームを構築して人工的な居住環境を創出する都市建設技術である。ドーム構造にはカーボンナノチューブ強化ガラスや透明な形状記憶ポリマーが使用され、微小隕石の衝突や宇宙放射線に対する防御性能を備えている。ドーム内部の大気圧は外界との圧力差による構造的応力をケーブルネットワークで分散し、トポロジカル最適化アルゴリズムによって最小質量で最大強度を実現する設計が行われる。ドーム内の生態系は閉鎖循環型の生命維持システムによって維持され、酸素の生成と二酸化炭素の吸収は光合成微生物と人工藻類の培養槽で行われる。E16文明圏ではテラフォーミングの前段階としてドーム都市が広く建設されており、数百万人規模の人口を収容するメガドームが複数の惑星で稼働している。",
   },
   {
-    id: "tech-orbital-habitat",
+    id: "tech-orbital-habitat" as WikiId,
     name: "軌道ハビタット",
     nameEn: "Orbital Habitat",
     category: "技術",
@@ -703,7 +703,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Military (5) --- */
   {
-    id: "tech-particle-beam-weapon",
+    id: "tech-particle-beam-weapon" as WikiId,
     name: "粒子ビーム砲",
     nameEn: "Particle Beam Weapon",
     category: "技術",
@@ -712,7 +712,7 @@ export const WIKI_TECHNOLOGY = [
       "高エネルギー粒子の指向性ビームを標的に照射して破壊する直接エネルギー兵器であり、粒子加速器の技術を軍事転用したものである。荷電粒子ビーム（陽子や電子）と中性粒子ビーム（中性子）の二つの方式があり、荷電粒子ビームは大気中での電離散乱により到達距離が制限されるが、中性子ビームは物質透過性が高く長距離の攻撃が可能である。粒子ビームの破壊メカニズムは、高エネルギー粒子が標的物質の原子と衝突してカスケード的な二次粒子反応を引き起こし、標的内部で急激な熱エネルギーの堆積と構造的破壊を生じさせる点にある。E16文明圏では宇宙艦隊の主力兵器として搭載され、大質量加速器を必要とするため大型艦船に限定して配備されている。ビームの集束と大気中での減衰の問題が技術的な課題である。",
   },
   {
-    id: "tech-emp-weapon",
+    id: "tech-emp-weapon" as WikiId,
     name: "電磁パルス兵器",
     nameEn: "EMP Weapon",
     category: "技術",
@@ -721,7 +721,7 @@ export const WIKI_TECHNOLOGY = [
       "高強度の電磁パルスを発生させて広範囲の電子機器を破壊または一時的に無効化する兵器であり、核爆発のガンマ線が大気中の分子を電離して生成するコンプトン電子による電磁パルス効果を非核の手段で再現したものである。電磁パルス兵器には爆縮型磁束圧縮発電機（MFCG）を用いたものや、高功率マイクロ波（HPM）を指向性ビームとして照射するものがある。電磁パルスはファラデーケージや電磁シールドで防御可能であるが、E16文明圏の高度な電子機器依存社会においては、広範囲の通信・電力・セル・ウィーヴなどの機能不全が致命的な影響をもたらす。EMP兵器の使用は国際条約で厳しく制限されており、非致死性兵器としての限定的な用途が議論されている。",
   },
   {
-    id: "tech-defense-shield",
+    id: "tech-defense-shield" as WikiId,
     name: "防衛シールド",
     nameEn: "Defense Shield",
     category: "技術",
@@ -730,7 +730,7 @@ export const WIKI_TECHNOLOGY = [
       "宇宙船や都市構造物の周囲にエネルギー障壁を展開して、物理的な攻撃とエネルギービームの両方を防御する技術である。防衛シールドの原理はカシミール効果の応用による負のエネルギー密度の局所的生成と、超伝導磁石による強力な磁場の形成を組み合わせたものである。磁気防御層は荷電粒子ビームとプラズマ兵器をローレンツ力で偏向させ、エネルギー障壁層はレーザーと粒子ビームのエネルギーを吸収・散乱する。シールドの強度は投入エネルギーに比例し、持続的な防御には大規模な電源が必要である。E16文明圏では軍用宇宙艦の標準装備として広く採用されており、都市規模の防衛シールドシステムも主要植民地に配備されている。シールドの有効性は攻撃の周波数とエネルギー密度に依存し、特定の周波数のレーザーに対する脆弱性が技術的な課題である。",
   },
   {
-    id: "tech-kinetic-orbital-strike",
+    id: "tech-kinetic-orbital-strike" as WikiId,
     name: "キネティック軌道打撃",
     nameEn: "Kinetic Orbital Strike",
     category: "技術",
@@ -739,7 +739,7 @@ export const WIKI_TECHNOLOGY = [
       "軌道上から高密度の質量体を地表に落下させ、運動エネルギーの変換による破壊効果を利用する兵器システムである。質量体はタングステンや劣化ウランなどの超高密度金属で構成され、軌道速度（約7.9km/s）と重力加速を組み合わせた着弾速度はマッハ10以上に達する。運動エネルギー E=1/2mv² に基づき、数トンの質量体が核兵器に匹敵する破壊力を発揮し、放射性降下物を伴わない「クリーンな」大量破壊兵器としての特性を持つ。キネティック軌道打撃の照準と投下には軌道力学の精密な計算が必要であり、大気圏再突入時のプラズマ加熱による質量体の溶損を防ぐためのアブレーションシールドが不可欠である。E16文明圏では国際条約によって軌道打撃兵器の保有が厳しく制限されているが、一部の国家による秘密開発の報告が存在する。",
   },
   {
-    id: "tech-stealth-field",
+    id: "tech-stealth-field" as WikiId,
     name: "ステルス・フィールド",
     nameEn: "Stealth Field",
     category: "技術",
@@ -750,7 +750,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- AI (4) --- */
   {
-    id: "tech-quantum-computing",
+    id: "tech-quantum-computing" as WikiId,
     name: "量子コンピューティング",
     nameEn: "Quantum Computing",
     category: "技術",
@@ -759,7 +759,7 @@ export const WIKI_TECHNOLOGY = [
       "量子ビット（qubit）の重ね合わせと量子もつれを利用して、古典コンピュータでは実用的な時間内に解けない問題を効率的に計算する次世代計算パラダイムである。超伝導量子ビット、イオントラップ、光量子ビットなどの物理的実現方式が研究されており、E16文明圏では超伝導トランスモン量子ビットが主流として採用されている。量子コンピューティングの計算能力は量子ビット数に対して指数関数的に増大し、Shorのアルゴリズムによる素因数分解やGroverのアルゴリズムによるデータベース探索において古典コンピュータを圧倒する性能を示す。量子誤り訂正符号（表面符号や色符号）の実装により、環境ノイズによるデコヒーレンスの影響を補償し、大規模な量子計算の信頼性を確保している。E16文明圏のあらゆる分野に量子コンピューティングが浸透しており、材料科学、暗号解読、金融工学、薬剤設計などで革命的な進歩をもたらしている。",
   },
   {
-    id: "tech-neural-interface",
+    id: "tech-neural-interface" as WikiId,
     name: "ニューラルインターフェース",
     nameEn: "Neural Interface",
     category: "技術",
@@ -768,7 +768,7 @@ export const WIKI_TECHNOLOGY = [
       "人間の神経系とデジタルシステムを直接的に接続する技術であり、脳内のニューロン活動を高精度に読み取り、外部デバイスとの双方向通信を実現する。非侵襲型の脳波センサーと侵襲型の脳内インプラントの二つのアプローチがあり、高帯域の通信には皮質内に微小電極アレイを埋め込む侵襲型が使用される。ニューラルインターフェースの信号処理にはディープラーニングを応用したニューラルデコーダーが使用され、脳活動パターンを運動指令や言語情報として解読する。E16文明圏ではペルセポネ仮想宇宙へのアクセス、義肢や外骨格の制御、言語障害者のコミュニケーション支援などに幅広く応用されている。脳と機械の境界が曖昧になることによる倫理的問題が議論の的であり、ニューラルインターフェースを通じた脳への外部介入の安全性確保が重要な課題である。",
   },
   {
-    id: "tech-artificial-general-intelligence",
+    id: "tech-artificial-general-intelligence" as WikiId,
     name: "人工一般知能",
     nameEn: "Artificial General Intelligence",
     category: "技術",
@@ -777,7 +777,7 @@ export const WIKI_TECHNOLOGY = [
       "人間と同等以上の汎用的な知能を備えた人工知能システムであり、特定のタスクに最適化された狭義AIとは異なり、未だ経験したことのない問題に対しても人間のように推論と学習を行う能力を持つ。AGIの実現には意識の困難問題とも関連し、「知能は計算によってどの程度再現可能か」という根本的な問いを含んでいる。E16文明圏では量子コンピューティングの能力を背景にAGIの実現が着実に進んでおり、自律的な意思決定と創造的問題解決を行うAGIシステムが政府機関や大企業の意思決定支援に活用されている。AGIの安全性確保はE16文明圏における最重要の技術倫理課題であり、アライメント問題（AGIの目標と人類の価値の整合性）の解決に向けた研究がグランベルを中心に進められている。",
   },
   {
-    id: "tech-swarm-intelligence",
+    id: "tech-swarm-intelligence" as WikiId,
     name: "群知能",
     nameEn: "Swarm Intelligence",
     category: "技術",
@@ -788,7 +788,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Life Support (4) --- */
   {
-    id: "tech-closed-ecosystem",
+    id: "tech-closed-ecosystem" as WikiId,
     name: "閉鎖循環生態系",
     nameEn: "Closed-Loop Ecosystem",
     category: "技術",
@@ -797,7 +797,7 @@ export const WIKI_TECHNOLOGY = [
       "外部との物質交換を最小限に抑え、酸素、水、栄養素などの生命維持物質を内部で循環・再生する自己完結型の生態系である。熱力学の第二法則に従い、閉鎖系ではエントロピーの増大が不可避であるが、外部からのエネルギー入力（太陽光や核融合炉）によって系のエントロピーを排出し、定常状態を維持する。酸素循環は光合成微生物と藻類の培養槽が担当し、二酸化炭素の吸収と酸素の生成を同時に行う。水循環は蒸留と膜分離技術を組み合わせた高度な浄水システムによって維持され、栄養循環は廃棄物の生物学的分解と再利用によって実現される。E16文明圏では軌道ハビタットや長期間の宇宙航行において不可欠な基盤技術であり、生態系の安定性を維持するための冗長性と多様性の設計が重要な課題となっている。",
   },
   {
-    id: "tech-artificial-hibernation",
+    id: "tech-artificial-hibernation" as WikiId,
     name: "人工冬眠",
     nameEn: "Artificial Hibernation",
     category: "技術",
@@ -806,7 +806,7 @@ export const WIKI_TECHNOLOGY = [
       "人間の生体機能を低減状態に移行させ、長期間の代謝抑制を実現する技術である。自然の冬眠現象を示す哺乳類の生理メカニズムを参考にし、体温の低下に伴う代謝率の指数関数的な減少を利用して、栄養消費と老朽化の速度を大幅に遅延させる。人工冬眠の導入には細胞保護剤（クライオプロテクトant）の投与と、生体の冷却・保温を精密に制御する医療システムが必要である。細胞レベルでは熱ショックタンパク質の発現誘導と、低体温状態での血液凝固防止が技術的な課題である。E16文明圏では恒星間航行の乗員の長期休眠や、医療資源の限られた環境での患者の一時的保存に応用されている。人工冬眠からの覚醒プロセスにおける生体機能の回復時間の短縮と、長期間の代謝抑制による筋肉萎縮や骨密度低下の防止が持続的な研究課題である。",
   },
   {
-    id: "tech-radiation-protection",
+    id: "tech-radiation-protection" as WikiId,
     name: "放射線防護",
     nameEn: "Radiation Protection",
     category: "技術",
@@ -815,7 +815,7 @@ export const WIKI_TECHNOLOGY = [
       "宇宙空間における高エネルギー宇宙放射線（太陽フレア粒子、銀河宇宙線など）から人命と電子機器を保護する技術体系である。受動的防護では水、ポリエチレン、アルミニウムなどの材料の質量厚によって放射線を減衰させ、能動的防護では超伝導磁石による強力な磁場を生成して荷電粒子をローレンツ力で偏向させる。E16文明圏ではセル・ウィーヴの放射線修復機能と組み合わせた多層的な防護システムが採用されている。宇宙放射線の中でも特に高いエネルギーを持つ重イオン（HZE粒子）は、材料中でのカスケード的な二次粒子生成を引き起こし、電子機器のシングルイベント・アップセット（SEU）の主要原因となるため、量子エラー訂正符号を用いた放射線耐性電子回路の開発が進められている。",
   },
   {
-    id: "tech-atmosphere-converter",
+    id: "tech-atmosphere-converter" as WikiId,
     name: "大気変換装置",
     nameEn: "Atmosphere Converter",
     category: "技術",
@@ -826,7 +826,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Mining (3) --- */
   {
-    id: "tech-asteroid-mining",
+    id: "tech-asteroid-mining" as WikiId,
     name: "小惑星採掘",
     nameEn: "Asteroid Mining",
     category: "技術",
@@ -835,7 +835,7 @@ export const WIKI_TECHNOLOGY = [
       "小惑星帯や近地球小惑星に含まれる貴金属、希土類元素、水などの資源を採掘する技術体系である。小惑星には地球上で枯渇が懸念される白金族元素やレアアースが豊富に含まれており、C型小惑星には大量の水が存在する。採掘方法には小惑星表面での直接的な切削掘削と、小惑星を捕獲して軌道上で処理する方式がある。採掘された資源の精製には宇宙空間での無重力冶金技術が使用され、太陽炉による高温度処理で金属を分離する。E16文明圏では小惑星採掘が宇宙経済の重要な基盤産業として確立されており、プロキオのレーン・システムを通じて採掘資源の輸送と取引が行われている。小惑星採掘の経済性は輸送コストと資源価格に依存し、軌道エレベーターやマスドライバーの整備が採掘コストの削減に貢献している。",
   },
   {
-    id: "tech-gas-giant-extraction",
+    id: "tech-gas-giant-extraction" as WikiId,
     name: "ガス巨人大気採取",
     nameEn: "Gas Giant Atmospheric Extraction",
     category: "技術",
@@ -844,7 +844,7 @@ export const WIKI_TECHNOLOGY = [
       "木星型惑星や土星型惑星の大気中に豊富に存在するヘリウム3、重水素、水素などの資源を採取する技術である。ガス巨星の大気上層に浮遊する採取プラットフォームからパイプラインを大気深部に伸ばし、分離膜と遠心分離機を用いて目的のガスを抽出する。ヘリウム3は核融合炉の燃料として極めて重要であり、ガス巨星の大気中には地球上の何百万倍ものヘリウム3が存在すると推定されている。ガス巨星の強力な重力場と激しい大気運動は採取プラットフォームの設計に厳しい条件を課し、浮力と推進力のバランスを精密に制御する必要がある。E16文明圏では数箇所のガス巨星で大気採取プラットフォームが稼働しており、採取されたヘリウム3は核融合炉の燃料として全文明圏に供給されている。",
   },
   {
-    id: "tech-nuclear-transmutation",
+    id: "tech-nuclear-transmutation" as WikiId,
     name: "核変換技術",
     nameEn: "Nuclear Transmutation",
     category: "技術",
@@ -855,7 +855,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Transport (4) --- */
   {
-    id: "tech-mass-driver",
+    id: "tech-mass-driver" as WikiId,
     name: "マスドライバー",
     nameEn: "Mass Driver",
     category: "技術",
@@ -864,7 +864,7 @@ export const WIKI_TECHNOLOGY = [
       "電磁力を利用して質量体を高速で加速・投射する装置であり、コイルガン（電磁砲）の大規模な応用形態である。マスドライバーは直列に配置された電磁コイルにパルス電流を順次供給し、ローレンツ力によって投射体を加速する。大気のない天体表面に建設されたマスドライバーは、鉱石や物資を軌道上の施設へ投射する低コストな輸送手段として機能し、化学ロケットによる打ち上げコストを大幅に削減する。投射体は軌道上で回収され、軌道エレベーターや宇宙船に積載される。E16文明圏では小惑星や月面の資源採掘拠点にマスドライバーが設置されており、採掘された資源の惑星間輸送の第一段階として機能している。加速コイルの超伝導化と投射体の空力加熱対策が技術的な課題である。",
   },
   {
-    id: "tech-teleporter-gate",
+    id: "tech-teleporter-gate" as WikiId,
     name: "テレポーターゲート",
     nameEn: "Teleporter Gate",
     category: "技術",
@@ -873,7 +873,7 @@ export const WIKI_TECHNOLOGY = [
       "量子テレポーテーション技術を大規模にスケールアップした固定型の輸送装置であり、ゲート間を結ぶ安定した量子もつれチャネルを維持して、人員や物資の空間転送を実現する。テレポーターゲートは事前に共有された量子もつれペアの集合を内蔵し、転送対象の量子状態を測定・破壊して受信側で完全に再構成する。転送される情報量は対象の質量に比例し、人間一人の転送には約10の27乗個の量子ビットの情報処理が必要である。テレポーターゲートの最大転送距離は量子もつれペアのデコヒーレンス時間によって制限され、長距離転送には量子中継器ネットワークが必要である。E16文明圏では主要都市間と軌道施設間にテレポーターゲートが設置されており、瞬時の輸送ネットワークを構成している。",
   },
   {
-    id: "tech-orbital-transfer",
+    id: "tech-orbital-transfer" as WikiId,
     name: "軌道トランスファー",
     nameEn: "Orbital Transfer",
     category: "技術",
@@ -882,7 +882,7 @@ export const WIKI_TECHNOLOGY = [
       "惑星間の軌道遷移を効率的に実行するための軌道力学技術体系であり、ホーマン遷移軌道やランベルト問題の解法を応用して最小エネルギーでの軌道間移動を計画・実行する。軌道トランスファーは出発軌道と到着軌道の速度差（デルタV）を最小化する軌道設計を必要とし、惑星の重力場を利用したスイングバイや大気上層での空力ブレーキを組み合わせた複合軌道が一般的に採用されている。E16文明圏ではプロキオのレーン・システムが全恒星系間の軌道トランスファーを統合管理し、AI駆動の軌道最適化アルゴリズムが天体の位置情報と燃料消費を総合的に分析して最適な遷移軌道を算出する。軌道トランスファー・ビークル（OTV）は再使用型の宇宙タグボートとして機能し、宇宙船の軌道間移動を支援する。",
   },
   {
-    id: "tech-sublight-interstellar",
+    id: "tech-sublight-interstellar" as WikiId,
     name: "亜光速星間輸送",
     nameEn: "Sublight Interstellar Transport",
     category: "技術",
@@ -893,7 +893,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Security (3) --- */
   {
-    id: "tech-biometric-auth",
+    id: "tech-biometric-auth" as WikiId,
     name: "生体認証",
     nameEn: "Biometric Authentication",
     category: "技術",
@@ -902,7 +902,7 @@ export const WIKI_TECHNOLOGY = [
       "人間の生体的特徴を用いた個人認証技術であり、指紋、虹彩、網膜パターン、顔面の幾何学的特徴、声紋、DNA配列などの個体固有の生体情報を量子センサーで高精度に読み取る。生体認証の情報理論的安全性は、生体特徴のエントロピー（情報量）によって定量化され、より高いエントロピーを持つ生体特徴ほど偽造が困難である。E16文明圏では多因子生体認証が標準的に採用され、複数の生体特徴を組み合わせることで認証の信頼性を飛躍的に向上させている。量子暗号を応用した生体情報の伝送と保存により、中間者攻撃やデータベースの改ざんに対する耐性が確保されている。生体認証の普及は利便性の向上をもたらす一方で、生体情報の漏洩が生涯にわたる影響をもたらすという固有のリスクを抱えており、生体情報の取り消し可能性を確保する技術開発が進められている。",
   },
   {
-    id: "tech-quantum-cryptography",
+    id: "tech-quantum-cryptography" as WikiId,
     name: "量子暗号",
     nameEn: "Quantum Cryptography",
     category: "技術",
@@ -911,7 +911,7 @@ export const WIKI_TECHNOLOGY = [
       "量子力学の基本原理を応用した情報理論的に安全な暗号方式であり、量子鍵配送（QKD）プロトコルがその代表例である。量子鍵配送では偏光や位相の量子状態を情報キャリアとして利用し、量子もつれの特性を活かして盗聴の有無を検出する。盗聴者が量子状態を測定すると波動関数の収縮により不可逆的な乱れが生じ、送信者と受信者が量子ビット誤り率の上昇から盗聴を検知できる。この特性により、量子暗号は計算能力に依存しない情報理論的安全性を保証し、Shorのアルゴリズムに対する耐性も持つ。E16文明圏では政府機関、軍事通信、金融機関の通信インフラに量子暗号が標準的に導入されており、ロースターのクアンタ・ラボが次世代の量子暗号プロトコルの開発を主導している。",
   },
   {
-    id: "tech-cyber-defense",
+    id: "tech-cyber-defense" as WikiId,
     name: "サイバー防御システム",
     nameEn: "Cyber Defense System",
     category: "技術",
@@ -922,7 +922,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Environment (4) --- */
   {
-    id: "tech-terraforming",
+    id: "tech-terraforming" as WikiId,
     name: "テラフォーミング",
     nameEn: "Terraforming",
     category: "技術",
@@ -931,7 +931,7 @@ export const WIKI_TECHNOLOGY = [
       "地球外の惑星の環境を人類の居住に適した状態に変革する大規模な環境改変技術であり、惑星の大気組成、表面温度、水循環、生態系を地球に類似した状態に変換する。テラフォーミングは熱力学のエントロピー変化の観点から、外部エネルギーの投入によって惑星環境を低エントロピー状態（居住可能な環境）に維持するプロセスと理解できる。初期段階では温室効果ガスの大気注入による温暖化と、大気変換装置による酸素生成が並行して進められ、中段階では遺伝子改変された微生物による土壌形成と植物の導入が行われる。テラフォーミングの完了には数百年から数千年の期間が必要とされ、大気の化学的安定性と生態系の自己維持能力の確立が技術的な課題である。E16文明圏ではテラフォーミングが複数の惑星で進行中であり、エコシステム工学と組み合わせた効率的な環境改変が目指されている。",
   },
   {
-    id: "tech-weather-control",
+    id: "tech-weather-control" as WikiId,
     name: "気象制御",
     nameEn: "Weather Control",
     category: "技術",
@@ -940,7 +940,7 @@ export const WIKI_TECHNOLOGY = [
       "惑星規模の気象現象を人為的に制御する技術体系であり、大気物理学と流体力学の原理に基づいて気象パターンを誘導・変更する。気象制御の手段には、大気中の水蒸気の凝縮核を操作して降雨を制御する手法、軌道上の太陽光反射ミラーを用いて日射量を調整する手法、超伝導コイルを用いた人工的な磁場変動によってジェット気流の経路を変更する手法などがある。気象システムはカオス理論の予測不可能性を内在しており、初期条件の微小な変化が大規模な気象変動を引き起こすバタフライ効果の制御が技術的な課題である。E16文明圏では農業生産の安定化と自然災害の防止を目的として気象制御が限定的に実施されており、テラフォーミング済み惑星の気候維持にも応用されている。気象制御の倫理的側面については、一地域の利益が別地域の気象に悪影響を与える可能性が議論されている。",
   },
   {
-    id: "tech-atmo-terra-conversion",
+    id: "tech-atmo-terra-conversion" as WikiId,
     name: "大気変換",
     nameEn: "Atmospheric Transformation",
     category: "技術",
@@ -949,7 +949,7 @@ export const WIKI_TECHNOLOGY = [
       "惑星の大気を根本的に変革する環境改変技術であり、テラフォーミングの中核プロセスの一つとして位置づけられる。大気変換は惑星の既存の大気成分を化学的・生物学的手段で変換し、窒素78パーセント、酸素21パーセント、その他微量ガスからなる地球型大気を構築する。化学的な大気変換では触媒反応槽とプラズマ化学反応を利用し、二酸化炭素を炭素と酸素に分解する。生物学的な大気変換では遺伝子改変されたシアノバクテリアや藻類を大気中に散布し、光合成による酸素生成を加速させる。大気変換の熱力学的効率は入力エネルギー量と変換速度に依存し、惑星規模の変換には恒星の放射エネルギーを効果的に利用する必要がある。E16文明圏では大気変換装置と大気変換の二つの技術体系が統合され、テラフォーミングの実行において相補的な役割を果たしている。",
   },
   {
-    id: "tech-ecosystem-engineering",
+    id: "tech-ecosystem-engineering" as WikiId,
     name: "エコシステム工学",
     nameEn: "Ecosystem Engineering",
     category: "技術",
@@ -960,7 +960,7 @@ export const WIKI_TECHNOLOGY = [
 
   /* --- Additional entries (3) --- */
   {
-    id: "tech-photon-rocket",
+    id: "tech-photon-rocket" as WikiId,
     name: "光子ロケット",
     nameEn: "Photon Rocket",
     category: "技術",
@@ -969,7 +969,7 @@ export const WIKI_TECHNOLOGY = [
       "光子（電磁波の量子）を推進剤として利用するロケット推進方式であり、アインシュタインの特殊相対性理論において光子が質量と等価の運動量を持つことを利用して推力を得る。光子ロケットの推進剤は物質と反物質の対消滅によって生成される高エネルギーガンマ線光子であり、完全に光速に近い速度で噴射されるため比推力の理論上限に到達する。光子ロケットの最大の利点は推進剤の噴射速度が光速に等しいため、ロケット方程式における質量比を極めて小さく抑えられる点である。E16文明圏では主に探査機や小型宇宙船の推進機として採用されており、反物質エンジンの小型版を動力源として搭載する。光子ロケットの推力は反物質の消費量に比例し、大推力を得るには大量の反物質が必要となるため、大型船舶への適用には限界がある。",
   },
   {
-    id: "tech-dark-matter-detector",
+    id: "tech-dark-matter-detector" as WikiId,
     name: "ダークマター検出器",
     nameEn: "Dark Matter Detector",
     category: "技術",
@@ -978,7 +978,7 @@ export const WIKI_TECHNOLOGY = [
       "宇宙の全質量エネルギーの約27パーセントを占める未発見の物質であるダークマター（WIMPやアクシオンなど）を直接検出するための超高感度センサーシステムである。ダークマター検出器は地下深部に設置された大量の液体キセノンや結晶タングステンを検出媒体とし、ダークマター粒子が原子核と弾性散乱した際に生じる微小な反跳エネルギーを超伝導センサーで検出する。E16文明圏では超伝導量子干渉素子（SQUID）と量子ドットセンサーを組み合わせた次世代のダークマター検出器が稼働しており、WIMPやアクシオンの質量範囲を網羅的に探索している。ダークマターの性質の解明は素粒子物理学の標準模型の拡張に直結し、宇宙の暗黒エネルギーとダークマターの関係の理解にも不可欠である。グランベルの最先端研究施設では多体相互作用を利用した革新的な検出手法の開発が進められている。",
   },
   {
-    id: "tech-plasma-wakefield",
+    id: "tech-plasma-wakefield" as WikiId,
     name: "プラズマウェイクフィールド加速器",
     nameEn: "Plasma Wakefield Accelerator",
     category: "技術",

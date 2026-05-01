@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi, afterEach } from "vitest"
 import { useBattleStore } from "@/domains/battle/battle.store"
 import { eventBus } from "@/platform/event-bus"
 import type { GameCard, Enemy } from "@/types"
+import type { CardId, EnemyId } from "@/platform/schemas/branded"
 
 // Mock the event bus
 vi.mock("@/platform/event-bus", () => ({
@@ -14,7 +15,7 @@ vi.mock("@/platform/event-bus", () => ({
 }))
 
 const makeCard = (id: string, overrides?: Partial<GameCard>): GameCard => ({
-  id,
+  id: id as CardId,
   name: `Card ${id}`,
   imageUrl: `/card-${id}.png`,
   flavorText: `Flavor for ${id}`,
@@ -30,8 +31,8 @@ const makeCard = (id: string, overrides?: Partial<GameCard>): GameCard => ({
   ...overrides,
 })
 
-const makeEnemy = (id: string = "test-enemy", overrides?: Partial<Enemy>): Enemy => ({
-  id,
+const makeEnemy = (id = "test-enemy", overrides?: Partial<Enemy>): Enemy => ({
+  id: id as EnemyId,
   name: "Test Enemy",
   title: "The Tester",
   maxHp: 500,
@@ -163,6 +164,7 @@ describe("useBattleStore", () => {
       const enemy = makeEnemy()
       const deck = [makeCard("c1")]
       useBattleStore.getState().startBattle(enemy, deck)
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(eventBus.publish).toHaveBeenCalledWith(
         expect.objectContaining({ type: "battle:start", enemyId: "test-enemy" })
       )
@@ -292,6 +294,7 @@ describe("useBattleStore", () => {
     it("publishes battle:ability event", () => {
       setupBattle()
       useBattleStore.getState().playAbility("攻撃")
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(eventBus.publish).toHaveBeenCalledWith(
         expect.objectContaining({ type: "battle:ability", ability: "攻撃" })
       )
@@ -316,7 +319,7 @@ describe("useBattleStore", () => {
       useBattleStore.getState().selectCharacter(0)
       useBattleStore.getState().playAbility("攻撃")
       vi.advanceTimersByTime(2000)
-      expect(useBattleStore.getState().log.some(l => l.includes("撃破"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("撃破"))).toBe(true)
     })
   })
 
@@ -339,6 +342,7 @@ describe("useBattleStore", () => {
     it("publishes battle:reset event", () => {
       useBattleStore.getState().startBattle(makeEnemy(), [makeCard("c1")])
       useBattleStore.getState().resetBattle()
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(eventBus.publish).toHaveBeenCalledWith({ type: "battle:reset" })
     })
   })
@@ -375,7 +379,7 @@ describe("useBattleStore", () => {
       useBattleStore.getState().startBattle(enemy, [card])
       useBattleStore.getState().selectCharacter(0)
       useBattleStore.getState().playAbility("攻撃")
-      expect(useBattleStore.getState().log.some(l => l.includes("Enraged!"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("Enraged!"))).toBe(true)
     })
 
     it("does nothing when no selected enemy", () => {
@@ -437,6 +441,7 @@ describe("useBattleStore", () => {
       useBattleStore.setState({ phase: "playerTurn" })
       useBattleStore.getState().executeEnemyTurn()
       vi.advanceTimersByTime(2000)
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(eventBus.publish).toHaveBeenCalledWith(
         expect.objectContaining({ type: "battle:turn", turn: 2 })
       )
@@ -454,7 +459,11 @@ describe("useBattleStore", () => {
     })
 
     it("applies poison damage for venom-hydra", () => {
-      const enemy = makeEnemy("venom-hydra", { maxHp: 500, attackPower: 0, phases: [{ triggerHpPercent: 100, message: "Phase 1", attackBonus: 0 }] })
+      const enemy = makeEnemy("venom-hydra", {
+        maxHp: 500,
+        attackPower: 0,
+        phases: [{ triggerHpPercent: 100, message: "Phase 1", attackBonus: 0 }],
+      })
       const card = makeCard("c1", { defense: 100 })
       useBattleStore.getState().startBattle(enemy, [card])
       useBattleStore.setState({ phase: "playerTurn" })
@@ -466,7 +475,11 @@ describe("useBattleStore", () => {
     })
 
     it("frost-guardian special attack at low HP on even turn", () => {
-      const enemy = makeEnemy("frost-guardian", { maxHp: 200, attackPower: 0, phases: [{ triggerHpPercent: 100, message: "Phase 1", attackBonus: 0 }] })
+      const enemy = makeEnemy("frost-guardian", {
+        maxHp: 200,
+        attackPower: 0,
+        phases: [{ triggerHpPercent: 100, message: "Phase 1", attackBonus: 0 }],
+      })
       const card = makeCard("c1", { defense: 100 })
       useBattleStore.getState().startBattle(enemy, [card])
       // Set HP to 50% and turn to 2 (even)
@@ -483,33 +496,45 @@ describe("useBattleStore", () => {
   describe("playAbility enemy-specific", () => {
     const startBattleWithEnemy = (enemyId: string, overrides?: Partial<Enemy>) => {
       const enemy = makeEnemy(enemyId, overrides)
-      const card = makeCard("c1", { attack: 30, defense: 20, ultimate: 50, effectType: "DAMAGE", effectValue: 8 })
+      const card = makeCard("c1", {
+        attack: 30,
+        defense: 20,
+        ultimate: 50,
+        effectType: "DAMAGE",
+        effectValue: 8,
+      })
       useBattleStore.getState().startBattle(enemy, [card])
       useBattleStore.getState().selectCharacter(0)
       return { enemy, card }
     }
 
     it("void-king phase 3 absorbs 攻撃 damage", () => {
-      const { enemy } = startBattleWithEnemy("void-king", { maxHp: 200, phases: [
-        { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
-        { triggerHpPercent: 60, message: "P2", attackBonus: 10 },
-        { triggerHpPercent: 30, message: "P3", attackBonus: 20 },
-      ]})
+      const { enemy: _enemy } = startBattleWithEnemy("void-king", {
+        maxHp: 200,
+        phases: [
+          { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
+          { triggerHpPercent: 60, message: "P2", attackBonus: 10 },
+          { triggerHpPercent: 30, message: "P3", attackBonus: 20 },
+        ],
+      })
       // Set phase to 3
       useBattleStore.setState({ enemyCurrentPhase: 3 })
       const hpBefore = useBattleStore.getState().enemyHp
       useBattleStore.getState().playAbility("攻撃")
       // Attack should be absorbed
       expect(useBattleStore.getState().enemyHp).toBe(hpBefore)
-      expect(useBattleStore.getState().log.some(l => l.includes("虚無に吸収"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("虚無に吸収"))).toBe(true)
     })
 
     it("void-king phase 3 doubles 必殺 damage", () => {
-      startBattleWithEnemy("void-king", { maxHp: 200, phases: [
-        { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
-        { triggerHpPercent: 60, message: "P2", attackBonus: 10 },
-        { triggerHpPercent: 30, message: "P3", attackBonus: 20 },
-      ]})
+      startBattleWithEnemy("void-king", {
+        maxHp: 200,
+        phases: [
+          { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
+          { triggerHpPercent: 60, message: "P2", attackBonus: 10 },
+          { triggerHpPercent: 30, message: "P3", attackBonus: 20 },
+        ],
+      })
       useBattleStore.setState({ enemyCurrentPhase: 3 })
       useBattleStore.getState().playAbility("必殺")
       // Ultimate 50 * 2 = 100 damage
@@ -517,31 +542,43 @@ describe("useBattleStore", () => {
     })
 
     it("iron-golem halves 防御 value", () => {
-      startBattleWithEnemy("iron-golem", { maxHp: 200, phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }] })
+      startBattleWithEnemy("iron-golem", {
+        maxHp: 200,
+        phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }],
+      })
       useBattleStore.getState().playAbility("防御")
       // defense is 20, halved = 10
       expect(useBattleStore.getState().shieldBuffer).toBe(10)
-      expect(useBattleStore.getState().log.some(l => l.includes("半減"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("半減"))).toBe(true)
     })
 
     it("flame-spirit deals 1 self-damage on 防御", () => {
-      startBattleWithEnemy("flame-spirit", { maxHp: 200, phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }] })
-      const hpBeforeChar = useBattleStore.getState().fieldCharacters[0]!.hp
+      startBattleWithEnemy("flame-spirit", {
+        maxHp: 200,
+        phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }],
+      })
+      const _hpBeforeChar = useBattleStore.getState().fieldCharacters[0]!.hp
       useBattleStore.getState().playAbility("防御")
       // Should have self-damage of 1
-      expect(useBattleStore.getState().log.some(l => l.includes("熱で"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("熱で"))).toBe(true)
     })
 
     it("void-spider blocks defense on even turn", () => {
-      startBattleWithEnemy("void-spider", { maxHp: 200, phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }] })
+      startBattleWithEnemy("void-spider", {
+        maxHp: 200,
+        phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }],
+      })
       useBattleStore.setState({ turn: 2 }) // Even turn
       useBattleStore.getState().playAbility("防御")
       expect(useBattleStore.getState().shieldBuffer).toBe(0)
-      expect(useBattleStore.getState().log.some(l => l.includes("封じられ"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("封じられ"))).toBe(true)
     })
 
     it("void-spider allows defense on odd turn", () => {
-      startBattleWithEnemy("void-spider", { maxHp: 200, phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }] })
+      startBattleWithEnemy("void-spider", {
+        maxHp: 200,
+        phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }],
+      })
       useBattleStore.setState({ turn: 1 }) // Odd turn
       useBattleStore.getState().playAbility("防御")
       expect(useBattleStore.getState().shieldBuffer).toBe(20) // defense = 20
@@ -550,7 +587,11 @@ describe("useBattleStore", () => {
 
   /* ── Enemy-specific executeEnemyTurn branches ── */
   describe("executeEnemyTurn enemy-specific", () => {
-    const setupEnemyTurn = (enemyId: string, overrides?: Partial<Enemy>, stateOverrides?: Record<string, any>) => {
+    const setupEnemyTurn = (
+      enemyId: string,
+      overrides?: Partial<Enemy>,
+      stateOverrides?: Record<string, unknown>
+    ) => {
       const enemy = makeEnemy(enemyId, overrides)
       const card = makeCard("c1", { defense: 100 })
       useBattleStore.getState().startBattle(enemy, [card])
@@ -559,78 +600,142 @@ describe("useBattleStore", () => {
     }
 
     it("flame-spirit special attack at low HP", () => {
-      setupEnemyTurn("flame-spirit", { maxHp: 200, attackPower: 0, phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }] }, { enemyHp: 50 })
+      setupEnemyTurn(
+        "flame-spirit",
+        {
+          maxHp: 200,
+          attackPower: 0,
+          phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }],
+        },
+        { enemyHp: 50 }
+      )
       useBattleStore.getState().executeEnemyTurn()
       vi.advanceTimersByTime(2000)
-      expect(useBattleStore.getState().log.some(l => l.includes("業火"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("業火"))).toBe(true)
     })
 
     it("void-spider special attack at low HP on odd turn", () => {
-      setupEnemyTurn("void-spider", { maxHp: 200, attackPower: 0, phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }] }, { enemyHp: 60, turn: 1 })
+      setupEnemyTurn(
+        "void-spider",
+        {
+          maxHp: 200,
+          attackPower: 0,
+          phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }],
+        },
+        { enemyHp: 60, turn: 1 }
+      )
       useBattleStore.getState().executeEnemyTurn()
       vi.advanceTimersByTime(2000)
-      expect(useBattleStore.getState().log.some(l => l.includes("捕縛糸"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("捕縛糸"))).toBe(true)
     })
 
     it("fallen-angel special attack at low HP", () => {
-      setupEnemyTurn("fallen-angel", { maxHp: 200, attackPower: 0, phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }] }, { enemyHp: 50 })
+      setupEnemyTurn(
+        "fallen-angel",
+        {
+          maxHp: 200,
+          attackPower: 0,
+          phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }],
+        },
+        { enemyHp: 50 }
+      )
       useBattleStore.getState().executeEnemyTurn()
       vi.advanceTimersByTime(2000)
-      expect(useBattleStore.getState().log.some(l => l.includes("裁きの光"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("裁きの光"))).toBe(true)
     })
 
     it("void-reaper special attacks at phase 2+", () => {
-      setupEnemyTurn("void-reaper", { maxHp: 200, attackPower: 0, phases: [
-        { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
-        { triggerHpPercent: 50, message: "P2", attackBonus: 10 },
-        { triggerHpPercent: 20, message: "P3", attackBonus: 20 },
-      ] }, { enemyCurrentPhase: 2 })
+      setupEnemyTurn(
+        "void-reaper",
+        {
+          maxHp: 200,
+          attackPower: 0,
+          phases: [
+            { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
+            { triggerHpPercent: 50, message: "P2", attackBonus: 10 },
+            { triggerHpPercent: 20, message: "P3", attackBonus: 20 },
+          ],
+        },
+        { enemyCurrentPhase: 2 }
+      )
       useBattleStore.getState().executeEnemyTurn()
       vi.advanceTimersByTime(2000)
-      expect(useBattleStore.getState().log.some(l => l.includes("時空の刃"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("時空の刃"))).toBe(true)
     })
 
     it("void-reaper extra attack at low HP", () => {
-      setupEnemyTurn("void-reaper", { maxHp: 200, attackPower: 0, phases: [
-        { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
-        { triggerHpPercent: 50, message: "P2", attackBonus: 10 },
-      ] }, { enemyHp: 50 })
+      setupEnemyTurn(
+        "void-reaper",
+        {
+          maxHp: 200,
+          attackPower: 0,
+          phases: [
+            { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
+            { triggerHpPercent: 50, message: "P2", attackBonus: 10 },
+          ],
+        },
+        { enemyHp: 50 }
+      )
       useBattleStore.getState().executeEnemyTurn()
       vi.advanceTimersByTime(2000)
-      expect(useBattleStore.getState().log.some(l => l.includes("虚無の刃"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("虚無の刃"))).toBe(true)
     })
 
     it("void-king wave attack at phase 1+", () => {
-      setupEnemyTurn("void-king", { maxHp: 500, attackPower: 0, phases: [
-        { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
-        { triggerHpPercent: 50, message: "P2", attackBonus: 10 },
-      ] }, { enemyCurrentPhase: 1 })
+      setupEnemyTurn(
+        "void-king",
+        {
+          maxHp: 500,
+          attackPower: 0,
+          phases: [
+            { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
+            { triggerHpPercent: 50, message: "P2", attackBonus: 10 },
+          ],
+        },
+        { enemyCurrentPhase: 1 }
+      )
       useBattleStore.getState().executeEnemyTurn()
       vi.advanceTimersByTime(2000)
-      expect(useBattleStore.getState().log.some(l => l.includes("虚無の波"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("虚無の波"))).toBe(true)
     })
 
     it("void-king existence erosion at low HP", () => {
-      setupEnemyTurn("void-king", { maxHp: 500, attackPower: 0, phases: [
-        { triggerHpPercent: 100, message: "P1", attackBonus: 0 },
-      ] }, { enemyHp: 100 }) // 20% HP → below 45%
+      setupEnemyTurn(
+        "void-king",
+        {
+          maxHp: 500,
+          attackPower: 0,
+          phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }],
+        },
+        { enemyHp: 100 }
+      ) // 20% HP → below 45%
       useBattleStore.getState().executeEnemyTurn()
       vi.advanceTimersByTime(2000)
-      expect(useBattleStore.getState().log.some(l => l.includes("存在の侵食"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("存在の侵食"))).toBe(true)
     })
 
     it("enemy self-heal from phase with selfHealPerTurn", () => {
-      setupEnemyTurn("heal-enemy", { maxHp: 200, attackPower: 0, phases: [
-        { triggerHpPercent: 100, message: "P1", attackBonus: 0, selfHealPerTurn: 10 },
-      ] }, { enemyHp: 100 })
+      setupEnemyTurn(
+        "heal-enemy",
+        {
+          maxHp: 200,
+          attackPower: 0,
+          phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0, selfHealPerTurn: 10 }],
+        },
+        { enemyHp: 100 }
+      )
       useBattleStore.getState().executeEnemyTurn()
       vi.advanceTimersByTime(2000)
-      expect(useBattleStore.getState().log.some(l => l.includes("HP回復"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("HP回復"))).toBe(true)
       expect(useBattleStore.getState().enemyHp).toBe(110) // 100 + 10
     })
 
     it("clears shieldBuffer and attackReduction after enemy turn", () => {
-      setupEnemyTurn("e1", { maxHp: 500, attackPower: 0, phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }] })
+      setupEnemyTurn("e1", {
+        maxHp: 500,
+        attackPower: 0,
+        phases: [{ triggerHpPercent: 100, message: "P1", attackBonus: 0 }],
+      })
       useBattleStore.setState({ shieldBuffer: 50, enemyAttackReduction: 5 })
       useBattleStore.getState().executeEnemyTurn()
       vi.advanceTimersByTime(2000)
@@ -654,7 +759,7 @@ describe("useBattleStore", () => {
       useBattleStore.getState().selectCharacter(0)
       useBattleStore.getState().playAbility("攻撃")
       // HP at 50% triggers void-reaper phase transition damage
-      expect(useBattleStore.getState().log.some(l => l.includes("次元断絶"))).toBe(true)
+      expect(useBattleStore.getState().log.some((l) => l.includes("次元断絶"))).toBe(true)
     })
   })
 })

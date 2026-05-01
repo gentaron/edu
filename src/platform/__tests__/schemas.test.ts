@@ -138,7 +138,14 @@ describe("Platform Schemas", () => {
     })
 
     it("rejects entry with empty id", () => {
-      expect(() => WikiEntrySchema.parse({ id: "", name: "Test", category: "キャラクター", description: "Desc" })).toThrow()
+      expect(() =>
+        WikiEntrySchema.parse({
+          id: "",
+          name: "Test",
+          category: "キャラクター",
+          description: "Desc",
+        })
+      ).toThrow()
     })
   })
 
@@ -181,6 +188,7 @@ describe("Platform Schemas", () => {
       attack: 10,
       defense: 5,
       effect: "Heal",
+      effectType: "HEAL",
       effectValue: 3,
       ultimate: 20,
       ultimateName: "Ultimate Test",
@@ -239,19 +247,23 @@ describe("Platform Schemas", () => {
     })
 
     it("rejects triggerHpPercent below 0", () => {
-      expect(() => EnemyPhaseSchema.parse({
-        triggerHpPercent: -1,
-        message: "Invalid",
-        attackBonus: 0,
-      })).toThrow()
+      expect(() =>
+        EnemyPhaseSchema.parse({
+          triggerHpPercent: -1,
+          message: "Invalid",
+          attackBonus: 0,
+        })
+      ).toThrow()
     })
 
     it("rejects triggerHpPercent above 100", () => {
-      expect(() => EnemyPhaseSchema.parse({
-        triggerHpPercent: 101,
-        message: "Invalid",
-        attackBonus: 0,
-      })).toThrow()
+      expect(() =>
+        EnemyPhaseSchema.parse({
+          triggerHpPercent: 101,
+          message: "Invalid",
+          attackBonus: 0,
+        })
+      ).toThrow()
     })
 
     it("allows 0 and 100", () => {
@@ -309,6 +321,7 @@ describe("Platform Schemas", () => {
         attack: 10,
         defense: 5,
         effect: "Effect",
+        effectType: "HEAL",
         effectValue: 0,
         ultimate: 20,
         ultimateName: "Ult",
@@ -420,13 +433,15 @@ describe("Platform Schemas", () => {
     })
 
     it("rejects empty events", () => {
-      expect(() => TimelinePeriodSchema.parse({
-        period: "Era 1",
-        range: "E260-E300",
-        color: "#FF0000",
-        borderColor: "#CC0000",
-        events: [],
-      })).toThrow()
+      expect(() =>
+        TimelinePeriodSchema.parse({
+          period: "Era 1",
+          range: "E260-E300",
+          color: "#FF0000",
+          borderColor: "#CC0000",
+          events: [],
+        })
+      ).toThrow()
     })
   })
 
@@ -450,35 +465,39 @@ describe("Platform Schemas", () => {
     })
 
     it("rejects invalid id format", () => {
-      expect(() => TechEntrySchema.parse({
-        id: "Invalid!",
-        name: "Tech",
-        nameEn: "Technology",
-        icon: "⚡",
-        color: "#FF0000",
-        borderColor: "#CC0000",
-        bgGlow: "rgba(255,0,0,0.1)",
-        tag: "Tag",
-        tagColor: "#FFF",
-        physics: "Physics",
-        applications: ["App 1"],
-      })).toThrow()
+      expect(() =>
+        TechEntrySchema.parse({
+          id: "Invalid!",
+          name: "Tech",
+          nameEn: "Technology",
+          icon: "⚡",
+          color: "#FF0000",
+          borderColor: "#CC0000",
+          bgGlow: "rgba(255,0,0,0.1)",
+          tag: "Tag",
+          tagColor: "#FFF",
+          physics: "Physics",
+          applications: ["App 1"],
+        })
+      ).toThrow()
     })
 
     it("rejects empty applications", () => {
-      expect(() => TechEntrySchema.parse({
-        id: "tech-2",
-        name: "Tech",
-        nameEn: "Technology",
-        icon: "⚡",
-        color: "#FF0000",
-        borderColor: "#CC0000",
-        bgGlow: "rgba(255,0,0,0.1)",
-        tag: "Tag",
-        tagColor: "#FFF",
-        physics: "Physics",
-        applications: [],
-      })).toThrow()
+      expect(() =>
+        TechEntrySchema.parse({
+          id: "tech-2",
+          name: "Tech",
+          nameEn: "Technology",
+          icon: "⚡",
+          color: "#FF0000",
+          borderColor: "#CC0000",
+          bgGlow: "rgba(255,0,0,0.1)",
+          tag: "Tag",
+          tagColor: "#FFF",
+          physics: "Physics",
+          applications: [],
+        })
+      ).toThrow()
     })
   })
 
@@ -491,7 +510,11 @@ describe("Platform Schemas", () => {
     })
 
     it("accepts node with children", () => {
-      const result = FactionNodeSchema.parse({ year: "E300", name: "Parent", children: ["c1", "c2"] })
+      const result = FactionNodeSchema.parse({
+        year: "E300",
+        name: "Parent",
+        children: ["c1", "c2"],
+      })
       expect(result.children).toHaveLength(2)
     })
   })
@@ -513,29 +536,33 @@ describe("Platform Schemas", () => {
     })
 
     it("rejects empty keyMembers", () => {
-      expect(() => FactionTreeSchema.parse({
-        name: "Test",
-        color: "#FF0000",
-        dotColor: "#CC0000",
-        textColor: "#FFF",
-        description: "Desc",
-        keyMembers: [],
-        alliances: "Alliance",
-        nodes: [{ year: "E300", name: "Node" }],
-      })).toThrow()
+      expect(() =>
+        FactionTreeSchema.parse({
+          name: "Test",
+          color: "#FF0000",
+          dotColor: "#CC0000",
+          textColor: "#FFF",
+          description: "Desc",
+          keyMembers: [],
+          alliances: "Alliance",
+          nodes: [{ year: "E300", name: "Node" }],
+        })
+      ).toThrow()
     })
 
     it("rejects empty nodes", () => {
-      expect(() => FactionTreeSchema.parse({
-        name: "Test",
-        color: "#FF0000",
-        dotColor: "#CC0000",
-        textColor: "#FFF",
-        description: "Desc",
-        keyMembers: ["Member"],
-        alliances: "Alliance",
-        nodes: [],
-      })).toThrow()
+      expect(() =>
+        FactionTreeSchema.parse({
+          name: "Test",
+          color: "#FF0000",
+          dotColor: "#CC0000",
+          textColor: "#FFF",
+          description: "Desc",
+          keyMembers: ["Member"],
+          alliances: "Alliance",
+          nodes: [],
+        })
+      ).toThrow()
     })
   })
 
@@ -558,18 +585,20 @@ describe("Platform Schemas", () => {
     })
 
     it("rejects invalid slug", () => {
-      expect(() => StoryMetaSchema.parse({
-        slug: "Invalid Slug!",
-        title: "Story",
-        titleJa: "ストーリー",
-        label: "Label",
-        fileName: "test.txt",
-        fileNameAlt: "test_EN.txt",
-        relatedEntries: [],
-        chapter: 1,
-        chapterOrder: 1,
-        isEnSource: false,
-      })).toThrow()
+      expect(() =>
+        StoryMetaSchema.parse({
+          slug: "Invalid Slug!",
+          title: "Story",
+          titleJa: "ストーリー",
+          label: "Label",
+          fileName: "test.txt",
+          fileNameAlt: "test_EN.txt",
+          relatedEntries: [],
+          chapter: 1,
+          chapterOrder: 1,
+          isEnSource: false,
+        })
+      ).toThrow()
     })
   })
 
@@ -590,16 +619,18 @@ describe("Platform Schemas", () => {
     })
 
     it("rejects zero id", () => {
-      expect(() => ChapterMetaSchema.parse({
-        id: 0,
-        titleJa: "Test",
-        titleEn: "Test",
-        era: "E300",
-        description: "Desc",
-        descriptionEn: "Desc",
-        color: "color",
-        gradient: "grad",
-      })).toThrow()
+      expect(() =>
+        ChapterMetaSchema.parse({
+          id: 0,
+          titleJa: "Test",
+          titleEn: "Test",
+          era: "E300",
+          description: "Desc",
+          descriptionEn: "Desc",
+          color: "color",
+          gradient: "grad",
+        })
+      ).toThrow()
     })
   })
 
@@ -631,9 +662,14 @@ describe("Platform Schemas", () => {
     })
 
     it("rejects invalid category", () => {
-      expect(() => RelationNodeSchema.parse({
-        id: "n", name: "N", category: "invalid", description: "D",
-      })).toThrow()
+      expect(() =>
+        RelationNodeSchema.parse({
+          id: "n",
+          name: "N",
+          category: "invalid",
+          description: "D",
+        })
+      ).toThrow()
     })
   })
 
@@ -651,15 +687,25 @@ describe("Platform Schemas", () => {
 
     it("accepts all valid edge types", () => {
       for (const type of ["所属", "指導", "同盟", "対立", "関連", "歴史的"]) {
-        const result = RelationEdgeSchema.parse({ source: "a", target: "b", type, description: "D" })
+        const result = RelationEdgeSchema.parse({
+          source: "a",
+          target: "b",
+          type,
+          description: "D",
+        })
         expect(result.type).toBe(type)
       }
     })
 
     it("rejects invalid edge type", () => {
-      expect(() => RelationEdgeSchema.parse({
-        source: "a", target: "b", type: "invalid", description: "D",
-      })).toThrow()
+      expect(() =>
+        RelationEdgeSchema.parse({
+          source: "a",
+          target: "b",
+          type: "invalid",
+          description: "D",
+        })
+      ).toThrow()
     })
   })
 
@@ -686,7 +732,11 @@ describe("Platform Schemas", () => {
   /* ── IrisRelationSchema ── */
   describe("IrisRelationSchema", () => {
     it("accepts valid relation", () => {
-      const result = IrisRelationSchema.parse({ name: "Friend", note: "A friend", color: "#00FF00" })
+      const result = IrisRelationSchema.parse({
+        name: "Friend",
+        note: "A friend",
+        color: "#00FF00",
+      })
       expect(result.name).toBe("Friend")
     })
   })
@@ -704,16 +754,28 @@ describe("Platform Schemas", () => {
     it("accepts all valid platform types", () => {
       for (const type of ["PORTAL", "SOCIAL", "ARCHIVE", "MUSIC", "VISUAL", "STORY"]) {
         const result = PlatformEntrySchema.parse({
-          name: "Test", desc: "Desc", type, color: "#FFF", bg: "#000", url: "https://example.com",
+          name: "Test",
+          desc: "Desc",
+          type,
+          color: "#FFF",
+          bg: "#000",
+          url: "https://example.com",
         })
         expect(result.type).toBe(type)
       }
     })
 
     it("rejects invalid type", () => {
-      expect(() => PlatformEntrySchema.parse({
-        name: "T", desc: "D", type: "INVALID", color: "#FFF", bg: "#000", url: "https://x.com",
-      })).toThrow()
+      expect(() =>
+        PlatformEntrySchema.parse({
+          name: "T",
+          desc: "D",
+          type: "INVALID",
+          color: "#FFF",
+          bg: "#000",
+          url: "https://x.com",
+        })
+      ).toThrow()
     })
   })
 
@@ -736,7 +798,11 @@ describe("Platform Schemas", () => {
     })
 
     it("shared EnemyPhaseSchema works the same", () => {
-      const shared = SharedEnemyPhaseSchema.parse({ triggerHpPercent: 50, message: "M", attackBonus: 0 })
+      const shared = SharedEnemyPhaseSchema.parse({
+        triggerHpPercent: 50,
+        message: "M",
+        attackBonus: 0,
+      })
       const orig = EnemyPhaseSchema.parse({ triggerHpPercent: 50, message: "M", attackBonus: 0 })
       expect(shared).toEqual(orig)
     })

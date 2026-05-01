@@ -1,6 +1,8 @@
 import { ALL_CARDS, ENEMIES } from "@/domains/cards/cards.data"
 import type { GameCard, Enemy } from "@/types"
 
+export { ALL_CARDS, ENEMIES } from "@/domains/cards/cards.data"
+
 export function getAllCards(): readonly GameCard[] {
   return ALL_CARDS
 }

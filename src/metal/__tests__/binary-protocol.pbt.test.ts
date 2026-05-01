@@ -16,7 +16,7 @@ describe("PBT: binary-protocol", () => {
   /* ── VarInt round-trip for any u32 ── */
   it("VarInt round-trip for any u32", () => {
     fc.assert(
-      fc.property(fc.integer({ min: 0, max: 4294967295 }), (value) => {
+      fc.property(fc.integer({ min: 0, max: 4_294_967_295 }), (value) => {
         const w = new BinaryWriter()
         w.writeVarInt(value)
         const r = new BinaryReader(w.toBuffer())
@@ -40,7 +40,7 @@ describe("PBT: binary-protocol", () => {
   /* ── i32 round-trip for any i32 ── */
   it("i32 round-trip for any i32", () => {
     fc.assert(
-      fc.property(fc.integer({ min: -2147483648, max: 2147483647 }), (value) => {
+      fc.property(fc.integer({ min: -2_147_483_648, max: 2_147_483_647 }), (value) => {
         const w = new BinaryWriter()
         w.writeI32(value)
         const r = new BinaryReader(w.toBuffer())
@@ -53,7 +53,9 @@ describe("PBT: binary-protocol", () => {
   it("f64 round-trip for any finite f64", () => {
     fc.assert(
       fc.property(fc.double(), (value) => {
-        if (!Number.isFinite(value)) return // skip NaN/Infinity
+        if (!Number.isFinite(value)) {
+          return
+        } // skip NaN/Infinity
         const w = new BinaryWriter()
         w.writeF64(value)
         const r = new BinaryReader(w.toBuffer())
@@ -99,7 +101,7 @@ describe("PBT: binary-protocol", () => {
 
   it("writeValue/readValue round-trip for any integer", () => {
     fc.assert(
-      fc.property(fc.integer({ min: -100000, max: 100000 }), (value) => {
+      fc.property(fc.integer({ min: -100_000, max: 100_000 }), (value) => {
         const w = new BinaryWriter()
         w.writeValue(value)
         const r = new BinaryReader(w.toBuffer())

@@ -4,14 +4,14 @@
    ═══════════════════════════════════════════ */
 
 import { ALL_CARDS, ENEMIES } from "./cards.data"
-import type { GameCard, Enemy } from "@/types"
+import type { CardId, EnemyId, GameCard, Enemy } from "@/types"
 
-const cardById = new Map<string, GameCard>()
+const cardById = new Map<CardId, GameCard>()
 for (const card of ALL_CARDS) {
   cardById.set(card.id, card)
 }
 
-const enemyById = new Map<string, Enemy>()
+const enemyById = new Map<EnemyId, Enemy>()
 for (const enemy of ENEMIES) {
   enemyById.set(enemy.id, enemy)
 }
@@ -31,7 +31,7 @@ export const CardRepository = {
    * const card = CardRepository.findCardById('char-lin')
    * // → { id: 'char-lin', name: 'リン', rarity: 'SR', ... }
    */
-  findCardById(id: string): GameCard | undefined {
+  findCardById(id: CardId): GameCard | undefined {
     return cardById.get(id)
   },
 
@@ -73,7 +73,7 @@ export const CardRepository = {
    * @param id - The enemy ID to look up (e.g. 'void-king').
    * @returns The matching {@link Enemy}, or `undefined` if not found.
    */
-  findEnemyById(id: string): Enemy | undefined {
+  findEnemyById(id: EnemyId): Enemy | undefined {
     return enemyById.get(id)
   },
 
@@ -101,4 +101,4 @@ export const CardRepository = {
   getEnemiesByDifficulty(difficulty: Enemy["difficulty"]): Enemy[] {
     return ENEMIES.filter((e) => e.difficulty === difficulty)
   },
-};
+}

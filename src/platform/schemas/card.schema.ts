@@ -1,5 +1,18 @@
 import { z } from "zod/v4"
 
+export const EffectTypeSchema = z.enum([
+  "HEAL",
+  "DAMAGE",
+  "SHIELD",
+  "HEAL_DAMAGE",
+  "DAMAGE_HEAL",
+  "DAMAGE_SHIELD",
+  "HEAL_SHIELD",
+  "HEAL_DAMAGE_SHIELD",
+  "ATTACK_REDUCTION",
+  "SPECIAL_PANDICT",
+])
+
 export const AbilityTypeSchema = z.enum(["攻撃", "防御", "効果", "必殺"])
 export const RaritySchema = z.enum(["C", "R", "SR"])
 
@@ -13,6 +26,7 @@ export const GameCardSchema = z.object({
   attack: z.number().int().min(0),
   defense: z.number().int().min(0),
   effect: z.string().min(1),
+  effectType: EffectTypeSchema,
   effectValue: z.number().int().min(0),
   ultimate: z.number().int().min(0),
   ultimateName: z.string().min(1),

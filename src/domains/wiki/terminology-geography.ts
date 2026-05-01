@@ -1,9 +1,10 @@
+import type { WikiId } from "../../platform/schemas/branded"
 import type { WikiEntry } from "@/types"
 
 export const WIKI_GEOGRAPHY: WikiEntry[] = [
   /* 宇宙・天文 */
   {
-    id: "E16連星系",
+    id: "E16連星系" as WikiId,
     name: "E16連星系",
     nameEn: "E16 Binary System",
     category: "地理",
@@ -13,7 +14,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Ea16",
+    id: "Ea16" as WikiId,
     name: "イーエー16",
     nameEn: "Ea16",
     category: "地理",
@@ -23,7 +24,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Eb16",
+    id: "Eb16" as WikiId,
     name: "イービー16",
     nameEn: "Eb16",
     category: "地理",
@@ -33,7 +34,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "シンフォニー・オブ・スターズ",
+    id: "シンフォニー・オブ・スターズ" as WikiId,
     name: "シンフォニー・オブ・スターズ",
     nameEn: "Symphony of Stars",
     category: "地理",
@@ -43,7 +44,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Eros-7",
+    id: "Eros-7" as WikiId,
     name: "エロス7",
     nameEn: "Eros-7",
     category: "地理",
@@ -53,21 +54,21 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
     leaders: [
       {
-        id: "リリス・ヴェイン",
+        id: "リリス・ヴェイン" as WikiId,
         name: "リリス・ヴェイン",
         nameEn: "Lilith Vaine",
         role: "Eros-7初期女性リーダー",
         era: "E0頃",
       },
       {
-        id: "シルヴィア・クロウ",
+        id: "シルヴィア・クロウ" as WikiId,
         name: "シルヴィア・クロウ",
         nameEn: "Sylvia Crow",
         role: "Eros-7女性リーダー",
         era: "E97〜E101",
       },
       {
-        id: "カーラ・ヴェルム",
+        id: "カーラ・ヴェルム" as WikiId,
         name: "カーラ・ヴェルム",
         nameEn: "Cara Verm",
         role: "スクイーズ・アビス立案者",
@@ -77,7 +78,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "惑星ビブリオ",
+    id: "惑星ビブリオ" as WikiId,
     name: "惑星ビブリオ",
     nameEn: "Planet Biblio",
     category: "地理",
@@ -87,7 +88,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "惑星Solaris",
+    id: "惑星Solaris" as WikiId,
     name: "惑星Solaris",
     nameEn: "Planet Solaris",
     category: "地理",
@@ -97,7 +98,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "M104銀河",
+    id: "M104銀河" as WikiId,
     name: "M104銀河",
     nameEn: "M104 Galaxy",
     category: "地理",
@@ -107,7 +108,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "ノスタルジア・コロニー",
+    id: "ノスタルジア・コロニー" as WikiId,
     name: "ノスタルジア・コロニー",
     nameEn: "Nostalgia Colony",
     category: "地理",
@@ -118,7 +119,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* クレセント地方 */
   {
-    id: "クレセント大地方",
+    id: "クレセント大地方" as WikiId,
     name: "クレセント大地方",
     nameEn: "Crescent Region",
     category: "地理",
@@ -128,7 +129,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "ヴァーミリオン",
+    id: "ヴァーミリオン" as WikiId,
     name: "ヴァーミリオン",
     nameEn: "Vermillion",
     category: "地理",
@@ -138,7 +139,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
     leaders: [
       {
-        id: "アザゼル",
+        id: "アザゼル" as WikiId,
         name: "アザゼル・ヘクトパス",
         nameEn: "Azazel Hectopass",
         role: "ヴァーミリオン元首脳",
@@ -148,7 +149,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "ブルーローズ",
+    id: "ブルーローズ" as WikiId,
     name: "ブルーローズ",
     nameEn: "Blue Rose",
     category: "地理",
@@ -158,7 +159,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
     leaders: [
       {
-        id: "フィオナ",
+        id: "フィオナ" as WikiId,
         name: "フィオナ",
         nameEn: "Klaus Fiona",
         role: "ブルーローズ統率者",
@@ -168,7 +169,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "ミエルテンガ",
+    id: "ミエルテンガ" as WikiId,
     name: "ミエルテンガ",
     nameEn: "Mielteunga",
     category: "地理",
@@ -178,7 +179,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
     leaders: [
       {
-        id: "マリーナ・ボビン",
+        id: "マリーナ・ボビン" as WikiId,
         name: "マリーナ・ボビン",
         nameEn: "Marina Bobbin",
         role: "ミエルテンガ総統",
@@ -188,7 +189,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "クロセヴィア",
+    id: "クロセヴィア" as WikiId,
     name: "クロセヴィア",
     nameEn: "Crosevia",
     category: "地理",
@@ -198,7 +199,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
     leaders: [
       {
-        id: "カスチーナ・テンペスト",
+        id: "カスチーナ・テンペスト" as WikiId,
         name: "カスチーナ・テンペスト",
         nameEn: "Castina Tempest",
         role: "クロセヴィア首脳",
@@ -208,7 +209,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "SSレンジ",
+    id: "SSレンジ" as WikiId,
     name: "SSレンジ",
     nameEn: "SS Range",
     category: "地理",
@@ -218,7 +219,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
     leaders: [
       {
-        id: "アイク・ロペス",
+        id: "アイク・ロペス" as WikiId,
         name: "アイク・ロペス",
         nameEn: "Ike Lopez",
         role: "SSレンジ首脳",
@@ -228,7 +229,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "アイアン・シンジケート",
+    id: "アイアン・シンジケート" as WikiId,
     name: "アイアン・シンジケート",
     nameEn: "Iron Syndicate",
     category: "地理",
@@ -238,7 +239,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
     leaders: [
       {
-        id: "レイド・カキザキ",
+        id: "レイド・カキザキ" as WikiId,
         name: "レイド・カキザキ",
         nameEn: "Raid Kakizaki",
         role: "アイアン・シンジケート首脳",
@@ -248,7 +249,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "SUDOM",
+    id: "SUDOM" as WikiId,
     name: "スードム",
     nameEn: "SUDOM",
     category: "地理",
@@ -258,7 +259,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
     leaders: [
       {
-        id: "セルヴァ・ドーン",
+        id: "セルヴァ・ドーン" as WikiId,
         name: "セルヴァ・ドーン",
         nameEn: "Selva Dawn",
         role: "SUDOM初代医療総裁",
@@ -268,7 +269,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "ファティマ連邦",
+    id: "ファティマ連邦" as WikiId,
     name: "ファティマ連邦",
     nameEn: "Fatima Federation",
     category: "地理",
@@ -278,7 +279,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
     leaders: [
       {
-        id: "ハシーム・ファティマ",
+        id: "ハシーム・ファティマ" as WikiId,
         name: "ハシーム・ファティマ",
         nameEn: "Hashim Fatima",
         role: "ファティマ連邦初代連邦議長",
@@ -288,7 +289,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "スターク三国",
+    id: "スターク三国" as WikiId,
     name: "スターク三国",
     nameEn: "Stark Triad Nations",
     category: "地理",
@@ -298,7 +299,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
     leaders: [
       {
-        id: "トリスタン・スターク",
+        id: "トリスタン・スターク" as WikiId,
         name: "トリスタン・スターク",
         nameEn: "Tristan Stark",
         role: "スターク三国軍事理事長",
@@ -308,7 +309,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "ネオンコロシアム",
+    id: "ネオンコロシアム" as WikiId,
     name: "ネオンコロシアム",
     nameEn: "Neon Colosseum",
     category: "地理",
@@ -319,7 +320,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* 西大陸都市 */
   {
-    id: "Abrivo",
+    id: "Abrivo" as WikiId,
     name: "アブリーヴォ",
     nameEn: "Abrivo",
     category: "地理",
@@ -329,7 +330,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Ronve",
+    id: "Ronve" as WikiId,
     name: "ロンヴ",
     nameEn: "Ronve",
     category: "地理",
@@ -339,7 +340,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Lille",
+    id: "Lille" as WikiId,
     name: "リール",
     nameEn: "Lille",
     category: "地理",
@@ -349,7 +350,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Valoria",
+    id: "Valoria" as WikiId,
     name: "ヴァロリア",
     nameEn: "Valoria",
     category: "地理",
@@ -359,7 +360,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Persepolis",
+    id: "Persepolis" as WikiId,
     name: "ペルセポリス",
     nameEn: "Persepolis",
     category: "地理",
@@ -369,7 +370,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Selinopolis（西大陸都市）",
+    id: "Selinopolis（西大陸都市）" as WikiId,
     name: "セリノポリス",
     nameEn: "Selinopolis",
     category: "地理",
@@ -379,7 +380,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "エヴァポリス",
+    id: "エヴァポリス" as WikiId,
     name: "エヴァポリス",
     nameEn: "Evapolis",
     category: "地理",
@@ -389,7 +390,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "パラトン",
+    id: "パラトン" as WikiId,
     name: "パラトン",
     nameEn: "Palaton",
     category: "地理",
@@ -399,7 +400,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "地下街",
+    id: "地下街" as WikiId,
     name: "地下街",
     nameEn: "Underground City",
     category: "地理",
@@ -410,7 +411,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* 施設・建造物 */
   {
-    id: "ネオンクレーター宮殿",
+    id: "ネオンクレーター宮殿" as WikiId,
     name: "ネオンクレーター宮殿",
     nameEn: "Neon Crater Palace",
     category: "地理",
@@ -420,7 +421,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "スクイーズ・アビス",
+    id: "スクイーズ・アビス" as WikiId,
     name: "スクイーズ・アビス",
     nameEn: "Squeeze Abyss",
     category: "地理",
@@ -430,7 +431,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "アンダーグリッド",
+    id: "アンダーグリッド" as WikiId,
     name: "アンダーグリッド",
     nameEn: "Undergrid",
     category: "地理",
@@ -440,7 +441,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "セントラル・タワー",
+    id: "セントラル・タワー" as WikiId,
     name: "セントラル・タワー",
     nameEn: "Central Tower",
     category: "地理",
@@ -450,7 +451,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "オアシス・ハウス",
+    id: "オアシス・ハウス" as WikiId,
     name: "オアシス・ハウス",
     nameEn: "Oasis House",
     category: "地理",
@@ -460,7 +461,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "ロレンツィオ国際大学",
+    id: "ロレンツィオ国際大学" as WikiId,
     name: "ロレンツィオ国際大学",
     nameEn: "Lorenzio International University",
     category: "地理",
@@ -471,7 +472,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* 宇宙拠点 — 地理 */
   {
-    id: "ヴェズレル",
+    id: "ヴェズレル" as WikiId,
     name: "ヴェズレル",
     nameEn: "Vezrel",
     category: "地理",
@@ -481,7 +482,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "プロキオ・ネクサス",
+    id: "プロキオ・ネクサス" as WikiId,
     name: "プロキオ・ネクサス",
     nameEn: "Prokio Nexus",
     category: "地理",
@@ -491,7 +492,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "ロースター・コア",
+    id: "ロースター・コア" as WikiId,
     name: "ロースター・コア",
     nameEn: "Roastar Core",
     category: "地理",
@@ -501,7 +502,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "次元の塔",
+    id: "次元の塔" as WikiId,
     name: "次元の塔",
     nameEn: "Dimensional Tower",
     category: "地理",
@@ -511,7 +512,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "シルバープラント",
+    id: "次元の塔（ZAMLT本社）" as WikiId,
     name: "シルバープラント",
     nameEn: "Silver Plant",
     category: "地理",
@@ -522,7 +523,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* 西大陸都市 */
   {
-    id: "ギガポリス",
+    id: "ギガポリス" as WikiId,
     name: "ギガポリス",
     nameEn: "Gigapolis",
     category: "地理",
@@ -532,7 +533,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Poitiers",
+    id: "Poitiers" as WikiId,
     name: "Poitiers",
     nameEn: "Poitiers",
     category: "地理",
@@ -542,7 +543,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Chem",
+    id: "Chem" as WikiId,
     name: "Chem",
     nameEn: "Chem",
     category: "地理",
@@ -552,7 +553,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "Troyane",
+    id: "Troyane" as WikiId,
     name: "Troyane",
     nameEn: "Troyane",
     category: "地理",
@@ -563,7 +564,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* Gigapolis周辺区・地区 */
   {
-    id: "テスラ地区",
+    id: "テスラ地区" as WikiId,
     name: "テスラ地区",
     nameEn: "Tesla District",
     category: "地理",
@@ -573,7 +574,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "大広場",
+    id: "大広場" as WikiId,
     name: "大広場",
     nameEn: "Grand Square",
     category: "地理",
@@ -583,7 +584,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "ZAMLT本部",
+    id: "ZAMLT本部" as WikiId,
     name: "ZAMLT本部",
     nameEn: "ZAMLT Headquarters",
     category: "地理",
@@ -593,7 +594,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "虚無の塔",
+    id: "虚無の塔" as WikiId,
     name: "虚無の塔",
     nameEn: "Tower of Void",
     category: "地理",
@@ -603,7 +604,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "シルバープラント",
+    id: "シルバープラント" as WikiId,
     name: "シルバープラント",
     nameEn: "Silver Plant",
     category: "地理",
@@ -618,7 +619,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* E16星系の他惑星・衛星 (5) */
   {
-    id: "geo-ビブリオ第2衛星ルナ",
+    id: "geo-ビブリオ第2衛星ルナ" as WikiId,
     name: "ビブリオ第2衛星ルナ",
     nameEn: "Luna — Second Moon of Biblio",
     category: "地理",
@@ -628,7 +629,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-Solaris第3衛星ヘリオス",
+    id: "geo-Solaris第3衛星ヘリオス" as WikiId,
     name: "Solaris第3衛星ヘリオス",
     nameEn: "Helios — Third Moon of Solaris",
     category: "地理",
@@ -638,7 +639,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-E16第4惑星クリオ",
+    id: "geo-E16第4惑星クリオ" as WikiId,
     name: "E16第4惑星クリオ",
     nameEn: "Clio — Fourth Planet of E16",
     category: "地理",
@@ -648,7 +649,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-E16第5惑星テラ・ノヴァ",
+    id: "geo-E16第5惑星テラ・ノヴァ" as WikiId,
     name: "E16第5惑星テラ・ノヴァ",
     nameEn: "Terra Nova — Fifth Planet of E16",
     category: "地理",
@@ -658,7 +659,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-E16小惑星帯ガイア・リング",
+    id: "geo-E16小惑星帯ガイア・リング" as WikiId,
     name: "E16小惑星帯ガイア・リング",
     nameEn: "Gaia Ring — E16 Asteroid Belt",
     category: "地理",
@@ -669,7 +670,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* 各惑星の主要都市 (10) */
   {
-    id: "geo-ビブリオ首都アカデミア",
+    id: "geo-ビブリオ首都アカデミア" as WikiId,
     name: "ビブリオ首都アカデミア",
     nameEn: "Academia — Capital of Biblio",
     category: "地理",
@@ -679,7 +680,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ビブリオ港町ポート・ロレンツィオ",
+    id: "geo-ビブリオ港町ポート・ロレンツィオ" as WikiId,
     name: "ビブリオ港町ポート・ロレンツィオ",
     nameEn: "Port Lorenzio — Harbor Town of Biblio",
     category: "地理",
@@ -689,7 +690,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-Solaris首都ソーラ・シティ",
+    id: "geo-Solaris首都ソーラ・シティ" as WikiId,
     name: "Solaris首都ソーラ・シティ",
     nameEn: "Solar City — Capital of Solaris",
     category: "地理",
@@ -699,7 +700,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-Solaris工業都市フォージ・タウン",
+    id: "geo-Solaris工業都市フォージ・タウン" as WikiId,
     name: "Solaris工業都市フォージ・タウン",
     nameEn: "Forge Town — Industrial City of Solaris",
     category: "地理",
@@ -709,7 +710,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-エレシオン聖都ヒエロポリス",
+    id: "geo-エレシオン聖都ヒエロポリス" as WikiId,
     name: "エレシオン聖都ヒエロポリス",
     nameEn: "Hieropolis — Holy City of Elyseon",
     category: "地理",
@@ -719,7 +720,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-グランベル商都マーケット・コア",
+    id: "geo-グランベル商都マーケット・コア" as WikiId,
     name: "グランベル商都マーケット・コア",
     nameEn: "Market Core — Commercial Capital of Granbell",
     category: "地理",
@@ -729,7 +730,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ディオクレニス首都ノウス",
+    id: "geo-ディオクレニス首都ノウス" as WikiId,
     name: "ディオクレニス首都ノウス",
     nameEn: "Nous — Capital of Dioclenis",
     category: "地理",
@@ -739,7 +740,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ティレリア海上都市フローティング・ハーバー",
+    id: "geo-ティレリア海上都市フローティング・ハーバー" as WikiId,
     name: "ティレリア海上都市フローティング・ハーバー",
     nameEn: "Floating Harbor — Ocean City of Tyeria",
     category: "地理",
@@ -749,7 +750,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ファルージャ砂漠都市オアシス・ハブ",
+    id: "geo-ファルージャ砂漠都市オアシス・ハブ" as WikiId,
     name: "ファルージャ砂漠都市オアシス・ハブ",
     nameEn: "Oasis Hub — Desert City of Fallujah",
     category: "地理",
@@ -759,7 +760,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ギガポリス第8区画イーストエンド",
+    id: "geo-ギガポリス第8区画イーストエンド" as WikiId,
     name: "ギガポリス第8区画イーストエンド",
     nameEn: "East End — District 8 of Gigapolis",
     category: "地理",
@@ -770,7 +771,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* ギガポリス区画 (8) */
   {
-    id: "geo-ウェスト・エンド",
+    id: "geo-ウェスト・エンド" as WikiId,
     name: "ウェスト・エンド",
     nameEn: "West End",
     category: "地理",
@@ -780,7 +781,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ノース・サイド",
+    id: "geo-ノース・サイド" as WikiId,
     name: "ノース・サイド",
     nameEn: "North Side",
     category: "地理",
@@ -790,7 +791,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-サウス・マーケット",
+    id: "geo-サウス・マーケット" as WikiId,
     name: "サウス・マーケット",
     nameEn: "South Market",
     category: "地理",
@@ -800,7 +801,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-テック・コリドー",
+    id: "geo-テック・コリドー" as WikiId,
     name: "テック・コリドー",
     nameEn: "Tech Corridor",
     category: "地理",
@@ -810,7 +811,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-アート・ディストリクト",
+    id: "geo-アート・ディストリクト" as WikiId,
     name: "アート・ディストリクト",
     nameEn: "Art District",
     category: "地理",
@@ -820,7 +821,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ポート・ディストリクト",
+    id: "geo-ポート・ディストリクト" as WikiId,
     name: "ポート・ディストリクト",
     nameEn: "Port District",
     category: "地理",
@@ -831,7 +832,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* クレセント地形 (8) */
   {
-    id: "geo-クレセント山脈",
+    id: "geo-クレセント山脈" as WikiId,
     name: "クレセント山脈",
     nameEn: "Crescent Mountain Range",
     category: "地理",
@@ -841,7 +842,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ヴェルミリオン渓谷",
+    id: "geo-ヴェルミリオン渓谷" as WikiId,
     name: "ヴェルミリオン渓谷",
     nameEn: "Vermillion Valley",
     category: "地理",
@@ -851,7 +852,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ブルーローズ平原",
+    id: "geo-ブルーローズ平原" as WikiId,
     name: "ブルーローズ平原",
     nameEn: "Blue Rose Plains",
     category: "地理",
@@ -861,7 +862,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-クロセヴィア密林",
+    id: "geo-クロセヴィア密林" as WikiId,
     name: "クロセヴィア密林",
     nameEn: "Crosevia Dense Forest",
     category: "地理",
@@ -871,7 +872,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-SSレンジ通信山",
+    id: "geo-SSレンジ通信山" as WikiId,
     name: "SSレンジ通信山",
     nameEn: "SS Range Signal Mountain",
     category: "地理",
@@ -881,7 +882,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-アイアン峡谷",
+    id: "geo-アイアン峡谷" as WikiId,
     name: "アイアン峡谷",
     nameEn: "Iron Canyon",
     category: "地理",
@@ -891,7 +892,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ミエルテンガ湖",
+    id: "geo-ミエルテンガ湖" as WikiId,
     name: "ミエルテンガ湖",
     nameEn: "Lake Mielteunga",
     category: "地理",
@@ -901,7 +902,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-ファールージャ砂漠",
+    id: "geo-ファールージャ砂漠" as WikiId,
     name: "ファールージャ砂漠",
     nameEn: "Faruja Desert",
     category: "地理",
@@ -912,7 +913,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
 
   /* 宇宙構造物 (5) */
   {
-    id: "geo-E16軌道ステーション・オメガ",
+    id: "geo-E16軌道ステーション・オメガ" as WikiId,
     name: "E16軌道ステーション・オメガ",
     nameEn: "E16 Orbital Station Omega",
     category: "地理",
@@ -922,7 +923,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-エロス・ステーション",
+    id: "geo-エロス・ステーション" as WikiId,
     name: "エロス・ステーション",
     nameEn: "Eros Station",
     category: "地理",
@@ -932,7 +933,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-アステロイド・マイニング・プラットフォーム",
+    id: "geo-アステロイド・マイニング・プラットフォーム" as WikiId,
     name: "アステロイド・マイニング・プラットフォーム",
     nameEn: "Asteroid Mining Platform",
     category: "地理",
@@ -942,7 +943,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-次元ブリッジ・ターミナル",
+    id: "geo-次元ブリッジ・ターミナル" as WikiId,
     name: "次元ブリッジ・ターミナル",
     nameEn: "Dimensional Bridge Terminal",
     category: "地理",
@@ -952,7 +953,7 @@ export const WIKI_GEOGRAPHY: WikiEntry[] = [
   },
 
   {
-    id: "geo-宇宙港スペースポート",
+    id: "geo-宇宙港スペースポート" as WikiId,
     name: "宇宙港スペースポート",
     nameEn: "Spaceport — E16 Interplanetary Spaceport",
     category: "地理",

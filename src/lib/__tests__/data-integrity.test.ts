@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.repository"
+import type { WikiId } from "@/platform/schemas/branded"
 
 const VALID_CATEGORIES = ["キャラクター", "組織", "地理", "技術", "用語", "歴史"] as const
 
@@ -79,7 +80,7 @@ describe("Data Integrity", () => {
       // Check a few known leaders
       const knownLeaders = ["アルゼン・カーリーン", "女王リアナ・ソリス", "グレイモンド・ハウザー"]
       for (const leader of knownLeaders) {
-        expect(entryIds.has(leader)).toBe(true)
+        expect(entryIds.has(leader as WikiId)).toBe(true)
       }
     })
 

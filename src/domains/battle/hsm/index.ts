@@ -109,12 +109,18 @@ export class Hsm {
     // Walk from leaf (end of activeStates) to root (start)
     for (let i = this.activeStates.length - 1; i >= 0; i--) {
       const stateId = this.activeStates[i]
-      if (stateId === undefined) {continue}
+      if (stateId === undefined) {
+        continue
+      }
       const state = this.config.states[stateId]
-      if (!state) {continue}
+      if (!state) {
+        continue
+      }
 
       const raw = state.transitions[event.type]
-      if (raw === undefined) {continue} // event not handled by this state
+      if (raw === undefined) {
+        continue
+      } // event not handled by this state
 
       // This state defines a handler for the event type.
       // We do NOT propagate to parents – all guards here must fail first.
@@ -286,11 +292,15 @@ export class Hsm {
 
     while (queue.length > 0) {
       const stateId = queue.shift()!
-      if (reachable.has(stateId)) {continue}
+      if (reachable.has(stateId)) {
+        continue
+      }
       reachable.add(stateId)
 
       const state = this.config.states[stateId]
-      if (!state) {continue}
+      if (!state) {
+        continue
+      }
 
       // Parent is reachable by hierarchy
       if (state.parent && !reachable.has(state.parent)) {
@@ -378,7 +388,9 @@ export class Hsm {
     // Exit from the current leaf up to (but not including) the LCA.
     for (let i = this.activeStates.length - 1; i >= 0; i--) {
       const sid = this.activeStates[i]
-      if (sid === undefined || sid === lca) {break}
+      if (sid === undefined || sid === lca) {
+        break
+      }
       this.saveHistory(sid)
       this.config.states[sid]?.onExit?.(this.context, event)
     }
@@ -389,7 +401,7 @@ export class Hsm {
     // ── ENTRY PHASE ──
     // States to enter: from just below the LCA down to the target.
     const entryStates: string[] =
-      lca === null ? [...targetAncestors] : targetAncestors.slice(targetAncestors.indexOf(lca) + 1)
+      lca == null ? [...targetAncestors] : targetAncestors.slice(targetAncestors.indexOf(lca) + 1)
 
     // Resolve any history states in the entry chain.
     const resolvedEntry = this.resolveHistory(entryStates)
@@ -399,7 +411,7 @@ export class Hsm {
     }
 
     // ── REBUILD ACTIVE STATES ──
-    if (lca === null) {
+    if (lca == null) {
       this.activeStates = [...resolvedEntry]
     } else {
       const lcaIdx = this.activeStates.indexOf(lca)
@@ -421,16 +433,22 @@ export class Hsm {
   /** Persist history for a state that supports it (called on exit). */
   private saveHistory(stateId: string): void {
     const mode = this.config.historyStates?.[stateId]
-    if (mode === undefined) {return}
+    if (mode === undefined) {
+      return
+    }
 
     if (mode === "deep") {
       const leaf = this.activeStates[this.activeStates.length - 1]
-      if (leaf !== undefined) {this.historyMemory.set(stateId, leaf)}
+      if (leaf !== undefined) {
+        this.historyMemory.set(stateId, leaf)
+      }
     } else {
       // Shallow: remember the direct child
       const idx = this.activeStates.indexOf(stateId)
       const child = this.activeStates[idx + 1]
-      if (child !== undefined) {this.historyMemory.set(stateId, child)}
+      if (child !== undefined) {
+        this.historyMemory.set(stateId, child)
+      }
     }
   }
 
@@ -461,6 +479,13 @@ export class Hsm {
 
 // ─── DOT generation (module-private, shared by toDot + graphviz.ts) ─
 
+/**
+ * Convert an HSM configuration to a DOT language string.
+ * Used by both toDot() and graphviz.ts for Graphviz export.
+ *
+ * @param config - The HSM configuration to convert.
+ * @returns A DOT language string representation of the HSM.
+ */
 export function hsmToDotString(config: HsmConfig): string {
   const lines: string[] = []
   lines.push("digraph HSM {")
@@ -472,7 +497,9 @@ export function hsmToDotString(config: HsmConfig): string {
   // Identify compound states (parents of at least one other state)
   const compoundSet = new Set<string>()
   for (const state of Object.values(config.states)) {
-    if (state.parent) {compoundSet.add(state.parent)}
+    if (state.parent) {
+      compoundSet.add(state.parent)
+    }
   }
 
   // Cluster subgraphs for compound states
@@ -512,7 +539,9 @@ export function hsmToDotString(config: HsmConfig): string {
       const list: readonly HsmTransition[] = Array.isArray(raw) ? raw : [raw]
       for (const t of list) {
         const key = `${stateId}->${t.target}:${eventType}`
-        if (emitted.has(key)) {continue}
+        if (emitted.has(key)) {
+          continue
+        }
         emitted.add(key)
         const label = t.guard ? `${eventType} [guarded]` : eventType
         lines.push(`  ${sanitizeId(stateId)} -> ${sanitizeId(t.target)} [label="${label}"];`)

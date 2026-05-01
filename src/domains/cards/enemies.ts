@@ -1,3 +1,4 @@
+import type { EnemyId } from "../../platform/schemas/branded"
 import type { Enemy } from "@/types"
 
 /* ═══════════════════════════════════════════════════════
@@ -6,7 +7,7 @@ import type { Enemy } from "@/types"
 export const ENEMIES: Enemy[] = [
   /* ── NORMAL ×4 ── */
   {
-    id: "stardust-dragon",
+    id: "stardust-dragon" as EnemyId,
     name: "スターダスト・ドラゴン",
     title: "星屑の守護者",
     maxHp: 28,
@@ -18,7 +19,7 @@ export const ENEMIES: Enemy[] = [
     phases: [{ triggerHpPercent: 50, message: "翼を広げ炎を吐く！", attackBonus: 2 }],
   },
   {
-    id: "phantom-walker",
+    id: "phantom-walker" as EnemyId,
     name: "霊体ウォーカー",
     title: "彷徨える亡者",
     maxHp: 22,
@@ -38,7 +39,7 @@ export const ENEMIES: Enemy[] = [
     specialRule: "HP40%以下から毎ターン2回復する",
   },
   {
-    id: "iron-golem",
+    id: "iron-golem" as EnemyId,
     name: "鉄塊ゴーレム",
     title: "廃工場の番人",
     maxHp: 35,
@@ -51,7 +52,7 @@ export const ENEMIES: Enemy[] = [
     specialRule: "防御能力の効果が半減する（シールド値÷2）",
   },
   {
-    id: "venom-hydra",
+    id: "venom-hydra" as EnemyId,
     name: "毒沼ヒュドラ",
     title: "沼地の多頭竜",
     maxHp: 30,
@@ -68,7 +69,7 @@ export const ENEMIES: Enemy[] = [
   },
   /* ── HARD ×3 ── */
   {
-    id: "frost-guardian",
+    id: "frost-guardian" as EnemyId,
     name: "氷獄の守護者",
     title: "絶対零度の鎧",
     maxHp: 42,
@@ -87,7 +88,7 @@ export const ENEMIES: Enemy[] = [
     specialRule: "バトル開始時味方全体に1ダメージ。防御能力の効果が半減する（シールド値÷2）",
   },
   {
-    id: "flame-spirit",
+    id: "flame-spirit" as EnemyId,
     name: "炎の精霊王",
     title: "業火の化身",
     maxHp: 36,
@@ -103,7 +104,7 @@ export const ENEMIES: Enemy[] = [
     specialRule: "防御能力を使うたびに自分が1ダメージ",
   },
   {
-    id: "void-spider",
+    id: "void-spider" as EnemyId,
     name: "深淵の大蜘蛛",
     title: "虚無の糸使い",
     maxHp: 45,
@@ -117,7 +118,7 @@ export const ENEMIES: Enemy[] = [
   },
   /* ── BOSS ×2 ── */
   {
-    id: "fallen-angel",
+    id: "fallen-angel" as EnemyId,
     name: "堕落した天使",
     title: "翼なき裁判者",
     maxHp: 65,
@@ -143,7 +144,7 @@ export const ENEMIES: Enemy[] = [
     specialRule: "HP33%以下から毎ターン3回復＋攻撃力+4",
   },
   {
-    id: "void-reaper",
+    id: "void-reaper" as EnemyId,
     name: "ヴォイドリーパー",
     title: "時空の刈り手",
     maxHp: 75,
@@ -161,7 +162,7 @@ export const ENEMIES: Enemy[] = [
   },
   /* ── FINAL ×1 ── */
   {
-    id: "void-king",
+    id: "void-king" as EnemyId,
     name: "虚無の王",
     title: "終焉の支配者",
     maxHp: 100,

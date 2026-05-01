@@ -1,8 +1,9 @@
+import type { WikiId } from "../../platform/schemas/branded"
 import type { WikiEntry } from "@/types"
 
 export const WIKI_TERMS: WikiEntry[] = [
   {
-    id: "コーポラトクラシー",
+    id: "コーポラトクラシー" as WikiId,
     name: "コーポラトクラシー",
     nameEn: "Corporatocracy",
     category: "用語",
@@ -12,7 +13,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "クロニクル・ネーム",
+    id: "クロニクル・ネーム" as WikiId,
     name: "クロニクル・ネーム",
     nameEn: "Chronicle Name",
     category: "用語",
@@ -22,7 +23,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "スティル・アレーナ",
+    id: "スティル・アレーナ" as WikiId,
     name: "スティル・アレーナ",
     nameEn: "Steel Arena",
     category: "用語",
@@ -32,7 +33,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "アビサル・ドレイン",
+    id: "アビサル・ドレイン" as WikiId,
     name: "アビサル・ドレイン",
     nameEn: "Abyssal Drain",
     category: "用語",
@@ -42,7 +43,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "フェルミ音楽",
+    id: "フェルミ音楽" as WikiId,
     name: "フェルミ音楽",
     nameEn: "Fermi Music",
     category: "用語",
@@ -52,7 +53,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "サイケデリック・コスモロジー",
+    id: "サイケデリック・コスモロジー" as WikiId,
     name: "サイケデリック・コスモロジー",
     nameEn: "Psychedelic Cosmology",
     category: "用語",
@@ -62,7 +63,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "シギル・アフェクト",
+    id: "シギル・アフェクト" as WikiId,
     name: "シギル・アフェクト",
     nameEn: "Sigil Affect",
     category: "用語",
@@ -72,7 +73,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "ジーン・カタログ",
+    id: "ジーン・カタログ" as WikiId,
     name: "ジーン・カタログ",
     nameEn: "Gene Catalogue",
     category: "用語",
@@ -82,7 +83,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "ヘゲモニー・パラドックス（概要）",
+    id: "ヘゲモニー・パラドックス（概要）" as WikiId,
     name: "ヘゲモニー・パラドックス",
     nameEn: "Hegemony Paradox",
     category: "用語",
@@ -93,7 +94,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
   /* 民族集団 */
   {
-    id: "フェンドラ人",
+    id: "フェンドラ人" as WikiId,
     name: "フェンドラ人",
     nameEn: "Fendra",
     category: "用語",
@@ -103,7 +104,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "アーキアン",
+    id: "アーキアン" as WikiId,
     name: "アーキアン",
     nameEn: "Archian",
     category: "用語",
@@ -113,7 +114,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "ポロンポロ",
+    id: "ポロンポロ" as WikiId,
     name: "ポロンポロ",
     nameEn: "Polonpolo",
     category: "用語",
@@ -123,7 +124,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "Iris_Worlds",
+    id: "Iris_Worlds" as WikiId,
     name: "アイリス・ワールズ",
     nameEn: "Iris Worlds",
     category: "用語",
@@ -136,7 +137,7 @@ export const WIKI_TERMS: WikiEntry[] = [
      宇宙勢力 — eduuni.txt
      ═══════════════════════════════════════════ */
   {
-    id: "グランベル",
+    id: "グランベル" as WikiId,
     name: "グランベル",
     nameEn: "Granbell",
     category: "用語",
@@ -153,14 +154,14 @@ export const WIKI_TERMS: WikiEntry[] = [
 
     leaders: [
       {
-        id: "アルゼン・カーリーン",
+        id: "アルゼン・カーリーン" as WikiId,
         name: "アルゼン・カーリーン",
         nameEn: "Alzen Carine",
         role: "グランベル大統領",
         era: "現在",
       },
       {
-        id: "マスター・クインシアス",
+        id: "マスター・クインシアス" as WikiId,
         name: "マスター・クインシアス",
         nameEn: "Master Quinsias",
         role: "グランベル初期リーダー",
@@ -170,7 +171,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "ティエリア",
+    id: "ティエリア" as WikiId,
     name: "ティエリア",
     nameEn: "Tyeria",
     category: "用語",
@@ -187,7 +188,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
     leaders: [
       {
-        id: "グレイモンド・ハウザー",
+        id: "グレイモンド・ハウザー" as WikiId,
         name: "グレイモンド・ハウザー",
         nameEn: "Greymond Hauser",
         role: "ティエリア総帥",
@@ -197,7 +198,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "エレシオン",
+    id: "エレシオン" as WikiId,
     name: "エレシオン",
     nameEn: "Elyseon",
     category: "用語",
@@ -214,7 +215,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
     leaders: [
       {
-        id: "女王リアナ・ソリス",
+        id: "女王リアナ・ソリス" as WikiId,
         name: "女王リアナ・ソリス",
         nameEn: "Queen Liana Solis",
         role: "エレシオン女王",
@@ -224,7 +225,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "ファルージャ",
+    id: "ファルージャ" as WikiId,
     name: "ファルージャ",
     nameEn: "Fallujah",
     category: "用語",
@@ -241,7 +242,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
     leaders: [
       {
-        id: "マドリス・カーネル",
+        id: "マドリス・カーネル" as WikiId,
         name: "マドリス・カーネル",
         nameEn: "Madrisernel",
         role: "ファルージャ評議会代表",
@@ -251,7 +252,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "ディオクレニス",
+    id: "ディオクレニス" as WikiId,
     name: "ディオクレニス",
     nameEn: "Dioclenis",
     category: "用語",
@@ -268,7 +269,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
     leaders: [
       {
-        id: "ネイサン・コリンド",
+        id: "ネイサン・コリンド" as WikiId,
         name: "ネイサン・コリンド",
         nameEn: "Nathan Corlind",
         role: "ディオクレニス科学宰相",
@@ -278,7 +279,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "アポロン文明圏",
+    id: "アポロン文明圏" as WikiId,
     name: "アポロン文明圏",
     nameEn: "Apollon",
     category: "用語",
@@ -295,7 +296,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
     leaders: [
       {
-        id: "ロナン・アーサ",
+        id: "ロナン・アーサ" as WikiId,
         name: "ロナン・アーサ",
         nameEn: "Ronan Arthur",
         role: "アポロン文明圏リーダー",
@@ -305,7 +306,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "Selinopolis",
+    id: "Selinopolis" as WikiId,
     name: "Selinopolis（ドミニオン）",
     nameEn: "Selinopolis / Dominion",
     category: "用語",
@@ -322,7 +323,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
     leaders: [
       {
-        id: "セリア・ドミニクス",
+        id: "セリア・ドミニクス" as WikiId,
         name: "セリア・ドミニクス",
         nameEn: "Celia Dminix",
         role: "Selinopolis/Dominion統治者",
@@ -332,7 +333,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "宇宙連合会合",
+    id: "宇宙連合会合" as WikiId,
     name: "宇宙連合会合",
     nameEn: "Universal Federation Summit",
     category: "用語",
@@ -349,7 +350,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "アポロン・Dominion大戦",
+    id: "アポロン・Dominion大戦" as WikiId,
     name: "アポロン・Dominion大戦",
     nameEn: "Apollon Dominion War",
     category: "用語",
@@ -366,7 +367,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "オルダシティ",
+    id: "オルダシティ" as WikiId,
     name: "オルダシティ",
     nameEn: "Olda City",
     category: "用語",
@@ -382,7 +383,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "アポロン・セントラリス",
+    id: "アポロン・セントラリス" as WikiId,
     name: "アポロン・セントラリス",
     nameEn: "Apollon Centralis",
     category: "用語",
@@ -398,7 +399,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "ヘゲモニー・パラドックス",
+    id: "ヘゲモニー・パラドックス" as WikiId,
     name: "ヘゲモニー・パラドックス",
     nameEn: "Hegemony Paradox",
     category: "用語",
@@ -414,7 +415,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "EVILS",
+    id: "EVILS" as WikiId,
     name: "イビルス",
     nameEn: "EVILS",
     category: "用語",
@@ -424,7 +425,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
     leaders: [
       {
-        id: "オメガ＝ユリシア",
+        id: "オメガ＝ユリシア" as WikiId,
         name: "オメガ＝ユリシア",
         nameEn: "Omega=Ulysses",
         role: "EVILSリーダー",
@@ -439,7 +440,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
   /* 暦・カレンダー (3) */
   {
-    id: "term-東暦紀年法",
+    id: "term-東暦紀年法" as WikiId,
     name: "東暦紀年法",
     nameEn: "Eastern Calendar System",
     category: "用語",
@@ -449,7 +450,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-E0の定義",
+    id: "term-E0の定義" as WikiId,
     name: "E0の定義",
     nameEn: "Definition of E0",
     category: "用語",
@@ -459,7 +460,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-暦変換規則",
+    id: "term-暦変換規則" as WikiId,
     name: "暦変換規則",
     nameEn: "Calendar Conversion Rules",
     category: "用語",
@@ -470,7 +471,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
   /* 社会システム (5) */
   {
-    id: "term-A籍制度",
+    id: "term-A籍制度" as WikiId,
     name: "A籍制度",
     nameEn: "A-Registry System",
     category: "用語",
@@ -480,7 +481,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-nトークン経済",
+    id: "term-nトークン経済" as WikiId,
     name: "nトークン経済",
     nameEn: "n-Token Economy",
     category: "用語",
@@ -490,7 +491,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-ギガポリス通貨システム",
+    id: "term-ギガポリス通貨システム" as WikiId,
     name: "ギガポリス通貨システム",
     nameEn: "Gigapolis Currency System",
     category: "用語",
@@ -500,7 +501,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-レア度分類",
+    id: "term-レア度分類" as WikiId,
     name: "レア度分類",
     nameEn: "Rarity Classification System",
     category: "用語",
@@ -510,7 +511,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-戦闘力指数",
+    id: "term-戦闘力指数" as WikiId,
     name: "戦闘力指数",
     nameEn: "Combat Power Index",
     category: "用語",
@@ -521,7 +522,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
   /* IRIS (2) */
   {
-    id: "term-IRISランキングシステム",
+    id: "term-IRISランキングシステム" as WikiId,
     name: "IRISランキングシステム",
     nameEn: "IRIS Ranking System",
     category: "用語",
@@ -531,7 +532,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-IRIS世界観",
+    id: "term-IRIS世界観" as WikiId,
     name: "IRIS世界観",
     nameEn: "IRIS Worldview",
     category: "用語",
@@ -542,7 +543,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
   /* 歴史的期間 (3) */
   {
-    id: "term-セリア黄金期の社会制度",
+    id: "term-セリア黄金期の社会制度" as WikiId,
     name: "セリア黄金期の社会制度",
     nameEn: "Social System of Celia Golden Age",
     category: "用語",
@@ -552,7 +553,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-エヴァトロン体制の法体系",
+    id: "term-エヴァトロン体制の法体系" as WikiId,
     name: "エヴァトロン体制の法体系",
     nameEn: "Evatron Legal System",
     category: "用語",
@@ -562,7 +563,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-ポスト・エヴァトロン秩序",
+    id: "term-ポスト・エヴァトロン秩序" as WikiId,
     name: "ポスト・エヴァトロン秩序",
     nameEn: "Post-Evatron Order",
     category: "用語",
@@ -573,7 +574,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
   /* E16文化 (7) */
   {
-    id: "term-E16の度量衡",
+    id: "term-E16の度量衡" as WikiId,
     name: "E16の度量衡",
     nameEn: "E16 Weights and Measures",
     category: "用語",
@@ -583,7 +584,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-言語体系",
+    id: "term-言語体系" as WikiId,
     name: "言語体系",
     nameEn: "Language System of E16",
     category: "用語",
@@ -593,7 +594,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-教育制度",
+    id: "term-教育制度" as WikiId,
     name: "教育制度",
     nameEn: "Education System of E16",
     category: "用語",
@@ -603,7 +604,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-芸術・文化運動",
+    id: "term-芸術・文化運動" as WikiId,
     name: "芸術・文化運動",
     nameEn: "Art and Cultural Movements of E16",
     category: "用語",
@@ -613,7 +614,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-宗教観・世界観",
+    id: "term-宗教観・世界観" as WikiId,
     name: "宗教観・世界観",
     nameEn: "Religious and Worldview of E16",
     category: "用語",
@@ -623,7 +624,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-料理・食文化",
+    id: "term-料理・食文化" as WikiId,
     name: "料理・食文化",
     nameEn: "Cuisine and Food Culture of E16",
     category: "用語",
@@ -633,7 +634,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-祝祭・記念日",
+    id: "term-祝祭・記念日" as WikiId,
     name: "祝祭・記念日",
     nameEn: "Festivals and Memorial Days of E16",
     category: "用語",
@@ -644,7 +645,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
   /* 外交・法規 (5) */
   {
-    id: "term-惑星間条約",
+    id: "term-惑星間条約" as WikiId,
     name: "惑星間条約",
     nameEn: "Interplanetary Treaties",
     category: "用語",
@@ -654,7 +655,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-銀河系コンソーシアム",
+    id: "term-銀河系コンソーシアム" as WikiId,
     name: "銀河系コンソーシアム",
     nameEn: "Galactic Consortium",
     category: "用語",
@@ -664,7 +665,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-通商路の定義",
+    id: "term-通商路の定義" as WikiId,
     name: "通商路の定義",
     nameEn: "Definition of Trade Routes",
     category: "用語",
@@ -674,7 +675,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-犯罪と刑罰体系",
+    id: "term-犯罪と刑罰体系" as WikiId,
     name: "犯罪と刑罰体系",
     nameEn: "Crime and Punishment System",
     category: "用語",
@@ -684,7 +685,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-特許・知的財産制度",
+    id: "term-特許・知的財産制度" as WikiId,
     name: "特許・知的財産制度",
     nameEn: "Patent and Intellectual Property System",
     category: "用語",
@@ -695,7 +696,7 @@ export const WIKI_TERMS: WikiEntry[] = [
 
   /* 追加: 環境・報道・スポーツ (3) */
   {
-    id: "term-環境保護法",
+    id: "term-環境保護法" as WikiId,
     name: "環境保護法",
     nameEn: "Environmental Protection Law of E16",
     category: "用語",
@@ -705,7 +706,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-報道自由",
+    id: "term-報道自由" as WikiId,
     name: "報道自由",
     nameEn: "Freedom of Press in E16",
     category: "用語",
@@ -715,7 +716,7 @@ export const WIKI_TERMS: WikiEntry[] = [
   },
 
   {
-    id: "term-スポーツ競技",
+    id: "term-スポーツ競技" as WikiId,
     name: "スポーツ競技",
     nameEn: "Sports and Athletic Competitions of E16",
     category: "用語",

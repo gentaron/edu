@@ -1,9 +1,9 @@
-import type { WikiEntry } from "@/types"
+import type { WikiId, WikiEntry } from "@/types"
 
 export const WIKI_ORGANIZATIONS = [
   /* 組織・制度 */
   {
-    id: "AURALIS",
+    id: "AURALIS" as WikiId,
     name: "オーラリス・コレクティブ",
     nameEn: "AURALIS Collective",
     category: "組織",
@@ -13,28 +13,28 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "Kate Claudia",
+        id: "Kate Claudia" as WikiId as WikiId,
         name: "ケイト・クラウディア",
         nameEn: "Kate Claudia",
         role: "AURALIS Collective創設者「設計者」",
         era: "E270〜E400",
       },
       {
-        id: "Lily Steiner",
+        id: "Lily Steiner" as WikiId as WikiId,
         name: "リリー・スタイナー",
         nameEn: "Lily Steiner",
         role: "AURALIS Collective共同創設者「感情の炎」",
         era: "E270〜E400",
       },
       {
-        id: "Kate Patton",
+        id: "Kate Patton" as WikiId as WikiId,
         name: "ケイト・パットン",
         nameEn: "Kate Patton",
         role: "AURALIS Collective第二世代",
         era: "E522〜",
       },
       {
-        id: "Lillie Ardent",
+        id: "Lillie Ardent" as WikiId as WikiId,
         name: "リリー・アーデント",
         nameEn: "Lillie Ardent",
         role: "AURALIS Collective第二世代",
@@ -44,7 +44,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ZAMLT",
+    id: "ZAMLT" as WikiId,
     name: "ザムルト",
     nameEn: "ZAMLT",
     category: "組織",
@@ -54,42 +54,42 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "エリオット・シュトラス",
+        id: "エリオット・シュトラス" as WikiId as WikiId,
         name: "エリオット・シュトラス",
         nameEn: "Elliot Strauss",
         role: "ZAMLT創設者・最高指導者",
         era: "E301〜E318",
       },
       {
-        id: "ラファエル・ドレイク",
+        id: "ラファエル・ドレイク" as WikiId as WikiId,
         name: "ラファエル・ドレイク",
         nameEn: "Rafael Drake",
         role: "トロン・コーポレーションCEO",
         era: "E301〜E318",
       },
       {
-        id: "カルロス・ヴァンダム",
+        id: "カルロス・ヴァンダム" as WikiId as WikiId,
         name: "カルロス・ヴァンダム",
         nameEn: "Carlos Vandam",
         role: "マモン・コーポレーションリーダー",
         era: "E301〜E318",
       },
       {
-        id: "アーサー・グリム",
+        id: "アーサー・グリム" as WikiId as WikiId,
         name: "アーサー・グリム",
         nameEn: "Arthur Grim",
         role: "ゼブラ・コーポレーションリーダー",
         era: "E301〜E318",
       },
       {
-        id: "エリザベス・リンドバーグ",
+        id: "エリザベス・リンドバーグ" as WikiId as WikiId,
         name: "エリザベス・リンドバーグ",
         nameEn: "Elizabeth Lindberg",
         role: "ルレンツ・コーポレーションリーダー",
         era: "E301〜E318",
       },
       {
-        id: "アイリス・ノヴァ",
+        id: "アイリス・ノヴァ" as WikiId as WikiId,
         name: "アイリス・ノヴァ",
         nameEn: "Iris Nova",
         role: "アロエオイル・コーポレーションリーダー",
@@ -99,7 +99,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ネオクラン同盟",
+    id: "ネオクラン同盟" as WikiId,
     name: "ネオクラン同盟",
     nameEn: "Neoclan Alliance",
     category: "組織",
@@ -109,7 +109,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "ルシア・ネオ",
+        id: "ルシア・ネオ" as WikiId as WikiId,
         name: "ルシア・ネオ",
         nameEn: "Lucia Neo",
         role: "ネオクラン同盟初代代表",
@@ -119,7 +119,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "UECO",
+    id: "UECO" as WikiId,
     name: "ユーエコー",
     nameEn: "UECO",
     category: "組織",
@@ -129,7 +129,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "ヘクトル・ヴァン",
+        id: "ヘクトル・ヴァン" as WikiId as WikiId,
         name: "ヘクトル・ヴァン",
         nameEn: "Hector Van",
         role: "UECO初代議長",
@@ -139,7 +139,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "シャドウ・リベリオン",
+    id: "シャドウ・リベリオン" as WikiId,
     name: "シャドウ・リベリオン",
     nameEn: "Shadow Rebellion",
     category: "組織",
@@ -149,7 +149,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "アルファ・ケイン",
+        id: "アルファ・ケイン" as WikiId as WikiId,
         name: "アルファ・ケイン",
         nameEn: "Alpha Kane",
         role: "シャドウ・リベリオンリーダー",
@@ -159,7 +159,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "A-Registry",
+    id: "A-Registry" as WikiId,
     name: "A-Registry（A籍）",
     nameEn: "A-Registry",
     category: "組織",
@@ -169,7 +169,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "nトークン",
+    id: "nトークン" as WikiId,
     name: "nトークン",
     nameEn: "n-Token",
     category: "組織",
@@ -180,7 +180,7 @@ export const WIKI_ORGANIZATIONS = [
 
   /* 軍事・対立組織 */
   {
-    id: "シルバー・ヴェノム",
+    id: "シルバー・ヴェノム" as WikiId,
     name: "シルバー・ヴェノム",
     nameEn: "Silver Venom",
     category: "組織",
@@ -190,14 +190,14 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "マスター・ヴェノム",
+        id: "マスター・ヴェノム" as WikiId as WikiId,
         name: "マスター・ヴェノム",
         nameEn: "Master Venom",
         role: "シルバー・ヴェノム創設者",
         era: "E475〜E500頃",
       },
       {
-        id: "レオン",
+        id: "レオン" as WikiId as WikiId,
         name: "レオン",
         nameEn: "Leon",
         role: "シルバー・ヴェノム幹部",
@@ -207,7 +207,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "アルファ・ヴェノム",
+    id: "アルファ・ヴェノム" as WikiId,
     name: "アルファ・ヴェノム",
     nameEn: "Alpha Venom",
     category: "組織",
@@ -217,7 +217,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "イズミ",
+        id: "イズミ" as WikiId as WikiId,
         name: "イズミ",
         nameEn: "Izumi",
         role: "アルファ・ヴェノムリーダー",
@@ -227,7 +227,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ゴールデン・ヴェノム",
+    id: "ゴールデン・ヴェノム" as WikiId,
     name: "ゴールデン・ヴェノム",
     nameEn: "Golden Venom",
     category: "組織",
@@ -237,7 +237,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "オーギュスト・ゴールド",
+        id: "オーギュスト・ゴールド" as WikiId as WikiId,
         name: "オーギュスト・ゴールド",
         nameEn: "August Gold",
         role: "ゴールデン・ヴェノム創設者",
@@ -247,7 +247,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ボグダス・ジャベリン",
+    id: "ボグダス・ジャベリン" as WikiId,
     name: "ボグダス・ジャベリン",
     nameEn: "Bogdas Javelin",
     category: "組織",
@@ -257,7 +257,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "セバスチャン・ヴァレリウス",
+        id: "セバスチャン・ヴァレリウス" as WikiId as WikiId,
         name: "セバスチャン・ヴァレリウス",
         nameEn: "Sebastian Valerius",
         role: "ボグダス・ジャベリンリーダー",
@@ -267,7 +267,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "V7",
+    id: "V7" as WikiId,
     name: "V7（Vital Seven）",
     nameEn: "V7 (Vital Seven)",
     category: "組織",
@@ -277,35 +277,35 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "フィオナ",
+        id: "フィオナ" as WikiId as WikiId,
         name: "フィオナ",
         nameEn: "Klaus Fiona",
         role: "ブルーローズ統率者・V7設立主導者",
         era: "E515〜",
       },
       {
-        id: "カスチーナ・テンペスト",
+        id: "カスチーナ・テンペスト" as WikiId as WikiId,
         name: "カスチーナ・テンペスト",
         nameEn: "Castina Tempest",
         role: "クロセヴィア首脳",
         era: "E515〜",
       },
       {
-        id: "アイク・ロペス",
+        id: "アイク・ロペス" as WikiId as WikiId,
         name: "アイク・ロペス",
         nameEn: "Ike Lopez",
         role: "SSレンジ首脳",
         era: "E515〜",
       },
       {
-        id: "レイド・カキザキ",
+        id: "レイド・カキザキ" as WikiId as WikiId,
         name: "レイド・カキザキ",
         nameEn: "Raid Kakizaki",
         role: "アイアン・シンジケート首脳",
         era: "E515〜",
       },
       {
-        id: "ヨニック",
+        id: "ヨニック" as WikiId as WikiId,
         name: "ヨニック",
         nameEn: "Yonick",
         role: "ブルーローズ最高司令官",
@@ -315,7 +315,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "トリニティ・アライアンス",
+    id: "トリニティ・アライアンス" as WikiId,
     name: "トリニティ・アライアンス",
     nameEn: "Trinity Alliance",
     category: "組織",
@@ -325,7 +325,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "アイリス",
+        id: "アイリス" as WikiId as WikiId,
         name: "アイリス",
         nameEn: "Iris",
         role: "トリニティ・アライアンス指導者",
@@ -336,7 +336,7 @@ export const WIKI_ORGANIZATIONS = [
 
   /* その他 */
   {
-    id: "ファールージャ社",
+    id: "ファールージャ社" as WikiId,
     name: "ファールージャ社",
     nameEn: "Faruja Corporation",
     category: "組織",
@@ -346,7 +346,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "ミカエル・ガブリエリ",
+        id: "ミカエル・ガブリエリ" as WikiId as WikiId,
         name: "ミカエル・ガブリエリ",
         nameEn: "Mikael Gabrieli",
         role: "ファールージャ社CEO",
@@ -356,7 +356,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "エヴァトロン",
+    id: "エヴァトロン" as WikiId,
     name: "エヴァトロン",
     nameEn: "Evatron",
     category: "組織",
@@ -366,14 +366,14 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "グリム・ダルゴス",
+        id: "グリム・ダルゴス" as WikiId as WikiId,
         name: "グリム・ダルゴス",
         nameEn: "Grim Dargos",
         role: "エヴァトロン初代リーダー",
         era: "歴史上",
       },
       {
-        id: "ヴァイロン・デアクス",
+        id: "ヴァイロン・デアクス" as WikiId as WikiId,
         name: "ヴァイロン・デアクス",
         nameEn: "Vylon Deax",
         role: "エヴァトロン幹部（Dominion総治者）",
@@ -383,7 +383,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "テクロサス",
+    id: "テクロサス" as WikiId,
     name: "テクロサス",
     nameEn: "Tekrosas",
     category: "組織",
@@ -393,7 +393,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "クロノ・ヴァーレント",
+        id: "クロノ・ヴァーレント" as WikiId as WikiId,
         name: "クロノ・ヴァーレント",
         nameEn: "Chrono Valeint",
         role: "テクロサス指導者",
@@ -404,7 +404,7 @@ export const WIKI_ORGANIZATIONS = [
 
   /* 組織・制度（追加） */
   {
-    id: "コーポラタムパブリカ",
+    id: "コーポラタムパブリカ" as WikiId,
     name: "コーポラタムパブリカ",
     nameEn: "Corporatum Publica",
     category: "組織",
@@ -414,7 +414,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "エリオット・シュトラス",
+        id: "エリオット・シュトラス" as WikiId as WikiId,
         name: "エリオット・シュトラス",
         nameEn: "Elliot Strauss",
         role: "ZAMLT統合による最末期執行官",
@@ -424,7 +424,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "シャドウ・ユニオン",
+    id: "シャドウ・ユニオン" as WikiId,
     name: "シャドウ・ユニオン",
     nameEn: "Shadow Union",
     category: "組織",
@@ -434,7 +434,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "男性指令省",
+    id: "男性指令省" as WikiId,
     name: "男性指令省",
     nameEn: "Male Directive Ministry",
     category: "組織",
@@ -444,7 +444,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "マトリカル・カウンシル",
+    id: "マトリカル・カウンシル" as WikiId,
     name: "マトリカル・カウンシル",
     nameEn: "Matrical Council",
     category: "組織",
@@ -454,7 +454,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "マトリカル・リフォーム運動",
+    id: "マトリカル・リフォーム運動" as WikiId,
     name: "マトリカル・リフォーム運動",
     nameEn: "Matrical Reform Movement",
     category: "組織",
@@ -464,7 +464,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ヒーローエージェンシー",
+    id: "ヒーローエージェンシー" as WikiId,
     name: "ヒーローエージェンシー",
     nameEn: "Hero Agency",
     category: "組織",
@@ -474,7 +474,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "銀河系コンソーシアム",
+    id: "銀河系コンソーシアム" as WikiId,
     name: "銀河系コンソーシアム",
     nameEn: "Galactic Consortium",
     category: "組織",
@@ -484,7 +484,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "テンプル・オブ・ホライゾン",
+    id: "テンプル・オブ・ホライゾン" as WikiId,
     name: "テンプル・オブ・ホライゾン",
     nameEn: "Temple of Horizon",
     category: "組織",
@@ -494,7 +494,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "Σ-Unit",
+    id: "Σ-Unit" as WikiId,
     name: "シグマ・ユニット",
     nameEn: "Sigma Unit",
     category: "組織",
@@ -504,7 +504,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "テリアン反乱軍",
+    id: "テリアン反乱軍" as WikiId,
     name: "テリアン反乱軍",
     nameEn: "Terrian Rebel Army",
     category: "組織",
@@ -514,7 +514,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ロンバルディア帝国",
+    id: "ロンバルディア帝国" as WikiId,
     name: "ロンバルディア帝国",
     nameEn: "Lombardia Empire",
     category: "組織",
@@ -524,7 +524,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "セクスタス連合",
+    id: "セクスタス連合" as WikiId,
     name: "セクスタス連合",
     nameEn: "Sextus Alliance",
     category: "組織",
@@ -534,7 +534,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "クラン・フォーラム",
+    id: "クラン・フォーラム" as WikiId,
     name: "クラン・フォーラム",
     nameEn: "Clan Forum",
     category: "組織",
@@ -544,7 +544,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ヴェルリット一族",
+    id: "ヴェルリット一族" as WikiId,
     name: "ヴェルリット一族",
     nameEn: "Verlit Clan",
     category: "組織",
@@ -554,7 +554,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ファランクス",
+    id: "ファランクス" as WikiId,
     name: "ファランクス",
     nameEn: "Phalanx",
     category: "組織",
@@ -565,7 +565,7 @@ export const WIKI_ORGANIZATIONS = [
 
   /* 宇宙勢力 — 組織 */
   {
-    id: "エレシュ・サンクチュアリ",
+    id: "エレシュ・サンクチュアリ" as WikiId,
     name: "エレシュ・サンクチュアリ",
     nameEn: "Eresh Sanctuary",
     category: "組織",
@@ -575,7 +575,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "オラクル",
+    id: "オラクル" as WikiId,
     name: "オラクル",
     nameEn: "Oracle",
     category: "組織",
@@ -585,7 +585,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "セラフィム",
+    id: "セラフィム" as WikiId,
     name: "セラフィム",
     nameEn: "Seraphim",
     category: "組織",
@@ -595,7 +595,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "コマース",
+    id: "コマース" as WikiId,
     name: "コマース・ディヴィジョン",
     nameEn: "Commerce Division",
     category: "組織",
@@ -605,7 +605,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "バザール",
+    id: "バザール" as WikiId,
     name: "バザール・ネットワーク",
     nameEn: "Bazaar Network",
     category: "組織",
@@ -615,7 +615,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "シグナル",
+    id: "シグナル" as WikiId,
     name: "シグナル・オペレーション",
     nameEn: "Signal Operation",
     category: "組織",
@@ -625,7 +625,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "リンク",
+    id: "リンク" as WikiId,
     name: "リンク・プロトコル",
     nameEn: "Link Protocol",
     category: "組織",
@@ -639,7 +639,7 @@ export const WIKI_ORGANIZATIONS = [
      ═══════════════════════════════════════════════════════════════ */
 
   {
-    id: "エレシュ",
+    id: "エレシュ" as WikiId,
     name: "エレシュ",
     nameEn: "Eresh",
     category: "組織",
@@ -649,7 +649,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "大司教",
+        id: "大司教" as WikiId as WikiId,
         name: "大司教",
         nameEn: "Archbishop",
         role: "エレシュ最高指導者",
@@ -659,7 +659,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "プロキオ",
+    id: "プロキオ" as WikiId,
     name: "プロキオ",
     nameEn: "Prokio",
     category: "組織",
@@ -669,7 +669,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "商工会議長",
+        id: "商工会議長" as WikiId as WikiId,
         name: "商工会議長",
         nameEn: "Chamber of Commerce Chairman",
         role: "プロキオ文明圏最高指導者",
@@ -679,7 +679,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ロースター",
+    id: "ロースター" as WikiId,
     name: "ロースター",
     nameEn: "Roastar",
     category: "組織",
@@ -689,7 +689,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "通信長官",
+        id: "通信長官" as WikiId as WikiId,
         name: "通信長官",
         nameEn: "Communications Commissioner",
         role: "ロースター文明圏最高指導者",
@@ -703,7 +703,7 @@ export const WIKI_ORGANIZATIONS = [
      ═══════════════════════════════════════════════════════════════ */
 
   {
-    id: "トロン・コーポレーション",
+    id: "トロン・コーポレーション" as WikiId,
     name: "トロン・コーポレーション",
     nameEn: "Tron Corporation",
     category: "組織",
@@ -713,7 +713,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "ラファエル・ドレイク",
+        id: "ラファエル・ドレイク" as WikiId as WikiId,
         name: "ラファエル・ドレイク",
         nameEn: "Rafael Drake",
         role: "トロン・コーポレーションCEO",
@@ -723,7 +723,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "アロエオイル・コーポレーション",
+    id: "アロエオイル・コーポレーション" as WikiId,
     name: "アロエオイル・コーポレーション",
     nameEn: "Aloe Oil Corporation",
     category: "組織",
@@ -733,7 +733,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "アイリス・ノヴァ",
+        id: "アイリス・ノヴァ" as WikiId as WikiId,
         name: "アイリス・ノヴァ",
         nameEn: "Iris Nova",
         role: "アロエオイル・コーポレーションリーダー",
@@ -743,7 +743,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "マモン・コーポレーション",
+    id: "マモン・コーポレーション" as WikiId,
     name: "マモン・コーポレーション",
     nameEn: "Mammon Corporation",
     category: "組織",
@@ -753,7 +753,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "カルロス・ヴァンダム",
+        id: "カルロス・ヴァンダム" as WikiId as WikiId,
         name: "カルロス・ヴァンダム",
         nameEn: "Carlos Vandam",
         role: "マモン・コーポレーションリーダー",
@@ -763,7 +763,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ゼブラ・コーポレーション",
+    id: "ゼブラ・コーポレーション" as WikiId,
     name: "ゼブラ・コーポレーション",
     nameEn: "Zebra Corporation",
     category: "組織",
@@ -773,7 +773,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "アーサー・グリム",
+        id: "アーサー・グリム" as WikiId as WikiId,
         name: "アーサー・グリム",
         nameEn: "Arthur Grim",
         role: "ゼブラ・コーポレーションリーダー",
@@ -783,7 +783,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ルレンツ・コーポレーション",
+    id: "ルレンツ・コーポレーション" as WikiId,
     name: "ルレンツ・コーポレーション",
     nameEn: "Lulentz Corporation",
     category: "組織",
@@ -793,7 +793,7 @@ export const WIKI_ORGANIZATIONS = [
 
     leaders: [
       {
-        id: "エリザベス・リンドバーグ",
+        id: "エリザベス・リンドバーグ" as WikiId as WikiId,
         name: "エリザベス・リンドバーグ",
         nameEn: "Elizabeth Lindberg",
         role: "ルレンツ・コーポレーションリーダー",
@@ -803,7 +803,7 @@ export const WIKI_ORGANIZATIONS = [
   },
 
   {
-    id: "ストロベリー",
+    id: "ストロベリー" as WikiId,
     name: "ストロベリー",
     nameEn: "Strawberry",
     category: "組織",
@@ -818,7 +818,7 @@ export const WIKI_ORGANIZATIONS = [
 
   /* 追加組織 */
   {
-    id: "org-バーズ帝国官庁",
+    id: "org-バーズ帝国官庁" as WikiId,
     name: "バーズ帝国中央官庁",
     nameEn: "Birds Empire Central Bureau",
     category: "組織",
@@ -827,7 +827,7 @@ export const WIKI_ORGANIZATIONS = [
       "ファランクス皇帝がE15年に設立したバーズ帝国の行政機関。帝国の法律・徴税・公共事業・人口管理を統括し、シンフォニー・オブ・スターズ西大陸全土に広がる支配体制の行政的基盤として機能した。官庁は三つの部門から構成され、法務部が帝国法の制定と執行を、財務部がnトークン以前の旧通貨システムによる徴税を、工事部が都市建設と道路整備を担当した。帝国崩壊後はその機能の大部分が惑星国家連合に引き継がれたが、一部の行政記録はTroyaneの地下公文書館に保管されたままである。官庁の官僚制度は後にZAMLT期のコーポラトクラシー体制とUECO期の超国家機関の両方に影響を与えた。",
   },
   {
-    id: "org-第一移民評議会",
+    id: "org-第一移民評議会" as WikiId,
     name: "第一移民評議会",
     nameEn: "First Immigration Council",
     category: "組織",
@@ -836,7 +836,7 @@ export const WIKI_ORGANIZATIONS = [
       "E50年のバーズ帝国崩壊後に、存続した入植地の指導者たちが設立した臨時統治機関。惑星ビブリオとSolarisを中心に7つの入植地を統括し、食糧生産、防衛、通信インフラの再建を最優先課題として取り組んだ。評議会は合議制を採用し、各入植地の代表が平等な発言権を持つ民主的な運営を特徴としたが、資源不足と外部からの脅威に対処するため、次第に権限が一部の強力な入植地に集中していった。第一移民評議会はE80年の技術啓蒙時代に正式な惑星国家連合へと発展的に解消し、その遺産は現在のUECOの協議体制に間接的に受け継がれている。",
   },
   {
-    id: "org-ギガポリス建設ギルド",
+    id: "org-ギガポリス建設ギルド" as WikiId,
     name: "ギガポリス建設者ギルド",
     nameEn: "Gigapolis Builders Guild",
     category: "組織",
@@ -845,7 +845,7 @@ export const WIKI_ORGANIZATIONS = [
       "E150年のギガポリス建設開始時に結成された建築技術者と労働者の職能団体。セントラル・タワーをはじめとするギガポリスの象徴的な建造物の設計・施工を統括し、数百万人の労働力を組織化して都市建設を推進した。ギルド内部は石工・鉄工・配管・電気・次元技術の五つの部門に分かれ、各部門が独自の技術体系と徒弟制度を持っていた。ギルドの技術遺産はテクノ文化ルネサンス期に再評価され、現代の建築工学にも影響を与えている。ギルドの初代親方とされるアルキテクト・ゼンは「都市は石でなく人で建てる」という言葉を残し、人材育成を最も重視した。",
   },
   {
-    id: "org-E16大学連合",
+    id: "org-E16大学連合" as WikiId,
     name: "E16大学学術連合",
     nameEn: "E16 University Consortium",
     category: "組織",
@@ -854,7 +854,7 @@ export const WIKI_ORGANIZATIONS = [
       "惑星ビブリオのロレンツィオ国際大学を中心に、E16連星系内の主要な研究機関が加盟する学術ネットワーク。次元極地平技術の基礎研究と応用研究を統括し、ティムール・シャーの10次元ホラズム理論やペルセポネ計画の学術的検証を行った。連合には物理学部門のほか、宇宙生物学部門、次元情報科学部門、歴史・人類学部門があり、各部門が独立した研究プログラムを運営している。テクノ文化ルネサンス期には民間への研究成果の公開を推進し、次元極地平技術の民主化に貢献した。連合の最高学術賞は「ティムール・シャー・メダル」と呼ばれ、次元物理学の分野で最も権威ある賞とされている。",
   },
   {
-    id: "org-クレセント国際法廷",
+    id: "org-クレセント国際法廷" as WikiId,
     name: "クレセント国際法廷",
     nameEn: "Crescent International Court",
     category: "組織",
@@ -863,7 +863,7 @@ export const WIKI_ORGANIZATIONS = [
       "クレセント7カ国間の紛争解決と国際法の解釈を担う司法機関。E320年のクレセント7カ国独立に伴い設立され、V7とトリニティ・アライアンスの対立の中で中立な裁定者として機能している。法廷は7カ国の法体系の調和を図りつつ、次元極地平技術の軍事利用やホライゾン・ゲートの管理に関する国際的な法規制の整備を進めている。法廷の判事は各国民の信任に基づき選出され、任期は5年である。アルファ・ヴェノムの犯罪行為に対する国際的な裁判もこの法廷の管轄であり、クレセント地方の平和維持における最重要機関として位置づけられている。",
   },
   {
-    id: "org-次元境界監視機構",
+    id: "org-次元境界監視機構" as WikiId,
     name: "次元境界監視機構",
     nameEn: "Dimension Boundary Watch",
     category: "組織",
@@ -872,7 +872,7 @@ export const WIKI_ORGANIZATIONS = [
       "E16連星系周辺の次元境界の安定性を監視する専門機関。銀河系コンソーシアムの下部組織として設立され、次元境界の歪みや不安定化の兆候を早期検知して警報を発する役割を担っている。監視機構は惑星ビブリオに本部を置き、E16連星系内の12の監視ステーションとディメンション・ブリッジ・ターミナルに配置されたセンサー網を通じて、次元境界の状態を24時間体制で監視している。監視データはグランベルのクアンタ・ラボとリアルタイムで共有され、次元境界の不安定化が大規模な災害に発展するのを未然に防ぐ重要な機能を果たしている。",
   },
   {
-    id: "org-E16放送協会",
+    id: "org-E16放送協会" as WikiId,
     name: "E16放送協会",
     nameEn: "E16 Broadcasting Association",
     category: "組織",
@@ -881,7 +881,7 @@ export const WIKI_ORGANIZATIONS = [
       "E16連星系全域のニュース・情報配信を統括する公共放送機関。ZAMLT崩壊後に設立され、報道の自由と公正を原則としている。放送協会は次元間通信技術を活用したリアルタイムの全星系ニュース配信を行い、政治・経済・文化・科学の各分野で独立した報道を提供している。特にAURALISの活動や次元極地平技術の動向については詳細な専門番組を制作し、市民の技術リテラシー向上に寄与している。放送協会の編集権は独立的に保障されており、UECOや銀河系コンソーシアムからの圧力に屈しない姿勢を維持している。",
   },
   {
-    id: "org-ギガポリス地下市場",
+    id: "org-ギガポリス地下市場" as WikiId,
     name: "ギガポリス地下市場",
     nameEn: "Gigapolis Underground Market",
     category: "組織",
@@ -890,7 +890,7 @@ export const WIKI_ORGANIZATIONS = [
       "Gigapolis地下街最深部を拠点とする非合法経済圏。Tina/Gueの実効支配下にあり、正規のnトークン経済には含まれない大規模な取引が行われている。地下市場では規制品の取引、非公認の技術取引、暗号通信サービスなどが提供され、ZAMLT期からエヴァトロン期を通じて継続的に運営されてきた。Tina/Gueの独自の情報ネットワークを通じて、表社会では得られない貴重な情報も流通している。地下市場の存在はUECOのガバナンスの限界を象徴するものであり、その取り込みはE16文明圏の政策課題の一つである。",
   },
   {
-    id: "org-Eros-7採掘公社",
+    id: "org-Eros-7採掘公社" as WikiId,
     name: "Eros-7エネルギー採掘公社",
     nameEn: "Eros-7 Energy Mining Corporation",
     category: "組織",
@@ -899,7 +899,7 @@ export const WIKI_ORGANIZATIONS = [
       "Eros-7における搾取エネルギーの採掘と管理を統括する公社。マトリカル・カウンシルの監督下で運営され、リーチ・ドレインの培養・配置・エネルギー回収・配送の全工程を管理している。公社は多数の採掘施設を運営し、その中でもスクイーズ・アビスは最大規模の拠点として知られた。搾取体制の段階的解体に伴い、公社の規模は縮小しているが、現在でもエネルギー生産の一部を担っている。公社の技術スタッフが開発した搾取エネルギー変換技術の一部は、のちにナノメディシンに応用され、搾取技術の平和的転用の成功事例となっている。",
   },
   {
-    id: "org-惑星間条約機構",
+    id: "org-惑星間条約機構" as WikiId,
     name: "惑星間条約機構",
     nameEn: "Interplanetary Treaty Organization",
     category: "組織",

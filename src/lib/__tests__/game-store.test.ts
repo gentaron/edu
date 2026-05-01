@@ -2,10 +2,11 @@ import { describe, it, expect, beforeEach } from "vitest"
 import { useBattleStore } from "../stores"
 import { EffectType } from "@/types"
 import type { GameCard, Enemy } from "@/types"
+import type { CardId, EnemyId } from "@/platform/schemas/branded"
 
 /* Minimal test fixtures */
 const mockCard: GameCard = {
-  id: "test-card-1",
+  id: "test-card-1" as CardId,
   name: "テスト戦士",
   imageUrl: "https://example.com/test.png",
   flavorText: "テスト用のカード",
@@ -21,7 +22,7 @@ const mockCard: GameCard = {
 }
 
 const mockCard2: GameCard = {
-  id: "test-card-2",
+  id: "test-card-2" as CardId,
   name: "テスト防御者",
   imageUrl: "https://example.com/test2.png",
   flavorText: "テスト用防御カード",
@@ -37,7 +38,7 @@ const mockCard2: GameCard = {
 }
 
 const mockEnemy: Enemy = {
-  id: "test-enemy",
+  id: "test-enemy" as EnemyId,
   name: "テスト敵",
   title: "テストの試練",
   maxHp: 30,
@@ -113,7 +114,9 @@ describe("game-store", () => {
     useBattleStore.getState().playAbility("攻撃")
 
     // Victory is set via setTimeout(800), wait for it
-    await new Promise((r) => setTimeout(r, 1000))
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, 1000)
+    })
     expect(useBattleStore.getState().phase).toBe("victory")
   })
 

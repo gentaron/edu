@@ -58,55 +58,70 @@ function buildNodes(): RelationNode[] {
 
 function buildEdges(nodes: RelationNode[]): RelationEdge[] {
   const edges: RelationEdge[] = []
-  const nodeMap = new Map(nodes.map((n) => [n.id, n]))
+  const nodeMap = new Map<string, RelationNode>(nodes.map((n) => [n.id as string, n]))
   const nodeByName = new Map<string, RelationNode>()
   for (const n of nodes) {
     nodeByName.set(n.name, n)
-    if (n.nameEn) {nodeByName.set(n.nameEn, n)}
+    if (n.nameEn) {
+      nodeByName.set(n.nameEn, n)
+    }
   }
 
   // ヘルパー: 名前の部分一致でノードを検索
   function findNodeByPartialName(query: string): RelationNode | undefined {
-    if (nodeMap.has(query)) {return nodeMap.get(query)}
-    if (nodeByName.has(query)) {return nodeByName.get(query)}
+    if (nodeMap.has(query)) {
+      return nodeMap.get(query)
+    }
+    if (nodeByName.has(query)) {
+      return nodeByName.get(query)
+    }
     // 部分一致
     for (const [name, node] of nodeByName) {
-      if (query.includes(name) || name.includes(query)) {return node}
+      if (query.includes(name) || name.includes(query)) {
+        return node
+      }
     }
     return undefined
   }
 
   // 1) キャラクターの所属 → 組織/文明
   for (const node of nodes) {
-    if (node.category !== "キャラクター" || !node.description) {continue}
+    if (node.category !== "キャラクター" || !node.description) {
+      continue
+    }
 
     // affiliation文字列から組織・文明を検索
     const affiliations = extractAffiliations(node.description, node.era)
     for (const aff of affiliations) {
       const target = findNodeByPartialName(aff.name)
-      if (target && target.id !== node.id && // 重複チェック
-        
-          !edges.some(
-            (e) =>
-              (e.source === node.id && e.target === target.id) ||
-              (e.source === target.id && e.target === node.id)
-          )
-        ) {
-          edges.push({
-            source: node.id,
-            target: target.id,
-            type: "所属",
-            description: `${node.name} は ${target.name} に所属`,
-          })
-        }
+      if (
+        target &&
+        target.id !== node.id && // 重複チェック
+        !edges.some(
+          (e) =>
+            (e.source === node.id && e.target === target.id) ||
+            (e.source === target.id && e.target === node.id)
+        )
+      ) {
+        edges.push({
+          source: node.id,
+          target: target.id,
+          type: "所属",
+          description: `${node.name} は ${target.name} に所属`,
+        })
+      }
     }
   }
 
   // 2) 組織のleaders[] → キャラクターへの「指導」エッジ
   for (const entry of ALL_ENTRIES) {
-    if (!entry.leaders) {continue}
+    if (!entry.leaders) {
+      continue
+    }
     const orgNode = nodeMap.get(entry.id)
-    if (!orgNode) {continue}
+    if (!orgNode) {
+      continue
+    }
     for (const leader of entry.leaders) {
       const leaderNode = nodeMap.get(leader.id)
       if (leaderNode) {
@@ -129,7 +144,9 @@ function buildEdges(nodes: RelationNode[]): RelationEdge[] {
   for (const civ of allCivs) {
     for (const rel of civ.relationships) {
       const match = rel.match(/^(.+?)\s*[—-]\s*(.+)$/)
-      if (!match) {continue}
+      if (!match) {
+        continue
+      }
       const targetName = match[1]!.trim()
       const desc = match[2]!.trim()
       const targetNode = findNodeByPartialName(targetName)
@@ -156,7 +173,9 @@ function buildEdges(nodes: RelationNode[]): RelationEdge[] {
 
   // 4) 記述テキストから他キャラクターへの言及を抽出
   for (const node of nodes) {
-    if (node.category !== "キャラクター") {continue}
+    if (node.category !== "キャラクター") {
+      continue
+    }
     const mentioned = extractMentions(node.description, node.id, nodes)
     for (const m of mentioned) {
       if (
@@ -250,8 +269,9 @@ function detectEdgeType(desc: string): "所属" | "指導" | "同盟" | "対立"
     lower.includes("反対") ||
     lower.includes("脅威") ||
     lower.includes("阻止")
-  )
-    {return "対立"}
+  ) {
+    return "対立"
+  }
   if (
     lower.includes("同盟") ||
     lower.includes("連携") ||
@@ -259,22 +279,25 @@ function detectEdgeType(desc: string): "所属" | "指導" | "同盟" | "対立"
     lower.includes("提携") ||
     lower.includes("協定") ||
     lower.includes("連携")
-  )
-    {return "同盟"}
+  ) {
+    return "同盟"
+  }
   if (
     lower.includes("指導") ||
     lower.includes("リーダー") ||
     lower.includes("統治") ||
     lower.includes("率いる")
-  )
-    {return "指導"}
+  ) {
+    return "指導"
+  }
   if (
     lower.includes("歴史") ||
     lower.includes("かつて") ||
     lower.includes("崩壊") ||
     lower.includes("戦後")
-  )
-    {return "歴史的"}
+  ) {
+    return "歴史的"
+  }
   return "関連"
 }
 
@@ -287,9 +310,15 @@ function extractMentions(
 
   // 記述から他のキャラクター名が含まれるかチェック
   for (const node of allNodes) {
-    if (node.id === selfId) {continue}
-    if (node.category !== "キャラクター") {continue}
-    if (node.name.length < 3) {continue}
+    if (node.id === selfId) {
+      continue
+    }
+    if (node.category !== "キャラクター") {
+      continue
+    }
+    if (node.name.length < 3) {
+      continue
+    }
     if (description.includes(node.name) || (node.nameEn && description.includes(node.nameEn))) {
       mentioned.push(node)
     }
@@ -328,20 +357,23 @@ export function getEntityById(id: string): RelationNode | undefined {
 export function getRelationsForEntity(id: string): { node: RelationNode; edge: RelationEdge }[] {
   const edges = getRelationEdges()
   const nodes = getRelationNodes()
-  const nodeMap = new Map(nodes.map((n) => [n.id, n]))
+  const nodeMap = new Map<string, RelationNode>(nodes.map((n) => [n.id as string, n]))
   const results: { node: RelationNode; edge: RelationEdge }[] = []
 
   for (const edge of edges) {
     if (edge.source === id) {
       const target = nodeMap.get(edge.target)
-      if (target) {results.push({ node: target, edge })}
+      if (target) {
+        results.push({ node: target, edge })
+      }
     } else if (edge.target === id) {
       const source = nodeMap.get(edge.source)
-      if (source)
-        {results.push({
+      if (source) {
+        results.push({
           node: source,
           edge: { ...edge, source: edge.target, target: edge.source },
-        })}
+        })
+      }
     }
   }
 

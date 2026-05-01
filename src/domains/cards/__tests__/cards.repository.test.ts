@@ -1,5 +1,7 @@
 import { describe, it, expect } from "vitest"
 import { CardRepository } from "@/domains/cards/cards.repository"
+import type { CardId, EnemyId } from "@/platform/schemas/branded"
+import type { GameCard, Enemy } from "@/types"
 
 describe("CardRepository", () => {
   /* ── findCardById ── */
@@ -13,7 +15,7 @@ describe("CardRepository", () => {
     })
 
     it("returns undefined for non-existent ID", () => {
-      const found = CardRepository.findCardById("nonexistent-card")
+      const found = CardRepository.findCardById("nonexistent-card" as CardId)
       expect(found).toBeUndefined()
     })
   })
@@ -67,7 +69,7 @@ describe("CardRepository", () => {
 
     it("returns empty array for rarity with no cards", () => {
       // There likely aren't any cards with unusual rarity, but the filter should work
-      const filtered = CardRepository.getCardsByRarity("SSR" as any)
+      const filtered = CardRepository.getCardsByRarity("SSR" as GameCard["rarity"])
       expect(filtered).toHaveLength(0)
     })
   })
@@ -99,7 +101,7 @@ describe("CardRepository", () => {
     })
 
     it("returns undefined for non-existent ID", () => {
-      const found = CardRepository.findEnemyById("nonexistent-enemy")
+      const found = CardRepository.findEnemyById("nonexistent-enemy" as EnemyId)
       expect(found).toBeUndefined()
     })
   })
@@ -158,7 +160,7 @@ describe("CardRepository", () => {
     })
 
     it("returns empty array for non-existent difficulty", () => {
-      const filtered = CardRepository.getEnemiesByDifficulty("IMPOSSIBLE" as any)
+      const filtered = CardRepository.getEnemiesByDifficulty("IMPOSSIBLE" as Enemy["difficulty"])
       expect(filtered).toHaveLength(0)
     })
   })

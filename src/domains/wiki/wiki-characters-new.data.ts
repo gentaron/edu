@@ -1,11 +1,11 @@
-import type { WikiEntry } from "../../types"
+import type { WikiId, WikiEntry } from "../../types"
 
 export const WIKI_CHARACTERS_NEW = [
   /* ========================================
    * バーズ帝国期 E0〜E50 (12)
    * ======================================== */
   {
-    id: "マルクス・アウレリウス",
+    id: "マルクス・アウレリウス" as WikiId,
     name: "マルクス・アウレリウス",
     nameEn: "Marcus Aurelius",
     category: "キャラクター",
@@ -17,7 +17,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "イサベラ・コルネリウス",
+    id: "イサベラ・コルネリウス" as WikiId,
     name: "イサベラ・コルネリウス",
     nameEn: "Isabella Cornelius",
     category: "キャラクター",
@@ -29,7 +29,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ガイウス・セプティムス",
+    id: "ガイウス・セプティムス" as WikiId,
     name: "ガイウス・セプティムス",
     nameEn: "Gaius Septimus",
     category: "キャラクター",
@@ -41,7 +41,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "レックス・ドラコ",
+    id: "レックス・ドラコ" as WikiId,
     name: "レックス・ドラコ",
     nameEn: "Rex Draco",
     category: "キャラクター",
@@ -53,7 +53,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ヴァレリア・トルクアタ",
+    id: "ヴァレリア・トルクアタ" as WikiId,
     name: "ヴァレリア・トルクアタ",
     nameEn: "Valeria Torquata",
     category: "キャラクター",
@@ -65,7 +65,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "プロフェッサー・クイントゥス",
+    id: "プロフェッサー・クイントゥス" as WikiId,
     name: "プロフェッサー・クイントゥス",
     nameEn: "Professor Quintus",
     category: "キャラクター",
@@ -77,7 +77,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ドクター・オクタヴィア",
+    id: "ドクター・オクタヴィア" as WikiId,
     name: "ドクター・オクタヴィア",
     nameEn: "Doctor Octavia",
     category: "キャラクター",
@@ -89,7 +89,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ヴェル・ナイアード",
+    id: "ヴェル・ナイアード" as WikiId,
     name: "ヴェル・ナイアード",
     nameEn: "Vel Naiad",
     category: "キャラクター",
@@ -101,7 +101,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "カイ・アシュフォード",
+    id: "カイ・アシュフォード" as WikiId,
     name: "カイ・アシュフォード",
     nameEn: "Kai Ashford",
     category: "キャラクター",
@@ -113,7 +113,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ソル・ブレイズ",
+    id: "ソル・ブレイズ" as WikiId,
     name: "ソル・ブレイズ",
     nameEn: "Sol Blaze",
     category: "キャラクター",
@@ -125,7 +125,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ルナ・サバイバー",
+    id: "ルナ・サバイバー" as WikiId,
     name: "ルナ・サバイバー",
     nameEn: "Luna Survivor",
     category: "キャラクター",
@@ -137,7 +137,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "リック・ウォーデン",
+    id: "リック・ウォーデン" as WikiId,
     name: "リック・ウォーデン",
     nameEn: "Rick Warden",
     category: "キャラクター",
@@ -153,7 +153,7 @@ export const WIKI_CHARACTERS_NEW = [
    * 第一移民期 E50〜E150 (12)
    * ======================================== */
   {
-    id: "キャプテン・ノヴァ",
+    id: "キャプテン・ノヴァ" as WikiId,
     name: "キャプテン・ノヴァ",
     nameEn: "Captain Nova",
     category: "キャラクター",
@@ -165,7 +165,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ナビゲーター・セイラ",
+    id: "ナビゲーター・セイラ" as WikiId,
     name: "ナビゲーター・セイラ",
     nameEn: "Navigator Seira",
     category: "キャラクター",
@@ -177,7 +177,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "エンジニア・ボルト",
+    id: "エンジニア・ボルト" as WikiId,
     name: "エンジニア・ボルト",
     nameEn: "Engineer Bolt",
     category: "キャラクター",
@@ -189,7 +189,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "科学官・アリス",
+    id: "科学官・アリス" as WikiId,
     name: "科学官・アリス",
     nameEn: "Science Officer Alice",
     category: "キャラクター",
@@ -201,7 +201,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "医療官・ヘイズ",
+    id: "医療官・ヘイズ" as WikiId,
     name: "医療官・ヘイズ",
     nameEn: "Medical Officer Haze",
     category: "キャラクター",
@@ -213,7 +213,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ゴヴァナー・キーン",
+    id: "ゴヴァナー・キーン" as WikiId,
     name: "ゴヴァナー・キーン",
     nameEn: "Governor Keen",
     category: "キャラクター",
@@ -225,7 +225,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "メイヤー・ストーン",
+    id: "メイヤー・ストーン" as WikiId,
     name: "メイヤー・ストーン",
     nameEn: "Mayor Stone",
     category: "キャラクター",
@@ -237,7 +237,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "シェリフ・ブラス",
+    id: "シェリフ・ブラス" as WikiId,
     name: "シェリフ・ブラス",
     nameEn: "Sheriff Brass",
     category: "キャラクター",
@@ -249,7 +249,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "エルダー・ウィロー",
+    id: "エルダー・ウィロー" as WikiId,
     name: "エルダー・ウィロー",
     nameEn: "Elder Willow",
     category: "キャラクター",
@@ -261,7 +261,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "コマンダー・アーチャー",
+    id: "コマンダー・アーチャー" as WikiId,
     name: "コマンダー・アーチャー",
     nameEn: "Commander Archer",
     category: "キャラクター",
@@ -273,7 +273,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "アドミラル・フロスト",
+    id: "アドミラル・フロスト" as WikiId,
     name: "アドミラル・フロスト",
     nameEn: "Admiral Frost",
     category: "キャラクター",
@@ -285,7 +285,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ジェネラル・テラ",
+    id: "ジェネラル・テラ" as WikiId,
     name: "ジェネラル・テラ",
     nameEn: "General Terra",
     category: "キャラクター",
@@ -301,7 +301,7 @@ export const WIKI_CHARACTERS_NEW = [
    * ギガポリス建設期 E150〜E260 (13)
    * ======================================== */
   {
-    id: "アルキテクト・ゼン",
+    id: "アルキテクト・ゼン" as WikiId,
     name: "アルキテクト・ゼン",
     nameEn: "Architect Zen",
     category: "キャラクター",
@@ -313,7 +313,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "デザイナー・ルナ",
+    id: "デザイナー・ルナ" as WikiId,
     name: "デザイナー・ルナ",
     nameEn: "Designer Luna",
     category: "キャラクター",
@@ -325,7 +325,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "エンジニア・ピラー",
+    id: "エンジニア・ピラー" as WikiId,
     name: "エンジニア・ピラー",
     nameEn: "Engineer Pillar",
     category: "キャラクター",
@@ -337,7 +337,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "プランナー・アクア",
+    id: "プランナー・アクア" as WikiId,
     name: "プランナー・アクア",
     nameEn: "Planner Aqua",
     category: "キャラクター",
@@ -349,7 +349,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "エコノミスト・ゴールド",
+    id: "エコノミスト・ゴールド" as WikiId,
     name: "エコノミスト・ゴールド",
     nameEn: "Economist Gold",
     category: "キャラクター",
@@ -361,7 +361,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "バンカー・シルバー",
+    id: "バンカー・シルバー" as WikiId,
     name: "バンカー・シルバー",
     nameEn: "Banker Silver",
     category: "キャラクター",
@@ -373,7 +373,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "トレーダー・ブロンズ",
+    id: "トレーダー・ブロンズ" as WikiId,
     name: "トレーダー・ブロンズ",
     nameEn: "Trader Bronze",
     category: "キャラクター",
@@ -385,7 +385,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "チーフ・グリズリー",
+    id: "チーフ・グリズリー" as WikiId,
     name: "チーフ・グリズリー",
     nameEn: "Chief Grizzly",
     category: "キャラクター",
@@ -397,7 +397,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "エルダー・イーグル",
+    id: "エルダー・イーグル" as WikiId,
     name: "エルダー・イーグル",
     nameEn: "Elder Eagle",
     category: "キャラクター",
@@ -409,7 +409,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "シャーマン・フォックス",
+    id: "シャーマン・フォックス" as WikiId,
     name: "シャーマン・フォックス",
     nameEn: "Shaman Fox",
     category: "キャラクター",
@@ -421,7 +421,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "チーフ・ドラゴン",
+    id: "チーフ・ドラゴン" as WikiId,
     name: "チーフ・ドラゴン",
     nameEn: "Chief Dragon",
     category: "キャラクター",
@@ -433,7 +433,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "エルダー・タイガー",
+    id: "エルダー・タイガー" as WikiId,
     name: "エルダー・タイガー",
     nameEn: "Elder Tiger",
     category: "キャラクター",
@@ -445,7 +445,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "シャーマン・スネーク",
+    id: "シャーマン・スネーク" as WikiId,
     name: "シャーマン・スネーク",
     nameEn: "Shaman Snake",
     category: "キャラクター",
@@ -461,7 +461,7 @@ export const WIKI_CHARACTERS_NEW = [
    * クレセント拡充 E300〜E400 (21)
    * ======================================== */
   {
-    id: "コマンダー・ヴェルミリオン守備隊長",
+    id: "コマンダー・ヴェルミリオン守備隊長" as WikiId,
     name: "ヴェルミリオン守備隊長",
     nameEn: "Commander of Vermilion Defense",
     category: "キャラクター",
@@ -473,7 +473,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "コマンダー・ブルーローズ衛兵長",
+    id: "コマンダー・ブルーローズ衛兵長" as WikiId,
     name: "ブルーローズ衛兵長",
     nameEn: "Commander of Blue Rose Guard",
     category: "キャラクター",
@@ -485,7 +485,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "コマンダー・SSレンジ警備隊長",
+    id: "コマンダー・SSレンジ警備隊長" as WikiId,
     name: "SSレンジ警備隊長",
     nameEn: "Commander of SS Range Security",
     category: "キャラクター",
@@ -497,7 +497,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "コマンダー・アイアン・シンジケート軍事顧問",
+    id: "コマンダー・アイアン・シンジケート軍事顧問" as WikiId,
     name: "アイアン・シンジケート軍事顧問",
     nameEn: "Iron Syndicate Military Advisor",
     category: "キャラクター",
@@ -509,7 +509,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "コマンダー・クロセヴィア防衛長",
+    id: "コマンダー・クロセヴィア防衛長" as WikiId,
     name: "クロセヴィア防衛長",
     nameEn: "Commander of Crocevia Defense",
     category: "キャラクター",
@@ -521,7 +521,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "コマンダー・ミエルテンガ護衛隊長",
+    id: "コマンダー・ミエルテンガ護衛隊長" as WikiId,
     name: "ミエルテンガ護衛隊長",
     nameEn: "Commander of Mieltenga Escort",
     category: "キャラクター",
@@ -533,7 +533,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "コマンダー・ファールージャ社軍事部長",
+    id: "コマンダー・ファールージャ社軍事部長" as WikiId,
     name: "ファールージャ社軍事部長",
     nameEn: "Faruja Corp Military Director",
     category: "キャラクター",
@@ -545,7 +545,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ドクター・ヴェルミリオン主席研究員",
+    id: "ドクター・ヴェルミリオン主席研究員" as WikiId,
     name: "ヴェルミリオン主席研究員",
     nameEn: "Chief Researcher of Vermilion",
     category: "キャラクター",
@@ -557,7 +557,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ドクター・ブルーローズ技術顧問",
+    id: "ドクター・ブルーローズ技術顧問" as WikiId,
     name: "ブルーローズ技術顧問",
     nameEn: "Blue Rose Technical Advisor",
     category: "キャラクター",
@@ -569,7 +569,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ドクター・SSレンジ通信研究員",
+    id: "ドクター・SSレンジ通信研究員" as WikiId,
     name: "SSレンジ通信研究員",
     nameEn: "SS Range Communication Researcher",
     category: "キャラクター",
@@ -581,7 +581,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ドクター・アイアン・シンジケート材料学者",
+    id: "ドクター・アイアン・シンジケート材料学者" as WikiId,
     name: "アイアン・シンジケート材料学者",
     nameEn: "Iron Syndicate Materials Scientist",
     category: "キャラクター",
@@ -593,7 +593,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ドクター・クロセヴィア生物学者",
+    id: "ドクター・クロセヴィア生物学者" as WikiId,
     name: "クロセヴィア生物学者",
     nameEn: "Crocevia Biologist",
     category: "キャラクター",
@@ -605,7 +605,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ドクター・ミエルテンガ医務官",
+    id: "ドクター・ミエルテンガ医務官" as WikiId,
     name: "ミエルテンガ医務官",
     nameEn: "Mieltenga Medical Officer",
     category: "キャラクター",
@@ -617,7 +617,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ドクター・ファールージャ社次元物理学者",
+    id: "ドクター・ファールージャ社次元物理学者" as WikiId,
     name: "ファールージャ社次元物理学者",
     nameEn: "Faruja Corp Dimensional Physicist",
     category: "キャラクター",
@@ -629,7 +629,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "リベリオン・リーダー・アッシュ",
+    id: "リベリオン・リーダー・アッシュ" as WikiId,
     name: "リベリオン・リーダー・アッシュ",
     nameEn: "Rebellion Leader Ash",
     category: "キャラクター",
@@ -641,7 +641,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "レジスタンス・コマンダー・フレイム",
+    id: "レジスタンス・コマンダー・フレイム" as WikiId,
     name: "レジスタンス・コマンダー・フレイム",
     nameEn: "Resistance Commander Flame",
     category: "キャラクター",
@@ -653,7 +653,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "アンダーグラウンド・フィクサー・シャドウ",
+    id: "アンダーグラウンド・フィクサー・シャドウ" as WikiId,
     name: "アンダーグラウンド・フィクサー・シャドウ",
     nameEn: "Underground Fixer Shadow",
     category: "キャラクター",
@@ -665,7 +665,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "フリーダム・ファイター・ストーム",
+    id: "フリーダム・ファイター・ストーム" as WikiId,
     name: "フリーダム・ファイター・ストーム",
     nameEn: "Freedom Fighter Storm",
     category: "キャラクター",
@@ -677,7 +677,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ネイト・クロス",
+    id: "ネイト・クロス" as WikiId,
     name: "ネイト・クロス",
     nameEn: "Nate Cross",
     category: "キャラクター",
@@ -689,7 +689,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "セラ・ムーンライト",
+    id: "セラ・ムーンライト" as WikiId,
     name: "セラ・ムーンライト",
     nameEn: "Cera Moonlight",
     category: "キャラクター",
@@ -701,7 +701,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "レン・ブラックウッド",
+    id: "レン・ブラックウッド" as WikiId,
     name: "レン・ブラックウッド",
     nameEn: "Ren Blackwood",
     category: "キャラクター",
@@ -717,7 +717,7 @@ export const WIKI_CHARACTERS_NEW = [
    * テクロサス E350〜E500 (12)
    * ======================================== */
   {
-    id: "キャプテン・テクロサス第1支隊",
+    id: "キャプテン・テクロサス第1支隊" as WikiId,
     name: "第1支隊キャプテン",
     nameEn: "Captain of Tekrosus 1st Division",
     category: "キャラクター",
@@ -729,7 +729,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "キャプテン・テクロサス第2支隊",
+    id: "キャプテン・テクロサス第2支隊" as WikiId,
     name: "第2支隊キャプテン",
     nameEn: "Captain of Tekrosus 2nd Division",
     category: "キャラクター",
@@ -741,7 +741,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "キャプテン・テクロサス第3支隊",
+    id: "キャプテン・テクロサス第3支隊" as WikiId,
     name: "第3支隊キャプテン",
     nameEn: "Captain of Tekrosus 3rd Division",
     category: "キャラクター",
@@ -753,7 +753,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "キャプテン・テクロサス東方支隊",
+    id: "キャプテン・テクロサス東方支隊" as WikiId,
     name: "東方支隊キャプテン",
     nameEn: "Captain of Tekrosus Eastern Division",
     category: "キャラクター",
@@ -765,7 +765,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "キャプテン・テクロサス特殊部隊",
+    id: "キャプテン・テクロサス特殊部隊" as WikiId,
     name: "特殊部隊キャプテン",
     nameEn: "Captain of Tekrosus Special Forces",
     category: "キャラクター",
@@ -777,7 +777,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "リサーチャー・アルファ",
+    id: "リサーチャー・アルファ" as WikiId,
     name: "リサーチャー・アルファ",
     nameEn: "Researcher Alpha",
     category: "キャラクター",
@@ -789,7 +789,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "リサーチャー・ベータ",
+    id: "リサーチャー・ベータ" as WikiId,
     name: "リサーチャー・ベータ",
     nameEn: "Researcher Beta",
     category: "キャラクター",
@@ -801,7 +801,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "リサーチャー・ガンマ",
+    id: "リサーチャー・ガンマ" as WikiId,
     name: "リサーチャー・ガンマ",
     nameEn: "Researcher Gamma",
     category: "キャラクター",
@@ -813,7 +813,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "レジスタンス・ワン",
+    id: "レジスタンス・ワン" as WikiId,
     name: "レジスタンス・ワン",
     nameEn: "Resistance One",
     category: "キャラクター",
@@ -825,7 +825,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "レジスタンス・ツー",
+    id: "レジスタンス・ツー" as WikiId,
     name: "レジスタンス・ツー",
     nameEn: "Resistance Two",
     category: "キャラクター",
@@ -837,7 +837,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "レジスタンス・スリー",
+    id: "レジスタンス・スリー" as WikiId,
     name: "レジスタンス・スリー",
     nameEn: "Resistance Three",
     category: "キャラクター",
@@ -849,7 +849,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "レジスタンス・フォー",
+    id: "レジスタンス・フォー" as WikiId,
     name: "レジスタンス・フォー",
     nameEn: "Resistance Four",
     category: "キャラクター",
@@ -865,7 +865,7 @@ export const WIKI_CHARACTERS_NEW = [
    * Eros-7 E300〜E520 (10)
    * ======================================== */
   {
-    id: "ステーション・マスター・オルビット",
+    id: "ステーション・マスター・オルビット" as WikiId,
     name: "ステーション・マスター・オルビット",
     nameEn: "Station Master Orbit",
     category: "キャラクター",
@@ -877,7 +877,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "オペレーター・コスモ",
+    id: "オペレーター・コスモ" as WikiId,
     name: "オペレーター・コスモ",
     nameEn: "Operator Cosmo",
     category: "キャラクター",
@@ -889,7 +889,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "エンジニア・スター",
+    id: "エンジニア・スター" as WikiId,
     name: "エンジニア・スター",
     nameEn: "Engineer Star",
     category: "キャラクター",
@@ -901,7 +901,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "マイナー・ディープ",
+    id: "マイナー・ディープ" as WikiId,
     name: "マイナー・ディープ",
     nameEn: "Miner Deep",
     category: "キャラクター",
@@ -913,7 +913,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "マイナー・コア",
+    id: "マイナー・コア" as WikiId,
     name: "マイナー・コア",
     nameEn: "Miner Core",
     category: "キャラクター",
@@ -925,7 +925,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "マイナー・クラスト",
+    id: "マイナー・クラスト" as WikiId,
     name: "マイナー・クラスト",
     nameEn: "Miner Crust",
     category: "キャラクター",
@@ -937,7 +937,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "パイオニア・フロンティア",
+    id: "パイオニア・フロンティア" as WikiId,
     name: "パイオニア・フロンティア",
     nameEn: "Pioneer Frontier",
     category: "キャラクター",
@@ -949,7 +949,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "パイオニア・ホライズン",
+    id: "パイオニア・ホライズン" as WikiId,
     name: "パイオニア・ホライズン",
     nameEn: "Pioneer Horizon",
     category: "キャラクター",
@@ -961,7 +961,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "パイオニア・ネビュラ",
+    id: "パイオニア・ネビュラ" as WikiId,
     name: "パイオニア・ネビュラ",
     nameEn: "Pioneer Nebula",
     category: "キャラクター",
@@ -973,7 +973,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "パイオニア・オーロラ",
+    id: "パイオニア・オーロラ" as WikiId,
     name: "パイオニア・オーロラ",
     nameEn: "Pioneer Aurora",
     category: "キャラクター",
@@ -989,7 +989,7 @@ export const WIKI_CHARACTERS_NEW = [
    * Shadow Rebellion E450〜 (9)
    * ======================================== */
   {
-    id: "副官・クリムゾン",
+    id: "副官・クリムゾン" as WikiId,
     name: "副官・クリムゾン",
     nameEn: "Vice Commander Crimson",
     category: "キャラクター",
@@ -1001,7 +1001,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "副官・サファイア",
+    id: "副官・サファイア" as WikiId,
     name: "副官・サファイア",
     nameEn: "Vice Commander Sapphire",
     category: "キャラクター",
@@ -1013,7 +1013,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "副官・エメラルド",
+    id: "副官・エメラルド" as WikiId,
     name: "副官・エメラルド",
     nameEn: "Vice Commander Emerald",
     category: "キャラクター",
@@ -1025,7 +1025,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "セル・リーダー・ノース",
+    id: "セル・リーダー・ノース" as WikiId,
     name: "セル・リーダー・ノース",
     nameEn: "Cell Leader North",
     category: "キャラクター",
@@ -1037,7 +1037,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "セル・リーダー・サウス",
+    id: "セル・リーダー・サウス" as WikiId,
     name: "セル・リーダー・サウス",
     nameEn: "Cell Leader South",
     category: "キャラクター",
@@ -1049,7 +1049,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "セル・リーダー・イースト",
+    id: "セル・リーダー・イースト" as WikiId,
     name: "セル・リーダー・イースト",
     nameEn: "Cell Leader East",
     category: "キャラクター",
@@ -1061,7 +1061,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "セル・リーダー・ウエスト",
+    id: "セル・リーダー・ウエスト" as WikiId,
     name: "セル・リーダー・ウエスト",
     nameEn: "Cell Leader West",
     category: "キャラクター",
@@ -1073,7 +1073,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "デザーター・レイ",
+    id: "デザーター・レイ" as WikiId,
     name: "デザーター・レイ",
     nameEn: "Deserter Ray",
     category: "キャラクター",
@@ -1085,7 +1085,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "デザーター・ミスト",
+    id: "デザーター・ミスト" as WikiId,
     name: "デザーター・ミスト",
     nameEn: "Deserter Mist",
     category: "キャラクター",
@@ -1101,7 +1101,7 @@ export const WIKI_CHARACTERS_NEW = [
    * 新世界編 E520〜 (17)
    * ======================================== */
   {
-    id: "ルナ・ノヴァ三世",
+    id: "ルナ・ノヴァ三世" as WikiId,
     name: "ルナ・ノヴァ三世",
     nameEn: "Luna Nova III",
     category: "キャラクター",
@@ -1113,7 +1113,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 2",
   },
   {
-    id: "カイ・エコー",
+    id: "カイ・エコー" as WikiId,
     name: "カイ・エコー",
     nameEn: "Kai Echo",
     category: "キャラクター",
@@ -1125,7 +1125,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 2",
   },
   {
-    id: "ミラ・レゾナンス",
+    id: "ミラ・レゾナンス" as WikiId,
     name: "ミラ・レゾナンス",
     nameEn: "Mira Resonance",
     category: "キャラクター",
@@ -1137,7 +1137,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 2",
   },
   {
-    id: "ソル・ハーモニー",
+    id: "ソル・ハーモニー" as WikiId,
     name: "ソル・ハーモニー",
     nameEn: "Sol Harmony",
     category: "キャラクター",
@@ -1149,7 +1149,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 2",
   },
   {
-    id: "ネイ・フューチャー",
+    id: "ネイ・フューチャー" as WikiId,
     name: "ネイ・フューチャー",
     nameEn: "Ney Future",
     category: "キャラクター",
@@ -1161,7 +1161,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 2",
   },
   {
-    id: "ビューロクラット・アルファ",
+    id: "ビューロクラット・アルファ" as WikiId,
     name: "ビューロクラット・アルファ",
     nameEn: "Bureaucrat Alpha",
     category: "キャラクター",
@@ -1173,7 +1173,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ビューロクラット・ベータ",
+    id: "ビューロクラット・ベータ" as WikiId,
     name: "ビューロクラット・ベータ",
     nameEn: "Bureaucrat Beta",
     category: "キャラクター",
@@ -1185,7 +1185,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ビューロクラット・ガンマ",
+    id: "ビューロクラット・ガンマ" as WikiId,
     name: "ビューロクラット・ガンマ",
     nameEn: "Bureaucrat Gamma",
     category: "キャラクター",
@@ -1197,7 +1197,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "ビューロクラット・デルタ",
+    id: "ビューロクラット・デルタ" as WikiId,
     name: "ビューロクラット・デルタ",
     nameEn: "Bureaucrat Delta",
     category: "キャラクター",
@@ -1209,7 +1209,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "テクニシャン・クオンタム",
+    id: "テクニシャン・クオンタム" as WikiId,
     name: "テクニシャン・クオンタム",
     nameEn: "Technician Quantum",
     category: "キャラクター",
@@ -1221,7 +1221,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "テクニシャン・テンポラル",
+    id: "テクニシャン・テンポラル" as WikiId,
     name: "テクニシャン・テンポラル",
     nameEn: "Technician Temporal",
     category: "キャラクター",
@@ -1233,7 +1233,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "テクニシャン・ディメンション",
+    id: "テクニシャン・ディメンション" as WikiId,
     name: "テクニシャン・ディメンション",
     nameEn: "Technician Dimension",
     category: "キャラクター",
@@ -1245,7 +1245,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "アンバサダー・グランベル",
+    id: "アンバサダー・グランベル" as WikiId,
     name: "アンバサダー・グランベル",
     nameEn: "Ambassador Granbel",
     category: "キャラクター",
@@ -1257,7 +1257,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "アンバサダー・ディオクレニス",
+    id: "アンバサダー・ディオクレニス" as WikiId,
     name: "アンバサダー・ディオクレニス",
     nameEn: "Ambassador Dioclenis",
     category: "キャラクター",
@@ -1269,7 +1269,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "アンバサダー・エレシオン",
+    id: "アンバサダー・エレシオン" as WikiId,
     name: "アンバサダー・エレシオン",
     nameEn: "Ambassador Erecion",
     category: "キャラクター",
@@ -1281,7 +1281,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "アンバサダー・ファルージャ",
+    id: "アンバサダー・ファルージャ" as WikiId,
     name: "アンバサダー・ファルージャ",
     nameEn: "Ambassador Faruja",
     category: "キャラクター",
@@ -1293,7 +1293,7 @@ export const WIKI_CHARACTERS_NEW = [
     tier: "Tier 3",
   },
   {
-    id: "アンバサダー・ティレリア",
+    id: "アンバサダー・ティレリア" as WikiId,
     name: "アンバサダー・ティレリア",
     nameEn: "Ambassador Tirelia",
     category: "キャラクター",

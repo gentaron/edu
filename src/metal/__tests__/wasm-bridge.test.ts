@@ -11,6 +11,8 @@ import {
   __injectWasmModuleForTesting,
 } from "@/metal/wasm-bridge"
 import type { WasmBattleModule } from "@/metal/wasm-bridge"
+import { EffectType } from "@/types"
+import type { CardId, EnemyId } from "@/platform/schemas/branded"
 
 describe("WASM Bridge", () => {
   beforeEach(() => {
@@ -36,7 +38,8 @@ describe("WASM Bridge", () => {
     })
 
     it("maps all ability types to unique indices", () => {
-      const indices = ["攻撃", "防御", "効果", "必殺"].map(abilityTypeToIndex)
+      const abilities = ["攻撃", "防御", "効果", "必殺"] as const
+      const indices = abilities.map(abilityTypeToIndex)
       expect(new Set(indices).size).toBe(4)
     })
   })
@@ -111,30 +114,33 @@ describe("WASM Bridge", () => {
     })
   })
 
+  const makeFieldChar = (overrides?: Partial<{ id: string; name: string }>) => ({
+    card: {
+      id: (overrides?.id ?? "char-1") as CardId,
+      name: overrides?.name ?? "Test",
+      imageUrl: "/test.png",
+      flavorText: "Flavor",
+      rarity: "R" as const,
+      affiliation: "Test",
+      attack: 10,
+      defense: 5,
+      effect: "Effect",
+      effectType: EffectType.HEAL,
+      effectValue: 0,
+      ultimate: 20,
+      ultimateName: "Ult",
+    },
+    hp: 50,
+    maxHp: 100,
+    isDown: false,
+  })
+
   /* ── wasmCalculateDamage (with injected mock) ── */
   describe("wasmCalculateDamage", () => {
     it("returns null when WASM is not ready", () => {
       resetWasmEngine()
       const result = wasmCalculateDamage({
-        character: {
-          card: {
-            id: "char-1",
-            name: "Test",
-            imageUrl: "/test.png",
-            flavorText: "Flavor",
-            rarity: "R",
-            affiliation: "Test",
-            attack: 10,
-            defense: 5,
-            effect: "Effect",
-            effectValue: 0,
-            ultimate: 20,
-            ultimateName: "Ult",
-          },
-          hp: 50,
-          maxHp: 100,
-          isDown: false,
-        },
+        character: makeFieldChar(),
         ability: "攻撃",
       })
       expect(result).toBeNull()
@@ -151,28 +157,11 @@ describe("WASM Bridge", () => {
       __injectWasmModuleForTesting(mockModule)
 
       const result = wasmCalculateDamage({
-        character: {
-          card: {
-            id: "char-1",
-            name: "Test",
-            imageUrl: "/test.png",
-            flavorText: "Flavor",
-            rarity: "R",
-            affiliation: "Test",
-            attack: 10,
-            defense: 5,
-            effect: "Effect",
-            effectValue: 0,
-            ultimate: 20,
-            ultimateName: "Ult",
-          },
-          hp: 50,
-          maxHp: 100,
-          isDown: false,
-        },
+        character: makeFieldChar(),
         ability: "攻撃",
       })
       expect(result).toEqual(mockResult)
+      // eslint-disable-next-line @typescript-eslint/unbound-method
       expect(mockModule.calculate_damage_wasm).toHaveBeenCalled()
     })
 
@@ -191,30 +180,25 @@ describe("WASM Bridge", () => {
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
 
       const result = wasmCalculateDamage({
-        character: {
-          card: {
-            id: "char-1",
-            name: "Test",
-            imageUrl: "/test.png",
-            flavorText: "Flavor",
-            rarity: "R",
-            affiliation: "Test",
-            attack: 10,
-            defense: 5,
-            effect: "Effect",
-            effectValue: 0,
-            ultimate: 20,
-            ultimateName: "Ult",
-          },
-          hp: 50,
-          maxHp: 100,
-          isDown: false,
-        },
+        character: makeFieldChar(),
         ability: "攻撃",
       })
       expect(result).toBeNull()
       warnSpy.mockRestore()
     })
+  })
+
+  const makeEnemy = (id = "enemy-1") => ({
+    id: id as EnemyId,
+    name: "Test Enemy",
+    title: "Tester",
+    maxHp: 200,
+    attackPower: 10,
+    imageUrl: "/enemy.png",
+    description: "Desc",
+    difficulty: "NORMAL" as const,
+    reward: "Reward",
+    phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
   })
 
   /* ── wasmExecuteEnemyTurn ── */
@@ -228,18 +212,7 @@ describe("WASM Bridge", () => {
         enemyPhase: 0,
         shieldBuffer: 0,
         field: [],
-        enemy: {
-          id: "enemy-1",
-          name: "Test Enemy",
-          title: "Tester",
-          maxHp: 200,
-          attackPower: 10,
-          imageUrl: "/enemy.png",
-          description: "Desc",
-          difficulty: "NORMAL",
-          reward: "Reward",
-          phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
-        },
+        enemy: makeEnemy(),
         poisonActive: false,
         enemyAttackReduction: 0,
       })
@@ -263,18 +236,7 @@ describe("WASM Bridge", () => {
         enemyPhase: 0,
         shieldBuffer: 0,
         field: [],
-        enemy: {
-          id: "enemy-1",
-          name: "Test Enemy",
-          title: "Tester",
-          maxHp: 200,
-          attackPower: 10,
-          imageUrl: "/enemy.png",
-          description: "Desc",
-          difficulty: "NORMAL",
-          reward: "Reward",
-          phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
-        },
+        enemy: makeEnemy(),
         poisonActive: false,
         enemyAttackReduction: 0,
       })
@@ -300,18 +262,7 @@ describe("WASM Bridge", () => {
         enemyPhase: 0,
         shieldBuffer: 0,
         field: [],
-        enemy: {
-          id: "enemy-1",
-          name: "Test Enemy",
-          title: "Tester",
-          maxHp: 200,
-          attackPower: 10,
-          imageUrl: "/enemy.png",
-          description: "Desc",
-          difficulty: "NORMAL",
-          reward: "Reward",
-          phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
-        },
+        enemy: makeEnemy(),
         poisonActive: false,
         enemyAttackReduction: 0,
       })
@@ -328,18 +279,7 @@ describe("WASM Bridge", () => {
         enemyHp: 50,
         enemyMaxHp: 100,
         enemyPhase: 0,
-        enemy: {
-          id: "enemy-1",
-          name: "Test Enemy",
-          title: "Tester",
-          maxHp: 100,
-          attackPower: 10,
-          imageUrl: "/enemy.png",
-          description: "Desc",
-          difficulty: "NORMAL",
-          reward: "Reward",
-          phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
-        },
+        enemy: makeEnemy("enemy-1"),
       })
       expect(result).toBeNull()
     })
@@ -357,18 +297,7 @@ describe("WASM Bridge", () => {
         enemyHp: 50,
         enemyMaxHp: 100,
         enemyPhase: 0,
-        enemy: {
-          id: "enemy-1",
-          name: "Test Enemy",
-          title: "Tester",
-          maxHp: 100,
-          attackPower: 10,
-          imageUrl: "/enemy.png",
-          description: "Desc",
-          difficulty: "NORMAL",
-          reward: "Reward",
-          phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
-        },
+        enemy: makeEnemy("enemy-1"),
       })
       expect(result).toBe("Phase transition!")
     })
@@ -386,18 +315,7 @@ describe("WASM Bridge", () => {
         enemyHp: 90,
         enemyMaxHp: 100,
         enemyPhase: 0,
-        enemy: {
-          id: "enemy-1",
-          name: "Test Enemy",
-          title: "Tester",
-          maxHp: 100,
-          attackPower: 10,
-          imageUrl: "/enemy.png",
-          description: "Desc",
-          difficulty: "NORMAL",
-          reward: "Reward",
-          phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
-        },
+        enemy: makeEnemy("enemy-1"),
       })
       expect(result).toBeNull()
     })
@@ -418,18 +336,7 @@ describe("WASM Bridge", () => {
         enemyHp: 50,
         enemyMaxHp: 100,
         enemyPhase: 0,
-        enemy: {
-          id: "enemy-1",
-          name: "Test Enemy",
-          title: "Tester",
-          maxHp: 100,
-          attackPower: 10,
-          imageUrl: "/enemy.png",
-          description: "Desc",
-          difficulty: "NORMAL",
-          reward: "Reward",
-          phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
-        },
+        enemy: makeEnemy("enemy-1"),
       })
       expect(result).toBeNull()
       warnSpy.mockRestore()
@@ -440,18 +347,7 @@ describe("WASM Bridge", () => {
   describe("wasmSimulateBattle", () => {
     it("returns null when WASM is not ready", () => {
       resetWasmEngine()
-      const result = wasmSimulateBattle([], {
-        id: "enemy-1",
-        name: "Test",
-        title: "Tester",
-        maxHp: 100,
-        attackPower: 10,
-        imageUrl: "/enemy.png",
-        description: "Desc",
-        difficulty: "NORMAL",
-        reward: "Reward",
-        phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
-      })
+      const result = wasmSimulateBattle([], makeEnemy())
       expect(result).toBeNull()
     })
 
@@ -465,18 +361,7 @@ describe("WASM Bridge", () => {
       } as unknown as WasmBattleModule
       __injectWasmModuleForTesting(mockModule)
 
-      const result = wasmSimulateBattle([], {
-        id: "enemy-1",
-        name: "Test",
-        title: "Tester",
-        maxHp: 100,
-        attackPower: 10,
-        imageUrl: "/enemy.png",
-        description: "Desc",
-        difficulty: "NORMAL",
-        reward: "Reward",
-        phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
-      })
+      const result = wasmSimulateBattle([], makeEnemy())
       expect(result).toEqual(mockResult)
     })
 
@@ -492,18 +377,7 @@ describe("WASM Bridge", () => {
       __injectWasmModuleForTesting(mockModule)
 
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
-      const result = wasmSimulateBattle([], {
-        id: "enemy-1",
-        name: "Test",
-        title: "Tester",
-        maxHp: 100,
-        attackPower: 10,
-        imageUrl: "/enemy.png",
-        description: "Desc",
-        difficulty: "NORMAL",
-        reward: "Reward",
-        phases: [{ triggerHpPercent: 50, message: "Phase 2", attackBonus: 10 }],
-      })
+      const result = wasmSimulateBattle([], makeEnemy())
       expect(result).toBeNull()
       warnSpy.mockRestore()
     })

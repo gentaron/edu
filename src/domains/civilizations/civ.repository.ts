@@ -9,6 +9,7 @@ import {
   HISTORICAL_CIVILIZATIONS,
   CIVILIZATION_LEADERS,
 } from "./civ.data"
+import type { CivilizationId } from "@/platform/schemas/branded"
 import type { Civilization, CivilizationLeader } from "@/types"
 
 const allCivs: Civilization[] = [
@@ -17,14 +18,14 @@ const allCivs: Civilization[] = [
   ...HISTORICAL_CIVILIZATIONS,
 ]
 
-const civById = new Map<string, Civilization>()
+const civById = new Map<CivilizationId, Civilization>()
 for (const civ of allCivs) {
   civById.set(civ.id, civ)
 }
 
 export const CivilizationRepository = {
   /** Find civilization by ID */
-  findById(id: string): Civilization | undefined {
+  findById(id: CivilizationId): Civilization | undefined {
     return civById.get(id)
   },
 
@@ -57,4 +58,4 @@ export const CivilizationRepository = {
   findByHref(href: string): Civilization | undefined {
     return allCivs.find((c) => c.href === href)
   },
-};
+}

@@ -52,7 +52,7 @@ export function checkStoryReferences(
   stories: StoryMeta[],
   wikiEntries: WikiEntry[]
 ): InvariantViolation[] {
-  const wikiIds = new Set(wikiEntries.map((e) => e.id))
+  const wikiIds = new Set(wikiEntries.map((e) => e.id as string))
   const violations: InvariantViolation[] = []
   for (const story of stories) {
     for (const entryId of story.relatedEntries) {
@@ -81,7 +81,7 @@ export function checkCivilizationLeaderReferences(
   civs: Civilization[],
   wikiEntries: WikiEntry[]
 ): InvariantViolation[] {
-  const wikiIds = new Set(wikiEntries.map((e) => e.id))
+  const wikiIds = new Set(wikiEntries.map((e) => e.id as string))
   const violations: InvariantViolation[] = []
   for (const civ of civs) {
     if (civ.leaderWikiId && !wikiIds.has(civ.leaderWikiId)) {

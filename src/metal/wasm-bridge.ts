@@ -167,8 +167,12 @@ let initPromise: Promise<WasmBattleModule | null> | null = null
  * if (wasm) { console.log('WASM engine ready') }
  */
 export async function initWasmEngine(): Promise<WasmBattleModule | null> {
-  if (wasmModule !== null) {return wasmModule}
-  if (initPromise !== null) {return initPromise}
+  if (wasmModule != null) {
+    return wasmModule
+  }
+  if (initPromise != null) {
+    return initPromise
+  }
 
   initPromise = (async () => {
     try {
@@ -176,6 +180,7 @@ export async function initWasmEngine(): Promise<WasmBattleModule | null> {
       // The WASM glue module lives in /public and is loaded at runtime,
       // not bundled. The Function constructor prevents the import() from
       // being analyzed as a dependency by the build tool.
+      // eslint-disable-next-line @typescript-eslint/no-implied-eval -- Dynamic import via Function constructor to bypass Vite/Rollup static analysis
       const dynamicImport = new Function("url", "return import(url)") as (
         url: string
       ) => Promise<WasmBattleModule>
@@ -201,7 +206,7 @@ export async function initWasmEngine(): Promise<WasmBattleModule | null> {
  * @returns `true` if the WASM module is available and ready for use.
  */
 export function isWasmReady(): boolean {
-  return wasmModule !== null
+  return wasmModule != null
 }
 
 // ── Conversion Helpers ──
@@ -248,9 +253,9 @@ function fieldCharsToWasmJson(field: readonly FieldChar[]): string {
       defense: fc.card.defense,
       is_down: fc.isDown,
       rarity: fc.card.rarity,
-      ultimate_name: fc.ultimateName,
-      ultimate_damage: fc.ultimate,
-      effect: fc.effect,
+      ultimate_name: fc.card.ultimateName,
+      ultimate_damage: fc.card.ultimate,
+      effect: fc.card.effect,
     }))
   )
 }
@@ -291,7 +296,9 @@ export interface CalculateDamageParams {
  * if (result) { console.log(result.damage) }
  */
 export function wasmCalculateDamage(params: CalculateDamageParams): WasmBattleResult | null {
-  if (wasmModule === null) {return null}
+  if (wasmModule == null) {
+    return null
+  }
 
   try {
     const flat = fieldCharToFlatParams(params.character)
@@ -340,7 +347,9 @@ export interface ExecuteEnemyTurnParams {
  * @returns The enemy turn result (updated field, new HP, logs), or `null` if WASM is unavailable.
  */
 export function wasmExecuteEnemyTurn(params: ExecuteEnemyTurnParams): WasmEnemyTurnResult | null {
-  if (wasmModule === null) {return null}
+  if (wasmModule == null) {
+    return null
+  }
 
   try {
     const fieldJson = fieldCharsToWasmJson(params.field)
@@ -381,7 +390,9 @@ export interface CheckPhaseTransitionParams {
  * @returns The transition message string, or `null` if no transition or WASM unavailable.
  */
 export function wasmCheckPhaseTransition(params: CheckPhaseTransitionParams): string | null {
-  if (wasmModule === null) {return null}
+  if (wasmModule == null) {
+    return null
+  }
 
   try {
     const enemyJson = enemyToWasmJson(params.enemy)
@@ -412,7 +423,9 @@ export function wasmSimulateBattle(
   field: readonly FieldChar[],
   enemy: Enemy
 ): WasmSimResult | null {
-  if (wasmModule === null) {return null}
+  if (wasmModule == null) {
+    return null
+  }
 
   try {
     const fieldJson = fieldCharsToWasmJson(field)
