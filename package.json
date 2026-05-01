@@ -19,7 +19,11 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
-    "bench": "vitest bench"
+    "bench": "vitest bench",
+    "bench:rust": "cd crates/edu-battle-engine && cargo bench",
+    "size": "bash scripts/measure-bundle-size.sh",
+    "size:json": "bash scripts/measure-bundle-size.sh --json",
+    "baseline": "bash scripts/capture-baseline.sh"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

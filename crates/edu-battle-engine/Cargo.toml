@@ -20,8 +20,13 @@ js-sys = "0.3"
 version = "0.3"
 features = ["console"]
 
+[[bench]]
+name = "battle_bench"
+harness = false
+
 [dev-dependencies]
 wasm-bindgen-test = "0.3"
+criterion = { version = "0.5", features = ["html_reports"] }
 
 [profile.release]
 opt-level = "z"

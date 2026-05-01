@@ -13,7 +13,9 @@
 [![Rust](https://img.shields.io/badge/Rust-WASM-CE422B?style=flat-square&logo=rust)](https://www.rust-lang.org)
 [![Zod](https://img.shields.io/badge/Zod-4-3068B7?style=flat-square&logo=zod)](https://zod.dev)
 [![Netlify](https://img.shields.io/badge/Deploy-Netlify-00C7B7?style=flat-square&logo=netlify)](https://netlify.com)
-[![Tests](https://img.shields.io/badge/Tests-17_pass-22C55E?style=flat-square)]()
+[![Tests](https://img.shields.io/badge/Tests-499_pass-22C55E?style=flat-square)](https://github.com/gentaron/edu/actions)
+[![PBT](https://img.shields.io/badge/PBT-56_properties-F59E0B?style=flat-square)]()
+[![Bench](https://img.shields.io/badge/Bench-criterion.rs+%2B+Vitest-9333EA?style=flat-square)](BENCHMARKS.md)
 
 </div>
 
@@ -54,6 +56,7 @@
   - [Epoch 8: Project Prometheus — Max Tech Level (2026/04/30)](#epoch-8-project-prometheus--max-tech-level-20260430)
   - [Epoch 9: Domain Cluster Migration × Philosophy Integration (2026/05/01)](#epoch-9-domain-cluster-migration--philosophy-integration-20260501)
 - [Architecture Evolution — Comparative View](#architecture-evolution--comparative-view)
+- [Performance Benchmarks](#performance-benchmarks)
 - [Metrics Summary](#metrics-summary)
 - [License](#license)
 
@@ -66,7 +69,8 @@ git clone https://github.com/gentaron/edu.git && cd edu
 bun install
 bun dev          # → http://localhost:3000
 bun run build    # → 本番ビルド（静的HTML 26ルート生成）
-bun test         # → 17テスト実行
+bun test         # → 499テスト実行
+bun run bench     # → TypeScript + Rust ベンチマーク
 ```
 
 > **Runtime**: Bun | **Framework**: Next.js 16 App Router | **Deploy**: Netlify
@@ -412,6 +416,9 @@ bun test             # Vitest テスト実行
 bun run test:watch   # ウォッチモード
 bun run test:ui      # Vitest UI
 bun run lint         # ESLint + Prettier
+bun run bench       # TypeScript + Rust ベンチマーク
+bun run size        # バンドルサイズ計測
+bun run baseline    # パフォーマンスベースライン取得
 bun run db:push      # Prisma DB同期
 bun run db:seed      # シードデータ投入
 ```
@@ -459,7 +466,7 @@ bun run db:seed      # シードデータ投入
 | `any` 型                       | 禁止                            |
 | `eslint-disable`               | 禁止                            |
 | Zodスキーマ検証                | ビルド時実行                    |
-| テスト                         | 全17テスト通過                  |
+| テスト                         | 全499テスト通過                 |
 | LCP (Largest Contentful Paint) | 1.5秒以下                       |
 | バトルアニメーション           | 60fps                           |
 | ページバンドルサイズ           | 100KB以下                       |
@@ -986,6 +993,29 @@ Phase 3で移行しきれなかった旧L層ファイルの完全削除と、pla
 05/01  ドメインクラスタアーキテクチャ
 05/01  AGENTS.md Protocol (ドメイン別)
 ```
+
+---
+
+## Performance Benchmarks
+
+科学的ベンチマークインフラを導入済み。詳細は [BENCHMARKS.md](BENCHMARKS.md) を参照。
+
+| ツール | 対象 | 実行コマンド |
+|--------|------|-------------|
+| Vitest bench | TS: Binary Protocol, Wiki Search, Battle Engine | `bun run bench` |
+| Criterion.rs | Rust: WASMバトルエンジン全関数 | `bun run bench:rust` |
+| Bundle Analyzer | Next.jsチャンク + WASM | `ANALYZE=true bun run build` |
+| Bundle Size | JS/WASMサイズ監視 | `bun run size` |
+| Baseline | 全メトリクス一括取得 | `bun run baseline` |
+
+### ハイライト
+
+| モジュール | 最速パス | ボトルネック | 倍率差 |
+|-----------|---------|-------------|-------|
+| Binary Protocol | writeVarInt: ~12.6M ops/s | writeValue(complex): ~43K ops/s | 288x |
+| Battle Engine | phaseTransition: ~2.0M ops/s | effectDamage: ~6.8K ops/s | 289x |
+| Wiki Search | autocomplete: ~28K ops/s | multi-cat search: ~300 ops/s | 93x |
+| WASM Binary | 148.5 KB (gzipped: ~45 KB) | — | — |
 
 ---
 
