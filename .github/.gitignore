@@ -1,5 +1,6 @@
 # Ignore everything
 *
-# But not ci.yml
-!ci.yml
+# But not workflows/ and its contents
+!workflows/
+!workflows/**
 !/.gitignore

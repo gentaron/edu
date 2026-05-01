@@ -17,6 +17,11 @@ pub struct Xoshiro256pp {
 
 impl Xoshiro256pp {
     /// Create a new RNG from a 256-bit seed (4 × u64).
+    ///
+    /// # Specification (Creusot/Prusti compatible)
+    /// ```text
+    /// ensures !s[0..4].iter().all(|x| *x == 0)  // no all-zero state
+    /// ```
     #[must_use]
     pub const fn new(seed: [u64; 4]) -> Self {
         // Ensure no all-zero state (xoshiro produces all zeros for zero seed)
@@ -56,6 +61,11 @@ impl Xoshiro256pp {
     }
 
     /// Generate a u32 in `[0, upper_bound)`.
+    ///
+    /// # Specification (Creusot/Prusti compatible)
+    /// ```text
+    /// ensures result < upper_bound
+    /// ```
     #[must_use]
     pub fn next_u32_bounded(&mut self, upper_bound: u32) -> u32 {
         if upper_bound <= 1 {
@@ -83,6 +93,11 @@ impl Xoshiro256pp {
     }
 
     /// Generate a f64 in `[0.0, 1.0)`.
+    ///
+    /// # Specification (Creusot/Prusti compatible)
+    /// ```text
+    /// ensures 0.0 <= result < 1.0
+    /// ```
     #[must_use]
     pub fn next_f64(&mut self) -> f64 {
         // Use upper 53 bits of u64 for uniform [0, 1)
@@ -105,7 +120,7 @@ fn splitmix64(mut x: u64) -> u64 {
 
 /// 64-bit left rotation.
 const fn rotl(x: u64, k: u32) -> u64 {
-    (x << k) | (x >> (64 - k))
+    x.rotate_left(k)
 }
 
 /// Jump function for xoshiro256++ — advance by 2^64 steps.
@@ -122,9 +137,9 @@ fn jump_impl(s: &mut [u64; 4]) {
     let mut s2 = 0u64;
     let mut s3 = 0u64;
 
-    for j in 0..4 {
+    for &jump_val in &jump {
         for b in 0..64 {
-            if (jump[j] >> b) & 1 != 0 {
+            if (jump_val >> b) & 1 != 0 {
                 s0 ^= s[0];
                 s1 ^= s[1];
                 s2 ^= s[2];

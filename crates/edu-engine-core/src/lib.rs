@@ -10,6 +10,7 @@
 
 #![cfg_attr(not(feature = "std"), no_std)]
 #![allow(unexpected_cfgs)]
+#![cfg_attr(all(feature = "simd"), feature(portable_simd))]
 
 #[cfg(feature = "alloc")]
 extern crate alloc;
@@ -18,6 +19,15 @@ pub mod damage;
 pub mod fsm;
 pub mod rng;
 pub mod types;
+
+/// SIMD-accelerated damage computations using `core::simd`.
+///
+/// **Requires nightly Rust**: `rustup run nightly cargo test -p edu-engine-core --features simd`
+///
+/// Canon: **Apolonium Vector Engine** — parallel damage resolution
+/// exploiting the quantum probability layer of the EDU universe.
+#[cfg(feature = "simd")]
+pub mod simd;
 
 #[cfg(feature = "std")]
 pub mod proofs;

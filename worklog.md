@@ -155,3 +155,28 @@ Stage Summary:
 
 - All 9 quality checkboxes passing: any=0, coverage≥80%, eslint --max-warnings=0, tsc --noEmit, build success, JSDoc on all exported functions, require-jsdoc enforced, Stryker config created, EffectType exhaustive check verified
 - Commit 249ad67 pushed to gentaron/edu main
+
+---
+
+Task ID: epoch-12-alpha-complete
+Agent: main
+Task: Phase α completion — CI workflows, SIMD module, Creusot/Prusti contracts, README badges
+
+Work Log:
+
+- Verified repo state: commit 4d9d65b on main, 854 TS tests + 61 Rust tests pass
+- Created `.github/workflows/ci.yml` — TypeScript + Rust CI (tsc, eslint, vitest, next build, cargo check/test/clippy, RISC-V cross-compile)
+- Created `.github/workflows/kani.yml` — Kani bounded model checking verification (6 harnesses)
+- Created `crates/edu-engine-core/src/simd.rs` — SIMD-accelerated AoE damage, batch HP clamp, HP sum using `core::simd` i32x8 (nightly-gated via `simd` feature)
+- Added Creusot/Prusti-compatible specification contracts to all core functions: `calculate_damage`, `apply_result_to_char`, `calculate_aoe_damage`, `clamp_hp`, `verify_hp_invariant`, `transition`, `execute_enemy_turn`, `simulate_battle`, `Xoshiro256pp::new`, `next_u32_bounded`, `next_f64`, `aoe_damage_simd`, `clamp_hp_batch`
+- Fixed all clippy warnings: clone_on_copy, needless_range_loop, manual_rotate, unused variables
+- Updated README badges: added Rust CI, Kani, RISC-V badges; updated test/PBT counts to include Rust
+- Updated Metrics Summary: Rust 1,400+ lines (was 1,004), 854 TS + 61 Rust tests, 6 Kani proofs, formal verification row
+- Updated Quality Standards table: formal verification, WASM, Rust targets, Clippy rows added
+- CI workflow properly excludes `edu-engine-embedded` from workspace tests (RISC-V cross-compile only)
+
+Stage Summary:
+
+- Phase α deliverables: ✅ Code (SIMD module), ✅ Tests (61 Rust + 6 Kani), ✅ ADR-0001, ✅ Benchmarks (criterion), ✅ README badges, ✅ CI workflows (ci.yml + kani.yml), ✅ Lore-tech mapping
+- All CI gates pass: 854 TS tests, 61 Rust tests, 0 ESLint warnings, tsc clean, clippy -D warnings clean, build 51 pages
+- Ready for commit to main

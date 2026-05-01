@@ -48,6 +48,14 @@ pub enum TransitionResult {
 /// # Determinism
 /// `transition(p, e1) == transition(p, e2)` whenever `e1 == e2`.
 /// This is a key property verified by tests and (where available) Kani.
+///
+/// # Specification (Creusot/Prusti compatible)
+/// ```text
+/// ensures match result {
+///   Accepted(p) => p is valid BattlePhase,
+///   Rejected => true,
+/// }
+/// ```
 #[must_use]
 pub fn transition(phase: BattlePhase, event: BattleEvent) -> TransitionResult {
     match (phase, event) {
@@ -92,6 +100,13 @@ pub fn valid_events(phase: BattlePhase) -> &'static [BattleEvent] {
 
 /// Execute enemy turn with deterministic target selection.
 /// Returns the updated field, new enemy HP, and total damage dealt.
+///
+/// # Specification (Creusot/Prusti compatible)
+/// ```text
+/// requires state.field_len <= 5
+/// ensures result.damage_dealt >= 0
+/// ensures forall i in 0..result.field_len: result.updated_field[i].hp >= 0
+/// ```
 ///
 /// # Canon (Lore-Tech)
 /// This implements the **Adversarial Determinism Principle**: enemy
@@ -169,6 +184,13 @@ pub fn check_phase_transition(state: &BattleState, enemy: &crate::types::Enemy) 
 
 /// Simulate an entire battle to completion.
 ///
+/// # Specification (Creusot/Prusti compatible)
+/// ```text
+/// ensures result.turns <= MAX_TURNS
+/// ensures result.survivors <= field.len()
+/// ensures result.victory ==> result.final_enemy_hp == 0
+/// ```
+///
 /// # Canon (Lore-Tech)
 /// This function is the **Temporal Loop** — the full battle simulation
 /// that proves combat always terminates within `MAX_TURNS`.
@@ -193,7 +215,7 @@ pub fn simulate_battle(field: &[FieldChar], enemy: &crate::types::Enemy) -> SimR
     };
 
     for (i, fc) in field.iter().enumerate().take(5) {
-        state.field[i] = fc.clone();
+        state.field[i] = *fc;
     }
 
     for _ in 0..crate::types::MAX_TURNS {
@@ -259,13 +281,10 @@ pub fn simulate_battle(field: &[FieldChar], enemy: &crate::types::Enemy) -> SimR
 }
 
 fn count_alive(field: &[FieldChar; 5], len: u8) -> u8 {
-    let mut count = 0u8;
-    for i in 0..len as usize {
-        if !field[i].is_down {
-            count = count.saturating_add(1);
-        }
-    }
-    count
+    field[..len as usize]
+        .iter()
+        .filter(|c| !c.is_down)
+        .count() as u8
 }
 
 #[cfg(test)]

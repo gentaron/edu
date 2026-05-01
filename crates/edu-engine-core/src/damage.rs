@@ -12,6 +12,16 @@ use crate::types::*;
 /// - Returned `BattleResult.heal >= 0`
 /// - Returned `BattleResult.shield >= 0`
 ///
+/// # Specification (Creusot/Prusti compatible)
+/// ```text
+/// requires attacker.hp >= 0
+/// requires attacker.max_hp >= 0
+/// ensures result.damage >= 0
+/// ensures result.heal >= 0
+/// ensures result.shield >= 0
+/// ensures result.attack_reduction >= 0
+/// ```
+///
 /// # Canon (Lore-Tech)
 /// This function is the **Soul Spark Calculation** — the fundamental
 /// damage law of the EDU universe, computed identically whether on
@@ -61,9 +71,19 @@ pub fn calculate_damage(attacker: &FieldChar, ability: &AbilityType) -> BattleRe
 ///
 /// # Post-condition
 /// `result.hp >= 0 && result.hp <= result.max_hp`
+///
+/// # Specification (Creusot/Prusti compatible)
+/// ```text
+/// requires char.hp >= 0 && char.hp <= char.max_hp
+/// requires result.damage >= 0
+/// requires result.heal >= 0
+/// ensures out.hp >= 0
+/// ensures out.hp <= out.max_hp
+/// ensures out.is_down ==> out.hp == 0
+/// ```
 #[must_use]
 pub fn apply_result_to_char(char: &FieldChar, result: &BattleResult) -> FieldChar {
-    let mut out = char.clone();
+    let mut out = *char;
     if result.damage > 0 {
         out.hp = (out.hp - result.damage).max(0);
     }
@@ -83,6 +103,13 @@ pub fn apply_result_to_char(char: &FieldChar, result: &BattleResult) -> FieldCha
 ///
 /// # Invariants
 /// - All returned damage values >= 0
+///
+/// # Specification (Creusot/Prusti compatible)
+/// ```text
+/// requires multiplier > 0
+/// ensures result.len <= 8
+/// ensures forall i in 0..result.len: result.damages[i] >= 0
+/// ```
 #[must_use]
 pub fn calculate_aoe_damage(base_damage: i32, target_defenses: &[i32], multiplier: i32) -> AoEResult {
     let mut result = AoEResult::default();
@@ -147,6 +174,11 @@ pub fn calculate_enemy_damage(
 }
 
 /// Clamp HP to valid range. Enforces `0 <= hp <= max_hp`.
+///
+/// # Specification (Creusot/Prusti compatible)
+/// ```text
+/// ensures 0 <= result <= max_hp
+/// ```
 #[must_use]
 pub const fn clamp_hp(hp: i32, max_hp: i32) -> i32 {
     if hp < 0 {
@@ -159,6 +191,12 @@ pub const fn clamp_hp(hp: i32, max_hp: i32) -> i32 {
 }
 
 /// Verify the HP invariant: `0 <= hp <= max_hp`.
+///
+/// # Specification (Creusot/Prusti compatible)
+/// ```text
+/// ensures result ==> (hp >= 0 && hp <= max_hp)
+/// ensures result ==> (max_hp >= 0)
+/// ```
 #[must_use]
 pub const fn verify_hp_invariant(hp: i32, max_hp: i32) -> bool {
     hp >= 0 && hp <= max_hp && max_hp >= 0

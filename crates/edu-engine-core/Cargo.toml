@@ -8,6 +8,7 @@ description = "no_std battle engine core — zero-heap, target-independent, form
 default = ["std"]
 std = ["serde/std", "alloc"]
 alloc = []
+simd = []
 
 [dependencies]
 serde = { version = "1", default-features = false, features = ["derive"] }
