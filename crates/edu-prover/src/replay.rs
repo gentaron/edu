@@ -287,6 +287,8 @@ pub fn record_step(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[cfg(not(feature = "std"))]
+    use alloc::vec;
     use edu_engine_core::types::{Enemy, FieldChar, Rarity, EffectType};
 
     fn sample_field() -> Vec<FieldChar> {

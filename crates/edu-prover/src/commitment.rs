@@ -317,6 +317,8 @@ pub fn verify_commitment_legacy(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[cfg(not(feature = "std"))]
+    use alloc::vec;
     use crate::replay::{FieldSnapshot, OutcomeRecord, ReplayStep};
     use crate::types::ReplayHash;
     use edu_engine_core::types::{Enemy, FieldChar, PhaseThreshold, Rarity, EffectType};

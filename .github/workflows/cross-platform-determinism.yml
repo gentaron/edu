@@ -153,17 +153,21 @@ jobs:
             echo "Skipping tests for bare-metal target"
             exit 0
           fi
+          SAFE_NAME="${{ matrix.target.name }}"
+          SAFE_NAME="${SAFE_NAME//[^a-zA-Z0-9_-]/_}"
           cargo test -p edu-engine-core --release --target ${{ matrix.target.test_target }} \
             -- simulate_battle --nocapture \
-            2>&1 | tee /tmp/test-output-${{ matrix.target.name }}.txt || true
+            2>&1 | tee "/tmp/test-output-${SAFE_NAME}.txt" || true
 
       - name: Extract deterministic output
         run: |
+          SAFE_NAME="${{ matrix.target.name }}"
+          SAFE_NAME="${SAFE_NAME//[^a-zA-Z0-9_-]/_}"
           # Extract just the test output lines (battle results)
-          rg -o 'battle_result:.*' /tmp/test-output-${{ matrix.target.name }}.txt 2>/dev/null \
-            | sort > /tmp/results-${{ matrix.target.name }}.txt \
+          rg -o 'battle_result:.*' /tmp/test-output-${SAFE_NAME}.txt 2>/dev/null \
+            | sort > /tmp/results-${SAFE_NAME}.txt \
             || echo "No battle_result lines found — using raw output" \
-            && sort /tmp/test-output-${{ matrix.target.name }}.txt > /tmp/results-${{ matrix.target.name }}.txt
+            && sort /tmp/test-output-${SAFE_NAME}.txt > /tmp/results-${SAFE_NAME}.txt
 
       - name: Upload results
         uses: actions/upload-artifact@v4

@@ -6,4 +6,4 @@ package apolon where
 
 @[default_target]
 lean_lib Apolon where
-  rootsDir := ".."
+  srcDir := ".."

@@ -76,15 +76,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - name: Stage 1: Verify CRDT types are load-bearing
+      - name: "Stage 1: Verify CRDT types are load-bearing"
         working-directory: crates
         run: |
           # Verify that removing the bridge crate breaks dependent code
           cargo test -p edu-crdt-bridge removal -- --nocapture
-      - name: Stage 2: Verify deck sync depends on CRDT
+      - name: "Stage 2: Verify deck sync depends on CRDT"
         run: |
           cargo test -p edu-crdt-bridge deck_sync -- --nocapture
-      - name: Stage 3: Verify annotation layer depends on CRDT
+      - name: "Stage 3: Verify annotation layer depends on CRDT"
         run: |
           cargo test -p edu-crdt-bridge annotation_layer -- --nocapture
 
