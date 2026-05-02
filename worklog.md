@@ -97,3 +97,42 @@ Stage Summary:
 - 5 CI failures fixed: Lean 4 build (rootsDir), edu-prover (alloc imports), RISC-V (apt package), aarch64 (apt package), Balance Gate (cascading)
 - README refreshed with complete 8-phase uplift documentation
 - Push: 2c8d32c..0d7939d main
+
+---
+
+Task ID: 1
+Agent: main
+Task: Phase 0 Discovery + Phase 1 Build-Time RAG Index Pipeline
+
+Work Log:
+
+- git pull (already up to date at eae623f)
+- Phase 0 Discovery: analyzed repo structure
+  - Content source: src/domains/wiki/_.data.ts (7 files), civilizations/_.data.ts (5 files), cards/\*.data.ts (2 files)
+  - Package manager: bun (bun.lock exists)
+  - Styling: Tailwind CSS 4 + shadcn/ui
+  - Testing: Vitest
+  - Path alias: @/_ -> ./src/_
+  - No /content/edu/\*_/_.md exists — adapted script to import .data.ts directly
+- Installed devDependencies: @xenova/transformers, tsx, gray-matter
+- Created scripts/build-rag-index.ts:
+  - Reads 665 entries from wiki, civilizations, and cards data files
+  - Chunks at ~400 tokens with 50-token overlap
+  - Embeds with Xenova/multilingual-e5-small (384-dim)
+  - Privacy filter: drops chunks with forbidden keywords (2 drops)
+  - Outputs corpus.json (2.13 MB, gitignored) + manifest.json
+  - Deterministic: same inputs = same buildHash; skips if up-to-date
+  - Supports --force, --dry-run flags
+- Updated package.json: build:rag script wired into build pipeline
+- Created public/rag/.gitkeep + public/rag/manifest.json
+- Updated .gitignore: public/rag/corpus.json gitignored
+- Updated tsconfig.json: excluded build-rag-index.ts from tsc
+- DoD checks passed: privacy keywords zero hits (word-boundary), chunkCount matches, determinism verified
+- Committed and pushed to main (0e199c5)
+
+Stage Summary:
+
+- 7 files changed, 942 insertions, 12 deletions
+- 665 entries -> 729 chunks, 2 privacy exclusions
+- corpus.json: 2.13 MB, manifest.json: 729 chunks, buildHash verified
+- Phase 1 complete, awaiting approval before Phase 2
