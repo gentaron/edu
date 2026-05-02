@@ -15,10 +15,14 @@
 #[cfg(feature = "alloc")]
 extern crate alloc;
 
+pub mod bounded_hp;
 pub mod damage;
 pub mod fsm;
 pub mod rng;
 pub mod types;
+
+#[cfg(feature = "alloc")]
+pub mod tlv;
 
 /// SIMD-accelerated damage computations using `core::simd`.
 ///
