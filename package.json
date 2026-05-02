@@ -5,9 +5,9 @@
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
     "postinstall": "prisma generate",
-    "prebuild": "bun run scripts/validate-data.ts",
+    "prebuild": "tsx scripts/validate-data.ts",
     "build:rag": "tsx scripts/build-rag-index.ts",
-    "build": "bun run build:rag && next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
+    "build": "npm run build:rag && next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
     "start": "NODE_ENV=production bun .next/standalone/server.js 2>&1 | tee server.log",
     "lint": "eslint .",
     "db:push": "prisma db push",

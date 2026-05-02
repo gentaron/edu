@@ -19,7 +19,10 @@ import { useWikiSync } from "../useWikiSync"
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
   draft: { label: "Draft", className: "bg-zinc-500/10 text-zinc-400 border-zinc-500/30" },
-  published: { label: "Published", className: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30" },
+  published: {
+    label: "Published",
+    className: "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+  },
   archived: { label: "Archived", className: "bg-amber-500/10 text-amber-400 border-amber-500/30" },
 }
 
@@ -41,7 +44,7 @@ export default function WikiSlugPage() {
 
   const editHistory = useMemo(
     () => (page ? getEditHistory(page.docId) : []),
-    [page, getEditHistory],
+    [page, getEditHistory]
   )
 
   const handleStartEdit = () => {
@@ -90,8 +93,8 @@ export default function WikiSlugPage() {
     )
   }
 
-  const status = STATUS_BADGE[page.metadata.status] ?? STATUS_BADGE.draft
-  const namespace = NAMESPACE_BADGE[page.metadata.namespace] ?? NAMESPACE_BADGE.draft
+  const status = STATUS_BADGE[page.metadata.status] ?? STATUS_BADGE.draft!
+  const namespace = NAMESPACE_BADGE[page.metadata.namespace] ?? NAMESPACE_BADGE.draft!
 
   return (
     <main className="min-h-screen bg-edu-bg pt-16 pb-20">
@@ -212,8 +215,7 @@ export default function WikiSlugPage() {
                       {line.slice(2)}
                     </li>
                   )
-                if (line.startsWith("# "))
-                  return null // Skip h1 since we show it in the header
+                if (line.startsWith("# ")) return null // Skip h1 since we show it in the header
                 if (line.trim() === "") return <br key={i} />
                 return (
                   <p key={i} className="text-xs text-edu-muted leading-relaxed">
@@ -224,7 +226,7 @@ export default function WikiSlugPage() {
                         </strong>
                       ) : (
                         part
-                      ),
+                      )
                     )}
                   </p>
                 )
@@ -238,9 +240,7 @@ export default function WikiSlugPage() {
           <div className="rounded-lg border border-edu-accent/20 bg-edu-accent/5 p-3 mb-4">
             <div className="flex items-center gap-1.5 text-[10px] text-edu-accent">
               <GitFork className="w-3 h-3" />
-              <span>
-                Forked from doc:{page.metadata.forkedFrom}
-              </span>
+              <span>Forked from doc:{page.metadata.forkedFrom}</span>
             </div>
           </div>
         )}
