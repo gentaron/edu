@@ -1,0 +1,80 @@
+name: ZK Prove & Verify
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'crates/edu-prover/**'
+      - 'crates/edu-verifier/**'
+      - 'crates/edu-engine-core/**'
+  pull_request:
+    paths:
+      - 'crates/edu-prover/**'
+      - 'crates/edu-verifier/**'
+      - 'crates/edu-engine-core/**'
+
+jobs:
+  test-prover:
+    name: edu-prover tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-prover-${{ hashFiles('crates/edu-prover/Cargo.lock') }}
+      - name: Test edu-prover
+        working-directory: crates
+        run: cargo test -p edu-prover -- --nocapture
+      - name: Test edu-prover (no std features)
+        working-directory: crates
+        run: cargo test -p edu-prover --no-default-features
+
+  test-verifier:
+    name: edu-verifier tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-verifier-${{ hashFiles('crates/edu-verifier/Cargo.lock') }}
+      - name: Test edu-verifier
+        working-directory: crates
+        run: cargo test -p edu-verifier -- --nocapture
+
+  clippy-zk:
+    name: Clippy (prover + verifier)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Run clippy
+        working-directory: crates
+        run: cargo clippy -p edu-prover -p edu-verifier -- -D warnings
+
+  integration:
+    name: End-to-end commitment roundtrip
+    runs-on: ubuntu-latest
+    needs: [test-prover, test-verifier]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Build verifier WASM
+        working-directory: crates
+        run: |
+          cargo build -p edu-prover --release
+          cargo build -p edu-verifier --release
+      - name: Run integration test
+        working-directory: crates
+        run: |
+          cargo test -p edu-verifier test_verify_valid_commitment_json -- --nocapture
+          cargo test -p edu-verifier test_verify_trace_integrity_valid -- --nocapture
+          cargo test -p edu-verifier test_compute_deck_hash_valid -- --nocapture
+          cargo test -p edu-verifier test_compute_enemy_hash_valid -- --nocapture
