@@ -10,7 +10,6 @@
 
 use sha2::{Digest, Sha256};
 use crate::types::ReplayHash;
-use crate::types::hex_encode;
 
 #[cfg(not(feature = "std"))]
 use alloc::string::String;
