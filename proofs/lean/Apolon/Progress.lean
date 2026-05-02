@@ -40,12 +40,12 @@ inductive Value : Expr → Prop where
   | boolLit (b : Bool) : Value (.boolLit b)
   | strLit (s : String) : Value (.strLit s)
   | unitLit : Value .unitLit
-  | lam (x : VarName) (τ : Type) (e : Expr) : Value (.lam x τ e)
+  | lam (x : VarName) (τ : ApType) (e : Expr) : Value (.lam x τ e)
   | record (fields : List (Label × Expr))
       (h : ∀ i (hi : i < fields.length), Value (fields[i].2)) :
       Value (.record fields)
   | listNil : Value (.listLit [])
-  | cons (e₁ e₂ : Expr) (τ : Type)
+  | cons (e₁ e₂ : Expr) (τ : ApType)
       (h₁ : Value e₁)
       (h₂ : Value e₂) :
       Value (.cons e₁ e₂)
@@ -159,7 +159,7 @@ inductive Step : Expr → Expr → Prop where
       Step (.app e₁ e₂) (.app e₁ e₂')
 
   /-- β-reduction: apply a closure to a value argument. -/
-  | appAbs (x : VarName) (τ : Type) (body arg : Expr)
+  | appAbs (x : VarName) (τ : ApType) (body arg : Expr)
       (h_v : Value arg) :
       Step (.app (.lam x τ body) arg) (body.subst x arg)
 
@@ -179,7 +179,7 @@ inductive Step : Expr → Expr → Prop where
       Step (.field e l) (.field e' l)
 
   /-- Field-val: extract field from a value record. -/
-  | fieldVal (fields : List (Label × Expr)) (l : Label) (τ : Type) (e : Expr)
+  | fieldVal (fields : List (Label × Expr)) (l : Label) (τ : ApType) (e : Expr)
       (h_v : Value (.record fields))
       (h_mem : (l, e) ∈ fields)
       (h_val : Value e) :
@@ -255,7 +255,7 @@ theorem canonical_TBool (Γ : TyCtx) (e : Expr)
 /--
   Canonical form for TArrow: if a value has type τ₁ → τ₂, it must be a lambda.
 -/
-theorem canonical_TArrow (Γ : TyCtx) (e : Expr) (τ₁ τ₂ : Type)
+theorem canonical_TArrow (Γ : TyCtx) (e : Expr) (τ₁ τ₂ : ApType)
     (h_type : HasType Γ e (.TArrow τ₁ τ₂))
     (h_val : Value e) :
     ∃ x τ body, e = .lam x τ body := by
@@ -299,7 +299,7 @@ theorem canonical_TUnit (Γ : TyCtx) (e : Expr)
   then the typing is consistent. (This is a helper lemma — values are trivially
   well-typed since they have the right form.)
 -/
-theorem progress_value (e : Expr) (τ : Type)
+theorem progress_value (e : Expr) (τ : ApType)
     (h_type : HasType [] e τ)
     (h_val : Value e) :
     True := by
@@ -326,7 +326,7 @@ theorem value_no_step (e e' : Expr)
   Given a well-typed expression in any context (with the module's functions in scope),
   either it is a value or it can take a step.
 -/
-theorem progress' (Δ : EffectCtx) (Γ : TyCtx) (e : Expr) (τ : Type)
+theorem progress' (Δ : EffectCtx) (Γ : TyCtx) (e : Expr) (τ : ApType)
     (h_type : HasType Γ e τ)
     (h_safe : EffectSafe Δ e .mut) :  -- mut allows everything; if safe at mut level
     Value e ∨ ∃ e', Step e e' := by
@@ -471,7 +471,7 @@ theorem progress' (Δ : EffectCtx) (Γ : TyCtx) (e : Expr) (τ : Type)
 
   See: Types and Programming Languages (Pierce, 2002), Chapter 12.
 -/
-theorem progress (Δ : EffectCtx) (e : Expr) (τ : Type)
+theorem progress (Δ : EffectCtx) (e : Expr) (τ : ApType)
     (h_well_typed : HasType [] e τ)
     (h_well_formed : ∀ (M : Module) (_ : ModuleWellFormed Δ M), True)
     (h_safe : EffectSafe Δ e .mut) :
@@ -489,7 +489,7 @@ theorem progress (Δ : EffectCtx) (e : Expr) (τ : Type)
   This states that every well-typed expression eventually reaches a value
   (assuming termination).
 -/
-theorem progress_multi (Δ : EffectCtx) (Γ : TyCtx) (e : Expr) (τ : Type)
+theorem progress_multi (Δ : EffectCtx) (Γ : TyCtx) (e : Expr) (τ : ApType)
     (h_type : HasType Γ e τ)
     (h_not_val : ¬ Value e) :
     ∃ e', MultiStep e e' ∧ Value e' := by
@@ -520,7 +520,7 @@ theorem step_deterministic (e e₁ e₂ : Expr)
   module has no stuck states.  A state is stuck if it is not a value and cannot
   take a step.  This follows directly from the Progress theorem.
 -/
-theorem no_stuck_states (Δ : EffectCtx) (e : Expr) (τ : Type)
+theorem no_stuck_states (Δ : EffectCtx) (e : Expr) (τ : ApType)
     (h_type : HasType [] e τ)
     (h_safe : EffectSafe Δ e .mut) :
     ¬ (¬ Value e ∧ ¬ ∃ e', Step e e') := by
@@ -536,7 +536,7 @@ theorem no_stuck_states (Δ : EffectCtx) (e : Expr) (τ : Type)
   at the appropriate level. Effect safety ensures that the expression will
   not attempt to call functions with incompatible effect levels.
 -/
-theorem progress_effect_aware (Δ : EffectCtx) (Γ : TyCtx) (e : Expr) (τ : Type)
+theorem progress_effect_aware (Δ : EffectCtx) (Γ : TyCtx) (e : Expr) (τ : ApType)
     (eff : Effect)
     (h_type : HasType Γ e τ)
     (h_safe : EffectSafe Δ e eff) :

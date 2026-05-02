@@ -84,16 +84,16 @@ instance : Min Effect where
   Supports base types, function types, record types with row polymorphism,
   and list types. See grammar.md §4.2.
 -/
-inductive Type where
-  | TInt        : Type
-  | TBool       : Type
-  | TString     : Type
-  | TUnit       : Type
-  | TVar        : String → Type          -- type variable for polymorphism
-  | TArrow      : Type → Type → Type     -- function type A → B
-  | TRecord     : List (Label × Type) → Type  -- {#l1: T1, #l2: T2, ...}
-  | TList       : Type → Type            -- [T]
-  | TTuple      : List Type → Type       -- (T1, T2, ...)
+inductive ApType where
+  | TInt        : ApType
+  | TBool       : ApType
+  | TString     : ApType
+  | TUnit       : ApType
+  | TVar        : String → ApType          -- type variable for polymorphism
+  | TArrow      : ApType → ApType → ApType     -- function type A → B
+  | TRecord     : List (Label × ApType) → ApType  -- {#l1: T1, #l2: T2, ...}
+  | TList       : ApType → ApType            -- [T]
+  | TTuple      : List ApType → ApType       -- (T1, T2, ...)
   deriving Repr
 
 /-- Named types (Card, FieldChar, BattleState, etc.) represented as aliases. -/
@@ -103,7 +103,7 @@ abbrev TypeName := String
 structure TypeDecl where
   name   : TypeName
   params : List String      -- type parameters
-  body   : Type
+  body   : ApType
   deriving Repr
 
 /--
@@ -122,7 +122,7 @@ inductive Expr where
   | binOp      : BinOp → Expr → Expr → Expr   -- binary operation
   | unaryOp    : UnaryOp → Expr → Expr         -- unary operation
   | ifThenElse : Expr → Expr → Expr → Expr     -- if c then e1 else e2
-  | lam        : VarName → Type → Expr → Expr  -- λx:τ. e  (lambda)
+  | lam        : VarName → ApType → Expr → Expr  -- λx:τ. e  (lambda)
   | letE       : VarName → Expr → Expr → Expr  -- let x = e1 in e2
   | record     : List (Label × Expr) → Expr    -- {#l1: e1, #l2: e2, ...}
   | field      : Expr → Label → Expr           -- e.#label (field access)
@@ -136,7 +136,7 @@ inductive Expr where
   See grammar.md §3 (Statements).
 -/
 inductive Stmt where
-  | letS       : VarName → Type → Expr → Stmt   -- let x: τ = e
+  | letS       : VarName → ApType → Expr → Stmt   -- let x: τ = e
   | letSInfer  : VarName → Expr → Stmt           -- let x = e
   | exprS      : Expr → Stmt                      -- expression statement
   | returnS    : Expr → Stmt                      -- return e
@@ -157,8 +157,8 @@ structure EffectClause where
 -/
 structure AbilityDecl where
   name      : String
-  params    : List (VarName × Type)   -- parameter list
-  retType   : Type                    -- return type
+  params    : List (VarName × ApType)   -- parameter list
+  retType   : ApType                    -- return type
   effect    : Effect                  -- declared effect level
   clauses   : List EffectClause       -- effect clauses
   deriving Repr
@@ -201,8 +201,8 @@ structure CardDecl where
 structure FnDecl where
   name      : String
   typeParams : List String
-  params    : List (VarName × Type)
-  retType   : Type
+  params    : List (VarName × ApType)
+  retType   : ApType
   effect    : Effect              -- declared effect level
   body      : Expr
   deriving Repr

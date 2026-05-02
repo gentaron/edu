@@ -16,32 +16,32 @@ import Apolon.Syntax
 namespace Apolon
 
 /-- A typing context: maps variable names to their types. -/
-abbrev TyCtx := List (VarName × Type)
+abbrev TyCtx := List (VarName × ApType)
 
 /-- Lookup a variable in the typing context. -/
-def TyCtx.lookup (Γ : TyCtx) (x : VarName) : Option Type :=
+def TyCtx.lookup (Γ : TyCtx) (x : VarName) : Option ApType :=
   (Γ.find? fun (y, _) => y == x).map Prod.snd
 
 /-- Extend the typing context with a new binding. -/
-def TyCtx.extend (Γ : TyCtx) (x : VarName) (τ : Type) : TyCtx :=
+def TyCtx.extend (Γ : TyCtx) (x : VarName) (τ : ApType) : TyCtx :=
   (x, τ) :: Γ
 
 /-- A type scheme: ∀α₁...αₙ. τ — universally quantified type variables. -/
 structure TypeScheme where
   vars : List String   -- quantified type variables
-  body : Type
+  body : ApType
   deriving Repr
 
 /-- Apply a type scheme by instantiating quantified variables with fresh types. -/
-def TypeScheme.instantiate (σ : TypeScheme) (subst : String → Type) : Type :=
+def TypeScheme.instantiate (σ : TypeScheme) (subst : String → ApType) : ApType :=
   σ.body
 
 /-- Generalize a type over all free type variables not in the context. -/
-def SchemeGen (Γ : TyCtx) (τ : Type) : TypeScheme :=
+def SchemeGen (Γ : TyCtx) (τ : ApType) : TypeScheme :=
   { vars := [], body := τ }  -- simplified: no free variable computation in this skeleton
 
 /-- Free type variables in a type. -/
-def Type.freeVars : Type → List String
+def ApType.freeVars : ApType → List String
   | .TInt        => []
   | .TBool       => []
   | .TString     => []
@@ -75,7 +75,7 @@ def Type.freeVars : Type → List String
   - T-Cons:  Γ ⊢ e₁ : τ, Γ ⊢ e₂ : [τ]  ⟹  Γ ⊢ e₁ :: e₂ : [τ]
   - T-Pipe:  desugars to application
 -/
-inductive HasType : TyCtx → Expr → Type → Prop where
+inductive HasType : TyCtx → Expr → ApType → Prop where
   /-- Integer literals have type TInt. -/
   | intLit (Γ : TyCtx) (n : Int) :
       HasType Γ (.intLit n) .TInt
@@ -93,29 +93,29 @@ inductive HasType : TyCtx → Expr → Type → Prop where
       HasType Γ .unitLit .TUnit
 
   /-- Variable lookup: Γ(x) = τ  ⟹  Γ ⊢ x : τ -/
-  | var (Γ : TyCtx) (x : VarName) (τ : Type) (h : Γ.lookup x = some τ) :
+  | var (Γ : TyCtx) (x : VarName) (τ : ApType) (h : Γ.lookup x = some τ) :
       HasType Γ (.var x) τ
 
   /-- Lambda abstraction. -/
-  | lam (Γ : TyCtx) (x : VarName) (τ₁ τ₂ : Type) (e : Expr)
+  | lam (Γ : TyCtx) (x : VarName) (τ₁ τ₂ : ApType) (e : Expr)
       (h : HasType (Γ.extend x τ₁) e τ₂) :
       HasType Γ (.lam x τ₁ e) (.TArrow τ₁ τ₂)
 
   /-- Function application. -/
-  | app (Γ : TyCtx) (e₁ e₂ : Expr) (τ₁ τ₂ : Type)
+  | app (Γ : TyCtx) (e₁ e₂ : Expr) (τ₁ τ₂ : ApType)
       (h₁ : HasType Γ e₁ (.TArrow τ₁ τ₂))
       (h₂ : HasType Γ e₂ τ₁) :
       HasType Γ (.app e₁ e₂) τ₂
 
   /-- If-then-else: condition must be TBool, branches must agree. -/
-  | ifThenElse (Γ : TyCtx) (c e₁ e₂ : Expr) (τ : Type)
+  | ifThenElse (Γ : TyCtx) (c e₁ e₂ : Expr) (τ : ApType)
       (hc : HasType Γ c .TBool)
       (h₁ : HasType Γ e₁ τ)
       (h₂ : HasType Γ e₂ τ) :
       HasType Γ (.ifThenElse c e₁ e₂) τ
 
   /-- Let binding. -/
-  | letE (Γ : TyCtx) (x : VarName) (e₁ e₂ : Expr) (τ₁ τ₂ : Type)
+  | letE (Γ : TyCtx) (x : VarName) (e₁ e₂ : Expr) (τ₁ τ₂ : ApType)
       (h₁ : HasType Γ e₁ τ₁)
       (h₂ : HasType (Γ.extend x τ₁) e₂ τ₂) :
       HasType Γ (.letE x e₁ e₂) τ₂
@@ -152,7 +152,7 @@ inductive HasType : TyCtx → Expr → Type → Prop where
       HasType Γ (.unaryOp .neg e) .TInt
 
   /-- Record literal: each field must typecheck. -/
-  | record (Γ : TyCtx) (fields : List (Label × Expr)) (types : List (Label × Type))
+  | record (Γ : TyCtx) (fields : List (Label × Expr)) (types : List (Label × ApType))
       (h_len : fields.length = types.length)
       (h_types : ∀ i (hi : i < fields.length),
         HasType Γ (fields[i].2) (types[i].2))
@@ -161,23 +161,23 @@ inductive HasType : TyCtx → Expr → Type → Prop where
       HasType Γ (.record fields) (.TRecord types)
 
   /-- Field access: e must be a record containing the label. -/
-  | field (Γ : TyCtx) (e : Expr) (l : Label) (τ : Type) (rest : List (Label × Type))
+  | field (Γ : TyCtx) (e : Expr) (l : Label) (τ : ApType) (rest : List (Label × ApType))
       (h : HasType Γ e (.TRecord ((l, τ) :: rest))) :
       HasType Γ (.field e l) τ
 
   /-- List literal: all elements must have the same type. -/
-  | listLit (Γ : TyCtx) (elems : List Expr) (τ : Type)
+  | listLit (Γ : TyCtx) (elems : List Expr) (τ : ApType)
       (h : ∀ e ∈ elems, HasType Γ e τ) :
       HasType Γ (.listLit elems) (.TList τ)
 
   /-- Cons: prepend element to list. -/
-  | cons (Γ : TyCtx) (e₁ e₂ : Expr) (τ : Type)
+  | cons (Γ : TyCtx) (e₁ e₂ : Expr) (τ : ApType)
       (h₁ : HasType Γ e₁ τ)
       (h₂ : HasType Γ e₂ (.TList τ)) :
       HasType Γ (.cons e₁ e₂) (.TList τ)
 
   /-- Pipe: e |> f desugars to f(e). -/
-  | pipe (Γ : TyCtx) (e : Expr) (f : VarName) (τ₁ τ₂ : Type)
+  | pipe (Γ : TyCtx) (e : Expr) (f : VarName) (τ₁ τ₂ : ApType)
       (h₁ : HasType Γ e τ₁)
       (h₂ : HasType Γ (.var f) (.TArrow τ₁ τ₂)) :
       HasType Γ (.pipe e f) τ₂
@@ -200,19 +200,19 @@ inductive WellTypedModule : Module → Prop where
 
 /-- A statement is well-typed in a given context. -/
 inductive WellTypedStmt : TyCtx → Stmt → Prop where
-  | letS (Γ : TyCtx) (x : VarName) (τ : Type) (e : Expr)
+  | letS (Γ : TyCtx) (x : VarName) (τ : ApType) (e : Expr)
       (h : HasType Γ e τ) :
       WellTypedStmt Γ (.letS x τ e)
 
-  | letSInfer (Γ : TyCtx) (x : VarName) (e : Expr) (τ : Type)
+  | letSInfer (Γ : TyCtx) (x : VarName) (e : Expr) (τ : ApType)
       (h : HasType Γ e τ) :
       WellTypedStmt Γ (.letSInfer x e)
 
-  | exprS (Γ : TyCtx) (e : Expr) (τ : Type)
+  | exprS (Γ : TyCtx) (e : Expr) (τ : ApType)
       (h : HasType Γ e τ) :
       WellTypedStmt Γ (.exprS e)
 
-  | returnS (Γ : TyCtx) (e : Expr) (τ : Type)
+  | returnS (Γ : TyCtx) (e : Expr) (τ : ApType)
       (h : HasType Γ e τ) :
       WellTypedStmt Γ (.returnS e)
 

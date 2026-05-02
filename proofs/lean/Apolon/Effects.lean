@@ -58,7 +58,7 @@ inductive HasEffect : EffectCtx → Expr → Effect → Prop where
       HasEffect Δ (.var x) .pure
 
   /-- Lambda abstraction is pure. -/
-  | lam (Δ : EffectCtx) (x : VarName) (τ : Type) (e : Expr) (eff : Effect)
+  | lam (Δ : EffectCtx) (x : VarName) (τ : ApType) (e : Expr) (eff : Effect)
       (h : HasEffect Δ e eff) :
       HasEffect Δ (.lam x τ e) eff
 
@@ -174,7 +174,7 @@ inductive EffectSafe : EffectCtx → Expr → Effect → Prop where
       EffectSafe Δ (.var x) declared
 
   /-- Lambda: body must be effect-safe. -/
-  | lam (Δ : EffectCtx) (x : VarName) (τ : Type) (e : Expr) (declared : Effect)
+  | lam (Δ : EffectCtx) (x : VarName) (τ : ApType) (e : Expr) (declared : Effect)
       (h : EffectSafe Δ e declared) :
       EffectSafe Δ (.lam x τ e) declared
 
