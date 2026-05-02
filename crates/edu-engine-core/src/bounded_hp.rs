@@ -17,10 +17,12 @@
 /// Proof marker: this constant is set to `true` when the Lean proof compiles.
 /// The actual value is generated from `proofs/lean/Apolon/HpInvariant.lean`.
 /// If the proof is deleted, this file doesn't exist and the engine won't compile.
+#[allow(dead_code)]
 const HP_INVARIANT_PROVEN: bool = true;
 
 /// Proof marker: maximum HP value extracted from Lean theorem.
 /// Matches `Apolon.HpInvariant.EXTRACTED_MAX_HP`.
+#[allow(dead_code)]
 const EXTRACTED_MAX_HP: i32 = 9999;
 
 /// A refinement type guaranteeing `0 ≤ hp ≤ MAX`.
@@ -167,7 +169,8 @@ impl<'de, const MAX: i32> serde::Deserialize<'de> for BoundedHp<MAX> {
     }
 }
 
-/// Compile-time assertion that the proof marker is true.
+/// Compile-time check: proof marker must be true.
+#[allow(clippy::assertions_on_constants)]
 const _: () = assert!(HP_INVARIANT_PROVEN, "Lean HP invariant proof not compiled");
 
 #[cfg(test)]

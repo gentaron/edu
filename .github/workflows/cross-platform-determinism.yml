@@ -58,6 +58,7 @@ jobs:
         with:
           toolchain: "1.85"
           targets: ${{ matrix.target.rust_target }}
+          components: clippy
 
       - name: Install cross-compilation toolchain
         if: matrix.target.cross
@@ -67,7 +68,10 @@ jobs:
             gcc-${{ matrix.target.cross_linker == 'aarch64-linux-gnu-gcc' && 'aarch64-linux-gnu' || 'riscv64-linux-gnu' }} \
             ${{ matrix.target.cross_linker }} \
             qemu-user-static
-          echo "CARGO_TARGET_${{ matrix.target.rust_target }}_LINKER=${{ matrix.target.cross_linker }}" >> "$GITHUB_ENV"
+          # Only set linker for Linux targets (not bare-metal)
+          if [ "${{ matrix.target.rust_target }}" != "riscv64gc-unknown-none-elf" ]; then
+            echo "CARGO_TARGET_${{ matrix.target.rust_target }}_LINKER=${{ matrix.target.cross_linker }}" >> "$GITHUB_ENV"
+          fi
 
       - name: Cache Cargo
         uses: actions/cache@v4
@@ -83,7 +87,12 @@ jobs:
       - name: Build edu-engine-core
         working-directory: crates
         run: |
-          cargo build -p edu-engine-core --release --target ${{ matrix.target.rust_target }}
+          # For bare-metal targets, build without std feature
+          if [ "${{ matrix.target.rust_target }}" = "riscv64gc-unknown-none-elf" ]; then
+            cargo build -p edu-engine-core --release --target ${{ matrix.target.rust_target }} --no-default-features
+          else
+            cargo build -p edu-engine-core --release --target ${{ matrix.target.rust_target }}
+          fi
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
@@ -140,8 +149,13 @@ jobs:
       - name: Run tests
         working-directory: crates
         run: |
+          # For bare-metal targets, skip tests (no runtime)
+          if [ "${{ matrix.target.test_target }}" = "riscv64gc-unknown-none-elf" ]; then
+            echo "Skipping tests for bare-metal target"
+            exit 0
+          fi
           cargo test -p edu-engine-core --release --target ${{ matrix.target.test_target }} \
-            -- smoke_battle --nocapture \
+            -- simulate_battle --nocapture \
             2>&1 | tee /tmp/test-output-${{ matrix.target.name }}.txt || true
 
       - name: Extract deterministic output

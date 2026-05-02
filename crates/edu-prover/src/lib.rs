@@ -12,6 +12,7 @@
 //! a frozen moment in the timeline that cannot be forged or reordered.
 
 #![cfg_attr(not(feature = "std"), no_std)]
+#![allow(clippy::format_collect, clippy::needless_borrows_for_generic_args)]
 
 #[cfg(feature = "alloc")]
 extern crate alloc;

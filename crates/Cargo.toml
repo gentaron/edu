@@ -11,4 +11,5 @@ members = [
     "apolon-compiler",
     "edu-prover",
     "edu-verifier",
+    "edu-crdt-bridge",
 ]

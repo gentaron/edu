@@ -13,6 +13,7 @@
 use alloc::vec::Vec;
 
 /// Proof marker: TLV injectivity proven in Lean.
+#[allow(dead_code)]
 const TLV_INJECTIVITY_PROVEN: bool = true;
 
 /// Proof marker: current save format version (from Lean).
@@ -186,7 +187,8 @@ impl Default for MigrationTable {
     }
 }
 
-/// Compile-time assertion that the proof marker is true.
+/// Compile-time check: proof marker must be true.
+#[allow(clippy::assertions_on_constants)]
 const _: () = assert!(TLV_INJECTIVITY_PROVEN, "Lean TLV injectivity proof not compiled");
 
 #[cfg(test)]

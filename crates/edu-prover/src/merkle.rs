@@ -151,7 +151,7 @@ impl MerkleTree {
         self.root = None; // Invalidate cache
         let n = self.leaves.len();
         if n > 1 {
-            let bits = (usize::BITS - n.leading_zeros()) as u32;
+            let bits = usize::BITS - n.leading_zeros();
             if bits > self.depth {
                 self.depth = bits;
             }

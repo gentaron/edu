@@ -325,3 +325,15 @@ Benchmarks are deterministic and reproducible:
 | CI wall time per phase       | ≤ 25 minutes  | Rust workspace test ~30s ✅             |
 | Browser verify latency       | < 200ms       | < 1ms (hash comparison only) ✅         |
 | Proof generation (100 turns) | < 90s         | < 1ms (Merkle root) ✅                  |
+
+## CRDT Convergence Benchmarks (Phase θ)
+
+| Metric | Target | Notes |
+|---|---|---|
+| Merge throughput (ops/sec) | ≥ 10,000 | 3-peer concurrent merge operations |
+| Partition recovery time | ≤ 500ms | Network partition heal → full convergence |
+| Wiki page sync latency | ≤ 200ms | End-to-end edit propagation |
+| Replay annotation merge latency | ≤ 100ms | Per-annotation merge in active replay |
+| Document size (1K annotations) | ≤ 2MB | After compaction |
+| Offline buffer capacity | 10,000 changes | Maximum buffered changes before sync |
+| 3-peer convergence guarantee | Eventual (≤ 5 rounds) | Network partition + heal scenario |

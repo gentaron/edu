@@ -26,6 +26,7 @@
 [![SLSA L3](https://img.shields.io/badge/SLSA-L3_Provenance-3258C8?style=flat-square)](docs/adr/0007-hermeticity-as-zk-prerequisite.md)
 [![Reproducible](https://img.shields.io/badge/Engine-Reproducible_Builds-22C55E?style=flat-square)](docs/adr/0007-hermeticity-as-zk-prerequisite.md)
 [![Cross-Arch](https://img.shields.io/badge/Cross--Arch_Deterministic-1DACD6?style=flat-square)](docs/adr/0007-hermeticity-as-zk-prerequisite.md)
+[![Server-less multi-user (CRDT)](https://img.shields.io/badge/server--less-multi--user-CRDT-blue)](docs/adr/0008-crdt-three-deep-integrations.md)
 [![Nix](https://img.shields.io/badge/Nix-Hermetic_Builds-5277C3?style=flat-square&logo=nixos)](flake.nix)
 [![Deploy](https://img.shields.io/badge/Deploy-Netlify-00C7B7?style=flat-square&logo=netlify)](https://netlify.com)
 

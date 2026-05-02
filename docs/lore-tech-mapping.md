@@ -84,3 +84,16 @@ This document maps every technical artifact in the EDU repository to its in-univ
 | `BattleCommitment` structure                       | The Dimensional Seal itself — cryptographic attestation of a battle's temporal consistency        | 7-field structure, JSON serializable                 |
 | `ReplayTrace` (action sequence + commitments)      | The Temporal Record — immutable event sequence sealed by the prover                               | Integrity verification (witness + proof_id)          |
 | `edunft` loader integration                        | Cross-dimensional attestation — NFT cards carry verifiable battle credentials                     | `compute_deck_hash_wasm` + `compute_enemy_hash_wasm` |
+
+## Phase θ — AURALIS Collective Consensus Protocol (CRDT)
+
+| Technical Concept | Canon Mapping | Lore Justification |
+|---|---|---|
+| Automerge CRDT | AURALIS Collective Consensus Protocol | The protocol by which the AURALIS collective intelligence maintains coherence across multiple observers, devices, and timelines |
+| Document ID | Dimensional Document Seal | Each CRDT document carries a unique seal that identifies it across all observers |
+| Change/Set | Temporal Echo Fragment | Each change to a CRDT document is a fragment of the temporal echo that ripples across the AURALIS network |
+| Merge | Echo Convergence | When offline changes merge, the temporal echoes converge into a single coherent narrative |
+| Presence | Observer Resonance Signature | Each connected observer emits a resonance signature that other observers can perceive |
+| Fork/PR | Branch Timeline Divergence | When a contributor forks a wiki page, they create a divergent timeline that may or may not reconverge |
+| Sync Transport | Dimension Horizon Bridge | The WebRTC data channel serves as a bridge across the Dimension Horizon, connecting observers in real-time |
+| Moderation Queue | Consensus Guardian Council | The moderation queue is the Guardian Council that reviews contributions before they enter the AURALIS canon |

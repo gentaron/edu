@@ -65,7 +65,16 @@ jobs:
         working-directory: proofs/lean/Apolon
         run: |
           lake exe cache get || true
-          lake build Apolon.NoInfiniteCombo
+          lake build Apolon.NoInfiniteCombo 2>&1
+        continue-on-error: false
+
+      - name: Lake build — fallback (retry with clean)
+        working-directory: proofs/lean/Apolon
+        if: failure()
+        run: |
+          lake clean
+          lake exe cache get || true
+          lake build Apolon.NoInfiniteCombo 2>&1
 
       - name: Check for `sorry`
         working-directory: proofs/lean/Apolon
@@ -87,6 +96,19 @@ jobs:
             exit 1
           fi
           echo "NoInfiniteCombo.lean is fully proven (no sorry)"
+
+      - name: Verify sorry count in all proof files
+        working-directory: proofs/lean/Apolon
+        run: |
+          echo "## Sorry Audit" >> "$GITHUB_STEP_SUMMARY"
+          for f in *.lean; do
+            count=$(rg -c 'sorry' "$f" 2>/dev/null || echo "0")
+            if [ "$count" -gt 0 ]; then
+              echo "  $f: $count sorry (acceptable in proof skeletons)" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "  $f: fully proven" >> "$GITHUB_STEP_SUMMARY"
+            fi
+          done
 
   # ─────────────────────────────────────────────────────────────
   # Gate 2: Battle Simulation / Termination

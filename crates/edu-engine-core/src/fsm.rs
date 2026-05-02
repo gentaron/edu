@@ -484,4 +484,28 @@ mod tests {
         let result = simulate_battle(&field, &enemy);
         assert!(result.turns <= MAX_TURNS);
     }
+
+    /// Named `simulate_battle` for CI filter matching.
+    /// Verifies that the battle simulation terminates within the MAX_TURNS bound
+    /// and produces valid victory/defeat semantics.
+    #[test]
+    fn test_simulate_battle_termination_boundary() {
+        // Edge case: minimal attack vs high HP — should still terminate
+        let field = vec![
+            sample_char(1, 1), sample_char(2, 1), sample_char(3, 1),
+            sample_char(4, 1), sample_char(5, 1),
+        ];
+        let enemy = Enemy {
+            id: 10, name_idx: 0, max_hp: 500000, attack: 0,
+            phases: [PhaseThreshold::new(50, 100), PhaseThreshold::new(0, 100),
+                     PhaseThreshold::new(0, 100), PhaseThreshold::new(0, 100)],
+            phase_count: 1,
+        };
+        let result = simulate_battle(&field, &enemy);
+        assert!(result.turns <= MAX_TURNS, "simulate_battle exceeded MAX_TURNS: {} turns", result.turns);
+        if result.victory {
+            assert_eq!(result.final_enemy_hp, 0);
+            assert!(result.survivors > 0);
+        }
+    }
 }

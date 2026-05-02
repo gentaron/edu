@@ -143,7 +143,7 @@ mod property_tests {
             let mult = rng.next_u32_bounded(300) as i32;
             let count = rng.next_u32_bounded(8) as usize + 1;
             let mut defs = [0i32; 8];
-            for (i, d) in defs.iter_mut().enumerate().take(count) {
+            for (_i, d) in defs.iter_mut().enumerate().take(count) {
                 *d = rng.next_i32_bounded(300);
             }
             let results = calculate_aoe_damage(base, &defs[..count], mult);
