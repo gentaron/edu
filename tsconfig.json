@@ -52,6 +52,7 @@
     "src/**/*.data.ts",
     "src/**/*.meta.ts",
     "scripts/validate-data.ts",
+    "scripts/build-rag-index.ts",
     "src/_infra/validate-data.ts",
     "src/metal/webgpu/__e2e__/**"
   ]

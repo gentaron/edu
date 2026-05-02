@@ -79,3 +79,6 @@ crates/target/
 playwright-report/
 test-results/*.json
 test-results/*.png
+
+# RAG generated corpus (large embeddings, regenerated at build time)
+public/rag/corpus.json
