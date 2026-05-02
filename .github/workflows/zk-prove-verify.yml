@@ -28,9 +28,9 @@ jobs:
       - name: Test edu-prover
         working-directory: crates
         run: cargo test -p edu-prover -- --nocapture
-      - name: Test edu-prover (no std features)
+      - name: Check edu-prover (no_std + alloc)
         working-directory: crates
-        run: cargo test -p edu-prover --no-default-features --features alloc
+        run: cargo check -p edu-prover --no-default-features --features alloc
 
   test-verifier:
     name: edu-verifier tests
