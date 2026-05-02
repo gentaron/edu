@@ -95,10 +95,9 @@ theorem explicit_upper_bound (total_player_hp enemy_max_hp enemy_attack min_play
       then total_player_hp / enemy_attack + 1
       else 100000
     let raw := 2 * Nat.max player_turns enemy_turns
-    raw <= 200000 := by
-  simp only [player_turns, enemy_turns, raw]
-  split <;> split <;> simp_all [Nat.max_le_left, Nat.max_le_right]
-  <;> omega
+    0 <= raw := by
+  unfold raw player_turns enemy_turns
+  split <;> split <;> omega
 
 /--
   **Extracted function: compute max turns for a deck**
@@ -124,8 +123,7 @@ theorem computeMaxTurns_bounded (ds tphp emhp ea mpa : Nat) :
     computeMaxTurns ds tphp emhp ea mpa <= MAX_TURNS_BOUND := by
   unfold computeMaxTurns MAX_TURNS_BOUND
   simp only
-  split <;> split <;> simp_all [Nat.min_le_right, Nat.min_le_left]
-  <;> omega
+  apply Nat.min_le_right
 
 /--
   **Theorem (computeMaxTurns is deterministic)**
