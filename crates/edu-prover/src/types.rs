@@ -19,8 +19,24 @@ use alloc::string::String;
 #[cfg(not(feature = "std"))]
 use alloc::vec::Vec;
 
-#[cfg(not(feature = "std"))]
-use alloc::fmt;
+/// Convert a byte to a 2-char lowercase hex string. Works in no_std.
+#[inline]
+fn byte_to_hex(b: u8) -> String {
+    const HEX: &[u8; 16] = b"0123456789abcdef";
+    let mut s = String::with_capacity(2);
+    s.push(HEX[(b >> 4) as usize] as char);
+    s.push(HEX[(b & 0x0f) as usize] as char);
+    s
+}
+
+/// Encode a byte slice as lowercase hex. Works in no_std.
+fn hex_encode(bytes: &[u8]) -> String {
+    let mut s = String::with_capacity(bytes.len() * 2);
+    for b in bytes {
+        s.push_str(&byte_to_hex(*b));
+    }
+    s
+}
 
 /// A proof identifier — opaque, globally unique.
 ///
@@ -56,7 +72,7 @@ impl ProofId {
     /// Hex-encoded representation for display.
     #[must_use]
     pub fn to_hex(&self) -> String {
-        self.0.iter().map(|b| format!("{:02x}", b)).collect()
+        hex_encode(&self.0)
     }
 }
 
@@ -105,7 +121,7 @@ impl ReplayHash {
     /// Hex representation.
     #[must_use]
     pub fn to_hex(&self) -> String {
-        self.0.iter().map(|b| alloc::fmt::format!("{:02x}", b)).collect()
+        hex_encode(&self.0)
     }
 
     /// The zero hash (all zeros) — used as a sentinel.
@@ -174,7 +190,7 @@ impl WitnessDigest {
     /// Hex representation.
     #[must_use]
     pub fn to_hex(&self) -> String {
-        self.0.iter().map(|b| format!("{:02x}", b)).collect()
+        hex_encode(&self.0)
     }
 }
 
@@ -241,7 +257,7 @@ impl BuildHash {
     /// Hex representation.
     #[must_use]
     pub fn to_hex(&self) -> String {
-        self.0.iter().map(|b| alloc::fmt::format!("{:02x}", b)).collect()
+        hex_encode(&self.0)
     }
 
     /// The zero hash — used as sentinel for "no build hash" (v1 compatibility).

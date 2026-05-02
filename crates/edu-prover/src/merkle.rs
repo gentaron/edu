@@ -10,15 +10,13 @@
 
 use sha2::{Digest, Sha256};
 use crate::types::ReplayHash;
+use crate::types::hex_encode;
 
 #[cfg(not(feature = "std"))]
 use alloc::string::String;
 
 #[cfg(not(feature = "std"))]
 use alloc::vec::Vec;
-
-#[cfg(not(feature = "std"))]
-use alloc::fmt;
 
 /// A Merkle tree node hash.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -55,7 +53,7 @@ impl NodeHash {
     /// Hex representation.
     #[must_use]
     pub fn to_hex(&self) -> String {
-        self.0.iter().map(|b| alloc::fmt::format!("{:02x}", b)).collect()
+        self.0.iter().map(|b| crate::types::byte_to_hex(*b)).collect()
     }
 
     /// Access raw bytes.
