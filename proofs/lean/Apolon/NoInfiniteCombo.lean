@@ -88,15 +88,8 @@ theorem combat_measure_decreases (s : CombatState)
 theorem explicit_upper_bound (total_player_hp enemy_max_hp enemy_attack min_player_attack deck_size : Nat)
     (h_size : deck_size <= 5)
     (h_ehp : 0 < enemy_max_hp) :
-    let player_turns := if min_player_attack > 0
-      then enemy_max_hp / min_player_attack + 1
-      else 0
-    let enemy_turns := if enemy_attack > 0
-      then total_player_hp / enemy_attack + 1
-      else 100000
-    let raw := 2 * Nat.max player_turns enemy_turns
-    0 <= raw := by
-  unfold raw player_turns enemy_turns
+    0 <= 2 * Nat.max (if min_player_attack > 0 then enemy_max_hp / min_player_attack + 1 else 0)
+                     (if enemy_attack > 0 then total_player_hp / enemy_attack + 1 else 100000) := by
   split <;> split <;> omega
 
 /--
