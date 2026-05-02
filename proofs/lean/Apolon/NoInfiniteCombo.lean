@@ -13,7 +13,7 @@
   Corresponds to: `edu-engine-core/src/fsm.rs` `simulate_battle()` MAX_TURNS=200
 
   ## Lore Mapping
-  The No Infinite Combo theorem is the **Temporal Horizon Guarantee** —
+  The No Infinite Combo theorem is the **Temporal Horizon Guarantee** -
   no resonance loop can persist beyond the dimension's computational
   limit. Every battle converges to resolution.
 -/
@@ -61,14 +61,14 @@ theorem battle_terminates (deck_size : Nat) (h_size : deck_size <= MAX_DECK_SIZE
   **Lemma (Combat measure strictly decreases or battle ends)**
 
   In each battle round:
-  - If any alive character has attack > 0: enemy HP decreases → first lex component decreases
-  - If all alive characters have attack = 0: enemy kills one character → second lex component decreases
+  - If any alive character has attack > 0: enemy HP decreases.
+  - If all alive characters have attack = 0: enemy kills one character.
   - If enemy_hp = 0: Victory
   - If alive_chars = 0: Defeat
 
   This is stated for extraction to the Rust tournament bound calculator.
 -/
-lemma combat_measure_decreases (s : CombatState)
+theorem combat_measure_decreases (s : CombatState)
     (h_alive : 0 < s.aliveChars)
     (h_enemy : 0 < s.enemyHp) :
     -- After one round, either enemy HP decreases, alive chars decrease, or battle ends
@@ -96,8 +96,9 @@ theorem explicit_upper_bound (total_player_hp enemy_max_hp enemy_attack min_play
       else 100000
     let raw := 2 * Nat.max player_turns enemy_turns
     raw <= 200000 := by
-  simp only
-  omega
+  simp only [player_turns, enemy_turns, raw]
+  split <;> split <;> simp_all [Nat.max_le_left, Nat.max_le_right]
+  <;> omega
 
 /--
   **Extracted function: compute max turns for a deck**
@@ -123,11 +124,8 @@ theorem computeMaxTurns_bounded (ds tphp emhp ea mpa : Nat) :
     computeMaxTurns ds tphp emhp ea mpa <= MAX_TURNS_BOUND := by
   unfold computeMaxTurns MAX_TURNS_BOUND
   simp only
-  split <;> split <;> simp [Nat.min_le_right]
-  · omega
-  · omega
-  · omega
-  · omega
+  split <;> split <;> simp_all [Nat.min_le_right, Nat.min_le_left]
+  <;> omega
 
 /--
   **Theorem (computeMaxTurns is deterministic)**
@@ -158,7 +156,7 @@ def EXTRACTED_MAX_TURNS : Nat := 200
 theorem format_version_injective (v1 v2 : Nat)
     (h_ne : v1 ≠ v2)
     (tag : UInt8) (payload : List UInt8) :
-    -- v1 ≠ v2 implies the encoded version prefix differs
+    -- v1 != v2 implies the encoded version prefix differs
     let bs1 := tag :: UInt8.ofNat ((2 / 256) % 256) :: UInt8.ofNat (2 % 256) :: [] -- simplified
     let bs2 := tag :: UInt8.ofNat ((2 / 256) % 256) :: UInt8.ofNat (2 % 256) :: []
     v1 ≠ v2 := by exact h_ne
