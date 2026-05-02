@@ -19,6 +19,9 @@ use alloc::string::String;
 #[cfg(not(feature = "std"))]
 use alloc::vec::Vec;
 
+#[cfg(not(feature = "std"))]
+use alloc::fmt;
+
 /// A proof identifier — opaque, globally unique.
 ///
 /// Canon: **True Name of the Witness** — unforgeable identity assigned
@@ -102,7 +105,7 @@ impl ReplayHash {
     /// Hex representation.
     #[must_use]
     pub fn to_hex(&self) -> String {
-        self.0.iter().map(|b| format!("{:02x}", b)).collect()
+        self.0.iter().map(|b| alloc::fmt::format!("{:02x}", b)).collect()
     }
 
     /// The zero hash (all zeros) — used as a sentinel.
@@ -238,7 +241,7 @@ impl BuildHash {
     /// Hex representation.
     #[must_use]
     pub fn to_hex(&self) -> String {
-        self.0.iter().map(|b| format!("{:02x}", b)).collect()
+        self.0.iter().map(|b| alloc::fmt::format!("{:02x}", b)).collect()
     }
 
     /// The zero hash — used as sentinel for "no build hash" (v1 compatibility).

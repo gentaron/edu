@@ -17,6 +17,9 @@ use alloc::string::String;
 #[cfg(not(feature = "std"))]
 use alloc::vec::Vec;
 
+#[cfg(not(feature = "std"))]
+use alloc::fmt;
+
 /// A Merkle tree node hash.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
@@ -52,7 +55,7 @@ impl NodeHash {
     /// Hex representation.
     #[must_use]
     pub fn to_hex(&self) -> String {
-        self.0.iter().map(|b| format!("{:02x}", b)).collect()
+        self.0.iter().map(|b| alloc::fmt::format!("{:02x}", b)).collect()
     }
 
     /// Access raw bytes.
