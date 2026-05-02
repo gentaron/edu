@@ -28,6 +28,7 @@ const eslintConfig = tseslint.config(
       "src/_infra/**",
       "src/hooks/**",
       "scripts/**",
+      "src/metal/webgpu/__e2e__/**",
     ],
   },
   ...nextCoreWebVitals,

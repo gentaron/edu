@@ -20,6 +20,7 @@
 [![RISC-V](https://img.shields.io/badge/RISC--V-bare_metal-1DACD6?style=flat-square)]()
 [![Quantum](https://img.shields.io/badge/Quantum-8_qubits-6366F1?style=flat-square)]()
 [![PQC](https://img.shields.io/badge/PQC-ML--KEM_%2B_ML--DSA-EF4444?style=flat-square)]()
+[![WebGPU Compute](https://img.shields.io/badge/WebGPU-Compute-4A90D9?style=flat-square)](docs/adr/0004-webgpu-compute-pipeline.md)
 [![Deploy](https://img.shields.io/badge/Deploy-Netlify-00C7B7?style=flat-square&logo=netlify)](https://netlify.com)
 
 </div>

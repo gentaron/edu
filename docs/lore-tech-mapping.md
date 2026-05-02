@@ -50,11 +50,23 @@ This document maps every technical artifact in the EDU repository to its in-univ
 | Branded types (`ModuleId`, `AbilityId`, `BlockId`) | True Names — unforgeable identities for every Forge artifact       | Opaque newtypes, compiler-generated only       |
 | 250KB gzip WASM size budget         | The Forge's output constraint — no Forged artifact exceeds its vessel | Compiler error E0010 on budget exceeded        |
 
+## Phase δ — WebGPU Compute + Zero-Copy WASM Boundary
+
+| Tech Artifact                                | Canon Mapping                                                                                  | Verification                                  |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------- |
+| WebGPU compute shaders                       | Dimensional Horizon Force Projection — raw elemental computation at the boundary layer        | WGSL source, CPU fallback parity tests        |
+| Particle integration (Verlet, 4096 particles) | 8 Thought Layers — kinetic thought propagation through the dimensional substrate              | PBT: bounds, determinism, life decay          |
+| AoE damage falloff fields (linear/smoothstep/exp) | Apolonium quantum probability decay — probability amplitude attenuates with distance from the source | 3 falloff types, grid-size parity tests       |
+| Zero-copy ring buffer (SharedArrayBuffer)    | AURALIS Collective memory bridge — instantaneous shared consciousness between computation and manifestation | Atomics-based SPSC, FallbackRingBuffer tests  |
+| COOP/COEP cross-origin isolation             | Dimensional isolation wards — protecting the boundary from cross-dimensional contamination     | netlify.toml headers, isCrossOriginIsolated()  |
+| Feature detection tier system (FULL_COMPUTE/COMPUTE_NO_SHARED/UNAVAILABLE) | Dimensional resonance calibration — adapting to the available dimensional energy of the host environment | device.ts GpuTier enum, 9 unit tests         |
+| Canvas 2D fallback path                      | Primal manifestation — the ancient, universal rendering path that requires no dimensional acceleration | cpuParticleIntegration + cpuAoeFalloff parity  |
+| WGSL compute shaders                         | Dimensional script — the language of pure elemental force, executed at the boundary of reality | `metal/webgpu/shaders/*.wgsl`                 |
+
 ## Planned (Future Phases)
 
 | Tech Artifact             | Canon Mapping                                      | Phase |
 | ------------------------- | -------------------------------------------------- | ----- |
-| WebGPU compute shaders    | The Visual Resonance Layer                         | δ     |
 | RISC Zero ZK proofs       | Dimensional witness — provable causality           | ε     |
 | Lean 4 proofs (complete)  | The L1–L3 Light Layers of mechanized truth         | ζ     |
 | Nix flake hermetic builds | The Temporal Anchor — reproducible universe states | η     |

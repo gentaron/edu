@@ -4,3 +4,14 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# ── Cross-Origin Isolation Headers ──
+# Required for SharedArrayBuffer (zero-copy WASM↔JS ring buffer).
+# Without these headers, SharedArrayBuffer is unavailable and
+# the ring buffer falls back to message-passing (structured clone).
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cross-Origin-Opener-Policy = "same-origin"
+    Cross-Origin-Embedder-Policy = "require-corp"

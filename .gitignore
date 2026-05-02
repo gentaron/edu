@@ -76,3 +76,6 @@ edu\nedutext
 crates/edu-battle-engine/target/
 edu-repo/
 crates/target/
+playwright-report/
+test-results/*.json
+test-results/*.png

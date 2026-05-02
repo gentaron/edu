@@ -25,6 +25,7 @@ Located in `src/**/__benchmarks__/*.bench.ts`:
 | Binary Protocol | `metal/__benchmarks__/binary-protocol.bench.ts` | 12         | VarInt, String, Object encode/decode, CRC32   |
 | Wiki Search     | `wiki/__benchmarks__/wiki-search.bench.ts`      | 9          | Search, autocomplete, category filtering      |
 | Battle Engine   | `battle/__benchmarks__/battle-engine.bench.ts`  | 6          | Damage calc, phase transition, log management |
+| WebGPU Compute  | `metal/webgpu/__benchmarks__/compute.bench.ts` | 12         | Particle integration, AoE falloff, ring buffer |
 
 ### Rust Benchmarks (Criterion.rs)
 
@@ -118,17 +119,43 @@ Run `ANALYZE=true bun run build` to open the interactive Next.js bundle analyzer
 - Tree-shaking effectiveness
 - Shared dependency duplication
 
-## Test Coverage — Epoch 11+ (Post Verification & Polishing)
+## Test Coverage — Epoch 12 Delta (WebGPU Compute)
 
-| Metric         | Epoch 10 Baseline | Epoch 11 Current | Target  |
-| -------------- | ----------------- | ---------------- | ------- |
-| Statements     | **28.8%**         | **92.39%**       | 80%+ ✅ |
-| Branches       | **38.33%**        | **80.96%**       | 80%+ ✅ |
-| Functions      | **27.73%**        | **95.65%**       | 80%+ ✅ |
-| Lines          | **30.14%**        | **93.93%**       | 80%+ ✅ |
-| Tests          | **499**           | **1708**         | 500+ ✅ |
-| PBT Properties | **56**            | **56**           | 56 ✅   |
-| Test Files     | **20**            | **58**           | —       |
+| Metric         | Epoch 11 Baseline | Epoch 12 Delta Current | Target  |
+| -------------- | ---------------- | ---------------------- | ------- |
+| Tests          | **1708**         | **1762** (+54)         | 500+ ✅ |
+| PBT Properties | **56**           | **69** (+13)           | 56+ ✅  |
+| Test Files     | **58**           | **63** (+5)            | —       |
+
+### New WebGPU Compute Benchmarks (Epoch 12 Delta)
+
+Located in `src/metal/webgpu/__benchmarks__/compute.bench.ts`:
+
+| Benchmark                                      | Description                              |
+| ---------------------------------------------- | ---------------------------------------- |
+| CPU Particle: 256 @ 60fps                     | 256 particles, single frame update       |
+| CPU Particle: 1024 @ 60fps                    | 1024 particles, single frame update      |
+| CPU Particle: 2048 @ 60fps                    | 2048 particles, single frame update      |
+| CPU Particle: 4096 @ 60fps                    | 4096 particles, single frame update      |
+| CPU Particle: 4096 × 10 steps                 | 4096 particles, 10 sequential frames     |
+| AoE 64×64 linear                              | 4096-cell grid, linear falloff           |
+| AoE 128×128 smoothstep                         | 16384-cell grid, hermite interpolation    |
+| AoE 256×256 exponential                        | 65536-cell grid, Gaussian decay           |
+| Ring Buffer: Fallback write 1000               | Structured clone fallback write throughput |
+| Ring Buffer: Fallback write+read 1000          | Fallback roundtrip throughput             |
+| Ring Buffer: Shared write 1000                 | SharedArrayBuffer write throughput        |
+| Ring Buffer: Shared write+read 1000            | SharedArrayBuffer roundtrip throughput    |
+| Frame-time sim: 60 frames × 2048 particles     | Full battle scene simulation (1 second)   |
+
+### Performance Budget — Epoch 12 Delta
+
+| Budget Item                    | Limit          | Status      |
+| ----------------------------- | -------------- | ----------- |
+| WASM total (gzip)             | ≤ 250 KB       | ~45 KB ✅   |
+| Initial JS max chunk (gzip)   | ≤ 200 KB       | ~220 KB ⚠️ |
+| CI wall time per phase        | ≤ 25 minutes   | TBD         |
+| Particle update (CPU, 4096)   | ≤ 16ms/frame   | Target: 60fps |
+| AoE 256×256 (CPU)             | ≤ 16ms         | Target: real-time |
 
 ### Coverage Improvement Summary (28.8% → 91.72%)
 
