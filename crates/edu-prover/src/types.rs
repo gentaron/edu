@@ -21,7 +21,7 @@ use alloc::vec::Vec;
 
 /// Convert a byte to a 2-char lowercase hex string. Works in no_std.
 #[inline]
-fn byte_to_hex(b: u8) -> String {
+pub(crate) fn byte_to_hex(b: u8) -> String {
     const HEX: &[u8; 16] = b"0123456789abcdef";
     let mut s = String::with_capacity(2);
     s.push(HEX[(b >> 4) as usize] as char);
@@ -30,7 +30,7 @@ fn byte_to_hex(b: u8) -> String {
 }
 
 /// Encode a byte slice as lowercase hex. Works in no_std.
-fn hex_encode(bytes: &[u8]) -> String {
+pub(crate) fn hex_encode(bytes: &[u8]) -> String {
     let mut s = String::with_capacity(bytes.len() * 2);
     for b in bytes {
         s.push_str(&byte_to_hex(*b));
