@@ -15,16 +15,22 @@
 
 use crate::merkle::{MerkleTree, NodeHash};
 use crate::replay::{OutcomeRecord, ReplayStep, ReplayTrace};
-use crate::types::{ProofId, ReplayHash as TypesReplayHash, WitnessDigest};
+use crate::types::{BuildHash, ProofId, ProofVersion, ReplayHash as TypesReplayHash, WitnessDigest};
 use sha2::{Digest, Sha256};
 
 /// A complete battle commitment — the output of the prover.
 ///
 /// Contains everything needed for verification:
-/// - Public inputs (deck hash, enemy hash, outcome)
+/// - Public inputs (deck hash, enemy hash, outcome, build hash)
 /// - Merkle root of state snapshots
 /// - Witness digest of the action sequence
 /// - Proof ID
+/// - Proof version (v1 = no build hash, v2 = with build hash)
+///
+/// ## Phase η Integration
+/// The `build_hash` field makes hermeticity a load-bearing prerequisite:
+/// removing `flake.nix` changes the build hash, which causes ε's proof
+/// verification to reject all new proofs against the old hash.
 #[derive(Clone, Debug)]
 #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]
 pub struct BattleCommitment {
@@ -42,13 +48,25 @@ pub struct BattleCommitment {
     pub witness: WitnessDigest,
     /// Total number of steps in the replay.
     pub step_count: u32,
+    /// Hermetic build hash — SHA-256 of Nix build artifacts.
+    /// Zero for v1 proofs (backward compat). Non-zero for v2.
+    pub build_hash: BuildHash,
+    /// Proof version — distinguishes pre-η (V1) from post-η (V2) proofs.
+    pub proof_version: ProofVersion,
 }
 
 impl BattleCommitment {
     /// Serialize the commitment to bytes for storage or transmission.
+    ///
+    /// Wire format (v2):
+    /// ```text
+    /// [proof_id:32][deck_hash:32][enemy_hash:32][victory:1]
+    /// [turns:4][enemy_hp:4][survivors:1][state_root:32]
+    /// [witness:32][step_count:4][build_hash:32][version:1]
+    /// ```
     #[must_use]
     pub fn to_bytes(&self) -> Vec<u8> {
-        let mut buf = Vec::with_capacity(128);
+        let mut buf = Vec::with_capacity(174);
         buf.extend_from_slice(self.proof_id.as_bytes());
         buf.extend_from_slice(self.deck_commitment.as_bytes());
         buf.extend_from_slice(self.enemy_seed.as_bytes());
@@ -59,6 +77,11 @@ impl BattleCommitment {
         buf.extend_from_slice(self.state_root.as_bytes());
         buf.extend_from_slice(self.witness.as_bytes());
         buf.extend_from_slice(&self.step_count.to_le_bytes());
+        buf.extend_from_slice(self.build_hash.as_bytes());
+        buf.push(match self.proof_version {
+            ProofVersion::V1 => 1u8,
+            ProofVersion::V2 => 2u8,
+        });
         buf
     }
 
@@ -76,6 +99,7 @@ impl BattleCommitment {
 /// let commitment = CommitmentBuilder::new()
 ///     .deck_commitment(deck_hash)
 ///     .enemy_seed(enemy_hash)
+///     .build_hash(build_hash)  // Phase η
 ///     .add_step(step1)
 ///     .add_step(step2)
 ///     .finalize(outcome);
@@ -83,6 +107,7 @@ impl BattleCommitment {
 pub struct CommitmentBuilder {
     deck_commitment: Option<TypesReplayHash>,
     enemy_seed: Option<TypesReplayHash>,
+    build_hash: Option<BuildHash>,
     steps: Vec<ReplayStep>,
     merkle_tree: MerkleTree,
 }
@@ -94,6 +119,7 @@ impl CommitmentBuilder {
         Self {
             deck_commitment: None,
             enemy_seed: None,
+            build_hash: None,
             steps: Vec::new(),
             merkle_tree: MerkleTree::with_capacity(64),
         }
@@ -108,6 +134,14 @@ impl CommitmentBuilder {
     /// Set the enemy seed hash.
     pub fn enemy_seed(mut self, hash: TypesReplayHash) -> Self {
         self.enemy_seed = Some(hash);
+        self
+    }
+
+    /// Set the hermetic build hash (Phase η).
+    ///
+    /// If not set, defaults to `BuildHash::zero()` (v1 compat).
+    pub fn build_hash(mut self, hash: BuildHash) -> Self {
+        self.build_hash = Some(hash);
         self
     }
 
@@ -138,10 +172,18 @@ impl CommitmentBuilder {
     pub fn finalize(mut self, outcome: OutcomeRecord) -> BattleCommitment {
         let deck_commitment = self.deck_commitment.expect("deck_commitment required");
         let enemy_seed = self.enemy_seed.expect("enemy_seed required");
+        let build_hash = self.build_hash.unwrap_or(BuildHash::zero());
 
         let witness = ReplayTrace::compute_witness(&self.steps);
 
-        // Compute proof_id from all public inputs
+        // Determine proof version from build_hash presence
+        let proof_version = if build_hash.is_zero() {
+            ProofVersion::V1
+        } else {
+            ProofVersion::V2
+        };
+
+        // Compute proof_id from all public inputs including build_hash
         let mut hasher = Sha256::new();
         hasher.update(b"commitment:");
         hasher.update(deck_commitment.as_bytes());
@@ -151,6 +193,7 @@ impl CommitmentBuilder {
         hasher.update(&outcome.final_enemy_hp.to_le_bytes());
         hasher.update(&[outcome.survivors]);
         hasher.update(witness.as_bytes());
+        hasher.update(build_hash.as_bytes());
 
         let proof_id = ProofId::from_seed(&hasher.finalize());
 
@@ -162,6 +205,8 @@ impl CommitmentBuilder {
             state_root: self.merkle_tree.root_as_replay_hash(),
             witness,
             step_count: self.steps.len() as u32,
+            build_hash,
+            proof_version,
         }
     }
 
@@ -192,14 +237,21 @@ impl Default for CommitmentBuilder {
 /// * `commitment` - The commitment to verify
 /// * `expected_deck_hash` - The expected deck commitment hash
 /// * `expected_enemy_hash` - The expected enemy seed hash
+/// * `current_build_hash` - The current engine build hash (Phase η)
 ///
 /// # Returns
 /// `true` if the commitment is valid.
+///
+/// ## Build Hash Verification (Phase η)
+/// - V1 proofs (build_hash = zero): always pass build_hash check (backward compat)
+/// - V2 proofs: build_hash must match `current_build_hash` exactly
+/// - Mismatched v2 proofs are rejected — this makes hermeticity load-bearing
 #[must_use]
 pub fn verify_commitment(
     commitment: &BattleCommitment,
     expected_deck_hash: &TypesReplayHash,
     expected_enemy_hash: &TypesReplayHash,
+    current_build_hash: &BuildHash,
 ) -> bool {
     // Check public input consistency
     if commitment.deck_commitment != *expected_deck_hash {
@@ -224,7 +276,39 @@ pub fn verify_commitment(
         return false;
     }
 
+    // Phase η: Build hash verification
+    match commitment.proof_version {
+        ProofVersion::V1 => {
+            // V1 proofs have no build hash — always accept
+            // (unless the current engine requires V2, which is a future gate)
+        }
+        ProofVersion::V2 => {
+            // V2 proofs must have matching build hash
+            // A zero build_hash on a V2 proof is invalid
+            if commitment.build_hash.is_zero() {
+                return false;
+            }
+            if commitment.build_hash != *current_build_hash {
+                return false;
+            }
+        }
+    }
+
     true
+}
+
+/// Legacy verification without build hash (pre-η compat).
+///
+/// Uses `BuildHash::zero()` as the current build hash, which means
+/// only V1 proofs will pass. Use `verify_commitment` with an explicit
+/// build hash for V2 verification.
+#[must_use]
+pub fn verify_commitment_legacy(
+    commitment: &BattleCommitment,
+    expected_deck_hash: &TypesReplayHash,
+    expected_enemy_hash: &TypesReplayHash,
+) -> bool {
+    verify_commitment(commitment, expected_deck_hash, expected_enemy_hash, &BuildHash::zero())
 }
 
 #[cfg(test)]
@@ -247,6 +331,10 @@ mod tests {
             ultimate_damage: 60,
             effect_type: EffectType::Damage,
         }).collect()
+    }
+
+    fn sample_build_hash() -> BuildHash {
+        BuildHash::from_artifacts(b"test-nix-build")
     }
 
     fn sample_enemy() -> Enemy {
@@ -289,6 +377,7 @@ mod tests {
     fn test_commitment_builder_basic() {
         let enemy = sample_enemy();
         let steps = make_steps();
+        let bh = sample_build_hash();
 
         let deck_hash = ReplayTrace::compute_deck_commitment(&[1, 2, 3, 4, 5]);
         let enemy_hash = ReplayTrace::compute_enemy_seed(&enemy);
@@ -300,20 +389,112 @@ mod tests {
         let commitment = CommitmentBuilder::new()
             .deck_commitment(deck_hash)
             .enemy_seed(enemy_hash)
+            .build_hash(bh)
             .add_step(steps[0].clone())
             .add_step(steps[1].clone())
             .add_step(steps[2].clone())
             .finalize(outcome);
 
         assert_eq!(commitment.step_count, 3);
+        assert_eq!(commitment.proof_version, ProofVersion::V2);
+        assert!(!commitment.build_hash.is_zero());
         assert!(!commitment.state_root.is_zero());
         assert!(!commitment.witness.as_bytes().iter().all(|&b| b == 0));
+    }
+
+    #[test]
+    fn test_commitment_v1_backward_compat() {
+        // Commitment without build_hash should be V1
+        let deck_hash = ReplayHash::from_data(b"v1-deck");
+        let enemy_hash = ReplayHash::from_data(b"v1-enemy");
+        let step = ReplayStep {
+            turn: 1, phase: 0, player_char_idx: 0, player_ability: 0,
+            enemy_hp_after: 180, field_after: FieldSnapshot::default(),
+            enemy_damage_dealt: 15, phase_transition: false, new_enemy_phase: 0,
+        };
+        let outcome = OutcomeRecord {
+            victory: true, total_turns: 1, final_enemy_hp: 180, survivors: 5,
+        };
+
+        let commitment = CommitmentBuilder::new()
+            .deck_commitment(deck_hash)
+            .enemy_seed(enemy_hash)
+            // No build_hash set
+            .add_step(step)
+            .finalize(outcome);
+
+        assert_eq!(commitment.proof_version, ProofVersion::V1);
+        assert!(commitment.build_hash.is_zero());
+        // V1 proofs should verify against any current build hash
+        let current_bh = BuildHash::from_artifacts(b"any-build");
+        assert!(verify_commitment(&commitment, &deck_hash, &enemy_hash, &current_bh));
+    }
+
+    #[test]
+    fn test_commitment_v2_rejects_wrong_build_hash() {
+        let deck_hash = ReplayHash::from_data(b"deck");
+        let enemy_hash = ReplayHash::from_data(b"enemy");
+        let bh = BuildHash::from_artifacts(b"correct-build");
+        let step = ReplayStep {
+            turn: 1, phase: 0, player_char_idx: 0, player_ability: 0,
+            enemy_hp_after: 180, field_after: FieldSnapshot::default(),
+            enemy_damage_dealt: 15, phase_transition: false, new_enemy_phase: 0,
+        };
+        let outcome = OutcomeRecord {
+            victory: true, total_turns: 1, final_enemy_hp: 180, survivors: 5,
+        };
+
+        let commitment = CommitmentBuilder::new()
+            .deck_commitment(deck_hash)
+            .enemy_seed(enemy_hash)
+            .build_hash(bh)
+            .add_step(step)
+            .finalize(outcome);
+
+        assert_eq!(commitment.proof_version, ProofVersion::V2);
+
+        // Correct build hash
+        assert!(verify_commitment(&commitment, &deck_hash, &enemy_hash, &bh));
+
+        // Wrong build hash
+        let wrong_bh = BuildHash::from_artifacts(b"different-build");
+        assert!(!verify_commitment(&commitment, &deck_hash, &enemy_hash, &wrong_bh));
+    }
+
+    #[test]
+    fn test_commitment_v2_zero_build_hash_invalid() {
+        // Manually construct a V2 commitment with zero build hash — should be rejected
+        let deck_hash = ReplayHash::from_data(b"deck");
+        let enemy_hash = ReplayHash::from_data(b"enemy");
+        let step = ReplayStep {
+            turn: 1, phase: 0, player_char_idx: 0, player_ability: 0,
+            enemy_hp_after: 180, field_after: FieldSnapshot::default(),
+            enemy_damage_dealt: 15, phase_transition: false, new_enemy_phase: 0,
+        };
+        let outcome = OutcomeRecord {
+            victory: true, total_turns: 1, final_enemy_hp: 180, survivors: 5,
+        };
+
+        let mut commitment = CommitmentBuilder::new()
+            .deck_commitment(deck_hash)
+            .enemy_seed(enemy_hash)
+            .build_hash(BuildHash::from_artifacts(b"real-build"))
+            .add_step(step)
+            .finalize(outcome);
+
+        // Tamper: set build_hash to zero but keep V2 version
+        commitment.build_hash = BuildHash::zero();
+        commitment.proof_version = ProofVersion::V2;
+
+        // Should reject — V2 with zero build hash is invalid
+        assert!(!verify_commitment(&commitment, &deck_hash, &enemy_hash, &BuildHash::from_artifacts(b"real-build")));
     }
 
     #[test]
     fn test_commitment_deterministic() {
         let deck_hash = ReplayHash::from_data(b"deck");
         let enemy_hash = ReplayHash::from_data(b"enemy");
+        let bh = BuildHash::from_artifacts(b"same-build");
         let step = ReplayStep {
             turn: 1, phase: 0, player_char_idx: 0, player_ability: 0,
             enemy_hp_after: 180, field_after: FieldSnapshot::default(),
@@ -326,18 +507,42 @@ mod tests {
         let c1 = CommitmentBuilder::new()
             .deck_commitment(deck_hash)
             .enemy_seed(enemy_hash)
+            .build_hash(bh)
             .add_step(step.clone())
             .finalize(outcome);
 
         let c2 = CommitmentBuilder::new()
             .deck_commitment(deck_hash)
             .enemy_seed(enemy_hash)
+            .build_hash(bh)
             .add_step(step)
             .finalize(outcome);
 
         assert_eq!(c1.proof_id, c2.proof_id);
         assert_eq!(c1.state_root, c2.state_root);
         assert_eq!(c1.witness, c2.witness);
+    }
+
+    #[test]
+    fn test_legacy_verify_compat() {
+        // Legacy verify should still work for V1 proofs
+        let deck_hash = ReplayHash::from_data(b"deck");
+        let enemy_hash = ReplayHash::from_data(b"enemy");
+        let step = ReplayStep {
+            turn: 1, phase: 0, player_char_idx: 0, player_ability: 0,
+            enemy_hp_after: 180, field_after: FieldSnapshot::default(),
+            enemy_damage_dealt: 15, phase_transition: false, new_enemy_phase: 0,
+        };
+        let outcome = OutcomeRecord {
+            victory: true, total_turns: 1, final_enemy_hp: 180, survivors: 5,
+        };
+        let commitment = CommitmentBuilder::new()
+            .deck_commitment(deck_hash)
+            .enemy_seed(enemy_hash)
+            .add_step(step)
+            .finalize(outcome);
+
+        assert!(verify_commitment_legacy(&commitment, &deck_hash, &enemy_hash));
     }
 
     #[test]
@@ -362,6 +567,7 @@ mod tests {
     fn test_verify_commitment_valid() {
         let deck_hash = ReplayHash::from_data(b"deck");
         let enemy_hash = ReplayHash::from_data(b"enemy");
+        let bh = sample_build_hash();
         let step = ReplayStep {
             turn: 1, phase: 0, player_char_idx: 0, player_ability: 0,
             enemy_hp_after: 180, field_after: FieldSnapshot::default(),
@@ -374,16 +580,18 @@ mod tests {
         let commitment = CommitmentBuilder::new()
             .deck_commitment(deck_hash)
             .enemy_seed(enemy_hash)
+            .build_hash(bh)
             .add_step(step)
             .finalize(outcome);
 
-        assert!(verify_commitment(&commitment, &deck_hash, &enemy_hash));
+        assert!(verify_commitment(&commitment, &deck_hash, &enemy_hash, &bh));
     }
 
     #[test]
     fn test_verify_commitment_wrong_deck() {
         let deck_hash = ReplayHash::from_data(b"deck");
         let enemy_hash = ReplayHash::from_data(b"enemy");
+        let bh = sample_build_hash();
         let step = ReplayStep {
             turn: 1, phase: 0, player_char_idx: 0, player_ability: 0,
             enemy_hp_after: 180, field_after: FieldSnapshot::default(),
@@ -396,17 +604,19 @@ mod tests {
         let commitment = CommitmentBuilder::new()
             .deck_commitment(deck_hash)
             .enemy_seed(enemy_hash)
+            .build_hash(bh)
             .add_step(step)
             .finalize(outcome);
 
         let wrong_deck = ReplayHash::from_data(b"wrong-deck");
-        assert!(!verify_commitment(&commitment, &wrong_deck, &enemy_hash));
+        assert!(!verify_commitment(&commitment, &wrong_deck, &enemy_hash, &bh));
     }
 
     #[test]
     fn test_verify_commitment_wrong_enemy() {
         let deck_hash = ReplayHash::from_data(b"deck");
         let enemy_hash = ReplayHash::from_data(b"enemy");
+        let bh = sample_build_hash();
         let step = ReplayStep {
             turn: 1, phase: 0, player_char_idx: 0, player_ability: 0,
             enemy_hp_after: 180, field_after: FieldSnapshot::default(),
@@ -419,11 +629,12 @@ mod tests {
         let commitment = CommitmentBuilder::new()
             .deck_commitment(deck_hash)
             .enemy_seed(enemy_hash)
+            .build_hash(bh)
             .add_step(step)
             .finalize(outcome);
 
         let wrong_enemy = ReplayHash::from_data(b"wrong-enemy");
-        assert!(!verify_commitment(&commitment, &deck_hash, &wrong_enemy));
+        assert!(!verify_commitment(&commitment, &deck_hash, &wrong_enemy, &bh));
     }
 
     #[test]
@@ -451,6 +662,7 @@ mod tests {
     fn test_empty_steps_commitment() {
         let deck_hash = ReplayHash::from_data(b"empty-deck");
         let enemy_hash = ReplayHash::from_data(b"empty-enemy");
+        let bh = sample_build_hash();
         let outcome = OutcomeRecord {
             victory: false, total_turns: 0, final_enemy_hp: 200, survivors: 0,
         };
@@ -458,17 +670,19 @@ mod tests {
         let commitment = CommitmentBuilder::new()
             .deck_commitment(deck_hash)
             .enemy_seed(enemy_hash)
+            .build_hash(bh)
             .finalize(outcome);
 
         assert_eq!(commitment.step_count, 0);
         // Empty steps → state_root is zero (no leaves), which is valid
-        assert!(verify_commitment(&commitment, &deck_hash, &enemy_hash));
+        assert!(verify_commitment(&commitment, &deck_hash, &enemy_hash, &bh));
     }
 
     #[test]
     fn test_commitment_with_phase_transition() {
         let deck_hash = ReplayHash::from_data(b"phase-deck");
         let enemy_hash = ReplayHash::from_data(b"phase-enemy");
+        let bh = sample_build_hash();
         let steps = vec![
             ReplayStep {
                 turn: 1, phase: 0, player_char_idx: 0, player_ability: 0,
@@ -483,10 +697,33 @@ mod tests {
         let commitment = CommitmentBuilder::new()
             .deck_commitment(deck_hash)
             .enemy_seed(enemy_hash)
+            .build_hash(bh)
             .add_step(steps[0].clone())
             .finalize(outcome);
 
-        assert!(verify_commitment(&commitment, &deck_hash, &enemy_hash));
+        assert!(verify_commitment(&commitment, &deck_hash, &enemy_hash, &bh));
         assert!(!commitment.state_root.is_zero());
+    }
+
+    #[test]
+    fn test_commitment_to_bytes_includes_build_hash() {
+        let deck_hash = ReplayHash::from_data(b"wire-deck");
+        let enemy_hash = ReplayHash::from_data(b"wire-enemy");
+        let bh = sample_build_hash();
+        let outcome = OutcomeRecord {
+            victory: false, total_turns: 200, final_enemy_hp: 150, survivors: 1,
+        };
+
+        let commitment = CommitmentBuilder::new()
+            .deck_commitment(deck_hash)
+            .enemy_seed(enemy_hash)
+            .build_hash(bh)
+            .finalize(outcome);
+
+        let bytes = commitment.to_bytes();
+        // 207 bytes = 32+32+32+1+4+4+1+32+32+4+32+1
+        assert_eq!(bytes.len(), 207);
+        // Last byte should be version (2 for V2)
+        assert_eq!(bytes[bytes.len() - 1], 2);
     }
 }

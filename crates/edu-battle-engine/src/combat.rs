@@ -181,7 +181,7 @@ fn execute_enemy_specials(
     };
 
     match enemy.id.as_str() {
-        "frost-guardian" if hp_pct <= 50.0 && state.turn.is_multiple_of(2) => {
+        "frost-guardian" if hp_pct <= 50.0 && state.turn % 2 == 0 => {
             apply_damage_to_random(field, state.turn, 3, "\u{2744}\u{FE0F}", "絶対零度の冷気が", logs);
         }
         "flame-spirit" if hp_pct <= 50.0 => {

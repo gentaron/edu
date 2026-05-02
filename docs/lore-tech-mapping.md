@@ -68,7 +68,7 @@ This document maps every technical artifact in the EDU repository to its in-univ
 | Tech Artifact             | Canon Mapping                                      | Phase |
 | ------------------------- | -------------------------------------------------- | ----- |
 | Lean 4 proofs (complete)  | The L1–L3 Light Layers of mechanized truth         | ζ     |
-| Nix flake hermetic builds | The Temporal Anchor — reproducible universe states | η     |
+| Nix flake hermetic builds | The Temporal Anchor — reproducible universe states | η ✓   |
 | Automerge CRDT            | AURALIS Collective consensus protocol              | θ     |
 
 ## Phase ε — ZK-Verifiable Battle Replays

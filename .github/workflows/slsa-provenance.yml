@@ -1,0 +1,152 @@
+# SLSA L3 Provenance — Phase η
+# Generates provenance attestations for release artifacts using the
+# slsa-framework/generic SLSA 3 generator.
+
+name: slsa-provenance
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: slsa-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # Build: compile all Rust artifacts + WASM
+  # ─────────────────────────────────────────────────────────────
+  build-artifacts:
+    name: "Build Release Artifacts"
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      digest: ${{ steps.hash.outputs.digest }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.85"
+          targets: wasm32-unknown-unknown
+
+      - name: Install wasm-pack
+        run: |
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            crates/target
+          key: cargo-slsa-${{ runner.os }}-${{ hashFiles('crates/Cargo.lock') }}
+          restore-keys: |
+            cargo-slsa-${{ runner.os }}-
+
+      - name: Build all crates (release)
+        working-directory: crates
+        run: |
+          cargo build --locked --release --workspace
+
+      - name: Build WASM verifier
+        working-directory: crates
+        run: |
+          wasm-pack build edu-engine-wasm \
+            --release \
+            --target web \
+            --out-dir ../../artifacts/wasm
+
+      - name: Collect release artifacts
+        run: |
+          mkdir -p artifacts/bin
+          # Copy native binaries
+          for bin in crates/target/release/edu-engine-*; do
+            if [ -f "$bin" ] && [ -x "$bin" ]; then
+              cp "$bin" artifacts/bin/
+              echo "Collected: $(basename $bin)"
+            fi
+          done
+          # Copy WASM
+          cp artifacts/wasm/edu_engine_wasm_bg.wasm artifacts/ 2>/dev/null || true
+          cp artifacts/wasm/edu_engine_wasm.js artifacts/ 2>/dev/null || true
+
+          echo "## Artifact manifest" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          sha256sum artifacts/bin/* artifacts/*.wasm artifacts/*.js 2>/dev/null >> "$GITHUB_STEP_SUMMARY" || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Compute subject digest
+        id: hash
+        run: |
+          # Single digest of all binary outputs for provenance
+          DIGEST=$(sha256sum artifacts/bin/* artifacts/*.wasm 2>/dev/null | sort | sha256sum | awk '{print $1}')
+          echo "digest=$DIGEST" >> "$GITHUB_OUTPUT"
+          echo "Digest: $DIGEST"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: edu-release-artifacts
+          path: artifacts/
+          retention-days: 90
+          if-no-files-found: error
+
+  # ─────────────────────────────────────────────────────────────
+  # SLSA Provenance Generation
+  # ─────────────────────────────────────────────────────────────
+  provenance:
+    name: "SLSA L3 Provenance"
+    needs: build-artifacts
+    if: needs.build-artifacts.result == 'success'
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v1.10.0
+    with:
+      base64-subjects: "${{ needs.build-artifacts.outputs.digest }}"
+      upload-assets: true
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+
+  # ─────────────────────────────────────────────────────────────
+  # Attach to GitHub Release
+  # ─────────────────────────────────────────────────────────────
+  release-attach:
+    name: "Attach to Release"
+    needs: [build-artifacts, provenance]
+    if: needs.build-artifacts.result == 'success' && needs.provenance.result == 'success'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: edu-release-artifacts
+          path: artifacts/
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/bin/*
+            artifacts/*.wasm
+            artifacts/*.js
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

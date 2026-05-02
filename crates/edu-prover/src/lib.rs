@@ -27,4 +27,4 @@ pub mod types;
 pub use commitment::{BattleCommitment, CommitmentBuilder};
 pub use merkle::{MerkleTree, MerkleProof};
 pub use replay::{ReplayTrace, ReplayStep};
-pub use types::{ProofId, ReplayHash, WitnessDigest};
+pub use types::{BuildHash, ProofId, ProofVersion, ReplayHash, WitnessDigest};

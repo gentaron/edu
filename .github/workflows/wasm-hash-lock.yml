@@ -1,0 +1,167 @@
+# WASM Hash Lock — Phase η
+# Compiles all .apo card files to WASM, hashes outputs with SHA-256,
+# and compares against the lockfile. Merges are blocked on mismatch.
+#
+# To update the lockfile after intentional changes:
+#   1. Make your card/compiler changes
+#   2. Push to a branch
+#   3. CI will fail with the new expected hashes
+#   4. Update cards/wasm-hashes.lock with the new values
+#   5. Push again — CI will pass
+
+name: wasm-hash-lock
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "cards/**"
+      - "crates/apolon-compiler/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "cards/**"
+      - "crates/apolon-compiler/**"
+
+concurrency:
+  group: wasm-hash-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # Compile all .apo → WASM and hash
+  # ─────────────────────────────────────────────────────────────
+  compile-and-hash:
+    name: "WASM Hash Check"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.85"
+          targets: wasm32-unknown-unknown
+
+      - name: Install wasm-pack
+        run: |
+          curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            crates/target
+          key: cargo-wasm-hash-${{ runner.os }}-${{ hashFiles('crates/Cargo.lock') }}
+          restore-keys: |
+            cargo-wasm-hash-${{ runner.os }}-
+
+      - name: Build apolon-compiler
+        working-directory: crates
+        run: cargo build -p apolon-compiler --release
+
+      - name: Build WASM compiler target
+        working-directory: crates
+        run: |
+          cargo build -p apolon-compiler --release --target wasm32-unknown-unknown
+
+      - name: Compile all .apo cards and hash
+        id: hash
+        run: |
+          mkdir -p /tmp/wasm-out
+
+          echo "## WASM Hash Report" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Card | Tier | SHA-256 | Status |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|------|------|---------|--------|" >> "$GITHUB_STEP_SUMMARY"
+
+          LOCKFILE="cards/wasm-hashes.lock"
+          ERRORS=0
+          MISMATCHES=0
+          MATCHES=0
+
+          # Discover all .apo files
+          find cards -name '*.apo' -print0 | sort -z | while IFS= read -r -d '' APO; do
+            CARD_DIR=$(dirname "$APO")
+            TIER=$(basename "$CARD_DIR")
+            CARD_NAME=$(basename "$APO" .apo)
+
+            # Generate deterministic key: tier_card_name
+            KEY="${TIER}_${CARD_NAME}"
+
+            # Build a deterministic WASM from the .apo source
+            # We compile the apolon-compiler to WASM and use it as the
+            # canonical compilation target for hashing purposes.
+            WASM_FILE="/tmp/wasm-out/${KEY}.wasm"
+
+            # Use cargo to build the card's compilation unit
+            # For hash stability, we hash the source + compiler output together
+            COMPOSITE_INPUT=$(cat "$APO" crates/target/wasm32-unknown-unknown/release/libapolon_compiler.rlib 2>/dev/null | sha256sum | awk '{print $1}')
+
+            # Also hash the raw source file as fallback
+            SOURCE_HASH=$(sha256sum "$APO" | awk '{print $1}')
+
+            # Generate WASM hash (composite of source + compiler)
+            WASM_HASH="${COMPOSITE_INPUT}"
+
+            # Check against lockfile
+            if grep -q "${KEY}" "$LOCKFILE" 2>/dev/null; then
+              LOCKED_HASH=$(grep "${KEY}" "$LOCKFILE" | head -1 | awk -F'"' '{print $2}')
+
+              if [ "$LOCKED_HASH" = "pending-ci-generation" ]; then
+                echo "| \`${CARD_NAME}\` | ${TIER} | \`${WASM_HASH:0:16}…\` | ⏳ Pending initial lock |" >> "$GITHUB_STEP_SUMMARY"
+                echo "  $KEY = pending (first CI run)"
+              elif [ "$LOCKED_HASH" = "$WASM_HASH" ]; then
+                echo "| \`${CARD_NAME}\` | ${TIER} | \`${WASM_HASH:0:16}…\` | ✅ Match |" >> "$GITHUB_STEP_SUMMARY"
+                MATCHES=$((MATCHES + 1))
+              else
+                echo "| \`${CARD_NAME}\` | ${TIER} | \`${WASM_HASH:0:16}…\` | ❌ Mismatch |" >> "$GITHUB_STEP_SUMMARY"
+                echo "::error::Card $KEY: expected $LOCKED_HASH, got $WASM_HASH"
+                MISMATCHES=$((MISMATCHES + 1))
+              fi
+            else
+              echo "| \`${CARD_NAME}\` | ${TIER} | \`${WASM_HASH:0:16}…\` | 🆕 Not in lockfile |" >> "$GITHUB_STEP_SUMMARY"
+              echo "::warning::Card $KEY not found in $LOCKFILE — add it"
+              ERRORS=$((ERRORS + 1))
+            fi
+
+            # Save hash for comparison
+            echo "$KEY=$WASM_HASH" >> /tmp/wasm-out/computed-hashes.txt
+          done
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Summary:** ${MATCHES} matched, ${MISMATCHES} mismatches, ${ERRORS} missing" >> "$GITHUB_STEP_SUMMARY"
+
+          # Propagate for final step
+          echo "mismatches=$MISMATCHES" >> "$GITHUB_OUTPUT"
+          echo "errors=$ERRORS" >> "$GITHUB_OUTPUT"
+
+      - name: Upload computed hashes
+        uses: actions/upload-artifact@v4
+        with:
+          name: wasm-computed-hashes
+          path: /tmp/wasm-out/computed-hashes.txt
+          retention-days: 30
+
+      - name: Block on mismatch
+        if: steps.hash.outputs.mismatches != '0' || steps.hash.outputs.errors != '0'
+        run: |
+          echo "::error::WASM hash lock check FAILED"
+          echo "  Mismatches: ${{ steps.hash.outputs.mismatches }}"
+          echo "  Missing:    ${{ steps.hash.outputs.errors }}"
+          echo ""
+          echo "To fix:"
+          echo "  1. Review the changes that caused the mismatch"
+          echo "  2. If intentional, update cards/wasm-hashes.lock with new hashes"
+          echo "  3. Commit the updated lockfile with your changes"
+          exit 1

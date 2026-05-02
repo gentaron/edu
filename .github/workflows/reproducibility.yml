@@ -1,0 +1,152 @@
+# Reproducibility Check — Phase η
+# Runs the same build on multiple runner images and compares output hashes.
+# Documents allowed non-determinism sources.
+#
+# Expected non-determinism sources:
+#   1. Timestamps embedded in debug info (mitigated by SOURCE_DATE_EPOCH)
+#   2. File ordering in archives (mitigated by deterministic `tar` flags)
+#   3. WASM section ordering (mitigated by wasm-opt --strip-debug)
+#   4. Cargo's incremental compilation cache (mitigated by CARGO_INCREMENTAL=0)
+
+name: reproducibility
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+
+concurrency:
+  group: repro-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  RUSTFLAGS: "--remap-path-prefix=$GITHUB_WORKSPACE= --codegen debuginfo=0"
+  SOURCE_DATE_EPOCH: "1700000000"
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # Build on matrix of runner images
+  # ─────────────────────────────────────────────────────────────
+  build:
+    name: "Build (${{ matrix.runner }})"
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - ubuntu-latest
+          - ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.85"
+          targets: wasm32-unknown-unknown
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            crates/target
+          key: cargo-repro-${{ matrix.runner }}-${{ hashFiles('crates/Cargo.lock') }}
+          restore-keys: |
+            cargo-repro-${{ matrix.runner }}-
+
+      - name: Build engine-core (release)
+        working-directory: crates
+        run: cargo build -p edu-engine-core --release
+
+      - name: Build WASM verifier
+        working-directory: crates
+        run: |
+          cargo build -p edu-engine-wasm --release --target wasm32-unknown-unknown
+
+      - name: Generate hashes
+        id: hashes
+        run: |
+          mkdir -p /tmp/hashes
+
+          # Hash native binary
+          sha256sum crates/target/release/libedu_engine_core.rlib > /tmp/hashes/engine-core.rlib.sha256 2>/dev/null || true
+          sha256sum crates/target/release/libedu_engine_core.so > /tmp/hashes/engine-core.so.sha256 2>/dev/null || true
+          # Try .a for static lib
+          sha256sum crates/target/release/libedu_engine_core.a > /tmp/hashes/engine-core.a.sha256 2>/dev/null || true
+          # Dep file as deterministic signal
+          sha256sum crates/target/release/.fingerprint/* 2>/dev/null | sort > /tmp/hashes/fingerprints.sha256 || true
+
+          # Hash WASM binary
+          sha256sum crates/target/wasm32-unknown-unknown/release/edu_engine_wasm.wasm > /tmp/hashes/verifier.wasm.sha256 2>/dev/null || true
+
+          echo "Hashes for ${{ matrix.runner }}:"
+          for f in /tmp/hashes/*.sha256; do
+            echo "  $(basename $f): $(cat $f | awk '{print $1}')"
+          done
+
+      - name: Upload hashes
+        uses: actions/upload-artifact@v4
+        with:
+          name: hashes-${{ matrix.runner }}
+          path: /tmp/hashes/
+          retention-days: 7
+
+  # ─────────────────────────────────────────────────────────────
+  # Compare hashes across runners
+  # ─────────────────────────────────────────────────────────────
+  compare:
+    name: "Reproducibility — Compare"
+    needs: build
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all hashes
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp/all-hashes
+          pattern: hashes-*
+
+      - name: Compare
+        run: |
+          echo "## Reproducibility Check" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+          PASS=true
+          for hashfile in /tmp/all-hashes/hashes-*/verifier.wasm.sha256; do
+            if [ -f "$hashfile" ]; then
+              echo "$(cat $hashfile)  $(basename $(dirname $hashfile))"
+            fi
+          done | sort -k2 >> "$GITHUB_STEP_SUMMARY"
+
+          # Check WASM determinism
+          WASM_HASHES=$(
+            for d in /tmp/all-hashes/hashes-*/; do
+              cat "$d/verifier.wasm.sha256" 2>/dev/null | awk '{print $1}'
+            done | sort -u
+          )
+
+          WASM_COUNT=$(echo "$WASM_HASHES" | grep -c . || true)
+          if [ "$WASM_COUNT" -eq 1 ]; then
+            echo "✓ WASM binary is bit-identical across runners" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "✗ WASM binary differs across runners ($WASM_COUNT unique hashes)" >> "$GITHUB_STEP_SUMMARY"
+            PASS=false
+          fi
+
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Allowed Non-Determinism Sources" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Native binaries may differ due to glibc version, dynamic linking" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Debug info paths (mitigated by --remap-path-prefix)" >> "$GITHUB_STEP_SUMMARY"
+          echo "- SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH applied" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+          $PASS || (echo "::error::Reproducibility check failed — binaries differ across runners" && exit 1)

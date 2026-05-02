@@ -21,16 +21,23 @@ use wasm_bindgen::prelude::*;
 /// * `commitment_json` - JSON-serialized BattleCommitment
 /// * `deck_hash_hex` - Expected deck commitment hash (hex)
 /// * `enemy_hash_hex` - Expected enemy seed hash (hex)
+/// * `build_hash_hex` - Current engine build hash (hex), empty string for legacy
 ///
 /// # Returns
-/// JSON object: `{ "valid": boolean, "proof_id": string, "reason": string }`
+/// JSON object: `{ "valid": boolean, "proof_id": string, "reason": string, "build_hash_status": string }`
 #[wasm_bindgen]
 pub fn verify_replay_wasm(
     commitment_json: &str,
     deck_hash_hex: &str,
     enemy_hash_hex: &str,
+    build_hash_hex: &str,
 ) -> JsValue {
-    let result = verify::verify_from_json(commitment_json, deck_hash_hex, enemy_hash_hex);
+    let build_hash_opt = if build_hash_hex.is_empty() {
+        None
+    } else {
+        Some(build_hash_hex)
+    };
+    let result = verify::verify_from_json(commitment_json, deck_hash_hex, enemy_hash_hex, build_hash_opt);
     serde_wasm_bindgen::to_value(&result).unwrap_or(JsValue::UNDEFINED)
 }
 

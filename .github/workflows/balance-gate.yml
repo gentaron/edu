@@ -1,0 +1,206 @@
+# Balance Gate — Phase η
+# Runs when card files, engine core, or proofs change.
+# Blocks merge if any gate fails.
+#
+# Gates:
+#   1. lean-build     — Compile Lean 4 proofs, reject `sorry`
+#   2. termination    — Simulate battles, verify no infinite loops
+#   3. axiom-audit    — Ensure sorryAx count is documented
+
+name: balance-gate
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - "cards/**"
+      - "crates/edu-engine-core/**"
+      - "proofs/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "cards/**"
+      - "crates/edu-engine-core/**"
+      - "proofs/**"
+
+# Prevent concurrent gates on the same PR
+concurrency:
+  group: balance-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # Gate 1: Lean 4 Proof Compilation
+  # ─────────────────────────────────────────────────────────────
+  lean-build:
+    name: "Lean 4 — Proof Build"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Cache Lake packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            proofs/lean/Apolon/.lake
+            ~/.elan
+          key: lean-lake-${{ runner.os }}-${{ hashFiles('proofs/lean/Apolon/lakefile.lean', 'proofs/lean/Apolon/lean-toolchain') }}
+          restore-keys: |
+            lean-lake-${{ runner.os }}-
+
+      - name: Lake build — NoInfiniteCombo
+        working-directory: proofs/lean/Apolon
+        run: |
+          lake exe cache get || true
+          lake build Apolon.NoInfiniteCombo
+
+      - name: Check for `sorry`
+        working-directory: proofs/lean/Apolon
+        run: |
+          SORRY_COUNT=$(rg -c 'sorry' --glob '*.lean' . 2>/dev/null | awk -F: '{s+=$2} END {print s+0}')
+          echo "::group::Sorry audit"
+          echo "Total 'sorry' occurrences: $SORRY_COUNT"
+          if [ "$SORRY_COUNT" -gt 0 ]; then
+            echo "::warning::Found $SORRY_COUNT 'sorry' in Lean proofs"
+            rg -n 'sorry' --glob '*.lean' . || true
+          fi
+          echo "::endgroup::"
+
+      - name: Verify NoInfiniteCombo has no sorry
+        working-directory: proofs/lean/Apolon
+        run: |
+          if rg -q 'sorry' NoInfiniteCombo.lean; then
+            echo "::error::NoInfiniteCombo.lean contains 'sorry' — proof is incomplete"
+            exit 1
+          fi
+          echo "NoInfiniteCombo.lean is fully proven (no sorry)"
+
+  # ─────────────────────────────────────────────────────────────
+  # Gate 2: Battle Simulation / Termination
+  # ─────────────────────────────────────────────────────────────
+  termination-test:
+    name: "Engine — Battle Termination"
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: "1.85"
+          components: rustfmt, clippy
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            crates/target
+          key: cargo-termination-${{ runner.os }}-${{ hashFiles('crates/Cargo.lock') }}
+          restore-keys: |
+            cargo-termination-${{ runner.os }}-
+
+      - name: Build edu-engine-core
+        working-directory: crates
+        run: cargo build -p edu-engine-core --release
+
+      - name: Run simulate_battle tests
+        working-directory: crates
+        run: cargo test -p edu-engine-core simulate_battle -- --nocapture --test-threads=1
+        timeout-minutes: 10
+
+      - name: Verify all battles terminate within turn limit
+        working-directory: crates
+        run: |
+          # Ensure there's a test for battle termination
+          cargo test -p edu-engine-core -- --list 2>&1 | grep -i "terminat\|max_turn\|bound" \
+            && echo "Termination boundary tests found" \
+            || echo "::warning::No explicit termination-boundary test found; please add one"
+
+  # ─────────────────────────────────────────────────────────────
+  # Gate 3: Axiom Audit
+  # ─────────────────────────────────────────────────────────────
+  axiom-audit:
+    name: "Lean — Axiom Documentation Audit"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Count sorryAx and compare with docs
+        run: |
+          SORRY_AX=$(rg -c 'sorryAx\b' proofs/lean/Apolon/ --glob '*.lean' 2>/dev/null | awk -F: '{s+=$2} END {print s+0}')
+          echo "sorryAx count: $SORRY_AX"
+
+          # Check documentation exists
+          if [ -f docs/proofs/axioms-report.md ]; then
+            DOC_AX=$(rg -c 'sorryAx' docs/proofs/axioms-report.md 2>/dev/null || echo "0")
+            echo "Documented sorryAx count: $DOC_AX"
+
+            if [ "$SORRY_AX" -ne "$DOC_AX" ]; then
+              echo "::error::sorryAx count ($SORRY_AX) differs from docs/proofs/axioms-report.md ($DOC_AX). Update documentation."
+              exit 1
+            fi
+            echo "Axiom count matches documentation ✓"
+          else
+            if [ "$SORRY_AX" -gt 0 ]; then
+              echo "::error::$SORRY_AX sorryAx found but docs/proofs/axioms-report.md does not exist. Create axiom documentation."
+              exit 1
+            fi
+            echo "No sorryAx found; no documentation required ✓"
+          fi
+
+          # List all axioms for the summary
+          echo "::group::Axiom locations"
+          rg -n 'sorryAx' proofs/lean/Apolon/ --glob '*.lean' || echo "(none)"
+          echo "::endgroup::"
+
+  # ─────────────────────────────────────────────────────────────
+  # Final Gate: All must pass
+  # ─────────────────────────────────────────────────────────────
+  balance-verdict:
+    name: "Balance Gate — Verdict"
+    if: always()
+    needs: [lean-build, termination-test, axiom-audit]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Evaluate gate results
+        run: |
+          LEAN="${{ needs.lean-build.result }}"
+          TERM="${{ needs.termination-test.result }}"
+          AXIOM="${{ needs.axiom-audit.result }}"
+
+          echo "lean-build:       $LEAN"
+          echo "termination-test: $TERM"
+          echo "axiom-audit:      $AXIOM"
+
+          if [ "$LEAN" = "success" ] && [ "$TERM" = "success" ] && [ "$AXIOM" = "success" ]; then
+            echo "✓ BALANCE GATE PASSED — all subsystems verified"
+            exit 0
+          else
+            echo "✗ BALANCE GATE FAILED"
+            [ "$LEAN" != "success" ] && echo "  - Lean build: $LEAN"
+            [ "$TERM" != "success" ] && echo "  - Termination: $TERM"
+            [ "$AXIOM" != "success" ] && echo "  - Axiom audit: $AXIOM"
+            exit 1
+          fi

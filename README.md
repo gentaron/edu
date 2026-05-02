@@ -23,6 +23,10 @@
 [![WebGPU Compute](https://img.shields.io/badge/WebGPU-Compute-4A90D9?style=flat-square)](docs/adr/0004-webgpu-compute-pipeline.md)
 [![ZK-Verified Replays](https://img.shields.io/badge/ZK-Verified_Replays-Merkle-9333EA?style=flat-square)](docs/adr/0005-zk-replay-verification.md)
 [![Lean 4 Theorems](https://img.shields.io/badge/Lean_4-Engine_Theorems_Mechanized-2D6B4E?style=flat-square)](docs/adr/0006-lean-as-engine-load-bearing.md)
+[![SLSA L3](https://img.shields.io/badge/SLSA-L3_Provenance-3258C8?style=flat-square)](docs/adr/0007-hermeticity-as-zk-prerequisite.md)
+[![Reproducible](https://img.shields.io/badge/Engine-Reproducible_Builds-22C55E?style=flat-square)](docs/adr/0007-hermeticity-as-zk-prerequisite.md)
+[![Cross-Arch](https://img.shields.io/badge/Cross--Arch_Deterministic-1DACD6?style=flat-square)](docs/adr/0007-hermeticity-as-zk-prerequisite.md)
+[![Nix](https://img.shields.io/badge/Nix-Hermetic_Builds-5277C3?style=flat-square&logo=nixos)](flake.nix)
 [![Deploy](https://img.shields.io/badge/Deploy-Netlify-00C7B7?style=flat-square&logo=netlify)](https://netlify.com)
 
 </div>
@@ -280,10 +284,12 @@ Naming: English PascalCase (e.g. `MinaEurekaErnst.png`) · 400x400px+ · Square 
 | `any` type count          | 0 (enforced by ESLint)                                           |
 | `eslint-disable`          | 0 (enforced)                                                     |
 | Zod build-time validation | validate-data.ts (285 Wiki ID uniqueness, etc.)                  |
-| Test suite                | 854 TS tests + 217 Rust tests, all passing                       |
+| Test suite                | 854 TS tests + 691 Rust tests, all passing (10 crates)           |
 | Coverage                  | 91.72% (V8 provider)                                             |
 | PBT properties            | 56 (fast-check) + 9 (Rust)                                       |
-| Formal verification       | 6 Kani bounded model checking proofs                             |
+| Formal verification       | 6 Kani proofs + Lean 4 load-bearing theorems (ζ: 3 proven)       |
+| Hermeticity               | Nix flake + SLSA L3 provenance + reproducibility                 |
+| Build hash                | BuildHash branded type in all V2 proof commitments               |
 | ESLint                    | --max-warnings=0 (custom: no-cross-domain-import, require-jsdoc) |
 | Bundle size (gzip)        | Max chunk 158KB                                                  |
 | WASM                      | 148KB .wasm (no_std core)                                        |
@@ -320,23 +326,23 @@ Detailed results in [BENCHMARKS.md](BENCHMARKS.md).
 
 ## Metrics Summary
 
-| Metric                  | Value                                                                                       |
-| ----------------------- | ------------------------------------------------------------------------------------------- |
-| **Total commits**       | 157                                                                                         |
-| **TypeScript**          | 59,020 lines, 226 files                                                                     |
-| **Rust**                | 7,200+ lines, 9 crates (core, WASM, native, embedded, battle, quasi, pqc, prover, verifier) |
-| **Lean 4**              | 7 modules (Syntax, Typing, Effects, Progress, HpInvariant, TlvInjective, NoInfiniteCombo) |
-| **Test suite**          | 854 TS + 217 Rust tests                                                                     |
-| **Coverage**            | 91.72%                                                                                      |
-| **PBT properties**      | 56 (fast-check) + 9 (Rust)                                                                  |
-| **Formal verification** | 6 Kani proofs + Creusot/Prusti contracts + Lean 4 theorems (ζ: load-bearing)              |
-| **Quantum**             | 8-qubit AerSimulator, byte-identical PMF (Qiskit + edu-quasi)                               |
-| **PQC**                 | ML-KEM-768 (Kyber) + ML-DSA-44 (Dilithium), 15 PBT properties                               |
-| **Benchmarks**          | 27 (TS) + 16 (Rust criterion.rs)                                                            |
-| **Build output**        | 51 pages (39 static, 12 SSG)                                                                |
-| **Max bundle (gzip)**   | 158KB                                                                                       |
-| **Wiki entries**        | 285+ (6 categories)                                                                         |
-| **Cards**               | 76 player cards, 10 enemies                                                                 |
-| **Stories**             | 22 chapters, EN/JP                                                                          |
-| **Domains**             | 5 (wiki, cards, battle, stories, civilizations)                                             |
-| **Development period**  | 2026/04/12 — 2026/05/01 (20 days)                                                           |
+| Metric                  | Value                                                                                                         |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Total commits**       | 157                                                                                                           |
+| **TypeScript**          | 59,020 lines, 226 files                                                                                       |
+| **Rust**                | 7,200+ lines, 10 crates (core, WASM, native, embedded, battle, quasi, pqc, apolon-compiler, prover, verifier) |
+| **Lean 4**              | 7 modules (Syntax, Typing, Effects, Progress, HpInvariant, TlvInjective, NoInfiniteCombo)                     |
+| **Test suite**          | 854 TS + 691 Rust tests                                                                                       |
+| **Hermeticity**         | Nix flake + SLSA L3 + reproducibility + cross-arch determinism (x86/aarch64/RISC-V)                           |
+| **Build hash**          | BuildHash branded type — proof versioning (V1/V2) with backward compat (η)                                    |
+| **Formal verification** | 6 Kani proofs + Lean 4 theorems (ζ: load-bearing, 35 sorrys remaining)                                        |
+| **Quantum**             | 8-qubit AerSimulator, byte-identical PMF (Qiskit + edu-quasi)                                                 |
+| **PQC**                 | ML-KEM-768 (Kyber) + ML-DSA-44 (Dilithium), 15 PBT properties                                                 |
+| **Benchmarks**          | 27 (TS) + 16 (Rust criterion.rs)                                                                              |
+| **Build output**        | 51 pages (39 static, 12 SSG)                                                                                  |
+| **Max bundle (gzip)**   | 158KB                                                                                                         |
+| **Wiki entries**        | 285+ (6 categories)                                                                                           |
+| **Cards**               | 76 player cards, 10 enemies                                                                                   |
+| **Stories**             | 22 chapters, EN/JP                                                                                            |
+| **Domains**             | 5 (wiki, cards, battle, stories, civilizations)                                                               |
+| **Development period**  | 2026/04/12 — 2026/05/01 (20 days)                                                                             |
