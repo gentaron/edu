@@ -73,3 +73,27 @@ Stage Summary:
 - BuildHash + ProofVersion make hermeticity load-bearing: removing flake.nix changes build hash → ε proofs rejected
 - Backward compatible: V1 proofs (pre-η) still pass; V2 proofs require exact build_hash match
 - 4-stage removal test ready: (1) flake.nix deletion breaks proof consistency, (2) SLSA no-op breaks NFT provenance, (3) cross-arch check deletion allows hidden non-determinism, (4) build_hash field removal breaks save migration
+
+---
+
+Task ID: 1
+Agent: main
+Task: git pull, fix 5 CI failures, refresh README, commit to main
+
+Work Log:
+
+- git stash + git pull (fast-forward 9b9a9bb..2c8d32c) — large merge with all phase θ files
+- Analyzed 5 CI failure logs via GitHub API
+- Fixed Lean 4 lakefile: added rootsDir := ".." to fix module path resolution (././././Apolon/NoInfiniteCombo.lean)
+- Fixed edu-prover no_std: added alloc::string::String and alloc::vec::Vec imports to types.rs, commitment.rs, merkle.rs, replay.rs
+- Fixed cross-platform workflow: removed invalid riscv64-linux-gnu-gcc and aarch64-linux-gnu-gcc packages (not separate apt packages)
+- Fixed ZK workflow: added --features alloc to no_std test invocation
+- Balance Gate Verdict: cascading fix from Lean 4 build resolution
+- Refreshed README.md (431 lines): 8-Phase Roadmap, Rust Crate Map (13), CI Pipeline (7), 22 routes, updated all metrics
+- Committed and pushed to main (0d7939d)
+
+Stage Summary:
+
+- 5 CI failures fixed: Lean 4 build (rootsDir), edu-prover (alloc imports), RISC-V (apt package), aarch64 (apt package), Balance Gate (cascading)
+- README refreshed with complete 8-phase uplift documentation
+- Push: 2c8d32c..0d7939d main
