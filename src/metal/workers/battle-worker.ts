@@ -300,7 +300,9 @@ function checkPhaseTransition(params: {
 
   let newPhase = 0
   for (let i = enemy.phases.length - 1; i >= 0; i--) {
-    if (hpPercent <= enemy.phases[i]!.hp_percent && i >= newPhase) {newPhase = i + 1}
+    if (hpPercent <= enemy.phases[i]!.hp_percent && i >= newPhase) {
+      newPhase = i + 1
+    }
   }
 
   if (newPhase <= params.enemy_phase) {
@@ -327,7 +329,9 @@ function simulateBattle(params: { field_json: string; enemy_json: string }): {
   for (turns = 1; turns <= maxTurns; turns++) {
     // Player turn: all alive characters attack
     for (const fc of fieldChars) {
-      if (fc.is_down || enemyHp <= 0) {continue}
+      if (fc.is_down || enemyHp <= 0) {
+        continue
+      }
       const result = calculateDamage(fc, 0) // attack
       enemyHp = Math.max(0, enemyHp - result.damage)
     }
@@ -339,7 +343,9 @@ function simulateBattle(params: { field_json: string; enemy_json: string }): {
 
     // Enemy turn: attack random alive character
     const alive = fieldChars.filter((fc) => !fc.is_down)
-    if (alive.length === 0) {break}
+    if (alive.length === 0) {
+      break
+    }
 
     const hpPercent = (enemyHp / enemy.max_hp) * 100
     let phaseBonus = 0

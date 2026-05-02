@@ -19,9 +19,18 @@ describe("ALL_CARDS", () => {
 
   it("every card has required fields", () => {
     const requiredFields: (keyof GameCard)[] = [
-      "id", "name", "imageUrl", "flavorText", "rarity",
-      "affiliation", "attack", "defense", "effect", "effectValue",
-      "ultimate", "ultimateName",
+      "id",
+      "name",
+      "imageUrl",
+      "flavorText",
+      "rarity",
+      "affiliation",
+      "attack",
+      "defense",
+      "effect",
+      "effectValue",
+      "ultimate",
+      "ultimateName",
     ]
     for (const card of ALL_CARDS) {
       for (const field of requiredFields) {
@@ -147,8 +156,16 @@ describe("ENEMIES", () => {
 
   it("every enemy has required fields", () => {
     const requiredFields: (keyof Enemy)[] = [
-      "id", "name", "title", "maxHp", "attackPower", "imageUrl",
-      "description", "difficulty", "reward", "phases",
+      "id",
+      "name",
+      "title",
+      "maxHp",
+      "attackPower",
+      "imageUrl",
+      "description",
+      "difficulty",
+      "reward",
+      "phases",
     ]
     for (const enemy of ENEMIES) {
       for (const field of requiredFields) {
@@ -203,8 +220,10 @@ describe("ENEMIES", () => {
   })
 
   it("HP increases with difficulty (on average)", () => {
-    const normalAvg = ENEMIES.filter((e) => e.difficulty === "NORMAL").reduce((s, e) => s + e.maxHp, 0) / 4
-    const bossAvg = ENEMIES.filter((e) => e.difficulty === "BOSS").reduce((s, e) => s + e.maxHp, 0) / 2
+    const normalAvg =
+      ENEMIES.filter((e) => e.difficulty === "NORMAL").reduce((s, e) => s + e.maxHp, 0) / 4
+    const bossAvg =
+      ENEMIES.filter((e) => e.difficulty === "BOSS").reduce((s, e) => s + e.maxHp, 0) / 2
     expect(bossAvg).toBeGreaterThan(normalAvg)
   })
 

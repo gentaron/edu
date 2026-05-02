@@ -48,7 +48,7 @@ describe("VarInt round-trip", () => {
   })
 
   it("encodes/decodes max u32", () => {
-    expect(roundTrip(0xFF_FF_FF_FF)).toBe(0xFF_FF_FF_FF)
+    expect(roundTrip(0xff_ff_ff_ff)).toBe(0xff_ff_ff_ff)
   })
 
   it("throws on negative value", () => {
@@ -272,7 +272,7 @@ describe("crc32", () => {
   it("returns u32 (unsigned)", () => {
     const result = crc32(new Uint8Array([255, 255, 255, 255]))
     expect(result).toBeGreaterThanOrEqual(0)
-    expect(result).toBeLessThanOrEqual(0xFF_FF_FF_FF)
+    expect(result).toBeLessThanOrEqual(0xff_ff_ff_ff)
   })
 })
 

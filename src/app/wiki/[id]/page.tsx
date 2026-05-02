@@ -174,7 +174,9 @@ export default function WikiEntryPage() {
           {/* Story links */}
           {(() => {
             const stories = getStoriesForEntry(entry.id)
-            if (stories.length === 0) {return null}
+            if (stories.length === 0) {
+              return null
+            }
             return (
               <RevealSection delay={350}>
                 <div className="edu-card p-6 sm:p-8 mb-8">

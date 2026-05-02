@@ -7,7 +7,9 @@ export default function ReadingProgress() {
 
   useEffect(() => {
     const bar = barRef.current
-    if (!bar) {return}
+    if (!bar) {
+      return
+    }
 
     const update = () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop

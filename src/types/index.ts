@@ -4,13 +4,7 @@ export { EffectType, classifyEffect } from "./card"
 export type { FieldChar } from "./game"
 export type { Civilization, CivilizationLeader } from "./civilization"
 export type { RelationNode, RelationEdge } from "./relation"
-export type {
-  CardId,
-  EnemyId,
-  WikiId,
-  CivilizationId,
-  StorySlug,
-} from "@/platform/schemas/branded"
+export type { CardId, EnemyId, WikiId, CivilizationId, StorySlug } from "@/platform/schemas/branded"
 export {
   asCardId,
   asEnemyId,

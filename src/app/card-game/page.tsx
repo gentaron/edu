@@ -213,7 +213,9 @@ export default function DeckBuildPage() {
 
   const filteredCards = useMemo(() => {
     return ALL_CARDS.filter((c) => {
-      if (rarityFilter !== "全て" && c.rarity !== rarityFilter) {return false}
+      if (rarityFilter !== "全て" && c.rarity !== rarityFilter) {
+        return false
+      }
       return true
     })
   }, [rarityFilter])

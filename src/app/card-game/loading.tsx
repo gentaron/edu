@@ -12,7 +12,11 @@ export default function Loading() {
         <div className="h-px w-full bg-edu-border" />
         <div className="space-y-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="h-6 animate-pulse rounded bg-edu-surface" style={{ width: `${60 + i * 8}%` }} />
+            <div
+              key={i}
+              className="h-6 animate-pulse rounded bg-edu-surface"
+              style={{ width: `${60 + i * 8}%` }}
+            />
           ))}
         </div>
       </div>

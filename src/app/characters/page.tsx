@@ -10,7 +10,9 @@ import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 const nameToWikiId = new Map<string, string>()
 for (const e of ALL_ENTRIES) {
   nameToWikiId.set(e.name, e.id)
-  if (e.nameEn) {nameToWikiId.set(e.nameEn, e.id)}
+  if (e.nameEn) {
+    nameToWikiId.set(e.nameEn, e.id)
+  }
 }
 
 export default function CharactersPage() {
@@ -52,8 +54,9 @@ export default function CharactersPage() {
         affiliation,
         cards: cards.sort((a, b) => {
           const rarityOrder = { SR: 0, R: 1, C: 2 }
-          if (rarityOrder[a.rarity] !== rarityOrder[b.rarity])
-            {return rarityOrder[a.rarity] - rarityOrder[b.rarity]}
+          if (rarityOrder[a.rarity] !== rarityOrder[b.rarity]) {
+            return rarityOrder[a.rarity] - rarityOrder[b.rarity]
+          }
           return (
             b.attack +
             b.defense +
@@ -286,7 +289,7 @@ export default function CharactersPage() {
                           className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-edu-bg/50 transition-colors"
                         >
                           <span
-                            className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${card.rarity === "SR" ? "rarity-badge-sr" : (card.rarity === "R" ? "rarity-badge-r" : "bg-edu-bg/50 text-edu-muted border border-edu-border/30")}`}
+                            className={`text-[9px] font-bold px-1.5 py-0.5 rounded shrink-0 ${card.rarity === "SR" ? "rarity-badge-sr" : card.rarity === "R" ? "rarity-badge-r" : "bg-edu-bg/50 text-edu-muted border border-edu-border/30"}`}
                           >
                             {card.rarity}
                           </span>

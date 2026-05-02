@@ -24,7 +24,9 @@ export const useDeckStore = create<DeckState>()(
       addCard: (card) =>
         set((s) => {
           const alreadyExists = s.deck.some((c) => c.id === card.id)
-          if (s.deck.length >= 5 || alreadyExists) {return s}
+          if (s.deck.length >= 5 || alreadyExists) {
+            return s
+          }
           return { deck: [...s.deck, card] }
         }),
       removeCard: (cardId) =>
@@ -33,8 +35,12 @@ export const useDeckStore = create<DeckState>()(
         })),
       moveCard: (fromIndex, toIndex) =>
         set((s) => {
-          if (fromIndex < 0 || fromIndex >= s.deck.length) {return s}
-          if (toIndex < 0 || toIndex >= s.deck.length) {return s}
+          if (fromIndex < 0 || fromIndex >= s.deck.length) {
+            return s
+          }
+          if (toIndex < 0 || toIndex >= s.deck.length) {
+            return s
+          }
           const next = [...s.deck]
           const [moved] = next.splice(fromIndex, 1)
           next.splice(toIndex, 0, moved!)

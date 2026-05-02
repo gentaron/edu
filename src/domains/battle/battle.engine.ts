@@ -319,8 +319,7 @@ export function calculateEffectDamage(
         : `✨ 次元階梯パンディクト展開！ ${cardName}のHP3回復！（ダメージは吸収）`
       return { damage, heal, shield: 0, attackReduction: 0, log }
     }
-    case ET.HEAL_DAMAGE: // Same as DAMAGE_HEAL but heal is primary (used by jun card)
-    {
+    case ET.HEAL_DAMAGE: { // Same as DAMAGE_HEAL but heal is primary (used by jun card)
       const heal = Math.max(1, Math.floor(val * 0.5))
       const damage = canDamage ? Math.max(1, Math.floor(val * 0.4)) : 0
       const log = canDamage

@@ -91,11 +91,11 @@ function isKatakanaLike(ch: string): boolean {
   // Katakana (30A0-30FF), Hiragana (3040-309F), CJK unified ideographs (4E00-9FFF),
   // Katakana-hiragana prolonged sound mark (30FC), CJK Extension A (3400-4DBF)
   return (
-    (code >= 0x30_A0 && code <= 0x30_FF) ||
-    (code >= 0x30_40 && code <= 0x30_9F) ||
-    (code >= 0x4E_00 && code <= 0x9F_FF) ||
-    (code >= 0x34_00 && code <= 0x4D_BF) ||
-    code === 0x30_FC || // prolongation mark ー
+    (code >= 0x30_a0 && code <= 0x30_ff) ||
+    (code >= 0x30_40 && code <= 0x30_9f) ||
+    (code >= 0x4e_00 && code <= 0x9f_ff) ||
+    (code >= 0x34_00 && code <= 0x4d_bf) ||
+    code === 0x30_fc || // prolongation mark ー
     code === 0x30_05 || // repetition mark 々
     code === 0x30_06 // cjk iteration mark 〆
   )
@@ -113,10 +113,10 @@ function isEmbeddedInWord(text: string, index: number, length: number): boolean 
   const isKanaOrKanji = (ch: string) => {
     const code = ch.codePointAt(0) ?? 0
     return (
-      (code >= 0x30_A0 && code <= 0x30_FF) || // Katakana
-      (code >= 0x4E_00 && code <= 0x9F_FF) || // CJK ideographs (kanji)
-      (code >= 0x34_00 && code <= 0x4D_BF) || // CJK Extension A
-      code === 0x30_FC || // prolongation mark ー
+      (code >= 0x30_a0 && code <= 0x30_ff) || // Katakana
+      (code >= 0x4e_00 && code <= 0x9f_ff) || // CJK ideographs (kanji)
+      (code >= 0x34_00 && code <= 0x4d_bf) || // CJK Extension A
+      code === 0x30_fc || // prolongation mark ー
       code === 0x30_05 || // repetition mark 々
       code === 0x30_06 // cjk iteration mark 〆
     )

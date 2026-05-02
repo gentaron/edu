@@ -119,7 +119,9 @@ class ServiceWorkerManager {
    * For immediate control, use `window.location.reload()` after calling this.
    */
   async skipWaiting(): Promise<void> {
-    if (!this.registration?.waiting) {return}
+    if (!this.registration?.waiting) {
+      return
+    }
 
     return new Promise<void>((resolve) => {
       const worker = this.registration!.waiting!
@@ -138,7 +140,9 @@ class ServiceWorkerManager {
    * If an update is found, the `updateAvailable` status will be set to true.
    */
   async update(): Promise<void> {
-    if (!this.registration) {return}
+    if (!this.registration) {
+      return
+    }
     await this.registration.update()
   }
 

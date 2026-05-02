@@ -38,7 +38,9 @@ export function TypewriterTitle() {
 
     function scheduleNext(ms: number, action: () => void) {
       timerRef.current = setTimeout(() => {
-        if (mountedRef.current) {action()}
+        if (mountedRef.current) {
+          action()
+        }
       }, ms)
     }
 
@@ -82,7 +84,9 @@ export function TypewriterTitle() {
 
     return () => {
       mountedRef.current = false
-      if (timerRef.current) {clearTimeout(timerRef.current)}
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+      }
     }
   }, [])
 

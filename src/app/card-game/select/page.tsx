@@ -162,7 +162,9 @@ export default function EnemySelectPage() {
       <div className="max-w-6xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {DIFF_ORDER.map((diff) => {
           const enemies = ENEMIES.filter((e) => e.difficulty === diff)
-          if (enemies.length === 0) {return null}
+          if (enemies.length === 0) {
+            return null
+          }
           return (
             <div key={diff} className="mb-8 sm:mb-10">
               <div className="flex items-center gap-2 mb-3 sm:mb-4">

@@ -4,10 +4,6 @@
     "noEmit": true,
     "allowJs": true
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "eslint-rules/**/*.js"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "eslint-rules/**/*.js"],
   "exclude": ["node_modules", ".next", "crates"]
 }

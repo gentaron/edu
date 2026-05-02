@@ -73,9 +73,7 @@ if (uniqueDuplicateWikiIds.length > 0) {
   for (const id of uniqueDuplicateWikiIds) {
     addError("wiki-id-unique", `Duplicate wiki entry id: "${id}"`)
   }
-  console.log(
-    `  ❌ Wiki ID uniqueness: ${uniqueDuplicateWikiIds.length} duplicate(s) found`
-  )
+  console.log(`  ❌ Wiki ID uniqueness: ${uniqueDuplicateWikiIds.length} duplicate(s) found`)
 } else {
   console.log(`  ✅ Wiki ID uniqueness: All ${allWiki.length} IDs are unique`)
 }
@@ -86,18 +84,13 @@ for (const card of allCards) {
   for (const field of ["attack", "defense", "ultimate"] as const) {
     const val = card[field]
     if (typeof val !== "number" || val < 0 || val > 999) {
-      addError(
-        "card-value-range",
-        `Card "${card.id}" has invalid ${field}: ${val} (must be 0-999)`
-      )
+      addError("card-value-range", `Card "${card.id}" has invalid ${field}: ${val} (must be 0-999)`)
       cardValueViolations++
     }
   }
 }
 if (cardValueViolations > 0) {
-  console.log(
-    `  ❌ Card value range: ${cardValueViolations} violation(s) found`
-  )
+  console.log(`  ❌ Card value range: ${cardValueViolations} violation(s) found`)
 } else {
   console.log(
     `  ✅ Card value range: All ${allCards.length} cards have valid attack/defense/ultimate (0-999)`
@@ -122,9 +115,7 @@ for (const enemy of allEnemies) {
   }
 }
 if (phaseOrderViolations > 0) {
-  console.log(
-    `  ❌ Enemy phase order: ${phaseOrderViolations} violation(s) found`
-  )
+  console.log(`  ❌ Enemy phase order: ${phaseOrderViolations} violation(s) found`)
 } else {
   console.log(
     `  ✅ Enemy phase order: All ${allEnemies.length} enemies have descending triggerHpPercent`
@@ -147,9 +138,7 @@ for (const entry of allWiki) {
   }
 }
 if (sourceLinkViolations > 0) {
-  console.log(
-    `  ❌ Source link URLs: ${sourceLinkViolations} violation(s) found`
-  )
+  console.log(`  ❌ Source link URLs: ${sourceLinkViolations} violation(s) found`)
 } else {
   console.log(`  ✅ Source link URLs: All URLs are valid`)
 }
@@ -166,13 +155,9 @@ for (const card of allCards) {
   }
 }
 if (effectTypeViolations > 0) {
-  console.log(
-    `  ❌ Card effectType: ${effectTypeViolations} violation(s) found`
-  )
+  console.log(`  ❌ Card effectType: ${effectTypeViolations} violation(s) found`)
 } else {
-  console.log(
-    `  ✅ Card effectType: All ${allCards.length} cards have valid effectType`
-  )
+  console.log(`  ✅ Card effectType: All ${allCards.length} cards have valid effectType`)
 }
 
 // ── Summary ──

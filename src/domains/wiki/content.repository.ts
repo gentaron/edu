@@ -90,4 +90,4 @@ export const ContentRepository = {
   getRelationsForEntity(id: string): { node: RelationNode; edge: RelationEdge }[] {
     return getRelationsForEntity(id)
   },
-};
+}

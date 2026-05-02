@@ -219,7 +219,9 @@ function ChapterSection({
 /* ─── Pre-compute stats ─── */
 const uniqueCharacters = new Set<string>()
 for (const s of ALL_STORIES) {
-  for (const e of s.relatedEntries) {uniqueCharacters.add(e)}
+  for (const e of s.relatedEntries) {
+    uniqueCharacters.add(e)
+  }
 }
 
 const chapterData = CHAPTERS.map((ch) => ({
@@ -232,7 +234,9 @@ export default function StoryArchivePage() {
   const [lang, setLangState] = useState<Lang>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("edu-lang") as Lang | null
-      if (saved === "en" || saved === "ja") {return saved}
+      if (saved === "en" || saved === "ja") {
+        return saved
+      }
     }
     return "ja"
   })

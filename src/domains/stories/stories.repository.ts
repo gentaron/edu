@@ -138,4 +138,4 @@ export const StoryRepository = {
   getEntryImageMap(): Readonly<Record<string, string>> {
     return ENTRY_IMAGE_MAP
   },
-};
+}

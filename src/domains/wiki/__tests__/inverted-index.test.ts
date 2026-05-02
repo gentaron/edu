@@ -261,9 +261,24 @@ describe("InvertedIndex", () => {
   let index: InvertedIndex
 
   const docs: SearchDocument[] = [
-    { id: "d1", title: "Hello World", content: "This is a test document about hello", category: "test" },
-    { id: "d2", title: "Goodbye World", content: "Another test document about goodbye", category: "test" },
-    { id: "d3", title: "Hello Again", content: "Yet another document with hello in it", category: "other" },
+    {
+      id: "d1",
+      title: "Hello World",
+      content: "This is a test document about hello",
+      category: "test",
+    },
+    {
+      id: "d2",
+      title: "Goodbye World",
+      content: "Another test document about goodbye",
+      category: "test",
+    },
+    {
+      id: "d3",
+      title: "Hello Again",
+      content: "Yet another document with hello in it",
+      category: "other",
+    },
   ]
 
   beforeEach(() => {

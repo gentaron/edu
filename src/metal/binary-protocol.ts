@@ -34,17 +34,17 @@ const CRC32_TABLE = new Uint32Array(256)
 for (let i = 0; i < 256; i++) {
   let c = i
   for (let j = 0; j < 8; j++) {
-    c = c & 1 ? (c >>> 1) ^ 0xED_B8_83_20 : c >>> 1
+    c = c & 1 ? (c >>> 1) ^ 0xed_b8_83_20 : c >>> 1
   }
   CRC32_TABLE[i] = c
 }
 
 function crc32(data: Uint8Array): number {
-  let crc = 0xFF_FF_FF_FF
+  let crc = 0xff_ff_ff_ff
   for (let i = 0; i < data.length; i++) {
-    crc = (crc >>> 8) ^ CRC32_TABLE[(crc ^ data[i]!) & 0xFF]!
+    crc = (crc >>> 8) ^ CRC32_TABLE[(crc ^ data[i]!) & 0xff]!
   }
-  return (crc ^ 0xFF_FF_FF_FF) >>> 0
+  return (crc ^ 0xff_ff_ff_ff) >>> 0
 }
 
 /**
@@ -154,7 +154,7 @@ export class BinaryWriter {
    * @param value - The byte value to write (only lower 8 bits used).
    */
   writeByte(value: number): void {
-    this.u8(value & 0xFF)
+    this.u8(value & 0xff)
   }
 
   /**
@@ -171,7 +171,7 @@ export class BinaryWriter {
     }
     let v = value >>> 0
     do {
-      let byte = v & 0x7F
+      let byte = v & 0x7f
       v >>>= 7
       if (v !== 0) {
         byte |= 0x80
@@ -431,7 +431,7 @@ export class BinaryReader {
     let shift = 0
     while (true) {
       const byte = this.u8()
-      result |= (byte & 0x7F) << shift
+      result |= (byte & 0x7f) << shift
       if ((byte & 0x80) === 0) {
         break
       }
