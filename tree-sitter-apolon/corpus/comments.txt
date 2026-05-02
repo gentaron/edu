@@ -1,0 +1,66 @@
+================================================================
+line-comments
+================================================================
+
+module test::line_comments {
+
+// This is a comment
+let x = 42 // inline comment
+// Another comment
+let y = 10
+
+fn add(a: Int, b: Int): Int = a + b // adds two numbers
+
+}
+
+================================================================
+block-comments
+================================================================
+
+module test::block_comments {
+
+/* This is a block comment */
+let x = 1
+
+/* Multi-line
+   block
+   comment */
+let y = 2
+
+let z = 3 /* inline block comment */
+
+}
+
+================================================================
+comments-on-declarations
+================================================================
+
+module test::commented_decls {
+
+// Health configuration constants
+let max_hp = 100      // maximum hit points
+let base_atk = 5      // base attack power
+let base_def = 3      // base defense
+
+/* Calculate total damage
+   including modifiers */
+fn total_damage(base: Int, mod: Int): Int = base + mod
+
+}
+
+================================================================
+empty-comments
+================================================================
+
+module test::empty_comments {
+
+// empty line comment
+
+/* */
+
+let x = 1
+
+////
+let y = 2
+
+}

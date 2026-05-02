@@ -1,0 +1,12 @@
+{
+  "card_id": "char-mina",
+  "ability_name": "dimensional_pandict",
+  "effect_type": "SPECIAL_PANDICT",
+  "expected_result": {
+    "damage": 5,
+    "heal": 0,
+    "shield": 0,
+    "attack_reduction": 0,
+    "log": "dimensional_pandict"
+  }
+}

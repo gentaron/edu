@@ -1,0 +1,56 @@
+================================================================
+record-type-definition
+================================================================
+
+module test::rec_type {
+
+type Point = {#x: Int, #y: Int}
+
+type Rect = {
+  #x: Int,
+  #y: Int,
+  #width: Int,
+  #height: Int
+}
+
+}
+
+================================================================
+record-type-with-generic
+================================================================
+
+module test::generic_rec {
+
+type Box<a> = {#value: a}
+
+type Pair<a, b> = {#fst: a, #snd: b}
+
+type Entry<k, v> = {#key: k, #val: v}
+
+}
+
+================================================================
+record-literal-construction
+================================================================
+
+module test::rec_literal {
+
+let origin = {#x = 0, #y = 0}
+
+let config = {#debug = true, #verbose = false, #max_retries = 3}
+
+let result = {#damage = 5, #heal = 3, #shield = 0, #attack_reduction = 1, #log = "test"}
+
+}
+
+================================================================
+record-type-with-function-types
+================================================================
+
+module test::rec_fn_type {
+
+type Handler = {#on_event: String -> Unit, #on_error: String -> Bool}
+
+type Reducer = {#step: Int -> Int -> Int, #init: Int}
+
+}

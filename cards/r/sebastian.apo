@@ -1,0 +1,27 @@
+module cards::r::sebastian {
+
+card sebastian {
+  name        = "Sebastian Valerius"
+  rarity      = R
+  affiliation = "Bogdas Javelin"
+  attack      = 5
+  defense     = 3
+  image_url   = "https://raw.githubusercontent.com/gentaron/image/main/SebastianValerius.png"
+  flavor_text = "Bogdas Javelin commander. An unmatched precise shot."
+
+  // effect: DAMAGE — 3 damage
+  ability precision_shot(target: FieldChar, damage: Int): BattleResult =
+    effect_ pure {
+      make_result(damage, 0, 0, 0, "precision_shot")
+    }
+
+  // ultimate: 11 damage
+  ultimate sniper_round(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 11
+      let s1 = deal_damage(state, damage)
+      log_message(s1, "Precision Sniper Round hits for 11 damage!")
+    }
+}
+
+}

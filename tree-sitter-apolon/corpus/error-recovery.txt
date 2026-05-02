@@ -1,0 +1,103 @@
+================================================================
+empty-module
+================================================================
+
+module empty {}
+
+================================================================
+module-with-only-comments
+================================================================
+
+module test::comments_only {
+
+// This module is intentionally empty
+
+}
+
+================================================================
+empty-card
+================================================================
+
+module test::empty_card {
+
+card placeholder {}
+
+}
+
+================================================================
+empty-list-and-record
+================================================================
+
+module test::empty_literals {
+
+let nothing = []
+let no_fields = {}
+
+}
+
+================================================================
+function-with-no-params
+================================================================
+
+module test::no_params {
+
+fn get_default(): Int = 0
+
+fn get_unit(): Unit = ()
+
+}
+
+================================================================
+effect-declaration
+================================================================
+
+module test::effect_decl {
+
+effect heal_effect = pure
+effect read_state = view
+effect modify_state = mut
+
+}
+
+================================================================
+let-statement-inside-effect
+================================================================
+
+module test::let_stmt {
+
+card striker {
+  name    = "Striker"
+  rarity  = R
+  attack  = 6
+  defense = 3
+
+  ability strike(state: BattleState, target: FieldChar): BattleState =
+    effect_ mut {
+      let damage: Int = 8
+      let new_state: BattleState = deal_damage(state, damage)
+      new_state
+    }
+}
+
+}
+
+================================================================
+return-statement-in-effect
+================================================================
+
+module test::return_stmt {
+
+card calculator {
+  name    = "Calculator"
+  rarity  = C
+  attack  = 1
+  defense = 1
+
+  ability compute(state: BattleState, a: Int, b: Int): BattleResult =
+    effect_ pure {
+      let sum = a + b
+      return make_result(sum, 0, 0, 0, "computed")
+    }
+}
+
+}

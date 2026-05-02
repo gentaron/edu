@@ -1,0 +1,27 @@
+module cards::sr::layla {
+
+card layla {
+  name        = "Layla"
+  rarity      = SR
+  affiliation = "AURALIS Second Generation"
+  attack      = 9
+  defense     = 3
+  image_url   = "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirelNova.png"
+  flavor_text = "Pink Voltage final performance. Plasma burns everything to ash."
+
+  // effect: DAMAGE — 6 damage
+  ability plasma_strike(target: FieldChar, damage: Int): BattleResult =
+    effect_ pure {
+      make_result(damage, 0, 0, 0, "plasma_strike")
+    }
+
+  // ultimate: 18 damage
+  ultimate plasma_finale(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 18
+      let s1 = deal_damage(state, damage)
+      log_message(s1, "Plasma Finale scorches the enemy for 18 damage!")
+    }
+}
+
+}

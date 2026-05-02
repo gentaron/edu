@@ -1,0 +1,45 @@
+================================================================
+pure-effect-block
+================================================================
+module test::pure_effect {
+
+card shielder {
+  name        = "Shielder"
+  rarity      = R
+  affiliation = "Gigapolis West Continent"
+  attack      = 2
+  defense     = 6
+
+  ability barrier(target: FieldChar, value: Int): BattleResult =
+    effect_ pure {
+      let result = make_result(0, 0, value, 0, "barrier")
+    }
+}
+
+}
+
+================================================================
+mut-effect-block-with-state-operations
+================================================================
+module test::mut_effect {
+
+card warrior {
+  name        = "Warrior"
+  rarity      = SR
+  affiliation = "Valoria Alliance"
+  attack      = 8
+  defense     = 3
+
+  ultimate devastating_blow(state: BattleState): BattleState =
+    effect_ mut {
+      let base_damage = 12
+      let turns = get_turn(state)
+      let bonus = turns * 2
+      let total = base_damage + bonus
+      let s1 = deal_damage(state, total)
+      let s2 = reduce_attack(s1, 1)
+      log_message(s2, "Devastating Blow!")
+    }
+}
+
+}

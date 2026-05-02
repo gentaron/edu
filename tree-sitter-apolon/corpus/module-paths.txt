@@ -1,0 +1,52 @@
+================================================================
+simple-module-path
+================================================================
+
+module prelude {
+
+let x = 1
+
+}
+
+================================================================
+two-segment-module-path
+================================================================
+
+module cards::basic {
+
+card soldier {
+  name    = "Soldier"
+  rarity  = C
+  attack  = 2
+  defense = 3
+}
+
+}
+
+================================================================
+deeply-nested-module-path
+================================================================
+
+module cards::sr::legendary::diana {
+
+import prelude
+
+card diana {
+  name        = "Diana"
+  rarity      = SR
+  affiliation = "Gigapolis West Continent"
+  attack      = 7
+  defense     = 4
+}
+
+}
+
+================================================================
+module-path-with-underscores
+================================================================
+
+module game_core::battle_state::enemy_ai {
+
+fn decide(state: BattleState): Int = 0
+
+}

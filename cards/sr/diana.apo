@@ -1,0 +1,27 @@
+module cards::sr::diana {
+
+card diana {
+  name        = "Diana"
+  rarity      = SR
+  affiliation = "Gigapolis West Continent"
+  attack      = 7
+  defense     = 4
+  image_url   = "https://raw.githubusercontent.com/gentaron/image/main/Diana.png"
+  flavor_text = "First-generation Wonder Woman. Light's judgment strikes evil."
+
+  // effect: SHIELD +5
+  ability light_shield(target: FieldChar, value: Int): BattleResult =
+    effect_ pure {
+      make_result(0, 0, value, 0, "shield")
+    }
+
+  // ultimate: 16 damage
+  ultimate light_judgment(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 16
+      let s1 = deal_damage(state, damage)
+      log_message(s1, "Light's Judgment strikes for 16 damage!")
+    }
+}
+
+}

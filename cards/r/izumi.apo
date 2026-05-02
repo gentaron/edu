@@ -1,0 +1,27 @@
+module cards::r::izumi {
+
+card izumi {
+  name        = "Izumi"
+  rarity      = R
+  affiliation = "Alpha Venom"
+  attack      = 6
+  defense     = 2
+  image_url   = "https://raw.githubusercontent.com/gentaron/image/main/Izumi.png"
+  flavor_text = "Alpha Venom leader. Dual-polarity combat prowess."
+
+  // effect: DAMAGE — 4 damage
+  ability venom_strike(target: FieldChar, damage: Int): BattleResult =
+    effect_ pure {
+      make_result(damage, 0, 0, 0, "venom_strike")
+    }
+
+  // ultimate: 12 damage
+  ultimate dual_venom_strike(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 12
+      let s1 = deal_damage(state, damage)
+      log_message(s1, "Dual-polarity Venom Strike hits for 12 damage!")
+    }
+}
+
+}

@@ -1,0 +1,12 @@
+{
+  "card_id": "char-vivietta",
+  "ability_name": "compassionate_heal",
+  "effect_type": "HEAL",
+  "expected_result": {
+    "damage": 0,
+    "heal": 2,
+    "shield": 0,
+    "attack_reduction": 0,
+    "log": "heal"
+  }
+}

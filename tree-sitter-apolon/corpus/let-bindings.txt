@@ -1,0 +1,54 @@
+================================================================
+top-level-let-declarations
+================================================================
+
+module test::let_top {
+
+let max_hp = 100
+let base_damage = 10
+let default_name = "unknown"
+
+}
+
+================================================================
+let-in-expression
+================================================================
+
+module test::let_in {
+
+fn double(x: Int): Int = let y = x + x in y
+
+fn add_pair(a: Int, b: Int): Int = let sum = a + b in sum
+
+}
+
+================================================================
+nested-let-in-expressions
+================================================================
+
+module test::nested_let {
+
+fn process(x: Int): Int =
+  let a = x * 2 in
+  let b = a + 1 in
+  let c = b * 3 in
+  c
+
+fn compose(f: Int -> Int, g: Int -> Int, x: Int): Int =
+  let fx = f(x) in let gx = g(x) in fx + gx
+
+}
+
+================================================================
+let-with-complex-expression
+================================================================
+
+module test::let_complex {
+
+fn compute(state: BattleState): Int =
+  let hp = state.enemy_hp in
+  let threshold = hp / 2 in
+  let bonus = if hp < threshold then 5 else 0 in
+  10 + bonus
+
+}

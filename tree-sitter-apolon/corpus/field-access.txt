@@ -1,0 +1,53 @@
+================================================================
+simple-field-access
+================================================================
+
+module test::field_simple {
+
+fn get_x(p: {#x: Int, #y: Int}): Int = p.x
+
+fn get_name(s: BattleState): String = s.name
+
+fn enemy_hp(state: BattleState): Int = state.enemy_hp
+
+}
+
+================================================================
+chained-field-access
+================================================================
+
+module test::field_chain {
+
+fn enemy_attack(state: BattleState): Int = state.enemy.attack
+
+fn target_name(state: BattleState): String = state.target.name
+
+fn deep_field(config: {#data: {#value: Int}}): Int = config.data.value
+
+}
+
+================================================================
+field-access-after-function-call
+================================================================
+
+module test::field_after_call {
+
+fn first_hp(cards: [FieldChar]): Int = head(cards).hp
+
+fn result_damage(r: BattleResult): Int = get_result(r).damage
+
+}
+
+================================================================
+field-access-in-expressions
+================================================================
+
+module test::field_expr {
+
+fn compare_hp(a: FieldChar, b: FieldChar): Bool = a.hp > b.hp
+
+fn total_stats(c: FieldChar): Int = c.attack + c.defense
+
+fn is_alive(c: FieldChar): Bool = c.hp > 0
+
+}

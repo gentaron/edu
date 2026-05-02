@@ -1,0 +1,79 @@
+================================================================
+card-with-all-meta-fields
+================================================================
+
+module cards::full_meta {
+
+card champion {
+  name        = "Champion"
+  rarity      = SR
+  affiliation = "Valoria Alliance"
+  attack      = 8
+  defense     = 7
+  image_url   = "https://example.com/champion.png"
+  flavor_text = "The unbreakable wall."
+}
+
+}
+
+================================================================
+card-with-minimal-fields
+================================================================
+
+module cards::minimal {
+
+card grunt {
+  name    = "Grunt"
+  rarity  = C
+  attack  = 1
+  defense = 2
+}
+
+}
+
+================================================================
+card-meta-with-various-rarities
+================================================================
+
+module cards::rarity_test {
+
+card common_card {
+  name    = "Peasant"
+  rarity  = C
+  attack  = 1
+  defense = 1
+}
+
+card rare_card {
+  name    = "Knight"
+  rarity  = R
+  attack  = 5
+  defense = 5
+}
+
+card sr_card {
+  name    = "Dragon"
+  rarity  = SR
+  attack  = 9
+  defense = 8
+}
+
+}
+
+================================================================
+card-with-strings-containing-special-chars
+================================================================
+
+module cards::special_strings {
+
+card exotic {
+  name        = "Li\u00e9n"
+  rarity      = R
+  affiliation = "Elyseon Order"
+  attack      = 4
+  defense     = 6
+  image_url   = "https://cdn.example.com/cards/lien_v2.png"
+  flavor_text = "Travels between worlds. \"Do not follow.\""
+}
+
+}

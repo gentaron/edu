@@ -1,0 +1,12 @@
+{
+  "card_id": "char-izumi",
+  "ability_name": "venom_strike",
+  "effect_type": "DAMAGE",
+  "expected_result": {
+    "damage": 4,
+    "heal": 0,
+    "shield": 0,
+    "attack_reduction": 0,
+    "log": "venom_strike"
+  }
+}

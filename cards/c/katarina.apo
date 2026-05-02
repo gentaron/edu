@@ -1,0 +1,27 @@
+module cards::c::katarina {
+
+card katarina {
+  name        = "Katarina"
+  rarity      = C
+  affiliation = "Alpha Venom"
+  attack      = 4
+  defense     = 1
+  image_url   = "https://raw.githubusercontent.com/gentaron/image/main/Katarina.png"
+  flavor_text = "Alpha Venom assassin. A swift, lethal strike."
+
+  // effect: DAMAGE — 3 damage
+  ability swift_assassinate(target: FieldChar, damage: Int): BattleResult =
+    effect_ pure {
+      make_result(damage, 0, 0, 0, "swift_assassinate")
+    }
+
+  // ultimate: 7 damage
+  ultimate hurricane_knife(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 7
+      let s1 = deal_damage(state, damage)
+      log_message(s1, "Assassin's Hurricane Knife slashes for 7 damage!")
+    }
+}
+
+}

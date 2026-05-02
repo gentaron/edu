@@ -38,13 +38,24 @@ This document maps every technical artifact in the EDU repository to its in-univ
 | All critical-strike rolls    | Drawn from the Qiskit-generated Apolonium PMF                     | 32 unique 8-bit outcomes                   |
 | Dimension Horizon            | The unitary boundary of the simulated state vector                | 2^8 = 256-outcome probability space        |
 
+## Phase γ — Apolon DSL
+
+| Tech Artifact                       | Canon Mapping                                                         | Verification                                  |
+| ----------------------------------- | --------------------------------------------------------------------- | --------------------------------------------- |
+| Apolon DSL (`.apo`) → WASM          | The Liminal Forge compilation pipeline — divine language of card abilities | Golden tests: TS↔WASM byte-identical results  |
+| SSA IR                              | The 8 Thought Layers crystallized into computational form             | Named basic blocks mirror cognitive strata     |
+| Effect system (`pure` / `view` / `mut`) | Three-tier invocation purity — celestial hierarchy of Forge operations | Compile-time E0005 on violations               |
+| Tree-sitter grammar (`tree-sitter-apolon`) | The Lexicon of the Forge — formal structure of all Forged utterances | ≥ 4 corpus test files                         |
+| Lean 4 progress theorem skeleton    | The L1–L3 Light Layers of mechanized truth (partial — ζ completes)   | `lake build` in CI                            |
+| Branded types (`ModuleId`, `AbilityId`, `BlockId`) | True Names — unforgeable identities for every Forge artifact       | Opaque newtypes, compiler-generated only       |
+| 250KB gzip WASM size budget         | The Forge's output constraint — no Forged artifact exceeds its vessel | Compiler error E0010 on budget exceeded        |
+
 ## Planned (Future Phases)
 
 | Tech Artifact             | Canon Mapping                                      | Phase |
 | ------------------------- | -------------------------------------------------- | ----- |
-| Apolon DSL → WASM         | Liminal Forge compilation pipeline                 | γ     |
 | WebGPU compute shaders    | The Visual Resonance Layer                         | δ     |
 | RISC Zero ZK proofs       | Dimensional witness — provable causality           | ε     |
-| Lean 4 proofs             | The L1–L3 Light Layers of mechanized truth         | ζ     |
+| Lean 4 proofs (complete)  | The L1–L3 Light Layers of mechanized truth         | ζ     |
 | Nix flake hermetic builds | The Temporal Anchor — reproducible universe states | η     |
 | Automerge CRDT            | AURALIS Collective consensus protocol              | θ     |

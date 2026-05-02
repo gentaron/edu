@@ -1,0 +1,12 @@
+{
+  "card_id": "char-gentaro",
+  "ability_name": "iron_resolve",
+  "effect_type": "SHIELD",
+  "expected_result": {
+    "damage": 0,
+    "heal": 0,
+    "shield": 3,
+    "attack_reduction": 0,
+    "log": "shield"
+  }
+}

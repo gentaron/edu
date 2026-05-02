@@ -1,0 +1,12 @@
+{
+  "card_id": "char-katarina",
+  "ability_name": "swift_assassinate",
+  "effect_type": "DAMAGE",
+  "expected_result": {
+    "damage": 3,
+    "heal": 0,
+    "shield": 0,
+    "attack_reduction": 0,
+    "log": "swift_assassinate"
+  }
+}

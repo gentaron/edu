@@ -1,0 +1,12 @@
+{
+  "card_id": "char-layla",
+  "ability_name": "plasma_strike",
+  "effect_type": "DAMAGE",
+  "expected_result": {
+    "damage": 6,
+    "heal": 0,
+    "shield": 0,
+    "attack_reduction": 0,
+    "log": "plasma_strike"
+  }
+}

@@ -1,0 +1,55 @@
+================================================================
+list-literals
+================================================================
+
+module test::list_lit {
+
+let empty = []
+let single = [1]
+let nums = [10, 20, 30]
+let names = ["alice", "bob", "carol"]
+
+}
+
+================================================================
+cons-operator
+================================================================
+
+module test::cons {
+
+let xs = 1 :: 2 :: 3 :: []
+let head = 42 :: tail
+
+fn prepend(x: Int, xs: [Int]): [Int] = x :: xs
+
+}
+
+================================================================
+list-type-annotations
+================================================================
+
+module test::list_types {
+
+fn head<a>(xs: [a]): a = xs
+
+fn length<a>(xs: [a]): Int = 0
+
+fn map_list<a, b>(xs: [a], f: a -> b): [b] = xs
+
+fn filter_list<a>(xs: [a], pred: a -> Bool): [a] = xs
+
+}
+
+================================================================
+list-of-complex-elements
+================================================================
+
+module test::complex_lists {
+
+let points = [{#x = 1, #y = 2}, {#x = 3, #y = 4}]
+
+let bools = [true, false, true]
+
+let nested = [[1, 2], [3, 4], [5, 6]]
+
+}

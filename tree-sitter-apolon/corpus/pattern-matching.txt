@@ -1,0 +1,62 @@
+================================================================
+match-with-integer-and-boolean-patterns
+================================================================
+module test::int_patterns {
+
+fn describe_hp(hp: Int): String =
+  match hp {
+    0 => "dead"
+    1 => "critical"
+    10 => "healthy"
+    100 => "max"
+  }
+
+fn check_flag(active: Bool): String =
+  match active {
+    true => "on"
+    false => "off"
+  }
+
+}
+
+================================================================
+match-with-wildcard-and-variable-patterns
+================================================================
+module test::wildcard_patterns {
+
+fn safe_divide(a: Int, b: Int): Int =
+  match b {
+    0 => 0
+    _ => a / b
+  }
+
+fn greet(name: String): String =
+  match name {
+    x => "Hello, " + x
+  }
+
+fn categorize(value: Int): String =
+  match value {
+    0 => "zero"
+    n => "nonzero"
+  }
+
+}
+
+================================================================
+match-with-constructor-and-tuple-patterns
+================================================================
+module test::ctor_patterns {
+
+fn unwrap(opt: Option): Int =
+  match opt {
+    Some(x) => x
+    None => 0
+  }
+
+fn swap(pair: (Int, String)): (String, Int) =
+  match pair {
+    (a, b) => (b, a)
+  }
+
+}

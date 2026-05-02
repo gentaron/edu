@@ -1,0 +1,27 @@
+module cards::c::vivietta {
+
+card vivietta {
+  name        = "Vivietta"
+  rarity      = C
+  affiliation = "Bogdas Javelin"
+  attack      = 3
+  defense     = 3
+  image_url   = "https://raw.githubusercontent.com/gentaron/image/main/Vivietta.png"
+  flavor_text = "Shimonin Vivietta. Continues to devote her strength even after rescue."
+
+  // effect: HEAL — 2 HP restored
+  ability compassionate_heal(target: FieldChar, heal_amt: Int): BattleResult =
+    effect_ pure {
+      make_result(0, heal_amt, 0, 0, "heal")
+    }
+
+  // ultimate: 7 damage
+  ultimate shimonin_compassion(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 7
+      let s1 = deal_damage(state, damage)
+      log_message(s1, "Shimonin's Compassion heals allies and strikes for 7 damage!")
+    }
+}
+
+}

@@ -1,0 +1,95 @@
+================================================================
+simple-function-no-return-type
+================================================================
+
+module test::basic_fn {
+
+fn add(a: Int, b: Int) = a + b
+
+fn greet(name: String) = "hello"
+
+}
+
+================================================================
+function-with-return-type
+================================================================
+
+module test::ret_fn {
+
+fn double(x: Int): Int = x + x
+
+fn is_even(n: Int): Bool = n % 2 == 0
+
+fn describe(n: Int): String =
+  if n == 0 then "zero" else "nonzero"
+
+}
+
+================================================================
+pure-view-mut-function-declarations
+================================================================
+
+module test::effect_fns {
+
+pure fn safe_add(a: Int, b: Int): Int = a + b
+
+view fn peek_hp(s: BattleState): Int = s.enemy_hp
+
+mut fn set_hp(s: BattleState, v: Int): BattleState = s
+
+}
+
+================================================================
+function-with-where-constraints
+================================================================
+
+module test::constrained {
+
+fn serialize<a>(x: a): String where a: Type = "data"
+
+fn identity<a>(x: a): a where a: * = x
+
+}
+
+================================================================
+function-with-type-params
+================================================================
+
+module test::poly {
+
+fn wrap<a>(x: a): [a] = [x]
+
+fn pair<a, b>(x: a, y: b): (a, b) = (x, y)
+
+fn map_fn<a, b>(xs: [a], f: a -> b): [b] = xs
+
+}
+
+================================================================
+function-with-complex-param-types
+================================================================
+
+module test::complex_params {
+
+fn apply(f: Int -> Int, x: Int): Int = f(x)
+
+fn process(state: BattleState, target: FieldChar, damage: Int): BattleResult =
+  make_result(damage, 0, 0, 0, "hit")
+
+fn configure(opts: {#debug: Bool, #verbose: Bool}): Unit = ()
+
+}
+
+================================================================
+function-with-arrow-return-type
+================================================================
+
+module test::arrow_ret {
+
+fn get_transform(kind: Int): Int -> Int = x
+
+fn get_predicate(threshold: Int): Int -> Bool = x
+
+fn compose<a, b, c>(f: a -> b, g: b -> c): a -> c = f
+
+}

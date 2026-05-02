@@ -1,0 +1,38 @@
+================================================================
+simple-pipe-expression
+================================================================
+
+module test::pipe_simple {
+
+fn process(state: BattleState): Int =
+  get_enemy_hp(state) |> clamp(0, 100)
+
+}
+
+================================================================
+chained-pipe-expression
+================================================================
+
+module test::pipe_chain {
+
+fn full_pipeline(state: BattleState): BattleState =
+  state |> deal_damage(10) |> heal_target(5) |> apply_shield(3)
+
+fn transform(value: Int): Int =
+  value |> add(5) |> mul(2) |> clamp(0, 100)
+
+}
+
+================================================================
+pipe-with-field-access
+================================================================
+
+module test::pipe_field {
+
+fn get_name_length(state: BattleState): Int =
+  state |> get_name |> length
+
+fn enemy_atk(state: BattleState): Int =
+  state |> get_enemy |> get_attack
+
+}

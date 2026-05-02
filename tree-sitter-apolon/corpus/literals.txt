@@ -1,0 +1,67 @@
+================================================================
+integer-literals
+================================================================
+
+module test::ints {
+
+let zero = 0
+let small = 42
+let large = 999999
+
+fn negate(x: Int): Int = -x
+
+}
+
+================================================================
+string-literals
+================================================================
+
+module test::strs {
+
+let empty_str = ""
+let greeting = "hello, world"
+let with_spaces = "  padded  "
+
+}
+
+================================================================
+string-escape-sequences
+================================================================
+
+module test::escapes {
+
+let newline = "line1\nline2"
+let tabbed = "col1\tcol2"
+let backslash = "path\\to\\file"
+let quoted = "she said \"hello\""
+
+}
+
+================================================================
+boolean-literals
+================================================================
+
+module test::bools {
+
+let yes = true
+let no = false
+
+fn flip(b: Bool): Bool = !b
+
+fn and_op(a: Bool, b: Bool): Bool = a && b
+
+fn or_op(a: Bool, b: Bool): Bool = a || b
+
+}
+
+================================================================
+unit-literal
+================================================================
+
+module test::unit {
+
+fn noop(): Unit = ()
+
+fn log(msg: String): Unit = ()
+
+}

@@ -1,0 +1,106 @@
+================================================================
+simple-type-declaration
+================================================================
+
+module test::simple_type {
+
+type Point = {#x: Int, #y: Int}
+
+type Color = Int
+
+type Name = String
+
+}
+
+================================================================
+generic-type-declaration
+================================================================
+
+module test::generic_type {
+
+type Option<a> = Some(a) | None
+
+type Result<e, v> = Ok(v) | Err(e)
+
+type Tree<a> = Leaf | Node(Tree<a>, a, Tree<a>)
+
+type Box<a> = {#value: a}
+
+}
+
+================================================================
+type-with-function-type
+================================================================
+
+module test::fn_type {
+
+type Callback = Int -> String
+
+type Comparator<a> = a -> a -> Bool
+
+type Reducer<a, b> = b -> a -> b
+
+}
+
+================================================================
+type-with-list-and-tuple
+================================================================
+
+module test::compound_type {
+
+type IntList = [Int]
+
+type StringPair = (String, String)
+
+type Matrix = [[Int]]
+
+type RecordList = [{#name: String, #value: Int}]
+
+}
+
+================================================================
+type-with-complex-record
+================================================================
+
+module test::complex_type {
+
+type Player = {
+  #name: String,
+  #hp: Int,
+  #attack: Int,
+  #defense: Int,
+  #alive: Bool
+}
+
+type GameState = {
+  #phase: Int,
+  #turn: Int,
+  #player: Player
+}
+
+}
+
+================================================================
+type-and-alias-declarations-together
+================================================================
+
+module game::types {
+
+type CardId = Int
+
+alias CardName = String
+alias HpValue = Int
+
+type Card = {
+  #id: CardId,
+  #name: CardName,
+  #hp: HpValue,
+  #attack: HpValue,
+  #defense: HpValue
+}
+
+alias CardRef = CardId -> Card
+
+fn lookup(id: CardId, cards: [Card]): CardRef = id
+
+}
