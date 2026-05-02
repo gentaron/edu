@@ -1,6 +1,7 @@
 //! # edu-prover
 //!
 //! ZK-verifiable battle replay prover.
+//! Builds with `--no-default-features --features alloc` for no_std.
 //!
 //! Generates cryptographic commitments for battle replays using Merkle trees
 //! and hash-based integrity proofs. Designed to be upgradeable to full ZK
