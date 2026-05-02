@@ -9,4 +9,6 @@ members = [
     "edu-quasi",
     "edu-pqc",
     "apolon-compiler",
+    "edu-prover",
+    "edu-verifier",
 ]
