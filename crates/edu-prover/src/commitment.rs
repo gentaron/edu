@@ -18,6 +18,9 @@ use crate::replay::{OutcomeRecord, ReplayStep, ReplayTrace};
 use crate::types::{BuildHash, ProofId, ProofVersion, ReplayHash as TypesReplayHash, WitnessDigest};
 use sha2::{Digest, Sha256};
 
+#[cfg(not(feature = "std"))]
+use alloc::vec::Vec;
+
 /// A complete battle commitment — the output of the prover.
 ///
 /// Contains everything needed for verification:

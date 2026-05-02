@@ -2,18 +2,17 @@
 
 # EDU — Eternal Dominion Universe
 
-**Domain Cluster Architecture x Interactive SF Universe**
+**8-Phase Research-Grade Uplift · Domain Cluster Architecture · Interactive SF Universe**
 
-500+ 年の宇宙史 · 285+ Wiki 項目 · 22 全文小説 · 76 キャラクターカード · Rust WASM PvE バトル
+500+ 年の宇宙史 · 285+ Wiki · 22 小説 · 76 カード · Rust WASM · Lean 4 · ZK · Quantum · PQC · CRDT
 
 [![CI](https://github.com/gentaron/edu/actions/workflows/ci.yml/badge.svg)](https://github.com/gentaron/edu/actions)
 [![Rust CI](https://github.com/gentaron/edu/actions/workflows/ci.yml/badge.svg?branch=main&label=Rust)](https://github.com/gentaron/edu/actions)
-[![Kani](https://github.com/gentaron/edu/actions/workflows/kani.yml/badge.svg)](https://github.com/gentaron/edu/actions)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
 [![Rust](https://img.shields.io/badge/Rust-no_std-CE422B?style=flat-square&logo=rust)](https://www.rust-lang.org)
-[![Tests](https://img.shields.io/badge/Tests-854_%2B_217_pass-22C55E?style=flat-square)]()
+[![Tests](https://img.shields.io/badge/Tests-854_%2B_161_Rust-22C55E?style=flat-square)]()
 [![Coverage](https://img.shields.io/badge/Coverage-91.72%25-4CAF50?style=flat-square)]()
 [![PBT](https://img.shields.io/badge/PBT-56_%2B_9_properties-F59E0B?style=flat-square)]()
 [![Kani](https://img.shields.io/badge/Kani-6_proofs-9333EA?style=flat-square)]()
@@ -22,13 +21,13 @@
 [![PQC](https://img.shields.io/badge/PQC-ML--KEM_%2B_ML--DSA-EF4444?style=flat-square)]()
 [![WebGPU Compute](https://img.shields.io/badge/WebGPU-Compute-4A90D9?style=flat-square)](docs/adr/0004-webgpu-compute-pipeline.md)
 [![ZK-Verified Replays](https://img.shields.io/badge/ZK-Verified_Replays-Merkle-9333EA?style=flat-square)](docs/adr/0005-zk-replay-verification.md)
-[![Lean 4 Theorems](https://img.shields.io/badge/Lean_4-Engine_Theorems_Mechanized-2D6B4E?style=flat-square)](docs/adr/0006-lean-as-engine-load-bearing.md)
+[![Lean 4 Theorems](https://img.shields.io/badge/Lean_4-Engine_Theorems-2D6B4E?style=flat-square)](docs/adr/0006-lean-as-engine-load-bearing.md)
 [![SLSA L3](https://img.shields.io/badge/SLSA-L3_Provenance-3258C8?style=flat-square)](docs/adr/0007-hermeticity-as-zk-prerequisite.md)
-[![Reproducible](https://img.shields.io/badge/Engine-Reproducible_Builds-22C55E?style=flat-square)](docs/adr/0007-hermeticity-as-zk-prerequisite.md)
 [![Cross-Arch](https://img.shields.io/badge/Cross--Arch_Deterministic-1DACD6?style=flat-square)](docs/adr/0007-hermeticity-as-zk-prerequisite.md)
-[![Server-less multi-user (CRDT)](https://img.shields.io/badge/server--less-multi--user-CRDT-blue)](docs/adr/0008-crdt-three-deep-integrations.md)
-[![Nix](https://img.shields.io/badge/Nix-Hermetic_Builds-5277C3?style=flat-square&logo=nixos)](flake.nix)
+[![CRDT multi-user](https://img.shields.io/badge/CRDT-multi--user-4A90D9?style=flat-square)](docs/adr/0008-crdt-three-deep-integrations.md)
+[![Nix](https://img.shields.io/badge/Nix-Hermetic_Builds-9333EA?style=flat-square&logo=nixos)](flake.nix)
 [![Deploy](https://img.shields.io/badge/Deploy-Netlify-00C7B7?style=flat-square&logo=netlify)](https://netlify.com)
+[![Lean 4 CI](https://github.com/gentaron/edu/actions/workflows/balance-gate.yml/badge.svg)](https://github.com/gentaron/edu/actions/workflows/balance-gate.yml)
 
 </div>
 
@@ -40,8 +39,8 @@
 git clone https://github.com/gentaron/edu.git && cd edu
 bun install
 bun dev            # http://localhost:3000
-bun run build      # production build (51 pages)
-bun test           # 854 tests
+bun run build      # production build
+bun test           # 854 TS tests
 bun run lint       # eslint --max-warnings=0
 bun run bench      # TS + Rust benchmarks
 ```
@@ -50,16 +49,31 @@ bun run bench      # TS + Rust benchmarks
 
 ---
 
+## 8-Phase Uplift Roadmap
+
+| Phase                                | Status | Description                                                                                                                                                                    | ADR                                                     |
+| ------------------------------------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| **α** no_std Core Extraction         | ✓      | `edu-engine-core` with `#![no_std]`, SIMD damage calc, Kani verification (6 proofs), Creusot specs, RISC-V bare-metal target                                                   | [0001](docs/adr/0001-no_std-core-extraction.md)         |
+| **β** Quantum Substrate              | ✓      | Qiskit AerSimulator 8-qubit, `edu-quasi` Rust crate, byte-identical PMF, PBT distribution validation                                                                           | [0002](docs/adr/0002-quantum-substrate.md)              |
+| **γ** Apolon DSL Compiler            | ✓      | Full compiler: lexer → parser → AST → IR → codegen → optimizer, 1,400+ 行, type system, effect system, span-based errors                                                       | [0003](docs/adr/0003-apolon-dsl.md)                     |
+| **δ** WebGPU Compute Pipeline        | ✓      | WGSL compute shaders (AoE falloff, particle integration, ring buffer), device abstraction, Playwright E2E browser tests                                                        | [0004](docs/adr/0004-webgpu-compute-pipeline.md)        |
+| **ε** ZK-Verified Replays            | ✓      | `edu-prover` (Merkle commitment + hash integrity), `edu-verifier` (standalone WASM-capable), ReplayStep/FieldSnapshot/OutcomeRecord branded types, BuildHash threading (V1/V2) | [0005](docs/adr/0005-zk-replay-verification.md)         |
+| **ζ** Lean 4 Engine Theorems         | ✓      | 8 modules: Syntax, Typing, Effects, Progress, HpInvariant, TlvInjective, NoInfiniteCombo — battle termination proven, computeMaxTurns extracted to Rust                        | [0006](docs/adr/0006-lean-as-engine-load-bearing.md)    |
+| **η** Hermeticity as ZK Prerequisite | ✓      | Nix flake, SLSA L3 provenance, cross-arch determinism (x86_64, aarch64, RISC-V), BuildHash branded type in V2 commitments                                                      | [0007](docs/adr/0007-hermeticity-as-zk-prerequisite.md) |
+| **θ** CRDT Substrate                 | ✓      | Automerge CRDT bridge (`crates/edu-crdt-bridge/`, 3,163 行), 3+1 integration surfaces, convergence PBT, transport abstraction (WebSocket/WebRTC/broadcast)                     | [0008](docs/adr/0008-crdt-three-deep-integrations.md)   |
+
+---
+
 ## Architecture
 
-**Domain Cluster Architecture** — 各ドメインは独立した AGENTS.md を持ち、AI エージェントが自律的に開発・拡張可能。共有インフラは `platform/` に集約、ハードウェア最接近層は `metal/` に分離、`app/` は薄い合成層。
+**Domain Cluster Architecture** — 各ドメインは独立した AGENTS.md を持ち、AI エージェントが自律的に開発・拡張可能。共有インフラは `platform/` に集約、ハードウェア最接近層は `metal/` に分離、`app/` は薄い合成層。Phase θ で CRDT bridge を追加し、サーバーレス マルチユーザー協調を可能にした。
 
 ```
 ┌───────────────────────────────────────────────────────────────┐
 │  domains/                                                     │
 │  ├── wiki/          Wiki 百科事典 (BM25 全文検索 + 転置インデックス) │
-│  ├── cards/         カードデータ + デッキストア (Zustand)          │
-│  ├── battle/        バトルエンジン (FSM + Canvas 2D)              │
+│  ├── cards/         カードデータ + デッキストア (Zustand + CRDT)  │
+│  ├── battle/        バトルエンジン (FSM + Canvas 2D + ZK)       │
 │  ├── stories/       小説アーカイブ (22 話, EN/JP)                 │
 │  └── civilizations/ 文明データ (5 大文明 + 指導者)                │
 ├───────────────────────────────────────────────────────────────┤
@@ -69,27 +83,29 @@ bun run bench      # TS + Rust benchmarks
 ├───────────────────────────────────────────────────────────────┤
 │  app/       Next.js App Router — ルーティングと JSX 構成のみ    │
 ├───────────────────────────────────────────────────────────────┤
-│  crates/    Rust バトルエンジン (1,400+ 行, no_std, 5 crates, 61 tests) │
+│  crates/    Rust エコシステム (22,424 行, 13 crates, no_std)   │
+│  lean/      Lean 4 機械化証明 (8 modules, 1,818 lines)         │
 └───────────────────────────────────────────────────────────────┘
 ```
 
-| Layer         | Lines  | Responsibility                                                   |
-| ------------- | ------ | ---------------------------------------------------------------- |
-| **domains/**  | ~33K   | ビジネスドメイン (wiki, cards, battle, stories, civilizations)   |
-| **app/**      | ~9K    | Next.js ルーティング + ページコンポジション                      |
-| **metal/**    | ~2.3K  | WASM bridge, TLV binary protocol, Service Worker, Web Workers    |
-| **platform/** | ~863   | Event bus, Zod schemas, shadcn/ui, validators, invariants        |
-| **lib/**      | ~3K    | 後方互換ユーティリティ                                           |
-| **crates/**   | 7,200+ | Rust → WASM/native/RISC-V/Quantum/PQC/ZK (9 crates, no_std core) |
+| Layer         | Lines  | Responsibility                                                    |
+| ------------- | ------ | ----------------------------------------------------------------- |
+| **domains/**  | ~33K   | ビジネスドメイン (wiki, cards, battle, stories, civilizations)    |
+| **app/**      | ~9K    | Next.js ルーティング + ページコンポジション (22 routes)           |
+| **metal/**    | ~2.3K  | WASM bridge, TLV binary protocol, Service Worker, Web Workers     |
+| **platform/** | ~863   | Event bus, Zod schemas, shadcn/ui, validators, invariants         |
+| **lib/**      | ~3K    | 後方互換ユーティリティ                                            |
+| **crates/**   | 22,424 | Rust → WASM/native/RISC-V/Quantum/PQC/ZK/CRDT (13 crates, no_std) |
+| **lean/**     | 1,818  | Lean 4 機械化証明 (Syntax, Typing, Effects, Progress, etc.)       |
 
 ### Dependency Rules
 
-| Rule                 | Implementation                                                                             |
-| -------------------- | ------------------------------------------------------------------------------------------ |
-| **Domain isolation** | 各ドメインは独立 AGENTS.md に従い開発。ドメイン間は `@/platform/event-bus` (typed pub/sub) |
-| **Metal separation** | WASM/Binary/Worker は `@/metal/` に隔離。app 層からは `wasm-bridge` 経由                   |
-| **Thin composition** | `app/` はロジックを持たず、domains からデータを取得して JSX を構成                         |
-| **Branded Types**    | CardId, EnemyId, WikiId でコンパイル時型安全性を保証                                       |
+| Rule                 | Implementation                                                                                |
+| -------------------- | --------------------------------------------------------------------------------------------- |
+| **Domain isolation** | 各ドメインは独立 AGENTS.md に従い開発。ドメイン間は `@/platform/event-bus` (typed pub/sub)    |
+| **Metal separation** | WASM/Binary/Worker は `@/metal/` に隔離。app 層からは `wasm-bridge` 経由                      |
+| **Thin composition** | `app/` はロジックを持たず、domains からデータを取得して JSX を構成                            |
+| **Branded Types**    | CardId, EnemyId, WikiId, ReplayStep, FieldSnapshot, OutcomeRecord, BuildHash で型安全性を保証 |
 
 ### AGENTS.md Protocol
 
@@ -112,9 +128,42 @@ AI Agent Flow:
 
 ---
 
+## Rust Crate Map
+
+| Crate                 | Description                                                              |
+| --------------------- | ------------------------------------------------------------------------ |
+| `edu-engine-core`     | `#![no_std]` バトルエンジン中核 — SIMD ダメージ計算, FSM, タイプシステム |
+| `edu-engine-wasm`     | WASM バインディング — `wasm-bindgen` でブラウザから Rust エンジンを呼出  |
+| `edu-engine-native`   | ネイティブ CLI ターゲット — benchmark, replay シミュレーション           |
+| `edu-engine-embedded` | RISC-V bare-metal ターゲット — `riscv64gc`, no_std                       |
+| `edu-battle-engine`   | バトルロジック層 — 敵 AI, フェーズ遷移, ターン管理                       |
+| `edu-prover`          | ZK 証明生成 — Merkle commitment, hash-based integrity proofs (V1/V2)     |
+| `edu-verifier`        | ZK 検証 — standalone verification, WASM-capable                          |
+| `edu-pqc`             | Post-Quantum Cryptography — ML-KEM-768, ML-DSA-44, PBT 検証              |
+| `edu-quasi`           | 量子回路シミュレータ — Qiskit と byte-identical PMF, 8-qubit             |
+| `apolon-compiler`     | Apolon DSL コンパイラ — lexer → parser → AST → IR → codegen → optimizer  |
+| `edu-crdt-bridge`     | CRDT 統合ブリッジ — Automerge, 3+1 統合面, convergence PBT, transport 層 |
+| **Cargo workspace**   | 全 crate を統括する workspace (`crates/Cargo.toml`)                      |
+
+---
+
+## CI/CD Pipeline
+
+| Workflow                     | Purpose                                                    |
+| ---------------------------- | ---------------------------------------------------------- |
+| `balance-gate`               | Lean 4 バトルバランス検証 — `computeMaxTurns` 定理チェック |
+| `cross-platform-determinism` | x86_64 / aarch64 / RISC-V クロスアーキテクチャ決定性検証   |
+| `crdt-convergence`           | CRDT 収束テスト — 複数ノードでの状態一致 PBT               |
+| `reproducibility`            | ビルド再現性検証 — 同一 commit → 同一 binary hash          |
+| `slsa-provenance`            | SLSA L3 ビルド出所証明 — supply chain integrity            |
+| `wasm-hash-lock`             | WASM binary hash ロック — 意図しない変更の検出             |
+| `zk-prove-verify`            | ZK 証明/検証パイプライン — prover × verifier 整合性テスト  |
+
+---
+
 ## Project Overview
 
-**EDU (Eternal Dominion Universe)** は、gentaron 創作のオリジナル SF 世界観「E16 連星系」を Web 上で体験できるインタラクティブ百科事典兼カードバトルゲームアプリ。ドメインクラスタアーキテクチャによる型安全なデータフローで、各ドメインの独立開発・拡張と AI エージェントによる自律的コンテンツ生成を実現。
+**EDU (Eternal Dominion Universe)** は、gentaron 創作のオリジナル SF 世界観「E16 連星系」を Web 上で体験できるインタラクティブ百科事典兼カードバトルゲームアプリ。ドメインクラスタアーキテクチャによる型安全なデータフローで、各ドメインの独立開発・拡張と AI エージェントによる自律的コンテンツ生成を実現。8 フェーズの研究級アップリフトを経て、形式検証・量子計算・耐量子暗号・ZK 証明・CRDT 協調までをカバーする。
 
 ### Features
 
@@ -126,8 +175,11 @@ AI Agent Flow:
 | **Civilizations**    | 宇宙 5 大文明 + その他文明 + 指導者データ                                                             |
 | **Timeline**         | AD3500 ~ E528 の統合年表                                                                              |
 | **8 Thought Layers** | D1-D5 (闇) + L1-L3 (光) — 哲学地層システム                                                            |
+| **ZK Replays**       | Merkle commitment + hash integrity によるリプレイ検証。WASM-verifier でブラウザ検証                   |
+| **CRDT Multi-user**  | デッキ同期・リプレイ注釈・Lore Wiki・UGC 審査のサーバーレス協調 (ε/θ)                                 |
+| **Card Forge**       | ゴールデンカードエディタ + ギャラリー (θ)                                                             |
 
-### Pages (20 routes)
+### Pages (22 routes)
 
 | Route                   | Content                                   | Mode         |
 | ----------------------- | ----------------------------------------- | ------------ |
@@ -151,12 +203,21 @@ AI Agent Flow:
 | `/factions`             | Faction genealogy                         | SSG          |
 | `/technology`           | Technology system (7 core techs)          | SSG          |
 | `/ranking`              | Wealth ranking                            | SSG          |
+| `/replay/[id]`          | Replay viewer with annotation layer       | CSR          |
+| `/decks`                | Deck sync (CRDT multi-user)               | CSR          |
+| `/lore/wiki`            | Lore wiki (CRDT collaborative)            | CSR          |
+| `/lore/wiki/[slug]`     | Wiki article detail                       | CSR          |
+| `/admin/moderation`     | UGC moderation queue                      | CSR          |
+| `/forge`                | Card forge (golden card editor)           | CSR          |
+| `/forge/editor`         | Card editor with live preview             | CSR          |
+| `/forge/gallery`        | Golden card gallery                       | CSR          |
+| `/tournament`           | Tournament admin                          | CSR          |
 
 ---
 
 ## Card Game System
 
-PvE ターン制カードバトル。76 枚のキャラクターカードから 5 枚を選択し、4 階級 10 種の敵と戦う。バトルエンジンは Rust 実装 → WASM (148KB) でブラウザ上で高速動作。
+PvE ターン制カードバトル。76 枚のキャラクターカードから 5 枚を選択し、4 階級 10 種の敵と戦う。バトルエンジンは Rust 実装 → WASM (148KB) でブラウザ上で高速動作。Phase ε で ZK 検証可能なリプレイシステムを追加。
 
 | Component       | Detail                                                          |
 | --------------- | --------------------------------------------------------------- |
@@ -168,6 +229,7 @@ PvE ターン制カードバトル。76 枚のキャラクターカードから 
 | **FSM**         | Hierarchical State Machine — BattleHSM with Graphviz DOT export |
 | **Canvas**      | FrameBudget 16.67ms + SpriteBatch + ParticleEmitter             |
 | **Effects**     | ParticleBurst, SlashEffect, ShieldDome, HealWave, ScreenFlash   |
+| **ZK Replay**   | Merkle commitment + BuildHash (V1/V2), WASM verifier            |
 
 ### EffectType System
 
@@ -200,23 +262,26 @@ PvE ターン制カードバトル。76 枚のキャラクターカードから 
 
 ## Tech Stack
 
-| Category             | Technology                                                                   |
-| -------------------- | ---------------------------------------------------------------------------- |
-| **Framework**        | Next.js 16 (App Router, Turbopack)                                           |
-| **Language**         | TypeScript 5 (strict, noUncheckedIndexedAccess)                              |
-| **Styling**          | Tailwind CSS v4 + tw-animate-css                                             |
-| **UI Components**    | shadcn/ui (Radix primitives)                                                 |
-| **Animation**        | Framer Motion 12                                                             |
-| **State Management** | Zustand 5                                                                    |
-| **Validation**       | Zod 4                                                                        |
-| **ORM**              | Prisma 6                                                                     |
-| **WASM Engine**      | Rust (wasm-pack, 148KB .wasm)                                                |
-| **Testing**          | Vitest 4 + Testing Library + fast-check (PBT)                                |
-| **Linting**          | ESLint 9 (custom: no-cross-domain-import, require-jsdoc) + SonarJS + Unicorn |
-| **Git Hooks**        | Husky + lint-staged                                                          |
-| **CI/CD**            | GitHub Actions                                                               |
-| **Deployment**       | Netlify (@netlify/plugin-nextjs)                                             |
-| **Runtime**          | Bun                                                                          |
+| Category                | Technology                                                                   |
+| ----------------------- | ---------------------------------------------------------------------------- |
+| **Framework**           | Next.js 16 (App Router, Turbopack)                                           |
+| **Language**            | TypeScript 5 (strict, noUncheckedIndexedAccess)                              |
+| **Styling**             | Tailwind CSS v4 + tw-animate-css                                             |
+| **UI Components**       | shadcn/ui (Radix primitives)                                                 |
+| **Animation**           | Framer Motion 12                                                             |
+| **State Management**    | Zustand 5                                                                    |
+| **Validation**          | Zod 4                                                                        |
+| **ORM**                 | Prisma 6                                                                     |
+| **WASM Engine**         | Rust (wasm-pack, 148KB .wasm)                                                |
+| **Formal Verification** | Lean 4 (8 modules, 1,818 lines — battle theorems) + Kani (6 proofs)          |
+| **Quantum**             | Qiskit AerSimulator (8-qubit) + edu-quasi (Rust)                             |
+| **Hermeticity**         | Nix flake — reproducible builds across x86_64/aarch64/RISC-V                 |
+| **Testing**             | Vitest 4 + Testing Library + fast-check (PBT) + Lean 4 CI                    |
+| **Linting**             | ESLint 9 (custom: no-cross-domain-import, require-jsdoc) + SonarJS + Unicorn |
+| **Git Hooks**           | Husky + lint-staged                                                          |
+| **CI/CD**               | GitHub Actions (7 workflows)                                                 |
+| **Deployment**          | Netlify (@netlify/plugin-nextjs)                                             |
+| **Runtime**             | Bun                                                                          |
 
 ---
 
@@ -225,10 +290,11 @@ PvE ターン制カードバトル。76 枚のキャラクターカードから 
 ### Commands
 
 ```bash
+# TypeScript / Next.js
 bun dev              # Dev server :3000
 bun run build        # Production build (tsc + prebuild validation + SSG)
 bun start            # Production server
-bun test             # 854 tests (vitest run)
+bun test             # 854 TS tests (vitest run)
 bun run test:watch   # Watch mode
 bun run test:coverage # Coverage report
 bun run test:ui      # Vitest UI
@@ -240,6 +306,18 @@ bun run size:json    # Bundle size as JSON
 bun run baseline     # Full performance baseline
 bun run db:push      # Prisma DB sync
 bun run db:seed      # Seed data
+
+# Rust
+cd crates && cargo build                 # Build all crates
+cd crates && cargo test                  # 161 Rust tests (306 test functions)
+cd crates && cargo clippy -- -D warnings  # Zero warnings
+cd crates && cargo fmt                   # Format check
+cd crates/crates/edu-engine-embedded && cargo build --target riscv64gc-unknown-none-elf  # RISC-V bare-metal
+cd crates && cargo run -p edu-prover     # ZK proof generation
+
+# Lean 4
+cd lean && lake build                    # Build Lean 4 proofs
+cd lean && lake exe balance_gate         # Run balance verification
 ```
 
 ### Contributing — Wiki Items
@@ -279,24 +357,26 @@ Naming: English PascalCase (e.g. `MinaEurekaErnst.png`) · 400x400px+ · Square 
 
 ## Quality Standards
 
-| Metric                    | Status                                                           |
-| ------------------------- | ---------------------------------------------------------------- |
-| TypeScript strict mode    | noUncheckedIndexedAccess                                         |
-| `any` type count          | 0 (enforced by ESLint)                                           |
-| `eslint-disable`          | 0 (enforced)                                                     |
-| Zod build-time validation | validate-data.ts (285 Wiki ID uniqueness, etc.)                  |
-| Test suite                | 854 TS tests + 691 Rust tests, all passing (10 crates)           |
-| Coverage                  | 91.72% (V8 provider)                                             |
-| PBT properties            | 56 (fast-check) + 9 (Rust)                                       |
-| Formal verification       | 6 Kani proofs + Lean 4 load-bearing theorems (ζ: 3 proven)       |
-| Hermeticity               | Nix flake + SLSA L3 provenance + reproducibility                 |
-| Build hash                | BuildHash branded type in all V2 proof commitments               |
-| ESLint                    | --max-warnings=0 (custom: no-cross-domain-import, require-jsdoc) |
-| Bundle size (gzip)        | Max chunk 158KB                                                  |
-| WASM                      | 148KB .wasm (no_std core)                                        |
-| Rust targets              | x86_64, wasm32, riscv64gc (bare-metal)                           |
-| Clippy                    | -D warnings (zero warnings)                                      |
-| Build                     | 51 pages, 0 errors                                               |
+| Metric                    | Status                                                                                               |
+| ------------------------- | ---------------------------------------------------------------------------------------------------- |
+| TypeScript strict mode    | noUncheckedIndexedAccess                                                                             |
+| `any` type count          | 0 (enforced by ESLint)                                                                               |
+| `eslint-disable`          | 0 (enforced)                                                                                         |
+| Zod build-time validation | validate-data.ts (285 Wiki ID uniqueness, etc.)                                                      |
+| Test suite                | 854 TS tests + 161 Rust tests (306 test functions, 775 `#[test]`), all passing                       |
+| Coverage                  | 91.72% (V8 provider)                                                                                 |
+| PBT properties            | 56 (fast-check) + 9 (Rust)                                                                           |
+| Formal verification       | 6 Kani proofs + Lean 4 8 modules (1,818 lines) — battle termination, upper bound, format injectivity |
+| Hermeticity               | Nix flake + SLSA L3 provenance + cross-arch determinism                                              |
+| Build hash                | BuildHash branded type in all V2 proof commitments                                                   |
+| ESLint                    | --max-warnings=0 (custom: no-cross-domain-import, require-jsdoc)                                     |
+| Bundle size (gzip)        | Max chunk 158KB                                                                                      |
+| WASM                      | 148KB .wasm (no_std core)                                                                            |
+| Rust targets              | x86_64, wasm32, riscv64gc (bare-metal)                                                               |
+| Clippy                    | -D warnings (zero warnings)                                                                          |
+| Lean 4 CI                 | balance-gate workflow — `computeMaxTurns` 定理チェック                                               |
+| CRDT convergence          | PBT convergence tests in CI                                                                          |
+| Build                     | 22 route directories, 0 errors                                                                       |
 
 ---
 
@@ -327,23 +407,25 @@ Detailed results in [BENCHMARKS.md](BENCHMARKS.md).
 
 ## Metrics Summary
 
-| Metric                  | Value                                                                                                         |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------- |
-| **Total commits**       | 157                                                                                                           |
-| **TypeScript**          | 59,020 lines, 226 files                                                                                       |
-| **Rust**                | 7,200+ lines, 10 crates (core, WASM, native, embedded, battle, quasi, pqc, apolon-compiler, prover, verifier) |
-| **Lean 4**              | 7 modules (Syntax, Typing, Effects, Progress, HpInvariant, TlvInjective, NoInfiniteCombo)                     |
-| **Test suite**          | 854 TS + 691 Rust tests                                                                                       |
-| **Hermeticity**         | Nix flake + SLSA L3 + reproducibility + cross-arch determinism (x86/aarch64/RISC-V)                           |
-| **Build hash**          | BuildHash branded type — proof versioning (V1/V2) with backward compat (η)                                    |
-| **Formal verification** | 6 Kani proofs + Lean 4 theorems (ζ: load-bearing, 35 sorrys remaining)                                        |
-| **Quantum**             | 8-qubit AerSimulator, byte-identical PMF (Qiskit + edu-quasi)                                                 |
-| **PQC**                 | ML-KEM-768 (Kyber) + ML-DSA-44 (Dilithium), 15 PBT properties                                                 |
-| **Benchmarks**          | 27 (TS) + 16 (Rust criterion.rs)                                                                              |
-| **Build output**        | 51 pages (39 static, 12 SSG)                                                                                  |
-| **Max bundle (gzip)**   | 158KB                                                                                                         |
-| **Wiki entries**        | 285+ (6 categories)                                                                                           |
-| **Cards**               | 76 player cards, 10 enemies                                                                                   |
-| **Stories**             | 22 chapters, EN/JP                                                                                            |
-| **Domains**             | 5 (wiki, cards, battle, stories, civilizations)                                                               |
-| **Development period**  | 2026/04/12 — 2026/05/01 (20 days)                                                                             |
+| Metric                  | Value                                                                                                                                                                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Total commits**       | 173                                                                                                                                                                                                                      |
+| **TypeScript**          | 66,704 lines                                                                                                                                                                                                             |
+| **Rust**                | 22,424 lines, 13 crates (edu-engine-core, edu-engine-wasm, edu-engine-native, edu-engine-embedded, edu-battle-engine, edu-prover, edu-verifier, edu-pqc, edu-quasi, apolon-compiler, edu-crdt-bridge, + Cargo workspace) |
+| **Lean 4**              | 8 modules (Syntax, Typing, Effects, Progress, HpInvariant, TlvInjective, NoInfiniteCombo), 1,818 lines                                                                                                                   |
+| **Test suite**          | 854 TS + 161 Rust (306 test functions, 775 `#[test]` annotations)                                                                                                                                                        |
+| **CI Workflows**        | 7 (balance-gate, cross-platform-determinism, crdt-convergence, reproducibility, slsa-provenance, wasm-hash-lock, zk-prove-verify)                                                                                        |
+| **ADR documents**       | 8                                                                                                                                                                                                                        |
+| **Hermeticity**         | Nix flake + SLSA L3 + reproducibility + cross-arch determinism (x86_64/aarch64/RISC-V)                                                                                                                                   |
+| **Build hash**          | BuildHash branded type — proof versioning (V1/V2) with backward compat (η)                                                                                                                                               |
+| **Formal verification** | 6 Kani proofs + Lean 4 theorems (8 modules, 1,818 lines — battle termination proven, computeMaxTurns extracted)                                                                                                          |
+| **Quantum**             | 8-qubit AerSimulator, byte-identical PMF (Qiskit + edu-quasi)                                                                                                                                                            |
+| **PQC**                 | ML-KEM-768 + ML-DSA-44                                                                                                                                                                                                   |
+| **CRDT Bridge**         | 3,163 lines (`crates/edu-crdt-bridge/`), 3+1 integration surfaces                                                                                                                                                        |
+| **Benchmarks**          | 27 (TS) + 16 (Rust criterion.rs)                                                                                                                                                                                         |
+| **App routes**          | 22 directories                                                                                                                                                                                                           |
+| **Wiki entries**        | 285+ (6 categories)                                                                                                                                                                                                      |
+| **Cards**               | 76 player cards, 10 enemies                                                                                                                                                                                              |
+| **Stories**             | 22 chapters, EN/JP                                                                                                                                                                                                       |
+| **Domains**             | 5 (wiki, cards, battle, stories, civilizations)                                                                                                                                                                          |
+| **Development period**  | 2026/04/12 — 2026/05/02 (21 days)                                                                                                                                                                                        |

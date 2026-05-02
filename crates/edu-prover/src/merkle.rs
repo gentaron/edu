@@ -11,6 +11,12 @@
 use sha2::{Digest, Sha256};
 use crate::types::ReplayHash;
 
+#[cfg(not(feature = "std"))]
+use alloc::string::String;
+
+#[cfg(not(feature = "std"))]
+use alloc::vec::Vec;
+
 /// A Merkle tree node hash.
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 #[cfg_attr(feature = "std", derive(serde::Serialize, serde::Deserialize))]

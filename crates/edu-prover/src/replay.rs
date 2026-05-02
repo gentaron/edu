@@ -18,6 +18,9 @@ use edu_engine_core::types::{
 use edu_engine_core::types::PhaseThreshold;
 use sha2::{Digest, Sha256};
 
+#[cfg(not(feature = "std"))]
+use alloc::vec::Vec;
+
 /// A single step in the battle replay.
 ///
 /// Each step records the action taken and the resulting state snapshot.

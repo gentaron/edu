@@ -13,6 +13,12 @@
 use core::fmt;
 use sha2::{Digest, Sha256};
 
+#[cfg(not(feature = "std"))]
+use alloc::string::String;
+
+#[cfg(not(feature = "std"))]
+use alloc::vec::Vec;
+
 /// A proof identifier — opaque, globally unique.
 ///
 /// Canon: **True Name of the Witness** — unforgeable identity assigned
