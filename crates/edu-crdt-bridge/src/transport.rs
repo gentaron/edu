@@ -10,6 +10,9 @@
 #[cfg(feature = "alloc")]
 use alloc::vec::Vec;
 
+#[cfg(all(feature = "alloc", test))]
+use alloc::{string::ToString, vec};
+
 use crate::{DocumentId, presence::DeviceInfo};
 
 /// Sync message types exchanged between peers.

@@ -11,6 +11,9 @@
 #[cfg(feature = "alloc")]
 use alloc::{string::String, vec::Vec};
 
+#[cfg(all(feature = "alloc", test))]
+use alloc::{string::ToString, vec};
+
 use crate::DocumentId;
 
 /// Branded document ID for a deck collection CRDT document.

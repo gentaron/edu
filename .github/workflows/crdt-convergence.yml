@@ -48,7 +48,7 @@ jobs:
         run: cargo test -p edu-crdt-bridge -- --nocapture
       - name: Test edu-crdt-bridge (no std)
         working-directory: crates
-        run: cargo test -p edu-crdt-bridge --no-default-features
+        run: cargo test -p edu-crdt-bridge --no-default-features --features alloc
       - name: Clippy
         working-directory: crates
         run: cargo clippy -p edu-crdt-bridge -- -D warnings

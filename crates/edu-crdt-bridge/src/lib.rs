@@ -31,6 +31,9 @@ extern crate alloc;
 use alloc::string::String;
 
 use core::fmt;
+
+#[cfg(feature = "alloc")]
+use alloc::format;
 use sha2::Digest;
 
 /// A branded document identifier — SHA-256 based, domain-separated for CRDT documents.
@@ -110,7 +113,8 @@ pub mod wiki;
 pub mod moderation;
 pub mod transport;
 pub mod presence;
-pub mod pbt;
+#[cfg(all(test, feature = "std"))]
+mod pbt;
 
 pub use deck::{DeckDocument, DeckEntry, DeckCollection};
 pub use annotation::{AnnotationDocument, AnnotationEntry, AnnotationLayer};

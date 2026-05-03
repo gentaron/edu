@@ -11,6 +11,9 @@
 #[cfg(feature = "alloc")]
 use alloc::string::String;
 
+#[cfg(all(feature = "alloc", test))]
+use alloc::string::ToString;
+
 /// Information about a user's presence session.
 ///
 /// Canon: An **Observer Beacon** — the signal broadcast by each active

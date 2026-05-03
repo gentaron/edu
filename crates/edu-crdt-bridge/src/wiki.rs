@@ -10,7 +10,7 @@
 //! coherent truth without silencing any contributor.
 
 #[cfg(feature = "alloc")]
-use alloc::{collections::BTreeMap, string::String, vec::Vec};
+use alloc::{collections::BTreeMap, format, string::String, string::ToString, vec::Vec};
 
 use crate::DocumentId;
 
