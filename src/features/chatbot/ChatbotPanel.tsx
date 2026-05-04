@@ -8,7 +8,6 @@ import {
   Loader2,
   AlertTriangle,
   MessageSquare,
-  ChevronDown,
 } from "lucide-react"
 import { useWebGPUSupport } from "./hooks/useWebGPUSupport"
 import { useChatbot } from "./hooks/useChatbot"
@@ -102,16 +101,22 @@ export function ChatbotPanel({ isOpen, onClose }: ChatbotPanelProps) {
 
   // Close on Escape
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) {
+      return
+    }
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
+      if (e.key === "Escape") {
+        onClose()
+      }
     }
     window.addEventListener("keydown", handler)
     return () => window.removeEventListener("keydown", handler)
   }, [isOpen, onClose])
 
   const handleSend = useCallback(async () => {
-    if (!inputText.trim()) return
+    if (!inputText.trim()) {
+      return
+    }
     const text = inputText
     setInputText("")
     await sendMessage(text)
@@ -135,7 +140,9 @@ export function ChatbotPanel({ isOpen, onClose }: ChatbotPanelProps) {
     [setModelSize, updateConfig],
   )
 
-  if (!isOpen) return null
+  if (!isOpen) {
+    return null
+  }
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center">
@@ -230,7 +237,7 @@ export function ChatbotPanel({ isOpen, onClose }: ChatbotPanelProps) {
                 step={1}
                 value={config.topK}
                 onChange={(e) =>
-                  updateConfig({ topK: parseInt(e.target.value, 10) })
+                  updateConfig({ topK: Number.parseInt(e.target.value, 10) })
                 }
                 className="w-full h-1.5 bg-edu-border rounded-full appearance-none cursor-pointer
                   [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:h-3.5

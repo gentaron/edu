@@ -53,7 +53,9 @@ export function cosineSimilarity(a: Float32Array, b: Float32Array): number {
   }
 
   const denominator = Math.sqrt(normA) * Math.sqrt(normB)
-  if (denominator === 0) return 0
+  if (denominator === 0) {
+    return 0
+  }
 
   return dotProduct / denominator
 }

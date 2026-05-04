@@ -27,8 +27,12 @@ let pipelinePromise: Promise<EmbeddingPipeline> | null = null
 export async function getEmbeddingPipeline(
   progressCallback?: (message: string) => void,
 ): Promise<EmbeddingPipeline> {
-  if (pipelineInstance) return pipelineInstance
-  if (pipelinePromise) return pipelinePromise
+  if (pipelineInstance) {
+    return pipelineInstance
+  }
+  if (pipelinePromise) {
+    return pipelinePromise
+  }
 
   pipelinePromise = (async () => {
     progressCallback?.("Loading embedding model...")
@@ -53,6 +57,7 @@ export async function getEmbeddingPipeline(
       },
     })
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- FeatureExtractionPipeline type mismatch; double assertion needed
     pipelineInstance = p as unknown as EmbeddingPipeline
     return pipelineInstance
   })()
@@ -93,7 +98,7 @@ export async function embedQuery(
 
   // Handle nested array format
   if (Array.isArray(data) && Array.isArray(data[0])) {
-    return new Float32Array(data[0] as number[])
+    return new Float32Array(data[0])
   }
 
   // Fallback: try to extract from the output object

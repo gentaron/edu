@@ -17,7 +17,7 @@ describe("chatbot/engine/rag", () => {
       const decoded = decodeBase64ToFloat32(encoded)
       expect(decoded).toBeInstanceOf(Float32Array)
       expect(decoded.length).toBe(4)
-      expect(Array.from(decoded)).toEqual([1, 2, 3, 4])
+      expect([...decoded]).toEqual([1, 2, 3, 4])
     })
 
     it("round-trips correctly for various values", () => {
@@ -30,7 +30,7 @@ describe("chatbot/engine/rag", () => {
       for (const original of cases) {
         const encoded = encodeFloat32ToBase64(original)
         const decoded = decodeBase64ToFloat32(encoded)
-        expect(Array.from(decoded)).toEqual(Array.from(original))
+        expect([...decoded]).toEqual([...original])
       }
     })
   })

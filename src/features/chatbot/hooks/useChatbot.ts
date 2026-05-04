@@ -79,8 +79,8 @@ export function useChatbot(): UseChatbotReturn {
         const corpus = await loadCorpus()
         corpusRef.current = corpus
         setLoadProgress(`Loaded ${corpus.chunkCount} knowledge entries`)
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err)
+      } catch (error_) {
+        const msg = error_ instanceof Error ? error_.message : String(error_)
         setError(`Failed to load corpus: ${msg}`)
         setStatus("error")
         return
@@ -94,8 +94,8 @@ export function useChatbot(): UseChatbotReturn {
       await getEmbeddingPipeline((msg) => {
         setLoadProgress(msg)
       })
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err)
+    } catch (error_) {
+      const msg = error_ instanceof Error ? error_.message : String(error_)
       setError(`Failed to load embedding model: ${msg}`)
       setStatus("error")
       return
@@ -110,7 +110,9 @@ export function useChatbot(): UseChatbotReturn {
    */
   const sendMessage = useCallback(
     async (text: string) => {
-      if (!text.trim() || status === "generating") return
+      if (!text.trim() || status === "generating") {
+        return
+      }
 
       // Add user message
       const userMessage: ChatMessage = {
@@ -124,7 +126,9 @@ export function useChatbot(): UseChatbotReturn {
       // Ensure corpus and embedding model are loaded
       if (!corpusRef.current) {
         await initChatbot()
-        if (!corpusRef.current) return
+        if (!corpusRef.current) {
+          return
+        }
       }
 
       const corpus = corpusRef.current
@@ -135,8 +139,8 @@ export function useChatbot(): UseChatbotReturn {
       let queryEmbedding: Float32Array
       try {
         queryEmbedding = await embedQuery(text.trim())
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err)
+      } catch (error_) {
+        const msg = error_ instanceof Error ? error_.message : String(error_)
         setError(`Embedding failed: ${msg}`)
         setStatus("error")
         return
@@ -171,8 +175,8 @@ export function useChatbot(): UseChatbotReturn {
             }
           })
           llmInitializedRef.current = true
-        } catch (err) {
-          const msg = err instanceof Error ? err.message : String(err)
+        } catch (error_) {
+          const msg = error_ instanceof Error ? error_.message : String(error_)
           setError(`LLM init failed: ${msg}`)
           setStatus("error")
           return
@@ -189,7 +193,7 @@ export function useChatbot(): UseChatbotReturn {
         role: "assistant",
         content: "",
         timestamp: Date.now(),
-        citations: retrievedChunks.map((c) => parseInt(c.id, 10)),
+        citations: retrievedChunks.map((c) => Number.parseInt(c.id, 10)),
       }
 
       setMessages((prev) => [...prev, assistantMessage])
@@ -215,8 +219,8 @@ export function useChatbot(): UseChatbotReturn {
 
         setStatus("ready")
         setLoadProgress("Ready")
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err)
+      } catch (error_) {
+        const msg = error_ instanceof Error ? error_.message : String(error_)
         setError(`Generation failed: ${msg}`)
         setStatus("error")
 

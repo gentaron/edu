@@ -30,7 +30,7 @@ export async function loadCorpus(): Promise<LoadedCorpus> {
   const corpus: CorpusFile = await response.json()
 
   if (corpus.version !== 1) {
-    throw new Error(`Unsupported corpus version: ${corpus.version}`)
+    throw new Error(`Unsupported corpus version: ${String(corpus.version)}`)
   }
 
   const corpusEmbeddings: Array<{ id: string; embedding: Float32Array }> = []

@@ -1,14 +1,23 @@
 "use client"
 
 import { useState } from "react"
+import dynamic from "next/dynamic"
 import { MessageSquare } from "lucide-react"
-import { ChatbotPanel } from "@/features/chatbot"
 
 /**
  * Floating chat button + chatbot panel portal.
  * This is a thin client component that can be imported in the
  * server layout.tsx without issues.
+ *
+ * ChatbotPanel is loaded via next/dynamic with ssr: false to prevent
+ * the WebGPU/WASM dependencies (@mlc-ai/web-llm, @xenova/transformers)
+ * from being evaluated during SSR or edge bundling.
  */
+const ChatbotPanel = dynamic(
+  () => import("./ChatbotPanel").then((mod) => ({ default: mod.ChatbotPanel })),
+  { ssr: false },
+)
+
 export function ChatbotPortal() {
   const [isOpen, setIsOpen] = useState(false)
 

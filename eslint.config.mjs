@@ -29,6 +29,7 @@ const eslintConfig = tseslint.config(
       "src/hooks/**",
       "scripts/**",
       "src/metal/webgpu/__e2e__/**",
+      "tree-sitter-apolon/**",
     ],
   },
   ...nextCoreWebVitals,
@@ -37,7 +38,7 @@ const eslintConfig = tseslint.config(
     languageOptions: {
       parserOptions: {
         projectService: {
-          allowDefaultProject: ["tsconfig.eslint.json"],
+          allowDefaultProject: ["tsconfig.eslint.json", "tree-sitter-apolon/grammar.js"],
         },
         tsconfigRootDir: import.meta.dirname,
       },

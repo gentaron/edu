@@ -1,7 +1,19 @@
 "use client"
 
-import { ChatbotPanel } from "@/features/chatbot"
+import dynamic from "next/dynamic"
 import { useState } from "react"
+
+/**
+ * ChatbotPanel is loaded via next/dynamic with ssr: false to prevent
+ * the WebGPU/WASM dependencies from being evaluated during SSR.
+ */
+const ChatbotPanel = dynamic(
+  () =>
+    import("@/features/chatbot").then((mod) => ({
+      default: mod.ChatbotPanel,
+    })),
+  { ssr: false },
+)
 
 export default function ChatbotPage() {
   const [isOpen, setIsOpen] = useState(true)
@@ -19,7 +31,9 @@ export default function ChatbotPage() {
           </p>
           <div className="mt-3 flex items-center gap-3">
             <button
-              onClick={() => setIsOpen(true)}
+              onClick={() => {
+                setIsOpen(true)
+              }}
               className="px-4 py-2 text-xs rounded-lg bg-edu-accent text-edu-bg hover:bg-edu-accent/80 transition-colors"
             >
               チャットを開く

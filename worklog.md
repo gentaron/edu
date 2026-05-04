@@ -136,3 +136,28 @@ Stage Summary:
 - 665 entries -> 729 chunks, 2 privacy exclusions
 - corpus.json: 2.13 MB, manifest.json: 729 chunks, buildHash verified
 - Phase 1 complete, awaiting approval before Phase 2
+
+---
+Task ID: 1
+Agent: main
+Task: CI Fix — Read hard constraints, audit codebase for violations
+
+Work Log:
+- git pull origin main (already up to date at 60ecd4a)
+- Audited all 7 hard constraints against current codebase:
+  1. No git submodules ✅ — .gitmodules does not exist, no submodule refs in index
+  2. No Node built-ins in chatbot ✅ — zero hits for node:fs, node:path, node:crypto, etc. in src/features/chatbot/
+  3. Chatbot is browser-only ✅ — ChatbotPortal.tsx and chatbot/page.tsx are "use client", only imported from layout.tsx and chatbot route
+  4. Determinism subsystems untouched ✅ — no modifications to crates/, proofs/, quantum/
+  5. No CI masking ✅ — no continue-on-error:true, no it.skip, no xit, no #[ignore]
+  6. No model weights in repo ✅ — corpus.json gitignored, embeddings are pre-computed build artifact
+  7. Lore-tech integration intact ✅ — Canon comments, ADRs, branded newtypes untouched
+- Noted potential CI issues (to be diagnosed in Phase 0):
+  - chatbot-build.yml uses `npm ci` but project has bun.lock
+  - Netlify build runs `npm run build` which triggers `build:rag` (needs tsx, devDep)
+  - layout.tsx imports ChatbotPortal ("use client") which could affect Workers build
+
+Stage Summary:
+- All 7 hard constraints verified — no violations found
+- Ready for Phase 0 diagnosis (awaiting next phase file from user)
+- No code changes needed at this stage

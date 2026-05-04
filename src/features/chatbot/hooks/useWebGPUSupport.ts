@@ -23,14 +23,20 @@ export function useWebGPUSupport(): WebGPUSupport {
         // Check for WebGPU API availability
         if (typeof navigator !== "undefined" && "gpu" in navigator) {
           const adapter = await (navigator as unknown as { gpu: { requestAdapter: () => Promise<unknown> } }).gpu.requestAdapter()
-          if (cancelled) return
+          if (cancelled) {
+            return
+          }
           setSupported(!!adapter)
         } else {
-          if (cancelled) return
+          if (cancelled) {
+            return
+          }
           setSupported(false)
         }
       } catch {
-        if (cancelled) return
+        if (cancelled) {
+          return
+        }
         setSupported(false)
       } finally {
         if (!cancelled) {

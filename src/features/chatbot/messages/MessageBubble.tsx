@@ -14,7 +14,9 @@ export const MessageBubble = memo(function MessageBubble({
   const isUser = message.role === "user"
   const isSystem = message.role === "system"
 
-  if (isSystem) return null
+  if (isSystem) {
+    return null
+  }
 
   return (
     <div
