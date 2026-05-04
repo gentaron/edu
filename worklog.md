@@ -138,11 +138,13 @@ Stage Summary:
 - Phase 1 complete, awaiting approval before Phase 2
 
 ---
+
 Task ID: 1
 Agent: main
 Task: CI Fix — Read hard constraints, audit codebase for violations
 
 Work Log:
+
 - git pull origin main (already up to date at 60ecd4a)
 - Audited all 7 hard constraints against current codebase:
   1. No git submodules ✅ — .gitmodules does not exist, no submodule refs in index
@@ -158,6 +160,46 @@ Work Log:
   - layout.tsx imports ChatbotPortal ("use client") which could affect Workers build
 
 Stage Summary:
+
 - All 7 hard constraints verified — no violations found
 - Ready for Phase 0 diagnosis (awaiting next phase file from user)
 - No code changes needed at this stage
+
+---
+
+Task ID: 2
+Agent: main
+Task: Phase 2 — Fix chatbot-build / build (push)
+
+Work Log:
+
+- git pull origin main (already up to date at cb41705)
+- Diagnosed chatbot-build.yml failures:
+  - Used `actions/setup-node` + `npm ci` but project uses bun → install fails
+  - Ran `npx prisma generate` (unnecessary for chatbot isolation)
+  - Ran full `npm run build` (too heavy for isolation workflow)
+  - Used `cache: 'npm'` instead of bun cache
+- Rewrote chatbot-build.yml:
+  - Replaced setup-node with oven-sh/setup-bun@v2
+  - Replaced `npm ci` with `bun install --frozen-lockfile`
+  - Removed prisma generate step
+  - Replaced `npm run build` with 3 chatbot-scoped steps:
+    1. `bun run lint -- src/features/chatbot`
+    2. `bunx vitest run src/features/chatbot`
+    3. `bun run scripts/build-rag-index.ts -- --force --dry-run`
+  - Added bun module cache (node_modules + ~/.bun/install/cache keyed on bun.lock)
+  - No submodules flag on checkout (already correct)
+  - No continue-on-error, no if:false, no skipped tests
+- Committed bun.lock with @mlc-ai/web-llm entry (needed for --frozen-lockfile)
+- Fixed unused eslint-disable directive in embeddings.ts
+- Local dry-run all 3 CI steps passed:
+  - lint: clean (0 errors, 0 warnings)
+  - vitest: 19/19 tests passed
+  - build-rag --dry-run: 665 entries → 729 chunks, 2 privacy drops
+
+Stage Summary:
+
+- chatbot-build.yml completely rewritten for bun-based isolation CI
+- bun.lock updated with @mlc-ai/web-llm dependency entry
+- All 3 CI steps verified locally
+- Commit: TBD (pushing to main)

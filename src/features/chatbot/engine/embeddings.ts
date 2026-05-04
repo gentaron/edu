@@ -10,7 +10,10 @@ const E5_MODEL_ID = "Xenova/multilingual-e5-small"
 const E5_DIMENSION = 384
 
 type EmbeddingPipeline = {
-  (texts: string[], options?: Record<string, unknown>): Promise<{
+  (
+    texts: string[],
+    options?: Record<string, unknown>
+  ): Promise<{
     dims?: number[]
     data: number[] | number[][]
     [j: number]: unknown
@@ -25,7 +28,7 @@ let pipelinePromise: Promise<EmbeddingPipeline> | null = null
  * Uses dynamic import to avoid bundling @xenova/transformers in initial bundle.
  */
 export async function getEmbeddingPipeline(
-  progressCallback?: (message: string) => void,
+  progressCallback?: (message: string) => void
 ): Promise<EmbeddingPipeline> {
   if (pipelineInstance) {
     return pipelineInstance
@@ -41,11 +44,7 @@ export async function getEmbeddingPipeline(
     const { pipeline } = await import("@xenova/transformers")
 
     const p = await pipeline("feature-extraction", E5_MODEL_ID, {
-      progress_callback: (progress: {
-        status: string
-        progress?: number
-        file?: string
-      }) => {
+      progress_callback: (progress: { status: string; progress?: number; file?: string }) => {
         if (progress.status === "progress" && progress.progress !== undefined) {
           const pct = Math.round(progress.progress)
           progressCallback?.(`Downloading model: ${pct}%`)
@@ -57,7 +56,7 @@ export async function getEmbeddingPipeline(
       },
     })
 
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion -- FeatureExtractionPipeline type mismatch; double assertion needed
+    // Double assertion needed: FeatureExtractionPipeline type doesn't overlap with EmbeddingPipeline
     pipelineInstance = p as unknown as EmbeddingPipeline
     return pipelineInstance
   })()
@@ -76,7 +75,7 @@ export async function getEmbeddingPipeline(
  */
 export async function embedQuery(
   text: string,
-  existingPipeline?: EmbeddingPipeline,
+  existingPipeline?: EmbeddingPipeline
 ): Promise<Float32Array> {
   const pipe = existingPipeline ?? (await getEmbeddingPipeline())
 
@@ -104,9 +103,7 @@ export async function embedQuery(
   // Fallback: try to extract from the output object
   if (output.dims && output.dims.length === 2) {
     const arr = new Float32Array(E5_DIMENSION)
-    const flatData = Array.isArray(data)
-      ? (data as number[]).flat()
-      : []
+    const flatData = Array.isArray(data) ? (data as number[]).flat() : []
     for (let i = 0; i < E5_DIMENSION; i++) {
       arr[i] = (flatData[i] as number) ?? 0
     }

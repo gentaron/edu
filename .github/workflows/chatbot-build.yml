@@ -14,12 +14,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - uses: oven-sh/setup-bun@v2
         with:
-          node-version: 20
-          cache: 'npm'
-      - run: npm ci --ignore-scripts
-      - run: npx prisma generate
-      - run: npm run build:rag -- --force --dry-run
-      - run: npx vitest run src/features/chatbot
-      - run: npm run build
+          bun-version: '1.1.x'
+
+      - name: Cache bun modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.bun/install/cache
+          key: bun-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run lint -- src/features/chatbot
+
+      - run: bunx vitest run src/features/chatbot
+
+      - run: bun run scripts/build-rag-index.ts -- --force --dry-run
