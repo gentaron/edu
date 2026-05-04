@@ -19,6 +19,7 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci --ignore-scripts
+      - run: npx prisma generate
       - run: npm run build:rag -- --force --dry-run
       - run: npx vitest run src/features/chatbot
       - run: npm run build

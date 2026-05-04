@@ -24,7 +24,7 @@ export function encodeFloat32ToBase64(floats: Float32Array): string {
   const bytes = new Uint8Array(floats.buffer)
   let binary = ""
   for (let i = 0; i < bytes.length; i++) {
-    binary += String.fromCharCode(bytes[i])
+    binary += String.fromCharCode(bytes[i]!)
   }
   return btoa(binary)
 }
@@ -45,9 +45,11 @@ export function cosineSimilarity(a: Float32Array, b: Float32Array): number {
   let normB = 0
 
   for (let i = 0; i < a.length; i++) {
-    dotProduct += a[i] * b[i]
-    normA += a[i] * a[i]
-    normB += b[i] * b[i]
+    const ai = a[i]!
+    const bi = b[i]!
+    dotProduct += ai * bi
+    normA += ai * ai
+    normB += bi * bi
   }
 
   const denominator = Math.sqrt(normA) * Math.sqrt(normB)

@@ -110,10 +110,10 @@ describe("chatbot/engine/rag", () => {
 
       expect(results).toHaveLength(3)
       // First two should have equal high scores
-      expect(results[0].score).toBeCloseTo(1 / Math.sqrt(2), 5)
-      expect(results[1].score).toBeCloseTo(1 / Math.sqrt(2), 5)
+      expect(results[0]!.score).toBeCloseTo(1 / Math.sqrt(2), 5)
+      expect(results[1]!.score).toBeCloseTo(1 / Math.sqrt(2), 5)
       // Third should be lower
-      expect(results[2].score).toBeLessThan(results[0].score)
+      expect(results[2]!.score).toBeLessThan(results[0]!.score)
     })
 
     it("respects topK parameter", () => {
@@ -137,9 +137,9 @@ describe("chatbot/engine/rag", () => {
         chunkMetadatas,
         1,
       )
-      expect(results[0].text).toBe(tinyCorpus.chunks[0].text)
-      expect(results[0].metadata.kind).toBe("story")
-      expect(results[0].metadata.headingPath).toEqual(["Project", "AURALIS"])
+      expect(results[0]!.text).toBe(tinyCorpus.chunks[0]!.text)
+      expect(results[0]!.metadata.kind).toBe("story")
+      expect(results[0]!.metadata.headingPath).toEqual(["Project", "AURALIS"])
     })
 
     it("works with topK greater than corpus size", () => {
@@ -165,8 +165,8 @@ describe("chatbot/engine/rag", () => {
         1,
       )
       // [0,0,1] is orthogonal to [1,1,1], similar to [0,1,1], orthogonal to [1,1,0], identical to [0,0,1]
-      expect(results[0].id).toBe("0004")
-      expect(results[0].text).toContain("card battle")
+      expect(results[0]!.id).toBe("0004")
+      expect(results[0]!.text).toContain("card battle")
     })
   })
 
