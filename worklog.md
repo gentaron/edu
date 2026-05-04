@@ -232,4 +232,50 @@ Stage Summary:
 - scripts/check-lore-integration.mjs added (85 lines, 0 external deps)
 - chatbot-build.yml updated with lore-tech integration check step
 - All 5 check categories pass locally
-- Commit: TBD (pushing to main)
+- Commit: 17cf7b0
+
+---
+
+Task ID: 4
+Agent: main
+Task: Phase 4 — Final Verification & Sign-off + CI bun version fix
+
+Work Log:
+
+- git pull origin main (already up to date at 17cf7b0)
+- Phase 3 commit was already on main (completed in prior session)
+- Fixed filemode issue in edu submodule (191 files showed mode-only changes, resolved with core.fileMode=false)
+- Phase 4.1 Repo Hygiene: all 3 checks pass (no gitmodules, no node: leaks, no determinism changes)
+- Phase 4.2 Build & Test:
+  - bun install --frozen-lockfile: clean
+  - bun run lint: 0 errors, 0 warnings
+  - bun run build: compiled successfully, 0 errors, 61 pages generated
+  - bun test: 927 pass, 0 fail (149,296 expect() calls, 35 files)
+  - cargo build/test/clippy: SKIPPED (Rust toolchain not installed in env)
+- Phase 4.3 Workflow Status:
+  - chatbot-build on baa6587: FAILED (bun 1.1.x couldn't read lockfileVersion from bun 1.3.x)
+  - Fixed bun-version from '1.1.x' to '1.x' in chatbot-build.yml
+  - Added trigger paths: scripts/check-lore-integration.mjs, chatbot-build.yml, bun.lock, bun.lockb
+  - Fixed netlify.toml: npm run build -> bun run build
+  - Commit 47e4c65 pushed to main
+  - chatbot-build on 47e4c65: GREEN (all 9 steps passed including lore-integration check)
+  - reproducibility on 47e4c65: GREEN
+  - Workers Builds: edu: failure (pre-existing on all commits since at least eae623f, Cloudflare Pages config issue)
+  - balance-gate: last run success on 0103d32 (not triggered on our commits, no path overlap)
+  - cross-platform-determinism: last run success on d5fd3d7 (not triggered)
+  - crdt-convergence: last run failure on d5fd3d7 (pre-existing, not triggered)
+  - slsa-provenance: no recent runs (not triggered)
+  - wasm-hash-lock: last run success on 0dc20df (not triggered)
+  - ZK Prove & Verify: last run success on eae623f (not triggered)
+  - None of the other workflows were made worse by our changes
+- Phase 4.4 Smoke Test: cannot be performed headless (no browser in env)
+- Phase 4.5 Final report generated
+
+Stage Summary:
+
+- Phase 4 verification complete (3 of 4 sub-phases fully executed)
+- chatbot-build fixed: bun version bump from 1.1.x to 1.x resolved lockfile incompatibility
+- chatbot-build GREEN on 47e4c65 (latest commit on main)
+- Workers Builds: edu is a pre-existing Cloudflare Pages failure unrelated to our changes
+- All hard constraints remain satisfied
+- Total commits across Phases 1-4: cb41705, baa6587, 17cf7b0, 47e4c65
