@@ -4,11 +4,19 @@ on:
     paths:
       - 'src/features/chatbot/**'
       - 'scripts/build-rag-index.ts'
+      - 'scripts/check-lore-integration.mjs'
+      - '.github/workflows/chatbot-build.yml'
+      - 'bun.lock'
+      - 'bun.lockb'
   push:
     branches: [main]
     paths:
       - 'src/features/chatbot/**'
       - 'scripts/build-rag-index.ts'
+      - 'scripts/check-lore-integration.mjs'
+      - '.github/workflows/chatbot-build.yml'
+      - 'bun.lock'
+      - 'bun.lockb'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,7 +25,7 @@ jobs:
 
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: '1.1.x'
+          bun-version: '1.x'
 
       - name: Cache bun modules
         uses: actions/cache@v4
