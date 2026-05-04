@@ -202,4 +202,34 @@ Stage Summary:
 - chatbot-build.yml completely rewritten for bun-based isolation CI
 - bun.lock updated with @mlc-ai/web-llm dependency entry
 - All 3 CI steps verified locally
+- Commit: baa6587
+
+---
+
+Task ID: 3
+Agent: main
+Task: Phase 3 — Lore↔Tech Integration Hardening
+
+Work Log:
+
+- git pull origin main (already up to date at baa6587)
+- Audited existing lore-tech integration markers:
+  - Canon Mapping comments: edu-engine-core, edu-prover, edu-verifier, edu-quasi (4 crates)
+  - Canon branded types: ProofId, ReplayHash, WitnessDigest, BuildHash in edu-prover/src/types.rs
+  - ADR Lore-Tech Mapping: ADR-0001, 0002, 0003 (3 of 8 ADRs)
+  - Lean-Rust marker: HP_INVARIANT_PROVEN in bounded_hp.rs
+- Created scripts/check-lore-integration.mjs:
+  - 5 check categories: Rust crate Canon Mapping, Prover branded types, ADR Lore-Tech sections, Lean-Rust marker, Chatbot barrel exports
+  - Uses only node:fs (no external deps needed)
+  - Scans exact files with exact needle strings from current codebase
+- Wired lore-integration check into chatbot-build.yml as final CI step
+- Verified RAG corpus generates only from src/domains/wiki/_.data.ts and civilizations/_.data.ts
+- Confirmed no handwritten chatbot corpus files exist
+- Confirmed zero modifications to determinism subsystems (crates/, proofs/, quantum/)
+
+Stage Summary:
+
+- scripts/check-lore-integration.mjs added (85 lines, 0 external deps)
+- chatbot-build.yml updated with lore-tech integration check step
+- All 5 check categories pass locally
 - Commit: TBD (pushing to main)

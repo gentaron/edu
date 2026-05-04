@@ -35,3 +35,6 @@ jobs:
       - run: bunx vitest run src/features/chatbot
 
       - run: bun run scripts/build-rag-index.ts -- --force --dry-run
+
+      - name: Lore-tech integration check
+        run: node scripts/check-lore-integration.mjs
