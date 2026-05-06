@@ -6,7 +6,6 @@ import { Toaster } from "@/platform/ui/toaster"
 import { Navigation } from "@/platform/navigation"
 import { MotionProvider } from "@/platform/motion-provider"
 import { WebsiteJsonLd } from "@/platform/json-ld"
-import { ChatbotPortal } from "@/features/chatbot/ChatbotPortal"
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-sans",
@@ -57,7 +56,6 @@ export default function RootLayout({
           <MotionProvider>{children}</MotionProvider>
         </main>
         <Toaster />
-        <ChatbotPortal />
       </body>
     </html>
   )
