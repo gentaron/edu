@@ -2,14 +2,17 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const GRADIO_URL =
-  process.env.ACESTEP_GRADIO_URL ?? "http://localhost:8001";
+  process.env.ACESTEP_GRADIO_URL ?? "http://localhost:7860";
 
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ path: string[] }> },
 ) {
   const { path } = await params;
-  const upstreamUrl = `${GRADIO_URL}/file=${path.join("/")}`;
+  const relPath = path.join("/");
+
+  // ACE-Step /v1/audio?path=... プロキシ
+  const upstreamUrl = `${GRADIO_URL}/v1/audio?path=${encodeURIComponent(relPath)}`;
 
   try {
     const res = await fetch(upstreamUrl);

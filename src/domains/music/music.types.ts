@@ -36,7 +36,7 @@ export interface Playlist {
 }
 
 export interface MusicGenerationParams {
-  taskType?: "text2music" | "audio2audio" | "repaint";
+  taskType?: "text2music" | "audio2audio" | "cover" | "repaint";
   lyrics?: string;
   style?: string;
   duration?: number;
