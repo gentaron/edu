@@ -9,7 +9,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -118,4 +118,54 @@ model Enemy {
   description    String?
   attackPattern  String  // JSON: [{phase, dmg, message, special}]
   reward         String?
+}
+
+// ═══ Music Generation (ACE-Step) ═══
+
+model Song {
+  id            String         @id @default(cuid())
+  title         String         @default("Untitled")
+  lyrics        String?
+  style         String?
+  duration      Float          @default(0)
+  audioPath     String?
+  bpm           Int?
+  keySignature  String?
+  timeSignature String?
+  isPublic      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  jobs          GenerationJob[]
+  playlists     PlaylistSong[]
+}
+
+model GenerationJob {
+  id            String   @id @default(cuid())
+  songId        String?
+  song          Song?    @relation(fields: [songId], references: [id], onDelete: SetNull)
+  status        String   @default("queued")
+  params        Json
+  progress      Float    @default(0)
+  stage         String?
+  errorMessage  String?
+  gradioEventId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Playlist {
+  id        String         @id @default(cuid())
+  name      String
+  createdAt DateTime       @default(now())
+  songs     PlaylistSong[]
+}
+
+model PlaylistSong {
+  playlistId String
+  songId     String
+  order      Int           @default(0)
+  playlist   Playlist      @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  song       Song          @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@id([playlistId, songId])
 }

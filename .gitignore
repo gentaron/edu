@@ -82,3 +82,4 @@ test-results/*.png
 
 # RAG generated corpus (large embeddings, regenerated at build time)
 public/rag/corpus.json
+prisma/dev.db
