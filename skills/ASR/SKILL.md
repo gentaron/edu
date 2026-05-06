@@ -70,6 +70,7 @@ z-ai asr -f ./audio.wav --stream
 ### Supported Audio Formats
 
 The ASR service supports various audio formats including:
+
 - WAV (.wav)
 - MP3 (.mp3)
 - Other common audio formats
@@ -77,12 +78,14 @@ The ASR service supports various audio formats including:
 ### When to Use CLI vs SDK
 
 **Use CLI for:**
+
 - Quick audio file transcriptions
 - Testing audio recognition accuracy
 - Simple batch processing scripts
 - One-off transcription tasks
 
 **Use SDK for:**
+
 - Real-time audio transcription in applications
 - Integration with recording systems
 - Custom audio processing workflows
@@ -93,75 +96,75 @@ The ASR service supports various audio formats including:
 ### Simple Audio Transcription
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
-import fs from 'fs';
+import ZAI from "z-ai-web-dev-sdk"
+import fs from "fs"
 
 async function transcribeAudio(audioFilePath) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   // Read audio file and convert to base64
-  const audioFile = fs.readFileSync(audioFilePath);
-  const base64Audio = audioFile.toString('base64');
+  const audioFile = fs.readFileSync(audioFilePath)
+  const base64Audio = audioFile.toString("base64")
 
   const response = await zai.audio.asr.create({
-    file_base64: base64Audio
-  });
+    file_base64: base64Audio,
+  })
 
-  return response.text;
+  return response.text
 }
 
 // Usage
-const transcription = await transcribeAudio('./audio.wav');
-console.log('Transcription:', transcription);
+const transcription = await transcribeAudio("./audio.wav")
+console.log("Transcription:", transcription)
 ```
 
 ### Transcribe Multiple Audio Files
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
-import fs from 'fs';
+import ZAI from "z-ai-web-dev-sdk"
+import fs from "fs"
 
 async function transcribeBatch(audioFilePaths) {
-  const zai = await ZAI.create();
-  const results = [];
+  const zai = await ZAI.create()
+  const results = []
 
   for (const filePath of audioFilePaths) {
     try {
-      const audioFile = fs.readFileSync(filePath);
-      const base64Audio = audioFile.toString('base64');
+      const audioFile = fs.readFileSync(filePath)
+      const base64Audio = audioFile.toString("base64")
 
       const response = await zai.audio.asr.create({
-        file_base64: base64Audio
-      });
+        file_base64: base64Audio,
+      })
 
       results.push({
         file: filePath,
         success: true,
-        transcription: response.text
-      });
+        transcription: response.text,
+      })
     } catch (error) {
       results.push({
         file: filePath,
         success: false,
-        error: error.message
-      });
+        error: error.message,
+      })
     }
   }
 
-  return results;
+  return results
 }
 
 // Usage
-const files = ['./interview1.wav', './interview2.wav', './interview3.wav'];
-const transcriptions = await transcribeBatch(files);
+const files = ["./interview1.wav", "./interview2.wav", "./interview3.wav"]
+const transcriptions = await transcribeBatch(files)
 
-transcriptions.forEach(result => {
+transcriptions.forEach((result) => {
   if (result.success) {
-    console.log(`${result.file}: ${result.transcription}`);
+    console.log(`${result.file}: ${result.transcription}`)
   } else {
-    console.error(`${result.file}: Error - ${result.error}`);
+    console.error(`${result.file}: Error - ${result.error}`)
   }
-});
+})
 ```
 
 ## Advanced Use Cases
@@ -169,25 +172,25 @@ transcriptions.forEach(result => {
 ### Audio File Processing with Metadata
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
-import fs from 'fs';
-import path from 'path';
+import ZAI from "z-ai-web-dev-sdk"
+import fs from "fs"
+import path from "path"
 
 async function transcribeWithMetadata(audioFilePath) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   // Get file metadata
-  const stats = fs.statSync(audioFilePath);
-  const audioFile = fs.readFileSync(audioFilePath);
-  const base64Audio = audioFile.toString('base64');
+  const stats = fs.statSync(audioFilePath)
+  const audioFile = fs.readFileSync(audioFilePath)
+  const base64Audio = audioFile.toString("base64")
 
-  const startTime = Date.now();
+  const startTime = Date.now()
 
   const response = await zai.audio.asr.create({
-    file_base64: base64Audio
-  });
+    file_base64: base64Audio,
+  })
 
-  const endTime = Date.now();
+  const endTime = Date.now()
 
   return {
     filename: path.basename(audioFilePath),
@@ -196,157 +199,149 @@ async function transcribeWithMetadata(audioFilePath) {
     transcription: response.text,
     wordCount: response.text.split(/\s+/).length,
     processingTime: endTime - startTime,
-    timestamp: new Date().toISOString()
-  };
+    timestamp: new Date().toISOString(),
+  }
 }
 
 // Usage
-const result = await transcribeWithMetadata('./meeting_recording.wav');
-console.log('Transcription Details:', JSON.stringify(result, null, 2));
+const result = await transcribeWithMetadata("./meeting_recording.wav")
+console.log("Transcription Details:", JSON.stringify(result, null, 2))
 ```
 
 ### Real-time Audio Processing Service
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
-import fs from 'fs';
+import ZAI from "z-ai-web-dev-sdk"
+import fs from "fs"
 
 class ASRService {
   constructor() {
-    this.zai = null;
-    this.transcriptionCache = new Map();
+    this.zai = null
+    this.transcriptionCache = new Map()
   }
 
   async initialize() {
-    this.zai = await ZAI.create();
+    this.zai = await ZAI.create()
   }
 
   generateCacheKey(audioBuffer) {
-    const crypto = require('crypto');
-    return crypto.createHash('md5').update(audioBuffer).digest('hex');
+    const crypto = require("crypto")
+    return crypto.createHash("md5").update(audioBuffer).digest("hex")
   }
 
   async transcribe(audioFilePath, useCache = true) {
-    const audioBuffer = fs.readFileSync(audioFilePath);
-    const cacheKey = this.generateCacheKey(audioBuffer);
+    const audioBuffer = fs.readFileSync(audioFilePath)
+    const cacheKey = this.generateCacheKey(audioBuffer)
 
     // Check cache
     if (useCache && this.transcriptionCache.has(cacheKey)) {
       return {
         transcription: this.transcriptionCache.get(cacheKey),
-        cached: true
-      };
+        cached: true,
+      }
     }
 
     // Transcribe audio
-    const base64Audio = audioBuffer.toString('base64');
+    const base64Audio = audioBuffer.toString("base64")
 
     const response = await this.zai.audio.asr.create({
-      file_base64: base64Audio
-    });
+      file_base64: base64Audio,
+    })
 
     // Cache result
     if (useCache) {
-      this.transcriptionCache.set(cacheKey, response.text);
+      this.transcriptionCache.set(cacheKey, response.text)
     }
 
     return {
       transcription: response.text,
-      cached: false
-    };
+      cached: false,
+    }
   }
 
   clearCache() {
-    this.transcriptionCache.clear();
+    this.transcriptionCache.clear()
   }
 
   getCacheSize() {
-    return this.transcriptionCache.size;
+    return this.transcriptionCache.size
   }
 }
 
 // Usage
-const asrService = new ASRService();
-await asrService.initialize();
+const asrService = new ASRService()
+await asrService.initialize()
 
-const result1 = await asrService.transcribe('./audio.wav');
-console.log('First call (not cached):', result1);
+const result1 = await asrService.transcribe("./audio.wav")
+console.log("First call (not cached):", result1)
 
-const result2 = await asrService.transcribe('./audio.wav');
-console.log('Second call (cached):', result2);
+const result2 = await asrService.transcribe("./audio.wav")
+console.log("Second call (cached):", result2)
 ```
 
 ### Directory Transcription
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
-import fs from 'fs';
-import path from 'path';
+import ZAI from "z-ai-web-dev-sdk"
+import fs from "fs"
+import path from "path"
 
 async function transcribeDirectory(directoryPath, outputJsonPath) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   // Get all audio files
-  const files = fs.readdirSync(directoryPath);
-  const audioFiles = files.filter(file => 
-    /\.(wav|mp3|m4a|flac|ogg)$/i.test(file)
-  );
+  const files = fs.readdirSync(directoryPath)
+  const audioFiles = files.filter((file) => /\.(wav|mp3|m4a|flac|ogg)$/i.test(file))
 
   const results = {
     directory: directoryPath,
     totalFiles: audioFiles.length,
     processedAt: new Date().toISOString(),
-    transcriptions: []
-  };
+    transcriptions: [],
+  }
 
   for (const filename of audioFiles) {
-    const filePath = path.join(directoryPath, filename);
+    const filePath = path.join(directoryPath, filename)
 
     try {
-      const audioFile = fs.readFileSync(filePath);
-      const base64Audio = audioFile.toString('base64');
+      const audioFile = fs.readFileSync(filePath)
+      const base64Audio = audioFile.toString("base64")
 
       const response = await zai.audio.asr.create({
-        file_base64: base64Audio
-      });
+        file_base64: base64Audio,
+      })
 
       results.transcriptions.push({
         filename: filename,
         success: true,
         text: response.text,
-        wordCount: response.text.split(/\s+/).length
-      });
+        wordCount: response.text.split(/\s+/).length,
+      })
 
-      console.log(`✓ Transcribed: ${filename}`);
+      console.log(`✓ Transcribed: ${filename}`)
     } catch (error) {
       results.transcriptions.push({
         filename: filename,
         success: false,
-        error: error.message
-      });
+        error: error.message,
+      })
 
-      console.error(`✗ Failed: ${filename} - ${error.message}`);
+      console.error(`✗ Failed: ${filename} - ${error.message}`)
     }
   }
 
   // Save results to JSON
-  fs.writeFileSync(
-    outputJsonPath,
-    JSON.stringify(results, null, 2)
-  );
+  fs.writeFileSync(outputJsonPath, JSON.stringify(results, null, 2))
 
-  return results;
+  return results
 }
 
 // Usage
-const results = await transcribeDirectory(
-  './audio-recordings',
-  './transcriptions.json'
-);
+const results = await transcribeDirectory("./audio-recordings", "./transcriptions.json")
 
-console.log(`\nProcessed ${results.totalFiles} files`);
-console.log(`Successful: ${results.transcriptions.filter(t => t.success).length}`);
-console.log(`Failed: ${results.transcriptions.filter(t => !t.success).length}`);
+console.log(`\nProcessed ${results.totalFiles} files`)
+console.log(`Successful: ${results.transcriptions.filter((t) => t.success).length}`)
+console.log(`Failed: ${results.transcriptions.filter((t) => !t.success).length}`)
 ```
 
 ## Best Practices
@@ -354,77 +349,77 @@ console.log(`Failed: ${results.transcriptions.filter(t => !t.success).length}`);
 ### 1. Audio Format Handling
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
-import fs from 'fs';
+import ZAI from "z-ai-web-dev-sdk"
+import fs from "fs"
 
 async function transcribeAnyFormat(audioFilePath) {
   // Supported formats: WAV, MP3, M4A, FLAC, OGG, etc.
-  const validExtensions = ['.wav', '.mp3', '.m4a', '.flac', '.ogg'];
-  const ext = audioFilePath.toLowerCase().substring(audioFilePath.lastIndexOf('.'));
+  const validExtensions = [".wav", ".mp3", ".m4a", ".flac", ".ogg"]
+  const ext = audioFilePath.toLowerCase().substring(audioFilePath.lastIndexOf("."))
 
   if (!validExtensions.includes(ext)) {
-    throw new Error(`Unsupported audio format: ${ext}`);
+    throw new Error(`Unsupported audio format: ${ext}`)
   }
 
-  const zai = await ZAI.create();
-  const audioFile = fs.readFileSync(audioFilePath);
-  const base64Audio = audioFile.toString('base64');
+  const zai = await ZAI.create()
+  const audioFile = fs.readFileSync(audioFilePath)
+  const base64Audio = audioFile.toString("base64")
 
   const response = await zai.audio.asr.create({
-    file_base64: base64Audio
-  });
+    file_base64: base64Audio,
+  })
 
-  return response.text;
+  return response.text
 }
 ```
 
 ### 2. Error Handling
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
-import fs from 'fs';
+import ZAI from "z-ai-web-dev-sdk"
+import fs from "fs"
 
 async function safeTranscribe(audioFilePath) {
   try {
     // Validate file exists
     if (!fs.existsSync(audioFilePath)) {
-      throw new Error(`File not found: ${audioFilePath}`);
+      throw new Error(`File not found: ${audioFilePath}`)
     }
 
     // Check file size (e.g., limit to 100MB)
-    const stats = fs.statSync(audioFilePath);
-    const fileSizeMB = stats.size / (1024 * 1024);
-    
+    const stats = fs.statSync(audioFilePath)
+    const fileSizeMB = stats.size / (1024 * 1024)
+
     if (fileSizeMB > 100) {
-      throw new Error(`File too large: ${fileSizeMB.toFixed(2)}MB (max 100MB)`);
+      throw new Error(`File too large: ${fileSizeMB.toFixed(2)}MB (max 100MB)`)
     }
 
     // Transcribe
-    const zai = await ZAI.create();
-    const audioFile = fs.readFileSync(audioFilePath);
-    const base64Audio = audioFile.toString('base64');
+    const zai = await ZAI.create()
+    const audioFile = fs.readFileSync(audioFilePath)
+    const base64Audio = audioFile.toString("base64")
 
     const response = await zai.audio.asr.create({
-      file_base64: base64Audio
-    });
+      file_base64: base64Audio,
+    })
 
     if (!response.text || response.text.trim().length === 0) {
-      throw new Error('Empty transcription result');
+      throw new Error("Empty transcription result")
     }
 
     return {
       success: true,
       transcription: response.text,
       filePath: audioFilePath,
-      fileSize: stats.size
-    };
+      fileSize: stats.size,
+    }
   } catch (error) {
-    console.error('Transcription error:', error);
+    console.error("Transcription error:", error)
     return {
       success: false,
       error: error.message,
-      filePath: audioFilePath
-    };
+      filePath: audioFilePath,
+    }
   }
 }
 ```
@@ -434,33 +429,33 @@ async function safeTranscribe(audioFilePath) {
 ```javascript
 function cleanTranscription(text) {
   // Remove excessive whitespace
-  text = text.replace(/\s+/g, ' ').trim();
+  text = text.replace(/\s+/g, " ").trim()
 
   // Capitalize first letter of sentences
-  text = text.replace(/(^\w|[.!?]\s+\w)/g, match => match.toUpperCase());
+  text = text.replace(/(^\w|[.!?]\s+\w)/g, (match) => match.toUpperCase())
 
   // Remove filler words (optional)
-  const fillers = ['um', 'uh', 'ah', 'like', 'you know'];
-  const fillerPattern = new RegExp(`\\b(${fillers.join('|')})\\b`, 'gi');
-  text = text.replace(fillerPattern, '').replace(/\s+/g, ' ');
+  const fillers = ["um", "uh", "ah", "like", "you know"]
+  const fillerPattern = new RegExp(`\\b(${fillers.join("|")})\\b`, "gi")
+  text = text.replace(fillerPattern, "").replace(/\s+/g, " ")
 
-  return text;
+  return text
 }
 
 async function transcribeAndClean(audioFilePath) {
-  const zai = await ZAI.create();
-  
-  const audioFile = fs.readFileSync(audioFilePath);
-  const base64Audio = audioFile.toString('base64');
+  const zai = await ZAI.create()
+
+  const audioFile = fs.readFileSync(audioFilePath)
+  const base64Audio = audioFile.toString("base64")
 
   const response = await zai.audio.asr.create({
-    file_base64: base64Audio
-  });
+    file_base64: base64Audio,
+  })
 
   return {
     raw: response.text,
-    cleaned: cleanTranscription(response.text)
-  };
+    cleaned: cleanTranscription(response.text),
+  }
 }
 ```
 
@@ -480,76 +475,81 @@ async function transcribeAndClean(audioFilePath) {
 ### Express.js API Endpoint
 
 ```javascript
-import express from 'express';
-import multer from 'multer';
-import ZAI from 'z-ai-web-dev-sdk';
-import fs from 'fs';
+import express from "express"
+import multer from "multer"
+import ZAI from "z-ai-web-dev-sdk"
+import fs from "fs"
 
-const app = express();
-const upload = multer({ dest: 'uploads/' });
+const app = express()
+const upload = multer({ dest: "uploads/" })
 
-let zaiInstance;
+let zaiInstance
 
 async function initZAI() {
-  zaiInstance = await ZAI.create();
+  zaiInstance = await ZAI.create()
 }
 
-app.post('/api/transcribe', upload.single('audio'), async (req, res) => {
+app.post("/api/transcribe", upload.single("audio"), async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: 'No audio file provided' });
+      return res.status(400).json({ error: "No audio file provided" })
     }
 
-    const audioFile = fs.readFileSync(req.file.path);
-    const base64Audio = audioFile.toString('base64');
+    const audioFile = fs.readFileSync(req.file.path)
+    const base64Audio = audioFile.toString("base64")
 
     const response = await zaiInstance.audio.asr.create({
-      file_base64: base64Audio
-    });
+      file_base64: base64Audio,
+    })
 
     // Clean up uploaded file
-    fs.unlinkSync(req.file.path);
+    fs.unlinkSync(req.file.path)
 
     res.json({
       success: true,
       transcription: response.text,
-      wordCount: response.text.split(/\s+/).length
-    });
+      wordCount: response.text.split(/\s+/).length,
+    })
   } catch (error) {
     // Clean up on error
     if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
+      fs.unlinkSync(req.file.path)
     }
 
     res.status(500).json({
       success: false,
-      error: error.message
-    });
+      error: error.message,
+    })
   }
-});
+})
 
 initZAI().then(() => {
   app.listen(3000, () => {
-    console.log('ASR API running on port 3000');
-  });
-});
+    console.log("ASR API running on port 3000")
+  })
+})
 ```
 
 ## Troubleshooting
 
 **Issue**: "SDK must be used in backend"
+
 - **Solution**: Ensure z-ai-web-dev-sdk is only imported in server-side code
 
 **Issue**: Empty or incorrect transcription
+
 - **Solution**: Verify audio quality and format. Check if audio contains clear speech
 
 **Issue**: Large file processing fails
+
 - **Solution**: Consider splitting large audio files into smaller segments
 
 **Issue**: Slow transcription speed
+
 - **Solution**: Implement caching for repeated transcriptions, optimize file sizes
 
 **Issue**: Memory errors with large files
+
 - **Solution**: Process files in chunks or increase Node.js memory limit
 
 ## Performance Tips
@@ -563,6 +563,7 @@ initZAI().then(() => {
 ## Audio Quality Guidelines
 
 For best transcription results:
+
 - **Sample Rate**: 16kHz or higher
 - **Format**: WAV, MP3, or M4A recommended
 - **Noise Level**: Minimize background noise

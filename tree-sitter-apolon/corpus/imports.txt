@@ -1,0 +1,46 @@
+================================================================
+simple-import
+================================================================
+
+module cards::mage {
+
+import prelude
+
+}
+
+================================================================
+import-with-alias
+================================================================
+
+module cards::warrior {
+
+import prelude
+import effects::damage as dmg
+import effects::heal as restore
+
+}
+
+================================================================
+import-with-selective-items
+================================================================
+
+module cards::archer {
+
+import prelude
+import utils (clamp, max, min)
+import effects::target (apply_to_all, apply_to_self)
+
+}
+
+================================================================
+multiple-imports-deep-paths
+================================================================
+
+module cards::sr::diana {
+
+import prelude
+import core::state::battle
+import core::effects::shield as shield
+import core::effects::damage (deal, calculate)
+
+}

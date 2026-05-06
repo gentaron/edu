@@ -1,0 +1,12 @@
+{
+  "card_id": "char-kate-claudia",
+  "ability_name": "resonance_guard",
+  "effect_type": "HEAL_SHIELD",
+  "expected_result": {
+    "damage": 0,
+    "heal": 5,
+    "shield": 3,
+    "attack_reduction": 0,
+    "log": "resonance_guard"
+  }
+}

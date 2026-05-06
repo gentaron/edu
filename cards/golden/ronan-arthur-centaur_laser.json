@@ -1,0 +1,12 @@
+{
+  "card_id": "char-ronan-arthur",
+  "ability_name": "centaur_laser",
+  "effect_type": "DAMAGE",
+  "expected_result": {
+    "damage": 5,
+    "heal": 0,
+    "shield": 0,
+    "attack_reduction": 0,
+    "log": "centaur_laser"
+  }
+}

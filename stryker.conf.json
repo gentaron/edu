@@ -1,0 +1,31 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/api/schema/stryker-schema.json",
+  "packageManager": "bun",
+  "testRunner": "vitest",
+  "vitest": {
+    "configFile": "vitest.config.ts"
+  },
+  "coverageAnalysis": "perTest",
+  "mutate": [
+    "src/domains/battle/battle.engine.ts",
+    "src/domains/battle/battle.fsm.ts",
+    "src/domains/battle/battle.store.ts",
+    "src/metal/binary-protocol.ts",
+    "src/platform/event-bus.ts",
+    "src/domains/wiki/wiki-search.ts",
+    "src/domains/wiki/inverted-index.ts"
+  ],
+  "thresholds": {
+    "high": 80,
+    "low": 70,
+    "break": 60
+  },
+  "tempDirName": "stryker-tmp",
+  "clearTextReporter": {
+    "allowColor": true
+  },
+  "reporters": ["html", "clear-text", "progress"],
+  "timeoutMS": 60000,
+  "timeoutFactor": 2,
+  "maxConcurrentTestRunners": 2
+}

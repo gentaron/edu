@@ -1,0 +1,118 @@
+================================================================
+sr-card-with-ability-and-ultimate
+================================================================
+module cards::diana {
+
+card diana {
+  name        = "Diana"
+  rarity      = SR
+  affiliation = "Gigapolis West Continent"
+  attack      = 7
+  defense     = 4
+  image_url   = "https://example.com/Diana.png"
+  flavor_text = "First-generation Wonder Woman."
+
+  ability light_shield(target: FieldChar, value: Int): BattleResult =
+    effect_ pure {
+      make_result(0, 0, value, 0, "shield")
+    }
+
+  ultimate light_judgment(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 16
+      let new_state = deal_damage(state, damage)
+      log_message(new_state, "Light's Judgment strikes!")
+    }
+}
+
+}
+
+================================================================
+r-card-with-simple-ability
+================================================================
+module cards::guard {
+
+card guard {
+  name        = "Guard"
+  rarity      = R
+  affiliation = "Gigapolis West Continent"
+  attack      = 3
+  defense     = 8
+
+  ability block(value: Int): BattleResult =
+    effect_ pure {
+      make_result(0, 0, value, 0, "block")
+    }
+}
+
+}
+
+================================================================
+card-with-all-meta-fields
+================================================================
+module cards::kate {
+
+card kate {
+  name        = "Kate"
+  rarity      = SR
+  affiliation = "Valoria Alliance"
+  attack      = 6
+  defense     = 5
+  image_url   = "https://example.com/Kate.png"
+  flavor_text = "A brilliant strategist."
+}
+
+}
+
+================================================================
+card-with-pure-effect-annotated-ability
+================================================================
+module cards::healer {
+
+card healer {
+  name        = "Healer"
+  rarity      = R
+  affiliation = "Elyseon Order"
+  attack      = 2
+  defense     = 4
+
+  ability restore(target: FieldChar, amount: Int): BattleResult =
+    effect_ pure {
+      make_result(0, amount, 0, 0, "restore")
+    }
+}
+
+}
+
+================================================================
+card-with-multiple-abilities
+================================================================
+module cards::ninja {
+
+card ninja {
+  name        = "Ninja"
+  rarity      = SR
+  affiliation = "Fallujah Dominion"
+  attack      = 9
+  defense     = 2
+
+  ability quick_strike(target: FieldChar, damage: Int): BattleResult =
+    effect_ pure {
+      make_result(damage, 0, 0, 0, "quick_strike")
+    }
+
+  ability smoke_bomb(target: FieldChar): BattleResult =
+    effect_ pure {
+      make_result(0, 0, 3, 2, "smoke_bomb")
+    }
+
+  ultimate shadow_assassination(state: BattleState): BattleState =
+    effect_ mut {
+      let dmg = 20
+      let s1 = deal_damage(state, dmg)
+      let s2 = reduce_attack(s1, 3)
+      log_message(s2, "Shadow Assassination!")
+    }
+}
+
+}

@@ -1,0 +1,27 @@
+module cards::r::gentaro {
+
+card gentaro {
+  name        = "Gentaro"
+  rarity      = R
+  affiliation = "AURALIS affiliated"
+  attack      = 5
+  defense     = 3
+  image_url   = "https://raw.githubusercontent.com/gentaron/image/main/Gentaro.png"
+  flavor_text = "Lv569. The indomitable warrior who supports AURALIS."
+
+  // effect: SHIELD +3
+  ability iron_resolve(target: FieldChar, value: Int): BattleResult =
+    effect_ pure {
+      make_result(0, 0, value, 0, "shield")
+    }
+
+  // ultimate: 10 damage
+  ultimate unyielding_draw(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 10
+      let s1 = deal_damage(state, damage)
+      log_message(s1, "Unyielding Iai Slash deals 10 damage!")
+    }
+}
+
+}

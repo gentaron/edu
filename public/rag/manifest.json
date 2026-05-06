@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "buildHash": "a3af9257dbb59eae6ff85d10779d90319d0d357d3f206ed5ad8e5b989ca7e40b",
+  "chunkCount": 729,
+  "model": "Xenova/multilingual-e5-small",
+  "dimension": 384,
+  "generatedAt": "2026-05-02T16:22:55.149Z"
+}

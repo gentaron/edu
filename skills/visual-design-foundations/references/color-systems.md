@@ -27,10 +27,7 @@ Using OKLCH for perceptually uniform color scales:
 ### Programmatic Scale Generation
 
 ```tsx
-function generateColorScale(
-  hue: number,
-  saturation: number = 100,
-): Record<string, string> {
+function generateColorScale(hue: number, saturation: number = 100): Record<string, string> {
   const lightnessStops = [
     { name: "50", l: 97 },
     { name: "100", l: 93 },
@@ -43,21 +40,18 @@ function generateColorScale(
     { name: "800", l: 25 },
     { name: "900", l: 18 },
     { name: "950", l: 12 },
-  ];
+  ]
 
   return Object.fromEntries(
-    lightnessStops.map(({ name, l }) => [
-      name,
-      `hsl(${hue}, ${saturation}%, ${l}%)`,
-    ]),
-  );
+    lightnessStops.map(({ name, l }) => [name, `hsl(${hue}, ${saturation}%, ${l}%)`])
+  )
 }
 
 // Generate semantic colors
-const brand = generateColorScale(220); // Blue
-const success = generateColorScale(142); // Green
-const warning = generateColorScale(38); // Amber
-const error = generateColorScale(0); // Red
+const brand = generateColorScale(220) // Blue
+const success = generateColorScale(142) // Green
+const warning = generateColorScale(38) // Amber
+const error = generateColorScale(0) // Red
 ```
 
 ## Semantic Color Tokens
@@ -170,63 +164,62 @@ const error = generateColorScale(0); // Red
 ### React Theme Context
 
 ```tsx
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react"
 
-type Theme = "light" | "dark" | "system";
+type Theme = "light" | "dark" | "system"
 
 interface ThemeContextValue {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-  resolvedTheme: "light" | "dark";
+  theme: Theme
+  setTheme: (theme: Theme) => void
+  resolvedTheme: "light" | "dark"
 }
 
-const ThemeContext = createContext<ThemeContextValue | null>(null);
+const ThemeContext = createContext<ThemeContextValue | null>(null)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("system");
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<Theme>("system")
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light")
 
   useEffect(() => {
-    const root = document.documentElement;
+    const root = document.documentElement
 
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
-        : "light";
-      setResolvedTheme(systemTheme);
-      root.setAttribute("data-theme", systemTheme);
+        : "light"
+      setResolvedTheme(systemTheme)
+      root.setAttribute("data-theme", systemTheme)
     } else {
-      setResolvedTheme(theme);
-      root.setAttribute("data-theme", theme);
+      setResolvedTheme(theme)
+      root.setAttribute("data-theme", theme)
     }
-  }, [theme]);
+  }, [theme])
 
   useEffect(() => {
-    if (theme !== "system") return;
+    if (theme !== "system") return
 
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
     const handler = (e: MediaQueryListEvent) => {
-      const newTheme = e.matches ? "dark" : "light";
-      setResolvedTheme(newTheme);
-      document.documentElement.setAttribute("data-theme", newTheme);
-    };
+      const newTheme = e.matches ? "dark" : "light"
+      setResolvedTheme(newTheme)
+      document.documentElement.setAttribute("data-theme", newTheme)
+    }
 
-    mediaQuery.addEventListener("change", handler);
-    return () => mediaQuery.removeEventListener("change", handler);
-  }, [theme]);
+    mediaQuery.addEventListener("change", handler)
+    return () => mediaQuery.removeEventListener("change", handler)
+  }, [theme])
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
       {children}
     </ThemeContext.Provider>
-  );
+  )
 }
 
 export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) throw new Error("useTheme must be within ThemeProvider");
-  return context;
+  const context = useContext(ThemeContext)
+  if (!context) throw new Error("useTheme must be within ThemeProvider")
+  return context
 }
 ```
 
@@ -236,55 +229,51 @@ export function useTheme() {
 
 ```tsx
 function hexToRgb(hex: string): [number, number, number] {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!result) throw new Error("Invalid hex color");
-  return [
-    parseInt(result[1], 16),
-    parseInt(result[2], 16),
-    parseInt(result[3], 16),
-  ];
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  if (!result) throw new Error("Invalid hex color")
+  return [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)]
 }
 
 function getLuminance(r: number, g: number, b: number): number {
   const [rs, gs, bs] = [r, g, b].map((c) => {
-    c = c / 255;
-    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-  });
-  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+    c = c / 255
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+  })
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs
 }
 
 function getContrastRatio(hex1: string, hex2: string): number {
-  const [r1, g1, b1] = hexToRgb(hex1);
-  const [r2, g2, b2] = hexToRgb(hex2);
+  const [r1, g1, b1] = hexToRgb(hex1)
+  const [r2, g2, b2] = hexToRgb(hex2)
 
-  const l1 = getLuminance(r1, g1, b1);
-  const l2 = getLuminance(r2, g2, b2);
+  const l1 = getLuminance(r1, g1, b1)
+  const l2 = getLuminance(r2, g2, b2)
 
-  const lighter = Math.max(l1, l2);
-  const darker = Math.min(l1, l2);
+  const lighter = Math.max(l1, l2)
+  const darker = Math.min(l1, l2)
 
-  return (lighter + 0.05) / (darker + 0.05);
+  return (lighter + 0.05) / (darker + 0.05)
 }
 
 function meetsWCAG(
   foreground: string,
   background: string,
   size: "normal" | "large" = "normal",
-  level: "AA" | "AAA" = "AA",
+  level: "AA" | "AAA" = "AA"
 ): boolean {
-  const ratio = getContrastRatio(foreground, background);
+  const ratio = getContrastRatio(foreground, background)
 
   const requirements = {
     normal: { AA: 4.5, AAA: 7 },
     large: { AA: 3, AAA: 4.5 },
-  };
+  }
 
-  return ratio >= requirements[size][level];
+  return ratio >= requirements[size][level]
 }
 
 // Usage
-meetsWCAG("#ffffff", "#3b82f6"); // true (4.5:1 for AA normal)
-meetsWCAG("#ffffff", "#60a5fa"); // false (below 4.5:1)
+meetsWCAG("#ffffff", "#3b82f6") // true (4.5:1 for AA normal)
+meetsWCAG("#ffffff", "#60a5fa") // false (below 4.5:1)
 ```
 
 ### Accessible Color Pairs
@@ -292,25 +281,25 @@ meetsWCAG("#ffffff", "#60a5fa"); // false (below 4.5:1)
 ```tsx
 // Generate accessible text color for any background
 function getAccessibleTextColor(backgroundColor: string): string {
-  const [r, g, b] = hexToRgb(backgroundColor);
-  const luminance = getLuminance(r, g, b);
+  const [r, g, b] = hexToRgb(backgroundColor)
+  const luminance = getLuminance(r, g, b)
 
   // Use white text on dark backgrounds, black on light
-  return luminance > 0.179 ? "#111827" : "#ffffff";
+  return luminance > 0.179 ? "#111827" : "#ffffff"
 }
 
 // Find the nearest accessible shade
 function findAccessibleShade(
   textColor: string,
   backgroundScale: string[],
-  minContrast: number = 4.5,
+  minContrast: number = 4.5
 ): string | null {
   for (const shade of backgroundScale) {
     if (getContrastRatio(textColor, shade) >= minContrast) {
-      return shade;
+      return shade
     }
   }
-  return null;
+  return null
 }
 ```
 
@@ -319,38 +308,31 @@ function findAccessibleShade(
 ### Harmony Functions
 
 ```tsx
-type HarmonyType =
-  | "complementary"
-  | "triadic"
-  | "analogous"
-  | "split-complementary";
+type HarmonyType = "complementary" | "triadic" | "analogous" | "split-complementary"
 
 function generateHarmony(baseHue: number, type: HarmonyType): number[] {
   switch (type) {
     case "complementary":
-      return [baseHue, (baseHue + 180) % 360];
+      return [baseHue, (baseHue + 180) % 360]
     case "triadic":
-      return [baseHue, (baseHue + 120) % 360, (baseHue + 240) % 360];
+      return [baseHue, (baseHue + 120) % 360, (baseHue + 240) % 360]
     case "analogous":
-      return [(baseHue - 30 + 360) % 360, baseHue, (baseHue + 30) % 360];
+      return [(baseHue - 30 + 360) % 360, baseHue, (baseHue + 30) % 360]
     case "split-complementary":
-      return [baseHue, (baseHue + 150) % 360, (baseHue + 210) % 360];
+      return [baseHue, (baseHue + 150) % 360, (baseHue + 210) % 360]
     default:
-      return [baseHue];
+      return [baseHue]
   }
 }
 
 // Generate palette from harmony
-function generateHarmoniousPalette(
-  baseHue: number,
-  type: HarmonyType,
-): Record<string, string> {
-  const hues = generateHarmony(baseHue, type);
-  const names = ["primary", "secondary", "tertiary"];
+function generateHarmoniousPalette(baseHue: number, type: HarmonyType): Record<string, string> {
+  const hues = generateHarmony(baseHue, type)
+  const names = ["primary", "secondary", "tertiary"]
 
   return Object.fromEntries(
-    hues.map((hue, i) => [names[i] || `color-${i}`, `hsl(${hue}, 70%, 50%)`]),
-  );
+    hues.map((hue, i) => [names[i] || `color-${i}`, `hsl(${hue}, 70%, 50%)`])
+  )
 }
 ```
 
@@ -358,7 +340,7 @@ function generateHarmoniousPalette(
 
 ```tsx
 // Simulate color blindness
-type ColorBlindnessType = "protanopia" | "deuteranopia" | "tritanopia";
+type ColorBlindnessType = "protanopia" | "deuteranopia" | "tritanopia"
 
 // Matrix transforms for common types
 const colorBlindnessMatrices: Record<ColorBlindnessType, number[][]> = {
@@ -377,7 +359,7 @@ const colorBlindnessMatrices: Record<ColorBlindnessType, number[][]> = {
     [0, 0.433, 0.567],
     [0, 0.475, 0.525],
   ],
-};
+}
 
 // Best practices for color-blind accessibility:
 // 1. Do not rely solely on color to convey information

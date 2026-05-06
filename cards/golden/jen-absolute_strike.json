@@ -1,0 +1,12 @@
+{
+  "card_id": "char-jen",
+  "ability_name": "absolute_strike",
+  "effect_type": "DAMAGE_HEAL",
+  "expected_result": {
+    "damage": 5,
+    "heal": 2,
+    "shield": 0,
+    "attack_reduction": 0,
+    "log": "absolute_strike"
+  }
+}

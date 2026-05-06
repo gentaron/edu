@@ -104,12 +104,14 @@ z-ai vision -p "Describe this image in detail" -i "./photo.jpg" --stream
 ### When to Use CLI vs SDK
 
 **Use CLI for:**
+
 - Quick image analysis
 - Testing vision model capabilities
 - One-off image descriptions
 - Simple automation scripts
 
 **Use SDK for:**
+
 - Multi-turn conversations with images
 - Dynamic image analysis in applications
 - Batch processing with custom logic
@@ -124,7 +126,9 @@ For better performance and reliability, use base64 encoding to pass images to th
 The Vision Chat API supports three types of media content:
 
 ### 1. **image_url** - For Image Files
+
 Use this type for static images (PNG, JPEG, GIF, WebP, etc.)
+
 ```typescript
 {
     role: 'user',
@@ -136,7 +140,9 @@ Use this type for static images (PNG, JPEG, GIF, WebP, etc.)
 ```
 
 ### 2. **video_url** - For Video Files
+
 Use this type for video content (MP4, AVI, MOV, etc.)
+
 ```typescript
 {
     role: 'user',
@@ -148,7 +154,9 @@ Use this type for video content (MP4, AVI, MOV, etc.)
 ```
 
 ### 3. **file_url** - For Document Files
+
 Use this type for document files (PDF, DOCX, TXT, etc.)
+
 ```typescript
 {
     role: 'user',
@@ -166,121 +174,118 @@ Use this type for document files (PDF, DOCX, TXT, etc.)
 ### Single Image Analysis
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function analyzeImage(imageUrl, question) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
           {
-            type: 'text',
-            text: question
+            type: "text",
+            text: question,
           },
           {
-            type: 'image_url',
+            type: "image_url",
             image_url: {
-              url: imageUrl
-            }
-          }
-        ]
-      }
+              url: imageUrl,
+            },
+          },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage
 const result = await analyzeImage(
-  'https://example.com/product.jpg',
-  'Describe this product in detail'
-);
-console.log('Analysis:', result);
+  "https://example.com/product.jpg",
+  "Describe this product in detail"
+)
+console.log("Analysis:", result)
 ```
 
 ### Multiple Images Analysis
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function compareImages(imageUrls, question) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const content = [
     {
-      type: 'text',
-      text: question
+      type: "text",
+      text: question,
     },
-    ...imageUrls.map(url => ({
-      type: 'image_url',
-      image_url: { url }
-    }))
-  ];
+    ...imageUrls.map((url) => ({
+      type: "image_url",
+      image_url: { url },
+    })),
+  ]
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
-        content: content
-      }
+        role: "user",
+        content: content,
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage
 const comparison = await compareImages(
-  [
-    'https://example.com/before.jpg',
-    'https://example.com/after.jpg'
-  ],
-  'Compare these two images and describe the differences'
-);
+  ["https://example.com/before.jpg", "https://example.com/after.jpg"],
+  "Compare these two images and describe the differences"
+)
 ```
 
 ### Base64 Image Support
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
-import fs from 'fs';
+import ZAI from "z-ai-web-dev-sdk"
+import fs from "fs"
 
 async function analyzeLocalImage(imagePath, question) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   // Read image file and convert to base64
-  const imageBuffer = fs.readFileSync(imagePath);
-  const base64Image = imageBuffer.toString('base64');
-  const mimeType = imagePath.endsWith('.png') ? 'image/png' : 'image/jpeg';
+  const imageBuffer = fs.readFileSync(imagePath)
+  const base64Image = imageBuffer.toString("base64")
+  const mimeType = imagePath.endsWith(".png") ? "image/png" : "image/jpeg"
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
           {
-            type: 'text',
-            text: question
+            type: "text",
+            text: question,
           },
           {
-            type: 'image_url',
+            type: "image_url",
             image_url: {
-              url: `data:${mimeType};base64,${base64Image}`
-            }
-          }
-        ]
-      }
+              url: `data:${mimeType};base64,${base64Image}`,
+            },
+          },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 ```
 
@@ -289,87 +294,87 @@ async function analyzeLocalImage(imagePath, question) {
 ### Conversational Vision Chat
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 class VisionChatSession {
   constructor() {
-    this.messages = [];
+    this.messages = []
   }
 
   async initialize() {
-    this.zai = await ZAI.create();
+    this.zai = await ZAI.create()
   }
 
   async addImage(imageUrl, initialQuestion) {
     this.messages.push({
-      role: 'user',
+      role: "user",
       content: [
         {
-          type: 'text',
-          text: initialQuestion
+          type: "text",
+          text: initialQuestion,
         },
         {
-          type: 'image_url',
-          image_url: { url: imageUrl }
-        }
-      ]
-    });
+          type: "image_url",
+          image_url: { url: imageUrl },
+        },
+      ],
+    })
 
-    return this.getResponse();
+    return this.getResponse()
   }
 
   async followUp(question) {
     this.messages.push({
-      role: 'user',
+      role: "user",
       content: [
         {
-          type: 'text',
-          text: question
-        }
-      ]
-    });
+          type: "text",
+          text: question,
+        },
+      ],
+    })
 
-    return this.getResponse();
+    return this.getResponse()
   }
 
   async getResponse() {
     const response = await this.zai.chat.completions.createVision({
       messages: this.messages,
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
-    const assistantMessage = response.choices[0]?.message?.content;
-    
+    const assistantMessage = response.choices[0]?.message?.content
+
     this.messages.push({
-      role: 'assistant',
-      content: assistantMessage
-    });
+      role: "assistant",
+      content: assistantMessage,
+    })
 
-    return assistantMessage;
+    return assistantMessage
   }
 }
 
 // Usage
-const session = new VisionChatSession();
-await session.initialize();
+const session = new VisionChatSession()
+await session.initialize()
 
 const initial = await session.addImage(
-  'https://example.com/chart.jpg',
-  'What does this chart show?'
-);
-console.log('Initial analysis:', initial);
+  "https://example.com/chart.jpg",
+  "What does this chart show?"
+)
+console.log("Initial analysis:", initial)
 
-const followup = await session.followUp('What are the key trends?');
-console.log('Follow-up:', followup);
+const followup = await session.followUp("What are the key trends?")
+console.log("Follow-up:", followup)
 ```
 
 ### Image Classification and Tagging
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function classifyImage(imageUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Analyze this image and provide:
 1. Main subject/category
@@ -377,33 +382,33 @@ async function classifyImage(imageUrl) {
 3. Scene description
 4. Suggested tags (comma-separated)
 
-Format your response as JSON.`;
+Format your response as JSON.`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
           {
-            type: 'text',
-            text: prompt
+            type: "text",
+            text: prompt,
           },
           {
-            type: 'image_url',
-            image_url: { url: imageUrl }
-          }
-        ]
-      }
+            type: "image_url",
+            image_url: { url: imageUrl },
+          },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  const content = response.choices[0]?.message?.content;
-  
+  const content = response.choices[0]?.message?.content
+
   try {
-    return JSON.parse(content);
+    return JSON.parse(content)
   } catch (e) {
-    return { rawResponse: content };
+    return { rawResponse: content }
   }
 }
 ```
@@ -411,85 +416,90 @@ Format your response as JSON.`;
 ### OCR and Text Extraction
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function extractText(imageUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
           {
-            type: 'text',
-            text: 'Extract all text from this image. Preserve the layout and formatting as much as possible.'
+            type: "text",
+            text: "Extract all text from this image. Preserve the layout and formatting as much as possible.",
           },
           {
-            type: 'image_url',
-            image_url: { url: imageUrl }
-          }
-        ]
-      }
+            type: "image_url",
+            image_url: { url: imageUrl },
+          },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 ```
 
 ## Best Practices
 
 ### 1. Image Quality and Size
+
 - Use high-quality images for better analysis results
 - Optimize image size to balance quality and processing speed
 - Supported formats: JPEG, PNG, WebP
 
 ### 2. Prompt Engineering
+
 - Be specific about what information you need from the image
 - Structure complex requests with numbered lists or bullet points
 - Provide context about the image type (photo, diagram, chart, etc.)
 
 ### 3. Error Handling
+
 ```javascript
 async function safeVisionChat(imageUrl, question) {
   try {
-    const zai = await ZAI.create();
-    
+    const zai = await ZAI.create()
+
     const response = await zai.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: question },
-            { type: 'image_url', image_url: { url: imageUrl } }
-          ]
-        }
+            { type: "text", text: question },
+            { type: "image_url", image_url: { url: imageUrl } },
+          ],
+        },
       ],
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
     return {
       success: true,
-      content: response.choices[0]?.message?.content
-    };
+      content: response.choices[0]?.message?.content,
+    }
   } catch (error) {
-    console.error('Vision chat error:', error);
+    console.error("Vision chat error:", error)
     return {
       success: false,
-      error: error.message
-    };
+      error: error.message,
+    }
   }
 }
 ```
 
 ### 4. Performance Optimization
+
 - Cache SDK instance creation when processing multiple images
 - Use appropriate image formats (JPEG for photos, PNG for diagrams)
 - Consider image preprocessing for large batches
 
 ### 5. Security Considerations
+
 - Validate image URLs before processing
 - Sanitize user-provided image data
 - Implement rate limiting for public-facing APIs
@@ -510,73 +520,77 @@ async function safeVisionChat(imageUrl, question) {
 ### Express.js API Endpoint
 
 ```javascript
-import express from 'express';
-import ZAI from 'z-ai-web-dev-sdk';
+import express from "express"
+import ZAI from "z-ai-web-dev-sdk"
 
-const app = express();
-app.use(express.json());
+const app = express()
+app.use(express.json())
 
-let zaiInstance;
+let zaiInstance
 
 // Initialize SDK once
 async function initZAI() {
-  zaiInstance = await ZAI.create();
+  zaiInstance = await ZAI.create()
 }
 
-app.post('/api/analyze-image', async (req, res) => {
+app.post("/api/analyze-image", async (req, res) => {
   try {
-    const { imageUrl, question } = req.body;
+    const { imageUrl, question } = req.body
 
     if (!imageUrl || !question) {
-      return res.status(400).json({ 
-        error: 'imageUrl and question are required' 
-      });
+      return res.status(400).json({
+        error: "imageUrl and question are required",
+      })
     }
 
     const response = await zaiInstance.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: question },
-            { type: 'image_url', image_url: { url: imageUrl } }
-          ]
-        }
+            { type: "text", text: question },
+            { type: "image_url", image_url: { url: imageUrl } },
+          ],
+        },
       ],
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
     res.json({
       success: true,
-      analysis: response.choices[0]?.message?.content
-    });
+      analysis: response.choices[0]?.message?.content,
+    })
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
-    });
+      error: error.message,
+    })
   }
-});
+})
 
 initZAI().then(() => {
   app.listen(3000, () => {
-    console.log('Vision chat API running on port 3000');
-  });
-});
+    console.log("Vision chat API running on port 3000")
+  })
+})
 ```
 
 ## Troubleshooting
 
 **Issue**: "SDK must be used in backend"
+
 - **Solution**: Ensure z-ai-web-dev-sdk is only imported and used in server-side code
 
 **Issue**: Image not loading or being analyzed
+
 - **Solution**: Verify the image URL is accessible and returns a valid image format
 
 **Issue**: Poor analysis quality
+
 - **Solution**: Provide more specific prompts and ensure image quality is sufficient
 
 **Issue**: Slow response times
+
 - **Solution**: Optimize image size and consider caching frequently analyzed images
 
 ## Remember

@@ -1,0 +1,15 @@
+[workspace]
+resolver = "2"
+members = [
+    "edu-battle-engine",
+    "edu-engine-core",
+    "edu-engine-wasm",
+    "edu-engine-native",
+    "edu-engine-embedded",
+    "edu-quasi",
+    "edu-pqc",
+    "apolon-compiler",
+    "edu-prover",
+    "edu-verifier",
+    "edu-crdt-bridge",
+]

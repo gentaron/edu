@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "model": "Xenova/multilingual-e5-small",
+  "dimension": 3,
+  "chunks": [
+    {
+      "id": "0001",
+      "text": "Auralis is the communication project linking the E16 star system to Earth AD2026.",
+      "embedding": "AACAPwAAgD8AAIA/",
+      "metadata": {
+        "path": "test/auralis.data.ts",
+        "headingPath": ["Project", "AURALIS"],
+        "kind": "story",
+        "language": "en",
+        "hash": "abc123"
+      }
+    },
+    {
+      "id": "0002",
+      "text": "Diana is a character from the Eternal Dominion Universe who wields light-based abilities.",
+      "embedding": "AAAAAAAAgD8AAIA/",
+      "metadata": {
+        "path": "test/characters.data.ts",
+        "headingPath": ["Characters", "Diana"],
+        "kind": "character",
+        "language": "en",
+        "hash": "def456"
+      }
+    },
+    {
+      "id": "0003",
+      "text": "The Granbell civilization is known for its advanced technological infrastructure.",
+      "embedding": "AACAPwAAgD8AAAAA",
+      "metadata": {
+        "path": "test/civ.data.ts",
+        "headingPath": ["Civilizations", "Granbell"],
+        "kind": "faction",
+        "language": "en",
+        "hash": "ghi789"
+      }
+    },
+    {
+      "id": "0004",
+      "text": "Eternal Dominion uses a unique card battle system where players summon historical figures.",
+      "embedding": "AAAAAAAAAAAAAIA/",
+      "metadata": {
+        "path": "test/rules.data.ts",
+        "headingPath": ["Rules", "Card Battle"],
+        "kind": "rules",
+        "language": "en",
+        "hash": "jkl012"
+      }
+    }
+  ]
+}

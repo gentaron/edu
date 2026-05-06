@@ -1,0 +1,27 @@
+module cards::sr::ronan_arthur {
+
+card ronan_arthur {
+  name        = "Ronan Arthur"
+  rarity      = SR
+  affiliation = "Apollo Civilization"
+  attack      = 7
+  defense     = 4
+  image_url   = "/logo.svg"
+  flavor_text = "Knight King of Apollo. Hero of the Centaur Laser."
+
+  // effect: DAMAGE — 5 damage
+  ability centaur_laser(target: FieldChar, damage: Int): BattleResult =
+    effect_ pure {
+      make_result(damage, 0, 0, 0, "centaur_laser")
+    }
+
+  // ultimate: 17 damage
+  ultimate centaur_laser_ult(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 17
+      let s1 = deal_damage(state, damage)
+      log_message(s1, "Centaur Laser fires for 17 damage!")
+    }
+}
+
+}

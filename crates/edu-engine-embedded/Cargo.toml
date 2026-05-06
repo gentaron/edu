@@ -1,0 +1,8 @@
+[package]
+name = "edu-engine-embedded"
+version = "0.1.0"
+edition = "2021"
+description = "RISC-V embedded demo — proves bare-metal capability"
+
+[dependencies]
+edu-engine-core = { path = "../edu-engine-core", default-features = false }

@@ -1,0 +1,51 @@
+================================================================
+function-types-with-arrow
+================================================================
+module test::fntype {
+
+fn apply(f: Int -> Int, x: Int): Int = f(x)
+
+fn compose<a, b, c>(f: a -> b, g: b -> c): a -> c = f
+
+// Right-associative: Int -> String -> Bool  ≡  Int -> (String -> Bool)
+fn curried(x: Int): String -> Bool = x
+
+}
+
+================================================================
+record-types-with-row-labels
+================================================================
+module test::rectype {
+
+type Pair = {#fst: Int, #snd: String}
+
+fn get_name(r: {#name: String | r}): String = r.name
+
+type Config = {
+  #debug: Bool,
+  #verbose: Bool,
+  #max_retries: Int
+}
+
+}
+
+================================================================
+generic-types
+================================================================
+module test::generic {
+
+fn identity<a>(x: a): a = x
+
+fn first<a, b>(pair: (a, b)): a = pair
+
+fn map_list<a, b>(xs: [a], f: a -> b): [b] = xs
+
+fn wrap<T>(x: T): [T] = [x]
+
+type Box<a> = {#value: a}
+
+type Option<a> = Some(a) | None
+
+type Result<e, v> = Ok(v) | Err(e)
+
+}

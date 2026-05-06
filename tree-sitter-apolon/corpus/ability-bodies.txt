@@ -1,0 +1,98 @@
+================================================================
+ability-with-pure-effect-body
+================================================================
+
+module test::ability_pure {
+
+card buffer {
+  name        = "Buffer"
+  rarity      = R
+  affiliation = "Elyseon Order"
+  attack      = 2
+  defense     = 5
+
+  ability fortify(target: FieldChar, amount: Int): BattleResult =
+    effect_ pure {
+      let result = make_result(0, 0, amount, 0, "fortify")
+    }
+}
+
+}
+
+================================================================
+ability-with-view-effect-body
+================================================================
+
+module test::ability_view {
+
+card scout {
+  name        = "Scout"
+  rarity      = C
+  affiliation = "Valoria Alliance"
+  attack      = 3
+  defense     = 2
+
+  ability observe(state: BattleState): Int =
+    effect_ view {
+      let hp = state.enemy_hp
+      let turn = state.turn
+      hp + turn
+    }
+}
+
+}
+
+================================================================
+ability-with-mut-effect-body
+================================================================
+
+module test::ability_mut {
+
+card berserker {
+  name        = "Berserker"
+  rarity      = SR
+  affiliation = "Fallujah Dominion"
+  attack      = 10
+  defense     = 1
+
+  ability rage(state: BattleState, target: FieldChar): BattleState =
+    effect_ mut {
+      let bonus = get_turn(state) * 2
+      let s1 = deal_damage(state, 8 + bonus)
+      log_message(s1, "Berserker Rage!")
+    }
+
+  ultimate frenzy(state: BattleState): BattleState =
+    effect_ mut {
+      let s1 = deal_damage(state, 25)
+      let s2 = reduce_attack(s1, 2)
+      let s3 = reduce_defense(s2, 2)
+      log_message(s3, "Ultimate Frenzy!")
+    }
+}
+
+}
+
+================================================================
+ability-with-effect-alternatives
+================================================================
+
+module test::ability_alt {
+
+card trickster {
+  name        = "Trickster"
+  rarity      = R
+  affiliation = "Gigapolis West Continent"
+  attack      = 5
+  defense     = 4
+
+  ability gamble(state: BattleState): BattleResult =
+    effect_ pure {
+      make_result(8, 0, 2, 0, "gamble")
+    }
+    | view {
+      make_result(0, 0, 0, 0, "peek")
+    }
+}
+
+}

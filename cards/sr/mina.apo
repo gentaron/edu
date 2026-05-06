@@ -1,0 +1,27 @@
+module cards::sr::mina {
+
+card mina {
+  name        = "Mina Eureka Ernst"
+  rarity      = SR
+  affiliation = "AURALIS Second Generation"
+  attack      = 8
+  defense     = 3
+  image_url   = "https://raw.githubusercontent.com/gentaron/image/main/MinaEurekaErnst.png"
+  flavor_text = "Hyperdimensional bombardment. A strike beyond dimensions erases the target."
+
+  // effect: SPECIAL_PANDICT — dimensional ladder deployment
+  ability dimensional_pandict(target: FieldChar, value: Int): BattleResult =
+    effect_ pure {
+      make_result(value, 0, 0, 0, "dimensional_pandict")
+    }
+
+  // ultimate: 18 damage
+  ultimate hyperdimensional_shell(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 18
+      let s1 = deal_damage(state, damage)
+      log_message(s1, "Hyperdimensional Shell obliterates for 18 damage!")
+    }
+}
+
+}

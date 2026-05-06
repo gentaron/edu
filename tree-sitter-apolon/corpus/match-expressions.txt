@@ -1,0 +1,123 @@
+================================================================
+match-with-integer-patterns
+================================================================
+
+module test::match_int {
+
+fn describe_phase(phase: Int): String =
+  match phase {
+    0 => "PlayerTurn"
+    1 => "Resolving"
+    2 => "EnemyTurn"
+    3 => "Victory"
+    4 => "Defeat"
+  }
+
+}
+
+================================================================
+match-with-boolean-patterns
+================================================================
+
+module test::match_bool {
+
+fn bool_to_str(b: Bool): String =
+  match b {
+    true => "yes"
+    false => "no"
+  }
+
+}
+
+================================================================
+match-with-wildcard-pattern
+================================================================
+
+module test::match_wildcard {
+
+fn safe_div(a: Int, b: Int): Int =
+  match b {
+    0 => 0
+    _ => a / b
+  }
+
+fn first_or_zero(xs: [Int]): Int =
+  match xs {
+    [] => 0
+    _ => 1
+  }
+
+}
+
+================================================================
+match-with-variable-binding
+================================================================
+
+module test::match_var {
+
+fn categorize(n: Int): String =
+  match n {
+    0 => "zero"
+    x => "nonzero"
+  }
+
+fn greet(name: String): String =
+  match name {
+    s => "Hello, " + s
+  }
+
+}
+
+================================================================
+match-with-constructor-patterns
+================================================================
+
+module test::match_ctor {
+
+fn unwrap(opt: Option): Int =
+  match opt {
+    Some(x) => x
+    None => 0
+  }
+
+fn get_result(res: Result): String =
+  match res {
+    Ok(v) => v
+    Err(e) => e
+  }
+
+}
+
+================================================================
+match-with-tuple-pattern
+================================================================
+
+module test::match_tuple {
+
+fn swap(pair: (Int, String)): (String, Int) =
+  match pair {
+    (a, b) => (b, a)
+  }
+
+fn first_of_three(t: (Int, Int, Int)): Int =
+  match t {
+    (x, _, _) => x
+  }
+
+}
+
+================================================================
+match-with-string-patterns
+================================================================
+
+module test::match_str {
+
+fn parse_command(cmd: String): Int =
+  match cmd {
+    "attack" => 0
+    "defend" => 1
+    "flee" => 2
+    _ => -1
+  }
+
+}

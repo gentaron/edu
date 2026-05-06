@@ -1,0 +1,12 @@
+{
+  "card_id": "char-sebastian",
+  "ability_name": "precision_shot",
+  "effect_type": "DAMAGE",
+  "expected_result": {
+    "damage": 3,
+    "heal": 0,
+    "shield": 0,
+    "attack_reduction": 0,
+    "log": "precision_shot"
+  }
+}

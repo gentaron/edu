@@ -1,0 +1,6 @@
+# Ignore everything
+*
+# But not workflows/ and its contents
+!workflows/
+!workflows/**
+!/.gitignore

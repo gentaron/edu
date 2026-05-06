@@ -1,0 +1,85 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+local-*
+.claude
+.z-ai-config
+*.log
+dev.log
+dev.out.log
+test
+prompt
+
+server.log
+
+# AI dev artifacts
+.zscripts/dev.pid
+.dev.log
+
+# Build analysis
+.next/analyze/
+
+# OS artifacts
+Thumbs.db
+
+# Editor artifacts
+*.swp
+*.swo
+*~
+
+# Upload staging (moved to separate repos)
+upload/
+# Skills directory
+/skills/db/custom.db
+edu\nedutext
+
+# Rust build artifacts
+crates/edu-battle-engine/target/
+edu-repo/
+crates/target/
+playwright-report/
+test-results/*.json
+test-results/*.png
+
+# RAG generated corpus (large embeddings, regenerated at build time)
+public/rag/corpus.json
+prisma/dev.db

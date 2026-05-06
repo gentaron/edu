@@ -1,0 +1,88 @@
+import type { CivilizationId, WikiId } from "../../platform/schemas/branded"
+import type { Civilization } from "@/types"
+
+export const HISTORICAL_CIVILIZATIONS: Civilization[] = [
+  {
+    id: "dominion" as CivilizationId,
+    rank: 0,
+    name: "Dominion / Selinopolis",
+    nameEn: "Dominion / Selinopolis",
+    color: "text-edu-accent",
+    borderColor: "border-edu-accent/30 hover:border-edu-accent/60",
+    bgColor: "from-amber-500/20 via-edu-accent/10 to-amber-600/20",
+    icon: "Crown",
+    leader: "セリア・ドミニクス",
+    leaderWikiId: "セリア・ドミニクス" as WikiId,
+    capital: "Selinopolis（旧Gigapolis）",
+    gdp: "81兆ドル（最盛期）→ 23兆ドル（大戦後）",
+    specialization: "次元エネルギー技術（Phovos）・女性主導社会",
+    description:
+      "セリア・ドミニクスがGigapolisを掌握しSelinopolisに改名して建国。次元エネルギー技術のPhovosを中核とし、女性主導社会で繁栄した。最盛期GDP81兆ドル。アポロン大戦後はエヴァトロンに吸収される。",
+    history:
+      "E335〜E370年のセリア黄金期。フェルミ音楽の頂点、nトークン経済の確立、AURALISの最盛期を導いた。アポロン大戦にエヴァトロンと共に参戦したが、戦後GDP23兆に激減。その後、ヴァイロン・デアクス率いるエヴァトロンによって買収・吸収された。",
+    currentStatus: "現在はエヴァトロンに吸収され、E16系を支配下に置いている。",
+    relationships: [
+      "エヴァトロン — 同盟→吸収",
+      "アポロン文明圏 — 全面戦争",
+      "グランベル — マスター・クインシアスがセリアを高評価",
+    ],
+    planets: ["Symphony of Stars", "Eros-7", "E16小惑星帯"],
+    wikiId: "セリア・ドミニクス" as WikiId,
+    href: "",
+    isHistorical: true,
+  },
+  {
+    id: "apollon" as CivilizationId,
+    rank: 0,
+    name: "アポロン文明圏",
+    nameEn: "Apollon Civilization",
+    color: "text-red-400",
+    borderColor: "border-red-400/30 hover:border-red-400/60",
+    bgColor: "from-red-500/20 via-red-600/10 to-red-700/20",
+    icon: "Swords",
+    leader: "ロナン・アーサ",
+    leaderWikiId: "ロナン・アーサ" as WikiId,
+    capital: "アポロン・セントラリス",
+    gdp: "125兆ドル（最盛期）→ 32億ドル（大戦後）",
+    specialization: "アポロンの騎士団・ケンタウロスレーザー",
+    description:
+      "ロナン・アーサ率いる英雄的文明圏。最盛期GDP125兆ドル。アポロンの騎士団とケンタウロスレーザーを擁し、Dominionとの全面戦争を戦ったが、セリアのヴェノム艦隊により壊滅。",
+    history:
+      "ロナン・アーサがセリアに同盟を提案したが拒絶されたことが戦争の端緒。ケンタウロスレーザーとG4ファントムパルスが交差する激戦の末、セリアのヴェノム艦隊がアポロン・セントラリスを攻略。GDP32億に激減し、文明圏としての機能を失った。",
+    currentStatus: "壊滅状態。GDP32億ドルに激減。",
+    relationships: ["Dominion — 同盟拒絶→全面戦争", "エヴァトロン — 戦後の混乱に関連"],
+    planets: ["アポロン・セントラリス（崩壊）", "アレス", "ヘファイストス", "アテナ"],
+    wikiId: "アポロン・Dominion大戦" as WikiId,
+    href: "",
+    isHistorical: true,
+  },
+  {
+    id: "evatron" as CivilizationId,
+    rank: 14,
+    name: "エヴァトロン",
+    nameEn: "Evatron",
+    color: "text-gray-400",
+    borderColor: "border-gray-400/30 hover:border-gray-400/60",
+    bgColor: "from-gray-500/20 via-gray-600/10 to-gray-700/20",
+    icon: "Skull",
+    leader: "グリム・ダルゴス（初代）→ ヴァイロン・デアクス",
+    leaderWikiId: "グリム・ダルゴス" as WikiId,
+    capital: "Evapolis",
+    gdp: "33兆ドル（同盟時）→ 14位（現在）",
+    specialization: "男尊女卑文化・E16系支配",
+    description:
+      "男尊女卑文化を基盤とする文明圏。グリム・ダルゴスが初代リーダー。Dominionと同盟しアポロン大戦に参戦。戦後、疲弊したDominionを買収・吸収。ヴァイロン・デアクスが統治者に任命され、E16系を支配下に置いた。",
+    history:
+      "セリアとの同盟を承認。アポロン大戦ではDominion側として参戦。戦後、ヴァイロン・デアクスが戦後の疲弊したDominionを買収・吸収。エヴァトロンの文化・価値観をDominion全土に浸透させた。現在もE16系に影響を与え続けている。",
+    currentStatus: "現在14位。セリアンズの抵抗に直面。",
+    relationships: [
+      "Dominion — 同盟→吸収",
+      "アポロン文明圏 — 大戦の敵対",
+      "セリアンズ — 抵抗に直面",
+    ],
+    planets: ["エヴァ・プライム", "Evapolis（Gigapolis）", "ゴルゴン", "タルタロス"],
+    wikiId: "エヴァトロン" as WikiId,
+    href: "",
+    isHistorical: true,
+  },
+]

@@ -1,0 +1,80 @@
+================================================================
+arithmetic-with-precedence
+================================================================
+module test::arith {
+
+let x = 2 + 3 * 4
+let y = (2 + 3) * 4
+let z = 10 / 3 % 2
+let w = -x + y * 2
+
+}
+
+================================================================
+if-then-else-expression
+================================================================
+module test::cond {
+
+fn classify(hp: Int): String =
+  if hp > 0 then "alive" else "dead"
+
+fn clamp_value(v: Int, lo: Int, hi: Int): Int =
+  if v < lo then lo
+  else if v > hi then hi
+  else v
+
+}
+
+================================================================
+let-binding-with-in
+================================================================
+module test::letin {
+
+fn double(x: Int): Int = let y = x + x in y
+
+fn compose(f: Int -> Int, g: Int -> Int, x: Int): Int =
+  let fx = f(x) in let gx = g(x) in fx + gx
+
+}
+
+================================================================
+match-expression
+================================================================
+module test::match {
+
+fn describe_phase(phase: Int): String =
+  match phase {
+    0 => "PlayerTurn"
+    1 => "Resolving"
+    2 => "EnemyTurn"
+    3 => "Victory"
+    4 => "Defeat"
+  }
+
+}
+
+================================================================
+pipe-operator-and-application
+================================================================
+module test::pipe {
+
+fn example(state: BattleState): Int =
+  get_enemy_hp(state) |> clamp(0, 100) |> add(1)
+
+fn apply_all(state: BattleState): BattleState =
+  state |> deal_damage(10) |> heal_target(5)
+
+}
+
+================================================================
+list-and-record-literals
+================================================================
+module test::literals {
+
+let scores = [10, 20, 30]
+let empty = []
+let pair = (1, "hello")
+
+let result = {#damage = 5, #heal = 3, #shield = 0, #attack_reduction = 1, #log = "test"}
+
+}

@@ -1,0 +1,67 @@
+# Balance Change Runbook
+
+## Overview
+
+Card balance changes require Lean 4 proof verification. When a card's stats
+(attack, defense, effect type) are modified, the `NoInfiniteCombo` theorem must
+remain valid under the new card pool.
+
+## CI Gate
+
+The `balance-gate.yml` workflow automatically checks:
+1. `lake build Apolon.NoInfiniteCombo` compiles successfully
+2. All `simulate_battle` termination tests pass
+3. No card creates an infinite combo loop
+
+## Process
+
+### Step 1: Modify Card Definition
+Edit the card file in `cards/*.apo` or `crates/edu-engine-core/src/types.rs`.
+
+### Step 2: Run Local Verification
+```bash
+cd proofs/lean/Apolon && lake build
+cd ../../../crates && cargo test -p edu-engine-core -- simulate_battle
+```
+
+### Step 3: Submit PR
+The CI will automatically run the balance gate. If the gate fails:
+- Check the PR comment for details
+- Verify the card doesn't enable infinite combo
+- If the theorem needs adjustment, update `proofs/lean/Apolon/NoInfiniteCombo.lean`
+- The theorem weakening must be documented in `docs/adr/0006-lean-as-engine-load-bearing.md`
+
+## Lean PR Requirement
+
+When the balance gate fails due to theorem violation:
+1. **Do NOT force-merge** — the theorem protects against genuinely broken balance
+2. If the change is intentional (e.g., adding a new mechanic), create a
+   companion PR that updates the Lean theorem
+3. The Lean PR must pass `lake build` before the card PR can be merged
+4. Document the theorem change in the ADR
+
+## Emergency Procedure
+
+If the balance gate is blocking critical deployment:
+1. Temporarily disable the gate with `@gentaron` approval
+2. Create a tracking issue for the theorem fix
+3. The gate must be re-enabled within 48 hours
+
+## Card Pool Constraints
+
+The `NoInfiniteCombo` theorem proves termination for decks of size ≤ 5.
+The following constraints are implicitly enforced:
+- All damage/heal values must be finite integers
+- No card can create a self-sustaining loop (heal >= damage taken per turn)
+- The engine's `MAX_TURNS = 200` is a conservative upper bound
+
+## Format
+
+```toml
+[card."kate-claudia"]
+attack = 6
+defense = 5
+effect = "HEAL_SHIELD"
+last_modified = "2026-05-02"
+lean_theorem_version = "NoInfiniteCombo.v1"
+```

@@ -1,0 +1,28 @@
+module cards::sr::jen {
+
+card jen {
+  name        = "Jen"
+  rarity      = SR
+  affiliation = "Valoria Alliance"
+  attack      = 8
+  defense     = 3
+  image_url   = "https://raw.githubusercontent.com/gentaron/image/main/Jen.png"
+  flavor_text = "Lv938+. The absolute strike of Valoria's ruler."
+
+  // effect: DAMAGE_HEAL — 5 damage + 2 heal
+  ability absolute_strike(target: FieldChar, damage: Int, heal_amt: Int): BattleResult =
+    effect_ pure {
+      make_result(damage, heal_amt, 0, 0, "absolute_strike")
+    }
+
+  // ultimate: 18 damage + 2 heal
+  ultimate sovereign_strike(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 18
+      let s1 = deal_damage(state, damage)
+      let s2 = heal_target(s1, 2)
+      log_message(s2, "Sovereign Absolute Strike for 18 damage + 2 HP restored!")
+    }
+}
+
+}

@@ -19,6 +19,7 @@ this skill is located at above path in your project.
 ## Overview
 
 Image Understanding focuses specifically on static image analysis, providing capabilities for:
+
 - Image description and scene understanding
 - Object detection and recognition
 - OCR (Optical Character Recognition) and text extraction
@@ -118,6 +119,7 @@ z-ai vision -p "Provide a detailed description" -i "./photo.jpg" --stream
 ### When to Use CLI vs SDK
 
 **Use CLI for:**
+
 - Quick image analysis or descriptions
 - One-off OCR tasks
 - Testing image understanding capabilities
@@ -125,6 +127,7 @@ z-ai vision -p "Provide a detailed description" -i "./photo.jpg" --stream
 - Generating alt text for accessibility
 
 **Use SDK for:**
+
 - Multi-turn conversations about images
 - Complex image processing pipelines
 - Production applications with error handling
@@ -140,144 +143,141 @@ For better performance and reliability, use base64 encoding to pass images to th
 ### Single Image Analysis
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function analyzeImage(imageUrl, prompt) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
           {
-            type: 'text',
-            text: prompt
+            type: "text",
+            text: prompt,
           },
           {
-            type: 'image_url',
+            type: "image_url",
             image_url: {
-              url: imageUrl
-            }
-          }
-        ]
-      }
+              url: imageUrl,
+            },
+          },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage examples
 const description = await analyzeImage(
-  'https://example.com/landscape.jpg',
-  'Describe this landscape in detail, including colors, lighting, and mood'
-);
+  "https://example.com/landscape.jpg",
+  "Describe this landscape in detail, including colors, lighting, and mood"
+)
 
 const objectDetection = await analyzeImage(
-  'https://example.com/room.jpg',
-  'List all objects visible in this room'
-);
+  "https://example.com/room.jpg",
+  "List all objects visible in this room"
+)
 ```
 
 ### Multiple Images Comparison
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function compareImages(imageUrls, question) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const content = [
     {
-      type: 'text',
-      text: question
+      type: "text",
+      text: question,
     },
-    ...imageUrls.map(url => ({
-      type: 'image_url',
-      image_url: { url }
-    }))
-  ];
+    ...imageUrls.map((url) => ({
+      type: "image_url",
+      image_url: { url },
+    })),
+  ]
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
-        content: content
-      }
+        role: "user",
+        content: content,
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage
 const comparison = await compareImages(
-  [
-    'https://example.com/before.jpg',
-    'https://example.com/after.jpg'
-  ],
-  'What are the key differences between these before and after images?'
-);
+  ["https://example.com/before.jpg", "https://example.com/after.jpg"],
+  "What are the key differences between these before and after images?"
+)
 ```
 
 ### Base64 Image Support (Recommended)
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
-import fs from 'fs';
-import path from 'path';
+import ZAI from "z-ai-web-dev-sdk"
+import fs from "fs"
+import path from "path"
 
 async function analyzeLocalImage(imagePath, prompt) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   // Read image file and convert to base64
-  const imageBuffer = fs.readFileSync(imagePath);
-  const base64Image = imageBuffer.toString('base64');
-  
+  const imageBuffer = fs.readFileSync(imagePath)
+  const base64Image = imageBuffer.toString("base64")
+
   // Determine MIME type based on file extension
-  const ext = path.extname(imagePath).toLowerCase();
+  const ext = path.extname(imagePath).toLowerCase()
   const mimeTypes = {
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.gif': 'image/gif',
-    '.webp': 'image/webp',
-    '.bmp': 'image/bmp'
-  };
-  const mimeType = mimeTypes[ext] || 'image/jpeg';
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".webp": "image/webp",
+    ".bmp": "image/bmp",
+  }
+  const mimeType = mimeTypes[ext] || "image/jpeg"
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
           {
-            type: 'text',
-            text: prompt
+            type: "text",
+            text: prompt,
           },
           {
-            type: 'image_url',
+            type: "image_url",
             image_url: {
-              url: `data:${mimeType};base64,${base64Image}`
-            }
-          }
-        ]
-      }
+              url: `data:${mimeType};base64,${base64Image}`,
+            },
+          },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage
 const result = await analyzeLocalImage(
-  './product-photo.jpg',
-  'Analyze this product image for e-commerce listing'
-);
+  "./product-photo.jpg",
+  "Analyze this product image for e-commerce listing"
+)
 ```
 
 ## Advanced Use Cases
@@ -285,88 +285,78 @@ const result = await analyzeLocalImage(
 ### OCR and Text Extraction
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function extractText(imageUrl, options = {}) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
-  const prompt = options.preserveLayout 
-    ? 'Extract all text from this image. Preserve the exact layout, formatting, and structure.'
-    : 'Extract all visible text from this image.';
+  const prompt = options.preserveLayout
+    ? "Extract all text from this image. Preserve the exact layout, formatting, and structure."
+    : "Extract all visible text from this image."
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'image_url', image_url: { url: imageUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "image_url", image_url: { url: imageUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage examples
-const receiptText = await extractText(
-  'https://example.com/receipt.jpg',
-  { preserveLayout: true }
-);
+const receiptText = await extractText("https://example.com/receipt.jpg", { preserveLayout: true })
 
-const businessCardInfo = await extractText(
-  'https://example.com/business-card.jpg'
-);
+const businessCardInfo = await extractText("https://example.com/business-card.jpg")
 ```
 
 ### Object Detection and Counting
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function detectObjects(imageUrl, objectType) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
-  const prompt = objectType 
+  const prompt = objectType
     ? `Count and locate all ${objectType} in this image. Provide their positions and describe each one.`
-    : 'Detect and list all objects in this image with their approximate locations.';
+    : "Detect and list all objects in this image with their approximate locations."
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'image_url', image_url: { url: imageUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "image_url", image_url: { url: imageUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'enabled' } // Enable thinking for complex counting
-  });
+    thinking: { type: "enabled" }, // Enable thinking for complex counting
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage
-const peopleCount = await detectObjects(
-  'https://example.com/crowd.jpg',
-  'people'
-);
+const peopleCount = await detectObjects("https://example.com/crowd.jpg", "people")
 
-const allObjects = await detectObjects(
-  'https://example.com/room.jpg'
-);
+const allObjects = await detectObjects("https://example.com/room.jpg")
 ```
 
 ### Image Classification and Tagging
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function classifyAndTag(imageUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Analyze this image and provide a comprehensive classification:
 1. Primary category (e.g., nature, urban, portrait, product)
@@ -375,44 +365,42 @@ async function classifyAndTag(imageUrl) {
 4. Color palette description
 5. Suggested tags (10-15 keywords, comma-separated)
 
-Format your response as structured JSON.`;
+Format your response as structured JSON.`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'image_url', image_url: { url: imageUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "image_url", image_url: { url: imageUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  const content = response.choices[0]?.message?.content;
-  
+  const content = response.choices[0]?.message?.content
+
   try {
-    return JSON.parse(content);
+    return JSON.parse(content)
   } catch (e) {
-    return { rawResponse: content };
+    return { rawResponse: content }
   }
 }
 
 // Usage
-const classification = await classifyAndTag(
-  'https://example.com/photo.jpg'
-);
-console.log('Tags:', classification.tags);
+const classification = await classifyAndTag("https://example.com/photo.jpg")
+console.log("Tags:", classification.tags)
 ```
 
 ### Quality Assessment
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function assessImageQuality(imageUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Assess the technical quality of this image:
 1. Sharpness and focus (1-10)
@@ -423,67 +411,67 @@ async function assessImageQuality(imageUrl) {
 6. Overall quality rating (1-10)
 7. Suggestions for improvement
 
-Provide specific feedback for each criterion.`;
+Provide specific feedback for each criterion.`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'image_url', image_url: { url: imageUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "image_url", image_url: { url: imageUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 ```
 
 ### Accessibility - Alt Text Generation
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
-async function generateAltText(imageUrl, context = '') {
-  const zai = await ZAI.create();
+async function generateAltText(imageUrl, context = "") {
+  const zai = await ZAI.create()
 
   const prompt = context
     ? `Generate concise, descriptive alt text for this image. Context: ${context}. Focus on the most important visual elements that convey the image's purpose.`
-    : 'Generate concise, descriptive alt text for this image suitable for screen readers. Focus on key visual elements.';
+    : "Generate concise, descriptive alt text for this image suitable for screen readers. Focus on key visual elements."
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'image_url', image_url: { url: imageUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "image_url", image_url: { url: imageUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage
 const altText = await generateAltText(
-  'https://example.com/hero-image.jpg',
-  'Website hero section for a tech startup'
-);
+  "https://example.com/hero-image.jpg",
+  "Website hero section for a tech startup"
+)
 ```
 
 ### Scene Understanding
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function understandScene(imageUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Provide a comprehensive scene analysis:
 1. Setting/location type (indoor/outdoor, specific place)
@@ -492,22 +480,22 @@ async function understandScene(imageUrl) {
 4. People present (number, activities, interactions)
 5. Key objects and their arrangement
 6. Overall atmosphere and mood
-7. Notable details or interesting elements`;
+7. Notable details or interesting elements`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'image_url', image_url: { url: imageUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "image_url", image_url: { url: imageUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 ```
 
@@ -516,73 +504,74 @@ async function understandScene(imageUrl) {
 ### Process Multiple Images
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 class ImageBatchProcessor {
   constructor() {
-    this.zai = null;
+    this.zai = null
   }
 
   async initialize() {
-    this.zai = await ZAI.create();
+    this.zai = await ZAI.create()
   }
 
   async processImage(imageUrl, prompt) {
     const response = await this.zai.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: prompt },
-            { type: 'image_url', image_url: { url: imageUrl } }
-          ]
-        }
+            { type: "text", text: prompt },
+            { type: "image_url", image_url: { url: imageUrl } },
+          ],
+        },
       ],
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
-    return response.choices[0]?.message?.content;
+    return response.choices[0]?.message?.content
   }
 
   async processBatch(imageUrls, prompt) {
-    const results = [];
-    
+    const results = []
+
     for (const imageUrl of imageUrls) {
       try {
-        const result = await this.processImage(imageUrl, prompt);
-        results.push({ imageUrl, success: true, result });
+        const result = await this.processImage(imageUrl, prompt)
+        results.push({ imageUrl, success: true, result })
       } catch (error) {
-        results.push({ 
-          imageUrl, 
-          success: false, 
-          error: error.message 
-        });
+        results.push({
+          imageUrl,
+          success: false,
+          error: error.message,
+        })
       }
     }
 
-    return results;
+    return results
   }
 }
 
 // Usage
-const processor = new ImageBatchProcessor();
-await processor.initialize();
+const processor = new ImageBatchProcessor()
+await processor.initialize()
 
 const images = [
-  'https://example.com/img1.jpg',
-  'https://example.com/img2.jpg',
-  'https://example.com/img3.jpg'
-];
+  "https://example.com/img1.jpg",
+  "https://example.com/img2.jpg",
+  "https://example.com/img3.jpg",
+]
 
 const results = await processor.processBatch(
   images,
-  'Generate a short description suitable for social media'
-);
+  "Generate a short description suitable for social media"
+)
 ```
 
 ## Best Practices
 
 ### 1. Image Quality and Preparation
+
 - Use high-resolution images for better analysis accuracy
 - Ensure images are well-lit and properly exposed
 - For OCR, ensure text is clear and readable
@@ -590,6 +579,7 @@ const results = await processor.processBatch(
 - Supported formats: PNG (best for text/diagrams), JPEG (best for photos), WebP, GIF, BMP
 
 ### 2. Prompt Engineering for Images
+
 - Be specific about what information you need
 - Mention the type of image (photo, diagram, screenshot, etc.)
 - For complex tasks, break down into specific questions
@@ -601,36 +591,37 @@ const results = await processor.processBatch(
 ```javascript
 async function safeImageAnalysis(imageUrl, prompt) {
   try {
-    const zai = await ZAI.create();
-    
+    const zai = await ZAI.create()
+
     const response = await zai.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: prompt },
-            { type: 'image_url', image_url: { url: imageUrl } }
-          ]
-        }
+            { type: "text", text: prompt },
+            { type: "image_url", image_url: { url: imageUrl } },
+          ],
+        },
       ],
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
     return {
       success: true,
-      content: response.choices[0]?.message?.content
-    };
+      content: response.choices[0]?.message?.content,
+    }
   } catch (error) {
-    console.error('Image analysis error:', error);
+    console.error("Image analysis error:", error)
     return {
       success: false,
-      error: error.message
-    };
+      error: error.message,
+    }
   }
 }
 ```
 
 ### 4. Performance Optimization
+
 - Cache SDK instance for batch processing
 - Use base64 encoding for local images
 - Implement request throttling for large batches
@@ -638,6 +629,7 @@ async function safeImageAnalysis(imageUrl, prompt) {
 - Use appropriate thinking mode (disabled for simple tasks, enabled for complex reasoning)
 
 ### 5. Security Considerations
+
 - Validate image URLs before processing
 - Implement rate limiting for public APIs
 - Sanitize user-provided image data
@@ -662,162 +654,162 @@ async function safeImageAnalysis(imageUrl, prompt) {
 ### Express.js API Endpoint
 
 ```javascript
-import express from 'express';
-import ZAI from 'z-ai-web-dev-sdk';
-import multer from 'multer';
+import express from "express"
+import ZAI from "z-ai-web-dev-sdk"
+import multer from "multer"
 
-const app = express();
-const upload = multer({ storage: multer.memoryStorage() });
+const app = express()
+const upload = multer({ storage: multer.memoryStorage() })
 
-let zaiInstance;
+let zaiInstance
 
 async function initZAI() {
-  zaiInstance = await ZAI.create();
+  zaiInstance = await ZAI.create()
 }
 
 // Analyze image from URL
-app.post('/api/analyze-image', express.json(), async (req, res) => {
+app.post("/api/analyze-image", express.json(), async (req, res) => {
   try {
-    const { imageUrl, prompt } = req.body;
+    const { imageUrl, prompt } = req.body
 
     if (!imageUrl || !prompt) {
-      return res.status(400).json({ 
-        error: 'imageUrl and prompt are required' 
-      });
+      return res.status(400).json({
+        error: "imageUrl and prompt are required",
+      })
     }
 
     const response = await zaiInstance.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: prompt },
-            { type: 'image_url', image_url: { url: imageUrl } }
-          ]
-        }
+            { type: "text", text: prompt },
+            { type: "image_url", image_url: { url: imageUrl } },
+          ],
+        },
       ],
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
     res.json({
       success: true,
-      analysis: response.choices[0]?.message?.content
-    });
+      analysis: response.choices[0]?.message?.content,
+    })
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
-    });
+      error: error.message,
+    })
   }
-});
+})
 
 // Analyze uploaded image file
-app.post('/api/analyze-upload', upload.single('image'), async (req, res) => {
+app.post("/api/analyze-upload", upload.single("image"), async (req, res) => {
   try {
-    const { prompt } = req.body;
-    const imageFile = req.file;
+    const { prompt } = req.body
+    const imageFile = req.file
 
     if (!imageFile || !prompt) {
-      return res.status(400).json({ 
-        error: 'image file and prompt are required' 
-      });
+      return res.status(400).json({
+        error: "image file and prompt are required",
+      })
     }
 
     // Convert to base64
-    const base64Image = imageFile.buffer.toString('base64');
-    const mimeType = imageFile.mimetype;
+    const base64Image = imageFile.buffer.toString("base64")
+    const mimeType = imageFile.mimetype
 
     const response = await zaiInstance.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: prompt },
-            { 
-              type: 'image_url', 
-              image_url: { 
-                url: `data:${mimeType};base64,${base64Image}` 
-              } 
-            }
-          ]
-        }
+            { type: "text", text: prompt },
+            {
+              type: "image_url",
+              image_url: {
+                url: `data:${mimeType};base64,${base64Image}`,
+              },
+            },
+          ],
+        },
       ],
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
     res.json({
       success: true,
-      analysis: response.choices[0]?.message?.content
-    });
+      analysis: response.choices[0]?.message?.content,
+    })
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
-    });
+      error: error.message,
+    })
   }
-});
+})
 
 initZAI().then(() => {
   app.listen(3000, () => {
-    console.log('Image understanding API running on port 3000');
-  });
-});
+    console.log("Image understanding API running on port 3000")
+  })
+})
 ```
 
 ### Next.js API Route
 
 ```javascript
 // pages/api/image-understand.js
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
-let zaiInstance = null;
+let zaiInstance = null
 
 async function getZAI() {
   if (!zaiInstance) {
-    zaiInstance = await ZAI.create();
+    zaiInstance = await ZAI.create()
   }
-  return zaiInstance;
+  return zaiInstance
 }
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" })
   }
 
   try {
-    const { imageUrl, prompt } = req.body;
+    const { imageUrl, prompt } = req.body
 
     if (!imageUrl || !prompt) {
-      return res.status(400).json({ 
-        error: 'imageUrl and prompt are required' 
-      });
+      return res.status(400).json({
+        error: "imageUrl and prompt are required",
+      })
     }
 
-    const zai = await getZAI();
+    const zai = await getZAI()
 
     const response = await zai.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: prompt },
-            { type: 'image_url', image_url: { url: imageUrl } }
-          ]
-        }
+            { type: "text", text: prompt },
+            { type: "image_url", image_url: { url: imageUrl } },
+          ],
+        },
       ],
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
     res.status(200).json({
       success: true,
-      analysis: response.choices[0]?.message?.content
-    });
+      analysis: response.choices[0]?.message?.content,
+    })
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error)
     res.status(500).json({
       success: false,
-      error: error.message
-    });
+      error: error.message,
+    })
   }
 }
 ```
@@ -825,21 +817,27 @@ export default async function handler(req, res) {
 ## Troubleshooting
 
 **Issue**: "SDK must be used in backend"
+
 - **Solution**: Ensure z-ai-web-dev-sdk is only imported and used in server-side code, never in client/browser code
 
 **Issue**: Image not loading or being analyzed
+
 - **Solution**: Verify the image URL is accessible, returns correct MIME type, and is in a supported format
 
 **Issue**: Poor OCR accuracy
+
 - **Solution**: Ensure text is clear and readable, increase image resolution, ensure proper lighting and contrast
 
 **Issue**: Inaccurate object detection or counting
+
 - **Solution**: Enable thinking mode for complex counting tasks, use high-resolution images, provide specific prompts
 
 **Issue**: Slow response times
+
 - **Solution**: Optimize image size (resize before upload), use base64 for local images, cache SDK instance for batch processing
 
 **Issue**: Base64 encoding fails
+
 - **Solution**: Verify file path is correct, check file permissions, ensure MIME type matches file extension
 
 ## Remember

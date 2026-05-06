@@ -1,0 +1,12 @@
+{
+  "card_id": "char-diana",
+  "ability_name": "light_shield",
+  "effect_type": "SHIELD",
+  "expected_result": {
+    "damage": 0,
+    "heal": 0,
+    "shield": 5,
+    "attack_reduction": 0,
+    "log": "shield"
+  }
+}

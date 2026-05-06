@@ -19,6 +19,7 @@ this skill is located at above path in your project.
 ## Overview
 
 Video Understanding focuses specifically on video content analysis, providing capabilities for:
+
 - Video scene understanding and description
 - Action and motion detection
 - Temporal sequence analysis
@@ -102,6 +103,7 @@ z-ai vision -p "Describe this video content" -i "./video.mp4" --stream
 ### When to Use CLI vs SDK
 
 **Use CLI for:**
+
 - Quick video summaries
 - One-off video analysis
 - Testing video understanding capabilities
@@ -109,6 +111,7 @@ z-ai vision -p "Describe this video content" -i "./video.mp4" --stream
 - Generating video descriptions
 
 **Use SDK for:**
+
 - Multi-turn conversations about videos
 - Complex video processing pipelines
 - Production applications with error handling
@@ -118,6 +121,7 @@ z-ai vision -p "Describe this video content" -i "./video.mp4" --stream
 ## Recommended Approach
 
 For better performance and reliability with local videos, consider:
+
 1. Uploading videos to a CDN and using URLs
 2. For shorter videos, convert key frames to images for faster analysis
 3. For long videos, consider chunking or sampling at intervals
@@ -127,54 +131,54 @@ For better performance and reliability with local videos, consider:
 ### Single Video Analysis
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function analyzeVideo(videoUrl, prompt) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
           {
-            type: 'text',
-            text: prompt
+            type: "text",
+            text: prompt,
           },
           {
-            type: 'video_url',
+            type: "video_url",
             video_url: {
-              url: videoUrl
-            }
-          }
-        ]
-      }
+              url: videoUrl,
+            },
+          },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage examples
 const summary = await analyzeVideo(
-  'https://example.com/presentation.mp4',
-  'Summarize the key points presented in this video'
-);
+  "https://example.com/presentation.mp4",
+  "Summarize the key points presented in this video"
+)
 
 const actionDetection = await analyzeVideo(
-  'https://example.com/sports.mp4',
-  'Identify and describe all athletic actions performed in this video'
-);
+  "https://example.com/sports.mp4",
+  "Identify and describe all athletic actions performed in this video"
+)
 ```
 
 ### Video Scene Understanding
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function understandVideoScenes(videoUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Analyze this video and provide:
 1. Overall summary of the video content
@@ -182,76 +186,69 @@ async function understandVideoScenes(videoUrl) {
 3. Key people or characters and their roles
 4. Important actions or events in chronological order
 5. Setting and environment description
-6. Overall mood or tone`;
+6. Overall mood or tone`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'video_url', video_url: { url: videoUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "video_url", video_url: { url: videoUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'enabled' } // Enable for detailed analysis
-  });
+    thinking: { type: "enabled" }, // Enable for detailed analysis
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage
-const sceneAnalysis = await understandVideoScenes(
-  'https://example.com/documentary.mp4'
-);
+const sceneAnalysis = await understandVideoScenes("https://example.com/documentary.mp4")
 ```
 
 ### Motion and Action Detection
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function detectActions(videoUrl, specificAction = null) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = specificAction
     ? `Identify all instances of "${specificAction}" in this video. For each instance, describe when it occurs and provide details about how it's performed.`
-    : 'Identify and describe all significant actions and movements in this video. Include who is performing them and when they occur.';
+    : "Identify and describe all significant actions and movements in this video. Include who is performing them and when they occur."
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'video_url', video_url: { url: videoUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "video_url", video_url: { url: videoUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'enabled' }
-  });
+    thinking: { type: "enabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 
 // Usage
-const runningActions = await detectActions(
-  'https://example.com/sports.mp4',
-  'running'
-);
+const runningActions = await detectActions("https://example.com/sports.mp4", "running")
 
-const allActions = await detectActions(
-  'https://example.com/activity.mp4'
-);
+const allActions = await detectActions("https://example.com/activity.mp4")
 ```
 
 ### Event Timeline Extraction
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function extractTimeline(videoUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Create a detailed timeline of events in this video:
 - Identify key moments and transitions
@@ -259,32 +256,32 @@ async function extractTimeline(videoUrl) {
 - Describe what happens at each key point
 - Identify any cause-and-effect relationships between events
 
-Format as a chronological list.`;
+Format as a chronological list.`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'video_url', video_url: { url: videoUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "video_url", video_url: { url: videoUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'enabled' }
-  });
+    thinking: { type: "enabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 ```
 
 ### Video Content Classification
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function classifyVideo(videoUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Classify this video content:
 1. Primary category (e.g., educational, entertainment, sports, news, tutorial)
@@ -294,27 +291,27 @@ async function classifyVideo(videoUrl) {
 5. Key themes or topics
 6. Suggested tags (10-15 keywords)
 
-Format your response as structured JSON.`;
+Format your response as structured JSON.`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'video_url', video_url: { url: videoUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "video_url", video_url: { url: videoUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  const content = response.choices[0]?.message?.content;
-  
+  const content = response.choices[0]?.message?.content
+
   try {
-    return JSON.parse(content);
+    return JSON.parse(content)
   } catch (e) {
-    return { rawResponse: content };
+    return { rawResponse: content }
   }
 }
 ```
@@ -324,82 +321,78 @@ Format your response as structured JSON.`;
 ### Multi-turn Video Conversation
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 class VideoConversation {
   constructor() {
-    this.messages = [];
+    this.messages = []
   }
 
   async initialize() {
-    this.zai = await ZAI.create();
+    this.zai = await ZAI.create()
   }
 
   async loadVideo(videoUrl, initialQuestion) {
     this.messages.push({
-      role: 'user',
+      role: "user",
       content: [
-        { type: 'text', text: initialQuestion },
-        { type: 'video_url', video_url: { url: videoUrl } }
-      ]
-    });
+        { type: "text", text: initialQuestion },
+        { type: "video_url", video_url: { url: videoUrl } },
+      ],
+    })
 
-    return this.getResponse();
+    return this.getResponse()
   }
 
   async askFollowUp(question) {
     this.messages.push({
-      role: 'user',
-      content: [
-        { type: 'text', text: question }
-      ]
-    });
+      role: "user",
+      content: [{ type: "text", text: question }],
+    })
 
-    return this.getResponse();
+    return this.getResponse()
   }
 
   async getResponse() {
     const response = await this.zai.chat.completions.createVision({
       messages: this.messages,
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
-    const assistantMessage = response.choices[0]?.message?.content;
-    
+    const assistantMessage = response.choices[0]?.message?.content
+
     this.messages.push({
-      role: 'assistant',
-      content: assistantMessage
-    });
+      role: "assistant",
+      content: assistantMessage,
+    })
 
-    return assistantMessage;
+    return assistantMessage
   }
 }
 
 // Usage
-const conversation = new VideoConversation();
-await conversation.initialize();
+const conversation = new VideoConversation()
+await conversation.initialize()
 
 const initial = await conversation.loadVideo(
-  'https://example.com/lecture.mp4',
-  'What is the main topic of this lecture?'
-);
+  "https://example.com/lecture.mp4",
+  "What is the main topic of this lecture?"
+)
 
-const followup1 = await conversation.askFollowUp(
-  'Can you explain the key concepts mentioned?'
-);
+const followup1 = await conversation.askFollowUp("Can you explain the key concepts mentioned?")
 
 const followup2 = await conversation.askFollowUp(
-  'What examples were used to illustrate these concepts?'
-);
+  "What examples were used to illustrate these concepts?"
+)
 ```
 
 ### Video Quality Assessment
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function assessVideoQuality(videoUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Assess the quality of this video:
 1. Visual quality (resolution, clarity, lighting) - Rate 1-10
@@ -412,32 +405,32 @@ async function assessVideoQuality(videoUrl) {
 8. Overall rating - 1-10
 9. Specific recommendations for improvement
 
-Provide detailed feedback for each criterion.`;
+Provide detailed feedback for each criterion.`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'video_url', video_url: { url: videoUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "video_url", video_url: { url: videoUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'enabled' }
-  });
+    thinking: { type: "enabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 ```
 
 ### Video Content Moderation
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function moderateVideo(videoUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Review this video for content moderation:
 1. Check for any inappropriate or sensitive content
@@ -447,32 +440,32 @@ async function moderateVideo(videoUrl) {
 5. Identify any copyrighted material visible (logos, brands, music)
 6. Overall safety rating: Safe / Caution / Review Required
 
-Provide specific examples for any concerns identified.`;
+Provide specific examples for any concerns identified.`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'video_url', video_url: { url: videoUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "video_url", video_url: { url: videoUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'enabled' }
-  });
+    thinking: { type: "enabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 ```
 
 ### Video Transcript Generation (Visual Description)
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function generateVisualTranscript(videoUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Generate a detailed visual transcript of this video:
 - Describe what's happening in each scene
@@ -481,32 +474,32 @@ async function generateVisualTranscript(videoUrl) {
 - Mention any scene changes or transitions
 - Include descriptions of people's actions and expressions
 
-Format as a time-based narrative (e.g., "At the beginning...", "Then...", "Finally...").`;
+Format as a time-based narrative (e.g., "At the beginning...", "Then...", "Finally...").`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'video_url', video_url: { url: videoUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "video_url", video_url: { url: videoUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'disabled' }
-  });
+    thinking: { type: "disabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 ```
 
 ### Sports Video Analysis
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function analyzeSportsVideo(videoUrl, sport = null) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = sport
     ? `Analyze this ${sport} video in detail:
@@ -521,32 +514,32 @@ async function analyzeSportsVideo(videoUrl, sport = null) {
 2. Describe the key actions and plays
 3. Note any scoring or significant events
 4. Describe player movements and strategies
-5. Overall assessment of the game or match`;
+5. Overall assessment of the game or match`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'video_url', video_url: { url: videoUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "video_url", video_url: { url: videoUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'enabled' }
-  });
+    thinking: { type: "enabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 ```
 
 ### Educational Video Summarization
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 async function summarizeEducationalVideo(videoUrl) {
-  const zai = await ZAI.create();
+  const zai = await ZAI.create()
 
   const prompt = `Summarize this educational video for students:
 1. Main topic or learning objective
@@ -557,22 +550,22 @@ async function summarizeEducationalVideo(videoUrl) {
 6. Key takeaways or conclusions
 7. Suggested review points
 
-Format as a study guide.`;
+Format as a study guide.`
 
   const response = await zai.chat.completions.createVision({
     messages: [
       {
-        role: 'user',
+        role: "user",
         content: [
-          { type: 'text', text: prompt },
-          { type: 'video_url', video_url: { url: videoUrl } }
-        ]
-      }
+          { type: "text", text: prompt },
+          { type: "video_url", video_url: { url: videoUrl } },
+        ],
+      },
     ],
-    thinking: { type: 'enabled' }
-  });
+    thinking: { type: "enabled" },
+  })
 
-  return response.choices[0]?.message?.content;
+  return response.choices[0]?.message?.content
 }
 ```
 
@@ -581,77 +574,78 @@ Format as a study guide.`;
 ### Process Multiple Videos
 
 ```javascript
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
 class VideoBatchProcessor {
   constructor() {
-    this.zai = null;
+    this.zai = null
   }
 
   async initialize() {
-    this.zai = await ZAI.create();
+    this.zai = await ZAI.create()
   }
 
   async processVideo(videoUrl, prompt) {
     const response = await this.zai.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: prompt },
-            { type: 'video_url', video_url: { url: videoUrl } }
-          ]
-        }
+            { type: "text", text: prompt },
+            { type: "video_url", video_url: { url: videoUrl } },
+          ],
+        },
       ],
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
-    return response.choices[0]?.message?.content;
+    return response.choices[0]?.message?.content
   }
 
   async processBatch(videoUrls, prompt) {
-    const results = [];
-    
+    const results = []
+
     for (const videoUrl of videoUrls) {
       try {
-        console.log(`Processing: ${videoUrl}`);
-        const result = await this.processVideo(videoUrl, prompt);
-        results.push({ videoUrl, success: true, result });
-        
+        console.log(`Processing: ${videoUrl}`)
+        const result = await this.processVideo(videoUrl, prompt)
+        results.push({ videoUrl, success: true, result })
+
         // Add delay to avoid rate limiting
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1000))
       } catch (error) {
-        results.push({ 
-          videoUrl, 
-          success: false, 
-          error: error.message 
-        });
+        results.push({
+          videoUrl,
+          success: false,
+          error: error.message,
+        })
       }
     }
 
-    return results;
+    return results
   }
 }
 
 // Usage
-const processor = new VideoBatchProcessor();
-await processor.initialize();
+const processor = new VideoBatchProcessor()
+await processor.initialize()
 
 const videos = [
-  'https://example.com/video1.mp4',
-  'https://example.com/video2.mp4',
-  'https://example.com/video3.mp4'
-];
+  "https://example.com/video1.mp4",
+  "https://example.com/video2.mp4",
+  "https://example.com/video3.mp4",
+]
 
 const results = await processor.processBatch(
   videos,
-  'Provide a brief summary of this video suitable for a content catalog'
-);
+  "Provide a brief summary of this video suitable for a content catalog"
+)
 ```
 
 ## Best Practices
 
 ### 1. Video Preparation
+
 - Use standard video formats (MP4, MOV, AVI)
 - Ensure videos are accessible via public URLs or properly encoded
 - For long videos, consider creating shorter clips for specific analysis
@@ -659,6 +653,7 @@ const results = await processor.processBatch(
 - Ensure good lighting and audio quality in source videos
 
 ### 2. Prompt Engineering for Videos
+
 - Be specific about temporal aspects ("beginning", "throughout", "at the end")
 - Mention what type of analysis you need (actions, events, scenes, etc.)
 - For long videos, ask for summaries or key moments
@@ -670,36 +665,37 @@ const results = await processor.processBatch(
 ```javascript
 async function safeVideoAnalysis(videoUrl, prompt) {
   try {
-    const zai = await ZAI.create();
-    
+    const zai = await ZAI.create()
+
     const response = await zai.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: prompt },
-            { type: 'video_url', video_url: { url: videoUrl } }
-          ]
-        }
+            { type: "text", text: prompt },
+            { type: "video_url", video_url: { url: videoUrl } },
+          ],
+        },
       ],
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
     return {
       success: true,
-      content: response.choices[0]?.message?.content
-    };
+      content: response.choices[0]?.message?.content,
+    }
   } catch (error) {
-    console.error('Video analysis error:', error);
+    console.error("Video analysis error:", error)
     return {
       success: false,
-      error: error.message
-    };
+      error: error.message,
+    }
   }
 }
 ```
 
 ### 4. Performance Optimization
+
 - Cache SDK instance for batch processing
 - Implement request throttling (add delays between requests)
 - Process videos asynchronously when possible
@@ -707,6 +703,7 @@ async function safeVideoAnalysis(videoUrl, prompt) {
 - Use appropriate thinking mode (disabled for simple descriptions, enabled for complex analysis)
 
 ### 5. Security Considerations
+
 - Validate video URLs before processing
 - Implement rate limiting for public APIs
 - Sanitize user-provided video URLs
@@ -732,151 +729,152 @@ async function safeVideoAnalysis(videoUrl, prompt) {
 ### Express.js API Endpoint
 
 ```javascript
-import express from 'express';
-import ZAI from 'z-ai-web-dev-sdk';
+import express from "express"
+import ZAI from "z-ai-web-dev-sdk"
 
-const app = express();
-app.use(express.json());
+const app = express()
+app.use(express.json())
 
-let zaiInstance;
+let zaiInstance
 
 async function initZAI() {
-  zaiInstance = await ZAI.create();
+  zaiInstance = await ZAI.create()
 }
 
 // Analyze video from URL
-app.post('/api/analyze-video', async (req, res) => {
+app.post("/api/analyze-video", async (req, res) => {
   try {
-    const { videoUrl, prompt } = req.body;
+    const { videoUrl, prompt } = req.body
 
     if (!videoUrl || !prompt) {
-      return res.status(400).json({ 
-        error: 'videoUrl and prompt are required' 
-      });
+      return res.status(400).json({
+        error: "videoUrl and prompt are required",
+      })
     }
 
     const response = await zaiInstance.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: prompt },
-            { type: 'video_url', video_url: { url: videoUrl } }
-          ]
-        }
+            { type: "text", text: prompt },
+            { type: "video_url", video_url: { url: videoUrl } },
+          ],
+        },
       ],
-      thinking: { type: 'disabled' }
-    });
+      thinking: { type: "disabled" },
+    })
 
     res.json({
       success: true,
-      analysis: response.choices[0]?.message?.content
-    });
+      analysis: response.choices[0]?.message?.content,
+    })
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
-    });
+      error: error.message,
+    })
   }
-});
+})
 
 // Get video summary
-app.post('/api/video-summary', async (req, res) => {
+app.post("/api/video-summary", async (req, res) => {
   try {
-    const { videoUrl } = req.body;
+    const { videoUrl } = req.body
 
     if (!videoUrl) {
-      return res.status(400).json({ error: 'videoUrl is required' });
+      return res.status(400).json({ error: "videoUrl is required" })
     }
 
-    const prompt = 'Provide a comprehensive summary of this video including: 1) Main content/topic, 2) Key events in chronological order, 3) Important people or subjects, 4) Overall takeaway.';
+    const prompt =
+      "Provide a comprehensive summary of this video including: 1) Main content/topic, 2) Key events in chronological order, 3) Important people or subjects, 4) Overall takeaway."
 
     const response = await zaiInstance.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: prompt },
-            { type: 'video_url', video_url: { url: videoUrl } }
-          ]
-        }
+            { type: "text", text: prompt },
+            { type: "video_url", video_url: { url: videoUrl } },
+          ],
+        },
       ],
-      thinking: { type: 'enabled' }
-    });
+      thinking: { type: "enabled" },
+    })
 
     res.json({
       success: true,
-      summary: response.choices[0]?.message?.content
-    });
+      summary: response.choices[0]?.message?.content,
+    })
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: error.message
-    });
+      error: error.message,
+    })
   }
-});
+})
 
 initZAI().then(() => {
   app.listen(3000, () => {
-    console.log('Video understanding API running on port 3000');
-  });
-});
+    console.log("Video understanding API running on port 3000")
+  })
+})
 ```
 
 ### Next.js API Route
 
 ```javascript
 // pages/api/video-understand.js
-import ZAI from 'z-ai-web-dev-sdk';
+import ZAI from "z-ai-web-dev-sdk"
 
-let zaiInstance = null;
+let zaiInstance = null
 
 async function getZAI() {
   if (!zaiInstance) {
-    zaiInstance = await ZAI.create();
+    zaiInstance = await ZAI.create()
   }
-  return zaiInstance;
+  return zaiInstance
 }
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" })
   }
 
   try {
-    const { videoUrl, prompt, enableThinking = false } = req.body;
+    const { videoUrl, prompt, enableThinking = false } = req.body
 
     if (!videoUrl || !prompt) {
-      return res.status(400).json({ 
-        error: 'videoUrl and prompt are required' 
-      });
+      return res.status(400).json({
+        error: "videoUrl and prompt are required",
+      })
     }
 
-    const zai = await getZAI();
+    const zai = await getZAI()
 
     const response = await zai.chat.completions.createVision({
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: [
-            { type: 'text', text: prompt },
-            { type: 'video_url', video_url: { url: videoUrl } }
-          ]
-        }
+            { type: "text", text: prompt },
+            { type: "video_url", video_url: { url: videoUrl } },
+          ],
+        },
       ],
-      thinking: { type: enableThinking ? 'enabled' : 'disabled' }
-    });
+      thinking: { type: enableThinking ? "enabled" : "disabled" },
+    })
 
     res.status(200).json({
       success: true,
-      analysis: response.choices[0]?.message?.content
-    });
+      analysis: response.choices[0]?.message?.content,
+    })
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error)
     res.status(500).json({
       success: false,
-      error: error.message
-    });
+      error: error.message,
+    })
   }
 }
 ```
@@ -884,21 +882,27 @@ export default async function handler(req, res) {
 ## Troubleshooting
 
 **Issue**: "SDK must be used in backend"
+
 - **Solution**: Ensure z-ai-web-dev-sdk is only imported and used in server-side code, never in client/browser code
 
 **Issue**: Video not loading or being analyzed
+
 - **Solution**: Verify the video URL is accessible, returns correct MIME type, and is in a supported format
 
 **Issue**: Inaccurate temporal analysis
+
 - **Solution**: Enable thinking mode for complex temporal reasoning, provide more specific prompts about time/sequence
 
 **Issue**: Slow response times for videos
+
 - **Solution**: Videos take longer to process than images; consider shorter clips or sampling for long videos
 
 **Issue**: Missing details from video
+
 - **Solution**: Be more specific in your prompt, ask about particular time segments or aspects
 
 **Issue**: Video format not supported
+
 - **Solution**: Convert video to MP4 (most widely supported), check that URL returns proper video MIME type
 
 ## Remember

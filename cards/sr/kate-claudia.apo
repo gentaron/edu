@@ -1,0 +1,28 @@
+module cards::sr::kate_claudia {
+
+card kate_claudia {
+  name        = "Kate Claudia"
+  rarity      = SR
+  affiliation = "AURALIS First Generation"
+  attack      = 6
+  defense     = 5
+  image_url   = "https://raw.githubusercontent.com/gentaron/image/main/KateClaudia.png"
+  flavor_text = "AURALIS founder. The pinnacle of resonance annihilates enemies."
+
+  // effect: HEAL_SHIELD — 5 heal + 3 shield
+  ability resonance_guard(target: FieldChar, heal_amt: Int, shield_amt: Int): BattleResult =
+    effect_ pure {
+      make_result(0, heal_amt, shield_amt, 0, "resonance_guard")
+    }
+
+  // ultimate: 15 damage
+  ultimate resonance_apex(state: BattleState): BattleState =
+    effect_ mut {
+      let damage = 15
+      let s1 = deal_damage(state, damage)
+      let s2 = heal_target(s1, 3)
+      log_message(s2, "Resonance Apex deals 15 damage + 3 HP restored!")
+    }
+}
+
+}

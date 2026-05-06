@@ -1,0 +1,10 @@
+{
+  "name": "tree-sitter-apolon",
+  "version": "0.1.0",
+  "description": "Tree-sitter grammar for the Apolon DSL",
+  "main": "bindings/node",
+  "types": "bindings/node",
+  "keywords": ["tree-sitter", "apolon", "dsl"],
+  "license": "MIT",
+  "tree-sitter": ["0.21", "0.22", "0.23"]
+}

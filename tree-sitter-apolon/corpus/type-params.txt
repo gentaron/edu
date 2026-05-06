@@ -1,0 +1,67 @@
+================================================================
+single-type-parameter
+================================================================
+
+module test::single_tparam {
+
+fn identity<a>(x: a): a = x
+
+fn wrap<a>(x: a): [a] = [x]
+
+type Box<a> = {#value: a}
+
+}
+
+================================================================
+multiple-type-parameters
+================================================================
+
+module test::multi_tparam {
+
+fn pair<a, b>(x: a, y: b): (a, b) = (x, y)
+
+fn map_fn<a, b>(xs: [a], f: a -> b): [b] = xs
+
+fn fold<a, b>(xs: [a], init: b, f: b -> a -> b): b = init
+
+fn zip<a, b>(xs: [a], ys: [b]): [(a, b)] = []
+
+type Entry<k, v> = {#key: k, #val: v}
+
+type Result<e, v> = Ok(v) | Err(e)
+
+}
+
+================================================================
+type-params-with-where-constraints
+================================================================
+
+module test::tparam_constrained {
+
+fn show<a>(x: a): String where a: Type = "value"
+
+fn eq<a>(x: a, y: a): Bool where a: * = true
+
+fn serialize<a>(x: a): [Int] where a: Type = [0]
+
+}
+
+================================================================
+type-params-in-card-abilities
+================================================================
+
+module test::tparam_card {
+
+card polymorph {
+  name    = "Polymorph"
+  rarity  = R
+  attack  = 4
+  defense = 4
+
+  ability transform<a>(target: FieldChar, value: a): BattleResult =
+    effect_ pure {
+      make_result(0, 0, 0, 0, "transform")
+    }
+}
+
+}

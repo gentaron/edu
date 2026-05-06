@@ -1,0 +1,48 @@
+name: chatbot-build
+on:
+  pull_request:
+    paths:
+      - 'src/features/chatbot/**'
+      - 'scripts/build-rag-index.ts'
+      - 'scripts/check-lore-integration.mjs'
+      - '.github/workflows/chatbot-build.yml'
+      - 'bun.lock'
+      - 'bun.lockb'
+  push:
+    branches: [main]
+    paths:
+      - 'src/features/chatbot/**'
+      - 'scripts/build-rag-index.ts'
+      - 'scripts/check-lore-integration.mjs'
+      - '.github/workflows/chatbot-build.yml'
+      - 'bun.lock'
+      - 'bun.lockb'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.x'
+
+      - name: Cache bun modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            ~/.bun/install/cache
+          key: bun-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run lint -- src/features/chatbot
+
+      - run: bunx vitest run src/features/chatbot
+
+      - run: bun run scripts/build-rag-index.ts -- --force --dry-run
+
+      - name: Lore-tech integration check
+        run: node scripts/check-lore-integration.mjs

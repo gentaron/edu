@@ -129,7 +129,7 @@ module.exports = {
       },
     },
   },
-};
+}
 ```
 
 ## Typography Best Practices
@@ -207,20 +207,20 @@ p {
 // Check contrast programmatically
 function getContrastRatio(foreground: string, background: string): number {
   const getLuminance = (hex: string) => {
-    const rgb = hexToRgb(hex);
+    const rgb = hexToRgb(hex)
     const [r, g, b] = rgb.map((c) => {
-      c = c / 255;
-      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
-    });
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-  };
+      c = c / 255
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
+    })
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+  }
 
-  const l1 = getLuminance(foreground);
-  const l2 = getLuminance(background);
-  const lighter = Math.max(l1, l2);
-  const darker = Math.min(l1, l2);
+  const l1 = getLuminance(foreground)
+  const l2 = getLuminance(background)
+  const lighter = Math.max(l1, l2)
+  const darker = Math.min(l1, l2)
 
-  return (lighter + 0.05) / (darker + 0.05);
+  return (lighter + 0.05) / (darker + 0.05)
 }
 ```
 
@@ -271,9 +271,9 @@ Icon-text gap:     8px (--space-2)
 
 ```tsx
 interface IconProps {
-  name: string;
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
-  className?: string;
+  name: string
+  size?: "xs" | "sm" | "md" | "lg" | "xl"
+  className?: string
 }
 
 const sizeMap = {
@@ -282,7 +282,7 @@ const sizeMap = {
   md: 20,
   lg: 24,
   xl: 32,
-};
+}
 
 export function Icon({ name, size = "md", className }: IconProps) {
   return (
@@ -294,7 +294,7 @@ export function Icon({ name, size = "md", className }: IconProps) {
     >
       <use href={`/icons.svg#${name}`} />
     </svg>
-  );
+  )
 }
 ```
 

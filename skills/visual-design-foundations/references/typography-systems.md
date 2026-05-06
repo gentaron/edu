@@ -17,22 +17,18 @@ const RATIOS = {
   augmentedFourth: 1.414, // √2
   perfectFifth: 1.5, // 3:2
   goldenRatio: 1.618, // φ
-};
+}
 
-function generateScale(
-  baseSize: number,
-  ratio: number,
-  steps: number,
-): number[] {
-  const scale: number[] = [];
+function generateScale(baseSize: number, ratio: number, steps: number): number[] {
+  const scale: number[] = []
   for (let i = -2; i <= steps; i++) {
-    scale.push(Math.round(baseSize * Math.pow(ratio, i) * 100) / 100);
+    scale.push(Math.round(baseSize * Math.pow(ratio, i) * 100) / 100)
   }
-  return scale;
+  return scale
 }
 
 // Generate a scale with 16px base and perfect fourth ratio
-const typeScale = generateScale(16, RATIOS.perfectFourth, 6);
+const typeScale = generateScale(16, RATIOS.perfectFourth, 6)
 // Result: [9, 12, 16, 21.33, 28.43, 37.9, 50.52, 67.34, 89.76]
 ```
 
@@ -110,13 +106,7 @@ body {
 ```html
 <head>
   <!-- Preload critical fonts -->
-  <link
-    rel="preload"
-    href="/fonts/Inter-Variable.woff2"
-    as="font"
-    type="font/woff2"
-    crossorigin
-  />
+  <link rel="preload" href="/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 ```
 
@@ -199,15 +189,11 @@ module.exports = {
       "5xl": ["3rem", { lineHeight: "1" }],
     },
   },
-};
+}
 
 // Component with responsive classes
 function Heading({ children }) {
-  return (
-    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-      {children}
-    </h1>
-  );
+  return <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">{children}</h1>
 }
 ```
 

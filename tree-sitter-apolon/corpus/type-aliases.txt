@@ -1,0 +1,57 @@
+================================================================
+simple-type-alias
+================================================================
+
+module test::simple_alias {
+
+alias Health = Int
+alias Name = String
+alias IsActive = Bool
+
+}
+
+================================================================
+generic-type-alias
+================================================================
+
+module test::generic_alias {
+
+alias List<a> = [a]
+alias Triple<a> = (a, a, a)
+alias Predicate<a> = a -> Bool
+alias Matrix<a> = [[a]]
+
+}
+
+================================================================
+alias-for-complex-types
+================================================================
+
+module test::complex_alias {
+
+alias Transform = Int -> Int
+alias Reducer<a> = a -> a -> a
+alias Handler = String -> Unit
+alias Config = {#debug: Bool, #verbose: Bool}
+
+}
+
+================================================================
+alias-in-module-context
+================================================================
+
+module cards::types {
+
+alias Damage = Int
+alias Shield = Int
+alias BattleLog = String
+
+alias EffectResult = {
+  #damage: Damage,
+  #heal: Shield,
+  #log: BattleLog
+}
+
+let default_result = {#damage = 0, #heal = 0, #log = ""}
+
+}

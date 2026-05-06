@@ -1,0 +1,41 @@
+================================================================
+simple-empty-module
+================================================================
+module cards::example {
+
+}
+
+================================================================
+module-with-imports
+================================================================
+module cards::diana {
+
+import prelude
+import effects::shield as shield
+
+}
+
+================================================================
+nested-module-path
+================================================================
+module cards::sr::ninigis {
+
+import prelude
+import cards::diana
+
+}
+
+================================================================
+module-with-multiple-declarations
+================================================================
+module game::core {
+
+import prelude
+
+effect heal_effect = pure
+
+let default_hp = 100
+
+fn get_hp(unit: FieldChar): Int = unit.hp
+
+}

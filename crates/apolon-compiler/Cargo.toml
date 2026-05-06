@@ -1,0 +1,13 @@
+[package]
+name = "apolon-compiler"
+version = "0.1.0"
+edition = "2021"
+description = "Apolon DSL compiler — Lexer, Parser, HM type inference, Effect system, SSA IR, Optimizer, WASM 2.0 codegen"
+
+[dependencies]
+wasm-encoder = "0.219"
+wasmparser = "0.219"
+log = "0.4"
+
+[dev-dependencies]
+proptest = "1"
