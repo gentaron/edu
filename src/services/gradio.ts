@@ -34,23 +34,53 @@ export interface AceStepQueryResultResponse {
 /**
  * ヘルスチェック — ACE-Stepの/healthエンドポイント使用
  * フォールバックでGradio /info と / も確認
+ * 各エンドポイントの結果とエラーをログ出力（デバッグ用）
  */
-export async function isGradioAvailable(): Promise<boolean> {
-  const candidates = [
-    `${GRADIO_URL}/health`,
-    `${GRADIO_URL}/gradio_api/info`,
-    `${GRADIO_URL}/info`,
-    `${GRADIO_URL}/`,
+export async function isGradioAvailable(): Promise<{
+  available: boolean;
+  reason: string;
+  gradioUrl: string;
+}> {
+  // 環境変数が未設定の場合
+  if (!process.env.ACESTEP_GRADIO_URL) {
+    return {
+      available: false,
+      reason: "ACESTEP_GRADIO_URL が .env に設定されていません",
+      gradioUrl: GRADIO_URL,
+    };
+  }
+
+  const candidates: Array<{ url: string; label: string }> = [
+    { url: `${GRADIO_URL}/health`, label: "/health" },
+    { url: `${GRADIO_URL}/gradio_api/info`, label: "/gradio_api/info" },
+    { url: `${GRADIO_URL}/info`, label: "/info" },
+    { url: `${GRADIO_URL}/`, label: "/" },
   ];
-  for (const url of candidates) {
+
+  const errors: string[] = [];
+
+  for (const { url, label } of candidates) {
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
-      if (res.ok) return true;
-    } catch {
-      // 次の候補を試す
+      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      if (res.ok) {
+        return {
+          available: true,
+          reason: `${label} (${res.status}) OK`,
+          gradioUrl: GRADIO_URL,
+        };
+      }
+      errors.push(`${label}: HTTP ${res.status}`);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      errors.push(`${label}: ${msg}`);
     }
   }
-  return false;
+
+  return {
+    available: false,
+    reason: `接続失敗 — ${errors.join(", ")}`,
+    gradioUrl: GRADIO_URL,
+  };
 }
 
 /**

@@ -14,17 +14,20 @@ export async function POST(req: NextRequest) {
     const body = (await req.json()) as MusicGenerationParams & { title?: string };
     const { title, ...params } = body;
 
-    const available = await isGradioAvailable();
-    if (!available) {
+    const health = await isGradioAvailable();
+    if (!health.available) {
+      console.error("[music/generate] ACE-Step health check failed:", health.reason, "URL:", health.gradioUrl);
       return NextResponse.json(
         {
           error:
-            "ACE-Step サーバーに接続できません。\n" +
-            "以下を確認してください:\n" +
-            "1. ACE-Step 1.5 が起動しているか\n" +
-            "2. --enable-api フラグ付きで起動しているか\n" +
-            '3. .env の ACESTEP_GRADIO_URL が正しいか (デフォルト: http://localhost:7860)\n' +
-            "起動例: acestep --port 7860 --enable-api --server-name 127.0.0.1",
+            "ACE-Step サーバーに接続できません。\n\n" +
+            `診断: ${health.reason}\n` +
+            `接続先: ${health.gradioUrl}\n\n` +
+            "解決策:\n" +
+            "1. ACE-Step 1.5 を起動:\n" +
+            "   acestep --port 7860 --enable-api --server-name 127.0.0.1\n" +
+            "2. .env に ACESTEP_GRADIO_URL を設定\n" +
+            "3. Netlify上ではACE-Stepは動作しません（ローカル環境のみ対応）",
         },
         { status: 503 },
       );
