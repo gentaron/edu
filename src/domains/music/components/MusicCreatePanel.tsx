@@ -109,7 +109,8 @@ export function MusicCreatePanel({ onGenerated }: MusicCreatePanelProps) {
       "Tier 3": "ambient, atmospheric, mysterious, ethereal",
     };
 
-    if (insp.tier && tierStyles[insp.tier]) return tierStyles[insp.tier];
+    const tier = insp.tier;
+    if (tier && tierStyles[tier]) return tierStyles[tier];
 
     // カテゴリ別のスタイル
     const categoryStyles: Record<string, string> = {
