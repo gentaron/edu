@@ -66,6 +66,14 @@ export async function POST(req: NextRequest) {
 
         // 最初の音声ファイルをダウンロード
         const audioServerPath = result.audio_paths[0];
+        if (!audioServerPath) {
+          await updateJob(job.id, {
+            status: "failed",
+            errorMessage: "音声ファイルパスが取得できませんでした",
+          });
+          return;
+        }
+
         await mkdir(AUDIO_DIR, { recursive: true });
 
         const audioFileName = `${song.id}.mp3`;
