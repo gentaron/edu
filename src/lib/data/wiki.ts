@@ -19,6 +19,7 @@ export function searchWikiEntries(query: string): WikiEntry[] {
     (entry) =>
       entry.name.toLowerCase().includes(q) ||
       (entry.nameEn && entry.nameEn.toLowerCase().includes(q)) ||
-      entry.description.toLowerCase().includes(q)
+      entry.description.toLowerCase().includes(q) ||
+      (entry.descriptionEn && entry.descriptionEn.toLowerCase().includes(q))
   )
 }

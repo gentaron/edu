@@ -18,6 +18,11 @@ export interface Civilization {
   history: string
   currentStatus: string
   relationships: string[]
+  specializationEn?: string
+  descriptionEn?: string
+  historyEn?: string
+  currentStatusEn?: string
+  relationshipsEn?: string[]
   wikiId: WikiId
   href: string
   isHistorical?: boolean
@@ -26,11 +31,17 @@ export interface Civilization {
 
 export interface CivilizationLeader {
   name: string
+  nameEn?: string
   title: string
+  titleEn?: string
   civilization: string
+  civilizationEn?: string
   civilizationColor: string
   wealth: string
+  wealthEn?: string
   source: string
+  sourceEn?: string
   era: string
+  eraEn?: string
   wikiId: WikiId
 }
