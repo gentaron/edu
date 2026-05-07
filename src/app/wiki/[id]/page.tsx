@@ -10,8 +10,8 @@ import { getStoriesForEntry } from "@/domains/stories/stories.meta"
 import WikiDescription from "./_components/wiki-description"
 import { RevealSection } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
-import { type Lang, tl } from "@/lib/lang"
-import { LangToggle } from "@/app/story/[slug]/_components/lang-toggle"
+import { type Lang, tl, tlCategory, tlTier } from "@/lib/lang"
+import { LangToggle } from "@/platform/lang-toggle"
 
 export default function WikiEntryPage() {
   const params = useParams<{ id: string }>()
@@ -35,7 +35,9 @@ export default function WikiEntryPage() {
     return (
       <div className="min-h-screen bg-edu-bg flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-light text-edu-text/80 mb-4">{tl("エントリが見つかりません", "Entry not found", lang)}</h1>
+          <h1 className="text-2xl font-light text-edu-text/80 mb-4">
+            {tl("エントリが見つかりません", "Entry not found", lang)}
+          </h1>
           <Link
             href="/wiki"
             className="text-sm text-edu-muted hover:text-edu-accent hover:underline inline-flex items-center gap-1 transition-colors"
@@ -62,9 +64,7 @@ export default function WikiEntryPage() {
         title={lang === "en" && entry.nameEn ? entry.nameEn : entry.name}
         subtitle={lang === "en" && entry.nameEn ? entry.name : entry.nameEn}
         wikiHref="/wiki"
-        extra={
-          <LangToggle lang={lang} setLang={setLang} />
-        }
+        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <main className="px-4 pb-16">
@@ -89,10 +89,14 @@ export default function WikiEntryPage() {
           {/* Category badges */}
           <RevealSection className="text-center mb-10" delay={100}>
             <div className="flex justify-center gap-2 mb-5">
-              <span className="wiki-badge">{entry.subCategory || entry.category}</span>
-              {entry.tier && <span className="wiki-badge">{entry.tier}</span>}
+              <span className="wiki-badge">
+                {tlCategory(entry.subCategory || entry.category, lang)}
+              </span>
+              {entry.tier && <span className="wiki-badge">{tlTier(entry.tier, lang)}</span>}
               {entry.era && <span className="wiki-badge">{entry.era}</span>}
-              {entry.category && <span className="wiki-badge">{entry.category}</span>}
+              {entry.category && (
+                <span className="wiki-badge">{tlCategory(entry.category, lang)}</span>
+              )}
             </div>
           </RevealSection>
 
@@ -154,7 +158,7 @@ export default function WikiEntryPage() {
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="text-sm text-edu-text group-hover:text-edu-accent transition-colors truncate">
-                            {leader.name}
+                            {lang === "en" && leader.nameEn ? leader.nameEn : leader.name}
                           </p>
                           <p className="text-[10px] text-edu-muted truncate">
                             {leader.role}
@@ -164,8 +168,10 @@ export default function WikiEntryPage() {
                         {leaderEntry && (
                           <span className="shrink-0 text-[9px] text-edu-muted">
                             {leaderEntry.category === "キャラクター"
-                              ? leaderEntry.tier || ""
-                              : leaderEntry.category}
+                              ? leaderEntry.tier
+                                ? tlTier(leaderEntry.tier, lang)
+                                : ""
+                              : tlCategory(leaderEntry.category, lang)}
                           </span>
                         )}
                       </Link>
@@ -184,7 +190,12 @@ export default function WikiEntryPage() {
                 {tl("概要", "Overview", lang)}
               </h2>
               <div className="wiki-body">
-                <WikiDescription description={entry.description} descriptionEn={entry.descriptionEn} entryId={entry.id} lang={lang} />
+                <WikiDescription
+                  description={entry.description}
+                  descriptionEn={entry.descriptionEn}
+                  entryId={entry.id}
+                  lang={lang}
+                />
               </div>
             </div>
           </RevealSection>
@@ -265,7 +276,7 @@ export default function WikiEntryPage() {
                 href={`/wiki/${encodeURIComponent(prevEntry.id)}`}
                 className="text-xs text-edu-muted hover:text-edu-accent transition-colors"
               >
-                ← {prevEntry.name}
+                ← {lang === "en" && prevEntry.nameEn ? prevEntry.nameEn : prevEntry.name}
               </Link>
             ) : (
               <span />
@@ -275,7 +286,7 @@ export default function WikiEntryPage() {
                 href={`/wiki/${encodeURIComponent(nextEntry.id)}`}
                 className="text-xs text-edu-muted hover:text-edu-accent transition-colors"
               >
-                {nextEntry.name} →
+                {lang === "en" && nextEntry.nameEn ? nextEntry.nameEn : nextEntry.name} →
               </Link>
             ) : (
               <span />

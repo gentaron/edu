@@ -2,6 +2,7 @@ export const PLATFORMS = [
   {
     name: "auralis-eternal-light.lovable.app",
     desc: "公式ポータル",
+    descEn: "Official Portal",
     type: "PORTAL",
     color: "text-edu-accent2 border-edu-accent2/30",
     bg: "bg-edu-accent2/10",
@@ -10,6 +11,7 @@ export const PLATFORMS = [
   {
     name: "bsky.app/profile/minaeurekaernst.bsky.social",
     desc: "ミナの直接放送",
+    descEn: "Mina's direct broadcast",
     type: "SOCIAL",
     color: "text-edu-accent2 border-edu-accent2/30",
     bg: "bg-edu-accent2/10",
@@ -18,6 +20,7 @@ export const PLATFORMS = [
   {
     name: "note.com/gensnotes",
     desc: "Genesis Vault（2000本突破）",
+    descEn: "Genesis Vault (2,000+ articles)",
     type: "ARCHIVE",
     color: "text-green-400 border-green-400/30",
     bg: "bg-green-400/10",
@@ -26,6 +29,7 @@ export const PLATFORMS = [
   {
     name: "suno.com/@liminalforge",
     desc: "音楽放送",
+    descEn: "Music broadcast",
     type: "MUSIC",
     color: "text-edu-accent border-edu-accent/30",
     bg: "bg-edu-accent/10",
@@ -34,6 +38,7 @@ export const PLATFORMS = [
   {
     name: "pixai.art/en/@apolon/artworks",
     desc: "ビジュアル放送",
+    descEn: "Visual broadcast",
     type: "VISUAL",
     color: "text-pink-400 border-pink-400/30",
     bg: "bg-pink-400/10",
@@ -42,6 +47,7 @@ export const PLATFORMS = [
   {
     name: "EDU Story Archive",
     desc: "アイリス物語（EDU内部）",
+    descEn: "Iris Story (EDU internal)",
     type: "STORY",
     color: "text-cyan-400 border-cyan-400/30",
     bg: "bg-cyan-400/10",

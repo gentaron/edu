@@ -3,29 +3,32 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, X } from "lucide-react"
+import { useLang } from "@/lib/use-lang"
+import { LangToggle } from "@/platform/lang-toggle"
 
 const SECTIONS = [
-  { id: "universe", label: "宇宙構造", href: "/universe" },
-  { id: "civilizations", label: "文明圏", href: "/civilizations" },
-  { id: "timeline", label: "年表", href: "/timeline" },
-  { id: "auralis", label: "AURALIS", href: "/auralis" },
-  { id: "mina", label: "ミナ", href: "/mina" },
-  { id: "liminal", label: "リミナル", href: "/liminal" },
-  { id: "iris", label: "アイリス", href: "/iris" },
-  { id: "characters", label: "キャラ", href: "/characters" },
-  { id: "factions", label: "勢力", href: "/factions" },
-  { id: "technology", label: "技術", href: "/technology" },
-  { id: "card-game-link", label: "Card Game", href: "/card-game" },
-  { id: "wiki-link", label: "Wiki", href: "/wiki" },
-  { id: "story-link", label: "Story", href: "/story" },
-  { id: "ranking-link", label: "番付", href: "/ranking" },
-  { id: "music-link", label: "音楽", href: "/music" },
+  { id: "universe", label: "宇宙構造", labelEn: "Universe", href: "/universe" },
+  { id: "civilizations", label: "文明圏", labelEn: "Civilizations", href: "/civilizations" },
+  { id: "timeline", label: "年表", labelEn: "Timeline", href: "/timeline" },
+  { id: "auralis", label: "AURALIS", labelEn: "AURALIS", href: "/auralis" },
+  { id: "mina", label: "ミナ", labelEn: "Mina", href: "/mina" },
+  { id: "liminal", label: "リミナル", labelEn: "Liminal", href: "/liminal" },
+  { id: "iris", label: "アイリス", labelEn: "Iris", href: "/iris" },
+  { id: "characters", label: "キャラ", labelEn: "Characters", href: "/characters" },
+  { id: "factions", label: "勢力", labelEn: "Factions", href: "/factions" },
+  { id: "technology", label: "技術", labelEn: "Technology", href: "/technology" },
+  { id: "card-game-link", label: "Card Game", labelEn: "Card Game", href: "/card-game" },
+  { id: "wiki-link", label: "Wiki", labelEn: "Wiki", href: "/wiki" },
+  { id: "story-link", label: "Story", labelEn: "Story", href: "/story" },
+  { id: "ranking-link", label: "番付", labelEn: "Ranking", href: "/ranking" },
+  { id: "music-link", label: "音楽", labelEn: "Music", href: "/music" },
 ]
 
 export function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
+  const { lang, setLang } = useLang()
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20)
@@ -71,7 +74,7 @@ export function Navigation() {
                     isActive ? "text-edu-accent" : "text-edu-muted hover:text-edu-text"
                   }`}
                 >
-                  {s.label}
+                  {lang === "en" && s.labelEn ? s.labelEn : s.label}
                   {isActive && (
                     <span
                       className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-0.5 rounded-full"
@@ -83,6 +86,9 @@ export function Navigation() {
                 </Link>
               )
             })}
+            <div className="ml-2">
+              <LangToggle lang={lang} setLang={setLang} />
+            </div>
           </div>
 
           {/* Mobile toggle */}
@@ -98,6 +104,9 @@ export function Navigation() {
         {/* Mobile menu — fullscreen overlay */}
         {mobileOpen && (
           <div className="lg:hidden fixed inset-0 top-12 bg-edu-bg/95 backdrop-blur-2xl z-40">
+            <div className="flex items-center justify-end p-4">
+              <LangToggle lang={lang} setLang={setLang} />
+            </div>
             <div className="flex flex-col p-6 gap-1">
               {SECTIONS.map((s) => {
                 const isActive = pathname === s.href || pathname.startsWith(s.href + "/")
@@ -112,7 +121,7 @@ export function Navigation() {
                         : "text-edu-muted hover:text-edu-text hover:bg-edu-surface"
                     }`}
                   >
-                    {s.label}
+                    {lang === "en" && s.labelEn ? s.labelEn : s.label}
                   </Link>
                 )
               })}

@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import {
   Crown,
@@ -20,6 +22,9 @@ import {
   OTHER_CIVILIZATIONS,
   HISTORICAL_CIVILIZATIONS,
 } from "@/domains/civilizations/civ.data"
+import { type Lang, tl } from "@/lib/lang"
+import { useLang } from "@/lib/use-lang"
+import { LangToggle } from "@/platform/lang-toggle"
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Crown: <Crown className="w-6 h-6" />,
@@ -35,13 +40,20 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 }
 
 export default function CivilizationsPage() {
+  const { lang, setLang } = useLang()
+
   return (
     <div className="min-h-screen bg-edu-bg">
       <PageHeader
         icon={<Globe2 className="w-6 h-6 text-amber-400" />}
-        title="宇宙5大文明圏"
-        subtitle="グランベル・エレシオン・ティエリア・ファルージャ・ディオクレニス — 宇宙勢力の全貌"
+        title={tl("宇宙5大文明圏", "Five Great Cosmic Civilizations", lang)}
+        subtitle={tl(
+          "グランベル・エレシオン・ティエリア・ファルージャ・ディオクレニス — 宇宙勢力の全貌",
+          "Grandel · Elyseon · Tyeria · Fallujah · Dioclenis — Overview of Cosmic Powers",
+          lang
+        )}
         wikiHref={`/wiki/${encodeURIComponent("グランベル")}`}
+        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <main className="px-4 pb-20">
@@ -49,26 +61,52 @@ export default function CivilizationsPage() {
           {/* 概説 */}
           <RevealSection>
             <div className="edu-card rounded-xl p-6 mb-10">
-              <p className="text-sm text-edu-muted leading-relaxed">
-                宇宙には多様な文明圏が存在し、それぞれが独自の技術・文化・政治体制で繁栄している。
-                中でも<span className="text-amber-400 font-medium">グランベル</span>
-                を頂点とする5大文明圏は、 宇宙の政治・経済・軍事の均衡を左右する重要な勢力である。
-                第一回
-                <a
-                  href={`/wiki/${encodeURIComponent("宇宙連合会合")}`}
-                  className="text-edu-accent hover:underline"
-                >
-                  宇宙連合会合
-                </a>
-                では、 全勢力の指導者が
-                <a
-                  href={`/wiki/${encodeURIComponent("オルダシティ")}`}
-                  className="text-edu-accent hover:underline"
-                >
-                  オルダシティ
-                </a>
-                に集い、宇宙の将来について議論した。
-              </p>
+              {lang === "ja" ? (
+                <p className="text-sm text-edu-muted leading-relaxed">
+                  宇宙には多様な文明圏が存在し、それぞれが独自の技術・文化・政治体制で繁栄している。
+                  中でも<span className="text-amber-400 font-medium">グランベル</span>
+                  を頂点とする5大文明圏は、 宇宙の政治・経済・軍事の均衡を左右する重要な勢力である。
+                  第一回
+                  <a
+                    href={`/wiki/${encodeURIComponent("宇宙連合会合")}`}
+                    className="text-edu-accent hover:underline"
+                  >
+                    宇宙連合会合
+                  </a>
+                  では、 全勢力の指導者が
+                  <a
+                    href={`/wiki/${encodeURIComponent("オルダシティ")}`}
+                    className="text-edu-accent hover:underline"
+                  >
+                    オルダシティ
+                  </a>
+                  に集い、宇宙の将来について議論した。
+                </p>
+              ) : (
+                <p className="text-sm text-edu-muted leading-relaxed">
+                  The cosmos is home to diverse civilizations, each prospering with unique
+                  technologies, cultures, and political systems. The{" "}
+                  <span className="text-amber-400 font-medium">
+                    Five Great Cosmic Civilizations
+                  </span>
+                  , led by Grandel, are pivotal forces that shape the balance of power across the
+                  cosmos. At the first{" "}
+                  <a
+                    href={`/wiki/${encodeURIComponent("宇宙連合会合")}`}
+                    className="text-edu-accent hover:underline"
+                  >
+                    Cosmic Assembly
+                  </a>
+                  , leaders of all factions gathered in{" "}
+                  <a
+                    href={`/wiki/${encodeURIComponent("オルダシティ")}`}
+                    className="text-edu-accent hover:underline"
+                  >
+                    Aldacity
+                  </a>{" "}
+                  to discuss the future of the cosmos.
+                </p>
+              )}
             </div>
           </RevealSection>
 
@@ -76,8 +114,12 @@ export default function CivilizationsPage() {
           <RevealSection>
             <SectionHeader
               icon={<Crown className="w-6 h-6 text-amber-400" />}
-              title="宇宙5大文明圏"
-              subtitle="宇宙を左右する5つの主要勢力"
+              title={tl("宇宙5大文明圏", "Five Great Cosmic Civilizations", lang)}
+              subtitle={tl(
+                "宇宙を左右する5つの主要勢力",
+                "The five major forces shaping the cosmos",
+                lang
+              )}
             />
           </RevealSection>
           <RevealSection>
@@ -92,15 +134,21 @@ export default function CivilizationsPage() {
                     <div className={`flex items-center gap-3 ${civ.color}`}>
                       {ICON_MAP[civ.icon] || <Globe2 className="w-6 h-6" />}
                       <div>
-                        <h3 className="text-lg font-bold">{civ.name}</h3>
-                        <p className="text-xs opacity-70">{civ.nameEn}</p>
+                        <h3 className="text-lg font-bold">
+                          {lang === "en" && civ.nameEn ? civ.nameEn : civ.name}
+                        </h3>
+                        <p className="text-xs opacity-70">
+                          {lang === "ja" ? civ.nameEn : civ.name}
+                        </p>
                       </div>
                     </div>
                     <span className={`text-2xl font-black ${civ.color} opacity-40`}>
                       #{civ.rank}
                     </span>
                   </div>
-                  <p className="text-xs text-edu-muted leading-relaxed mb-3">{civ.description}</p>
+                  <p className="text-xs text-edu-muted leading-relaxed mb-3">
+                    {lang === "en" && civ.descriptionEn ? civ.descriptionEn : civ.description}
+                  </p>
                   {civ.planets && civ.planets.length > 0 && (
                     <div className="flex flex-wrap gap-1 mb-3">
                       {civ.planets.map((p) => (
@@ -128,8 +176,8 @@ export default function CivilizationsPage() {
           <RevealSection>
             <SectionHeader
               icon={<Globe2 className="w-6 h-6 text-edu-accent2" />}
-              title="その他の文明圏"
-              subtitle="宇宙ランキング第6位〜第8位"
+              title={tl("その他の文明圏", "Other Civilizations", lang)}
+              subtitle={tl("宇宙ランキング第6位〜第8位", "Cosmic Rankings #6–#8", lang)}
             />
           </RevealSection>
           <RevealSection>
@@ -141,10 +189,16 @@ export default function CivilizationsPage() {
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <span className={`text-lg font-bold ${civ.color}`}>#{civ.rank}</span>
-                    <h3 className={`text-sm font-bold ${civ.color}`}>{civ.name}</h3>
-                    <span className="text-[10px] text-edu-muted">{civ.nameEn}</span>
+                    <h3 className={`text-sm font-bold ${civ.color}`}>
+                      {lang === "en" && civ.nameEn ? civ.nameEn : civ.name}
+                    </h3>
+                    <span className="text-[10px] text-edu-muted">
+                      {lang === "ja" ? civ.nameEn : civ.name}
+                    </span>
                   </div>
-                  <p className="text-xs text-edu-muted leading-relaxed mb-2">{civ.description}</p>
+                  <p className="text-xs text-edu-muted leading-relaxed mb-2">
+                    {lang === "en" && civ.descriptionEn ? civ.descriptionEn : civ.description}
+                  </p>
                   {civ.planets && civ.planets.length > 0 && (
                     <div className="flex flex-wrap gap-1 mb-2">
                       {civ.planets.map((p) => (
@@ -157,13 +211,18 @@ export default function CivilizationsPage() {
                       ))}
                     </div>
                   )}
-                  <p className="text-[10px] text-edu-muted">専門: {civ.specialization}</p>
+                  <p className="text-[10px] text-edu-muted">
+                    {tl("専門: ", "Specialty: ", lang)}
+                    {lang === "en" && civ.specializationEn
+                      ? civ.specializationEn
+                      : civ.specialization}
+                  </p>
                   {civ.wikiId && (
                     <Link
                       href={`/wiki/${encodeURIComponent(civ.wikiId)}`}
                       className="text-[10px] text-edu-accent hover:underline mt-1 inline-block"
                     >
-                      Wiki →
+                      {tl("Wiki →", "Wiki →", lang)}
                     </Link>
                   )}
                 </div>
@@ -175,8 +234,12 @@ export default function CivilizationsPage() {
           <RevealSection>
             <SectionHeader
               icon={<Swords className="w-6 h-6 text-red-400" />}
-              title="歴史的文明圏"
-              subtitle="アポロン大戦で消滅・変容した文明圏"
+              title={tl("歴史的文明圏", "Historical Civilizations", lang)}
+              subtitle={tl(
+                "アポロン大戦で消滅・変容した文明圏",
+                "Civilizations destroyed or transformed in the Apollon War",
+                lang
+              )}
             />
           </RevealSection>
           <RevealSection>
@@ -188,11 +251,15 @@ export default function CivilizationsPage() {
                 >
                   <div className="flex items-center gap-2 mb-3">
                     <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30">
-                      歴史的
+                      {tl("歴史的", "Historical", lang)}
                     </span>
-                    <h3 className={`text-sm font-bold ${civ.color}`}>{civ.name}</h3>
+                    <h3 className={`text-sm font-bold ${civ.color}`}>
+                      {lang === "en" && civ.nameEn ? civ.nameEn : civ.name}
+                    </h3>
                   </div>
-                  <p className="text-xs text-edu-muted leading-relaxed mb-3">{civ.description}</p>
+                  <p className="text-xs text-edu-muted leading-relaxed mb-3">
+                    {lang === "en" && civ.descriptionEn ? civ.descriptionEn : civ.description}
+                  </p>
                   {civ.planets && civ.planets.length > 0 && (
                     <div className="flex flex-wrap gap-1 mb-3">
                       {civ.planets.map((p) => (
@@ -210,7 +277,7 @@ export default function CivilizationsPage() {
                     href={`/wiki/${encodeURIComponent(civ.wikiId)}`}
                     className="text-[10px] text-edu-accent hover:underline inline-block"
                   >
-                    Wiki で詳しく見る →
+                    {tl("Wiki で詳しく見る →", "Learn more on Wiki →", lang)}
                   </Link>
                 </div>
               ))}
@@ -220,31 +287,33 @@ export default function CivilizationsPage() {
           {/* 関連リンク */}
           <RevealSection>
             <div className="edu-card rounded-xl p-6">
-              <h3 className="text-sm font-bold text-edu-text mb-4">関連ページ</h3>
+              <h3 className="text-sm font-bold text-edu-text mb-4">
+                {tl("関連ページ", "Related Pages", lang)}
+              </h3>
               <div className="flex flex-wrap gap-3">
                 <Link
                   href={`/wiki/${encodeURIComponent("ヘゲモニー・パラドックス")}`}
                   className="text-xs text-edu-accent hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50"
                 >
-                  ヘゲモニー・パラドックス
+                  {lang === "ja" ? "ヘゲモニー・パラドックス" : "Hegemony Paradox"}
                 </Link>
                 <Link
                   href={`/wiki/${encodeURIComponent("宇宙連合会合")}`}
                   className="text-xs text-edu-accent hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50"
                 >
-                  宇宙連合会合
+                  {lang === "ja" ? "宇宙連合会合" : "Cosmic Assembly"}
                 </Link>
                 <Link
                   href={`/wiki/${encodeURIComponent("アポロン・Dominion大戦")}`}
                   className="text-xs text-edu-accent hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50"
                 >
-                  アポロン・Dominion大戦
+                  {lang === "ja" ? "アポロン・Dominion大戦" : "Apollo-Dominion War"}
                 </Link>
                 <Link
                   href="/ranking"
                   className="text-xs text-emerald-400 hover:underline bg-edu-surface px-3 py-1.5 rounded-lg border border-edu-border/50"
                 >
-                  長者番付
+                  {tl("長者番付", "Wealth Rankings", lang)}
                 </Link>
                 <Link
                   href="/card-game"
@@ -261,7 +330,7 @@ export default function CivilizationsPage() {
       <footer className="relative border-t border-edu-border/50 py-8 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <Link href="/" className="text-xs text-edu-muted hover:text-edu-accent transition-colors">
-            ← トップページに戻る
+            {tl("← トップページに戻る", "← Back to Home", lang)}
           </Link>
         </div>
       </footer>

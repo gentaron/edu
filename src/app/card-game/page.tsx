@@ -15,6 +15,9 @@ import {
   ChevronDown,
   Info,
 } from "lucide-react"
+import { type Lang, tl } from "@/lib/lang"
+import { useLang } from "@/lib/use-lang"
+import { LangToggle } from "@/platform/lang-toggle"
 import { ALL_CARDS } from "@/domains/cards/cards.data"
 import type { GameCard } from "@/types"
 import { useDeckStore } from "@/lib/stores"
@@ -49,6 +52,7 @@ function CardInPool({
   inDeck: boolean
   onAdd: () => void
 }) {
+  const { lang } = useLang()
   const rc = rarityColors[card.rarity] ?? {
     border: "border-edu-border bg-edu-surface",
     label: "text-edu-muted",
@@ -78,7 +82,7 @@ function CardInPool({
       <div className="h-16 sm:h-20 w-full overflow-hidden bg-edu-bg/50 relative z-10">
         <Image
           src={card.imageUrl}
-          alt={card.name}
+          alt={lang === "en" && card.nameEn ? card.nameEn : card.name}
           width={144}
           height={80}
           sizes="(max-width: 640px) 100vw, 200px"
@@ -91,7 +95,7 @@ function CardInPool({
       <div className="flex-1 flex flex-col items-center justify-between p-1.5 sm:p-2 min-h-0 relative z-10">
         <div className="text-center">
           <p className="text-[8px] sm:text-[9px] font-bold text-edu-text leading-tight line-clamp-2">
-            {card.name}
+            {lang === "en" && card.nameEn ? card.nameEn : card.name}
           </p>
           <span
             className={`inline-block text-[7px] font-bold px-1.5 py-0.5 rounded mt-0.5 ${badgeClass}`}
@@ -125,6 +129,7 @@ function DeckSlot({
   onMoveUp: () => void
   onMoveDown: () => void
 }) {
+  const { lang } = useLang()
   const rc = rarityColors[card.rarity] ?? {
     border: "border-edu-border bg-edu-surface",
     label: "text-edu-muted",
@@ -158,7 +163,9 @@ function DeckSlot({
       </div>
 
       {/* Name */}
-      <span className="text-[10px] font-medium text-edu-text flex-1 truncate">{card.name}</span>
+      <span className="text-[10px] font-medium text-edu-text flex-1 truncate">
+        {lang === "en" && card.nameEn ? card.nameEn : card.name}
+      </span>
 
       {/* Rarity */}
       <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${badgeClass}`}>
@@ -196,6 +203,7 @@ function DeckSlot({
 
 export default function DeckBuildPage() {
   const router = useRouter()
+  const { lang, setLang } = useLang()
   const { deck, deckName, addCard, removeCard, moveCard, clearDeck, setDeckName } = useDeckStore(
     useShallow((s) => ({
       deck: s.deck,
@@ -229,11 +237,14 @@ export default function DeckBuildPage() {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center gap-2 sm:gap-3">
           <Link href="/" className="text-xs text-edu-muted hover:text-edu-text transition-colors">
             <ArrowLeft className="w-4 h-4 inline" />{" "}
-            <span className="hidden sm:inline">ホームへ</span>
+            <span className="hidden sm:inline">{tl("ホームへ", "Home", lang)}</span>
           </Link>
           <span className="text-edu-border">|</span>
           <Swords className="w-4 h-4 sm:w-5 sm:h-5 text-rose-400" />
-          <h1 className="text-xs sm:text-sm font-bold text-edu-text">EDU CARD GAME — デッキ構築</h1>
+          <h1 className="text-xs sm:text-sm font-bold text-edu-text flex-1">
+            {tl("EDU CARD GAME — デッキ構築", "EDU CARD GAME — Deck Builder", lang)}
+          </h1>
+          <LangToggle lang={lang} setLang={setLang} />
         </div>
       </div>
 
@@ -242,9 +253,11 @@ export default function DeckBuildPage() {
         <div className="flex items-start gap-2 mb-4 sm:mb-6">
           <Info className="w-4 h-4 text-edu-accent2 shrink-0 mt-0.5" />
           <p className="text-xs text-edu-muted">
-            64種のキャラクターから<strong className="text-edu-text">5枚</strong>
-            を選び、順番を決めてバトルに挑もう。
-            各カードは攻撃・防御・効果・必殺の4つの能力を持っています。順番は戦略の要です！
+            {tl(
+              "64種のキャラクターから5枚を選び、順番を決めてバトルに挑もう。各カードは攻撃・防御・効果・必殺の4つの能力を持っています。順番は戦略の要です！",
+              "Choose 5 cards from 64 characters, set their order, and enter battle. Each card has 4 abilities: Attack, Defense, Effect, and Ultimate. The order is key to strategy!",
+              lang
+            )}
           </p>
         </div>
 
@@ -265,7 +278,7 @@ export default function DeckBuildPage() {
                       : "border-edu-border/30 bg-edu-surface/30 text-edu-muted hover:text-edu-text"
                   }`}
                 >
-                  {r}
+                  {r === "全て" ? tl("全て", "All", lang) : r}
                 </button>
               ))}
             </div>
@@ -292,13 +305,13 @@ export default function DeckBuildPage() {
               value={deckName}
               onChange={(e) => setDeckName(e.target.value)}
               className="w-full bg-edu-bg/50 border border-edu-border/30 rounded-lg px-3 py-2 text-sm font-bold text-edu-text mb-3 focus:outline-none focus:border-edu-accent2/50"
-              placeholder="デッキ名"
+              placeholder={tl("デッキ名", "Deck Name", lang)}
             />
 
             {/* Count */}
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs text-edu-muted">
-                デッキ枚数:{" "}
+                {tl("デッキ枚数", "Deck Count", lang)}:{" "}
                 <span
                   className={isReady ? "text-emerald-400 font-bold" : "text-rose-400 font-bold"}
                 >
@@ -310,7 +323,7 @@ export default function DeckBuildPage() {
                 onClick={clearDeck}
                 className="text-[10px] text-edu-muted hover:text-rose-400 transition-colors flex items-center gap-1"
               >
-                <Trash2 className="w-3 h-3" /> クリア
+                <Trash2 className="w-3 h-3" /> {tl("クリア", "Clear", lang)}
               </button>
             </div>
 
@@ -318,7 +331,11 @@ export default function DeckBuildPage() {
             <div className="space-y-1.5 mb-4">
               {deck.length === 0 ? (
                 <p className="text-[10px] text-edu-muted/50 text-center py-6 sm:py-8">
-                  カードを下のプールから追加してください
+                  {tl(
+                    "カードを下のプールから追加してください",
+                    "Add cards from the pool below",
+                    lang
+                  )}
                 </p>
               ) : (
                 <AnimatePresence>
@@ -344,7 +361,7 @@ export default function DeckBuildPage() {
                       className="flex items-center justify-center px-2 py-1.5 rounded-lg border border-dashed border-edu-border/20"
                     >
                       <span className="text-[9px] text-edu-muted/40">
-                        空きスロット {deck.length + i + 1}
+                        {tl("空きスロット", "Empty Slot", lang)} {deck.length + i + 1}
                       </span>
                     </div>
                   ))}
@@ -362,7 +379,7 @@ export default function DeckBuildPage() {
                   : "bg-edu-bg/50 border border-edu-border/20 text-edu-muted cursor-not-allowed"
               }`}
             >
-              バトルへ
+              {tl("バトルへ", "To Battle", lang)}
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>

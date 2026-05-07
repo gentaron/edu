@@ -27,6 +27,20 @@ export const OTHER_CIVILIZATIONS = [
       "プロキオ — サンクチュアリへの巡礼ルートを通じた経済的つながり",
       "ロースター — 次元共鳴通信技術の共同研究",
     ],
+    specializationEn: "Religion \u00b7 Spiritual Influence",
+    descriptionEn:
+      "A religious and spiritual civilization forming a cosmic-scale faith community. The Oracle, composed of the Archbishop and High Priest, functions as the supreme decision-making body, and its prophecies boast an extremely high accuracy rate. Centered on the sacred central planet Vezrel ('Star of Truth'), the Sanctuary built near dimensional boundaries serves as its primary holy site. Its tradition of meditation and prophecy using dimensional resonance has widely influenced other civilizations.",
+    historyEn:
+      "Since ancient times, it has developed unique spiritual training methods based on dimensional boundary resonance phenomena, eventually establishing a theocratic system with the Oracle (Archbishop + High Priest) at its apex. It venerates the sacred central planet Vezrel as the 'Star of Truth' and built the Sanctuary near dimensional boundaries as the center of worship. Through Seraphim as its external agency, it has expanded its spiritual influence on other civilizations through active missionary activities. The high accuracy of its prophecies has directly influenced political decisions across multiple civilizations including Granbell and Tyeria.",
+    currentStatusEn:
+      "The Oracle's dimensional resonance prophecies continue to influence cosmic-scale decision-making. The Sanctuary bustles with pilgrims from across the cosmos, and Seraphim actively conducts diplomatic and missionary activities with other civilizations.",
+    relationshipsEn: [
+      "Fallujah \u2014 Diplomatic and spiritual exchange through Madris Cernel",
+      "Granbell \u2014 Political influence through prophecy",
+      "Tyeria \u2014 Spiritual guidance and military tension mediation",
+      "Prokio \u2014 Economic ties through pilgrimage routes to Sanctuary",
+      "Roastar \u2014 Joint research on dimensional resonance communication technology",
+    ],
     wikiId: "エレシュ" as WikiId,
     href: "/civilizations/eresh",
     planets: ["エレシュ・サンクチュアリ", "オラクル", "ヴェズレル", "セラフィム"],
@@ -57,6 +71,21 @@ export const OTHER_CIVILIZATIONS = [
       "ディオクレニス — 科学機器の優先物流協定",
       "エレシュ — サンクチュアリへの巡礼ルート運営",
     ],
+    specializationEn: "Cosmic-Scale Trade \u00b7 Logistics",
+    descriptionEn:
+      "A trade and logistics civilization controlling all trade routes throughout the cosmos. With the Trade Council Chairman as its supreme executive, it manages all commercial transactions across the cosmos centered on Prokio Nexus. The Commerce Department oversees all commercial transactions, while the AI logistics routing network 'Lane System' calculates optimal transport routes. Its open architecture has been integrated into Granbell and Elyseon as well.",
+    historyEn:
+      "Having gradually unified all trade routes by consolidating trade hubs across the cosmos since ancient times. Under the Trade Council Chairman's leadership, the Commerce Department was organized and commercial standardization was promoted. The development of the AI logistics routing network 'Lane System' realized cosmic-scale logistics optimization. Its open architecture design allowed Granbell and Elyseon to integrate Lane System within their spheres.",
+    currentStatusEn:
+      "Price setting at Prokio Nexus continues to function as the baseline price for the entire cosmos. The Lane System's open architecture is being adopted by more civilizations, and transaction standardization is progressing through the Prokio Clear payment system.",
+    relationshipsEn: [
+      "Granbell \u2014 Lane System integration and Prokio Clear adoption",
+      "Elyseon \u2014 Lane System integration and medical supply priority delivery agreement",
+      "Tyeria \u2014 Relationship through military logistics management",
+      "Fallujah \u2014 Cultural goods and art trade route provision",
+      "Dioclenis \u2014 Priority logistics agreement for scientific equipment",
+      "Eresh \u2014 Pilgrimage route operation to Sanctuary",
+    ],
     planets: ["プロキオ・ネクサス", "コマース", "レーン", "バザール"],
     wikiId: "プロキオ" as WikiId,
     href: "/civilizations/prokio",
@@ -86,6 +115,21 @@ export const OTHER_CIVILIZATIONS = [
       "エレシオン — 医療通信回線の優先確保協定",
       "ファルージャ — 文化放送ネットワークの運営支援",
       "エレシュ — 次元共鳴通信技術の共同研究",
+    ],
+    specializationEn: "Interdimensional Communication \u00b7 Quantum Networks",
+    descriptionEn:
+      "A technological civilization specializing in interdimensional communication and quantum network technology innovation. With the Communications Commissioner as its supreme executive, it promotes quantum computing research centered on Roastar Core. Signal Operations manages the entire cosmos's satellite communication network, while Quanta Lab conducts cutting-edge quantum protocol research. The 'Link Protocol' is the only universal communication standard used across all civilizations, currently at version Link 7.2.",
+    historyEn:
+      "Starting from interdimensional communication research, it grew to integrate the entire cosmos's communication infrastructure. It established a quantum computing center at Roastar Core and created a unified management system for all cosmic communications. Through Signal Operations' satellite communication network construction, it achieved stable communication across dimensional boundaries.",
+    currentStatusEn:
+      "Link 7.2 adoption is progressing across the entire cosmos. Next-generation quantum technology research is accelerating at Quanta Lab, with the open innovation model enabling cosmic-scale deployment of new technologies within months.",
+    relationshipsEn: [
+      "Tyeria \u2014 Connected to defense network ensuring emergency routing",
+      "Dioclenis \u2014 Joint research at Quanta Lab, researcher dispatch",
+      "Granbell \u2014 Major customer of communication infrastructure, technology standard coordination",
+      "Elyseon \u2014 Priority medical communication line agreement",
+      "Fallujah \u2014 Cultural broadcast network operation support",
+      "Eresh \u2014 Joint research on dimensional resonance communication technology",
     ],
     planets: ["ロースター・コア", "シグナル", "クアンタ", "リンク"],
     wikiId: "ロースター" as WikiId,

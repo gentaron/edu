@@ -62,22 +62,28 @@ export function classifyEffect(effect: string): EffectType {
 export interface GameCard {
   id: CardId
   name: string
+  nameEn?: string
   imageUrl: string
   flavorText: string
+  flavorTextEn?: string
   rarity: "C" | "R" | "SR"
   affiliation: string
+  affiliationEn?: string
   attack: number
   defense: number
   effect: string
+  effectEn?: string
   effectType: EffectType
   effectValue: number
   ultimate: number
   ultimateName: string
+  ultimateNameEn?: string
 }
 
 export interface EnemyPhase {
   triggerHpPercent: number
   message: string
+  messageEn?: string
   attackBonus: number
   selfHealPerTurn?: number
 }
@@ -85,13 +91,17 @@ export interface EnemyPhase {
 export interface Enemy {
   id: EnemyId
   name: string
+  nameEn?: string
   title: string
+  titleEn?: string
   maxHp: number
   attackPower: number
   imageUrl: string
   description: string
+  descriptionEn?: string
   difficulty: "NORMAL" | "HARD" | "BOSS" | "FINAL"
   reward: string
+  rewardEn?: string
   phases: EnemyPhase[]
   specialRule?: string
 }

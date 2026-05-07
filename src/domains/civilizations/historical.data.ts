@@ -26,6 +26,18 @@ export const HISTORICAL_CIVILIZATIONS = [
       "アポロン文明圏 — 全面戦争",
       "グランベル — マスター・クインシアスがセリアを高評価",
     ],
+    specializationEn: "Dimensional Energy Technology (Phovos) \u00b7 Female-Led Society",
+    descriptionEn:
+      "Founded when Celia Dominix seized control of Gigapolis and renamed it Selinopolis. Centered on the dimensional energy technology Phovos, it prospered as a female-led society. Peak GDP of 81 trillion dollars. After the Apollon War, it was absorbed by Evatron.",
+    historyEn:
+      "The Celia Golden Age from E335 to E370. Led to the peak of Fermi music, establishment of the n-token economy, and the zenith of AURALIS. Fought alongside Evatron in the Apollon War, but post-war GDP plummeted to 23 trillion. Subsequently, it was acquired and absorbed by Evatron under Viron Daxe's leadership.",
+    currentStatusEn:
+      "Currently absorbed by Evatron, which controls the E16 system under its authority.",
+    relationshipsEn: [
+      "Evatron \u2014 Alliance \u2192 Absorption",
+      "Apollon Civilization \u2014 Total war",
+      "Granbell \u2014 Master Quinsias held Celia in high regard",
+    ],
     planets: ["Symphony of Stars", "Eros-7", "E16小惑星帯"],
     wikiId: "セリア・ドミニクス" as WikiId,
     href: "",
@@ -51,6 +63,16 @@ export const HISTORICAL_CIVILIZATIONS = [
       "ロナン・アーサがセリアに同盟を提案したが拒絶されたことが戦争の端緒。ケンタウロスレーザーとG4ファントムパルスが交差する激戦の末、セリアのヴェノム艦隊がアポロン・セントラリスを攻略。GDP32億に激減し、文明圏としての機能を失った。",
     currentStatus: "壊滅状態。GDP32億ドルに激減。",
     relationships: ["Dominion — 同盟拒絶→全面戦争", "エヴァトロン — 戦後の混乱に関連"],
+    specializationEn: "Order of Apollon \u00b7 Centaurus Laser",
+    descriptionEn:
+      "A heroic civilization led by Ronan Arthur. Peak GDP of 125 trillion dollars. Possessing the Order of Apollon and the Centaurus Laser, it fought a total war against Dominion but was annihilated by Celia's Venom Fleet.",
+    historyEn:
+      "The war began when Ronan Arthur's alliance proposal to Celia was rejected. After fierce battles where the Centaurus Laser and G4 Phantom Pulse clashed, Celia's Venom Fleet conquered Apollon Centralis. GDP plummeted to 3.2 billion, and the civilization lost all functionality.",
+    currentStatusEn: "Annihilated. GDP plummeted to 3.2 billion dollars.",
+    relationshipsEn: [
+      "Dominion \u2014 Alliance rejected \u2192 Total war",
+      "Evatron \u2014 Related to post-war chaos",
+    ],
     planets: ["アポロン・セントラリス（崩壊）", "アレス", "ヘファイストス", "アテナ"],
     wikiId: "アポロン・Dominion大戦" as WikiId,
     href: "",
@@ -79,6 +101,17 @@ export const HISTORICAL_CIVILIZATIONS = [
       "Dominion — 同盟→吸収",
       "アポロン文明圏 — 大戦の敵対",
       "セリアンズ — 抵抗に直面",
+    ],
+    specializationEn: "Patriarchal Culture \u00b7 E16 System Domination",
+    descriptionEn:
+      "A civilization based on patriarchal culture. Grim Dargos was the founding leader. Allied with Dominion and participated in the Apollon War. Post-war, it acquired and absorbed the exhausted Dominion. Viron Daxe was appointed as ruler, placing the E16 system under its control.",
+    historyEn:
+      "Approved an alliance with Celia. Fought on the Dominion side in the Apollon War. Post-war, Viron Daxe acquired and absorbed the exhausted Dominion. Evatron's culture and values permeated throughout Dominion's territory. It continues to influence the E16 system to this day.",
+    currentStatusEn: "Currently ranked 14th. Facing resistance from the Celians.",
+    relationshipsEn: [
+      "Dominion \u2014 Alliance \u2192 Absorption",
+      "Apollon Civilization \u2014 War adversaries",
+      "Celians \u2014 Facing resistance",
     ],
     planets: ["エヴァ・プライム", "Evapolis（Gigapolis）", "ゴルゴン", "タルタロス"],
     wikiId: "エヴァトロン" as WikiId,
