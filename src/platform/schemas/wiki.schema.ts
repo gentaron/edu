@@ -22,6 +22,7 @@ export const WikiEntrySchema = z.object({
   category: CategorySchema,
   subCategory: z.string().optional(),
   description: z.string().min(1),
+  descriptionEn: z.string().optional(),
   era: z.string().optional(),
   affiliation: z.string().optional(),
   tier: z.string().optional(),

@@ -22,6 +22,7 @@ export interface WikiEntry {
   category: Category
   subCategory?: string
   description: string
+  descriptionEn?: string
   era?: string
   affiliation?: string
   tier?: string
