@@ -15,6 +15,8 @@ import {
   ArrowLeft,
 } from "lucide-react"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
+import { type Lang, tl } from "@/lib/lang"
+import { LangToggle } from "@/app/story/[slug]/_components/lang-toggle"
 
 type Category = "キャラクター" | "用語" | "組織" | "地理" | "技術" | "歴史"
 
@@ -69,6 +71,19 @@ function WikiPage() {
   const searchParams = useSearchParams()
   const categoryParam = searchParams.get("category") as Category | null
   const [search, setSearch] = useState("")
+  const [lang, setLangState] = useState<Lang>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("edu-lang") as Lang | null
+      if (saved === "en" || saved === "ja") {
+        return saved
+      }
+    }
+    return "ja"
+  })
+  const setLang = (l: Lang) => {
+    setLangState(l)
+    localStorage.setItem("edu-lang", l)
+  }
 
   const isSearching = search.trim().length > 0
   const showCategory = !isSearching && categoryParam
@@ -82,7 +97,8 @@ function WikiPage() {
       (e) =>
         e.name.toLowerCase().includes(q) ||
         (e.nameEn && e.nameEn.toLowerCase().includes(q)) ||
-        e.description.toLowerCase().includes(q)
+        e.description.toLowerCase().includes(q) ||
+        (e.descriptionEn && e.descriptionEn.toLowerCase().includes(q))
     )
   }, [search, isSearching])
 
@@ -145,9 +161,12 @@ function WikiPage() {
     <main className="min-h-screen bg-edu-bg pt-16 pb-20">
       {/* Header + Search */}
       <div className="max-w-3xl mx-auto px-4 pt-8 pb-6">
-        <h1 className="text-xl font-bold text-edu-text mb-1">EDU Wiki 百科事典</h1>
+        <div className="flex items-center justify-between gap-4 mb-1">
+          <h1 className="text-xl font-bold text-edu-text">{tl("EDU Wiki 百科事典", "EDU Wiki Encyclopedia", lang)}</h1>
+          <LangToggle lang={lang} setLang={setLang} />
+        </div>
         <p className="text-xs text-edu-muted mb-6">
-          {ALL_ENTRIES.length} entries — キャラクター・組織・地理・技術・用語・歴史
+          {ALL_ENTRIES.length} {tl("件", "entries", lang)} — {tl("キャラクター・組織・地理・技術・用語・歴史", "Characters · Organizations · Geography · Technology · Terms · History", lang)}
         </p>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-edu-muted" />
@@ -155,7 +174,7 @@ function WikiPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Wiki内を検索..."
+            placeholder={tl("Wiki内を検索...", "Search wiki...", lang)}
             className="w-full bg-edu-surface border border-edu-border rounded-lg pl-10 pr-4 py-2.5 text-sm text-edu-text placeholder:text-edu-muted focus:outline-none focus:border-edu-accent"
           />
         </div>
@@ -166,11 +185,11 @@ function WikiPage() {
         {isSearching ? (
           <div>
             <p className="text-xs text-edu-muted mb-4">
-              「{search}」の検索結果: {searchResults.length}件
+              {tl(`「${search}」の検索結果:`, `Search results for "${search}":`, lang)} {searchResults.length}{tl("件", " entries", lang)}
             </p>
             {searchResults.length === 0 ? (
               <p className="text-xs text-edu-muted text-center py-12">
-                該当するエントリがありません
+                {tl("該当するエントリがありません", "No matching entries found", lang)}
               </p>
             ) : (
               <div className="space-y-2">
@@ -181,13 +200,16 @@ function WikiPage() {
                     className={`block edu-card p-3 border-l-[3px] ${BORDER_COLORS[entry.category] || "border-l-edu-border"} hover:border-edu-accent transition-colors`}
                   >
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-xs font-medium text-edu-text">{entry.name}</span>
-                      {entry.nameEn && (
+                      <span className="text-xs font-medium text-edu-text">{lang === "en" && entry.nameEn ? entry.nameEn : entry.name}</span>
+                      {entry.nameEn && lang !== "en" && (
                         <span className="text-[10px] text-edu-muted">{entry.nameEn}</span>
+                      )}
+                      {entry.name && lang === "en" && entry.nameEn && entry.name !== entry.nameEn && (
+                        <span className="text-[10px] text-edu-muted">{entry.name}</span>
                       )}
                     </div>
                     <p className="text-[11px] text-edu-muted leading-relaxed line-clamp-2">
-                      {entry.description}
+                      {(lang === "en" && entry.descriptionEn ? entry.descriptionEn : entry.description).slice(0, 100)}{(lang === "en" && entry.descriptionEn ? entry.descriptionEn : entry.description).length > 100 ? "…" : ""}
                     </p>
                   </Link>
                 ))}
@@ -202,16 +224,16 @@ function WikiPage() {
               className="inline-flex items-center gap-1 text-xs text-edu-muted hover:text-edu-accent transition-colors mb-4"
             >
               <ChevronRight className="w-3 h-3 rotate-180" />
-              カテゴリ一覧に戻る
+              {tl("カテゴリ一覧に戻る", "Back to categories", lang)}
             </Link>
             <div className="flex items-center gap-2 mb-6">
               <activeCategoryConfig.icon className={`w-4 h-4 ${activeCategoryConfig.color}`} />
-              <h2 className="text-sm font-bold text-edu-text">{activeCategoryConfig.label}</h2>
-              <span className="text-[10px] text-edu-muted">{categoryEntries.length}件</span>
+              <h2 className="text-sm font-bold text-edu-text">{lang === "en" ? activeCategoryConfig.labelEn : activeCategoryConfig.label}</h2>
+              <span className="text-[10px] text-edu-muted">{categoryEntries.length}{tl("件", " entries", lang)}</span>
             </div>
             {categoryEntries.length === 0 ? (
               <p className="text-xs text-edu-muted text-center py-12">
-                該当するエントリがありません
+                {tl("該当するエントリがありません", "No matching entries found", lang)}
               </p>
             ) : (
               <div className="space-y-2">
@@ -222,9 +244,12 @@ function WikiPage() {
                     className={`block edu-card p-3 border-l-[3px] ${BORDER_COLORS[entry.category] || "border-l-edu-border"} hover:border-edu-accent transition-colors`}
                   >
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-xs font-medium text-edu-text">{entry.name}</span>
-                      {entry.nameEn && (
+                      <span className="text-xs font-medium text-edu-text">{lang === "en" && entry.nameEn ? entry.nameEn : entry.name}</span>
+                      {entry.nameEn && lang !== "en" && (
                         <span className="text-[10px] text-edu-muted">{entry.nameEn}</span>
+                      )}
+                      {entry.name && lang === "en" && entry.nameEn && entry.name !== entry.nameEn && (
+                        <span className="text-[10px] text-edu-muted">{entry.name}</span>
                       )}
                       {entry.tier && (
                         <span className="text-[10px] text-edu-muted bg-edu-surface px-1.5 py-0.5 rounded">
@@ -233,7 +258,7 @@ function WikiPage() {
                       )}
                     </div>
                     <p className="text-[11px] text-edu-muted leading-relaxed line-clamp-2">
-                      {entry.description}
+                      {(lang === "en" && entry.descriptionEn ? entry.descriptionEn : entry.description).slice(0, 100)}{(lang === "en" && entry.descriptionEn ? entry.descriptionEn : entry.description).length > 100 ? "…" : ""}
                     </p>
                   </Link>
                 ))}
@@ -257,7 +282,7 @@ function WikiPage() {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <Icon className={`w-4 h-4 ${cat.color}`} />
-                      <h2 className="text-sm font-bold text-edu-text">{cat.label}</h2>
+                      <h2 className="text-sm font-bold text-edu-text">{lang === "en" ? cat.labelEn : cat.label}</h2>
                       <span className="text-[10px] text-edu-muted">{entries.length}</span>
                     </div>
                   </div>
@@ -282,7 +307,7 @@ function WikiPage() {
                         href={`/wiki/${encodeURIComponent(entry.id)}`}
                         className="text-xs text-edu-accent hover:text-edu-accent2 transition-colors"
                       >
-                        {entry.name}
+                        {lang === "en" && entry.nameEn ? entry.nameEn : entry.name}
                       </Link>
                     ))}
                     <span className="text-xs text-edu-muted">...</span>
@@ -292,7 +317,7 @@ function WikiPage() {
                     href={`/wiki?category=${encodeURIComponent(cat.key)}`}
                     className="inline-flex items-center gap-1 text-[10px] text-edu-muted hover:text-edu-accent transition-colors"
                   >
-                    全{entries.length}件を見る <ChevronRight className="w-3 h-3" />
+                    {tl(`全${entries.length}件を見る`, `View all ${entries.length} entries`, lang)} <ChevronRight className="w-3 h-3" />
                   </Link>
                 </section>
               )
@@ -309,7 +334,7 @@ function WikiPage() {
             className="inline-flex items-center gap-1.5 text-xs text-edu-muted hover:text-edu-accent transition-colors"
           >
             <ArrowLeft className="w-3 h-3" />
-            メインページに戻る
+            {tl("メインページに戻る", "Back to main page", lang)}
           </Link>
         </div>
       </footer>

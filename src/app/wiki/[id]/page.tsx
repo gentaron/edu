@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import Link from "next/link"
@@ -10,22 +10,37 @@ import { getStoriesForEntry } from "@/domains/stories/stories.meta"
 import WikiDescription from "./_components/wiki-description"
 import { RevealSection } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
+import { type Lang, tl } from "@/lib/lang"
+import { LangToggle } from "@/app/story/[slug]/_components/lang-toggle"
 
 export default function WikiEntryPage() {
   const params = useParams<{ id: string }>()
   const decodedId = decodeURIComponent(params.id || "")
   const entry = ALL_ENTRIES.find((e) => e.id === decodedId)
+  const [lang, setLangState] = useState<Lang>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("edu-lang") as Lang | null
+      if (saved === "en" || saved === "ja") {
+        return saved
+      }
+    }
+    return "ja"
+  })
+  const setLang = (l: Lang) => {
+    setLangState(l)
+    localStorage.setItem("edu-lang", l)
+  }
 
   if (!entry) {
     return (
       <div className="min-h-screen bg-edu-bg flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-light text-edu-text/80 mb-4">エントリが見つかりません</h1>
+          <h1 className="text-2xl font-light text-edu-text/80 mb-4">{tl("エントリが見つかりません", "Entry not found", lang)}</h1>
           <Link
             href="/wiki"
             className="text-sm text-edu-muted hover:text-edu-accent hover:underline inline-flex items-center gap-1 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4" /> Wikiに戻る
+            <ArrowLeft className="w-4 h-4" /> {tl("Wikiに戻る", "Back to Wiki", lang)}
           </Link>
         </div>
       </div>
@@ -44,9 +59,12 @@ export default function WikiEntryPage() {
     <div className="min-h-screen bg-edu-bg">
       <PageHeader
         icon={<BookOpen className="w-5 h-5" />}
-        title={entry.name}
-        subtitle={entry.nameEn}
+        title={lang === "en" && entry.nameEn ? entry.nameEn : entry.name}
+        subtitle={lang === "en" && entry.nameEn ? entry.name : entry.nameEn}
         wikiHref="/wiki"
+        extra={
+          <LangToggle lang={lang} setLang={setLang} />
+        }
       />
 
       <main className="px-4 pb-16">
@@ -85,7 +103,7 @@ export default function WikiEntryPage() {
                 {entry.era && (
                   <div className="edu-card p-4">
                     <p className="text-[10px] text-edu-muted mb-1.5 uppercase tracking-widest">
-                      時代
+                      {tl("時代", "Era", lang)}
                     </p>
                     <p className="text-sm text-edu-text">{entry.era}</p>
                   </div>
@@ -93,7 +111,7 @@ export default function WikiEntryPage() {
                 {entry.affiliation && (
                   <div className="edu-card p-4">
                     <p className="text-[10px] text-edu-muted mb-1.5 uppercase tracking-widest">
-                      所属
+                      {tl("所属", "Affiliation", lang)}
                     </p>
                     <p className="text-sm text-edu-text">{entry.affiliation}</p>
                   </div>
@@ -108,7 +126,7 @@ export default function WikiEntryPage() {
               <div className="edu-card p-6 sm:p-8 mb-8">
                 <h2 className="text-[11px] text-edu-muted mb-5 uppercase tracking-widest flex items-center gap-2">
                   <Crown className="w-3.5 h-3.5 text-edu-accent/60" />
-                  歴代指導者
+                  {tl("歴代指導者", "Historical Leaders", lang)}
                 </h2>
                 <div className="space-y-2">
                   {entry.leaders.map((leader) => {
@@ -163,10 +181,10 @@ export default function WikiEntryPage() {
             <div className="edu-card p-6 sm:p-8 mb-8">
               <h2 className="text-[11px] text-edu-muted mb-5 uppercase tracking-widest flex items-center gap-2">
                 <Scroll className="w-3.5 h-3.5 text-edu-accent/60" />
-                概要
+                {tl("概要", "Overview", lang)}
               </h2>
               <div className="wiki-body">
-                <WikiDescription description={entry.description} entryId={entry.id} />
+                <WikiDescription description={entry.description} descriptionEn={entry.descriptionEn} entryId={entry.id} lang={lang} />
               </div>
             </div>
           </RevealSection>
@@ -182,7 +200,7 @@ export default function WikiEntryPage() {
                 <div className="edu-card p-6 sm:p-8 mb-8">
                   <h2 className="text-[11px] text-edu-muted mb-5 uppercase tracking-widest flex items-center gap-2">
                     <BookOpen className="w-3.5 h-3.5 text-edu-accent/60" />
-                    関連作品
+                    {tl("関連作品", "Related Stories", lang)}
                   </h2>
                   <div className="space-y-2">
                     {stories.map((story) => (
@@ -206,7 +224,7 @@ export default function WikiEntryPage() {
             <RevealSection delay={400}>
               <div className="mb-8">
                 <h2 className="text-[11px] text-edu-muted mb-4 uppercase tracking-widest">
-                  関連エントリ
+                  {tl("関連エントリ", "Related Entries", lang)}
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {relatedEntries.map((rel) => (
@@ -231,7 +249,7 @@ export default function WikiEntryPage() {
                         )}
                       </div>
                       <p className="text-xs text-edu-text group-hover:text-edu-accent transition-colors truncate">
-                        {rel.name}
+                        {lang === "en" && rel.nameEn ? rel.nameEn : rel.name}
                       </p>
                     </Link>
                   ))}
@@ -273,7 +291,7 @@ export default function WikiEntryPage() {
             className="inline-flex items-center gap-1.5 text-xs text-edu-muted hover:text-edu-accent transition-colors"
           >
             <ArrowLeft className="w-3 h-3" />
-            EDU 百科事典に戻る
+            {tl("EDU 百科事典に戻る", "Back to EDU Encyclopedia", lang)}
           </Link>
         </div>
       </footer>

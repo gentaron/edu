@@ -3,6 +3,7 @@
 import React, { useMemo } from "react"
 import Link from "next/link"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
+import { type Lang } from "@/lib/lang"
 
 // ── Build the name→id lookup map ONCE at module level ──────────────────
 // Each entry maps both its Japanese `name` and English `nameEn` (if present)
@@ -57,11 +58,14 @@ for (const item of NAME_MAP) {
 
 interface WikiDescriptionProps {
   description: string
+  descriptionEn?: string
   entryId?: string
+  lang?: Lang
 }
 
-export default function WikiDescription({ description, entryId }: WikiDescriptionProps) {
-  const segments = useMemo(() => tokenize(description, entryId), [description, entryId])
+export default function WikiDescription({ description, descriptionEn, entryId, lang }: WikiDescriptionProps) {
+  const text = lang === "en" && descriptionEn ? descriptionEn : description
+  const segments = useMemo(() => tokenize(text, entryId), [text, entryId])
 
   return (
     <p className="text-sm sm:text-base text-white/65 leading-relaxed whitespace-pre-line font-light">
