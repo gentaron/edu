@@ -1,1008 +1,1048 @@
-//! Three-level effect system for the Apolon DSL.
-//!
-//! Every function and ability is classified by its effect level:
-//! - **Pure** (L0): No side effects
-//! - **View** (L1): May read BattleState but not modify it
-//! - **Mut** (L2): May read and write BattleState
-//!
-//! The effect system performs bottom-up inference of effect levels from function
-//! calls, and rejects violations (pure calling mut, view calling mut).
+//! Effect system for the Apolon DSL — tracks purity / randomness / mutation.
 
-use crate::ast::{Expr, Stmt};
-pub use crate::ast::EffectLevel;
-use crate::span::Span;
+use crate::ast::*;
+use crate::error::Span;
 use std::collections::HashMap;
-use std::fmt;
 
-impl fmt::Display for EffectLevel {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+// ---------------------------------------------------------------------------
+// Effect lattice
+// ---------------------------------------------------------------------------
+
+/// Effect level of a computation.
+///
+/// Ordering: `Pure < Random < Mutating` (subtyping / impurity lattice).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub enum Effect {
+    /// No side-effects.
+    Pure,
+    /// Uses randomness (e.g. `roll`).
+    Random,
+    /// Mutates game state (e.g. `damage`).
+    Mutating,
+}
+
+impl std::fmt::Display for Effect {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Pure => write!(f, "pure"),
-            Self::View => write!(f, "view"),
-            Self::Mut => write!(f, "mut"),
+            Effect::Pure => write!(f, "pure"),
+            Effect::Random => write!(f, "random"),
+            Effect::Mutating => write!(f, "mutating"),
         }
     }
 }
 
-/// Effect system errors.
+impl Effect {
+    /// Convert an AST-level effect annotation into an `Effect`.
+    pub fn from_ann(ann: EffectAnn) -> Self {
+        match ann {
+            EffectAnn::Pure => Effect::Pure,
+            EffectAnn::Random => Effect::Random,
+            EffectAnn::Mutating => Effect::Mutating,
+        }
+    }
+
+    /// Compute the least upper bound (join) of two effects.
+    ///
+    /// ```text
+    /// pure + pure = pure
+    /// pure + random = random
+    /// pure + mutating = mutating
+    /// random + random = random
+    /// random + mutating = mutating
+    /// mutating + mutating = mutating
+    /// ```
+    #[must_use]
+    pub fn lattice_join(e1: Effect, e2: Effect) -> Effect {
+        std::cmp::max(e1, e2)
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Effect errors
+// ---------------------------------------------------------------------------
+
+/// Kinds of effect errors.
 #[derive(Debug, Clone, PartialEq)]
-pub enum EffectError {
-    /// A pure function calls a view or mut function.
-    PureViolation {
-        function_name: String,
-        called_name: String,
-        called_level: EffectLevel,
-        span: Span,
+pub enum EffectErrorKind {
+    /// An impure call was made inside a context that requires purity.
+    ImpureCallInPureContext {
+        /// The effect level of the called function.
+        called: Effect,
+        /// The effect level of the enclosing context.
+        context: Effect,
     },
-    /// A view function calls a mut function.
-    ViewViolation {
-        function_name: String,
-        called_name: String,
-        span: Span,
-    },
-    /// Missing effect annotation where required.
-    MissingAnnotation {
-        function_name: String,
-        inferred_level: EffectLevel,
-        span: Span,
+    /// A mixed-effect call was encountered inside a pure context.
+    MixedEffectInPureContext {
+        /// The effect level of the called function.
+        called: Effect,
     },
 }
 
-impl fmt::Display for EffectError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl std::fmt::Display for EffectErrorKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::PureViolation {
-                function_name,
-                called_name,
-                called_level,
-                ..
-            } => {
-                write!(
-                    f,
-                    "[E0005] effect violation: pure function '{}' calls {} function '{}'",
-                    function_name, called_level, called_name
-                )
+            Self::ImpureCallInPureContext { called, context } => {
+                write!(f, "{} call in {} context is not allowed", called, context)
             }
-            Self::ViewViolation {
-                function_name,
-                called_name,
-                ..
-            } => {
-                write!(
-                    f,
-                    "[E0005] effect violation: view function '{}' calls mut function '{}'",
-                    function_name, called_name
-                )
-            }
-            Self::MissingAnnotation {
-                function_name,
-                inferred_level,
-                ..
-            } => {
-                write!(
-                    f,
-                    "[E0007] function '{}' has inferred effect level {} but lacks effect annotation",
-                    function_name, inferred_level
-                )
+            Self::MixedEffectInPureContext { called } => {
+                write!(f, "{} effect not allowed in pure context", called)
             }
         }
+    }
+}
+
+/// An effect-checking error with source position.
+#[derive(Debug, Clone, PartialEq)]
+pub struct EffectError {
+    /// The specific kind of effect error.
+    pub kind: EffectErrorKind,
+    /// Source span where the error occurred.
+    pub span: Span,
+}
+
+impl std::fmt::Display for EffectError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "effect error at {}: {}", self.span, self.kind)
     }
 }
 
 impl std::error::Error for EffectError {}
 
-impl EffectError {
-    /// Get the error code (always "E0005" for effect violations, "E0007" for missing annotations).
-    #[must_use]
-    pub fn code(&self) -> &'static str {
-        match self {
-            Self::PureViolation { .. } | Self::ViewViolation { .. } => "E0005",
-            Self::MissingAnnotation { .. } => "E0007",
-        }
+// ---------------------------------------------------------------------------
+// Built-in function effects
+// ---------------------------------------------------------------------------
+
+/// Return the effect level of a built-in function by name.
+fn builtin_effect(name: &str) -> Effect {
+    match name {
+        "damage" | "heal" | "shield" | "apply" => Effect::Mutating,
+        "roll" | "roll_percent" | "choose" => Effect::Random,
+        "is_alive" | "is_dead" | "has_shield" => Effect::Pure,
+        "min" | "max" | "abs" | "clamp" => Effect::Pure,
+        _ => Effect::Pure,
     }
 }
 
-/// An entry in the effect environment mapping function names to their effect levels.
-#[derive(Debug, Clone, PartialEq)]
-pub struct EffectInfo {
-    /// The declared (or inferred) effect level of the function.
-    pub level: EffectLevel,
-    /// Whether the function was explicitly annotated.
-    pub annotated: bool,
-    /// Source span for error reporting.
-    pub span: Span,
+// ---------------------------------------------------------------------------
+// EffectChecker
+// ---------------------------------------------------------------------------
+
+/// Checks that function / ability effects are compatible with their declared
+/// effect annotations.
+pub struct EffectChecker {
+    /// Known effect for each function name.
+    fn_effects: HashMap<String, Effect>,
+    /// Currently active effect context.
+    context: Effect,
+    /// Collected effect errors.
+    errors: Vec<EffectError>,
 }
 
-/// The effect environment tracks the effect level of all known functions.
-#[derive(Debug, Clone)]
-pub struct EffectEnv {
-    bindings: HashMap<String, EffectInfo>,
-}
-
-impl EffectEnv {
-    /// Create a new empty effect environment.
-    #[must_use]
-    pub fn new() -> Self {
-        Self {
-            bindings: HashMap::new(),
-        }
-    }
-
-    /// Create an environment pre-populated with the Apolon prelude effect info.
-    #[must_use]
-    pub fn prelude() -> Self {
-        let mut env = Self::new();
-
-        // Pure prelude functions
-        let pure_fns = [
-            "add", "sub", "mul", "div", "mod", "clamp", "max", "min",
-            "eq", "ne", "lt", "le", "gt", "ge", "not", "and", "or",
-            "len", "nth", "map", "foldl", "filter", "append", "concat",
-            "str_len", "str_concat", "str_eq", "str_contains",
-            "apply_effect_type", "classify_effect", "make_result",
-        ];
-
-        for name in &pure_fns {
-            env.bind(name, EffectLevel::Pure, true);
-        }
-
-        // View functions
-        let view_fns = [
-            "get_turn", "get_enemy_hp", "get_field", "get_shield_buffer", "is_poison_active",
-        ];
-
-        for name in &view_fns {
-            env.bind(name, EffectLevel::View, true);
-        }
-
-        // Mut functions
-        let mut_fns = [
-            "deal_damage", "heal_target", "apply_shield", "reduce_attack",
-            "log_message", "advance_turn",
-        ];
-
-        for name in &mut_fns {
-            env.bind(name, EffectLevel::Mut, true);
-        }
-
-        env
-    }
-
-    /// Register a function with its effect level.
-    pub fn bind(&mut self, name: &str, level: EffectLevel, annotated: bool) {
-        self.bindings.insert(
-            name.to_string(),
-            EffectInfo {
-                level,
-                annotated,
-                span: Span::dummy(),
-            },
-        );
-    }
-
-    /// Register a function with its effect level and source span.
-    pub fn bind_with_span(&mut self, name: &str, level: EffectLevel, annotated: bool, span: Span) {
-        self.bindings.insert(
-            name.to_string(),
-            EffectInfo {
-                level,
-                annotated,
-                span,
-            },
-        );
-    }
-
-    /// Look up the effect level of a function.
-    #[must_use]
-    pub fn lookup(&self, name: &str) -> Option<&EffectInfo> {
-        self.bindings.get(name)
-    }
-
-    /// Get just the effect level for a function.
-    #[must_use]
-    pub fn get_level(&self, name: &str) -> Option<EffectLevel> {
-        self.bindings.get(name).map(|info| info.level)
-    }
-
-    /// Get all registered function names.
-    #[must_use]
-    pub fn function_names(&self) -> Vec<&str> {
-        self.bindings.keys().map(String::as_str).collect()
-    }
-}
-
-impl Default for EffectEnv {
+impl Default for EffectChecker {
     fn default() -> Self {
         Self::new()
     }
 }
 
-/// Infer the effect level of an expression.
-///
-/// Bottom-up inference: the effect level of an expression is the maximum
-/// of all effect levels of function calls within it.
-#[must_use]
-pub fn infer_expr_effect(env: &EffectEnv, expr: &Expr) -> EffectLevel {
-    match expr {
-        Expr::IntLit { .. }
-        | Expr::BoolLit { .. }
-        | Expr::StringLit { .. }
-        | Expr::Var { .. }
-        | Expr::Constructor { .. }
-        | Expr::Unit { .. }
-        | Expr::List { .. }
-        | Expr::Record { .. } => EffectLevel::Pure,
-
-        Expr::BinOp { left, right, .. } => {
-            infer_expr_effect(env, left).max(infer_expr_effect(env, right))
+impl EffectChecker {
+    /// Create a new effect checker with built-in function effects registered.
+    pub fn new() -> Self {
+        let mut checker = Self {
+            fn_effects: HashMap::new(),
+            context: Effect::Pure,
+            errors: vec![],
+        };
+        // Register builtins
+        for name in [
+            "damage", "heal", "shield", "apply",
+            "roll", "roll_percent", "choose",
+            "is_alive", "is_dead", "has_shield",
+            "min", "max", "abs", "clamp",
+        ] {
+            checker
+                .fn_effects
+                .insert(name.to_string(), builtin_effect(name));
         }
-
-        Expr::UnaryOp { operand, .. } => infer_expr_effect(env, operand),
-
-        Expr::If {
-            condition,
-            then_branch,
-            else_branch,
-            ..
-        } => infer_expr_effect(env, condition)
-            .max(infer_expr_effect(env, then_branch))
-            .max(infer_expr_effect(env, else_branch)),
-
-        Expr::Let { value, body, .. } => {
-            infer_expr_effect(env, value).max(infer_expr_effect(env, body))
-        }
-
-        Expr::Lambda { body, .. } => infer_expr_effect(env, body),
-
-        Expr::App { func, args, .. } => {
-            // Get effect level of the called function
-            let func_effect = match func.as_ref() {
-                Expr::Var { name, .. } => env.get_level(name).unwrap_or(EffectLevel::Pure),
-                _ => infer_expr_effect(env, func),
-            };
-
-            let args_effect = args
-                .iter()
-                .map(|a| infer_expr_effect(env, a))
-                .max()
-                .unwrap_or(EffectLevel::Pure);
-
-            func_effect.max(args_effect)
-        }
-
-        Expr::FieldAccess { record, .. } => infer_expr_effect(env, record),
-
-        Expr::Pipe { left, right, .. } => {
-            let left_effect = infer_expr_effect(env, left);
-            let right_effect = env.get_level(right).unwrap_or(EffectLevel::Pure);
-            left_effect.max(right_effect)
-        }
-
-        Expr::Cons { head, tail, .. } => {
-            infer_expr_effect(env, head).max(infer_expr_effect(env, tail))
-        }
-
-        Expr::Match { scrutinee, arms, .. } => {
-            let scrutinee_effect = infer_expr_effect(env, scrutinee);
-            let arms_effect = arms
-                .iter()
-                .map(|arm| infer_expr_effect(env, &arm.body))
-                .max()
-                .unwrap_or(EffectLevel::Pure);
-            scrutinee_effect.max(arms_effect)
-        }
+        checker
     }
-}
 
-/// Infer the effect level of a statement.
-#[must_use]
-pub fn infer_stmt_effect(env: &EffectEnv, stmt: &Stmt) -> EffectLevel {
-    match stmt {
-        Stmt::Let(l) => infer_expr_effect(env, &l.value),
-        Stmt::Expr(e) => infer_expr_effect(env, &e.expr),
-        Stmt::Return(r) => infer_expr_effect(env, &r.expr),
+    // -----------------------------------------------------------------------
+    // Lattice join (public helper)
+    // -----------------------------------------------------------------------
+
+    /// Compute the least upper bound of two effects.
+    #[must_use]
+    pub fn lattice_join(e1: Effect, e2: Effect) -> Effect {
+        Effect::lattice_join(e1, e2)
     }
-}
 
-/// Check effect compatibility between a declared effect level and the inferred one.
-///
-/// Returns an error if there is a violation.
-pub fn check_effect(
-    env: &EffectEnv,
-    function_name: &str,
-    declared_level: EffectLevel,
-    inferred_level: EffectLevel,
-    span: Span,
-) -> Result<(), EffectError> {
-    if inferred_level > declared_level {
-        match (declared_level, inferred_level) {
-            (EffectLevel::Pure, EffectLevel::View) => {
-                // Find the violating call for error message
-                return Err(EffectError::PureViolation {
-                    function_name: function_name.to_string(),
-                    called_name: "view function".to_string(),
-                    called_level: EffectLevel::View,
-                    span,
-                });
-            }
-            (EffectLevel::Pure, EffectLevel::Mut) => {
-                return Err(EffectError::PureViolation {
-                    function_name: function_name.to_string(),
-                    called_name: "mut function".to_string(),
-                    called_level: EffectLevel::Mut,
-                    span,
-                });
-            }
-            (EffectLevel::View, EffectLevel::Mut) => {
-                return Err(EffectError::ViewViolation {
-                    function_name: function_name.to_string(),
-                    called_name: "mut function".to_string(),
-                    span,
-                });
-            }
-            _ => {}
-        }
-    }
-    Ok(())
-}
+    // -----------------------------------------------------------------------
+    // Expression / statement effect inference
+    // -----------------------------------------------------------------------
 
-/// Check whether a specific function call violates the current effect context.
-///
-/// This is a more granular check that identifies the specific violating call.
-pub fn check_call_effect(
-    env: &EffectEnv,
-    caller_name: &str,
-    caller_level: EffectLevel,
-    callee_name: &str,
-    callee_level: EffectLevel,
-    span: Span,
-) -> Result<(), EffectError> {
-    if callee_level > caller_level {
-        match (caller_level, callee_level) {
-            (EffectLevel::Pure, _) => Err(EffectError::PureViolation {
-                function_name: caller_name.to_string(),
-                called_name: callee_name.to_string(),
-                called_level: callee_level,
-                span,
-            }),
-            (EffectLevel::View, EffectLevel::Mut) => Err(EffectError::ViewViolation {
-                function_name: caller_name.to_string(),
-                called_name: callee_name.to_string(),
-                span,
-            }),
-            _ => Ok(()),
-        }
-    } else {
-        Ok(())
-    }
-}
-
-/// Collect all function calls within an expression, returning their names and spans.
-pub fn collect_calls(expr: &Expr) -> Vec<(&str, Span)> {
-    let mut calls: Vec<(&str, Span)> = Vec::new();
-
-    fn walk<'a>(expr: &'a Expr, calls: &mut Vec<(&'a str, Span)>) {
+    /// Infer the effect level of an expression.
+    pub fn infer_expr_effect(&mut self, expr: &Expr) -> Effect {
         match expr {
-            Expr::IntLit { .. }
-            | Expr::BoolLit { .. }
-            | Expr::StringLit { .. }
-            | Expr::Var { .. }
-            | Expr::Constructor { .. }
-            | Expr::Unit { .. }
-            | Expr::List { .. }
-            | Expr::Record { .. } => {}
+            Expr::IntLit(_) | Expr::BoolLit(_) | Expr::StrLit(_) => Effect::Pure,
 
-            Expr::BinOp { left, right, .. } => {
-                walk(left, calls);
-                walk(right, calls);
+            Expr::Ident(name) => self
+                .fn_effects
+                .get(name)
+                .copied()
+                .unwrap_or(Effect::Pure),
+
+            Expr::Binary { left, right, .. } => {
+                let le = self.infer_expr_effect(left);
+                let re = self.infer_expr_effect(right);
+                Effect::lattice_join(le, re)
             }
-            Expr::UnaryOp { operand, .. } => {
-                walk(operand, calls);
-            }
-            Expr::If {
-                condition,
-                then_branch,
-                else_branch,
-                ..
-            } => {
-                walk(condition, calls);
-                walk(then_branch, calls);
-                walk(else_branch, calls);
-            }
-            Expr::Let { value, body, .. } => {
-                walk(value, calls);
-                walk(body, calls);
-            }
-            Expr::Lambda { body, .. } => {
-                walk(body, calls);
-            }
-            Expr::App { func, args, .. } => {
-                match func.as_ref() {
-                    Expr::Var { name, span } => {
-                        calls.push((name.as_str(), *span));
-                    }
-                    _ => {
-                        walk(func, calls);
-                    }
-                }
+
+            Expr::Unary { operand, .. } => self.infer_expr_effect(operand),
+
+            Expr::Call { func, args } => {
+                let func_eff = self.infer_expr_effect(func);
+                // Also compute effects from evaluating arguments
+                let mut eff = func_eff;
                 for arg in args {
-                    walk(arg, calls);
+                    let arg_eff = match arg {
+                        CallArg::Positional(e) => self.infer_expr_effect(e),
+                        CallArg::Named { value, .. } => self.infer_expr_effect(value),
+                    };
+                    eff = Effect::lattice_join(eff, arg_eff);
+                }
+                // In a pure context, any non-pure call is an error
+                if self.context == Effect::Pure && eff != Effect::Pure {
+                    self.errors.push(EffectError {
+                        kind: EffectErrorKind::ImpureCallInPureContext {
+                            called: eff,
+                            context: self.context,
+                        },
+                        span: Span::at(0),
+                    });
+                }
+                eff
+            }
+
+            Expr::Member { object, .. } => {
+                // Entity field access is pure
+                let _ = self.infer_expr_effect(object);
+                Effect::Pure
+            }
+
+            Expr::If(if_expr) => {
+                let cond_eff = self.infer_expr_effect(&if_expr.condition);
+                let mut eff = cond_eff;
+                for stmt in &if_expr.then_block {
+                    eff = Effect::lattice_join(eff, self.infer_stmt_effect(stmt));
+                }
+                if let Some(else_clause) = &if_expr.else_clause {
+                    eff = Effect::lattice_join(eff, self.infer_else_effect(else_clause));
+                }
+                eff
+            }
+
+            Expr::Struct(fields) => {
+                let mut eff = Effect::Pure;
+                for (_, expr) in fields {
+                    eff = Effect::lattice_join(eff, self.infer_expr_effect(expr));
+                }
+                eff
+            }
+
+            Expr::List(elements) => {
+                let mut eff = Effect::Pure;
+                for elem in elements {
+                    eff = Effect::lattice_join(eff, self.infer_expr_effect(elem));
+                }
+                eff
+            }
+        }
+    }
+
+    fn infer_else_effect(&mut self, clause: &ElseClause) -> Effect {
+        match clause {
+            ElseClause::Block(stmts) => {
+                let mut eff = Effect::Pure;
+                for stmt in stmts {
+                    eff = Effect::lattice_join(eff, self.infer_stmt_effect(stmt));
+                }
+                eff
+            }
+            ElseClause::If(inner) => {
+                let cond_eff = self.infer_expr_effect(&inner.condition);
+                let mut eff = cond_eff;
+                for stmt in &inner.then_block {
+                    eff = Effect::lattice_join(eff, self.infer_stmt_effect(stmt));
+                }
+                if let Some(ec) = &inner.else_clause {
+                    eff = Effect::lattice_join(eff, self.infer_else_effect(ec));
+                }
+                eff
+            }
+        }
+    }
+
+    fn infer_stmt_effect(&mut self, stmt: &Stmt) -> Effect {
+        match stmt {
+            Stmt::Expr(expr) => self.infer_expr_effect(expr),
+
+            Stmt::Let(let_stmt) => self.infer_expr_effect(&let_stmt.value),
+
+            Stmt::Assign(_) => Effect::Mutating,
+
+            Stmt::If(if_stmt) => {
+                let cond_eff = self.infer_expr_effect(&if_stmt.condition);
+                let mut eff = cond_eff;
+                for s in &if_stmt.then_block {
+                    eff = Effect::lattice_join(eff, self.infer_stmt_effect(s));
+                }
+                if let Some(ec) = &if_stmt.else_clause {
+                    eff = Effect::lattice_join(eff, self.infer_else_effect(ec));
+                }
+                eff
+            }
+
+            Stmt::Return(ret) => match &ret.value {
+                Some(expr) => self.infer_expr_effect(expr),
+                None => Effect::Pure,
+            },
+        }
+    }
+
+    fn infer_body_effect(&mut self, stmts: &[Stmt]) -> Effect {
+        let mut eff = Effect::Pure;
+        for stmt in stmts {
+            eff = Effect::lattice_join(eff, self.infer_stmt_effect(stmt));
+        }
+        eff
+    }
+
+    // -----------------------------------------------------------------------
+    // Top-level checking
+    // -----------------------------------------------------------------------
+
+    /// Check a function definition's declared vs inferred effect.
+    pub fn check_function_def(&mut self, fn_def: &FnDef) {
+        let declared = fn_def
+            .effect
+            .map(Effect::from_ann)
+            .unwrap_or(Effect::Mutating);
+
+        let saved = self.context;
+        self.context = declared;
+
+        let inferred = self.infer_body_effect(&fn_def.body);
+
+        if inferred > declared {
+            self.errors.push(EffectError {
+                kind: EffectErrorKind::ImpureCallInPureContext {
+                    called: inferred,
+                    context: declared,
+                },
+                span: Span::at(0),
+            });
+        }
+
+        // Register so later calls can see the effect
+        self.fn_effects.insert(fn_def.name.clone(), declared);
+
+        self.context = saved;
+    }
+
+    /// Check an ability definition.  Abilities default to `Mutating`.
+    pub fn check_ability(&mut self, ability: &AbilityDef) {
+        let declared = Effect::Mutating;
+
+        let saved = self.context;
+        self.context = declared;
+
+        for body_item in &ability.body {
+            match body_item {
+                AbilityBodyItem::Cost(cost) => {
+                    let _ = self.infer_expr_effect(&cost.amount);
+                }
+                AbilityBodyItem::Trigger(trigger) => {
+                    let trigger_eff = trigger
+                        .effect
+                        .map(Effect::from_ann)
+                        .unwrap_or(declared);
+
+                    let prev = self.context;
+                    self.context = trigger_eff;
+
+                    let inferred = self.infer_body_effect(&trigger.body);
+                    if inferred > trigger_eff {
+                        self.errors.push(EffectError {
+                            kind: EffectErrorKind::ImpureCallInPureContext {
+                                called: inferred,
+                                context: trigger_eff,
+                            },
+                            span: Span::at(0),
+                        });
+                    }
+
+                    self.context = prev;
+                }
+                AbilityBodyItem::Stmt(stmt) => {
+                    let _ = self.infer_stmt_effect(stmt);
                 }
             }
-            Expr::FieldAccess { record, .. } => {
-                walk(record, calls);
-            }
-            Expr::Pipe { left, .. } => {
-                walk(left, calls);
-            }
-            Expr::Cons { head, tail, .. } => {
-                walk(head, calls);
-                walk(tail, calls);
-            }
-            Expr::Match { scrutinee, arms, .. } => {
-                walk(scrutinee, calls);
-                for arm in arms {
-                    walk(&arm.body, calls);
+        }
+
+        self.context = saved;
+    }
+
+    /// Check a complete program for effect violations.
+    pub fn check_program(&mut self, program: &Program) -> Result<(), Vec<EffectError>> {
+        for item in &program.items {
+            match item {
+                Item::Fn(fn_def) => self.check_function_def(fn_def),
+                Item::Card(card) => {
+                    for body_item in &card.body {
+                        if let CardBodyItem::Ability(ability) = body_item {
+                            self.check_ability(ability);
+                        }
+                    }
                 }
+                _ => {} // Const, Effect def, Use — skip
             }
+        }
+
+        if self.errors.is_empty() {
+            Ok(())
+        } else {
+            Err(std::mem::take(&mut self.errors))
         }
     }
 
-    walk(expr, &mut calls);
-    calls
+    // -----------------------------------------------------------------------
+    // Accessors
+    // -----------------------------------------------------------------------
+
+    /// Get collected errors.
+    pub fn errors(&self) -> &[EffectError] {
+        &self.errors
+    }
+
+    /// Drain collected errors.
+    pub fn take_errors(&mut self) -> Vec<EffectError> {
+        std::mem::take(&mut self.errors)
+    }
 }
 
-/// Validate all effect constraints in an expression against a caller's effect level.
-pub fn validate_effects(
-    env: &EffectEnv,
-    caller_name: &str,
-    caller_level: EffectLevel,
-    expr: &Expr,
-) -> Result<(), EffectError> {
-    let calls = collect_calls(expr);
-
-    for (callee_name, span) in &calls {
-        if let Some(callee_level) = env.get_level(callee_name) {
-            check_call_effect(env, caller_name, caller_level, callee_name, callee_level, *span)?;
-        }
-    }
-
-    // Also validate nested expressions
-    match expr {
-        Expr::BinOp { left, right, .. } => {
-            validate_effects(env, caller_name, caller_level, left)?;
-            validate_effects(env, caller_name, caller_level, right)?;
-        }
-        Expr::UnaryOp { operand, .. } => {
-            validate_effects(env, caller_name, caller_level, operand)?;
-        }
-        Expr::If {
-            condition,
-            then_branch,
-            else_branch,
-            ..
-        } => {
-            validate_effects(env, caller_name, caller_level, condition)?;
-            validate_effects(env, caller_name, caller_level, then_branch)?;
-            validate_effects(env, caller_name, caller_level, else_branch)?;
-        }
-        Expr::Let { value, body, .. } => {
-            validate_effects(env, caller_name, caller_level, value)?;
-            validate_effects(env, caller_name, caller_level, body)?;
-        }
-        Expr::Match { scrutinee, arms, .. } => {
-            validate_effects(env, caller_name, caller_level, scrutinee)?;
-            for arm in arms {
-                validate_effects(env, caller_name, caller_level, &arm.body)?;
-            }
-        }
-        Expr::App { func, args, .. } => {
-            validate_effects(env, caller_name, caller_level, func)?;
-            for arg in args {
-                validate_effects(env, caller_name, caller_level, arg)?;
-            }
-        }
-        Expr::Cons { head, tail, .. } => {
-            validate_effects(env, caller_name, caller_level, head)?;
-            validate_effects(env, caller_name, caller_level, tail)?;
-        }
-        Expr::FieldAccess { record, .. } => {
-            validate_effects(env, caller_name, caller_level, record)?;
-        }
-        Expr::Pipe { left, .. } => {
-            validate_effects(env, caller_name, caller_level, left)?;
-        }
-        Expr::List { elements, .. } => {
-            for elem in elements {
-                validate_effects(env, caller_name, caller_level, elem)?;
-            }
-        }
-        Expr::Record { fields, .. } => {
-            for field in fields {
-                validate_effects(env, caller_name, caller_level, &field.value)?;
-            }
-        }
-        Expr::Lambda { body, .. } => {
-            validate_effects(env, caller_name, caller_level, body)?;
-        }
-        _ => {}
-    }
-
-    Ok(())
-}
+// ===========================================================================
+// Tests
+// ===========================================================================
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn i64_val(v: i64) -> Expr {
-        Expr::IntLit {
-            span: Span::dummy(),
-            value: v,
-        }
-    }
-
-    fn bool_val(v: bool) -> Expr {
-        Expr::BoolLit {
-            span: Span::dummy(),
-            value: v,
-        }
-    }
-
-    fn var(name: &str) -> Expr {
-        Expr::Var {
-            span: Span::dummy(),
-            name: name.to_string(),
-        }
-    }
-
-    fn app(name: &str, args: Vec<Expr>) -> Expr {
-        Expr::App {
-            span: Span::dummy(),
-            func: Box::new(var(name)),
-            args,
-        }
-    }
-
-    fn bin(op: crate::ast::BinOp, l: Expr, r: Expr) -> Expr {
-        Expr::BinOp {
-            span: Span::dummy(),
-            op,
-            left: Box::new(l),
-            right: Box::new(r),
-        }
-    }
-
-    // ─── EffectEnv tests ───
+    // -----------------------------------------------------------------------
+    // Effect Display
+    // -----------------------------------------------------------------------
 
     #[test]
-    fn env_new() {
-        let env = EffectEnv::new();
-        assert!(env.lookup("foo").is_none());
+    fn test_effect_display() {
+        assert_eq!(format!("{}", Effect::Pure), "pure");
+        assert_eq!(format!("{}", Effect::Random), "random");
+        assert_eq!(format!("{}", Effect::Mutating), "mutating");
+    }
+
+    // -----------------------------------------------------------------------
+    // Lattice join
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_lattice_join_pure_pure() {
+        assert_eq!(Effect::lattice_join(Effect::Pure, Effect::Pure), Effect::Pure);
     }
 
     #[test]
-    fn env_bind_and_lookup() {
-        let mut env = EffectEnv::new();
-        env.bind("f", EffectLevel::Pure, true);
-        assert_eq!(env.get_level("f"), Some(EffectLevel::Pure));
+    fn test_lattice_join_pure_random() {
+        assert_eq!(Effect::lattice_join(Effect::Pure, Effect::Random), Effect::Random);
     }
 
     #[test]
-    fn env_prelude_has_pure() {
-        let env = EffectEnv::prelude();
-        assert_eq!(env.get_level("add"), Some(EffectLevel::Pure));
-        assert_eq!(env.get_level("make_result"), Some(EffectLevel::Pure));
+    fn test_lattice_join_pure_mutating() {
+        assert_eq!(
+            Effect::lattice_join(Effect::Pure, Effect::Mutating),
+            Effect::Mutating
+        );
     }
 
     #[test]
-    fn env_prelude_has_view() {
-        let env = EffectEnv::prelude();
-        assert_eq!(env.get_level("get_turn"), Some(EffectLevel::View));
-        assert_eq!(env.get_level("get_enemy_hp"), Some(EffectLevel::View));
+    fn test_lattice_join_random_random() {
+        assert_eq!(
+            Effect::lattice_join(Effect::Random, Effect::Random),
+            Effect::Random
+        );
     }
 
     #[test]
-    fn env_prelude_has_mut() {
-        let env = EffectEnv::prelude();
-        assert_eq!(env.get_level("deal_damage"), Some(EffectLevel::Mut));
-        assert_eq!(env.get_level("heal_target"), Some(EffectLevel::Mut));
+    fn test_lattice_join_random_mutating() {
+        assert_eq!(
+            Effect::lattice_join(Effect::Random, Effect::Mutating),
+            Effect::Mutating
+        );
     }
 
     #[test]
-    fn env_function_names() {
-        let env = EffectEnv::prelude();
-        let names = env.function_names();
-        assert!(names.contains(&"add"));
-        assert!(names.contains(&"deal_damage"));
+    fn test_lattice_join_mutating_mutating() {
+        assert_eq!(
+            Effect::lattice_join(Effect::Mutating, Effect::Mutating),
+            Effect::Mutating
+        );
     }
 
     #[test]
-    fn env_bind_with_span() {
-        let mut env = EffectEnv::new();
-        let span = Span::with_line_col(0, 5, 1, 1, 1, 6);
-        env.bind_with_span("f", EffectLevel::Pure, true, span);
-        let info = env.lookup("f").unwrap();
-        assert_eq!(info.span.start, 0);
-    }
-
-    // ─── Effect inference tests ───
-
-    #[test]
-    fn infer_pure_literal() {
-        let env = EffectEnv::new();
-        assert_eq!(infer_expr_effect(&env, &i64_val(42)), EffectLevel::Pure);
+    fn test_lattice_join_commutative() {
+        assert_eq!(
+            Effect::lattice_join(Effect::Random, Effect::Pure),
+            Effect::lattice_join(Effect::Pure, Effect::Random)
+        );
     }
 
     #[test]
-    fn infer_pure_variable() {
-        let env = EffectEnv::new();
-        assert_eq!(infer_expr_effect(&env, &var("x")), EffectLevel::Pure);
+    fn test_lattice_join_associative() {
+        let a = Effect::lattice_join(
+            Effect::lattice_join(Effect::Pure, Effect::Random),
+            Effect::Mutating,
+        );
+        let b = Effect::lattice_join(
+            Effect::Pure,
+            Effect::lattice_join(Effect::Random, Effect::Mutating),
+        );
+        assert_eq!(a, b);
     }
 
     #[test]
-    fn infer_pure_binop() {
-        let env = EffectEnv::new();
-        let expr = bin(crate::ast::BinOp::Add, i64_val(1), i64_val(2));
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Pure);
+    fn test_static_method_lattice_join() {
+        assert_eq!(
+            EffectChecker::lattice_join(Effect::Pure, Effect::Mutating),
+            Effect::Mutating
+        );
+    }
+
+    // -----------------------------------------------------------------------
+    // Ordering
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_effect_ordering() {
+        assert!(Effect::Pure < Effect::Random);
+        assert!(Effect::Random < Effect::Mutating);
+        assert!(Effect::Pure < Effect::Mutating);
     }
 
     #[test]
-    fn infer_pure_function_call() {
-        let env = EffectEnv::prelude();
-        let expr = app("add", vec![i64_val(1), i64_val(2)]);
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Pure);
+    fn test_effect_equality() {
+        assert_eq!(Effect::Pure, Effect::Pure);
+        assert_eq!(Effect::Random, Effect::Random);
+        assert_eq!(Effect::Mutating, Effect::Mutating);
+        assert_ne!(Effect::Pure, Effect::Random);
+    }
+
+    // -----------------------------------------------------------------------
+    // Literal / expression inference
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_pure_literal() {
+        let mut ec = EffectChecker::new();
+        assert_eq!(ec.infer_expr_effect(&Expr::IntLit(42)), Effect::Pure);
+        assert_eq!(ec.infer_expr_effect(&Expr::BoolLit(true)), Effect::Pure);
+        assert_eq!(
+            ec.infer_expr_effect(&Expr::StrLit("hi".into())),
+            Effect::Pure
+        );
     }
 
     #[test]
-    fn infer_view_function_call() {
-        let env = EffectEnv::prelude();
-        let expr = app("get_turn", vec![var("state")]);
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::View);
+    fn test_pure_variable() {
+        let mut ec = EffectChecker::new();
+        assert_eq!(
+            ec.infer_expr_effect(&Expr::Ident("min".into())),
+            Effect::Pure
+        );
     }
 
     #[test]
-    fn infer_mut_function_call() {
-        let env = EffectEnv::prelude();
-        let expr = app("deal_damage", vec![var("state"), i64_val(10)]);
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Mut);
+    fn test_mutating_builtin() {
+        let mut ec = EffectChecker::new();
+        assert_eq!(
+            ec.infer_expr_effect(&Expr::Ident("damage".into())),
+            Effect::Mutating
+        );
+        assert_eq!(
+            ec.infer_expr_effect(&Expr::Ident("heal".into())),
+            Effect::Mutating
+        );
     }
 
     #[test]
-    fn infer_nested_mut_call() {
-        let env = EffectEnv::prelude();
-        // let x = deal_damage(state, 10) in x
-        let expr = Expr::Let {
-            span: Span::dummy(),
-            name: "x".to_string(),
+    fn test_random_builtin() {
+        let mut ec = EffectChecker::new();
+        assert_eq!(
+            ec.infer_expr_effect(&Expr::Ident("roll".into())),
+            Effect::Random
+        );
+        assert_eq!(
+            ec.infer_expr_effect(&Expr::Ident("choose".into())),
+            Effect::Random
+        );
+    }
+
+    // -----------------------------------------------------------------------
+    // Binary / unary expression effects
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_binary_expression_effect() {
+        let mut ec = EffectChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Add,
+            left: Box::new(Expr::IntLit(1)),
+            right: Box::new(Expr::IntLit(2)),
+        };
+        assert_eq!(ec.infer_expr_effect(&expr), Effect::Pure);
+    }
+
+    #[test]
+    fn test_binary_with_random() {
+        let mut ec = EffectChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Add,
+            left: Box::new(Expr::Ident("roll".into())),
+            right: Box::new(Expr::IntLit(1)),
+        };
+        // roll is Random but called through Ident, not Call.
+        // The Ident itself returns Random, so the join is Random.
+        assert_eq!(ec.infer_expr_effect(&expr), Effect::Random);
+    }
+
+    #[test]
+    fn test_unary_expression_effect() {
+        let mut ec = EffectChecker::new();
+        let expr = Expr::Unary {
+            op: UnaryOp::Neg,
+            operand: Box::new(Expr::IntLit(5)),
+        };
+        assert_eq!(ec.infer_expr_effect(&expr), Effect::Pure);
+    }
+
+    // -----------------------------------------------------------------------
+    // If expression effect
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_if_expression_pure_branches() {
+        let mut ec = EffectChecker::new();
+        let expr = Expr::If(Box::new(IfExpr {
+            condition: Expr::BoolLit(true),
+            then_block: vec![],
+            else_clause: Some(ElseClause::Block(vec![])),
+        }));
+        assert_eq!(ec.infer_expr_effect(&expr), Effect::Pure);
+    }
+
+    #[test]
+    fn test_if_expression_mutating_branch() {
+        let mut ec = EffectChecker::new();
+        // damage is Mutating
+        let expr = Expr::If(Box::new(IfExpr {
+            condition: Expr::BoolLit(true),
+            then_block: vec![Stmt::Expr(Expr::Ident("damage".into()))],
+            else_clause: None,
+        }));
+        // damage Ident resolves to Mutating
+        assert_eq!(ec.infer_expr_effect(&expr), Effect::Mutating);
+    }
+
+    // -----------------------------------------------------------------------
+    // Member access
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_member_access_effect() {
+        let mut ec = EffectChecker::new();
+        let expr = Expr::Member {
+            object: Box::new(Expr::Ident("target".into())),
+            field: "hp".into(),
+        };
+        assert_eq!(ec.infer_expr_effect(&expr), Effect::Pure);
+    }
+
+    // -----------------------------------------------------------------------
+    // Struct / list expression effects
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_struct_literal_effect() {
+        let mut ec = EffectChecker::new();
+        let expr = Expr::Struct(vec![
+            ("hp".into(), Expr::IntLit(100)),
+            ("atk".into(), Expr::IntLit(25)),
+        ]);
+        assert_eq!(ec.infer_expr_effect(&expr), Effect::Pure);
+    }
+
+    #[test]
+    fn test_list_literal_effect() {
+        let mut ec = EffectChecker::new();
+        let expr = Expr::List(vec![Expr::IntLit(1), Expr::IntLit(2)]);
+        assert_eq!(ec.infer_expr_effect(&expr), Effect::Pure);
+    }
+
+    // -----------------------------------------------------------------------
+    // Statement effects
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_assignment_is_mutating() {
+        let mut ec = EffectChecker::new();
+        let stmt = Stmt::Assign(AssignStmt {
+            name: "x".into(),
+            value: Expr::IntLit(1),
+        });
+        assert_eq!(ec.infer_stmt_effect(&stmt), Effect::Mutating);
+    }
+
+    #[test]
+    fn test_let_statement_effect() {
+        let mut ec = EffectChecker::new();
+        let stmt = Stmt::Let(LetStmt {
+            name: "x".into(),
             type_ann: None,
-            value: Box::new(app("deal_damage", vec![var("state"), i64_val(10)])),
-            body: Box::new(var("x")),
+            value: Expr::IntLit(1),
+        });
+        assert_eq!(ec.infer_stmt_effect(&stmt), Effect::Pure);
+    }
+
+    // -----------------------------------------------------------------------
+    // Mixed effects in expression
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_mixed_effects_in_expression() {
+        let mut ec = EffectChecker::new();
+        // roll() + damage — Random ∨ Mutating = Mutating
+        // But these are Idents, not Calls. The effect of an Ident is the
+        // registered function effect.
+        let expr = Expr::Binary {
+            op: BinOp::Add,
+            left: Box::new(Expr::Ident("roll".into())),
+            right: Box::new(Expr::Ident("damage".into())),
         };
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Mut);
+        assert_eq!(ec.infer_expr_effect(&expr), Effect::Mutating);
+    }
+
+    // -----------------------------------------------------------------------
+    // Function checking
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_pure_function_with_pure_calls() {
+        let mut ec = EffectChecker::new();
+        let fn_def = FnDef {
+            name: "pure_fn".into(),
+            params: vec![],
+            return_type: None,
+            effect: Some(EffectAnn::Pure),
+            body: vec![Stmt::Expr(Expr::Call {
+                func: Box::new(Expr::Ident("min".into())),
+                args: vec![
+                    CallArg::Positional(Expr::IntLit(1)),
+                    CallArg::Positional(Expr::IntLit(2)),
+                ],
+            })],
+        };
+        ec.check_function_def(&fn_def);
+        assert!(ec.errors().is_empty());
     }
 
     #[test]
-    fn infer_if_with_mut_branch() {
-        let env = EffectEnv::prelude();
-        let expr = Expr::If {
-            span: Span::dummy(),
-            condition: Box::new(bool_val(true)),
-            then_branch: Box::new(app("deal_damage", vec![var("state"), i64_val(10)])),
-            else_branch: Box::new(i64_val(0)),
+    fn test_pure_function_with_random_call_fails() {
+        let mut ec = EffectChecker::new();
+        let fn_def = FnDef {
+            name: "bad_pure".into(),
+            params: vec![],
+            return_type: None,
+            effect: Some(EffectAnn::Pure),
+            body: vec![Stmt::Expr(Expr::Call {
+                func: Box::new(Expr::Ident("roll".into())),
+                args: vec![CallArg::Positional(Expr::IntLit(6))],
+            })],
         };
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Mut);
+        ec.check_function_def(&fn_def);
+        assert!(!ec.errors().is_empty());
+        // Also check the call-level error
+        assert!(matches!(
+            &ec.errors()[0].kind,
+            EffectErrorKind::ImpureCallInPureContext { .. }
+        ));
     }
 
     #[test]
-    fn infer_if_both_pure() {
-        let env = EffectEnv::prelude();
-        let expr = Expr::If {
-            span: Span::dummy(),
-            condition: Box::new(bool_val(true)),
-            then_branch: Box::new(i64_val(1)),
-            else_branch: Box::new(i64_val(2)),
+    fn test_pure_function_with_mutating_call_fails() {
+        let mut ec = EffectChecker::new();
+        let fn_def = FnDef {
+            name: "bad_pure2".into(),
+            params: vec![],
+            return_type: None,
+            effect: Some(EffectAnn::Pure),
+            body: vec![Stmt::Expr(Expr::Call {
+                func: Box::new(Expr::Ident("damage".into())),
+                args: vec![
+                    CallArg::Positional(Expr::Ident("target".into())),
+                    CallArg::Positional(Expr::IntLit(10)),
+                ],
+            })],
         };
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Pure);
+        ec.check_function_def(&fn_def);
+        assert!(!ec.errors().is_empty());
     }
 
     #[test]
-    fn infer_match_with_mixed_effects() {
-        let env = EffectEnv::prelude();
-        let expr = Expr::Match {
-            span: Span::dummy(),
-            scrutinee: Box::new(var("x")),
-            arms: vec![
-                crate::ast::MatchArm {
-                    span: Span::dummy(),
-                    pattern: crate::ast::Pattern::Int {
-                        span: Span::dummy(),
-                        value: 0,
-                    },
-                    body: app("deal_damage", vec![var("state"), i64_val(10)]),
-                },
-                crate::ast::MatchArm {
-                    span: Span::dummy(),
-                    pattern: crate::ast::Pattern::Wildcard {
-                        span: Span::dummy(),
-                    },
-                    body: i64_val(0),
-                },
+    fn test_random_function_with_pure_calls() {
+        let mut ec = EffectChecker::new();
+        let fn_def = FnDef {
+            name: "rand_fn".into(),
+            params: vec![],
+            return_type: None,
+            effect: Some(EffectAnn::Random),
+            body: vec![Stmt::Expr(Expr::Call {
+                func: Box::new(Expr::Ident("min".into())),
+                args: vec![
+                    CallArg::Positional(Expr::IntLit(1)),
+                    CallArg::Positional(Expr::IntLit(2)),
+                ],
+            })],
+        };
+        ec.check_function_def(&fn_def);
+        assert!(ec.errors().is_empty());
+    }
+
+    #[test]
+    fn test_random_function_with_random_calls() {
+        let mut ec = EffectChecker::new();
+        let fn_def = FnDef {
+            name: "rand_fn2".into(),
+            params: vec![],
+            return_type: None,
+            effect: Some(EffectAnn::Random),
+            body: vec![Stmt::Expr(Expr::Call {
+                func: Box::new(Expr::Ident("roll".into())),
+                args: vec![CallArg::Positional(Expr::IntLit(6))],
+            })],
+        };
+        ec.check_function_def(&fn_def);
+        assert!(ec.errors().is_empty());
+    }
+
+    #[test]
+    fn test_mutating_function_accepts_any_call() {
+        let mut ec = EffectChecker::new();
+        let fn_def = FnDef {
+            name: "mut_fn".into(),
+            params: vec![],
+            return_type: None,
+            effect: Some(EffectAnn::Mutating),
+            body: vec![Stmt::Expr(Expr::Call {
+                func: Box::new(Expr::Ident("damage".into())),
+                args: vec![
+                    CallArg::Positional(Expr::Ident("target".into())),
+                    CallArg::Positional(Expr::IntLit(10)),
+                ],
+            })],
+        };
+        ec.check_function_def(&fn_def);
+        assert!(ec.errors().is_empty());
+    }
+
+    #[test]
+    fn test_function_defaults_to_mutating() {
+        let mut ec = EffectChecker::new();
+        let fn_def = FnDef {
+            name: "no_ann".into(),
+            params: vec![],
+            return_type: None,
+            effect: None,
+            body: vec![Stmt::Expr(Expr::Call {
+                func: Box::new(Expr::Ident("damage".into())),
+                args: vec![
+                    CallArg::Positional(Expr::Ident("target".into())),
+                    CallArg::Positional(Expr::IntLit(5)),
+                ],
+            })],
+        };
+        ec.check_function_def(&fn_def);
+        assert!(ec.errors().is_empty());
+    }
+
+    // -----------------------------------------------------------------------
+    // Ability checking
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_ability_defaults_to_mutating() {
+        let mut ec = EffectChecker::new();
+        let ability = AbilityDef {
+            name: "test_ability".into(),
+            params: vec![],
+            body: vec![AbilityBodyItem::Trigger(TriggerClause {
+                event: "cast".into(),
+                effect: None,
+                body: vec![Stmt::Expr(Expr::Call {
+                    func: Box::new(Expr::Ident("damage".into())),
+                    args: vec![
+                        CallArg::Positional(Expr::Ident("target".into())),
+                        CallArg::Positional(Expr::IntLit(10)),
+                    ],
+                })],
+            })],
+        };
+        ec.check_ability(&ability);
+        assert!(ec.errors().is_empty());
+    }
+
+    #[test]
+    fn test_ability_trigger_pure_annotation_violation() {
+        let mut ec = EffectChecker::new();
+        let ability = AbilityDef {
+            name: "bad_ability".into(),
+            params: vec![],
+            body: vec![AbilityBodyItem::Trigger(TriggerClause {
+                event: "cast".into(),
+                effect: Some(EffectAnn::Pure),
+                body: vec![Stmt::Expr(Expr::Call {
+                    func: Box::new(Expr::Ident("damage".into())),
+                    args: vec![
+                        CallArg::Positional(Expr::Ident("target".into())),
+                        CallArg::Positional(Expr::IntLit(10)),
+                    ],
+                })],
+            })],
+        };
+        ec.check_ability(&ability);
+        assert!(!ec.errors().is_empty());
+    }
+
+    // -----------------------------------------------------------------------
+    // Program-level checking
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_check_program_no_errors() {
+        let mut ec = EffectChecker::new();
+        let program = Program {
+            module: None,
+            items: vec![Item::Fn(FnDef {
+                name: "my_fn".into(),
+                params: vec![],
+                return_type: None,
+                effect: Some(EffectAnn::Mutating),
+                body: vec![Stmt::Expr(Expr::Call {
+                    func: Box::new(Expr::Ident("damage".into())),
+                    args: vec![
+                        CallArg::Positional(Expr::Ident("target".into())),
+                        CallArg::Positional(Expr::IntLit(10)),
+                    ],
+                })],
+            })],
+        };
+        assert!(ec.check_program(&program).is_ok());
+    }
+
+    #[test]
+    fn test_check_program_with_errors() {
+        let mut ec = EffectChecker::new();
+        let program = Program {
+            module: None,
+            items: vec![Item::Fn(FnDef {
+                name: "bad_fn".into(),
+                params: vec![],
+                return_type: None,
+                effect: Some(EffectAnn::Pure),
+                body: vec![Stmt::Expr(Expr::Call {
+                    func: Box::new(Expr::Ident("roll".into())),
+                    args: vec![CallArg::Positional(Expr::IntLit(6))],
+                })],
+            })],
+        };
+        let result = ec.check_program(&program);
+        assert!(result.is_err());
+        assert!(!result.unwrap_err().is_empty());
+    }
+
+    // -----------------------------------------------------------------------
+    // Error messages / display
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_effect_error_display() {
+        let err = EffectError {
+            kind: EffectErrorKind::ImpureCallInPureContext {
+                called: Effect::Random,
+                context: Effect::Pure,
+            },
+            span: Span::new(5, 15),
+        };
+        let s = format!("{}", err);
+        assert!(s.contains("random"));
+        assert!(s.contains("pure"));
+        assert!(s.contains("5..15"));
+    }
+
+    #[test]
+    fn test_effect_error_kind_display() {
+        let kind = EffectErrorKind::MixedEffectInPureContext {
+            called: Effect::Mutating,
+        };
+        let s = format!("{}", kind);
+        assert!(s.contains("mutating"));
+        assert!(s.contains("pure"));
+    }
+
+    // -----------------------------------------------------------------------
+    // Nested call effects
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_nested_call_effects() {
+        let mut ec = EffectChecker::new();
+        // clamp(roll(6), 1, 10) → Random ∨ Pure ∨ Pure = Random
+        let expr = Expr::Call {
+            func: Box::new(Expr::Ident("clamp".into())),
+            args: vec![
+                CallArg::Positional(Expr::Call {
+                    func: Box::new(Expr::Ident("roll".into())),
+                    args: vec![CallArg::Positional(Expr::IntLit(6))],
+                }),
+                CallArg::Positional(Expr::IntLit(1)),
+                CallArg::Positional(Expr::IntLit(10)),
             ],
         };
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Mut);
+        assert_eq!(ec.infer_expr_effect(&expr), Effect::Random);
     }
 
+    // -----------------------------------------------------------------------
+    // Context management
+    // -----------------------------------------------------------------------
+
     #[test]
-    fn infer_pipe_with_mut() {
-        let env = EffectEnv::prelude();
-        let expr = Expr::Pipe {
-            span: Span::dummy(),
-            left: Box::new(var("state")),
-            right: "deal_damage".to_string(),
+    fn test_context_restored_after_check() {
+        let mut ec = EffectChecker::new();
+        assert_eq!(ec.context, Effect::Pure);
+        let fn_def = FnDef {
+            name: "f".into(),
+            params: vec![],
+            return_type: None,
+            effect: Some(EffectAnn::Mutating),
+            body: vec![],
         };
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Mut);
-    }
-
-    #[test]
-    fn infer_unary_pure() {
-        let env = EffectEnv::new();
-        let expr = Expr::UnaryOp {
-            span: Span::dummy(),
-            op: crate::ast::UnaryOp::Neg,
-            operand: Box::new(i64_val(5)),
-        };
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Pure);
-    }
-
-    #[test]
-    fn infer_cons_pure() {
-        let env = EffectEnv::new();
-        let expr = Expr::Cons {
-            span: Span::dummy(),
-            head: Box::new(i64_val(1)),
-            tail: Box::new(var("xs")),
-        };
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Pure);
-    }
-
-    // ─── Effect checking tests ───
-
-    #[test]
-    fn check_pure_calling_pure_ok() {
-        let env = EffectEnv::prelude();
-        assert!(check_effect(&env, "f", EffectLevel::Pure, EffectLevel::Pure, Span::dummy()).is_ok());
-    }
-
-    #[test]
-    fn check_view_calling_view_ok() {
-        let env = EffectEnv::prelude();
-        assert!(check_effect(&env, "f", EffectLevel::View, EffectLevel::View, Span::dummy()).is_ok());
-    }
-
-    #[test]
-    fn check_mut_calling_mut_ok() {
-        let env = EffectEnv::prelude();
-        assert!(check_effect(&env, "f", EffectLevel::Mut, EffectLevel::Mut, Span::dummy()).is_ok());
-    }
-
-    #[test]
-    fn check_view_calling_pure_ok() {
-        let env = EffectEnv::prelude();
-        assert!(check_effect(&env, "f", EffectLevel::View, EffectLevel::Pure, Span::dummy()).is_ok());
-    }
-
-    #[test]
-    fn check_mut_calling_pure_ok() {
-        let env = EffectEnv::prelude();
-        assert!(check_effect(&env, "f", EffectLevel::Mut, EffectLevel::Pure, Span::dummy()).is_ok());
-    }
-
-    #[test]
-    fn check_pure_calling_view_fails() {
-        let env = EffectEnv::prelude();
-        let result = check_effect(&env, "f", EffectLevel::Pure, EffectLevel::View, Span::dummy());
-        assert!(matches!(result, Err(EffectError::PureViolation { .. })));
-    }
-
-    #[test]
-    fn check_pure_calling_mut_fails() {
-        let env = EffectEnv::prelude();
-        let result = check_effect(&env, "f", EffectLevel::Pure, EffectLevel::Mut, Span::dummy());
-        assert!(matches!(result, Err(EffectError::PureViolation { .. })));
-    }
-
-    #[test]
-    fn check_view_calling_mut_fails() {
-        let env = EffectEnv::prelude();
-        let result = check_effect(&env, "f", EffectLevel::View, EffectLevel::Mut, Span::dummy());
-        assert!(matches!(result, Err(EffectError::ViewViolation { .. })));
-    }
-
-    #[test]
-    fn check_call_effect_pure_to_mut() {
-        let env = EffectEnv::prelude();
-        let result = check_call_effect(
-            &env,
-            "my_pure_fn",
-            EffectLevel::Pure,
-            "deal_damage",
-            EffectLevel::Mut,
-            Span::dummy(),
-        );
-        match result {
-            Err(EffectError::PureViolation { called_name, .. }) => {
-                assert_eq!(called_name, "deal_damage");
-            }
-            other => panic!("expected PureViolation, got {other:?}"),
-        }
-    }
-
-    #[test]
-    fn validate_effects_pure_with_add_ok() {
-        let env = EffectEnv::prelude();
-        let expr = app("add", vec![i64_val(1), i64_val(2)]);
-        assert!(validate_effects(&env, "f", EffectLevel::Pure, &expr).is_ok());
-    }
-
-    #[test]
-    fn validate_effects_pure_with_deal_damage_fails() {
-        let env = EffectEnv::prelude();
-        let expr = app("deal_damage", vec![var("state"), i64_val(10)]);
-        let result = validate_effects(&env, "pure_fn", EffectLevel::Pure, &expr);
-        assert!(matches!(result, Err(EffectError::PureViolation { .. })));
-    }
-
-    #[test]
-    fn validate_effects_view_with_deal_damage_fails() {
-        let env = EffectEnv::prelude();
-        let expr = app("deal_damage", vec![var("state"), i64_val(10)]);
-        let result = validate_effects(&env, "view_fn", EffectLevel::View, &expr);
-        assert!(matches!(result, Err(EffectError::ViewViolation { .. })));
-    }
-
-    #[test]
-    fn validate_effects_mut_with_deal_damage_ok() {
-        let env = EffectEnv::prelude();
-        let expr = app("deal_damage", vec![var("state"), i64_val(10)]);
-        assert!(validate_effects(&env, "mut_fn", EffectLevel::Mut, &expr).is_ok());
-    }
-
-    #[test]
-    fn collect_calls_basic() {
-        let expr = app("add", vec![i64_val(1), i64_val(2)]);
-        let calls = collect_calls(&expr);
-        assert_eq!(calls.len(), 1);
-        assert_eq!(calls[0].0, "add");
-    }
-
-    #[test]
-    fn collect_calls_nested() {
-        let inner = app("add", vec![i64_val(1), i64_val(2)]);
-        let outer = app("mul", vec![inner, i64_val(3)]);
-        let calls = collect_calls(&outer);
-        assert_eq!(calls.len(), 2);
-    }
-
-    #[test]
-    fn collect_calls_let() {
-        let expr = Expr::Let {
-            span: Span::dummy(),
-            name: "x".to_string(),
-            type_ann: None,
-            value: Box::new(app("add", vec![i64_val(1), i64_val(2)])),
-            body: Box::new(app("mul", vec![var("x"), i64_val(3)])),
-        };
-        let calls = collect_calls(&expr);
-        assert_eq!(calls.len(), 2);
-    }
-
-    #[test]
-    fn effect_level_ordering() {
-        assert!(EffectLevel::Pure < EffectLevel::View);
-        assert!(EffectLevel::View < EffectLevel::Mut);
-        assert!(EffectLevel::Pure < EffectLevel::Mut);
-    }
-
-    #[test]
-    fn effect_error_code() {
-        let err = EffectError::PureViolation {
-            function_name: "f".to_string(),
-            called_name: "g".to_string(),
-            called_level: EffectLevel::Mut,
-            span: Span::dummy(),
-        };
-        assert_eq!(err.code(), "E0005");
-
-        let err2 = EffectError::MissingAnnotation {
-            function_name: "f".to_string(),
-            inferred_level: EffectLevel::View,
-            span: Span::dummy(),
-        };
-        assert_eq!(err2.code(), "E0007");
-    }
-
-    #[test]
-    fn effect_error_display() {
-        let err = EffectError::ViewViolation {
-            function_name: "view_fn".to_string(),
-            called_name: "deal_damage".to_string(),
-            span: Span::dummy(),
-        };
-        let msg = format!("{err}");
-        assert!(msg.contains("E0005"));
-        assert!(msg.contains("view_fn"));
-        assert!(msg.contains("deal_damage"));
-    }
-
-    #[test]
-    fn infer_stmt_let() {
-        let env = EffectEnv::prelude();
-        let stmt = Stmt::Let(crate::ast::LetStmt {
-            span: Span::dummy(),
-            name: "x".to_string(),
-            type_ann: None,
-            value: app("deal_damage", vec![var("state"), i64_val(10)]),
-        });
-        assert_eq!(infer_stmt_effect(&env, &stmt), EffectLevel::Mut);
-    }
-
-    #[test]
-    fn infer_stmt_return() {
-        let env = EffectEnv::prelude();
-        let stmt = Stmt::Return(crate::ast::ReturnStmt {
-            span: Span::dummy(),
-            expr: i64_val(42),
-        });
-        assert_eq!(infer_stmt_effect(&env, &stmt), EffectLevel::Pure);
-    }
-
-    #[test]
-    fn infer_stmt_expr() {
-        let env = EffectEnv::prelude();
-        let stmt = Stmt::Expr(crate::ast::ExprStmt {
-            span: Span::dummy(),
-            expr: app("add", vec![i64_val(1), i64_val(2)]),
-        });
-        assert_eq!(infer_stmt_effect(&env, &stmt), EffectLevel::Pure);
-    }
-
-    // ─── proptest: effect level monotonicity ───
-
-    #[test]
-    fn proptest_effect_level_max() {
-        assert_eq!(EffectLevel::Pure.max(EffectLevel::Pure), EffectLevel::Pure);
-        assert_eq!(EffectLevel::Pure.max(EffectLevel::Mut), EffectLevel::Mut);
-        assert_eq!(EffectLevel::View.max(EffectLevel::Mut), EffectLevel::Mut);
-        assert_eq!(EffectLevel::Mut.max(EffectLevel::Pure), EffectLevel::Mut);
-    }
-
-    #[test]
-    fn proptest_all_prelude_fns_have_levels() {
-        let env = EffectEnv::prelude();
-        let names = env.function_names();
-        assert!(!names.is_empty());
-        for name in names {
-            assert!(env.get_level(name).is_some(), "prelude fn '{name}' missing effect level");
-        }
-    }
-
-    #[test]
-    fn proptest_nested_let_effects() {
-        let env = EffectEnv::prelude();
-        let expr = Expr::Let {
-            span: Span::dummy(),
-            name: "a".to_string(),
-            type_ann: None,
-            value: Box::new(i64_val(1)),
-            body: Box::new(Expr::Let {
-                span: Span::dummy(),
-                name: "b".to_string(),
-                type_ann: None,
-                value: Box::new(app("deal_damage", vec![var("state"), i64_val(10)])),
-                body: Box::new(var("b")),
-            }),
-        };
-        assert_eq!(infer_expr_effect(&env, &expr), EffectLevel::Mut);
+        ec.check_function_def(&fn_def);
+        // Context should be restored
+        assert_eq!(ec.context, Effect::Pure);
     }
 }

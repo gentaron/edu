@@ -2,12 +2,10 @@
 name = "apolon-compiler"
 version = "0.1.0"
 edition = "2021"
-description = "Apolon DSL compiler — Lexer, Parser, HM type inference, Effect system, SSA IR, Optimizer, WASM 2.0 codegen"
+description = "Compiler for the Apolon DSL — card ability language for the edu battle system"
 
 [dependencies]
-wasm-encoder = "0.219"
-wasmparser = "0.219"
-log = "0.4"
+wasm-encoder = "0.220"
+wasmparser = "0.220"
 
 [dev-dependencies]
-proptest = "1"

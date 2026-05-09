@@ -1,1649 +1,2194 @@
-//! Hindley-Milner type inference with row polymorphism.
-//!
-//! Implements Algorithm W (Damas-Milner) for type inference with extensions for
-//! row polymorphism in record types. Supports type variables, unification,
-//! substitution, and generalization into type schemes.
+//! Hindley-Milner type inference with row polymorphism for the Apolon DSL.
 
-use std::collections::HashMap;
-use std::fmt;
+use crate::ast::*;
+use crate::error::Span;
+use std::collections::{HashMap, HashSet};
 
-use crate::span::Span;
+// ---------------------------------------------------------------------------
+// Type representations
+// ---------------------------------------------------------------------------
 
-/// Unique identifier for type variables.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct TypeVarId(pub u32);
-
-/// Represents types in the Apolon type system.
+/// Type representations for inference.
 #[derive(Debug, Clone, PartialEq)]
-pub enum Type {
-    /// Type variable: `a`, `b`, etc.
-    Var(TypeVarId),
-    /// Concrete named type: `Int`, `Bool`, `String`, `Unit`, user-defined.
+pub enum Ty {
+    /// Integer type.
+    Int,
+    /// Boolean type.
+    Bool,
+    /// String type.
+    Str,
+    /// Unit type (void).
+    Unit,
+    /// Entity type (game entity with stat fields).
+    Entity,
+    /// Effect type (user-defined effect).
+    Effect,
+    /// Row type with named fields and optional row tail variable for extension.
+    Row(Vec<(String, Ty)>, Option<u32>),
+    /// Function type: parameter types → return type.
+    Fn(Vec<Ty>, Box<Ty>),
+    /// List (homogeneous) type.
+    List(Box<Ty>),
+    /// Type variable used during inference.
+    Var(u32),
+    /// User-defined / named type.
     Named(String),
-    /// Function type: `A -> B`
-    Arrow(Box<Type>, Box<Type>),
-    /// Record type with row polymorphism: `{#name: String, #age: Int | r}`
-    Record(Vec<(String, Type)>, Option<TypeVarId>),
-    /// List type: `[T]`
-    List(Box<Type>),
-    /// Tuple type: `(A, B, C)`
-    Tuple(Vec<Type>),
-    /// Row extension: used for row polymorphism (internal)
-    RowExtend(String, Box<Type>, Box<Type>),
-    /// Row variable (empty row)
-    EmptyRow,
 }
 
-impl fmt::Display for Type {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl std::fmt::Display for Ty {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Var(id) => write!(f, "t{}", id.0),
-            Self::Named(name) => write!(f, "{name}"),
-            Self::Arrow(param, ret) => write!(f, "({param} -> {ret})"),
-            Self::Record(fields, rest) => {
+            Ty::Int => write!(f, "int"),
+            Ty::Bool => write!(f, "bool"),
+            Ty::Str => write!(f, "str"),
+            Ty::Unit => write!(f, "unit"),
+            Ty::Entity => write!(f, "entity"),
+            Ty::Effect => write!(f, "Effect"),
+            Ty::Row(fields, None) => {
                 write!(f, "{{")?;
-                for (i, (label, ty)) in fields.iter().enumerate() {
+                for (i, (name, ty)) in fields.iter().enumerate() {
                     if i > 0 {
                         write!(f, ", ")?;
                     }
-                    write!(f, "#{label}: {ty}")?;
-                }
-                if let Some(rv) = rest {
-                    write!(f, " | t{})", rv.0)?;
+                    write!(f, "{}: {}", name, ty)?;
                 }
                 write!(f, "}}")
             }
-            Self::List(elem) => write!(f, "[{elem}]"),
-            Self::Tuple(elems) => {
-                write!(f, "(")?;
-                for (i, e) in elems.iter().enumerate() {
+            Ty::Row(fields, Some(v)) => {
+                write!(f, "{{")?;
+                for (i, (name, ty)) in fields.iter().enumerate() {
                     if i > 0 {
                         write!(f, ", ")?;
                     }
-                    write!(f, "{e}")?;
+                    write!(f, "{}: {}", name, ty)?;
                 }
-                write!(f, ")")
+                write!(f, ", ..|?{}}}", v)
             }
-            Self::RowExtend(label, ty, rest) => {
-                write!(f, "(#{label}: {ty} | {rest})")
+            Ty::Fn(params, ret) => {
+                write!(f, "(")?;
+                for (i, param) in params.iter().enumerate() {
+                    if i > 0 {
+                        write!(f, ", ")?;
+                    }
+                    write!(f, "{}", param)?;
+                }
+                write!(f, ") -> {}", ret)
             }
-            Self::EmptyRow => write!(f, "{{}}"),
+            Ty::List(inner) => write!(f, "[{}]", inner),
+            Ty::Var(id) => write!(f, "?{}", id),
+            Ty::Named(name) => write!(f, "{}", name),
         }
     }
 }
 
-/// A type scheme: `∀a1...an. T`
-///
-/// Represents a polymorphic type with quantified type variables.
+// ---------------------------------------------------------------------------
+// Type scheme (let-polymorphism)
+// ---------------------------------------------------------------------------
+
+/// Type scheme: universally quantified type variables + body type.
 #[derive(Debug, Clone, PartialEq)]
 pub struct TypeScheme {
-    /// Universally quantified type variables.
-    pub vars: Vec<TypeVarId>,
+    /// Quantified (bound) type variables.
+    pub vars: Vec<u32>,
     /// The type body.
-    pub ty: Type,
+    pub ty: Ty,
 }
 
 impl TypeScheme {
-    /// Create a monomorphic type scheme (no quantified variables).
-    #[must_use]
-    pub fn monomorphic(ty: Type) -> Self {
-        Self { vars: vec![], ty }
+    /// Create a new type scheme.
+    pub fn new(vars: Vec<u32>, ty: Ty) -> Self {
+        Self { vars, ty }
     }
 
-    /// Instantiate a type scheme by replacing quantified variables with fresh ones.
-    pub fn instantiate(&self, subst: &mut Substitution) -> Type {
-        let fresh: Vec<_> = self.vars.iter().map(|_| subst.fresh_var()).collect();
-        let mut mapping = HashMap::new();
-        for (old, new) in self.vars.iter().zip(fresh.iter()) {
-            mapping.insert(*old, *new);
-        }
-        self.ty.apply_mapping(&mapping)
-    }
-}
-
-/// A substitution mapping type variables to types.
-#[derive(Debug, Clone, PartialEq)]
-pub struct Substitution {
-    mapping: HashMap<TypeVarId, Type>,
-    next_var_id: u32,
-}
-
-impl Substitution {
-    /// Create a new empty substitution.
-    #[must_use]
-    pub fn new() -> Self {
+    /// Create a monomorphic (non-quantified) type scheme.
+    pub fn monomorphic(ty: Ty) -> Self {
         Self {
-            mapping: HashMap::new(),
-            next_var_id: 0,
+            vars: vec![],
+            ty,
         }
-    }
-
-    /// Generate a fresh type variable.
-    pub fn fresh_var(&mut self) -> TypeVarId {
-        let id = TypeVarId(self.next_var_id);
-        self.next_var_id += 1;
-        id
-    }
-
-    /// Apply this substitution to a type, resolving all type variables.
-    pub fn apply(&self, ty: &Type) -> Type {
-        match ty {
-            Type::Var(id) => match self.mapping.get(id) {
-                Some(resolved) => self.apply(resolved),
-                None => Type::Var(*id),
-            },
-            Type::Named(name) => Type::Named(name.clone()),
-            Type::Arrow(param, ret) => {
-                Type::Arrow(Box::new(self.apply(param)), Box::new(self.apply(ret)))
-            }
-            Type::Record(fields, rest) => {
-                let new_fields: Vec<_> = fields
-                    .iter()
-                    .map(|(label, t)| (label.clone(), self.apply(t)))
-                    .collect();
-                let new_rest = rest.map(|id| match self.mapping.get(&id) {
-                    Some(resolved) => self.apply(resolved),
-                    None => Type::Var(id),
-                });
-                // Simplify: if rest resolves to EmptyRow, just return the record without rest
-                match &new_rest {
-                    Some(Type::EmptyRow) => Type::Record(new_fields, None),
-                    _ => Type::Record(new_fields, rest.clone()),
-                }
-            }
-            Type::List(elem) => Type::List(Box::new(self.apply(elem))),
-            Type::Tuple(elems) => Type::Tuple(elems.iter().map(|e| self.apply(e)).collect()),
-            Type::RowExtend(label, ty, rest) => Type::RowExtend(
-                label.clone(),
-                Box::new(self.apply(ty)),
-                Box::new(self.apply(rest)),
-            ),
-            Type::EmptyRow => Type::EmptyRow,
-        }
-    }
-
-    /// Add a binding to the substitution.
-    pub fn bind(&mut self, var: TypeVarId, ty: Type) {
-        self.mapping.insert(var, ty);
-    }
-
-    /// Compose two substitutions: self after other.
-    pub fn compose(&mut self, other: &Substitution) {
-        let mut new_mapping = HashMap::new();
-        for (var, ty) in &other.mapping {
-            new_mapping.insert(*var, self.apply(ty));
-        }
-        for (var, ty) in &self.mapping {
-            if !new_mapping.contains_key(var) {
-                new_mapping.insert(*var, ty.clone());
-            }
-        }
-        self.mapping = new_mapping;
-        self.next_var_id = self.next_var_id.max(other.next_var_id);
-    }
-
-    /// Get the set of free type variables in a type.
-    pub fn free_vars(ty: &Type) -> Vec<TypeVarId> {
-        let mut vars = Vec::new();
-        Self::collect_free_vars(ty, &mut vars);
-        vars.sort_by_key(|v| v.0);
-        vars.dedup();
-        vars
-    }
-
-    fn collect_free_vars(ty: &Type, vars: &mut Vec<TypeVarId>) {
-        match ty {
-            Type::Var(id) => {
-                if !vars.contains(id) {
-                    vars.push(*id);
-                }
-            }
-            Type::Arrow(param, ret) => {
-                Self::collect_free_vars(param, vars);
-                Self::collect_free_vars(ret, vars);
-            }
-            Type::Record(fields, rest) => {
-                for (_, t) in fields {
-                    Self::collect_free_vars(t, vars);
-                }
-                if let Some(id) = rest {
-                    if !vars.contains(id) {
-                        vars.push(*id);
-                    }
-                }
-            }
-            Type::List(elem) => Self::collect_free_vars(elem, vars),
-            Type::Tuple(elems) => {
-                for e in elems {
-                    Self::collect_free_vars(e, vars);
-                }
-            }
-            Type::RowExtend(_, ty, rest) => {
-                Self::collect_free_vars(ty, vars);
-                Self::collect_free_vars(rest, vars);
-            }
-            Type::Named(_) | Type::EmptyRow => {}
-        }
-    }
-
-    /// Get free vars in a type scheme.
-    pub fn free_vars_scheme(scheme: &TypeScheme) -> Vec<TypeVarId> {
-        let mut vars = Self::free_vars(&scheme.ty);
-        vars.retain(|v| !scheme.vars.contains(v));
-        vars
     }
 }
 
-impl Default for Substitution {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+// ---------------------------------------------------------------------------
+// Type errors
+// ---------------------------------------------------------------------------
 
-/// Unification errors.
+/// Kinds of type errors.
 #[derive(Debug, Clone, PartialEq)]
-pub enum UnificationError {
-    /// Cannot unify two different named types.
-    NameMismatch(String, String),
-    /// Cannot unify a type variable with a type that contains it (occurs check).
-    OccursCheck(TypeVarId),
-    /// Cannot unify function type with non-function type.
-    FunctionArityMismatch,
-    /// Cannot unify record types with conflicting fields.
-    RowLabelConflict(String),
-    /// Cannot unify list types with different element types.
-    ListMismatch,
-    /// Cannot unify tuples with different lengths.
-    TupleLengthMismatch(usize, usize),
-    /// Cannot unify a row variable with a type containing a duplicate label.
-    DuplicateRowLabel(String),
-    /// Generic unification failure.
-    Mismatch(Type, Type),
+pub enum TypeErrorKind {
+    /// Two types could not be unified.
+    UnificationMismatch(Ty, Ty),
+    /// A name was used but is not defined in scope.
+    UndefinedVariable(String),
+    /// A non-function type was called.
+    NotAFunction(Ty),
+    /// Wrong number of arguments supplied to a function.
+    ArityMismatch {
+        expected: usize,
+        found: usize,
+    },
+    /// Row fields do not match.
+    RowMismatch {
+        missing: Vec<String>,
+        extra: Vec<String>,
+    },
+    /// An effect annotation was required but not provided.
+    EffectAnnotationMissing,
+    /// Infinite / cyclic type detected (occurs check failed).
+    CyclicType,
 }
 
-impl fmt::Display for UnificationError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl std::fmt::Display for TypeErrorKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::NameMismatch(a, b) => write!(f, "cannot unify {a} with {b}"),
-            Self::OccursCheck(id) => write!(f, "infinite type: t{} occurs in itself", id.0),
-            Self::FunctionArityMismatch => write!(f, "function arity mismatch"),
-            Self::RowLabelConflict(label) => write!(f, "row label conflict: #{label}"),
-            Self::ListMismatch => write!(f, "list element type mismatch"),
-            Self::TupleLengthMismatch(a, b) => {
-                write!(f, "tuple length mismatch: {a} vs {b}")
+            Self::UnificationMismatch(t1, t2) => {
+                write!(f, "type mismatch: expected {}, got {}", t1, t2)
             }
-            Self::DuplicateRowLabel(label) => {
-                write!(f, "duplicate row label: #{label}")
+            Self::UndefinedVariable(name) => {
+                write!(f, "undefined variable: {}", name)
             }
-            Self::Mismatch(a, b) => write!(f, "cannot unify {a} with {b}"),
+            Self::NotAFunction(ty) => {
+                write!(f, "cannot call non-function type: {}", ty)
+            }
+            Self::ArityMismatch { expected, found } => {
+                write!(
+                    f,
+                    "arity mismatch: expected {} argument(s), found {}",
+                    expected, found
+                )
+            }
+            Self::RowMismatch { missing, extra } => {
+                write!(
+                    f,
+                    "row mismatch: missing fields {:?}, extra fields {:?}",
+                    missing, extra
+                )
+            }
+            Self::EffectAnnotationMissing => {
+                write!(f, "effect annotation missing")
+            }
+            Self::CyclicType => {
+                write!(f, "cyclic type detected")
+            }
         }
     }
 }
 
-impl std::error::Error for UnificationError {}
-
-/// Unify two types, producing a substitution.
-pub fn unify(subst: &mut Substitution, t1: &Type, t2: &Type) -> Result<(), UnificationError> {
-    let t1 = subst.apply(t1);
-    let t2 = subst.apply(t2);
-    unify_inner(subst, &t1, &t2)
+/// A type error with source position.
+#[derive(Debug, Clone, PartialEq)]
+pub struct TypeError {
+    /// The specific kind of type error.
+    pub kind: TypeErrorKind,
+    /// Source span where the error occurred.
+    pub span: Span,
 }
 
-fn unify_inner(
-    subst: &mut Substitution,
-    t1: &Type,
-    t2: &Type,
-) -> Result<(), UnificationError> {
-    match (t1, t2) {
-        // Same type variable: trivially unified
-        (Type::Var(id1), Type::Var(id2)) if id1 == id2 => Ok(()),
-
-        // Type variable on the left
-        (Type::Var(id), ty) => {
-            if occurs(subst, id, ty) {
-                return Err(UnificationError::OccursCheck(*id));
-            }
-            subst.bind(*id, ty.clone());
-            Ok(())
-        }
-
-        // Type variable on the right
-        (ty, Type::Var(id)) => {
-            if occurs(subst, id, ty) {
-                return Err(UnificationError::OccursCheck(*id));
-            }
-            subst.bind(*id, ty.clone());
-            Ok(())
-        }
-
-        // Named types
-        (Type::Named(a), Type::Named(b)) if a == b => Ok(()),
-        (Type::Named(a), Type::Named(b)) => Err(UnificationError::NameMismatch(a.clone(), b.clone())),
-
-        // Arrow types
-        (Type::Arrow(p1, r1), Type::Arrow(p2, r2)) => {
-            unify(subst, p1, p2)?;
-            unify(subst, r1, r2)
-        }
-
-        // List types
-        (Type::List(e1), Type::List(e2)) => unify(subst, e1, e2),
-
-        // Tuple types
-        (Type::Tuple(elems1), Type::Tuple(elems2)) if elems1.len() == elems2.len() => {
-            for (a, b) in elems1.iter().zip(elems2.iter()) {
-                unify(subst, a, b)?;
-            }
-            Ok(())
-        }
-        (Type::Tuple(a), Type::Tuple(b)) => {
-            Err(UnificationError::TupleLengthMismatch(a.len(), b.len()))
-        }
-
-        // Record types with row polymorphism
-        (Type::Record(fields1, rest1), Type::Record(fields2, rest2)) => {
-            // Unify matching fields
-            let mut remaining1: Vec<_> = fields1.clone();
-            let mut remaining2: Vec<_> = fields2.clone();
-
-            let mut common_labels = Vec::new();
-            for (label1, _) in fields1 {
-                for (label2, _) in fields2 {
-                    if label1 == label2 {
-                        common_labels.push(label1.clone());
-                        break;
-                    }
-                }
-            }
-
-            for label in &common_labels {
-                if let Some(idx1) = remaining1.iter().position(|(l, _)| l == label) {
-                    if let Some(idx2) = remaining2.iter().position(|(l, _)| l == label) {
-                        let (_, ty1) = remaining1.remove(idx1);
-                        let (_, ty2) = remaining2.remove(idx2);
-                        unify(subst, &ty1, &ty2)?;
-                    }
-                }
-            }
-
-            // Handle remaining fields via row unification
-            if !remaining1.is_empty() || !remaining2.is_empty() {
-                // Create row types for remaining fields and unify with rest variables
-                let row1 = fields_to_row(&remaining1, *rest1);
-                let row2 = fields_to_row(&remaining2, *rest2);
-                unify(subst, &row1, &row2)?;
-            } else {
-                // Both consumed, unify rest variables
-                match (rest1, rest2) {
-                    (Some(r1), Some(r2)) => unify(subst, &Type::Var(*r1), &Type::Var(*r2))?,
-                    (Some(r1), None) => unify(subst, &Type::Var(*r1), &Type::EmptyRow)?,
-                    (None, Some(r2)) => unify(subst, &Type::EmptyRow, &Type::Var(*r2))?,
-                    (None, None) => {}
-                }
-            }
-
-            Ok(())
-        }
-
-        // Empty row
-        (Type::EmptyRow, Type::EmptyRow) => Ok(()),
-
-        // Row extension unification
-        (Type::RowExtend(label, ty, rest), other) | (other, Type::RowExtend(label, ty, rest)) => {
-            match other {
-                Type::Record(fields, rest_var) => {
-                    // Check for duplicate label
-                    if fields.iter().any(|(l, _)| l == label) {
-                        return Err(UnificationError::DuplicateRowLabel(label.clone()));
-                    }
-                    let mut new_fields = vec![(label.clone(), *ty.clone())];
-                    new_fields.extend(fields.clone());
-                    unify(subst, &Type::Record(new_fields, *rest_var), rest)
-                }
-                Type::RowExtend(label2, ty2, rest2) => {
-                    if label == label2 {
-                        unify(subst, ty, ty2)?;
-                        unify(subst, rest, rest2)
-                    } else {
-                        // Rotate: extend rest with (label, ty) and unify with (label2, ty2, rest2)
-                        let rotated =
-                            Type::RowExtend(label.clone(), ty.clone(), rest.clone());
-                        // We need to unify this more carefully — for simplicity, treat as mismatch
-                        // In a full implementation, we'd need row variable decomposition
-                        Err(UnificationError::Mismatch(t1.clone(), t2.clone()))
-                    }
-                }
-                Type::Var(id) => {
-                    if occurs(subst, id, &t1) {
-                        return Err(UnificationError::OccursCheck(*id));
-                    }
-                    subst.bind(*id, t1.clone());
-                    Ok(())
-                }
-                Type::EmptyRow => Err(UnificationError::Mismatch(t1.clone(), t2.clone())),
-                _ => Err(UnificationError::Mismatch(t1.clone(), t2.clone())),
-            }
-        }
-
-        // Catch-all mismatch
-        _ => Err(UnificationError::Mismatch(t1.clone(), t2.clone())),
-    }
-}
-
-/// Check if a type variable occurs in a type (occurs check).
-fn occurs(subst: &Substitution, var: &TypeVarId, ty: &Type) -> bool {
-    let resolved = subst.apply(ty);
-    match &resolved {
-        Type::Var(id) => id == var,
-        Type::Arrow(p, r) => occurs(subst, var, p) || occurs(subst, var, r),
-        Type::Record(fields, rest) => {
-            fields.iter().any(|(_, t)| occurs(subst, var, t))
-                || rest.is_some_and(|id| &id == var)
-        }
-        Type::List(e) => occurs(subst, var, e),
-        Type::Tuple(elems) => elems.iter().any(|e| occurs(subst, var, e)),
-        Type::RowExtend(_, ty, rest) => occurs(subst, var, ty) || occurs(subst, var, rest),
-        Type::Named(_) | Type::EmptyRow => false,
-    }
-}
-
-/// Convert a list of fields and optional rest variable to a row type.
-fn fields_to_row(fields: &[(String, Type)], rest: Option<TypeVarId>) -> Type {
-    match fields {
-        [] => match rest {
-            Some(id) => Type::Var(id),
-            None => Type::EmptyRow,
-        },
-        [(label, ty)] => {
-            let rest_type = match rest {
-                Some(id) => Type::Var(id),
-                None => Type::EmptyRow,
-            };
-            Type::RowExtend(label.clone(), Box::new(ty.clone()), Box::new(rest_type))
-        }
-        _ => {
-            let tail = fields_to_row(&fields[1..], rest);
-            Type::RowExtend(
-                fields[0].0.clone(),
-                Box::new(fields[0].1.clone()),
-                Box::new(tail),
-            )
-        }
-    }
-}
-
-/// Type inference environment: maps variable names to type schemes.
-#[derive(Debug, Clone)]
-pub struct TypeEnv {
-    pub bindings: HashMap<String, TypeScheme>,
-}
-
-impl TypeEnv {
-    /// Create an empty type environment.
-    #[must_use]
-    pub fn new() -> Self {
-        Self {
-            bindings: HashMap::new(),
-        }
-    }
-
-    /// Create an environment pre-populated with the Apolon built-in types.
-    #[must_use]
-    pub fn prelude() -> Self {
-        let mut env = Self::new();
-
-        // Arithmetic functions
-        env.bind(
-            "add",
-            TypeScheme::monomorphic(Type::Arrow(
-                Box::new(Type::Named("Int".to_string())),
-                Box::new(Type::Arrow(
-                    Box::new(Type::Named("Int".to_string())),
-                    Box::new(Type::Named("Int".to_string())),
-                )),
-            )),
-        );
-        env.bind(
-            "sub",
-            TypeScheme::monomorphic(Type::Arrow(
-                Box::new(Type::Named("Int".to_string())),
-                Box::new(Type::Arrow(
-                    Box::new(Type::Named("Int".to_string())),
-                    Box::new(Type::Named("Int".to_string())),
-                )),
-            )),
-        );
-        env.bind(
-            "mul",
-            TypeScheme::monomorphic(Type::Arrow(
-                Box::new(Type::Named("Int".to_string())),
-                Box::new(Type::Arrow(
-                    Box::new(Type::Named("Int".to_string())),
-                    Box::new(Type::Named("Int".to_string())),
-                )),
-            )),
-        );
-
-        // make_result
-        env.bind(
-            "make_result",
-            TypeScheme::monomorphic(Type::Arrow(
-                Box::new(Type::Named("Int".to_string())),
-                Box::new(Type::Arrow(
-                    Box::new(Type::Named("Int".to_string())),
-                    Box::new(Type::Arrow(
-                        Box::new(Type::Named("Int".to_string())),
-                        Box::new(Type::Arrow(
-                            Box::new(Type::Named("Int".to_string())),
-                            Box::new(Type::Arrow(
-                                Box::new(Type::Named("String".to_string())),
-                                Box::new(Type::Named("BattleResult".to_string())),
-                            )),
-                        )),
-                    )),
-                )),
-            )),
-        );
-
-        env
-    }
-
-    /// Bind a variable name to a type scheme.
-    pub fn bind(&mut self, name: &str, scheme: TypeScheme) {
-        self.bindings.insert(name.to_string(), scheme);
-    }
-
-    /// Look up a variable's type scheme.
-    pub fn lookup(&self, name: &str) -> Option<&TypeScheme> {
-        self.bindings.get(name)
-    }
-
-    /// Generalize a type into a type scheme by quantifying over free variables
-    /// not in the environment.
-    pub fn generalize(&self, subst: &Substitution, ty: &Type) -> TypeScheme {
-        let resolved = subst.apply(ty);
-        let free_in_type = Substitution::free_vars(&resolved);
-        let mut free_in_env = Vec::new();
-        for scheme in self.bindings.values() {
-            free_in_env.extend(Substitution::free_vars_scheme(scheme));
-        }
-        let vars: Vec<_> = free_in_type
-            .into_iter()
-            .filter(|v| !free_in_env.contains(v))
-            .collect();
-        TypeScheme {
-            vars,
-            ty: resolved,
-        }
-    }
-}
-
-impl Default for TypeEnv {
-    fn default() -> Self {
-        Self::new()
-    }
-}
-
-/// Type inference errors.
-#[derive(Debug, Clone)]
-pub enum TypeError {
-    UnificationError(UnificationError),
-    UndefinedVariable { name: String, span: Span },
-    NotAFunction { ty: Type, span: Span },
-    ArityMismatch { expected: usize, actual: usize, span: Span },
-}
-
-impl fmt::Display for TypeError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Self::UnificationError(e) => write!(f, "type error: {e}"),
-            Self::UndefinedVariable { name, .. } => write!(f, "undefined variable: {name}"),
-            Self::NotAFunction { ty, .. } => write!(f, "not a function: {ty}"),
-            Self::ArityMismatch {
-                expected, actual, ..
-            } => write!(f, "arity mismatch: expected {expected}, got {actual}"),
-        }
+impl std::fmt::Display for TypeError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "type error at {}: {}", self.span, self.kind)
     }
 }
 
 impl std::error::Error for TypeError {}
 
-/// Infer the type of an expression using Algorithm W.
-///
-/// Returns the inferred type and an updated substitution.
-pub fn infer(
-    env: &mut TypeEnv,
-    subst: &mut Substitution,
-    expr: &crate::ast::Expr,
-) -> Result<Type, TypeError> {
-    use crate::ast::Expr::*;
+// ---------------------------------------------------------------------------
+// Known entity fields (all typed as Int in the game domain)
+// ---------------------------------------------------------------------------
 
-    match expr {
-        IntLit { .. } => Ok(Type::Named("Int".to_string())),
-        BoolLit { .. } => Ok(Type::Named("Bool".to_string())),
-        StringLit { .. } => Ok(Type::Named("String".to_string())),
-        Unit { .. } => Ok(Type::Named("Unit".to_string())),
+const ENTITY_FIELDS: &[&str] = &["hp", "maxhp", "atk", "def", "shield"];
 
-        Var { name, span } => {
-            let scheme = env.lookup(name).ok_or_else(|| TypeError::UndefinedVariable {
-                name: name.clone(),
-                span: *span,
-            })?;
-            Ok(scheme.instantiate(subst))
-        }
+// ---------------------------------------------------------------------------
+// TypeChecker
+// ---------------------------------------------------------------------------
 
-        Constructor { name, span, .. } => {
-            // Constructors are treated as variables
-            let scheme = env.lookup(name).ok_or_else(|| TypeError::UndefinedVariable {
-                name: name.clone(),
-                span: *span,
-            })?;
-            Ok(scheme.instantiate(subst))
-        }
+/// Hindley-Milner type checker with row polymorphism.
+pub struct TypeChecker {
+    /// Type variable → type substitution map.
+    subst: HashMap<u32, Ty>,
+    /// Monotonic counter for generating fresh type variables.
+    next_var: u32,
+    /// Scoped environment: each scope is a name → TypeScheme map.
+    env: Vec<HashMap<String, TypeScheme>>,
+    /// Collected type errors (non-fatal).
+    errors: Vec<TypeError>,
+}
 
-        BinOp { op, left, right, .. } => {
-            let left_ty = infer(env, subst, left)?;
-            let right_ty = infer(env, subst, right)?;
+impl Default for TypeChecker {
+    fn default() -> Self {
+        Self::new()
+    }
+}
 
-            match op {
-                crate::ast::BinOp::Add
-                | crate::ast::BinOp::Sub
-                | crate::ast::BinOp::Mul
-                | crate::ast::BinOp::Div
-                | crate::ast::BinOp::Mod => {
-                    unify(subst, &left_ty, &Type::Named("Int".to_string()))
-                        .map_err(TypeError::UnificationError)?;
-                    unify(subst, &right_ty, &Type::Named("Int".to_string()))
-                        .map_err(TypeError::UnificationError)?;
-                    Ok(Type::Named("Int".to_string()))
-                }
-                crate::ast::BinOp::Eq
-                | crate::ast::BinOp::Neq
-                | crate::ast::BinOp::Lt
-                | crate::ast::BinOp::Gt
-                | crate::ast::BinOp::Le
-                | crate::ast::BinOp::Ge => {
-                    unify(subst, &left_ty, &right_ty)
-                        .map_err(TypeError::UnificationError)?;
-                    Ok(Type::Named("Bool".to_string()))
-                }
-                crate::ast::BinOp::And | crate::ast::BinOp::Or => {
-                    unify(subst, &left_ty, &Type::Named("Bool".to_string()))
-                        .map_err(TypeError::UnificationError)?;
-                    unify(subst, &right_ty, &Type::Named("Bool".to_string()))
-                        .map_err(TypeError::UnificationError)?;
-                    Ok(Type::Named("Bool".to_string()))
-                }
-            }
-        }
+impl TypeChecker {
+    /// Create a new type checker with built-in environment.
+    pub fn new() -> Self {
+        let mut checker = Self {
+            subst: HashMap::new(),
+            next_var: 0,
+            env: vec![HashMap::new()],
+            errors: vec![],
+        };
+        checker.register_builtins();
+        checker
+    }
 
-        UnaryOp { op, operand, .. } => {
-            let operand_ty = infer(env, subst, operand)?;
-            match op {
-                crate::ast::UnaryOp::Neg => {
-                    unify(subst, &operand_ty, &Type::Named("Int".to_string()))
-                        .map_err(TypeError::UnificationError)?;
-                    Ok(Type::Named("Int".to_string()))
-                }
-                crate::ast::UnaryOp::Not => {
-                    unify(subst, &operand_ty, &Type::Named("Bool".to_string()))
-                        .map_err(TypeError::UnificationError)?;
-                    Ok(Type::Named("Bool".to_string()))
-                }
-            }
-        }
+    // -----------------------------------------------------------------------
+    // Built-in environment
+    // -----------------------------------------------------------------------
 
-        If {
-            condition,
-            then_branch,
-            else_branch,
-            ..
-        } => {
-            let cond_ty = infer(env, subst, condition)?;
-            unify(subst, &cond_ty, &Type::Named("Bool".to_string()))
-                .map_err(TypeError::UnificationError)?;
-            let then_ty = infer(env, subst, then_branch)?;
-            let else_ty = infer(env, subst, else_branch)?;
-            unify(subst, &then_ty, &else_ty).map_err(TypeError::UnificationError)?;
-            Ok(subst.apply(&then_ty))
-        }
+    fn register_builtins(&mut self) {
+        let entity = Ty::Entity;
+        let int = Ty::Int;
+        let bool = Ty::Bool;
+        let unit = Ty::Unit;
+        let effect = Ty::Effect;
 
-        Let {
-            name,
-            type_ann,
-            value,
-            body,
-            ..
-        } => {
-            let val_ty = infer(env, subst, value)?;
-
-            // Apply type annotation if present
-            let final_val_ty = if let Some(ann) = type_ann {
-                let ann_ty = convert_type_expr(subst, ann)?;
-                unify(subst, &val_ty, &ann_ty).map_err(TypeError::UnificationError)?;
-                subst.apply(&ann_ty)
-            } else {
-                subst.apply(&val_ty)
-            };
-
-            let scheme = env.generalize(subst, &final_val_ty);
-            env.bind(name, scheme);
-            let body_ty = infer(env, subst, body)?;
-            Ok(body_ty)
-        }
-
-        Lambda { params, body, .. } => {
-            let mut param_types = Vec::new();
-            for param in params {
-                let param_ty = convert_type_expr(subst, &param.type_ann)?;
-                param_types.push(param_ty.clone());
-                env.bind(&param.name, TypeScheme::monomorphic(param_ty));
-            }
-
-            let body_ty = infer(env, subst, body)?;
-            let mut result = body_ty;
-            for param_ty in param_types.into_iter().rev() {
-                result = Type::Arrow(Box::new(param_ty), Box::new(result));
-            }
-            Ok(result)
-        }
-
-        App { func, args, span } => {
-            let func_ty = infer(env, subst, func)?;
-            let mut result_ty = subst.fresh_var();
-            let mut arg_types = Vec::new();
-            for _ in args {
-                arg_types.push(subst.fresh_var());
-            }
-
-            // Build expected function type
-            let mut expected = Type::Var(result_ty);
-            for arg_ty in arg_types.into_iter().rev() {
-                expected = Type::Arrow(Box::new(Type::Var(arg_ty)), Box::new(expected));
-            }
-
-            unify(subst, &func_ty, &expected).map_err(|e| match e {
-                UnificationError::FunctionArityMismatch => TypeError::ArityMismatch {
-                    expected: args.len(),
-                    actual: args.len(),
-                    span: *span,
-                },
-                e => TypeError::UnificationError(e),
-            })?;
-
-            // Infer arg types
-            for arg in args {
-                let arg_ty = infer(env, subst, arg)?;
-                // Arg types are already unified via the function type
-                let _ = arg_ty;
-            }
-
-            Ok(subst.apply(&Type::Var(result_ty)))
-        }
-
-        List { elements, .. } => {
-            let elem_ty = subst.fresh_var();
-            for elem in elements {
-                let ty = infer(env, subst, elem)?;
-                unify(subst, &ty, &Type::Var(elem_ty))
-                    .map_err(TypeError::UnificationError)?;
-            }
-            Ok(Type::List(Box::new(subst.apply(&Type::Var(elem_ty)))))
-        }
-
-        Record { fields, .. } => {
-            let mut field_types = Vec::new();
-            for field in fields {
-                let ty = infer(env, subst, &field.value)?;
-                field_types.push((field.label.clone(), ty));
-            }
-            Ok(Type::Record(field_types, None))
-        }
-
-        FieldAccess { record, field, .. } => {
-            let rec_ty = infer(env, subst, record)?;
-            let rest_var = subst.fresh_var();
-            let field_ty = subst.fresh_var();
-            let expected = Type::Record(
-                vec![(field.clone(), Type::Var(field_ty))],
-                Some(rest_var),
+        // damage: (entity, int) -> unit
+        self.env[0].insert(
+            "damage".into(),
+            TypeScheme::monomorphic(Ty::Fn(
+                vec![entity.clone(), int.clone()],
+                Box::new(unit.clone()),
+            )),
+        );
+        // heal: (entity, int) -> unit
+        self.env[0].insert(
+            "heal".into(),
+            TypeScheme::monomorphic(Ty::Fn(
+                vec![entity.clone(), int.clone()],
+                Box::new(unit.clone()),
+            )),
+        );
+        // shield: (entity, int, int) -> unit
+        self.env[0].insert(
+            "shield".into(),
+            TypeScheme::monomorphic(Ty::Fn(
+                vec![entity.clone(), int.clone(), int.clone()],
+                Box::new(unit.clone()),
+            )),
+        );
+        // apply: (entity, Effect) -> unit
+        self.env[0].insert(
+            "apply".into(),
+            TypeScheme::monomorphic(Ty::Fn(
+                vec![entity.clone(), effect.clone()],
+                Box::new(unit.clone()),
+            )),
+        );
+        // target / self / caster: entity
+        for name in &["target", "self", "caster"] {
+            self.env[0].insert(
+                (*name).into(),
+                TypeScheme::monomorphic(entity.clone()),
             );
-            unify(subst, &rec_ty, &expected).map_err(TypeError::UnificationError)?;
-            Ok(subst.apply(&Type::Var(field_ty)))
         }
-
-        Pipe { left, right, span, .. } => {
-            let left_ty = infer(env, subst, left)?;
-            let func_scheme = env.lookup(right).ok_or_else(|| TypeError::UndefinedVariable {
-                name: right.clone(),
-                span: *span,
-            })?;
-            let func_ty = func_scheme.instantiate(subst);
-            // pipe: left |> f  ≡  f(left)
-            let arg_ty = subst.fresh_var();
-            let ret_ty = subst.fresh_var();
-            unify(subst, &func_ty, &Type::Arrow(Box::new(Type::Var(arg_ty)), Box::new(Type::Var(ret_ty))))
-                .map_err(TypeError::UnificationError)?;
-            unify(subst, &left_ty, &Type::Var(arg_ty))
-                .map_err(TypeError::UnificationError)?;
-            Ok(subst.apply(&Type::Var(ret_ty)))
+        // is_alive / is_dead / has_shield: entity -> bool
+        for name in &["is_alive", "is_dead", "has_shield"] {
+            self.env[0].insert(
+                (*name).into(),
+                TypeScheme::monomorphic(Ty::Fn(
+                    vec![entity.clone()],
+                    Box::new(bool.clone()),
+                )),
+            );
         }
-
-        Cons { head, tail, .. } => {
-            let head_ty = infer(env, subst, head)?;
-            let tail_ty = infer(env, subst, tail)?;
-            unify(subst, &tail_ty, &Type::List(Box::new(head_ty)))
-                .map_err(TypeError::UnificationError)?;
-            Ok(tail_ty)
+        // min / max: (int, int) -> int
+        for name in &["min", "max"] {
+            self.env[0].insert(
+                (*name).into(),
+                TypeScheme::monomorphic(Ty::Fn(
+                    vec![int.clone(), int.clone()],
+                    Box::new(int.clone()),
+                )),
+            );
         }
-
-        Match {
-            scrutinee, arms, ..
-        } => {
-            let scrut_ty = infer(env, subst, scrutinee)?;
-            let result_ty = subst.fresh_var();
-
-            for arm in arms {
-                let arm_ty = infer(env, subst, &arm.body)?;
-                unify(subst, &arm_ty, &Type::Var(result_ty))
-                    .map_err(TypeError::UnificationError)?;
-            }
-
-            Ok(subst.apply(&Type::Var(result_ty)))
-        }
+        // abs: int -> int
+        self.env[0].insert(
+            "abs".into(),
+            TypeScheme::monomorphic(Ty::Fn(vec![int.clone()], Box::new(int.clone()))),
+        );
+        // clamp: (int, int, int) -> int
+        self.env[0].insert(
+            "clamp".into(),
+            TypeScheme::monomorphic(Ty::Fn(
+                vec![int.clone(), int.clone(), int.clone()],
+                Box::new(int.clone()),
+            )),
+        );
+        // roll: int -> int
+        self.env[0].insert(
+            "roll".into(),
+            TypeScheme::monomorphic(Ty::Fn(vec![int.clone()], Box::new(int.clone()))),
+        );
+        // roll_percent: () -> int
+        self.env[0].insert(
+            "roll_percent".into(),
+            TypeScheme::monomorphic(Ty::Fn(vec![], Box::new(int.clone()))),
+        );
+        // choose: int -> int
+        self.env[0].insert(
+            "choose".into(),
+            TypeScheme::monomorphic(Ty::Fn(vec![int.clone()], Box::new(int.clone()))),
+        );
     }
-}
 
-/// Convert an AST type expression to a Type.
-pub fn convert_type_expr(
-    subst: &mut Substitution,
-    expr: &crate::ast::TypeExpr,
-) -> Result<Type, TypeError> {
-    use crate::ast::TypeExpr::*;
-    match expr {
-        Named { name, .. } => Ok(Type::Named(name.clone())),
-        Var { name, .. } => Ok(Type::Named(name.clone())), // treat type vars as named for now
-        Arrow { param, ret, .. } => {
-            let p = convert_type_expr(subst, param)?;
-            let r = convert_type_expr(subst, ret)?;
-            Ok(Type::Arrow(Box::new(p), Box::new(r)))
-        }
-        List { element, .. } => {
-            let e = convert_type_expr(subst, element)?;
-            Ok(Type::List(Box::new(e)))
-        }
-        Tuple { elements, .. } => {
-            let mut types = Vec::new();
-            for e in elements {
-                types.push(convert_type_expr(subst, e)?);
-            }
-            Ok(Type::Tuple(types))
-        }
-        Record { fields, rest, .. } => {
-            let mut field_types = Vec::new();
-            for f in fields {
-                field_types.push((f.label.clone(), convert_type_expr(subst, &f.field_type)?));
-            }
-            let rest_var = if rest.is_some() {
-                Some(subst.fresh_var())
-            } else {
-                None
-            };
-            Ok(Type::Record(field_types, rest_var))
-        }
-        RowExt { .. } => {
-            // Row extension in type annotations — simplified handling
-            Ok(Type::Named("RowExt".to_string()))
-        }
+    // -----------------------------------------------------------------------
+    // Fresh variable helpers
+    // -----------------------------------------------------------------------
+
+    /// Generate a fresh type variable id.
+    pub fn fresh_var(&mut self) -> u32 {
+        let v = self.next_var;
+        self.next_var += 1;
+        v
     }
-}
 
-/// Helper trait for applying variable mappings (used by TypeScheme::instantiate).
-trait ApplyMapping {
-    fn apply_mapping(&self, mapping: &HashMap<TypeVarId, TypeVarId>) -> Type;
-}
+    /// Generate a fresh type variable as a `Ty`.
+    fn fresh_ty(&mut self) -> Ty {
+        Ty::Var(self.fresh_var())
+    }
 
-impl ApplyMapping for Type {
-    fn apply_mapping(&self, mapping: &HashMap<TypeVarId, TypeVarId>) -> Type {
-        match self {
-            Self::Var(id) => Type::Var(*mapping.get(id).unwrap_or(id)),
-            Self::Named(name) => Type::Named(name.clone()),
-            Self::Arrow(p, r) => Type::Arrow(
-                Box::new(p.apply_mapping(mapping)),
-                Box::new(r.apply_mapping(mapping)),
-            ),
-            Self::Record(fields, rest) => Type::Record(
+    // -----------------------------------------------------------------------
+    // Substitution helpers
+    // -----------------------------------------------------------------------
+
+    /// Fully resolve a type by chasing all substitution chains (non-mutating).
+    pub fn resolve(&self, ty: &Ty) -> Ty {
+        match ty {
+            Ty::Var(v) => match self.subst.get(v) {
+                Some(resolved) => self.resolve(resolved),
+                None => Ty::Var(*v),
+            },
+            Ty::Row(fields, tail) => Ty::Row(
                 fields
                     .iter()
-                    .map(|(l, t)| (l.clone(), t.apply_mapping(mapping)))
+                    .map(|(name, t)| (name.clone(), self.resolve(t)))
                     .collect(),
-                *rest,
+                *tail,
             ),
-            Self::List(e) => Type::List(Box::new(e.apply_mapping(mapping))),
-            Self::Tuple(elems) => Type::Tuple(
-                elems.iter().map(|e| e.apply_mapping(mapping)).collect(),
+            Ty::Fn(params, ret) => Ty::Fn(
+                params.iter().map(|p| self.resolve(p)).collect(),
+                Box::new(self.resolve(ret)),
             ),
-            Self::RowExtend(label, ty, rest) => Type::RowExtend(
-                label.clone(),
-                Box::new(ty.apply_mapping(mapping)),
-                Box::new(rest.apply_mapping(mapping)),
-            ),
-            Self::EmptyRow => Type::EmptyRow,
+            Ty::List(inner) => Ty::List(Box::new(self.resolve(inner))),
+            Ty::Int
+            | Ty::Bool
+            | Ty::Str
+            | Ty::Unit
+            | Ty::Entity
+            | Ty::Effect
+            | Ty::Named(_) => ty.clone(),
         }
     }
+
+    /// Apply current substitution to a type (with path compression).
+    pub fn apply_subst(&mut self, ty: &Ty) -> Ty {
+        match ty {
+            Ty::Var(v) => match self.subst.get(v).cloned() {
+                Some(resolved) => {
+                    let fully = self.apply_subst(&resolved);
+                    self.subst.insert(*v, fully.clone());
+                    fully
+                }
+                None => Ty::Var(*v),
+            },
+            Ty::Row(fields, tail) => Ty::Row(
+                fields
+                    .iter()
+                    .map(|(name, t)| (name.clone(), self.apply_subst(t)))
+                    .collect(),
+                *tail,
+            ),
+            Ty::Fn(params, ret) => Ty::Fn(
+                params.iter().map(|p| self.apply_subst(p)).collect(),
+                Box::new(self.apply_subst(ret)),
+            ),
+            Ty::List(inner) => Ty::List(Box::new(self.apply_subst(inner))),
+            Ty::Int
+            | Ty::Bool
+            | Ty::Str
+            | Ty::Unit
+            | Ty::Entity
+            | Ty::Effect
+            | Ty::Named(_) => ty.clone(),
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Free variables
+    // -----------------------------------------------------------------------
+
+    /// Collect the set of free (unbound) type variables in a type.
+    fn free_vars(&self, ty: &Ty) -> HashSet<u32> {
+        match ty {
+            Ty::Var(v) => match self.subst.get(v) {
+                Some(resolved) => self.free_vars(resolved),
+                None => {
+                    let mut s = HashSet::new();
+                    s.insert(*v);
+                    s
+                }
+            },
+            Ty::Row(fields, tail) => {
+                let mut vars = HashSet::new();
+                for (_, t) in fields {
+                    vars.extend(self.free_vars(t));
+                }
+                if let Some(tv) = tail {
+                    if !self.subst.contains_key(tv) {
+                        vars.insert(*tv);
+                    }
+                }
+                vars
+            }
+            Ty::Fn(params, ret) => {
+                let mut vars = HashSet::new();
+                for p in params {
+                    vars.extend(self.free_vars(p));
+                }
+                vars.extend(self.free_vars(ret));
+                vars
+            }
+            Ty::List(inner) => self.free_vars(inner),
+            Ty::Int
+            | Ty::Bool
+            | Ty::Str
+            | Ty::Unit
+            | Ty::Entity
+            | Ty::Effect
+            | Ty::Named(_) => HashSet::new(),
+        }
+    }
+
+    /// Check whether a type variable occurs in a type (occurs check).
+    fn occurs_in(&self, var: u32, ty: &Ty) -> bool {
+        match ty {
+            Ty::Var(v) => {
+                if *v == var {
+                    return true;
+                }
+                match self.subst.get(v) {
+                    Some(resolved) => self.occurs_in(var, resolved),
+                    None => false,
+                }
+            }
+            Ty::Row(fields, tail) => {
+                if fields.iter().any(|(_, t)| self.occurs_in(var, t)) {
+                    return true;
+                }
+                if let Some(tv) = tail {
+                    if *tv == var {
+                        return true;
+                    }
+                    if let Some(resolved) = self.subst.get(tv) {
+                        return self.occurs_in(var, resolved);
+                    }
+                }
+                false
+            }
+            Ty::Fn(params, ret) => {
+                params.iter().any(|p| self.occurs_in(var, p)) || self.occurs_in(var, ret)
+            }
+            Ty::List(inner) => self.occurs_in(var, inner),
+            Ty::Int
+            | Ty::Bool
+            | Ty::Str
+            | Ty::Unit
+            | Ty::Entity
+            | Ty::Effect
+            | Ty::Named(_) => false,
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Unification
+    // -----------------------------------------------------------------------
+
+    /// Unify two types, extending the substitution as needed.
+    pub fn unify(&mut self, t1: &Ty, t2: &Ty, span: &Span) -> Result<(), TypeError> {
+        let t1 = self.apply_subst(t1);
+        let t2 = self.apply_subst(t2);
+        self.unify_inner(&t1, &t2, span)
+    }
+
+    fn unify_inner(&mut self, t1: &Ty, t2: &Ty, span: &Span) -> Result<(), TypeError> {
+        match (t1, t2) {
+            // Identical concrete types
+            (Ty::Int, Ty::Int)
+            | (Ty::Bool, Ty::Bool)
+            | (Ty::Str, Ty::Str)
+            | (Ty::Unit, Ty::Unit)
+            | (Ty::Entity, Ty::Entity)
+            | (Ty::Effect, Ty::Effect) => Ok(()),
+
+            // Named types (nominal equality)
+            (Ty::Named(n1), Ty::Named(n2)) if n1 == n2 => Ok(()),
+
+            // Type variable on left
+            (Ty::Var(v), _) => {
+                if self.occurs_in(*v, t2) {
+                    let err = TypeError {
+                        kind: TypeErrorKind::CyclicType,
+                        span: *span,
+                    };
+                    self.errors.push(err.clone());
+                    Err(err)
+                } else {
+                    self.subst.insert(*v, t2.clone());
+                    Ok(())
+                }
+            }
+
+            // Type variable on right
+            (_, Ty::Var(v)) => {
+                if self.occurs_in(*v, t1) {
+                    let err = TypeError {
+                        kind: TypeErrorKind::CyclicType,
+                        span: *span,
+                    };
+                    self.errors.push(err.clone());
+                    Err(err)
+                } else {
+                    self.subst.insert(*v, t1.clone());
+                    Ok(())
+                }
+            }
+
+            // Function types
+            (Ty::Fn(p1, r1), Ty::Fn(p2, r2)) => {
+                if p1.len() != p2.len() {
+                    let err = TypeError {
+                        kind: TypeErrorKind::ArityMismatch {
+                            expected: p1.len(),
+                            found: p2.len(),
+                        },
+                        span: *span,
+                    };
+                    self.errors.push(err.clone());
+                    return Err(err);
+                }
+                for (a, b) in p1.iter().zip(p2.iter()) {
+                    self.unify(a, b, span)?;
+                }
+                self.unify(r1, r2, span)?;
+                Ok(())
+            }
+
+            // List types
+            (Ty::List(a), Ty::List(b)) => self.unify(a, b, span),
+
+            // Row types
+            (Ty::Row(fields1, tail1), Ty::Row(fields2, tail2)) => {
+                self.unify_rows(fields1, *tail1, fields2, *tail2, span)
+            }
+
+            // Anything else: mismatch
+            _ => {
+                let err = TypeError {
+                    kind: TypeErrorKind::UnificationMismatch(t1.clone(), t2.clone()),
+                    span: *span,
+                };
+                self.errors.push(err.clone());
+                Err(err)
+            }
+        }
+    }
+
+    fn unify_rows(
+        &mut self,
+        fields1: &[(String, Ty)],
+        tail1: Option<u32>,
+        fields2: &[(String, Ty)],
+        tail2: Option<u32>,
+        span: &Span,
+    ) -> Result<(), TypeError> {
+        let map2: HashMap<&str, &Ty> = fields2
+            .iter()
+            .map(|(n, t)| (n.as_str(), t))
+            .collect();
+
+        let map1: HashMap<&str, &Ty> = fields1
+            .iter()
+            .map(|(n, t)| (n.as_str(), t))
+            .collect();
+
+        // Unify common fields
+        for (name, ty1) in fields1 {
+            if let Some(ty2) = map2.get(name.as_str()) {
+                self.unify(ty1, ty2, span)?;
+            }
+        }
+
+        // Collect remaining (non-common) fields
+        let remaining1: Vec<(String, Ty)> = fields1
+            .iter()
+            .filter(|(n, _)| !map2.contains_key(n.as_str()))
+            .map(|(n, t)| (n.clone(), t.clone()))
+            .collect();
+
+        let remaining2: Vec<(String, Ty)> = fields2
+            .iter()
+            .filter(|(n, _)| !map1.contains_key(n.as_str()))
+            .map(|(n, t)| (n.clone(), t.clone()))
+            .collect();
+
+        match (tail1, tail2) {
+            (None, None) => {
+                if !remaining1.is_empty() || !remaining2.is_empty() {
+                    let err = TypeError {
+                        kind: TypeErrorKind::RowMismatch {
+                            missing: remaining1.iter().map(|(n, _)| n.clone()).collect(),
+                            extra: remaining2.iter().map(|(n, _)| n.clone()).collect(),
+                        },
+                        span: *span,
+                    };
+                    self.errors.push(err.clone());
+                    Err(err)
+                } else {
+                    Ok(())
+                }
+            }
+            (Some(v1), None) => {
+                let remaining_ty = if remaining2.is_empty() {
+                    Ty::Row(vec![], None)
+                } else {
+                    Ty::Row(remaining2, None)
+                };
+                self.unify(&Ty::Var(v1), &remaining_ty, span)
+            }
+            (None, Some(v2)) => {
+                let remaining_ty = if remaining1.is_empty() {
+                    Ty::Row(vec![], None)
+                } else {
+                    Ty::Row(remaining1, None)
+                };
+                self.unify(&Ty::Var(v2), &remaining_ty, span)
+            }
+            (Some(v1), Some(_v2)) => {
+                // v1 unifies with Row(remaining2, Some(v2))
+                let ty_for_v1 = Ty::Row(remaining2, tail2);
+                self.unify(&Ty::Var(v1), &ty_for_v1, span)
+            }
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Generalization & instantiation (let-polymorphism)
+    // -----------------------------------------------------------------------
+
+    /// Instantiate a type scheme by replacing quantified variables with fresh ones.
+    pub fn instantiate(&mut self, scheme: &TypeScheme) -> Ty {
+        if scheme.vars.is_empty() {
+            return scheme.ty.clone();
+        }
+        let mapping: HashMap<u32, u32> = scheme
+            .vars
+            .iter()
+            .map(|&v| (v, self.fresh_var()))
+            .collect();
+        self.remap_ty(&scheme.ty, &mapping)
+    }
+
+    fn remap_ty(&self, ty: &Ty, mapping: &HashMap<u32, u32>) -> Ty {
+        match ty {
+            Ty::Var(v) => match mapping.get(v) {
+                Some(&nv) => Ty::Var(nv),
+                None => Ty::Var(*v),
+            },
+            Ty::Row(fields, tail) => Ty::Row(
+                fields
+                    .iter()
+                    .map(|(name, t)| (name.clone(), self.remap_ty(t, mapping)))
+                    .collect(),
+                *tail,
+            ),
+            Ty::Fn(params, ret) => Ty::Fn(
+                params.iter().map(|p| self.remap_ty(p, mapping)).collect(),
+                Box::new(self.remap_ty(ret, mapping)),
+            ),
+            Ty::List(inner) => Ty::List(Box::new(self.remap_ty(inner, mapping))),
+            _ => ty.clone(),
+        }
+    }
+
+    /// Generalize a type by quantifying over free variables not in the environment.
+    pub fn generalize(&mut self, ty: &Ty) -> TypeScheme {
+        let resolved = self.apply_subst(ty);
+        let ty_free = self.free_vars(&resolved);
+
+        // Collect all free vars in the environment
+        let mut env_free: HashSet<u32> = HashSet::new();
+        for scope in &self.env {
+            for scheme in scope.values() {
+                // Add free vars of the scheme body
+                env_free.extend(self.free_vars(&scheme.ty));
+                // Remove quantified vars (they are not free)
+                for &v in &scheme.vars {
+                    env_free.remove(&v);
+                }
+            }
+        }
+
+        let quantified: Vec<u32> = ty_free.difference(&env_free).copied().collect();
+        TypeScheme::new(quantified, resolved)
+    }
+
+    // -----------------------------------------------------------------------
+    // Environment helpers
+    // -----------------------------------------------------------------------
+
+    /// Look up a name in the scoped environment.
+    fn lookup_env(&self, name: &str) -> Option<&TypeScheme> {
+        for scope in self.env.iter().rev() {
+            if let Some(scheme) = scope.get(name) {
+                return Some(scheme);
+            }
+        }
+        None
+    }
+
+    /// Enter a new lexical scope.
+    fn enter_scope(&mut self) {
+        self.env.push(HashMap::new());
+    }
+
+    /// Exit the current lexical scope.
+    fn exit_scope(&mut self) {
+        self.env.pop();
+    }
+
+    /// Add a binding to the innermost scope.
+    fn push_env(&mut self, name: String, scheme: TypeScheme) {
+        if let Some(scope) = self.env.last_mut() {
+            scope.insert(name, scheme);
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Type annotation conversion
+    // -----------------------------------------------------------------------
+
+    /// Convert a syntax-level type annotation into a `Ty`.
+    fn type_ann_to_ty(&mut self, ann: &TypeAnn) -> Ty {
+        match ann {
+            TypeAnn::Int => Ty::Int,
+            TypeAnn::Bool => Ty::Bool,
+            TypeAnn::Str => Ty::Str,
+            TypeAnn::Unit => Ty::Unit,
+            TypeAnn::Entity => Ty::Entity,
+            TypeAnn::Effect => Ty::Effect,
+            TypeAnn::FnType { params, ret } => Ty::Fn(
+                params.iter().map(|p| self.type_ann_to_ty(p)).collect(),
+                Box::new(self.type_ann_to_ty(ret)),
+            ),
+            TypeAnn::List(inner) => Ty::List(Box::new(self.type_ann_to_ty(inner))),
+            TypeAnn::Row(fields) => Ty::Row(
+                fields
+                    .iter()
+                    .map(|(name, a)| (name.clone(), self.type_ann_to_ty(a)))
+                    .collect(),
+                None,
+            ),
+            TypeAnn::Named(name) => Ty::Named(name.clone()),
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Statement inference
+    // -----------------------------------------------------------------------
+
+    /// Infer the type of a statement (returns the type of the produced value).
+    pub fn infer_stmt(&mut self, stmt: &Stmt) -> Ty {
+        let dummy = Span::at(0);
+        match stmt {
+            Stmt::Expr(expr) => self.infer_expr(expr),
+
+            Stmt::Let(let_stmt) => {
+                let value_ty = self.infer_expr(&let_stmt.value);
+                let final_ty = if let Some(ann) = &let_stmt.type_ann {
+                    let ann_ty = self.type_ann_to_ty(ann);
+                    let _ = self.unify(&value_ty, &ann_ty, &dummy);
+                    ann_ty
+                } else {
+                    value_ty
+                };
+                let scheme = self.generalize(&final_ty);
+                self.push_env(let_stmt.name.clone(), scheme);
+                final_ty
+            }
+
+            Stmt::Assign(assign_stmt) => {
+                let value_ty = self.infer_expr(&assign_stmt.value);
+                match self.lookup_env(&assign_stmt.name).cloned() {
+                    Some(scheme) => {
+                        let expected = self.instantiate(&scheme);
+                        let _ = self.unify(&value_ty, &expected, &dummy);
+                    }
+                    None => {
+                        self.errors.push(TypeError {
+                            kind: TypeErrorKind::UndefinedVariable(assign_stmt.name.clone()),
+                            span: dummy,
+                        });
+                    }
+                }
+                Ty::Unit
+            }
+
+            Stmt::If(if_stmt) => {
+                let cond_ty = self.infer_expr(&if_stmt.condition);
+                let _ = self.unify(&cond_ty, &Ty::Bool, &dummy);
+                let then_ty = self.infer_block(&if_stmt.then_block);
+                let else_ty = match &if_stmt.else_clause {
+                    Some(ElseClause::Block(stmts)) => self.infer_block(stmts),
+                    Some(ElseClause::If(inner)) => {
+                        self.infer_stmt(&Stmt::If((**inner).clone()))
+                    }
+                    None => Ty::Unit,
+                };
+                let _ = self.unify(&then_ty, &else_ty, &dummy);
+                Ty::Unit
+            }
+
+            Stmt::Return(ret) => match &ret.value {
+                Some(expr) => self.infer_expr(expr),
+                None => Ty::Unit,
+            },
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Expression inference
+    // -----------------------------------------------------------------------
+
+    /// Infer the type of an expression.
+    pub fn infer_expr(&mut self, expr: &Expr) -> Ty {
+        let dummy = Span::at(0);
+        match expr {
+            // ----- literals -----
+            Expr::IntLit(_) => Ty::Int,
+            Expr::BoolLit(_) => Ty::Bool,
+            Expr::StrLit(_) => Ty::Str,
+
+            // ----- identifier -----
+            Expr::Ident(name) => match self.lookup_env(name).cloned() {
+                Some(scheme) => self.instantiate(&scheme),
+                None => {
+                    self.errors.push(TypeError {
+                        kind: TypeErrorKind::UndefinedVariable(name.clone()),
+                        span: dummy,
+                    });
+                    self.fresh_ty()
+                }
+            },
+
+            // ----- binary operations -----
+            Expr::Binary { op, left, right } => {
+                let lt = self.infer_expr(left);
+                let rt = self.infer_expr(right);
+                match op {
+                    BinOp::Add | BinOp::Sub | BinOp::Mul | BinOp::Div | BinOp::Mod => {
+                        let _ = self.unify(&lt, &Ty::Int, &dummy);
+                        let _ = self.unify(&rt, &Ty::Int, &dummy);
+                        Ty::Int
+                    }
+                    BinOp::Eq | BinOp::Neq => {
+                        let _ = self.unify(&lt, &rt, &dummy);
+                        Ty::Bool
+                    }
+                    BinOp::Lt | BinOp::Gt | BinOp::Le | BinOp::Ge => {
+                        let _ = self.unify(&lt, &Ty::Int, &dummy);
+                        let _ = self.unify(&rt, &Ty::Int, &dummy);
+                        Ty::Bool
+                    }
+                    BinOp::And | BinOp::Or => {
+                        let _ = self.unify(&lt, &Ty::Bool, &dummy);
+                        let _ = self.unify(&rt, &Ty::Bool, &dummy);
+                        Ty::Bool
+                    }
+                }
+            }
+
+            // ----- unary operations -----
+            Expr::Unary { op, operand } => {
+                let ot = self.infer_expr(operand);
+                match op {
+                    UnaryOp::Neg => {
+                        let _ = self.unify(&ot, &Ty::Int, &dummy);
+                        Ty::Int
+                    }
+                    UnaryOp::Not => {
+                        let _ = self.unify(&ot, &Ty::Bool, &dummy);
+                        Ty::Bool
+                    }
+                }
+            }
+
+            // ----- function call -----
+            Expr::Call { func, args } => {
+                let func_ty = self.infer_expr(func);
+                let arg_tys: Vec<Ty> = args
+                    .iter()
+                    .map(|arg| match arg {
+                        CallArg::Positional(e) => self.infer_expr(e),
+                        CallArg::Named { value, .. } => self.infer_expr(value),
+                    })
+                    .collect();
+
+                let ret_ty = self.fresh_ty();
+                let expected_fn = Ty::Fn(arg_tys, Box::new(ret_ty.clone()));
+
+                if let Err(e) = self.unify(&func_ty, &expected_fn, &dummy) {
+                    // Provide a more specific NotAFunction diagnostic when applicable
+                    if matches!(e.kind, TypeErrorKind::UnificationMismatch(_, _)) {
+                        let resolved = self.apply_subst(&func_ty);
+                        if !matches!(resolved, Ty::Fn(_, _) | Ty::Var(_)) {
+                            self.errors.push(TypeError {
+                                kind: TypeErrorKind::NotAFunction(resolved),
+                                span: dummy,
+                            });
+                        }
+                    }
+                }
+                self.apply_subst(&ret_ty)
+            }
+
+            // ----- member access -----
+            Expr::Member { object, field } => {
+                let obj_ty = self.infer_expr(object);
+                let obj_resolved = self.apply_subst(&obj_ty);
+
+                match &obj_resolved {
+                    Ty::Entity => {
+                        if ENTITY_FIELDS.contains(&field.as_str()) {
+                            Ty::Int
+                        } else {
+                            // Unknown field – don't cascade; just return Int as a best guess
+                            Ty::Int
+                        }
+                    }
+                    Ty::Row(fields, _tail) => {
+                        if let Some((_, ty)) = fields.iter().find(|(n, _)| n == field) {
+                            ty.clone()
+                        } else {
+                            self.fresh_ty()
+                        }
+                    }
+                    _ => {
+                        self.errors.push(TypeError {
+                            kind: TypeErrorKind::UnificationMismatch(obj_resolved, Ty::Entity),
+                            span: dummy,
+                        });
+                        self.fresh_ty()
+                    }
+                }
+            }
+
+            // ----- if expression -----
+            Expr::If(if_expr) => {
+                let cond_ty = self.infer_expr(&if_expr.condition);
+                let _ = self.unify(&cond_ty, &Ty::Bool, &dummy);
+                let then_ty = self.infer_block(&if_expr.then_block);
+                let else_ty = match &if_expr.else_clause {
+                    Some(ElseClause::Block(stmts)) => self.infer_block(stmts),
+                    Some(ElseClause::If(inner)) => {
+                        let if_expr = IfExpr {
+                            condition: inner.condition.clone(),
+                            then_block: inner.then_block.clone(),
+                            else_clause: inner.else_clause.clone(),
+                        };
+                        self.infer_expr(&Expr::If(Box::new(if_expr)))
+                    }
+                    None => Ty::Unit,
+                };
+                let _ = self.unify(&then_ty, &else_ty, &dummy);
+                then_ty
+            }
+
+            // ----- struct / row literal -----
+            Expr::Struct(fields) => {
+                let typed_fields: Vec<(String, Ty)> = fields
+                    .iter()
+                    .map(|(name, expr)| (name.clone(), self.infer_expr(expr)))
+                    .collect();
+                let tail = self.fresh_var();
+                Ty::Row(typed_fields, Some(tail))
+            }
+
+            // ----- list literal -----
+            Expr::List(elements) => {
+                if elements.is_empty() {
+                    Ty::List(Box::new(self.fresh_ty()))
+                } else {
+                    let first = self.infer_expr(&elements[0]);
+                    for elem in &elements[1..] {
+                        let et = self.infer_expr(elem);
+                        let _ = self.unify(&first, &et, &dummy);
+                    }
+                    Ty::List(Box::new(first))
+                }
+            }
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Block inference
+    // -----------------------------------------------------------------------
+
+    /// Infer the type produced by a block of statements.
+    fn infer_block(&mut self, stmts: &[Stmt]) -> Ty {
+        self.enter_scope();
+        let mut last = Ty::Unit;
+        for stmt in stmts {
+            last = self.infer_stmt(stmt);
+        }
+        self.exit_scope();
+        last
+    }
+
+    // -----------------------------------------------------------------------
+    // Top-level program checking
+    // -----------------------------------------------------------------------
+
+    /// Type-check a complete program. Returns `Ok(())` or all collected errors.
+    pub fn check_program(&mut self, program: &Program) -> Result<(), Vec<TypeError>> {
+        for item in &program.items {
+            self.check_item(item);
+        }
+        if self.errors.is_empty() {
+            Ok(())
+        } else {
+            Err(std::mem::take(&mut self.errors))
+        }
+    }
+
+    fn check_item(&mut self, item: &Item) {
+        match item {
+            Item::Card(card) => self.check_card(card),
+            Item::Fn(fn_def) => self.check_fn_def(fn_def),
+            Item::Const(const_def) => self.check_const(const_def),
+            Item::Effect(effect_def) => self.check_effect_def(effect_def),
+            Item::Use(_) => {} // skip imports
+        }
+    }
+
+    fn check_card(&mut self, card: &CardDef) {
+        for body_item in &card.body {
+            match body_item {
+                CardBodyItem::Stats(stats) => {
+                    for field in &stats.fields {
+                        let vt = self.infer_expr(&field.value);
+                        let _ = self.unify(&vt, &Ty::Int, &Span::at(0));
+                    }
+                }
+                CardBodyItem::Ability(ability) => self.check_ability(ability),
+                CardBodyItem::Passive(passive) => self.check_passive(passive),
+            }
+        }
+    }
+
+    fn check_ability(&mut self, ability: &AbilityDef) {
+        self.enter_scope();
+        for param in &ability.params {
+            let ty = self.type_ann_to_ty(&param.type_ann);
+            self.push_env(param.name.clone(), TypeScheme::monomorphic(ty));
+        }
+        for body_item in &ability.body {
+            match body_item {
+                AbilityBodyItem::Cost(cost) => {
+                    let at = self.infer_expr(&cost.amount);
+                    let _ = self.unify(&at, &Ty::Int, &Span::at(0));
+                }
+                AbilityBodyItem::Trigger(trigger) => {
+                    for stmt in &trigger.body {
+                        self.infer_stmt(stmt);
+                    }
+                }
+                AbilityBodyItem::Stmt(stmt) => {
+                    self.infer_stmt(stmt);
+                }
+            }
+        }
+        self.exit_scope();
+    }
+
+    fn check_passive(&mut self, passive: &PassiveDef) {
+        self.enter_scope();
+        for stmt in &passive.body {
+            self.infer_stmt(stmt);
+        }
+        self.exit_scope();
+    }
+
+    fn check_fn_def(&mut self, fn_def: &FnDef) {
+        self.enter_scope();
+        for param in &fn_def.params {
+            let ty = self.type_ann_to_ty(&param.type_ann);
+            self.push_env(param.name.clone(), TypeScheme::monomorphic(ty));
+        }
+
+        // Allocate return type
+        let ret_ty = fn_def
+            .return_type
+            .as_ref()
+            .map(|a| self.type_ann_to_ty(a))
+            .unwrap_or_else(|| self.fresh_ty());
+
+        // Check body
+        for stmt in &fn_def.body {
+            self.infer_stmt(stmt);
+        }
+
+        // Register function type in global scope for later use
+        let param_tys: Vec<Ty> = fn_def
+            .params
+            .iter()
+            .map(|p| self.type_ann_to_ty(&p.type_ann))
+            .collect();
+        let fn_ty = Ty::Fn(param_tys, Box::new(ret_ty));
+        self.env[0].insert(fn_def.name.clone(), TypeScheme::monomorphic(fn_ty));
+
+        self.exit_scope();
+    }
+
+    fn check_const(&mut self, const_def: &ConstDef) {
+        let vt = self.infer_expr(&const_def.value);
+        let at = self.type_ann_to_ty(&const_def.type_ann);
+        let _ = self.unify(&vt, &at, &Span::at(0));
+        self.env[0].insert(
+            const_def.name.clone(),
+            TypeScheme::monomorphic(at),
+        );
+    }
+
+    fn check_effect_def(&mut self, effect_def: &EffectDef) {
+        // Register the effect type name
+        self.env[0].insert(
+            effect_def.name.clone(),
+            TypeScheme::monomorphic(Ty::Named(effect_def.name.clone())),
+        );
+
+        for variant in &effect_def.variants {
+            self.enter_scope();
+            for param in &variant.params {
+                let ty = self.type_ann_to_ty(&param.type_ann);
+                self.push_env(param.name.clone(), TypeScheme::monomorphic(ty));
+            }
+            for stmt in &variant.body {
+                self.infer_stmt(stmt);
+            }
+            self.exit_scope();
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Error accessors
+    // -----------------------------------------------------------------------
+
+    /// Get a reference to collected errors.
+    pub fn errors(&self) -> &[TypeError] {
+        &self.errors
+    }
+
+    /// Drain collected errors.
+    pub fn take_errors(&mut self) -> Vec<TypeError> {
+        std::mem::take(&mut self.errors)
+    }
 }
+
+// ===========================================================================
+// Tests
+// ===========================================================================
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::ast::{BinOp, Expr, UnaryOp};
-    use crate::span::Span;
 
-    fn i64_val(v: i64) -> Expr {
-        Expr::IntLit {
-            span: Span::dummy(),
-            value: v,
-        }
+    // Helper: create a dummy span for testing.
+    fn sp() -> Span {
+        Span::at(0)
     }
 
-    fn bool_val(v: bool) -> Expr {
-        Expr::BoolLit {
-            span: Span::dummy(),
-            value: v,
-        }
-    }
-
-    fn var(name: &str) -> Expr {
-        Expr::Var {
-            span: Span::dummy(),
-            name: name.to_string(),
-        }
-    }
-
-    fn bin(op: BinOp, l: Expr, r: Expr) -> Expr {
-        Expr::BinOp {
-            span: Span::dummy(),
-            op,
-            left: Box::new(l),
-            right: Box::new(r),
-        }
-    }
-
-    fn unary(op: UnaryOp, e: Expr) -> Expr {
-        Expr::UnaryOp {
-            span: Span::dummy(),
-            op,
-            operand: Box::new(e),
-        }
-    }
-
-    // ─── Substitution tests ───
+    // -----------------------------------------------------------------------
+    // Primitive literals
+    // -----------------------------------------------------------------------
 
     #[test]
-    fn subst_new() {
-        let s = Substitution::new();
-        assert!(s.mapping.is_empty());
+    fn test_int_literal_type() {
+        let mut tc = TypeChecker::new();
+        let ty = tc.infer_expr(&Expr::IntLit(42));
+        assert_eq!(ty, Ty::Int);
     }
 
     #[test]
-    fn subst_fresh_var() {
-        let mut s = Substitution::new();
-        let v1 = s.fresh_var();
-        let v2 = s.fresh_var();
-        assert_ne!(v1, v2);
+    fn test_bool_literal_type() {
+        let mut tc = TypeChecker::new();
+        assert_eq!(tc.infer_expr(&Expr::BoolLit(true)), Ty::Bool);
+        assert_eq!(tc.infer_expr(&Expr::BoolLit(false)), Ty::Bool);
     }
 
     #[test]
-    fn subst_bind_and_apply() {
-        let mut s = Substitution::new();
-        let v = s.fresh_var();
-        s.bind(v, Type::Named("Int".to_string()));
-        let result = s.apply(&Type::Var(v));
-        assert_eq!(result, Type::Named("Int".to_string()));
+    fn test_str_literal_type() {
+        let mut tc = TypeChecker::new();
+        let ty = tc.infer_expr(&Expr::StrLit("hello".into()));
+        assert_eq!(ty, Ty::Str);
     }
 
     #[test]
-    fn subst_chained_apply() {
-        let mut s = Substitution::new();
-        let v1 = s.fresh_var();
-        let v2 = s.fresh_var();
-        s.bind(v1, Type::Var(v2));
-        s.bind(v2, Type::Named("Int".to_string()));
-        let result = s.apply(&Type::Var(v1));
-        assert_eq!(result, Type::Named("Int".to_string()));
+    fn test_unit_type_available() {
+        // Unit isn't directly produced by a literal, but verify it exists
+        let ty = Ty::Unit;
+        assert_eq!(ty, Ty::Unit);
+    }
+
+    // -----------------------------------------------------------------------
+    // Variable lookup
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_variable_lookup() {
+        let mut tc = TypeChecker::new();
+        tc.push_env("x".into(), TypeScheme::monomorphic(Ty::Int));
+        let ty = tc.infer_expr(&Expr::Ident("x".into()));
+        assert_eq!(ty, Ty::Int);
     }
 
     #[test]
-    fn subst_apply_arrow() {
-        let mut s = Substitution::new();
-        let v = s.fresh_var();
-        s.bind(v, Type::Named("Bool".to_string()));
-        let t = Type::Arrow(
-            Box::new(Type::Var(v)),
-            Box::new(Type::Named("Int".to_string())),
-        );
-        let result = s.apply(&t);
-        assert_eq!(
-            result,
-            Type::Arrow(
-                Box::new(Type::Named("Bool".to_string())),
-                Box::new(Type::Named("Int".to_string()))
-            )
-        );
-    }
-
-    #[test]
-    fn subst_free_vars_simple() {
-        let v = TypeVarId(0);
-        let ty = Type::Var(v);
-        let fv = Substitution::free_vars(&ty);
-        assert_eq!(fv, vec![v]);
-    }
-
-    #[test]
-    fn subst_free_vars_none() {
-        let ty = Type::Named("Int".to_string());
-        let fv = Substitution::free_vars(&ty);
-        assert!(fv.is_empty());
-    }
-
-    #[test]
-    fn subst_free_vars_arrow() {
-        let v0 = TypeVarId(0);
-        let v1 = TypeVarId(1);
-        let ty = Type::Arrow(Box::new(Type::Var(v0)), Box::new(Type::Var(v1)));
-        let mut fv = Substitution::free_vars(&ty);
-        fv.sort_by_key(|v| v.0);
-        assert_eq!(fv, vec![v0, v1]);
-    }
-
-    // ─── Unification tests ───
-
-    #[test]
-    fn unify_same_named() {
-        let mut s = Substitution::new();
-        assert!(unify(&mut s, &Type::Named("Int".to_string()), &Type::Named("Int".to_string())).is_ok());
-    }
-
-    #[test]
-    fn unify_different_named() {
-        let mut s = Substitution::new();
-        let result = unify(&mut s, &Type::Named("Int".to_string()), &Type::Named("Bool".to_string()));
-        assert!(matches!(result, Err(UnificationError::NameMismatch(_, _))));
-    }
-
-    #[test]
-    fn unify_var_with_named() {
-        let mut s = Substitution::new();
-        let v = s.fresh_var();
-        unify(&mut s, &Type::Var(v), &Type::Named("Int".to_string())).unwrap();
-        assert_eq!(s.apply(&Type::Var(v)), Type::Named("Int".to_string()));
-    }
-
-    #[test]
-    fn unify_var_with_var() {
-        let mut s = Substitution::new();
-        let v1 = s.fresh_var();
-        let v2 = s.fresh_var();
-        unify(&mut s, &Type::Var(v1), &Type::Var(v2)).unwrap();
-        // Both should resolve to the same thing
-        assert_eq!(s.apply(&Type::Var(v1)), s.apply(&Type::Var(v2)));
-    }
-
-    #[test]
-    fn unify_arrows() {
-        let mut s = Substitution::new();
-        let t1 = Type::Arrow(
-            Box::new(Type::Named("Int".to_string())),
-            Box::new(Type::Named("Bool".to_string())),
-        );
-        let t2 = Type::Arrow(
-            Box::new(Type::Named("Int".to_string())),
-            Box::new(Type::Named("Bool".to_string())),
-        );
-        assert!(unify(&mut s, &t1, &t2).is_ok());
-    }
-
-    #[test]
-    fn unify_arrow_mismatch() {
-        let mut s = Substitution::new();
-        let t1 = Type::Arrow(
-            Box::new(Type::Named("Int".to_string())),
-            Box::new(Type::Named("Bool".to_string())),
-        );
-        let t2 = Type::Arrow(
-            Box::new(Type::Named("Bool".to_string())),
-            Box::new(Type::Named("Int".to_string())),
-        );
-        assert!(unify(&mut s, &t1, &t2).is_err());
-    }
-
-    #[test]
-    fn unify_lists() {
-        let mut s = Substitution::new();
-        let t1 = Type::List(Box::new(Type::Named("Int".to_string())));
-        let t2 = Type::List(Box::new(Type::Named("Int".to_string())));
-        assert!(unify(&mut s, &t1, &t2).is_ok());
-    }
-
-    #[test]
-    fn unify_list_mismatch() {
-        let mut s = Substitution::new();
-        let t1 = Type::List(Box::new(Type::Named("Int".to_string())));
-        let t2 = Type::List(Box::new(Type::Named("Bool".to_string())));
-        assert!(matches!(unify(&mut s, &t1, &t2), Err(UnificationError::NameMismatch(_, _))));
-    }
-
-    #[test]
-    fn unify_tuples_same() {
-        let mut s = Substitution::new();
-        let t1 = Type::Tuple(vec![
-            Type::Named("Int".to_string()),
-            Type::Named("Bool".to_string()),
-        ]);
-        let t2 = Type::Tuple(vec![
-            Type::Named("Int".to_string()),
-            Type::Named("Bool".to_string()),
-        ]);
-        assert!(unify(&mut s, &t1, &t2).is_ok());
-    }
-
-    #[test]
-    fn unify_tuples_different_length() {
-        let mut s = Substitution::new();
-        let t1 = Type::Tuple(vec![Type::Named("Int".to_string())]);
-        let t2 = Type::Tuple(vec![
-            Type::Named("Int".to_string()),
-            Type::Named("Bool".to_string()),
-        ]);
+    fn test_undefined_variable_error() {
+        let mut tc = TypeChecker::new();
+        let ty = tc.infer_expr(&Expr::Ident("nonexistent".into()));
+        // Should return a fresh type variable to avoid cascading errors
+        assert!(matches!(ty, Ty::Var(_)));
+        assert_eq!(tc.errors().len(), 1);
         assert!(matches!(
-            unify(&mut s, &t1, &t2),
-            Err(UnificationError::TupleLengthMismatch(1, 2))
+            &tc.errors()[0].kind,
+            TypeErrorKind::UndefinedVariable(n) if n == "nonexistent"
         ));
     }
 
     #[test]
-    fn unify_empty_rows() {
-        let mut s = Substitution::new();
-        assert!(unify(&mut s, &Type::EmptyRow, &Type::EmptyRow).is_ok());
+    fn test_scope_shadowing() {
+        let mut tc = TypeChecker::new();
+        tc.push_env("x".into(), TypeScheme::monomorphic(Ty::Int));
+        tc.enter_scope();
+        tc.push_env("x".into(), TypeScheme::monomorphic(Ty::Bool));
+        let ty = tc.infer_expr(&Expr::Ident("x".into()));
+        assert_eq!(ty, Ty::Bool);
+        tc.exit_scope();
+        let ty2 = tc.infer_expr(&Expr::Ident("x".into()));
+        assert_eq!(ty2, Ty::Int);
     }
 
-    #[test]
-    fn unify_records_matching() {
-        let mut s = Substitution::new();
-        let t1 = Type::Record(
-            vec![
-                ("name".to_string(), Type::Named("String".to_string())),
-                ("age".to_string(), Type::Named("Int".to_string())),
-            ],
-            None,
-        );
-        let t2 = Type::Record(
-            vec![
-                ("name".to_string(), Type::Named("String".to_string())),
-                ("age".to_string(), Type::Named("Int".to_string())),
-            ],
-            None,
-        );
-        assert!(unify(&mut s, &t1, &t2).is_ok());
-    }
+    // -----------------------------------------------------------------------
+    // Arithmetic operations
+    // -----------------------------------------------------------------------
 
     #[test]
-    fn unify_records_with_row_vars() {
-        let mut s = Substitution::new();
-        let rv = s.fresh_var();
-        let t1 = Type::Record(
-            vec![("name".to_string(), Type::Named("String".to_string()))],
-            Some(rv),
-        );
-        let t2 = Type::Record(
-            vec![
-                ("name".to_string(), Type::Named("String".to_string())),
-                ("age".to_string(), Type::Named("Int".to_string())),
-            ],
-            None,
-        );
-        assert!(unify(&mut s, &t1, &t2).is_ok());
-    }
-
-    #[test]
-    fn occurs_check_fails() {
-        let mut s = Substitution::new();
-        let v = s.fresh_var();
-        let t = Type::Arrow(
-            Box::new(Type::Var(v)),
-            Box::new(Type::Named("Int".to_string())),
-        );
-        let result = unify(&mut s, &Type::Var(v), &t);
-        assert!(matches!(result, Err(UnificationError::OccursCheck(_))));
-    }
-
-    // ─── TypeScheme tests ───
-
-    #[test]
-    fn scheme_monomorphic() {
-        let s = TypeScheme::monomorphic(Type::Named("Int".to_string()));
-        assert!(s.vars.is_empty());
-    }
-
-    #[test]
-    fn scheme_instantiate() {
-        let v = TypeVarId(42);
-        let s = TypeScheme {
-            vars: vec![v],
-            ty: Type::Arrow(
-                Box::new(Type::Var(v)),
-                Box::new(Type::Var(v)),
-            ),
+    fn test_arithmetic_add() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Add,
+            left: Box::new(Expr::IntLit(1)),
+            right: Box::new(Expr::IntLit(2)),
         };
-        let mut subst = Substitution::new();
-        let instantiated = s.instantiate(&mut subst);
-        // After instantiation, the quantified variable should be replaced
-        assert_ne!(instantiated, s.ty);
-    }
-
-    // ─── TypeEnv tests ───
-
-    #[test]
-    fn env_lookup() {
-        let mut env = TypeEnv::new();
-        env.bind("x", TypeScheme::monomorphic(Type::Named("Int".to_string())));
-        assert!(env.lookup("x").is_some());
-        assert!(env.lookup("y").is_none());
+        assert_eq!(tc.infer_expr(&expr), Ty::Int);
+        assert!(tc.errors().is_empty());
     }
 
     #[test]
-    fn env_prelude() {
-        let env = TypeEnv::prelude();
-        assert!(env.lookup("add").is_some());
-        assert!(env.lookup("sub").is_some());
-        assert!(env.lookup("mul").is_some());
-    }
-
-    #[test]
-    fn env_generalize() {
-        let mut s = Substitution::new();
-        let v = s.fresh_var();
-        let ty = Type::Arrow(
-            Box::new(Type::Var(v)),
-            Box::new(Type::Var(v)),
-        );
-        let env = TypeEnv::new();
-        let scheme = env.generalize(&s, &ty);
-        assert!(!scheme.vars.is_empty());
-    }
-
-    #[test]
-    fn env_generalize_no_free() {
-        let s = Substitution::new();
-        let ty = Type::Arrow(
-            Box::new(Type::Named("Int".to_string())),
-            Box::new(Type::Named("Bool".to_string())),
-        );
-        let env = TypeEnv::new();
-        let scheme = env.generalize(&s, &ty);
-        assert!(scheme.vars.is_empty());
-    }
-
-    // ─── Type inference tests ───
-
-    #[test]
-    fn infer_int_literal() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &i64_val(42)).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
-    }
-
-    #[test]
-    fn infer_bool_literal() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &bool_val(true)).unwrap();
-        assert_eq!(ty, Type::Named("Bool".to_string()));
-    }
-
-    #[test]
-    fn infer_string_literal() {
-        let expr = Expr::StringLit {
-            span: Span::dummy(),
-            value: "hello".to_string(),
+    fn test_arithmetic_sub() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Sub,
+            left: Box::new(Expr::IntLit(10)),
+            right: Box::new(Expr::IntLit(3)),
         };
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &expr).unwrap();
-        assert_eq!(ty, Type::Named("String".to_string()));
+        assert_eq!(tc.infer_expr(&expr), Ty::Int);
     }
 
     #[test]
-    fn infer_variable() {
-        let mut env = TypeEnv::new();
-        env.bind("x", TypeScheme::monomorphic(Type::Named("Int".to_string())));
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &var("x")).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
-    }
-
-    #[test]
-    fn infer_undefined_variable() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let result = infer(&mut env, &mut subst, &var("undefined"));
-        assert!(matches!(result, Err(TypeError::UndefinedVariable { .. })));
-    }
-
-    #[test]
-    fn infer_add() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &bin(BinOp::Add, i64_val(1), i64_val(2))).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
-    }
-
-    #[test]
-    fn infer_add_type_mismatch() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let result = infer(&mut env, &mut subst, &bin(BinOp::Add, i64_val(1), bool_val(true)));
-        assert!(result.is_err());
-    }
-
-    #[test]
-    fn infer_sub() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &bin(BinOp::Sub, i64_val(5), i64_val(3))).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
-    }
-
-    #[test]
-    fn infer_mul() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &bin(BinOp::Mul, i64_val(3), i64_val(4))).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
-    }
-
-    #[test]
-    fn infer_comparison() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &bin(BinOp::Eq, i64_val(1), i64_val(2))).unwrap();
-        assert_eq!(ty, Type::Named("Bool".to_string()));
-    }
-
-    #[test]
-    fn infer_logical_and() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &bin(BinOp::And, bool_val(true), bool_val(false)))
-            .unwrap();
-        assert_eq!(ty, Type::Named("Bool".to_string()));
-    }
-
-    #[test]
-    fn infer_logical_or() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &bin(BinOp::Or, bool_val(true), bool_val(false)))
-            .unwrap();
-        assert_eq!(ty, Type::Named("Bool".to_string()));
-    }
-
-    #[test]
-    fn infer_unary_neg() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &unary(UnaryOp::Neg, i64_val(5))).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
-    }
-
-    #[test]
-    fn infer_unary_not() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &unary(UnaryOp::Not, bool_val(true))).unwrap();
-        assert_eq!(ty, Type::Named("Bool".to_string()));
-    }
-
-    #[test]
-    fn infer_if_then_else() {
-        let expr = Expr::If {
-            span: Span::dummy(),
-            condition: Box::new(bool_val(true)),
-            then_branch: Box::new(i64_val(1)),
-            else_branch: Box::new(i64_val(2)),
+    fn test_arithmetic_mul() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Mul,
+            left: Box::new(Expr::IntLit(4)),
+            right: Box::new(Expr::IntLit(5)),
         };
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &expr).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
+        assert_eq!(tc.infer_expr(&expr), Ty::Int);
     }
 
     #[test]
-    fn infer_if_type_mismatch() {
-        let expr = Expr::If {
-            span: Span::dummy(),
-            condition: Box::new(i64_val(1)), // wrong: should be Bool
-            then_branch: Box::new(i64_val(1)),
-            else_branch: Box::new(i64_val(2)),
+    fn test_arithmetic_div() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Div,
+            left: Box::new(Expr::IntLit(20)),
+            right: Box::new(Expr::IntLit(4)),
         };
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let result = infer(&mut env, &mut subst, &expr);
-        assert!(result.is_err());
+        assert_eq!(tc.infer_expr(&expr), Ty::Int);
     }
 
     #[test]
-    fn infer_let_in() {
-        let expr = Expr::Let {
-            span: Span::dummy(),
-            name: "x".to_string(),
+    fn test_arithmetic_mod() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Mod,
+            left: Box::new(Expr::IntLit(7)),
+            right: Box::new(Expr::IntLit(3)),
+        };
+        assert_eq!(tc.infer_expr(&expr), Ty::Int);
+    }
+
+    #[test]
+    fn test_arithmetic_type_mismatch() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Add,
+            left: Box::new(Expr::BoolLit(true)),
+            right: Box::new(Expr::IntLit(1)),
+        };
+        let _ = tc.infer_expr(&expr);
+        assert!(!tc.errors().is_empty());
+    }
+
+    // -----------------------------------------------------------------------
+    // Comparison operations
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_comparison_eq() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Eq,
+            left: Box::new(Expr::IntLit(1)),
+            right: Box::new(Expr::IntLit(2)),
+        };
+        assert_eq!(tc.infer_expr(&expr), Ty::Bool);
+    }
+
+    #[test]
+    fn test_comparison_lt() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Lt,
+            left: Box::new(Expr::IntLit(1)),
+            right: Box::new(Expr::IntLit(2)),
+        };
+        assert_eq!(tc.infer_expr(&expr), Ty::Bool);
+    }
+
+    #[test]
+    fn test_comparison_ge() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Ge,
+            left: Box::new(Expr::IntLit(5)),
+            right: Box::new(Expr::IntLit(5)),
+        };
+        assert_eq!(tc.infer_expr(&expr), Ty::Bool);
+    }
+
+    #[test]
+    fn test_comparison_neq() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Neq,
+            left: Box::new(Expr::BoolLit(true)),
+            right: Box::new(Expr::BoolLit(false)),
+        };
+        assert_eq!(tc.infer_expr(&expr), Ty::Bool);
+    }
+
+    // -----------------------------------------------------------------------
+    // Logical operations
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_logical_and() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::And,
+            left: Box::new(Expr::BoolLit(true)),
+            right: Box::new(Expr::BoolLit(false)),
+        };
+        assert_eq!(tc.infer_expr(&expr), Ty::Bool);
+    }
+
+    #[test]
+    fn test_logical_or() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Binary {
+            op: BinOp::Or,
+            left: Box::new(Expr::BoolLit(true)),
+            right: Box::new(Expr::BoolLit(false)),
+        };
+        assert_eq!(tc.infer_expr(&expr), Ty::Bool);
+    }
+
+    // -----------------------------------------------------------------------
+    // Unary operations
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_unary_neg() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Unary {
+            op: UnaryOp::Neg,
+            operand: Box::new(Expr::IntLit(42)),
+        };
+        assert_eq!(tc.infer_expr(&expr), Ty::Int);
+    }
+
+    #[test]
+    fn test_unary_not() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Unary {
+            op: UnaryOp::Not,
+            operand: Box::new(Expr::BoolLit(true)),
+        };
+        assert_eq!(tc.infer_expr(&expr), Ty::Bool);
+    }
+
+    // -----------------------------------------------------------------------
+    // If expressions
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_if_expression_both_branches() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::If(Box::new(IfExpr {
+            condition: Expr::BoolLit(true),
+            then_block: vec![Stmt::Expr(Expr::IntLit(1))],
+            else_clause: Some(ElseClause::Block(vec![Stmt::Expr(Expr::IntLit(2))])),
+        }));
+        let ty = tc.infer_expr(&expr);
+        assert_eq!(ty, Ty::Int);
+        assert!(tc.errors().is_empty());
+    }
+
+    #[test]
+    fn test_if_expression_without_else() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::If(Box::new(IfExpr {
+            condition: Expr::BoolLit(false),
+            then_block: vec![Stmt::Expr(Expr::IntLit(1))],
+            else_clause: None,
+        }));
+        let ty = tc.infer_expr(&expr);
+        // then-block is Int, else is Unit → mismatch
+        assert!(!tc.errors().is_empty());
+        assert_eq!(ty, Ty::Int); // returns then-type
+    }
+
+    #[test]
+    fn test_if_branch_type_mismatch() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::If(Box::new(IfExpr {
+            condition: Expr::BoolLit(true),
+            then_block: vec![Stmt::Expr(Expr::IntLit(1))],
+            else_clause: Some(ElseClause::Block(vec![Stmt::Expr(Expr::StrLit("no".into()))])),
+        }));
+        let _ = tc.infer_expr(&expr);
+        assert!(!tc.errors().is_empty());
+    }
+
+    // -----------------------------------------------------------------------
+    // Let bindings
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_let_binding() {
+        let mut tc = TypeChecker::new();
+        let stmt = Stmt::Let(LetStmt {
+            name: "x".into(),
             type_ann: None,
-            value: Box::new(i64_val(42)),
-            body: Box::new(var("x")),
-        };
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &expr).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
+            value: Expr::IntLit(10),
+        });
+        let ty = tc.infer_stmt(&stmt);
+        assert_eq!(ty, Ty::Int);
+        // Verify x is now in scope
+        let lookup = tc.lookup_env("x");
+        assert!(lookup.is_some());
     }
 
     #[test]
-    fn infer_function_application() {
-        let mut env = TypeEnv::new();
-        env.bind(
-            "double",
-            TypeScheme::monomorphic(Type::Arrow(
-                Box::new(Type::Named("Int".to_string())),
-                Box::new(Type::Named("Int".to_string())),
+    fn test_let_binding_with_annotation() {
+        let mut tc = TypeChecker::new();
+        let stmt = Stmt::Let(LetStmt {
+            name: "x".into(),
+            type_ann: Some(TypeAnn::Bool),
+            value: Expr::BoolLit(true),
+        });
+        let ty = tc.infer_stmt(&stmt);
+        assert_eq!(ty, Ty::Bool);
+        assert!(tc.errors().is_empty());
+    }
+
+    #[test]
+    fn test_let_binding_annotation_mismatch() {
+        let mut tc = TypeChecker::new();
+        let stmt = Stmt::Let(LetStmt {
+            name: "x".into(),
+            type_ann: Some(TypeAnn::Int),
+            value: Expr::BoolLit(true),
+        });
+        let _ = tc.infer_stmt(&stmt);
+        assert!(!tc.errors().is_empty());
+    }
+
+    // -----------------------------------------------------------------------
+    // Assignment
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_assignment_to_bound_variable() {
+        let mut tc = TypeChecker::new();
+        tc.push_env("x".into(), TypeScheme::monomorphic(Ty::Int));
+        let stmt = Stmt::Assign(AssignStmt {
+            name: "x".into(),
+            value: Expr::IntLit(99),
+        });
+        let ty = tc.infer_stmt(&stmt);
+        assert_eq!(ty, Ty::Unit);
+        assert!(tc.errors().is_empty());
+    }
+
+    #[test]
+    fn test_assignment_to_undefined_variable() {
+        let mut tc = TypeChecker::new();
+        let stmt = Stmt::Assign(AssignStmt {
+            name: "y".into(),
+            value: Expr::IntLit(1),
+        });
+        let _ = tc.infer_stmt(&stmt);
+        assert!(!tc.errors().is_empty());
+    }
+
+    // -----------------------------------------------------------------------
+    // Function calls
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_function_call_correct_arity() {
+        let mut tc = TypeChecker::new();
+        // damage(target, 10) → (entity, int) -> unit
+        let expr = Expr::Call {
+            func: Box::new(Expr::Ident("damage".into())),
+            args: vec![
+                CallArg::Positional(Expr::Ident("target".into())),
+                CallArg::Positional(Expr::IntLit(10)),
+            ],
+        };
+        let ty = tc.infer_expr(&expr);
+        assert_eq!(ty, Ty::Unit);
+        assert!(tc.errors().is_empty());
+    }
+
+    #[test]
+    fn test_function_call_too_few_args() {
+        let mut tc = TypeChecker::new();
+        // damage(target) — missing second arg
+        let expr = Expr::Call {
+            func: Box::new(Expr::Ident("damage".into())),
+            args: vec![CallArg::Positional(Expr::Ident("target".into()))],
+        };
+        let _ = tc.infer_expr(&expr);
+        // Should produce an arity mismatch error (Fn unification fails)
+        assert!(!tc.errors().is_empty());
+    }
+
+    #[test]
+    fn test_function_call_too_many_args() {
+        let mut tc = TypeChecker::new();
+        // is_alive(target, extra) — too many args
+        let expr = Expr::Call {
+            func: Box::new(Expr::Ident("is_alive".into())),
+            args: vec![
+                CallArg::Positional(Expr::Ident("target".into())),
+                CallArg::Positional(Expr::IntLit(1)),
+            ],
+        };
+        let _ = tc.infer_expr(&expr);
+        assert!(!tc.errors().is_empty());
+    }
+
+    #[test]
+    fn test_call_non_function() {
+        let mut tc = TypeChecker::new();
+        // 42() — int is not callable
+        let expr = Expr::Call {
+            func: Box::new(Expr::IntLit(42)),
+            args: vec![],
+        };
+        let _ = tc.infer_expr(&expr);
+        assert!(!tc.errors().is_empty());
+    }
+
+    // -----------------------------------------------------------------------
+    // Member access
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_member_access_entity_field() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Member {
+            object: Box::new(Expr::Ident("target".into())),
+            field: "hp".into(),
+        };
+        let ty = tc.infer_expr(&expr);
+        assert_eq!(ty, Ty::Int);
+    }
+
+    #[test]
+    fn test_member_access_entity_maxhp() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Member {
+            object: Box::new(Expr::Ident("self".into())),
+            field: "maxhp".into(),
+        };
+        assert_eq!(tc.infer_expr(&expr), Ty::Int);
+    }
+
+    #[test]
+    fn test_member_access_entity_atk_def_shield() {
+        let mut tc = TypeChecker::new();
+        for field in &["atk", "def", "shield"] {
+            let expr = Expr::Member {
+                object: Box::new(Expr::Ident("caster".into())),
+                field: (*field).into(),
+            };
+            assert_eq!(tc.infer_expr(&expr), Ty::Int);
+        }
+    }
+
+    #[test]
+    fn test_member_access_non_entity() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Member {
+            object: Box::new(Expr::IntLit(42)),
+            field: "hp".into(),
+        };
+        let _ = tc.infer_expr(&expr);
+        assert!(!tc.errors().is_empty());
+    }
+
+    // -----------------------------------------------------------------------
+    // Struct / Row literal
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_struct_literal_row_type() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::Struct(vec![
+            ("hp".into(), Expr::IntLit(100)),
+            ("atk".into(), Expr::IntLit(25)),
+        ]);
+        let ty = tc.infer_expr(&expr);
+        match &ty {
+            Ty::Row(fields, Some(_tail)) => {
+                assert_eq!(fields.len(), 2);
+                assert_eq!(fields[0].0, "hp");
+                assert_eq!(fields[0].1, Ty::Int);
+                assert_eq!(fields[1].0, "atk");
+                assert_eq!(fields[1].1, Ty::Int);
+            }
+            other => panic!("Expected Row type, got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn test_row_field_access() {
+        let mut tc = TypeChecker::new();
+        // Create a row and access a field
+        tc.push_env(
+            "stats".into(),
+            TypeScheme::monomorphic(Ty::Row(
+                vec![("hp".into(), Ty::Int), ("atk".into(), Ty::Int)],
+                None,
             )),
         );
-        let expr = Expr::App {
-            span: Span::dummy(),
-            func: Box::new(var("double")),
-            args: vec![i64_val(21)],
+        let expr = Expr::Member {
+            object: Box::new(Expr::Ident("stats".into())),
+            field: "hp".into(),
         };
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &expr).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
+        let ty = tc.infer_expr(&expr);
+        assert_eq!(ty, Ty::Int);
     }
 
     #[test]
-    fn infer_list_homogeneous() {
-        let expr = Expr::List {
-            span: Span::dummy(),
-            elements: vec![i64_val(1), i64_val(2), i64_val(3)],
+    fn test_row_field_not_found() {
+        let mut tc = TypeChecker::new();
+        tc.push_env(
+            "stats".into(),
+            TypeScheme::monomorphic(Ty::Row(
+                vec![("hp".into(), Ty::Int)],
+                None,
+            )),
+        );
+        let expr = Expr::Member {
+            object: Box::new(Expr::Ident("stats".into())),
+            field: "mp".into(),
         };
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &expr).unwrap();
-        assert_eq!(ty, Type::List(Box::new(Type::Named("Int".to_string()))));
+        let ty = tc.infer_expr(&expr);
+        // Should return a fresh variable (no error emitted for row field miss in this impl)
+        assert!(matches!(ty, Ty::Var(_)));
+    }
+
+    // -----------------------------------------------------------------------
+    // List types
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_list_literal_type() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::List(vec![Expr::IntLit(1), Expr::IntLit(2), Expr::IntLit(3)]);
+        let ty = tc.infer_expr(&expr);
+        assert_eq!(ty, Ty::List(Box::new(Ty::Int)));
     }
 
     #[test]
-    fn infer_list_heterogeneous_fails() {
-        let expr = Expr::List {
-            span: Span::dummy(),
-            elements: vec![i64_val(1), bool_val(true)],
-        };
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let result = infer(&mut env, &mut subst, &expr);
-        assert!(result.is_err());
+    fn test_empty_list_type() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::List(vec![]);
+        let ty = tc.infer_expr(&expr);
+        assert!(matches!(ty, Ty::List(_)));
     }
 
     #[test]
-    fn infer_empty_list() {
-        let expr = Expr::List {
-            span: Span::dummy(),
-            elements: vec![],
-        };
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &expr).unwrap();
-        // Empty list has a fresh type variable as element type
-        assert!(matches!(ty, Type::List(_)));
+    fn test_list_type_mismatch() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::List(vec![Expr::IntLit(1), Expr::BoolLit(true)]);
+        let _ = tc.infer_expr(&expr);
+        assert!(!tc.errors().is_empty());
+    }
+
+    // -----------------------------------------------------------------------
+    // Built-in function types
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_builtin_damage_type() {
+        let mut tc = TypeChecker::new();
+        let ty = tc.infer_expr(&Expr::Ident("damage".into()));
+        let resolved = tc.resolve(&ty);
+        assert_eq!(
+            resolved,
+            Ty::Fn(vec![Ty::Entity, Ty::Int], Box::new(Ty::Unit))
+        );
     }
 
     #[test]
-    fn infer_cons() {
-        let mut env = TypeEnv::new();
-        let expr = Expr::Cons {
-            span: Span::dummy(),
-            head: Box::new(i64_val(1)),
-            tail: Box::new(Expr::List {
-                span: Span::dummy(),
-                elements: vec![i64_val(2), i64_val(3)],
+    fn test_builtin_is_alive_type() {
+        let mut tc = TypeChecker::new();
+        let ty = tc.infer_expr(&Expr::Ident("is_alive".into()));
+        let resolved = tc.resolve(&ty);
+        assert_eq!(
+            resolved,
+            Ty::Fn(vec![Ty::Entity], Box::new(Ty::Bool))
+        );
+    }
+
+    #[test]
+    fn test_builtin_clamp_type() {
+        let mut tc = TypeChecker::new();
+        let ty = tc.infer_expr(&Expr::Ident("clamp".into()));
+        let resolved = tc.resolve(&ty);
+        assert_eq!(
+            resolved,
+            Ty::Fn(vec![Ty::Int, Ty::Int, Ty::Int], Box::new(Ty::Int))
+        );
+    }
+
+    #[test]
+    fn test_builtin_abs_type() {
+        let mut tc = TypeChecker::new();
+        let ty = tc.infer_expr(&Expr::Ident("abs".into()));
+        let resolved = tc.resolve(&ty);
+        assert_eq!(resolved, Ty::Fn(vec![Ty::Int], Box::new(Ty::Int)));
+    }
+
+    #[test]
+    fn test_builtin_heal_type() {
+        let mut tc = TypeChecker::new();
+        let ty = tc.infer_expr(&Expr::Ident("heal".into()));
+        let resolved = tc.resolve(&ty);
+        assert_eq!(
+            resolved,
+            Ty::Fn(vec![Ty::Entity, Ty::Int], Box::new(Ty::Unit))
+        );
+    }
+
+    // -----------------------------------------------------------------------
+    // Unification
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_unify_same_types() {
+        let mut tc = TypeChecker::new();
+        assert!(tc.unify(&Ty::Int, &Ty::Int, &sp()).is_ok());
+        assert!(tc.unify(&Ty::Bool, &Ty::Bool, &sp()).is_ok());
+        assert!(tc.unify(&Ty::Str, &Ty::Str, &sp()).is_ok());
+        assert!(tc.errors().is_empty());
+    }
+
+    #[test]
+    fn test_unify_mismatch() {
+        let mut tc = TypeChecker::new();
+        assert!(tc.unify(&Ty::Int, &Ty::Bool, &sp()).is_err());
+        assert_eq!(tc.errors().len(), 1);
+    }
+
+    #[test]
+    fn test_unify_type_variable() {
+        let mut tc = TypeChecker::new();
+        let v = tc.fresh_var();
+        assert!(tc.unify(&Ty::Var(v), &Ty::Int, &sp()).is_ok());
+        let resolved = tc.resolve(&Ty::Var(v));
+        assert_eq!(resolved, Ty::Int);
+    }
+
+    #[test]
+    fn test_unify_two_variables() {
+        let mut tc = TypeChecker::new();
+        let v1 = tc.fresh_var();
+        let v2 = tc.fresh_var();
+        assert!(tc.unify(&Ty::Var(v1), &Ty::Var(v2), &sp()).is_ok());
+        // Both should now resolve to the same thing
+        let r1 = tc.resolve(&Ty::Var(v1));
+        let r2 = tc.resolve(&Ty::Var(v2));
+        assert_eq!(r1, r2);
+    }
+
+    #[test]
+    fn test_unify_function_types() {
+        let mut tc = TypeChecker::new();
+        let t1 = Ty::Fn(vec![Ty::Int, Ty::Int], Box::new(Ty::Bool));
+        let t2 = Ty::Fn(vec![Ty::Int, Ty::Int], Box::new(Ty::Bool));
+        assert!(tc.unify(&t1, &t2, &sp()).is_ok());
+    }
+
+    #[test]
+    fn test_unify_list_types() {
+        let mut tc = TypeChecker::new();
+        let t1 = Ty::List(Box::new(Ty::Int));
+        let t2 = Ty::List(Box::new(Ty::Int));
+        assert!(tc.unify(&t1, &t2, &sp()).is_ok());
+        let t3 = Ty::List(Box::new(Ty::Bool));
+        assert!(tc.unify(&t1, &t3, &sp()).is_err());
+    }
+
+    // -----------------------------------------------------------------------
+    // Cyclic type detection (occurs check)
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_cyclic_type_detection() {
+        let mut tc = TypeChecker::new();
+        let v = tc.fresh_var();
+        // Try to unify ?0 = (?0 -> int) → cyclic!
+        let fn_ty = Ty::Fn(vec![Ty::Var(v)], Box::new(Ty::Int));
+        assert!(tc.unify(&Ty::Var(v), &fn_ty, &sp()).is_err());
+        assert!(matches!(
+            &tc.errors()[0].kind,
+            TypeErrorKind::CyclicType
+        ));
+    }
+
+    // -----------------------------------------------------------------------
+    // Row unification
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_row_unification_identical() {
+        let mut tc = TypeChecker::new();
+        let r1 = Ty::Row(vec![("hp".into(), Ty::Int), ("atk".into(), Ty::Int)], None);
+        let r2 = Ty::Row(vec![("hp".into(), Ty::Int), ("atk".into(), Ty::Int)], None);
+        assert!(tc.unify(&r1, &r2, &sp()).is_ok());
+    }
+
+    #[test]
+    fn test_row_unification_with_tail() {
+        let mut tc = TypeChecker::new();
+        let v = tc.fresh_var();
+        let r1 = Ty::Row(vec![("hp".into(), Ty::Int)], Some(v));
+        let r2 = Ty::Row(
+            vec![("hp".into(), Ty::Int), ("atk".into(), Ty::Int)],
+            None,
+        );
+        assert!(tc.unify(&r1, &r2, &sp()).is_ok());
+    }
+
+    #[test]
+    fn test_row_unification_mismatch_closed() {
+        let mut tc = TypeChecker::new();
+        let r1 = Ty::Row(vec![("hp".into(), Ty::Int)], None);
+        let r2 = Ty::Row(vec![("atk".into(), Ty::Int)], None);
+        // Both closed, no common fields, should fail
+        assert!(tc.unify(&r1, &r2, &sp()).is_err());
+    }
+
+    // -----------------------------------------------------------------------
+    // Generalize & instantiate (let-polymorphism)
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_generalize_fresh_variable() {
+        let mut tc = TypeChecker::new();
+        let v = tc.fresh_var();
+        let ty = Ty::Var(v);
+        let scheme = tc.generalize(&ty);
+        // The variable should be quantified (it's not in the env)
+        assert!(scheme.vars.contains(&v));
+    }
+
+    #[test]
+    fn test_generalize_does_not_quantify_env_vars() {
+        let mut tc = TypeChecker::new();
+        let env_var = tc.fresh_var();
+        tc.subst.insert(env_var, Ty::Int);
+        // Now create a type with a fresh var
+        let fresh = tc.fresh_var();
+        let ty = Ty::Fn(vec![Ty::Var(fresh)], Box::new(Ty::Var(env_var)));
+        let scheme = tc.generalize(&ty);
+        // fresh should be quantified, env_var should not
+        assert!(scheme.vars.contains(&fresh));
+        assert!(!scheme.vars.contains(&env_var));
+    }
+
+    #[test]
+    fn test_instantiate_creates_fresh_vars() {
+        let mut tc = TypeChecker::new();
+        let v = tc.fresh_var();
+        let scheme = TypeScheme::new(vec![v], Ty::Fn(vec![Ty::Var(v)], Box::new(Ty::Var(v))));
+        let inst1 = tc.instantiate(&scheme);
+        let inst2 = tc.instantiate(&scheme);
+        // The two instances should have different variable ids
+        assert_ne!(inst1, inst2);
+        // Both should be function types
+        assert!(matches!(inst1, Ty::Fn(_, _)));
+        assert!(matches!(inst2, Ty::Fn(_, _)));
+    }
+
+    #[test]
+    fn test_monomorphic_scheme_no_quantification() {
+        let mut tc = TypeChecker::new();
+        let scheme = TypeScheme::monomorphic(Ty::Int);
+        let inst = tc.instantiate(&scheme);
+        assert_eq!(inst, Ty::Int);
+    }
+
+    // -----------------------------------------------------------------------
+    // Resolve
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_resolve_type_variable() {
+        let mut tc = TypeChecker::new();
+        let v = tc.fresh_var();
+        tc.subst.insert(v, Ty::Bool);
+        assert_eq!(tc.resolve(&Ty::Var(v)), Ty::Bool);
+    }
+
+    #[test]
+    fn test_resolve_chain() {
+        let mut tc = TypeChecker::new();
+        let v0 = tc.fresh_var();
+        let v1 = tc.fresh_var();
+        tc.subst.insert(v0, Ty::Var(v1));
+        tc.subst.insert(v1, Ty::Int);
+        assert_eq!(tc.resolve(&Ty::Var(v0)), Ty::Int);
+    }
+
+    // -----------------------------------------------------------------------
+    // apply_subst
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_apply_subst_primitive() {
+        let mut tc = TypeChecker::new();
+        assert_eq!(tc.apply_subst(&Ty::Int), Ty::Int);
+        assert_eq!(tc.apply_subst(&Ty::Bool), Ty::Bool);
+    }
+
+    #[test]
+    fn test_apply_subst_variable() {
+        let mut tc = TypeChecker::new();
+        let v = tc.fresh_var();
+        tc.subst.insert(v, Ty::Str);
+        assert_eq!(tc.apply_subst(&Ty::Var(v)), Ty::Str);
+    }
+
+    // -----------------------------------------------------------------------
+    // Program-level checking
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_check_program_empty() {
+        let mut tc = TypeChecker::new();
+        let program = Program {
+            module: None,
+            items: vec![],
+        };
+        assert!(tc.check_program(&program).is_ok());
+    }
+
+    #[test]
+    fn test_check_const_definition() {
+        let mut tc = TypeChecker::new();
+        let program = Program {
+            module: None,
+            items: vec![Item::Const(ConstDef {
+                name: "MAX_HP".into(),
+                type_ann: TypeAnn::Int,
+                value: Expr::IntLit(100),
+            })],
+        };
+        assert!(tc.check_program(&program).is_ok());
+    }
+
+    #[test]
+    fn test_check_fn_definition() {
+        let mut tc = TypeChecker::new();
+        let program = Program {
+            module: None,
+            items: vec![Item::Fn(FnDef {
+                name: "double".into(),
+                params: vec![Param {
+                    name: "x".into(),
+                    type_ann: TypeAnn::Int,
+                }],
+                return_type: Some(TypeAnn::Int),
+                effect: None,
+                body: vec![Stmt::Return(ReturnStmt {
+                    value: Some(Expr::Binary {
+                        op: BinOp::Mul,
+                        left: Box::new(Expr::Ident("x".into())),
+                        right: Box::new(Expr::IntLit(2)),
+                    }),
+                })],
+            })],
+        };
+        assert!(tc.check_program(&program).is_ok());
+    }
+
+    // -----------------------------------------------------------------------
+    // Nested / complex expressions
+    // -----------------------------------------------------------------------
+
+    #[test]
+    fn test_nested_binary_expression() {
+        let mut tc = TypeChecker::new();
+        // (1 + 2) * 3
+        let expr = Expr::Binary {
+            op: BinOp::Mul,
+            left: Box::new(Expr::Binary {
+                op: BinOp::Add,
+                left: Box::new(Expr::IntLit(1)),
+                right: Box::new(Expr::IntLit(2)),
             }),
+            right: Box::new(Expr::IntLit(3)),
         };
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &expr).unwrap();
-        assert_eq!(ty, Type::List(Box::new(Type::Named("Int".to_string()))));
+        assert_eq!(tc.infer_expr(&expr), Ty::Int);
+        assert!(tc.errors().is_empty());
     }
 
     #[test]
-    fn infer_nested_binop() {
-        let mut env = TypeEnv::new();
-        let mut subst = Substitution::new();
-        let expr = bin(BinOp::Add, bin(BinOp::Mul, i64_val(2), i64_val(3)), i64_val(1));
-        let ty = infer(&mut env, &mut subst, &expr).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
+    fn test_nested_if_expression() {
+        let mut tc = TypeChecker::new();
+        let expr = Expr::If(Box::new(IfExpr {
+            condition: Expr::BoolLit(true),
+            then_block: vec![Stmt::Expr(Expr::If(Box::new(IfExpr {
+                condition: Expr::BoolLit(false),
+                then_block: vec![Stmt::Expr(Expr::IntLit(1))],
+                else_clause: Some(ElseClause::Block(vec![Stmt::Expr(Expr::IntLit(2))])),
+            })))],
+            else_clause: Some(ElseClause::Block(vec![Stmt::Expr(Expr::IntLit(3))])),
+        }));
+        let ty = tc.infer_expr(&expr);
+        assert_eq!(ty, Ty::Int);
+        assert!(tc.errors().is_empty());
     }
 
     #[test]
-    fn infer_prelude_add() {
-        let mut env = TypeEnv::prelude();
-        let expr = Expr::App {
-            span: Span::dummy(),
-            func: Box::new(var("add")),
-            args: vec![i64_val(1), i64_val(2)],
+    fn test_complex_function_call_chain() {
+        let mut tc = TypeChecker::new();
+        // clamp(min(a, b), 0, 100)
+        let expr = Expr::Call {
+            func: Box::new(Expr::Ident("clamp".into())),
+            args: vec![
+                CallArg::Positional(Expr::Call {
+                    func: Box::new(Expr::Ident("min".into())),
+                    args: vec![
+                        CallArg::Positional(Expr::IntLit(5)),
+                        CallArg::Positional(Expr::IntLit(10)),
+                    ],
+                }),
+                CallArg::Positional(Expr::IntLit(0)),
+                CallArg::Positional(Expr::IntLit(100)),
+            ],
         };
-        let mut subst = Substitution::new();
-        let ty = infer(&mut env, &mut subst, &expr).unwrap();
-        assert_eq!(ty, Type::Named("Int".to_string()));
+        let ty = tc.infer_expr(&expr);
+        assert_eq!(ty, Ty::Int);
+        assert!(tc.errors().is_empty());
     }
 
     #[test]
-    fn type_display() {
-        let t = Type::Named("Int".to_string());
-        assert_eq!(format!("{t}"), "Int");
-
-        let t = Type::Arrow(
-            Box::new(Type::Named("Int".to_string())),
-            Box::new(Type::Named("Bool".to_string())),
-        );
-        let s = format!("{t}");
-        assert!(s.contains("->"));
+    fn test_display_type() {
+        assert_eq!(format!("{}", Ty::Int), "int");
+        assert_eq!(format!("{}", Ty::Bool), "bool");
+        assert_eq!(format!("{}", Ty::Str), "str");
+        assert_eq!(format!("{}", Ty::Unit), "unit");
+        assert_eq!(format!("{}", Ty::Entity), "entity");
     }
 
     #[test]
-    fn unification_error_display() {
-        let e = UnificationError::NameMismatch("Int".to_string(), "Bool".to_string());
-        let s = format!("{e}");
-        assert!(s.contains("Int"));
-        assert!(s.contains("Bool"));
+    fn test_display_fn_type() {
+        let ty = Ty::Fn(vec![Ty::Int, Ty::Int], Box::new(Ty::Bool));
+        let s = format!("{}", ty);
+        assert!(s.contains("int"));
+        assert!(s.contains("bool"));
     }
 
     #[test]
-    fn type_error_display() {
-        let e = TypeError::UndefinedVariable {
-            name: "x".to_string(),
-            span: Span::dummy(),
+    fn test_error_display() {
+        let err = TypeError {
+            kind: TypeErrorKind::UndefinedVariable("foo".into()),
+            span: Span::new(10, 20),
         };
-        let s = format!("{e}");
-        assert!(s.contains("undefined"));
-    }
-
-    // ─── proptest: free vars ───
-
-    #[test]
-    fn proptest_free_vars_no_duplicates() {
-        let v = TypeVarId(0);
-        let ty = Type::Arrow(
-            Box::new(Type::Var(v)),
-            Box::new(Type::Var(v)),
-        );
-        let fv = Substitution::free_vars(&ty);
-        assert_eq!(fv.len(), 1);
+        let s = format!("{}", err);
+        assert!(s.contains("foo"));
+        assert!(s.contains("10..20"));
     }
 
     #[test]
-    fn proptest_deeply_nested_arrow() {
-        let v0 = TypeVarId(0);
-        let v1 = TypeVarId(1);
-        let v2 = TypeVarId(2);
-        let ty = Type::Arrow(
-            Box::new(Type::Var(v0)),
-            Box::new(Type::Arrow(
-                Box::new(Type::Var(v1)),
-                Box::new(Type::Var(v2)),
-            )),
-        );
-        let fv = Substitution::free_vars(&ty);
-        assert_eq!(fv.len(), 3);
+    fn test_type_error_kind_display() {
+        let kind = TypeErrorKind::ArityMismatch {
+            expected: 2,
+            found: 3,
+        };
+        let s = format!("{}", kind);
+        assert!(s.contains("2") && s.contains("3"));
     }
 
     #[test]
-    fn proptest_record_free_vars() {
-        let v = TypeVarId(0);
-        let ty = Type::Record(
-            vec![("x".to_string(), Type::Var(v))],
-            Some(TypeVarId(1)),
-        );
-        let fv = Substitution::free_vars(&ty);
-        assert_eq!(fv.len(), 2);
+    fn test_named_type() {
+        let mut tc = TypeChecker::new();
+        let n1 = Ty::Named("MyType".into());
+        let n2 = Ty::Named("MyType".into());
+        let n3 = Ty::Named("OtherType".into());
+        assert!(tc.unify(&n1, &n2, &sp()).is_ok());
+        assert!(tc.unify(&n1, &n3, &sp()).is_err());
     }
 
     #[test]
-    fn proptest_generalize_only_free_vars() {
-        let mut s = Substitution::new();
-        let v = s.fresh_var(); // this is the free var
-        let ty = Type::Arrow(
-            Box::new(Type::Var(v)),
-            Box::new(Type::Named("Int".to_string())),
-        );
-        let env = TypeEnv::new(); // empty env, so all free vars are generalized
-        let scheme = env.generalize(&s, &ty);
-        assert_eq!(scheme.vars.len(), 1);
-    }
-
-    #[test]
-    fn proptest_unify_transitive() {
-        let mut s = Substitution::new();
-        let a = s.fresh_var();
-        let b = s.fresh_var();
-        let c = s.fresh_var();
-        unify(&mut s, &Type::Var(a), &Type::Var(b)).unwrap();
-        unify(&mut s, &Type::Var(b), &Type::Named("Int".to_string())).unwrap();
-        let resolved = s.apply(&Type::Var(a));
-        assert_eq!(resolved, Type::Named("Int".to_string()));
-    }
-
-    #[test]
-    fn proptest_list_of_lists() {
-        let ty = Type::List(Box::new(Type::List(Box::new(Type::Named("Int".to_string())))));
-        let fv = Substitution::free_vars(&ty);
-        assert!(fv.is_empty());
+    fn test_function_arity_error_in_unify() {
+        let mut tc = TypeChecker::new();
+        let f1 = Ty::Fn(vec![Ty::Int], Box::new(Ty::Unit));
+        let f2 = Ty::Fn(vec![Ty::Int, Ty::Int], Box::new(Ty::Unit));
+        let result = tc.unify(&f1, &f2, &sp());
+        assert!(result.is_err());
+        assert!(matches!(
+            result.unwrap_err().kind,
+            TypeErrorKind::ArityMismatch { .. }
+        ));
     }
 }
