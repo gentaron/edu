@@ -244,7 +244,7 @@ export default function AuralisPage() {
           <div className="edu-card rounded-xl overflow-hidden mb-8">
             <div className="relative">
               <img
-                src="https://raw.githubusercontent.com/gentaron/image/main/Gentaro.png"
+                src="/edu-aurali.png"
                 alt="AURALIS Collective"
                 className="w-full h-64 sm:h-80 object-cover object-top"
               />
