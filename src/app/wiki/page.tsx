@@ -17,7 +17,6 @@ import {
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import { type Lang, tl, tlTier } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 
 type Category = "キャラクター" | "用語" | "組織" | "地理" | "技術" | "歴史"
 
@@ -154,7 +153,6 @@ function WikiPage() {
           <h1 className="text-xl font-bold text-edu-text">
             {tl("EDU Wiki 百科事典", "EDU Wiki Encyclopedia", lang)}
           </h1>
-          <LangToggle lang={lang} setLang={setLang} />
         </div>
         <p className="text-xs text-edu-muted mb-6">
           {ALL_ENTRIES.length} {tl("件", "entries", lang)} —{" "}

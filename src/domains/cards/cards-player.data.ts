@@ -74,7 +74,7 @@ export const ALL_CARDS = [
   {
     id: "char-layla",
     name: "レイラ・ヴィレル・ノヴァ",
-    imageUrl: I("LaylaVirelNova.png"),
+    imageUrl: "/LaylaVirellNova.png",
     flavorText: "「Pink Voltageの最終演舞。プラズマが全てを焼き尽くす。」",
     rarity: "SR",
     affiliation: "AURALIS第二世代",

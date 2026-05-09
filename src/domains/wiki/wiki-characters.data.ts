@@ -1,6 +1,7 @@
 import type { WikiId, WikiEntry } from "../../types"
 
-export const WIKI_CHARACTERS = [{
+export const WIKI_CHARACTERS = [
+  {
     id: "Diana" as WikiId,
     name: "ディアナ",
     nameEn: "Diana",
@@ -20,7 +21,8 @@ export const WIKI_CHARACTERS = [{
         label: "Diana's Story",
       },
     ],
-  },{
+  },
+  {
     id: "Jen" as WikiId,
     name: "ジェン",
     nameEn: "Jen",
@@ -48,7 +50,8 @@ export const WIKI_CHARACTERS = [{
         label: "Jen's Story Ep3",
       },
     ],
-  },{
+  },
+  {
     id: "Tina/Gue" as WikiId,
     name: "ティナ/グエ",
     nameEn: "Tina / Gue",
@@ -68,7 +71,8 @@ export const WIKI_CHARACTERS = [{
         label: "Gue's Story",
       },
     ],
-  },{
+  },
+  {
     id: "セリア・ドミニクス" as WikiId,
     name: "セリア・ドミニクス",
     nameEn: "Celia Dminix",
@@ -88,7 +92,8 @@ export const WIKI_CHARACTERS = [{
         label: "Alpha Cain & Celia Dominix's Story",
       },
     ],
-  },{
+  },
+  {
     id: "アルファ・ケイン" as WikiId,
     name: "アルファ・ケイン",
     nameEn: "Alpha Kane",
@@ -108,7 +113,8 @@ export const WIKI_CHARACTERS = [{
         label: "Alpha Cain & Celia Dominix's Story",
       },
     ],
-  },{
+  },
+  {
     id: "エリオス・ウォルド" as WikiId,
     name: "エリオス・ウォルド",
     nameEn: "Elios Wald",
@@ -122,7 +128,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "テリアン反乱軍",
     tier: "歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/EriosWald.png",
-  },{
+  },
+  {
     id: "エル・フォルハウス" as WikiId,
     name: "エル・フォルハウス",
     nameEn: "El Folhaus",
@@ -136,7 +143,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "コーポラタムパブリカ",
     tier: "歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/ElForhaus.png",
-  },{
+  },
+  {
     id: "ティムール・シャー" as WikiId,
     name: "ティムール・シャー",
     nameEn: "Timur Shah",
@@ -150,7 +158,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "移民団",
     tier: "歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/TimurShah.png",
-  },{
+  },
+  {
     id: "レイラ・ヴィレル・ノヴァ" as WikiId,
     name: "レイラ・ヴィレル・ノヴァ",
     nameEn: "Layla Virell Nova",
@@ -163,7 +172,7 @@ export const WIKI_CHARACTERS = [{
     era: "E325〜E400（冷凍）→ E522〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 1",
-    image: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirelNova.png",
+    image: "/LaylaVirellNova.png",
     sourceLinks: [
       {
         url: "https://raw.githubusercontent.com/gentaron/edutext/main/laylastats.txt",
@@ -178,7 +187,8 @@ export const WIKI_CHARACTERS = [{
         label: "Layla Virel Nova's Story",
       },
     ],
-  },{
+  },
+  {
     id: "弦太郎" as WikiId,
     name: "弦太郎",
     nameEn: "Gentaro",
@@ -198,7 +208,8 @@ export const WIKI_CHARACTERS = [{
         label: "Gentaro's Story",
       },
     ],
-  },{
+  },
+  {
     id: "Kate Claudia" as WikiId,
     name: "ケイト・クラウディア",
     nameEn: "Kate Claudia",
@@ -218,7 +229,8 @@ export const WIKI_CHARACTERS = [{
         label: "Kate Claudia & Lillie Steiner's Story",
       },
     ],
-  },{
+  },
+  {
     id: "Kate Patton" as WikiId,
     name: "ケイト・パットン",
     nameEn: "Kate Patton",
@@ -238,7 +250,8 @@ export const WIKI_CHARACTERS = [{
         label: "AURALIS Spinoff",
       },
     ],
-  },{
+  },
+  {
     id: "Lily Steiner" as WikiId,
     name: "リリー・スタイナー",
     nameEn: "Lily Steiner",
@@ -258,7 +271,8 @@ export const WIKI_CHARACTERS = [{
         label: "Kate Claudia & Lillie Steiner's Story",
       },
     ],
-  },{
+  },
+  {
     id: "Lillie Ardent" as WikiId,
     name: "リリー・アーデント",
     nameEn: "Lillie Ardent",
@@ -278,7 +292,8 @@ export const WIKI_CHARACTERS = [{
         label: "AURALIS Spinoff",
       },
     ],
-  },{
+  },
+  {
     id: "ミナ・エウレカ・エルンスト" as WikiId,
     name: "ミナ・エウレカ・エルンスト",
     nameEn: "Mina Eureka Ernst",
@@ -298,7 +313,8 @@ export const WIKI_CHARACTERS = [{
         label: "AURALIS Spinoff",
       },
     ],
-  },{
+  },
+  {
     id: "Ninny Offenbach" as WikiId,
     name: "ニニー・オッフェンバッハ",
     nameEn: "Ninny Offenbach",
@@ -318,7 +334,8 @@ export const WIKI_CHARACTERS = [{
         label: "AURALIS Spinoff",
       },
     ],
-  },{
+  },
+  {
     id: "アイリス" as WikiId,
     name: "アイリス",
     nameEn: "Iris",
@@ -350,7 +367,8 @@ export const WIKI_CHARACTERS = [{
         label: "Iris's Story Ep4",
       },
     ],
-  },{
+  },
+  {
     id: "ウィリー" as WikiId,
     name: "ウィリー",
     nameEn: "Willy",
@@ -364,7 +382,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "ヴァーミリオン",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Willie.png",
-  },{
+  },
+  {
     id: "エレナ" as WikiId,
     name: "エレナ",
     nameEn: "Elena",
@@ -378,7 +397,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "ヴァーミリオン諜報機関",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Elena.png",
-  },{
+  },
+  {
     id: "セバスチャン・ヴァレリウス" as WikiId,
     name: "セバスチャン・ヴァレリウス",
     nameEn: "Sebastian Valerius",
@@ -392,7 +412,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "ボグダス・ジャベリン",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/SebastianValerius.png",
-  },{
+  },
+  {
     id: "ガレス" as WikiId,
     name: "ガレス",
     nameEn: "Gareth",
@@ -406,7 +427,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "ボグダス・ジャベリン",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Gareth.png",
-  },{
+  },
+  {
     id: "フィオナ" as WikiId,
     name: "フィオナ",
     nameEn: "Klaus Fiona",
@@ -420,7 +442,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "ブルーローズ / アルファ・ヴェノム（内通）",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Fiona.png",
-  },{
+  },
+  {
     id: "マリーナ・ボビン" as WikiId,
     name: "マリーナ・ボビン",
     nameEn: "Marina Bobbin",
@@ -434,7 +457,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "ミエルテンガ",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/MarinaBobbin.png",
-  },{
+  },
+  {
     id: "カスチーナ・テンペスト" as WikiId,
     name: "カスチーナ・テンペスト",
     nameEn: "Castina Tempest",
@@ -443,12 +467,13 @@ export const WIKI_CHARACTERS = [{
     description:
       "クロセヴィア首脳。IRIS現代ランキング5位。E515年のV7設立メンバーの一人。テンペストの名が示す通り、荒波のような政治的判断力でクロセヴィアを率いる。V7 vs トリニティの二大陣営対立において、明確な陣営選択を避け独自路線を歩む戦略家。Casteria Grenvelt（カステリア・グレンヴェルト）とは全くの別人物であり、混同を避けるべき。",
     descriptionEn:
-      "An advanced nation in the Crescent region led by Castina Tempest, specializing in weather control technology and environmental engineering. Crosevia has long researched technology to control the complex weather systems unique to the Symphony of Stars, which greatly contributes to stabilizing agricultural production and preventing natural disasters. True to her name \"Tempest,\" Castina Tempest is known for her diplomatic skill that utilizes weather manipulation as a strategic resource. While a member of V7, Crosevia also strives to build relations with the Trinity Alliance, maintaining a flexible diplomatic stance. The nation's main exports include weather control devices and environmental monitoring systems, widely exported to other colonies in the E16 star system.",
+      'An advanced nation in the Crescent region led by Castina Tempest, specializing in weather control technology and environmental engineering. Crosevia has long researched technology to control the complex weather systems unique to the Symphony of Stars, which greatly contributes to stabilizing agricultural production and preventing natural disasters. True to her name "Tempest," Castina Tempest is known for her diplomatic skill that utilizes weather manipulation as a strategic resource. While a member of V7, Crosevia also strives to build relations with the Trinity Alliance, maintaining a flexible diplomatic stance. The nation\'s main exports include weather control devices and environmental monitoring systems, widely exported to other colonies in the E16 star system.',
     era: "E515〜現在",
     affiliation: "クロセヴィア",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/CastinaTempest.png",
-  },{
+  },
+  {
     id: "イズミ" as WikiId,
     name: "イズミ",
     nameEn: "Izumi",
@@ -462,7 +487,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "アルファ・ヴェノム",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Izumi.png",
-  },{
+  },
+  {
     id: "レオン" as WikiId,
     name: "レオン",
     nameEn: "Leon",
@@ -476,7 +502,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "シルバー・ヴェノム",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Leon.png",
-  },{
+  },
+  {
     id: "ヴィヴィエッタ" as WikiId,
     name: "ヴィヴィエッタ",
     nameEn: "四楓院ヴィヴィエッタ",
@@ -490,7 +517,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "捕虜（のち救出）",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Vivietta.png",
-  },{
+  },
+  {
     id: "レヴィリア・サーペンティナ" as WikiId,
     name: "レヴィリア・サーペンティナ",
     nameEn: "Levilia Serpentina",
@@ -504,7 +532,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "シルバー・ヴェノム",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/LeviliaSerpentina.png",
-  },{
+  },
+  {
     id: "ミユシャリ" as WikiId,
     name: "ミユシャリ",
     nameEn: "Miyushari",
@@ -517,7 +546,8 @@ export const WIKI_CHARACTERS = [{
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Miyushari.png",
-  },{
+  },
+  {
     id: "ファリエル" as WikiId,
     name: "ファリエル",
     nameEn: "Fariel",
@@ -530,7 +560,8 @@ export const WIKI_CHARACTERS = [{
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Fariel.png",
-  },{
+  },
+  {
     id: "アイナ" as WikiId,
     name: "アイナ・フォン・リースフェルト",
     nameEn: "Aina von Riesfeldt",
@@ -543,7 +574,8 @@ export const WIKI_CHARACTERS = [{
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/AinaVonRiesfeld.png",
-  },{
+  },
+  {
     id: "ギャビー" as WikiId,
     name: "フレデリック・ギャビー",
     nameEn: "Frederick Gabby",
@@ -556,7 +588,8 @@ export const WIKI_CHARACTERS = [{
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/FredericGabby.png",
-  },{
+  },
+  {
     id: "シェロン" as WikiId,
     name: "シェロン・ジェラス",
     nameEn: "Sheron Jeras",
@@ -569,7 +602,8 @@ export const WIKI_CHARACTERS = [{
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/SheronJeras.png",
-  },{
+  },
+  {
     id: "イルミーゼ" as WikiId,
     name: "イルミーゼ",
     nameEn: "Ilmise",
@@ -582,7 +616,8 @@ export const WIKI_CHARACTERS = [{
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Ilmise.png",
-  },{
+  },
+  {
     id: "ホワイトノイズ" as WikiId,
     name: "ホワイトノイズ",
     nameEn: "White Noise",
@@ -595,7 +630,8 @@ export const WIKI_CHARACTERS = [{
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/WhiteNoise.png",
-  },{
+  },
+  {
     id: "ワドリナ" as WikiId,
     name: "ワドリナ",
     nameEn: "Wadorina",
@@ -608,7 +644,8 @@ export const WIKI_CHARACTERS = [{
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Wadrina.png",
-  },{
+  },
+  {
     id: "ニニギス" as WikiId,
     name: "ニニギス・カラス",
     nameEn: "Ninigisu Karasu",
@@ -621,7 +658,8 @@ export const WIKI_CHARACTERS = [{
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/NinigisKaras.png",
-  },{
+  },
+  {
     id: "イェシバトー" as WikiId,
     name: "イェシバトー",
     nameEn: "Yeshibato",
@@ -634,7 +672,8 @@ export const WIKI_CHARACTERS = [{
     era: "E490〜現在",
     affiliation: "ボグダス・ジャベリン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Yeshibato.png",
-  },{
+  },
+  {
     id: "アザゼル" as WikiId,
     name: "アザゼル・ヘクトパス",
     nameEn: "Azazel Hectopass",
@@ -647,7 +686,8 @@ export const WIKI_CHARACTERS = [{
     era: "?〜E480頃",
     affiliation: "ヴァーミリオン",
     image: "https://raw.githubusercontent.com/gentaron/image/main/AzazelHectopus.png",
-  },{
+  },
+  {
     id: "ピアトリーノ" as WikiId,
     name: "ピアトリーノ",
     nameEn: "Piatorino",
@@ -660,7 +700,8 @@ export const WIKI_CHARACTERS = [{
     era: "E515〜現在",
     affiliation: "ブルーローズ",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Piatrino.png",
-  },{
+  },
+  {
     id: "アイク・ロペス" as WikiId,
     name: "アイク・ロペス",
     nameEn: "Ike Lopez",
@@ -673,7 +714,8 @@ export const WIKI_CHARACTERS = [{
     era: "E515〜現在",
     affiliation: "SSレンジ / V7",
     image: "https://raw.githubusercontent.com/gentaron/image/main/AikeLopez.png",
-  },{
+  },
+  {
     id: "レイド・カキザキ" as WikiId,
     name: "レイド・カキザキ",
     nameEn: "Raid Kakizaki",
@@ -686,7 +728,8 @@ export const WIKI_CHARACTERS = [{
     era: "E515〜現在",
     affiliation: "アイアン・シンジケート / V7",
     image: "https://raw.githubusercontent.com/gentaron/image/main/ReidKakizaki.png",
-  },{
+  },
+  {
     id: "ミカエル・ガブリエリ" as WikiId,
     name: "ミカエル・ガブリエリ",
     nameEn: "Mikael Gabrieli",
@@ -699,7 +742,8 @@ export const WIKI_CHARACTERS = [{
     era: "E515〜現在",
     affiliation: "ファールージャ社",
     image: "https://raw.githubusercontent.com/gentaron/image/main/MikaelGabrieli.png",
-  },{
+  },
+  {
     id: "ヨニック" as WikiId,
     name: "ヨニック",
     nameEn: "Yonick",
@@ -712,7 +756,8 @@ export const WIKI_CHARACTERS = [{
     era: "E515〜現在",
     affiliation: "ブルーローズ",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Yonik.png",
-  },{
+  },
+  {
     id: "マスター・ヴェノム" as WikiId,
     name: "マスター・ヴェノム",
     nameEn: "Master Venom",
@@ -726,7 +771,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "シルバー・ヴェノム",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/MasterVenom.png",
-  },{
+  },
+  {
     id: "ゴルディロックス" as WikiId,
     name: "ゴルディロックス",
     nameEn: "Goldilocks",
@@ -739,7 +785,8 @@ export const WIKI_CHARACTERS = [{
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Goldilocks.png",
-  },{
+  },
+  {
     id: "カタリナ" as WikiId,
     name: "カタリナ",
     nameEn: "Catalina",
@@ -752,7 +799,8 @@ export const WIKI_CHARACTERS = [{
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Katarina.png",
-  },{
+  },
+  {
     id: "ボブリスティ" as WikiId,
     name: "ボブリスティ",
     nameEn: "Boblisti",
@@ -765,7 +813,8 @@ export const WIKI_CHARACTERS = [{
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Bobristy.png",
-  },{
+  },
+  {
     id: "ギル" as WikiId,
     name: "ギル",
     nameEn: "Gil",
@@ -778,7 +827,8 @@ export const WIKI_CHARACTERS = [{
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Gil.png",
-  },{
+  },
+  {
     id: "ラストマン" as WikiId,
     name: "ラストマン",
     nameEn: "Lastman",
@@ -791,7 +841,8 @@ export const WIKI_CHARACTERS = [{
     era: "E500〜",
     affiliation: "シルバー・ヴェノム残党",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Lastman.png",
-  },{
+  },
+  {
     id: "AJ" as WikiId,
     name: "アルフレッド・ジュース",
     nameEn: "Alfred Juce",
@@ -804,7 +855,8 @@ export const WIKI_CHARACTERS = [{
     era: "E518〜現在",
     affiliation: "アルファ・ヴェノム",
     image: "https://raw.githubusercontent.com/gentaron/image/main/AJ.png",
-  },{
+  },
+  {
     id: "Slime_Woman" as WikiId,
     name: "スライム・ウーマン",
     nameEn: "Slime Woman",
@@ -824,7 +876,8 @@ export const WIKI_CHARACTERS = [{
         label: "Jun's Story",
       },
     ],
-  },{
+  },
+  {
     id: "テミルタロン" as WikiId,
     name: "テミルタロン",
     nameEn: "Temirtalon",
@@ -838,7 +891,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "テンプル・オブ・ホライゾン",
     tier: "歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Temirtaron.png",
-  },{
+  },
+  {
     id: "アリア・ソル" as WikiId,
     name: "アリア・ソル",
     nameEn: "Aria Sol",
@@ -852,7 +906,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "惑星連邦構想派",
     tier: "歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/AriaSol.png",
-  },{
+  },
+  {
     id: "ゼナ" as WikiId,
     name: "ゼナ",
     nameEn: "Zena",
@@ -865,7 +920,8 @@ export const WIKI_CHARACTERS = [{
     era: "E525〜",
     affiliation: "マトリカル・リフォーム運動",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Zena.png",
-  },{
+  },
+  {
     id: "リリス・ヴェイン" as WikiId,
     name: "リリス・ヴェイン",
     nameEn: "Lilith Vaine",
@@ -879,7 +935,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "Eros-7",
     tier: "歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/LilithVane.png",
-  },{
+  },
+  {
     id: "シルヴィア・クロウ" as WikiId,
     name: "シルヴィア・クロウ",
     nameEn: "Sylvia Crow",
@@ -893,7 +950,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "Eros-7",
     tier: "歴史的人物",
     image: "https://raw.githubusercontent.com/gentaron/image/main/SylviaCrow.png",
-  },{
+  },
+  {
     id: "カーラ・ヴェルム" as WikiId,
     name: "カーラ・ヴェルム",
     nameEn: "Cara Verm",
@@ -907,7 +965,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "Eros-7",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/KarlaVelm.png",
-  },{
+  },
+  {
     id: "ガロ" as WikiId,
     name: "ガロ",
     nameEn: "Garo",
@@ -921,7 +980,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "シャドウ・ユニオン",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/Garo.png",
-  },{
+  },
+  {
     id: "アヤカ・リン" as WikiId,
     name: "アヤカ・リン",
     nameEn: "Ayaka Rin",
@@ -935,7 +995,8 @@ export const WIKI_CHARACTERS = [{
     affiliation: "シャドウ・ユニオン / マトリカル・リフォーム運動",
     tier: "Tier 1",
     image: "https://raw.githubusercontent.com/gentaron/image/main/AyakaRin.png",
-  },{
+  },
+  {
     id: "カステリア・グレンヴェルト" as WikiId,
     name: "カステリア・グレンヴェルト",
     nameEn: "Casteria Grenvelt",
@@ -955,7 +1016,8 @@ export const WIKI_CHARACTERS = [{
         label: "Casteria Grenvelt's Story",
       },
     ],
-  },{
+  },
+  {
     id: "シトラ・セレス" as WikiId,
     name: "シトラ・セレス",
     nameEn: "Sitra Celes",
@@ -975,7 +1037,8 @@ export const WIKI_CHARACTERS = [{
         label: "Sitra Celes's Story",
       },
     ],
-  },{
+  },
+  {
     id: "ミュー" as WikiId,
     name: "ミュー",
     nameEn: "Myu",
@@ -995,7 +1058,8 @@ export const WIKI_CHARACTERS = [{
         label: "Myu's Story",
       },
     ],
-  },{
+  },
+  {
     id: "ジュン" as WikiId,
     name: "ジュン",
     nameEn: "Jun",
@@ -1015,7 +1079,8 @@ export const WIKI_CHARACTERS = [{
         label: "Jun's Story",
       },
     ],
-  },{
+  },
+  {
     id: "アルゼン・カーリーン" as WikiId,
     name: "アルゼン・カーリーン",
     nameEn: "Alzen Carine",
@@ -1033,7 +1098,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "グレイモンド・ハウザー" as WikiId,
     name: "グレイモンド・ハウザー",
     nameEn: "Greymond Hauser",
@@ -1051,7 +1117,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "女王リアナ・ソリス" as WikiId,
     name: "女王リアナ・ソリス",
     nameEn: "Queen Liana Solis",
@@ -1069,7 +1136,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "マドリス・カーネル" as WikiId,
     name: "マドリス・カーネル",
     nameEn: "Madrisernel",
@@ -1087,7 +1155,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "ネイサン・コリンド" as WikiId,
     name: "ネイサン・コリンド",
     nameEn: "Nathan Corlind",
@@ -1105,7 +1174,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "ロナン・アーサ" as WikiId,
     name: "ロナン・アーサ",
     nameEn: "Ronan Arthur",
@@ -1123,7 +1193,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "グリム・ダルゴス" as WikiId,
     name: "グリム・ダルゴス",
     nameEn: "Grim Dargos",
@@ -1141,7 +1212,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "マスター・クインシアス" as WikiId,
     name: "マスター・クインシアス",
     nameEn: "Master Quinsias",
@@ -1159,7 +1231,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "ヴァイロン・デアクス" as WikiId,
     name: "ヴァイロン・デアクス",
     nameEn: "Vylon Deax",
@@ -1177,7 +1250,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "エリオット・シュトラス" as WikiId,
     name: "エリオット・シュトラス",
     nameEn: "Elliot Strauss",
@@ -1190,7 +1264,8 @@ export const WIKI_CHARACTERS = [{
     era: "E301〜E318",
     affiliation: "ZAMLT",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "アレン" as WikiId,
     name: "アレン",
     nameEn: "Allen",
@@ -1209,7 +1284,8 @@ export const WIKI_CHARACTERS = [{
         label: "Alpha Cain & Celia Dominix's Story",
       },
     ],
-  },{
+  },
+  {
     id: "大司教" as WikiId,
     name: "大司教",
     nameEn: "Archbishop",
@@ -1227,7 +1303,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "商工会議長" as WikiId,
     name: "商工会議長",
     nameEn: "Chamber of Commerce Chairman",
@@ -1245,7 +1322,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "通信長官" as WikiId,
     name: "通信長官",
     nameEn: "Communications Commissioner",
@@ -1263,7 +1341,8 @@ export const WIKI_CHARACTERS = [{
         label: "eduuni.txt",
       },
     ],
-  },{
+  },
+  {
     id: "ラファエル・ドレイク" as WikiId,
     name: "ラファエル・ドレイク",
     nameEn: "Rafael Drake",
@@ -1276,7 +1355,8 @@ export const WIKI_CHARACTERS = [{
     era: "E301〜E318",
     affiliation: "トロン・コーポレーション / ZAMLT",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "アイリス・ノヴァ" as WikiId,
     name: "アイリス・ノヴァ",
     nameEn: "Iris Nova",
@@ -1289,7 +1369,8 @@ export const WIKI_CHARACTERS = [{
     era: "E301〜E318",
     affiliation: "アロエオイル・コーポレーション / ZAMLT",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "カルロス・ヴァンダム" as WikiId,
     name: "カルロス・ヴァンダム",
     nameEn: "Carlos Vandam",
@@ -1302,7 +1383,8 @@ export const WIKI_CHARACTERS = [{
     era: "E301〜E318",
     affiliation: "マモン・コーポレーション / ZAMLT",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "アーサー・グリム" as WikiId,
     name: "アーサー・グリム",
     nameEn: "Arthur Grim",
@@ -1315,7 +1397,8 @@ export const WIKI_CHARACTERS = [{
     era: "E301〜E318",
     affiliation: "ゼブラ・コーポレーション / ZAMLT",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "エリザベス・リンドバーグ" as WikiId,
     name: "エリザベス・リンドバーグ",
     nameEn: "Elizabeth Lindberg",
@@ -1328,7 +1411,8 @@ export const WIKI_CHARACTERS = [{
     era: "E301〜E318",
     affiliation: "ルレンツ・コーポレーション / ZAMLT",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "レイ・ヴァンデルト" as WikiId,
     name: "レイ・ヴァンデルト",
     nameEn: "Ray Vandelte",
@@ -1341,7 +1425,8 @@ export const WIKI_CHARACTERS = [{
     era: "E318年頃",
     affiliation: "ゼブラ・コーポレーション / ZAMLT",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "リンダ" as WikiId,
     name: "リンダ",
     nameEn: "Linda",
@@ -1354,7 +1439,8 @@ export const WIKI_CHARACTERS = [{
     era: "E318年",
     affiliation: "ルレンツ・コーポレーション / ZAMLT",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "クロノ・ヴァーレント" as WikiId,
     name: "クロノ・ヴァーレント",
     nameEn: "Chrono Valeint",
@@ -1367,7 +1453,8 @@ export const WIKI_CHARACTERS = [{
     era: "E318年頃",
     affiliation: "テクロサス",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "オメガ＝ユリシス" as WikiId,
     name: "オメガ＝ユリシス",
     nameEn: "Omega=Ulysses",
@@ -1380,7 +1467,8 @@ export const WIKI_CHARACTERS = [{
     era: "E318年頃",
     affiliation: "EVILS",
     tier: "神格・歴史的人物（次元間存在）",
-  },{
+  },
+  {
     id: "ファランクス（初代皇帝）" as WikiId,
     name: "ファランクス（初代皇帝）",
     nameEn: "Phalanx",
@@ -1393,7 +1481,8 @@ export const WIKI_CHARACTERS = [{
     era: "E15〜E61",
     affiliation: "バーズ帝国",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "セルヴァ・ドーン" as WikiId,
     name: "セルヴァ・ドーン",
     nameEn: "Selva Dawn",
@@ -1406,7 +1495,8 @@ export const WIKI_CHARACTERS = [{
     era: "E480〜",
     affiliation: "SUDOM",
     tier: "Tier 2",
-  },{
+  },
+  {
     id: "ハシーム・ファティマ" as WikiId,
     name: "ハシーム・ファティマ",
     nameEn: "Hashim Fatima",
@@ -1419,7 +1509,8 @@ export const WIKI_CHARACTERS = [{
     era: "E400〜",
     affiliation: "ファティマ連邦",
     tier: "Tier 2",
-  },{
+  },
+  {
     id: "トリスタン・スターク" as WikiId,
     name: "トリスタン・スターク",
     nameEn: "Tristan Stark",
@@ -1428,11 +1519,12 @@ export const WIKI_CHARACTERS = [{
     description:
       "スターク三国軍事理事長。E480年代に三国の防衛同盟を近代化し、他勢力への依存を避ける自律的安全保障体制を強化した。V7やトリニティ・アライアンスのいずれにも属さない独自路線を堅持し、クレセント地方の第三勢力として中立地帯の防衛を担う。質量ともに高く評価されるスターク三国軍事力の近代化の立役者。",
     descriptionEn:
-      "A cluster of three nations located in the northern part of the Crescent Great Region, historically maintaining a strong mutual defense alliance. The name \"Stark Triumvirate\" derives from its \"stark\" diplomatic posture, with the national philosophy of avoiding dependence on other powers and maintaining an independent security system. The three nations specialize respectively in military, economic, and affairs, ensuring the resilience of their alliance through complementary relationships. They maintain their own independent position, belonging to neither V7 nor the Trinity Alliance, serving as a third force in the Crescent region. The military power of the Stark Triumvirate is highly regarded in both quality and quantity, and due to its neutral stance, it often plays an important role in mediating conflicts in the Crescent region. The prototype of the three nations was formed after the collapse of the Bartz Empire in the early Eastern Calendar, and over a long history, they have developed a unique alliance culture.",
+      'A cluster of three nations located in the northern part of the Crescent Great Region, historically maintaining a strong mutual defense alliance. The name "Stark Triumvirate" derives from its "stark" diplomatic posture, with the national philosophy of avoiding dependence on other powers and maintaining an independent security system. The three nations specialize respectively in military, economic, and affairs, ensuring the resilience of their alliance through complementary relationships. They maintain their own independent position, belonging to neither V7 nor the Trinity Alliance, serving as a third force in the Crescent region. The military power of the Stark Triumvirate is highly regarded in both quality and quantity, and due to its neutral stance, it often plays an important role in mediating conflicts in the Crescent region. The prototype of the three nations was formed after the collapse of the Bartz Empire in the early Eastern Calendar, and over a long history, they have developed a unique alliance culture.',
     era: "E480〜",
     affiliation: "スターク三国",
     tier: "Tier 2",
-  },{
+  },
+  {
     id: "オーギュスト・ゴールド" as WikiId,
     name: "オーギュスト・ゴールド",
     nameEn: "August Gold",
@@ -1445,7 +1537,8 @@ export const WIKI_CHARACTERS = [{
     era: "E500〜",
     affiliation: "ゴールデン・ヴェノム",
     tier: "Tier 2",
-  },{
+  },
+  {
     id: "ルシア・ネオ" as WikiId,
     name: "ルシア・ネオ",
     nameEn: "Lucia Neo",
@@ -1458,7 +1551,8 @@ export const WIKI_CHARACTERS = [{
     era: "E330〜",
     affiliation: "ネオクラン同盟",
     tier: "歴史的人物",
-  },{
+  },
+  {
     id: "ヘクトル・ヴァン" as WikiId,
     name: "ヘクトル・ヴァン",
     nameEn: "Hector Van",
@@ -1471,4 +1565,5 @@ export const WIKI_CHARACTERS = [{
     era: "E400後半〜E500",
     affiliation: "UECO",
     tier: "歴史的人物",
-  },] as const satisfies readonly WikiEntry[]
+  },
+] as const satisfies readonly WikiEntry[]

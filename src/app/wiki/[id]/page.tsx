@@ -12,7 +12,6 @@ import { RevealSection } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { type Lang, tl, tlCategory, tlTier } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 
 export default function WikiEntryPage() {
   const params = useParams<{ id: string }>()
@@ -53,7 +52,7 @@ export default function WikiEntryPage() {
         title={lang === "en" && entry.nameEn ? entry.nameEn : entry.name}
         subtitle={lang === "en" && entry.nameEn ? entry.name : entry.nameEn}
         wikiHref="/wiki"
-        extra={<LangToggle lang={lang} setLang={setLang} />}
+        extra={undefined}
       />
 
       <main className="px-4 pb-16">

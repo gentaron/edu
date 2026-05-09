@@ -270,11 +270,7 @@ export default function AuralisPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2">
               <div className="relative">
                 <img
-                  src={
-                    process.env.NODE_ENV === "production"
-                      ? "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirelNova.png"
-                      : "/LaylaVirelNova.png"
-                  }
+                  src="/LaylaVirellNova.png"
                   alt="Layla Virell Nova — Pink Voltage"
                   className="w-full h-full min-h-[280px] object-cover object-top"
                 />
@@ -551,7 +547,7 @@ export default function AuralisPage() {
                           ? "Pink Voltage — Revived from cryogenic preservation, same generation as Mina"
                           : "Pink Voltage — 冷凍保存から復活、ミナたちと同年代",
                       color: "bg-pink-500/20 border-pink-500/40",
-                      img: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirellNova.png",
+                      img: "/LaylaVirellNova.png",
                       wiki: `/wiki/${encodeURIComponent("レイラ・ヴィレル・ノヴァ")}`,
                     },
                     {

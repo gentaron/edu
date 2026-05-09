@@ -22,7 +22,6 @@ import {
 } from "@/domains/stories/stories.meta"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 import ReadingProgress from "./reading-progress"
 import { toRoman, isSceneBreak, isChapterHeading } from "../_lib/parser"
 import { RelatedStoriesSection } from "./related-stories"
@@ -120,7 +119,6 @@ export function StoryReaderUI({
 
             {/* Right: lang toggle + prev/next */}
             <div className="flex items-center gap-2 shrink-0">
-              <LangToggle lang={lang} setLang={setLang} />
               {prev && (
                 <Link
                   href={`/story/${prev.slug}`}
