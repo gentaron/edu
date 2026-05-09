@@ -24,7 +24,6 @@ import {
 } from "@/domains/civilizations/civ.data"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   Crown: <Crown className="w-6 h-6" />,
@@ -40,7 +39,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
 }
 
 export default function CivilizationsPage() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -53,7 +52,6 @@ export default function CivilizationsPage() {
           lang
         )}
         wikiHref={`/wiki/${encodeURIComponent("グランベル")}`}
-        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <main className="px-4 pb-20">

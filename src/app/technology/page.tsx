@@ -4,13 +4,12 @@ import Link from "next/link"
 import { Atom, Zap, Globe2, ChevronDown } from "lucide-react"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { TECH_DATA } from "@/lib/tech-data"
 
 export default function TechnologyPage() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   const ladderData = [
     {
@@ -71,7 +70,6 @@ export default function TechnologyPage() {
             ? "Core technologies of the E16 binary star system — Technical explanations based on real physics theories"
             : "E16連星系のコア技術群 — 実在の物理学理論に基づく技術的解説"
         }
-        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <RevealSection>

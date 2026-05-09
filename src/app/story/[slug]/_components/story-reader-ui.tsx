@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo } from "react"
+import React, { useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import {
@@ -21,9 +21,10 @@ import {
   getStoryTitle,
 } from "@/domains/stories/stories.meta"
 import { type Lang, tl } from "@/lib/lang"
+import { useLang } from "@/lib/use-lang"
+import { LangToggle } from "@/platform/lang-toggle"
 import ReadingProgress from "./reading-progress"
 import { toRoman, isSceneBreak, isChapterHeading } from "../_lib/parser"
-import { LangToggle } from "./lang-toggle"
 import { RelatedStoriesSection } from "./related-stories"
 
 /* ─── Props ─── */
@@ -53,20 +54,7 @@ export function StoryReaderUI({
   next,
   relatedEntries,
 }: StoryReaderUIProps) {
-  const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("edu-lang") as Lang | null
-      if (saved === "en" || saved === "ja") {
-        return saved
-      }
-    }
-    return "ja"
-  })
-
-  const setLang = (l: Lang) => {
-    setLangState(l)
-    localStorage.setItem("edu-lang", l)
-  }
+  const { lang, setLang } = useLang()
 
   const paragraphs = lang === "ja" ? paragraphsJa : paragraphsEn
 

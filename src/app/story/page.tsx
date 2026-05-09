@@ -12,6 +12,7 @@ import {
   getStoryTitle,
 } from "@/domains/stories/stories.meta"
 import { type Lang, tl } from "@/lib/lang"
+import { useLang } from "@/lib/use-lang"
 
 /* ─── Roman numerals ─── */
 function toRoman(n: number): string {
@@ -30,32 +31,6 @@ function toRoman(n: number): string {
     }
   }
   return result
-}
-
-/* ─── Lang Toggle ─── */
-function LangToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => void }) {
-  return (
-    <div className="flex items-center border border-edu-border rounded-full overflow-hidden shrink-0 bg-edu-surface">
-      <button
-        type="button"
-        onClick={() => setLang("ja")}
-        className={`px-3 py-1 text-[11px] font-semibold tracking-wider uppercase transition-all duration-300 ${
-          lang === "ja" ? "bg-edu-accent/15 text-edu-accent" : "text-edu-muted hover:text-edu-text"
-        }`}
-      >
-        JP
-      </button>
-      <button
-        type="button"
-        onClick={() => setLang("en")}
-        className={`px-3 py-1 text-[11px] font-semibold tracking-wider uppercase transition-all duration-300 ${
-          lang === "en" ? "bg-edu-accent/15 text-edu-accent" : "text-edu-muted hover:text-edu-text"
-        }`}
-      >
-        EN
-      </button>
-    </div>
-  )
 }
 
 /* ─── Story Card ─── */
@@ -231,20 +206,7 @@ const chapterData = CHAPTERS.map((ch) => ({
 
 /* ─── Main Page ─── */
 export default function StoryArchivePage() {
-  const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("edu-lang") as Lang | null
-      if (saved === "en" || saved === "ja") {
-        return saved
-      }
-    }
-    return "ja"
-  })
-
-  const setLang = (l: Lang) => {
-    setLangState(l)
-    localStorage.setItem("edu-lang", l)
-  }
+  const { lang } = useLang()
 
   /* Refs for chapter scroll-jump */
   const chapterRefs = useMemo(() => {

@@ -4,7 +4,6 @@ import Link from "next/link"
 import { Globe2, Star, Users, Zap } from "lucide-react"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 
@@ -77,7 +76,7 @@ function PlanetCard({
 }
 
 export default function UniversePage() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -90,7 +89,6 @@ export default function UniversePage() {
             : "M104銀河全域 — E16連星系・Eros-7・惑星ビブリオ・惑星Solaris"
         }
         wikiHref={`/wiki/${encodeURIComponent("E16連星系")}`}
-        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <RevealSection>

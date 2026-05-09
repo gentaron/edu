@@ -4,14 +4,13 @@ import Link from "next/link"
 import { Radio, ArrowDown, Zap, Star } from "lucide-react"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 import { Badge } from "@/platform/ui/badge"
 import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { PLATFORMS } from "@/lib/liminal-data"
 
 export default function LiminalPage() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -27,7 +26,6 @@ export default function LiminalPage() {
         }
         subtitle="Liminal Forge — E528からAD2026へ、時空を超えた放送プロジェクト"
         wikiHref={`/wiki/${encodeURIComponent("リミナル・フォージ")}`}
-        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <RevealSection>

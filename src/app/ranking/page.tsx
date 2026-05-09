@@ -5,7 +5,6 @@ import Link from "next/link"
 import { TrendingUp, Globe2 } from "lucide-react"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 import { CIVILIZATION_LEADERS } from "@/domains/civilizations/civ.data"
 import { RANKING_DATA } from "./_components/ranking-data"
 import { RankingCard } from "./_components/ranking-card"
@@ -16,7 +15,7 @@ import { FooterNotes } from "./_components/footer-notes"
    ═══════════════════════════════════════════ */
 export default function RankingPage() {
   const maxWealth = RANKING_DATA[0]?.wealthNum ?? 0
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -30,7 +29,6 @@ export default function RankingPage() {
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-edu-text mb-0 leading-tight">
               {tl("世界長者番付", "World Wealth Rankings", lang)}
             </h1>
-            <LangToggle lang={lang} setLang={setLang} />
           </div>
           <div className="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-edu-accent to-transparent mb-6" />
           <p className="text-sm sm:text-base text-edu-muted max-w-2xl mx-auto leading-relaxed">

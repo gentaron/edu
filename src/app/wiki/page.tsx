@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import { type Lang, tl, tlTier } from "@/lib/lang"
+import { useLang } from "@/lib/use-lang"
 import { LangToggle } from "@/platform/lang-toggle"
 
 type Category = "キャラクター" | "用語" | "組織" | "地理" | "技術" | "歴史"
@@ -71,19 +72,7 @@ function WikiPage() {
   const searchParams = useSearchParams()
   const categoryParam = searchParams.get("category") as Category | null
   const [search, setSearch] = useState("")
-  const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("edu-lang") as Lang | null
-      if (saved === "en" || saved === "ja") {
-        return saved
-      }
-    }
-    return "ja"
-  })
-  const setLang = (l: Lang) => {
-    setLangState(l)
-    localStorage.setItem("edu-lang", l)
-  }
+  const { lang, setLang } = useLang()
 
   const isSearching = search.trim().length > 0
   const showCategory = !isSearching && categoryParam

@@ -21,7 +21,6 @@ const SECTIONS = [
   { id: "wiki-link", label: "Wiki", labelEn: "Wiki", href: "/wiki" },
   { id: "story-link", label: "Story", labelEn: "Story", href: "/story" },
   { id: "ranking-link", label: "番付", labelEn: "Ranking", href: "/ranking" },
-  { id: "music-link", label: "音楽", labelEn: "Music", href: "/music" },
 ]
 
 export function Navigation() {
@@ -48,7 +47,7 @@ export function Navigation() {
     <nav
       className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-edu-bg border-b border-edu-border"
+          ? "bg-edu-bg/80 backdrop-blur-xl border-b edu-nav-border"
           : "bg-transparent border-b border-transparent"
       }`}
     >

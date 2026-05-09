@@ -9,10 +9,9 @@ import { IRIS_TIMELINE, IRIS_ABILITIES, IRIS_RELATIONS } from "@/lib/iris-data"
 import { locColor } from "@/lib/timeline-data"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 
 export default function IrisPage() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -58,7 +57,6 @@ export default function IrisPage() {
           )
         }
         wikiHref={`/wiki/${encodeURIComponent("アイリス")}`}
-        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <RevealSection>

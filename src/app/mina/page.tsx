@@ -5,13 +5,12 @@ import React from "react"
 import { Users } from "lucide-react"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { MINA_TIMELINE } from "@/lib/mina-data"
 
 export default function MinaPage() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -38,7 +37,6 @@ export default function MinaPage() {
           </>
         }
         wikiHref={`/wiki/${encodeURIComponent("ミナ・エウレカ・エルンスト")}`}
-        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <RevealSection>

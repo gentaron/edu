@@ -4,7 +4,6 @@ import Link from "next/link"
 import { Crown, Swords, Shield, Users } from "lucide-react"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { ALL_CARDS } from "@/domains/cards/cards.data"
@@ -48,7 +47,7 @@ const IRIS_RANKING = [
 ]
 
 export default function CharactersPage() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   const srCards = ALL_CARDS.filter((c) => c.rarity === "SR").sort(
     (a, b) =>
@@ -148,7 +147,6 @@ export default function CharactersPage() {
             ? `Eternal Dominion Universe — Card data for all ${ALL_CARDS.length} characters`
             : `Eternal Dominion Universe — 全${ALL_CARDS.length}キャラクターのカードデータ`
         }
-        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <section className="pb-20">

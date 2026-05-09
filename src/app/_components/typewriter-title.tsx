@@ -1,55 +1,136 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useLang } from "@/lib/use-lang"
 
-const FULL_TEXT = "Eternal Dominion\nUniverse"
-const TOTAL_CHARS = FULL_TEXT.length
-const NEWLINE_POS = FULL_TEXT.indexOf("\n")
+interface QuoteEntry {
+  text: string
+  textEn: string
+  speaker: string
+  speakerEn: string
+  era?: string
+}
 
-const FONT_CYCLE = [
-  { family: "'Noto Sans JP', sans-serif", weight: "900", spacing: "0.05em" },
-  { family: "'Courier New', 'DejaVu Sans Mono', monospace", weight: "700", spacing: "0.14em" },
-  { family: "'Georgia', 'Noto Serif SC', serif", weight: "700", spacing: "0.1em" },
-  { family: "'Trebuchet MS', 'Noto Sans JP', sans-serif", weight: "800", spacing: "0.16em" },
-  { family: "'Palatino Linotype', 'Book Antiqua', serif", weight: "700", spacing: "0.06em" },
+const QUOTES: QuoteEntry[] = [
+  {
+    text: "「光と音を永遠にする」",
+    textEn: '"Where Light and Sound Become Eternal"',
+    speaker: "AURALIS",
+    speakerEn: "AURALIS",
+    era: "E290–",
+  },
+  {
+    text: "「私はもう、あなたと一緒に歩むことはできない」",
+    textEn: '"I can no longer walk with you"',
+    speaker: "Ninny Offenbach",
+    speakerEn: "Ninny Offenbach",
+    era: "E319",
+  },
+  {
+    text: "「Gigapolis — セリア黄金期の伝統的な名称」",
+    textEn: '"Gigapolis — the traditional name from the Seria Golden Age"',
+    speaker: "Mina Eureka Ernst",
+    speakerEn: "Mina Eureka Ernst",
+    era: "E499–",
+  },
+  {
+    text: "「E400のエヴァトロン弾圧で解体を余儀なくされた」",
+    textEn: '"Dismantled by the Evatron suppression in E400"',
+    speaker: "AURALIS 第一世代",
+    speakerEn: "AURALIS 1st Generation",
+    era: "E400",
+  },
+  {
+    text: "「トリニティ・アライアンスは、この銀河を変える」",
+    textEn: '"The Trinity Alliance will change this galaxy"',
+    speaker: "Iris",
+    speakerEn: "Iris",
+    era: "E510–",
+  },
+  {
+    text: "「Layla Virell Nova — ピンクの電撃、嵐を加速させる」",
+    textEn: '"Layla Virell Nova — Pink Voltage, accelerating the storm"',
+    speaker: "AURALIS Archives",
+    speakerEn: "AURALIS Archives",
+    era: "E325–",
+  },
+  {
+    text: "「E528、Liminal Forgeが地球への放送を開始」",
+    textEn: '"E528 — Liminal Forge begins broadcasting to Earth"',
+    speaker: "Liminal Forge",
+    speakerEn: "Liminal Forge",
+    era: "E528",
+  },
+  {
+    text: "「Lillie Ardent — 真夜中の炎、静かに燃え尽きることはない」",
+    textEn: '"Lillie Ardent — The Midnight Flame never quietly burns out"',
+    speaker: "AURALIS Archives",
+    speakerEn: "AURALIS Archives",
+    era: "E522–",
+  },
+  {
+    text: "「Kate Patton — 大地の豊かさと安定、不動の意志」",
+    textEn: '"Kate Patton — Earth Resonance, unwavering resolve"',
+    speaker: "AURALIS Archives",
+    speakerEn: "AURALIS Archives",
+    era: "E522–",
+  },
+  {
+    text: "「Timur Shahの第10次元Horasm理論がPersephoneを生んだ」",
+    textEn: '"Timur Shah\'s 10th-dimensional Horasm theory gave birth to Persephone"',
+    speaker: "EDU Archives",
+    speakerEn: "EDU Archives",
+    era: "E0",
+  },
 ]
 
-const TYPE_SPEED = 75
-const DELETE_SPEED = 40
-const PAUSE_TYPED = 2000
-const PAUSE_DELETED = 500
-const FONT_SWITCH_MS = 400
+const TYPE_SPEED = 55
+const PAUSE_TYPED = 3200
+const DELETE_SPEED = 30
+const PAUSE_DELETED = 600
+const CROSSFADE_MS = 500
 
-type Phase = "typing" | "paused-typed" | "deleting" | "paused-deleted" | "font-switch"
+type Phase = "typing" | "paused-typed" | "deleting" | "paused-deleted"
 
 export function TypewriterTitle() {
+  const { lang } = useLang()
+  const [quoteIdx, setQuoteIdx] = useState(0)
   const [charIndex, setCharIndex] = useState(0)
-  const [fontIdx, setFontIdx] = useState(0)
-  const [fontFading, setFontFading] = useState(false)
+  const [fadingOut, setFadingOut] = useState(false)
 
   const phaseRef = useRef<Phase>("typing")
   const charRef = useRef(0)
-  const fontRef = useRef(0)
+  const quoteRef = useRef(0)
   const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const mountedRef = useRef(true)
+
+  const currentQuote = QUOTES[quoteIdx] ?? QUOTES[0]!
+  const displayText = lang === "en" ? currentQuote.textEn : currentQuote.text
+  const speaker = lang === "en" ? currentQuote.speakerEn : currentQuote.speaker
+  const currentText = displayText.slice(0, charIndex)
+
+  useEffect(() => {
+    charRef.current = 0
+    setCharIndex(0)
+    phaseRef.current = "typing"
+  }, [lang, quoteIdx])
 
   useEffect(() => {
     mountedRef.current = true
 
     function scheduleNext(ms: number, action: () => void) {
       timerRef.current = setTimeout(() => {
-        if (mountedRef.current) {
-          action()
-        }
+        if (mountedRef.current) action()
       }, ms)
     }
 
     function tick() {
       const phase = phaseRef.current
       const char = charRef.current
+      const total = displayText.length
 
       if (phase === "typing") {
-        if (char < TOTAL_CHARS) {
+        if (char < total) {
           charRef.current = char + 1
           setCharIndex(char + 1)
           scheduleNext(TYPE_SPEED, tick)
@@ -66,69 +147,58 @@ export function TypewriterTitle() {
           setCharIndex(char - 1)
           scheduleNext(DELETE_SPEED, tick)
         } else {
-          phaseRef.current = "font-switch"
-          setFontFading(true)
-          scheduleNext(FONT_SWITCH_MS, () => {
-            const nextFont = (fontRef.current + 1) % FONT_CYCLE.length
-            fontRef.current = nextFont
-            setFontIdx(nextFont)
-            setFontFading(false)
+          phaseRef.current = "paused-deleted"
+          setFadingOut(true)
+          scheduleNext(CROSSFADE_MS, () => {
+            const next = (quoteRef.current + 1) % QUOTES.length
+            quoteRef.current = next
+            setQuoteIdx(next)
+            setFadingOut(false)
             phaseRef.current = "typing"
+            charRef.current = 0
+            setCharIndex(0)
             scheduleNext(PAUSE_DELETED, tick)
           })
         }
       }
     }
 
-    scheduleNext(300, tick)
+    scheduleNext(400, tick)
 
     return () => {
       mountedRef.current = false
-      if (timerRef.current) {
-        clearTimeout(timerRef.current)
-      }
+      if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [])
-
-  const currentText = FULL_TEXT.slice(0, charIndex)
-  const [line1, line2] = currentText.split("\n", 2)
-  const cursorOnLine2 = charIndex > NEWLINE_POS
-
-  const font = FONT_CYCLE[fontIdx] ?? FONT_CYCLE[0]!
+  }, [displayText])
 
   return (
-    <h1
-      className="text-4xl sm:text-6xl lg:text-7xl font-black text-edu-text mb-4 leading-tight min-h-[5.5rem] sm:min-h-[7rem]"
+    <div
+      className="mb-6"
       style={{
-        fontFamily: font.family,
-        fontWeight: font.weight,
-        letterSpacing: font.spacing,
-        opacity: fontFading ? 0 : 1,
-        transition: "opacity 0.3s ease",
-        textShadow: "0 0 40px rgba(129, 140, 248, 0.15), 0 0 80px rgba(200, 164, 78, 0.08)",
+        opacity: fadingOut ? 0 : 1,
+        transition: "opacity 0.4s ease",
       }}
     >
-      {line1 ?? ""}
-      {!cursorOnLine2 && (
+      <p
+        className="text-2xl sm:text-4xl lg:text-5xl font-bold text-edu-text leading-snug min-h-[3rem] sm:min-h-[5rem]"
+        style={{
+          textShadow: "0 0 40px rgba(129, 140, 248, 0.15), 0 0 80px rgba(200, 164, 78, 0.08)",
+        }}
+      >
+        {currentText}
         <span
           className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-edu-accent ml-1 align-middle animate-pulse"
           style={{ boxShadow: "0 0 8px rgba(200, 164, 78, 0.5)" }}
         />
-      )}
-      {line1 !== undefined && (
-        <>
-          <br />
-          <span className={cursorOnLine2 ? "" : "opacity-0"}>
-            {line2 ?? ""}
-            {cursorOnLine2 && (
-              <span
-                className="inline-block w-[3px] sm:w-[4px] h-[0.85em] bg-edu-accent ml-1 align-middle animate-pulse"
-                style={{ boxShadow: "0 0 8px rgba(200, 164, 78, 0.5)" }}
-              />
-            )}
+      </p>
+      <div className="mt-4 flex items-center justify-center gap-3">
+        {currentQuote.era && (
+          <span className="text-xs text-edu-muted/60 tracking-widest font-mono">
+            {currentQuote.era}
           </span>
-        </>
-      )}
-    </h1>
+        )}
+        <span className="text-xs text-edu-accent tracking-wider font-medium">— {speaker}</span>
+      </div>
+    </div>
   )
 }

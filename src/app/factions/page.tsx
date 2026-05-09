@@ -7,7 +7,6 @@ import { PageHeader } from "@/platform/page-header"
 import { FACTION_TREES } from "@/lib/faction-data"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 
 function FactionNode({
   node,
@@ -60,7 +59,7 @@ function FactionNode({
 }
 
 export default function FactionsPage() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -73,7 +72,6 @@ export default function FactionsPage() {
           lang
         )}
         wikiHref={`/wiki/${encodeURIComponent("テクロサス")}`}
-        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <RevealSection>

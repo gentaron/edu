@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React from "react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import Link from "next/link"
@@ -11,25 +11,14 @@ import WikiDescription from "./_components/wiki-description"
 import { RevealSection } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { type Lang, tl, tlCategory, tlTier } from "@/lib/lang"
+import { useLang } from "@/lib/use-lang"
 import { LangToggle } from "@/platform/lang-toggle"
 
 export default function WikiEntryPage() {
   const params = useParams<{ id: string }>()
   const decodedId = decodeURIComponent(params.id || "")
   const entry = ALL_ENTRIES.find((e) => e.id === decodedId)
-  const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("edu-lang") as Lang | null
-      if (saved === "en" || saved === "ja") {
-        return saved
-      }
-    }
-    return "ja"
-  })
-  const setLang = (l: Lang) => {
-    setLangState(l)
-    localStorage.setItem("edu-lang", l)
-  }
+  const { lang, setLang } = useLang()
 
   if (!entry) {
     return (

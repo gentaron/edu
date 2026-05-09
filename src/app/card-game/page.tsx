@@ -17,7 +17,6 @@ import {
 } from "lucide-react"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 import { ALL_CARDS } from "@/domains/cards/cards.data"
 import type { GameCard } from "@/types"
 import { useDeckStore } from "@/lib/stores"
@@ -203,7 +202,7 @@ function DeckSlot({
 
 export default function DeckBuildPage() {
   const router = useRouter()
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
   const { deck, deckName, addCard, removeCard, moveCard, clearDeck, setDeckName } = useDeckStore(
     useShallow((s) => ({
       deck: s.deck,
@@ -244,7 +243,6 @@ export default function DeckBuildPage() {
           <h1 className="text-xs sm:text-sm font-bold text-edu-text flex-1">
             {tl("EDU CARD GAME — デッキ構築", "EDU CARD GAME — Deck Builder", lang)}
           </h1>
-          <LangToggle lang={lang} setLang={setLang} />
         </div>
       </div>
 

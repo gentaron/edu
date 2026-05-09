@@ -10,13 +10,12 @@ import {
 } from "@/platform/ui/accordion"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { TIMELINE_DATA, locColor } from "@/lib/timeline-data"
 
 export default function TimelinePage() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -28,7 +27,6 @@ export default function TimelinePage() {
             ? "Human history of the E16 binary system — From AD 3500 to the present E528"
             : "E16連星系の人類史 — AD 3500からE528現代まで"
         }
-        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <RevealSection>

@@ -308,6 +308,201 @@
   background: var(--color-edu-border-bright);
 }
 
+/* ─── Polished UI Utility Classes ─── */
+
+/* Mesh gradient background for hero */
+.edu-mesh-bg {
+  position: relative;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 30%, rgba(129, 140, 248, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 80% 20%, rgba(200, 164, 78, 0.1) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 70% at 60% 80%, rgba(34, 211, 238, 0.06) 0%, transparent 50%),
+    var(--color-edu-bg);
+}
+.edu-mesh-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 30% 60%, rgba(200, 164, 78, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 70% 40%, rgba(129, 140, 248, 0.04) 0%, transparent 35%);
+  animation: mesh-drift 20s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes mesh-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-15px, 10px) scale(1.02);
+  }
+  100% {
+    transform: translate(10px, -8px) scale(0.98);
+  }
+}
+
+/* Floating particles */
+.edu-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.edu-particles .dot {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: var(--color-edu-accent);
+  opacity: 0;
+  animation: particle-float linear infinite;
+}
+.edu-particles .dot:nth-child(1) {
+  left: 10%;
+  animation-duration: 18s;
+  animation-delay: 0s;
+  background: var(--color-edu-accent2);
+}
+.edu-particles .dot:nth-child(2) {
+  left: 25%;
+  animation-duration: 22s;
+  animation-delay: 2s;
+}
+.edu-particles .dot:nth-child(3) {
+  left: 40%;
+  animation-duration: 16s;
+  animation-delay: 4s;
+  background: var(--color-edu-cyan);
+}
+.edu-particles .dot:nth-child(4) {
+  left: 55%;
+  animation-duration: 20s;
+  animation-delay: 1s;
+}
+.edu-particles .dot:nth-child(5) {
+  left: 70%;
+  animation-duration: 24s;
+  animation-delay: 3s;
+  background: var(--color-edu-accent2);
+}
+.edu-particles .dot:nth-child(6) {
+  left: 85%;
+  animation-duration: 19s;
+  animation-delay: 5s;
+}
+.edu-particles .dot:nth-child(7) {
+  left: 15%;
+  animation-duration: 21s;
+  animation-delay: 6s;
+  background: var(--color-edu-cyan);
+}
+.edu-particles .dot:nth-child(8) {
+  left: 50%;
+  animation-duration: 17s;
+  animation-delay: 7s;
+}
+.edu-particles .dot:nth-child(9) {
+  left: 65%;
+  animation-duration: 23s;
+  animation-delay: 8s;
+  background: var(--color-edu-accent);
+}
+.edu-particles .dot:nth-child(10) {
+  left: 35%;
+  animation-duration: 15s;
+  animation-delay: 9s;
+  background: var(--color-edu-accent2);
+}
+.edu-particles .dot:nth-child(11) {
+  left: 78%;
+  animation-duration: 20s;
+  animation-delay: 3.5s;
+}
+.edu-particles .dot:nth-child(12) {
+  left: 92%;
+  animation-duration: 25s;
+  animation-delay: 6.5s;
+  background: var(--color-edu-cyan);
+}
+@keyframes particle-float {
+  0% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-10vh) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Glow effect */
+.edu-glow {
+  transition: box-shadow 0.3s ease;
+}
+.edu-glow:hover {
+  box-shadow:
+    0 0 15px rgba(200, 164, 78, 0.15),
+    0 0 40px rgba(200, 164, 78, 0.06);
+}
+
+/* Glassmorphism card */
+.edu-glass {
+  background: rgba(17, 24, 50, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(30, 42, 82, 0.6);
+  border-radius: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.edu-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(200, 164, 78, 0.2),
+    transparent 40%,
+    transparent 60%,
+    rgba(129, 140, 248, 0.15)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Grid line pattern background */
+.edu-grid-bg {
+  background-image:
+    linear-gradient(rgba(30, 42, 82, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 42, 82, 0.3) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: center center;
+}
+
+/* Gradient border for nav on scroll */
+.edu-nav-border {
+  border-image: linear-gradient(
+      90deg,
+      transparent,
+      rgba(200, 164, 78, 0.3),
+      rgba(129, 140, 248, 0.3),
+      transparent
+    )
+    1;
+}
+
 /* em:lang(ja) bold instead of italic */
 em:lang(ja) {
   font-style: normal;

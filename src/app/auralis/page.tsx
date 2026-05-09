@@ -5,12 +5,11 @@ import Image from "next/image"
 import { Sparkles } from "lucide-react"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
-import { LangToggle } from "@/platform/lang-toggle"
 import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 
 export default function AuralisPage() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -30,7 +29,6 @@ export default function AuralisPage() {
             : "「光と音を永遠にする — Where Light and Sound Become Eternal」"
         }
         wikiHref={`/wiki/${encodeURIComponent("AURALIS")}`}
-        extra={<LangToggle lang={lang} setLang={setLang} />}
       />
 
       <RevealSection>
