@@ -401,26 +401,28 @@ export function getStoriesByChapter(chapterId: number): StoryMeta[] {
 }
 
 /** Shared character → portrait image mapping (used by story archive + reader) */
+const IMG = (n: string) => `https://raw.githubusercontent.com/gentaron/image/main/${n}`
+
 export const ENTRY_IMAGE_MAP: Record<string, string> = {
-  アイリス: "/edu-iris.png",
-  Diana: "/edu-diana.png",
-  "Kate Claudia": "/edu-kate-claudia.png",
-  "Lily Steiner": "/edu-lillie-steiner.png",
-  "レイラ・ヴィレル・ノヴァ": "/edu-fiona.png",
-  "カステリア・グレンヴェルト": "/edu-diana.png",
-  "シトラ・セレス": "/edu-iris.png",
-  ミュー: "/edu-diana.png",
-  Jen: "/edu-iris.png",
-  "Tina/Gue": "/edu-diana.png",
-  "アルファ・ケイン": "/edu-hero.png",
-  "セリア・ドミニクス": "/edu-celia.png",
-  弦太郎: "/edu-auralis.png",
-  Slime_Woman: "/edu-diana.png",
-  ジュン: "/edu-hero.png",
-  "Kate Patton": "/edu-kate-claudia.png",
-  "Lillie Ardent": "/edu-lillie-steiner.png",
-  "ミナ・エウレカ・エルンスト": "/edu-diana.png",
-  "Ninny Offenbach": "/edu-fiona.png",
+  アイリス: IMG("Iris.png"),
+  Diana: IMG("Diana.png"),
+  "Kate Claudia": IMG("KateClaudia.png"),
+  "Lily Steiner": IMG("LillieSteiner.png"),
+  "レイラ・ヴィレル・ノヴァ": IMG("LaylaVirellNova.png"),
+  "カステリア・グレンヴェルト": IMG("CasteriaGrenvelt.png"),
+  "シトラ・セレス": IMG("SitraCeles.png"),
+  ミュー: IMG("Myu.png"),
+  Jen: IMG("Jen.png"),
+  "Tina/Gue": IMG("TinaGue.png"),
+  "アルファ・ケイン": IMG("AlphaKane.png"),
+  "セリア・ドミニクス": IMG("CeliaDminix.png"),
+  弦太郎: IMG("Gentaro.png"),
+  Slime_Woman: IMG("SlimeWoman.png"),
+  ジュン: IMG("Jun.png"),
+  "Kate Patton": IMG("KatePatton.png"),
+  "Lillie Ardent": IMG("LillieArdent.png"),
+  "ミナ・エウレカ・エルンスト": IMG("MinaEurekaErnst.png"),
+  "Ninny Offenbach": IMG("NinnyOffenbach.png"),
 }
 
 export function getAdjacentStories(story: StoryMeta): { prev?: StoryMeta; next?: StoryMeta } {

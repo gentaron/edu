@@ -172,7 +172,7 @@ export const WIKI_CHARACTERS = [
     era: "E325〜E400（冷凍）→ E522〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 1",
-    image: "/LaylaVirellNova.png",
+    image: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirellNova.png",
     sourceLinks: [
       {
         url: "https://raw.githubusercontent.com/gentaron/edutext/main/laylastats.txt",

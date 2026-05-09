@@ -71,7 +71,7 @@ function WikiPage() {
   const searchParams = useSearchParams()
   const categoryParam = searchParams.get("category") as Category | null
   const [search, setSearch] = useState("")
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   const isSearching = search.trim().length > 0
   const showCategory = !isSearching && categoryParam

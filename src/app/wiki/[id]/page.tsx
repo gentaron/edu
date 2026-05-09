@@ -17,7 +17,7 @@ export default function WikiEntryPage() {
   const params = useParams<{ id: string }>()
   const decodedId = decodeURIComponent(params.id || "")
   const entry = ALL_ENTRIES.find((e) => e.id === decodedId)
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   if (!entry) {
     return (

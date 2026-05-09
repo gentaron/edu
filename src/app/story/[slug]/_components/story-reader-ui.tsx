@@ -53,7 +53,7 @@ export function StoryReaderUI({
   next,
   relatedEntries,
 }: StoryReaderUIProps) {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
 
   const paragraphs = lang === "ja" ? paragraphsJa : paragraphsEn
 
