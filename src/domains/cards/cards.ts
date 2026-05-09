@@ -75,7 +75,7 @@ export const ALL_CARDS: GameCard[] = [
   {
     id: "char-layla" as CardId,
     name: "レイラ・ヴィレル・ノヴァ",
-    imageUrl: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirellNova.png",
+    imageUrl: "/LaylaVirellNova.png",
     flavorText: "「Pink Voltageの最終演舞。プラズマが全てを焼き尽くす。」",
     rarity: "SR",
     affiliation: "AURALIS第二世代",

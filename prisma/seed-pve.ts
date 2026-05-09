@@ -33,7 +33,7 @@ const pveCards = [
     defense: 0,
     cost: 2,
     effect: "敵単体に4ダメージ。スライム危機で戦果を上げた重火器。",
-    imageUrl: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirellNova.png",
+    imageUrl: "/LaylaVirellNova.png",
     flavorText: "「スライムの巣は焼却済み。次の任務は？」",
     loreSource: "IRIS_3",
   },

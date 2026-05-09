@@ -408,7 +408,7 @@ export const ENTRY_IMAGE_MAP: Record<string, string> = {
   Diana: IMG("Diana.png"),
   "Kate Claudia": IMG("KateClaudia.png"),
   "Lily Steiner": IMG("LillieSteiner.png"),
-  "レイラ・ヴィレル・ノヴァ": IMG("LaylaVirellNova.png"),
+  "レイラ・ヴィレル・ノヴァ": "/LaylaVirellNova.png",
   "カステリア・グレンヴェルト": IMG("CasteriaGrenvelt.png"),
   "シトラ・セレス": IMG("SitraCeles.png"),
   ミュー: IMG("Myu.png"),

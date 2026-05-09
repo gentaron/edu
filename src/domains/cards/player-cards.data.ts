@@ -95,7 +95,7 @@ export const ALL_CARDS = [
     id: "char-layla" as CardId,
     name: "レイラ・ヴィレル・ノヴァ",
     nameEn: "Layla Virel Nova",
-    imageUrl: "https://raw.githubusercontent.com/gentaron/image/main/LaylaVirellNova.png",
+    imageUrl: "/LaylaVirellNova.png",
     flavorText: "「Pink Voltageの最終演舞。プラズマが全てを焼き尽くす。」",
     flavorTextEn: '"Pink Voltage\'s final dance. Plasma incinerates everything."',
     rarity: "SR",
