@@ -52,7 +52,7 @@ const BORDER_COLORS: Record<Category, string> = {
 
 function WikiLoading() {
   return (
-    <main className="min-h-screen bg-edu-bg pt-16 pb-20">
+    <main className="min-h-screen bg-edu-bg pt-14 sm:pt-16 pb-16 sm:pb-20">
       <div className="max-w-3xl mx-auto px-4 pt-8">
         <div className="animate-pulse">
           <div className="h-7 w-48 bg-edu-surface rounded mb-2" />
@@ -146,7 +146,7 @@ function WikiPage() {
     : null
 
   return (
-    <main className="min-h-screen bg-edu-bg pt-16 pb-20">
+    <main className="min-h-screen bg-edu-bg pt-14 sm:pt-16 pb-16 sm:pb-20">
       {/* Header + Search */}
       <div className="max-w-3xl mx-auto px-4 pt-8 pb-6">
         <div className="flex items-center justify-between gap-4 mb-1">

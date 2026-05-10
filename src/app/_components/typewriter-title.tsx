@@ -180,7 +180,7 @@ export function TypewriterTitle() {
       }}
     >
       <p
-        className="text-2xl sm:text-4xl lg:text-5xl font-bold text-edu-text leading-snug min-h-[3rem] sm:min-h-[5rem]"
+        className="text-xl sm:text-4xl lg:text-5xl font-bold text-edu-text leading-snug min-h-[2.5rem] sm:min-h-[5rem]"
         style={{
           textShadow: "0 0 40px rgba(129, 140, 248, 0.15), 0 0 80px rgba(200, 164, 78, 0.08)",
         }}
@@ -191,13 +191,15 @@ export function TypewriterTitle() {
           style={{ boxShadow: "0 0 8px rgba(200, 164, 78, 0.5)" }}
         />
       </p>
-      <div className="mt-4 flex items-center justify-center gap-3">
+      <div className="mt-3 sm:mt-4 flex items-center justify-center gap-2 sm:gap-3">
         {currentQuote.era && (
-          <span className="text-xs text-edu-muted/60 tracking-widest font-mono">
+          <span className="text-[10px] sm:text-xs text-edu-muted/60 tracking-widest font-mono">
             {currentQuote.era}
           </span>
         )}
-        <span className="text-xs text-edu-accent tracking-wider font-medium">— {speaker}</span>
+        <span className="text-[11px] sm:text-xs text-edu-accent tracking-wider font-medium">
+          — {speaker}
+        </span>
       </div>
     </div>
   )

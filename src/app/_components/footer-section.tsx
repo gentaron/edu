@@ -5,7 +5,7 @@ import { SECTION_PAGES } from "./home-data"
 
 export function FooterSection() {
   return (
-    <footer className="py-12 px-4">
+    <footer className="py-8 sm:py-12 px-4">
       <hr className="edu-divider mb-8" />
       <div className="max-w-4xl mx-auto text-center space-y-4">
         <p className="text-sm font-bold text-edu-text">
@@ -38,21 +38,100 @@ export function FooterSection() {
         </div>
 
         <div className="pt-6 mt-6 border-t border-edu-border">
-          <p className="text-[10px] tracking-[0.2em] uppercase text-edu-muted/60 mb-3">Universe Sites</p>
+          <p className="text-[10px] tracking-[0.2em] uppercase text-edu-muted/60 mb-3">
+            Universe Sites
+          </p>
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-[11px]">
-            <a href="https://auralis-eternal-light.lovable.app/" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">AURALIS <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
-            <a href="https://e16super.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">E16 Portal <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
-            <a href="https://eurekaspace.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">Eureka Space <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
-            <a href="https://laylaland.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">Layla Land <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
-            <a href="https://irisworlds.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">Iris Worlds <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
-            <a href="https://game-of-mina.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">Game of Mina <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
-            <a href="https://orbital-eternity.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">Orbital Eternity <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
+            <a
+              href="https://auralis-eternal-light.lovable.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              AURALIS <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
+            <a
+              href="https://e16super.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              E16 Portal <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
+            <a
+              href="https://eurekaspace.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              Eureka Space <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
+            <a
+              href="https://laylaland.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              Layla Land <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
+            <a
+              href="https://irisworlds.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              Iris Worlds <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
+            <a
+              href="https://game-of-mina.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              Game of Mina <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
+            <a
+              href="https://orbital-eternity.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              Orbital Eternity <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
           </div>
           <div className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-1.5 text-[11px]">
-            <a href="https://katepatton.lovable.app" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">Kate Patton <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
-            <a href="https://lillieardentsuper.lovable.app" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">Lillie Ardent <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
-            <a href="https://ninnyoffenbach.lovable.app" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">Ninny Offenbach <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
-            <a href="https://kate1st.netlify.app/" target="_blank" rel="noopener noreferrer" className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1">Kate Claudia <ExternalLink className="w-2.5 h-2.5 opacity-40" /></a>
+            <a
+              href="https://katepatton.lovable.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              Kate Patton <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
+            <a
+              href="https://lillieardentsuper.lovable.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              Lillie Ardent <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
+            <a
+              href="https://ninnyoffenbach.lovable.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              Ninny Offenbach <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
+            <a
+              href="https://kate1st.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-edu-muted hover:text-edu-accent transition-colors inline-flex items-center gap-1"
+            >
+              Kate Claudia <ExternalLink className="w-2.5 h-2.5 opacity-40" />
+            </a>
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 
 export function ConsistencySection() {
   return (
-    <section id="consistency" className="py-20 px-4">
+    <section id="consistency" className="py-12 sm:py-20 px-4">
       <div className="max-w-5xl mx-auto">
         <RevealSection>
           <SectionHeader

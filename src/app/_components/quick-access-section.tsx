@@ -11,7 +11,7 @@ export function QuickAccessSection() {
   const { lang } = useLang()
 
   return (
-    <section className="py-16 px-4">
+    <section className="py-10 sm:py-16 px-4">
       <div className="max-w-5xl mx-auto">
         <RevealGrid
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"

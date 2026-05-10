@@ -646,12 +646,6 @@ export const TIMELINE_DATA: {
         "Stories of diverse individuals in the EDU world are recorded, including Castelia Glenvelt, Citra Cerese, Mew, Jun, and others. In particular, the story of Jun and Slime Woman addresses the important theme in EDU cosmology of contact between higher-dimensional beings and humans",
         "E16星系"
       ),
-      /* ── E529以降: 1日=1年 リアルタイム進行 ── */
-      e(
-        "E529: ミナがAltera Field深層監視中に旧ZAMLT期オムニバス・エンジンの残骸から自己進化型AI「黒鉄（クロガネ）」の覚醒を検知。AURALIS第2世代が対応チームを編成",
-        "E529: Mina detects awakening of self-evolving AI \"Kurogane\" from ZAMLT-era Omnibus Engine wreckage during deep Altera Field monitoring. AURALIS 2nd Gen forms response team",
-        "西大陸"
-      ),
     ],
   },
 ]

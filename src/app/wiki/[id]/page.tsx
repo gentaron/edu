@@ -1,10 +1,10 @@
 "use client"
 
-import React from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, User, Scroll, BookOpen, Crown } from "lucide-react"
+import { ArrowLeft, User, Scroll, BookOpen, Crown, Sparkles } from "lucide-react"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import { getStoriesForEntry } from "@/domains/stories/stories.meta"
 import WikiDescription from "./_components/wiki-description"
@@ -18,6 +18,34 @@ export default function WikiEntryPage() {
   const decodedId = decodeURIComponent(params.id || "")
   const entry = ALL_ENTRIES.find((e) => e.id === decodedId)
   const { lang } = useLang()
+
+  const [aiRelatedIds, setAiRelatedIds] = useState<string[] | null>(null)
+  const [aiLoading, setAiLoading] = useState(false)
+
+  // Fetch AI-related entries on mount
+  const fetchAiRelated = useCallback(async () => {
+    if (!entry) return
+    setAiLoading(true)
+    try {
+      const res = await fetch("/api/wiki/related", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ entryId: entry.id, lang }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        setAiRelatedIds(data.related || [])
+      }
+    } catch {
+      // Silently fail — fallback to category filter
+    } finally {
+      setAiLoading(false)
+    }
+  }, [entry?.id, lang])
+
+  useEffect(() => {
+    fetchAiRelated()
+  }, [fetchAiRelated])
 
   if (!entry) {
     return (
@@ -41,9 +69,15 @@ export default function WikiEntryPage() {
   const prevEntry = currentIndex > 0 ? ALL_ENTRIES[currentIndex - 1] : null
   const nextEntry = currentIndex < ALL_ENTRIES.length - 1 ? ALL_ENTRIES[currentIndex + 1] : null
 
-  const relatedEntries = ALL_ENTRIES.filter(
-    (e) => e.category === entry.category && e.id !== entry.id
-  ).slice(0, 4)
+  // Use AI results if available, otherwise fall back to category-based filter
+  const relatedEntries =
+    aiRelatedIds && aiRelatedIds.length > 0
+      ? (aiRelatedIds
+          .map((id) => ALL_ENTRIES.find((e) => e.id === id))
+          .filter(Boolean) as typeof ALL_ENTRIES)
+      : aiLoading
+        ? []
+        : ALL_ENTRIES.filter((e) => e.category === entry.category && e.id !== entry.id).slice(0, 6)
 
   return (
     <div className="min-h-screen bg-edu-bg">
@@ -59,8 +93,8 @@ export default function WikiEntryPage() {
         <div className="max-w-3xl mx-auto">
           {/* Portrait */}
           {entry.image && (
-            <RevealSection className="flex justify-center mb-10">
-              <div className="wiki-portrait w-48 h-48 sm:w-64 sm:h-64 border border-edu-border">
+            <RevealSection className="flex justify-center mb-8 sm:mb-10">
+              <div className="wiki-portrait w-40 h-40 sm:w-64 sm:h-64 border border-edu-border">
                 <Image
                   src={entry.image}
                   alt={entry.name}
@@ -75,8 +109,8 @@ export default function WikiEntryPage() {
           )}
 
           {/* Category badges */}
-          <RevealSection className="text-center mb-10" delay={100}>
-            <div className="flex justify-center gap-2 mb-5">
+          <RevealSection className="text-center mb-8 sm:mb-10" delay={100}>
+            <div className="flex justify-center gap-2 mb-5 flex-wrap">
               <span className="wiki-badge">
                 {tlCategory(entry.subCategory || entry.category, lang)}
               </span>
@@ -218,14 +252,29 @@ export default function WikiEntryPage() {
             )
           })()}
 
-          {/* Related entries */}
-          {relatedEntries.length > 0 && (
-            <RevealSection delay={400}>
-              <div className="mb-8">
-                <h2 className="text-[11px] text-edu-muted mb-4 uppercase tracking-widest">
-                  {tl("関連エントリ", "Related Entries", lang)}
-                </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {/* Related entries — AI-powered */}
+          <RevealSection delay={400}>
+            <div className="mb-8">
+              <h2 className="text-[11px] text-edu-muted mb-4 uppercase tracking-widest flex items-center gap-2">
+                <Sparkles className="w-3 h-3 text-edu-accent/60" />
+                {tl("関連エントリ", "Related Entries", lang)}
+                {aiRelatedIds && !aiLoading && (
+                  <span className="text-[9px] text-edu-accent/40 normal-case tracking-normal">
+                    AI
+                  </span>
+                )}
+              </h2>
+              {aiLoading ? (
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
+                  {Array.from({ length: 6 }).map((_, i) => (
+                    <div key={i} className="edu-card p-3 text-center animate-pulse">
+                      <div className="w-10 h-10 rounded-full mx-auto mb-2 bg-edu-surface" />
+                      <div className="h-3 w-16 mx-auto rounded bg-edu-surface" />
+                    </div>
+                  ))}
+                </div>
+              ) : relatedEntries.length > 0 ? (
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-3">
                   {relatedEntries.map((rel) => (
                     <Link
                       key={rel.id}
@@ -247,15 +296,15 @@ export default function WikiEntryPage() {
                           <User className="w-3.5 h-3.5 text-edu-muted" />
                         )}
                       </div>
-                      <p className="text-xs text-edu-text group-hover:text-edu-accent transition-colors truncate">
+                      <p className="text-[11px] text-edu-text group-hover:text-edu-accent transition-colors truncate">
                         {lang === "en" && rel.nameEn ? rel.nameEn : rel.name}
                       </p>
                     </Link>
                   ))}
                 </div>
-              </div>
-            </RevealSection>
-          )}
+              ) : null}
+            </div>
+          </RevealSection>
 
           {/* Prev/Next navigation */}
           <div className="flex justify-between py-8 border-t border-edu-border">

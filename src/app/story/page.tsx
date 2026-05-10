@@ -223,15 +223,15 @@ export default function StoryArchivePage() {
 
   return (
     <div className="min-h-screen bg-edu-bg">
-      <main className="pt-24 pb-20 px-6">
+      <main className="pt-16 sm:pt-24 pb-16 sm:pb-20 px-4 sm:px-6">
         <div className="max-w-5xl mx-auto">
           {/* Hero */}
-          <div className="text-center mb-16">
-            <div className="w-20 h-px mx-auto bg-gradient-to-r from-transparent via-edu-border to-transparent mb-10" />
+          <div className="text-center mb-10 sm:mb-16">
+            <div className="w-16 sm:w-20 h-px mx-auto bg-gradient-to-r from-transparent via-edu-border to-transparent mb-6 sm:mb-10" />
             <div className="flex items-center justify-center gap-3 mb-5">
               <Feather className="w-6 h-6 text-edu-muted" />
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extralight text-edu-text mb-5 tracking-wider">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extralight text-edu-text mb-4 sm:mb-5 tracking-wider">
               Story Archive
             </h1>
             <p className="text-sm text-edu-muted max-w-lg mx-auto leading-relaxed font-light">
@@ -240,7 +240,7 @@ export default function StoryArchivePage() {
             </p>
 
             {/* Stats */}
-            <div className="flex justify-center gap-8 mt-8">
+            <div className="flex justify-center gap-6 sm:gap-8 mt-6 sm:mt-8">
               <div className="flex flex-col items-center">
                 <span className="text-xl font-extralight text-edu-text tabular-nums">
                   {CHAPTERS.length}
@@ -269,11 +269,11 @@ export default function StoryArchivePage() {
               </div>
             </div>
 
-            <div className="w-20 h-px mx-auto bg-gradient-to-r from-transparent via-edu-border to-transparent mt-10" />
+            <div className="w-16 sm:w-20 h-px mx-auto bg-gradient-to-r from-transparent via-edu-border to-transparent mt-6 sm:mt-10" />
           </div>
 
           {/* ─── Chapter Quick Navigation ─── */}
-          <div className="mb-16">
+          <div className="mb-10 sm:mb-16">
             <div className="flex items-center gap-4 mb-6">
               <div className="h-px flex-1 bg-edu-border" />
               <span className="text-[9px] text-edu-muted uppercase tracking-[0.25em] font-medium">

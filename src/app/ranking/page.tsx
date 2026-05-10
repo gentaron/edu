@@ -20,13 +20,13 @@ export default function RankingPage() {
   return (
     <div className="min-h-screen bg-edu-bg">
       {/* Hero Header */}
-      <header className="pt-28 pb-12 px-4 text-center">
+      <header className="pt-16 sm:pt-28 pb-8 sm:pb-12 px-4 text-center">
         <div className="max-w-4xl mx-auto">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-edu-surface border border-edu-border mb-6">
             <TrendingUp className="w-8 h-8 text-edu-accent" />
           </div>
           <div className="flex items-center justify-center gap-3 mb-4">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-edu-text mb-0 leading-tight">
+            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-edu-text mb-0 leading-tight">
               {tl("世界長者番付", "World Wealth Rankings", lang)}
             </h1>
           </div>

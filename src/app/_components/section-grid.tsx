@@ -11,7 +11,7 @@ export function SectionGrid() {
   const { lang } = useLang()
 
   return (
-    <section id="sections" className="py-20 px-4 relative">
+    <section id="sections" className="py-12 sm:py-20 px-4 relative">
       {/* Subtle grid pattern overlay */}
       <div
         className="absolute inset-0 edu-grid-bg opacity-40 pointer-events-none"

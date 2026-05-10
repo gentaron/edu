@@ -96,6 +96,10 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
   body {
     @apply bg-edu-bg text-edu-text antialiased;
     font-feature-settings:
@@ -104,9 +108,8 @@
     text-autospace: no-autospace;
     line-break: strict;
     text-spacing-trim: trim-start;
-  }
-  html {
-    scroll-behavior: smooth;
+    overflow-x: hidden;
+    min-height: 100dvh;
   }
 }
 
