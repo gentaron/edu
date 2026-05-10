@@ -1,10 +1,26 @@
 import { create } from "zustand"
-import type { GameCard, Enemy, AbilityType, FieldChar } from "@/types"
+import type { GameCard, Enemy, AbilityType, FieldChar, EffectType } from "@/types"
+import { classifyEffect } from "@/types"
+import { ALL_CARDS } from "@/domains/cards/cards.data"
 import {
   charMaxHp,
   calculateEffectDamage,
   calculateEnemyDamage,
 } from "@/domains/battle/battle.engine"
+
+/** Merge old localStorage deck data with latest card data to fill missing fields. */
+function migrateCard(card: GameCard): GameCard {
+  const latest = ALL_CARDS.find((c) => c.id === card.id)
+  if (!latest) {
+    return card
+  }
+  return {
+    ...card,
+    effectType: card.effectType ?? latest.effectType,
+    effectValue: card.effectValue ?? latest.effectValue,
+    ultimateName: card.ultimateName ?? latest.ultimateName,
+  }
+}
 
 /* ═══════════════════════════════════════════════════════
    Field-based Battle Store — Individual Character HP
@@ -96,7 +112,9 @@ export const useBattleStore = create<BattleState>((set, get) => ({
   charHitIndex: null,
 
   startBattle: (enemy, deck) => {
-    const field: FieldChar[] = deck.map((c) => {
+    // Migrate old localStorage cards to fill missing effectType/effectValue
+    const migratedDeck = deck.map(migrateCard)
+    const field: FieldChar[] = migratedDeck.map((c) => {
       let hp = charMaxHp(c)
       // Frost guardian: reduce each character by 1 HP at start
       if (enemy.id === "frost-guardian") {
@@ -217,10 +235,13 @@ export const useBattleStore = create<BattleState>((set, get) => ({
         break
       }
       case "効果": {
+        // Fallback for old localStorage data missing effectType/effectValue
+        const resolvedEffectType: EffectType = card.effectType ?? classifyEffect(card.effect)
+        const resolvedEffectValue: number = card.effectValue ?? 0
         const result = calculateEffectDamage(
-          card.effectType,
+          resolvedEffectType,
           card.effect,
-          card.effectValue,
+          resolvedEffectValue,
           card.name,
           enemyId,
           isVoidKingPhase3

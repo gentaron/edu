@@ -319,7 +319,8 @@ export function calculateEffectDamage(
         : `✨ 次元階梯パンディクト展開！ ${cardName}のHP3回復！（ダメージは吸収）`
       return { damage, heal, shield: 0, attackReduction: 0, log }
     }
-    case ET.HEAL_DAMAGE: { // Same as DAMAGE_HEAL but heal is primary (used by jun card)
+    case ET.HEAL_DAMAGE: {
+      // Same as DAMAGE_HEAL but heal is primary (used by jun card)
       const heal = Math.max(1, Math.floor(val * 0.5))
       const damage = canDamage ? Math.max(1, Math.floor(val * 0.4)) : 0
       const log = canDamage
@@ -342,9 +343,20 @@ export function calculateEffectDamage(
   }
 }
 
-/** Runtime exhaustive check — should never be reached if all enum values are handled. */
+/** Runtime exhaustive check — should never be reached if all enum values are handled.
+ *  Falls back to a safe HEAL instead of throwing, to avoid crashing the UI
+ *  when old deck data from localStorage lacks effectType. */
 function exhaustiveCheck(_type: never): never {
-  throw new Error(`Unhandled EffectType: ${String(_type)}`)
+  // This should never happen with valid data, but if it does (e.g. old localStorage data),
+  // we return a safe fallback instead of crashing.
+  const fallback: EffectResult = {
+    damage: 0,
+    heal: 1,
+    shield: 0,
+    attackReduction: 0,
+    log: `✨ 未分類の効果！ HPを1回復！`,
+  }
+  return fallback as never
 }
 
 /* ── Enemy Damage Calculation ── */
