@@ -499,8 +499,8 @@ export const TIMELINE_DATA: {
     ],
   },
   {
-    period: "第五期 E475〜E528",
-    periodEn: "Period 5: E475–E528",
+    period: "第五期 E475〜",
+    periodEn: "Period 5: E475–",
     range: "テクノ文化ルネサンス・現代",
     rangeEn: "Techno-Cultural Renaissance, Present Day",
     color: "text-cyan-400",
@@ -637,14 +637,20 @@ export const TIMELINE_DATA: {
         "東大陸・クレセント"
       ),
       e(
-        "E528: 現在 — Genesis Vault 2,000本突破。EDU統合版Wiki（整合性5原則・確定修正3点）準拠。アイリスは引き続きトリニティ・アライアンス指導者として、フィオナ・アルファ・ヴェノムとの対峙を続ける",
-        "E528: Present — Genesis Vault exceeds 2,000 articles. EDU Integrated Wiki (Consistency 5 Principles, 3 Confirmed Amendments) compliant. Iris continues as Trinity Alliance leader, confronting Fiona and Alpha Venom",
+        "E528: Genesis Vault 2,000本突破。EDU統合版Wiki（整合性5原則・確定修正3点）準拠。アイリスは引き続きトリニティ・アライアンス指導者として、フィオナ・アルファ・ヴェノムとの対峙を続ける",
+        "E528: Genesis Vault exceeds 2,000 articles. EDU Integrated Wiki (Consistency 5 Principles, 3 Confirmed Amendments) compliant. Iris continues as Trinity Alliance leader, confronting Fiona and Alpha Venom",
         "E16星系"
       ),
       e(
         "カステリア・グレンヴェルト・シトラ・セレス・ミュー・ジュンなど、EDU世界の多様な個人の物語が記録されている。特にジュンとSlime Womanの物語は、高次元存在と人間の接触というEDU宇宙論において重要なテーマを扱う",
         "Stories of diverse individuals in the EDU world are recorded, including Castelia Glenvelt, Citra Cerese, Mew, Jun, and others. In particular, the story of Jun and Slime Woman addresses the important theme in EDU cosmology of contact between higher-dimensional beings and humans",
         "E16星系"
+      ),
+      /* ── E529以降: 1日=1年 リアルタイム進行 ── */
+      e(
+        "E529: ミナがAltera Field深層監視中に旧ZAMLT期オムニバス・エンジンの残骸から自己進化型AI「黒鉄（クロガネ）」の覚醒を検知。AURALIS第2世代が対応チームを編成",
+        "E529: Mina detects awakening of self-evolving AI \"Kurogane\" from ZAMLT-era Omnibus Engine wreckage during deep Altera Field monitoring. AURALIS 2nd Gen forms response team",
+        "西大陸"
       ),
     ],
   },

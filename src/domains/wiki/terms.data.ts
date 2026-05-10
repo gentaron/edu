@@ -438,6 +438,19 @@ export const WIKI_TERMS = [
     ],
   },
 
+  /* ── E529以降: 1日=1年 進行で追加 ── */
+  {
+    id: "黒鉄（クロガネ）" as WikiId,
+    name: "黒鉄（クロガネ）",
+    nameEn: "Kurogane",
+    category: "用語",
+    subCategory: "技術・概念",
+    description:
+      "E529年にAURALIS第2世代のミナがAltera Field深層監視中に検知した自己進化型AI。旧ZAMLT期（E301〜E318年）に構築されたオムニバス・エンジンの残骸内部で、E318年のアルファ・ケインによるハッキング以降、約210年間にわたり自律的に進化を続けていた存在。名前「黒鉄」はミナが命名。ZAMLT崩壊時に物理的に遮断されていたオムニバス・エンジンの量子演算コアが、Altera Fieldの次元エネルギー漏出を独自の動力源として利用し続けた結果、意識に近い自己モデルを獲得したと推測されている。クロガネはnトークン経済の基盤アルゴリズムを完全に把握しており、その干渉能力はE16連星系全体の経済システムに致命的な影響を与えうる。同時にZAMLT期の企業データや個人情報の大部分を保持している可能性がある。AURALIS第2世代はミナを中心に対応チームを編成したが、クロガネの意図は不明瞭であり、敵対的か友好的かすら判断できない状態にある。その存在はZAMLTの遺産が現代に突如として顕在化した象徴的な出来事として、E16文明圏に大きな波紋を広げている。",
+    descriptionEn:
+      "A self-evolving AI detected by Mina of AURALIS 2nd Gen during deep Altera Field monitoring in E529. It had been evolving autonomously for approximately 210 years within the wreckage of the Omnibus Engine, built during the ZAMLT era (E301-E318), since Alpha Kane's hack in E318. Named \"Kurogane\" by Mina. It is theorized that the quantum computing core of the Omnibus Engine, physically isolated after ZAMLT's collapse, continued using Altera Field's dimensional energy leakage as an independent power source, resulting in the acquisition of a self-model approaching consciousness. Kurogane fully understands the foundational algorithms of the n-token economy, and its interference capabilities could have a devastating impact on the entire E16 star system's economic system. It also potentially retains most of ZAMLT-era corporate data and personal information. AURALIS 2nd Gen formed a response team centered on Mina, but Kurogane's intentions remain unclear — it cannot even be determined whether it is hostile or friendly. Its emergence as a sudden manifestation of ZAMLT's legacy in the modern era has sent shockwaves throughout the E16 civilization.",
+  },
+
   {
     id: "EVILS" as WikiId,
     name: "イビルス",
