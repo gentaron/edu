@@ -6,6 +6,7 @@ import { Toaster } from "@/platform/ui/toaster"
 import { Navigation } from "@/platform/navigation"
 import { MotionProvider } from "@/platform/motion-provider"
 import { WebsiteJsonLd } from "@/platform/json-ld"
+import { LangProvider } from "@/lib/use-lang"
 
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-sans",
@@ -51,11 +52,13 @@ export default function RootLayout({
         className={`${notoSansJP.variable} font-sans`}
         style={{ fontFamily: "var(--font-sans), 'Noto Sans JP', sans-serif" }}
       >
-        <Navigation />
-        <main id="main-content">
-          <MotionProvider>{children}</MotionProvider>
-        </main>
-        <Toaster />
+        <LangProvider>
+          <Navigation />
+          <main id="main-content">
+            <MotionProvider>{children}</MotionProvider>
+          </main>
+          <Toaster />
+        </LangProvider>
       </body>
     </html>
   )
