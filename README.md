@@ -14,7 +14,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
 [![Rust](https://img.shields.io/badge/Rust-no__std-CE422B?style=flat-square&logo=rust)](https://www.rust-lang.org)
 [![Lean 4](https://img.shields.io/badge/Lean_4-Formal_Verification-2D6B4E?style=flat-square)]()
-[![Tests](https://img.shields.io/badge/Tests-873_%2B_161_Rust-22C55E?style=flat-square)]()
+[![Tests](https://img.shields.io/badge/Tests-908_%2B_161_Rust-22C55E?style=flat-square)]()
 [![Coverage](https://img.shields.io/badge/Coverage-91.72%25-4CAF50?style=flat-square)]()
 [![License](https://img.shields.io/badge/License-MIT-blue?style=flat-square)]()
 
@@ -24,7 +24,7 @@
 
 ### TL;DR
 
-**EDU** は E16 連星系を舞台に 500 年以上の宇宙史を描くオリジナル SF ユニバースプロジェクト。285+ 項目の百科事典、22 話の小説、76 枚のカードゲームを、Rust `no_std` WASM エンジン・Lean 4 形式検証・ZK 証明・ブラウザネイティブ RAG チャットボットといった研究級技術スタックで表現している。技術は世界観内の概念として物語に根付いており、両者は分離不可能に統合されている。
+**EDU** は E16 連星系を舞台に 500 年以上の宇宙史を描くオリジナル SF ユニバースプロジェクト。550+ 項目の百科事典、5 章 21 話の小説、86 枚のカード（76 プレイヤー + 10 敵）と金融ダッシュボードを、Rust `no_std` WASM エンジン・Lean 4 形式検証・ZK 証明・ブラウザネイティブ RAG チャットボットといった研究級技術スタックで表現している。技術は世界観内の概念として物語に根付いており、両者は分離不可能に統合されている。
 
 ### Quick Start
 
@@ -33,24 +33,27 @@ git clone https://github.com/gentaron/edu.git && cd edu
 bun install
 bun dev            # http://localhost:3000
 bun run build      # production build
-bun test           # 873 TS tests + 161 Rust tests
+bun test           # 908 TS tests + 161 Rust tests
 bun run lint       # eslint --max-warnings=0
 ```
 
-> **Runtime**: Bun · **Framework**: Next.js 16 App Router · **Deploy**: Netlify
+> **Runtime**: Bun · **Framework**: Next.js 16 App Router · **Deploy**: Netlify · **Node**: >= 22
 
 ### Features
 
-| Feature               | 説明                                                                                                |
-| --------------------- | --------------------------------------------------------------------------------------------------- |
-| **Wiki 百科事典**     | 285+ 項目、7 カテゴリ（キャラクター・組織・地理・技術・用語・歴史）、EN/JP bilingual、BM25 全文検索 |
-| **Story 小説集**      | 5 章 22 話の連作小説、EN/JP 言語切替、SSG + ISR                                                     |
-| **Card Game PvP**     | 76 キャラクターカード (C/R/SR) · Rust WASM バトルエンジン (148KB) · ZK-Verified Replays             |
-| **Timeline 統合年表** | AD3500 〜 E528 の 500 年宇宙史、キャラクター個別年表付き                                            |
-| **Character Pages**   | AURALIS、Mina、Iris 等の詳細キャラクターページ、ファクション別 tier list                            |
-| **RAG Chatbot**       | ブラウザネイティブ EDU 質問箱 — WebGPU LLM + E5 embeddings + cosine RAG、ゼロ継続コスト             |
-| **Card Forge**        | Apolon DSL カード作成 — Tree-sitter 構文検査 + Lean 4 型検証 (UGC)                                  |
-| **CRDT Multi-user**   | デッキ同期・リプレイ注釈・Lore Wiki のサーバーレス協調                                              |
+| Feature               | 説明                                                                                                           |
+| --------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Wiki 百科事典**     | 550+ 項目、6 カテゴリ（キャラ・組織・地理・技術・用語・歴史）、EN/JP bilingual、BM25 全文検索、AI 関連候補推薦 |
+| **Story 小説集**      | 5 章 21 話の連作小説、EN/JP 言語切替、SSG + ISR                                                                |
+| **Card Game PvP**     | 86 枚のバトルカード (15 SR / 43 R / 18 C + 10 敵) · Rust WASM エンジン (148KB) · ZK-Verified Replays           |
+| **E16 Market**        | 金融ダッシュボード — 28 銘柄 (株式・N-Token・指数)、GARCH ボラティリティ、インタラクティブチャート、ティッカー |
+| **Timeline 統合年表** | AD3500 〜 E528 の 500 年宇宙史、キャラクター個別年表付き                                                       |
+| **Character Pages**   | AURALIS、Mina、Iris 等の詳細キャラクターページ、ファクション別 tier list                                       |
+| **RAG Chatbot**       | ブラウザネイティブ EDU 質問箱 — WebGPU LLM + E5 embeddings + cosine RAG、ゼロ継続コスト                        |
+| **Card Forge**        | Apolon DSL カード作成 — Tree-sitter 構文検査 + Lean 4 型検証 (UGC)                                             |
+| **CRDT Multi-user**   | デッキ同期・リプレイ注釈・Lore Wiki のサーバーレス協調 (Automerge)                                             |
+| **Ranking**           | ユニバース富ランキング — 15 名のキャラクター、N-Token 資産評価                                                 |
+| **Tournament**        | Lean 4 証明付きトーナメント設定 — 最大 200 ターン制約保証                                                      |
 
 ### Universe — E16 連星系
 
@@ -82,36 +85,39 @@ bun run lint       # eslint --max-warnings=0
 
 ### Overview
 
-**EDU** is an original sci-fi universe project set in the **E16 binary star system**, located in the halo of the Sombrero Galaxy (M104). It spans 500+ years of universe history (AD3500 to E528) told through a 285+ entry encyclopedia, a 22-episode novel series, and a 76-card character game — all powered by a research-grade technology stack including Rust `no_std` WASM battle engine, Lean 4 formal verification, ZK replay proofs, and a browser-native RAG chatbot. The technology is deeply rooted in the universe's lore, making the two inseparable.
+**EDU** is an original sci-fi universe project set in the **E16 binary star system**, located in the halo of the Sombrero Galaxy (M104). It spans 500+ years of universe history (AD3500 to E528) told through a 550+ entry encyclopedia, a 21-episode novel series, an 86-card battle game (76 player + 10 enemy), and a financial dashboard — all powered by a research-grade technology stack including Rust `no_std` WASM battle engine, Lean 4 formal verification, ZK replay proofs, and a browser-native RAG chatbot. The technology is deeply rooted in the universe's lore, making the two inseparable.
 
 ### Features
 
-| Feature              | Description                                                                                         |
-| -------------------- | --------------------------------------------------------------------------------------------------- |
-| **Wiki Encyclopedia**| 285+ entries, 7 categories (characters, orgs, geography, tech, terms, history), EN/JP, BM25 search |
-| **Story Collection** | 5-chapter, 22-episode novel series with EN/JP language switching, SSG + ISR                         |
-| **Card Game PvP**    | 76 character cards (C/R/SR) · Rust WASM battle engine (148KB) · ZK-Verified Replays                |
-| **Timeline**         | 500-year integrated universe timeline (AD3500–E528) with per-character sub-timelines               |
-| **Character Pages**  | Detailed character pages for AURALIS, Mina, Iris, etc. with faction-based tier lists               |
-| **RAG Chatbot**      | Browser-native Q&A — WebGPU LLM + E5 embeddings + cosine RAG, zero API cost                        |
-| **Card Forge**       | Apolon DSL card creation — Tree-sitter syntax check + Lean 4 type verification (UGC)                |
-| **CRDT Multi-user**  | Serverless collaboration for deck sync, replay annotation, and Lore Wiki                            |
+| Feature               | Description                                                                                                                |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **Wiki Encyclopedia** | 550+ entries, 6 categories (characters, orgs, geography, tech, terms, history), EN/JP, BM25 search, AI related suggestions |
+| **Story Collection**  | 5-chapter, 21-episode novel series with EN/JP language switching, SSG + ISR                                                |
+| **Card Game PvP**     | 86 battle cards (15 SR / 43 R / 18 C + 10 enemies) · Rust WASM engine (148KB) · ZK-Verified Replays                        |
+| **E16 Market**        | Financial dashboard — 28 assets (stocks, N-Token crypto, indices), GARCH volatility, interactive charts, scrolling ticker  |
+| **Timeline**          | 500-year integrated universe timeline (AD3500–E528) with per-character sub-timelines                                       |
+| **Character Pages**   | Detailed character pages for AURALIS, Mina, Iris, etc. with faction-based tier lists                                       |
+| **RAG Chatbot**       | Browser-native Q&A — WebGPU LLM + E5 embeddings + cosine RAG, zero API cost                                                |
+| **Card Forge**        | Apolon DSL card creation — Tree-sitter syntax check + Lean 4 type verification (UGC)                                       |
+| **CRDT Multi-user**   | Serverless collaboration via Automerge — deck sync, replay annotation, and Lore Wiki                                       |
+| **Ranking**           | Universe wealth rankings — 15 ranked characters with N-Token asset valuation                                               |
+| **Tournament**        | Lean 4 proven tournament configuration — max 200 turn bound guarantees                                                     |
 
 ---
 
 ## Tech Stack
 
-| Layer                   | Technology                                                                         |
-| ----------------------- | ---------------------------------------------------------------------------------- |
-| **Frontend**            | Next.js 16 · React 19 · Tailwind v4 · shadcn/ui · Framer Motion                    |
-| **Language**            | TypeScript 5 (strict) · Zustand · Prisma                                           |
-| **WASM Engine**         | Rust `no_std` — 13 crates, 22,400+ 行, 148KB .wasm                                 |
-| **Formal Verification** | Lean 4 (8 modules) · Kani (6 proofs) — Lean 証明は Rust エンジンのコンパイル時依存 |
-| **ZK / Crypto**         | Merkle commitment replays · Post-Quantum (ML-KEM/ML-DSA) · BuildHash provenance    |
-| **Quantum**             | Qiskit 8-qubit entanglement circuit + Rust PMF (byte-identical)                    |
-| **AI / RAG**            | Browser-native WebGPU LLM · E5 embeddings (WASM) · zero API cost                   |
-| **Hermeticity**         | Nix flake · SLSA L3 provenance · cross-arch (x86_64/aarch64/RISC-V)                |
-| **Runtime**             | Bun · Vitest · ESLint --max-warnings=0 · GitHub Actions (8 workflows)              |
+| Layer                   | Technology                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------- |
+| **Frontend**            | Next.js 16 · React 19 · Tailwind v4 · shadcn/ui · Framer Motion                       |
+| **Language**            | TypeScript 5 (strict) · Zustand · Prisma                                              |
+| **WASM Engine**         | Rust `no_std` — 13 crates, 22,400+ 行, 148KB .wasm                                    |
+| **Formal Verification** | Lean 4 (8 modules) · Kani (6 proofs) — Lean 証明は Rust エンジンのコンパイル時依存    |
+| **ZK / Crypto**         | Merkle commitment replays · Post-Quantum (ML-KEM/ML-DSA) · BuildHash provenance       |
+| **Quantum**             | Qiskit 8-qubit entanglement circuit + Rust PMF (byte-identical)                       |
+| **AI / RAG**            | Browser-native WebGPU LLM · E5 embeddings (WASM) · zero API cost                      |
+| **Hermeticity**         | Nix flake · SLSA L3 provenance · cross-arch (x86_64/aarch64/RISC-V)                   |
+| **Runtime**             | Bun · Node.js >= 22 · Vitest · ESLint --max-warnings=0 · GitHub Actions (8 workflows) |
 
 ## Architecture
 
@@ -167,7 +173,7 @@ edu/
 
 ## Repository Network
 
-EDU ユニバースは 11 のクロスリンクされたサイトで構成されている：
+EDU ユニバースは 11 のクロスリンクされたサイトで構成されている。メインアプリケーションは **34 のページルート** と **5 つの API ルート** を持つ。
 
 | Site                 | URL                                                                            |
 | -------------------- | ------------------------------------------------------------------------------ |
@@ -198,8 +204,8 @@ EDU ユニバースは 11 のクロスリンクされたサイトで構成され
 ### Prerequisites
 
 - [Bun](https://bun.sh/) (latest)
+- [Node.js](https://nodejs.org/) >= 22 (Netlify build, tooling)
 - [Rust](https://www.rust-lang.org/tools/install) (stable, with `rustup`)
-- [Node.js](https://nodejs.org/) 18+ (for tooling)
 
 ### Commands
 
@@ -207,7 +213,7 @@ EDU ユニバースは 11 のクロスリンクされたサイトで構成され
 # TypeScript / Next.js
 bun dev              # Dev server :3000
 bun run build        # Production build
-bun test             # 873 TS tests (vitest)
+bun test             # 908 TS tests (vitest)
 bun run test:coverage
 bun run lint         # ESLint --max-warnings=0
 bun run bench        # TS + Rust benchmarks
