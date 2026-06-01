@@ -1,0 +1,624 @@
+/* ═══════════════════════════════════════════════════════════════
+   EDU Market Data Engine
+   Deterministic price generation using seeded pseudo-random numbers.
+   Produces the SAME prices on every page load.
+   ═══════════════════════════════════════════════════════════════ */
+
+// ─── Types ───
+
+export interface AssetPrice {
+  date: string // YYYY-MM-DD
+  open: number
+  high: number
+  low: number
+  close: number
+  volume: number
+}
+
+export interface NarrativeEvent {
+  date: string // YYYY-MM-DD
+  descriptionJa: string
+  descriptionEn: string
+  affectedSymbols: string[]
+  impact: number // percentage change applied
+}
+
+export interface AssetDefinition {
+  symbol: string
+  name: string
+  nameEn: string
+  type: "stock" | "index" | "crypto"
+  sector?: string
+  basePrice: number
+  volatility: number // annualized σ
+  mu: number // annual drift μ
+  meanRevertStrength?: number // for indices
+  affiliation?: string
+}
+
+export interface Asset {
+  symbol: string
+  name: string
+  nameEn: string
+  type: "stock" | "index" | "crypto"
+  sector?: string
+  affiliation?: string
+  prices: AssetPrice[]
+  currentPrice: number
+  change24h: number
+  changePercent24h: number
+  marketCap?: string
+}
+
+// ─── Seeded Pseudo-Random Number Generator (Mulberry32) ───
+
+function mulberry32(seed: number): () => number {
+  let state = seed | 0
+  return () => {
+    state = (state + 0x6d2b79f5) | 0
+    let t = Math.imul(state ^ (state >>> 15), 1 | state)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+/** Hash a string to a 32-bit integer seed */
+function hashString(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i)
+    hash = ((hash << 5) - hash + ch) | 0
+  }
+  return Math.abs(hash)
+}
+
+/** Box-Muller transform to generate standard normal from uniform [0,1) */
+function boxMuller(rng: () => number): number {
+  let u1 = rng()
+  while (u1 === 0) u1 = rng() // avoid log(0)
+  const u2 = rng()
+  return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2)
+}
+
+// ─── Date Utilities ───
+
+const DAYS = 365
+const END_DATE = new Date("2026-01-15")
+
+function dateStr(d: Date): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, "0")
+  const day = String(d.getDate()).padStart(2, "0")
+  return `${y}-${m}-${day}`
+}
+
+function generateDates(count: number, endDate: Date): string[] {
+  const dates: string[] = []
+  const d = new Date(endDate)
+  for (let i = count - 1; i >= 0; i--) {
+    const back = new Date(d.getTime() - i * 86_400_000)
+    dates.push(dateStr(back))
+  }
+  return dates
+}
+
+// ─── Narrative Events ───
+
+export const NARRATIVE_EVENTS: NarrativeEvent[] = [
+  {
+    date: "2025-06-10",
+    descriptionJa: "E318: ZAMLT崩壊の余波、ZEBRA社大幅下落",
+    descriptionEn: "E318 Aftermath: ZAMLT collapse — ZEBRA plunges",
+    affectedSymbols: ["ZEBRA"],
+    impact: -18.5,
+  },
+  {
+    date: "2025-04-15",
+    descriptionJa: "E400: エヴァトロン弾圧、暗号市場への不信感",
+    descriptionEn: "E400: Evatron suppression — crypto market panic",
+    affectedSymbols: ["GOLDV", "TINGUE"],
+    impact: -12.0,
+  },
+  {
+    date: "2025-08-22",
+    descriptionJa: "E515: V7結成、軍需株・ファールージャ社急騰",
+    descriptionEn: "E515: V7 Formation — defense stocks & FARUJA soar",
+    affectedSymbols: ["FARUJA", "THORON", "LORENTZ", "MGABR", "GHAUS"],
+    impact: 15.0,
+  },
+  {
+    date: "2025-09-18",
+    descriptionJa: "E522: AURALIS Gen-2復活、文化的指標急上昇",
+    descriptionEn: "E522: AURALIS Gen-2 Revival — cultural index surges",
+    affectedSymbols: ["AURAL", "LSOL", "ACARL"],
+    impact: 10.0,
+  },
+  {
+    date: "2025-11-05",
+    descriptionJa: "E528: リミナル・フォージ発射、技術株ブーム",
+    descriptionEn: "E528: Liminal Forge launch — tech sector boom",
+    affectedSymbols: ["FARUJA", "LORENTZ", "ALOE", "NCORI"],
+    impact: 12.5,
+  },
+  {
+    date: "2025-12-01",
+    descriptionJa: "グランベルGDP上方修正、文明圏指標全体上昇",
+    descriptionEn: "Grandel GDP upward revision — civilization indices rise",
+    affectedSymbols: ["GRANDEL", "UECO", "ACARL"],
+    impact: 8.0,
+  },
+  {
+    date: "2025-07-14",
+    descriptionJa: "ティエリア軍事演習、THORON受注増加",
+    descriptionEn: "Tyeria military exercises — THORON orders surge",
+    affectedSymbols: ["THORON", "GHAUS", "TYERIA"],
+    impact: 7.5,
+  },
+  {
+    date: "2025-10-20",
+    descriptionJa: "ディオクレニス次元探査成功、NCORL急上昇",
+    descriptionEn: "Dioclenis dimensional probe success — NCORI surges",
+    affectedSymbols: ["NCORI", "DIOCLE", "LORENTZ"],
+    impact: 11.0,
+  },
+  {
+    date: "2025-05-30",
+    descriptionJa: "ゴールデン・ヴェノム摘発、GOLDV暴落",
+    descriptionEn: "Golden Venom crackdown — GOLDV crashes",
+    affectedSymbols: ["GOLDV", "TINGUE"],
+    impact: -22.0,
+  },
+  {
+    date: "2026-01-08",
+    descriptionJa: "ファルージャ評議会新体制、MAMON上昇",
+    descriptionEn: "Fallujah Council reform — MAMON rises",
+    affectedSymbols: ["MAMON", "MCERN", "FALLUJA"],
+    impact: 6.5,
+  },
+]
+
+// ─── Asset Definitions ───
+
+const ASSET_DEFS: AssetDefinition[] = [
+  // ── Stocks ──
+  {
+    symbol: "FARUJA",
+    name: "ファールージャ社",
+    nameEn: "Faruja Corp",
+    type: "stock",
+    sector: "DimensionalTech",
+    basePrice: 12450,
+    volatility: 0.35,
+    mu: 0.12,
+  },
+  {
+    symbol: "ZEBRA",
+    name: "Zebra Corp (ZAMLT)",
+    nameEn: "Zebra Corp (ZAMLT)",
+    type: "stock",
+    sector: "Legacy",
+    basePrice: 8200,
+    volatility: 0.55,
+    mu: -0.08,
+  },
+  {
+    symbol: "ALOE",
+    name: "Aloe Oil Corp",
+    nameEn: "Aloe Oil Corp",
+    type: "stock",
+    sector: "Energy",
+    basePrice: 6800,
+    volatility: 0.30,
+    mu: 0.08,
+  },
+  {
+    symbol: "MAMON",
+    name: "Mamon Corp",
+    nameEn: "Mamon Corp",
+    type: "stock",
+    sector: "Finance",
+    basePrice: 5400,
+    volatility: 0.25,
+    mu: 0.06,
+  },
+  {
+    symbol: "LORENTZ",
+    name: "Lorentz Corp",
+    nameEn: "Lorentz Corp",
+    type: "stock",
+    sector: "Construction",
+    basePrice: 7100,
+    volatility: 0.28,
+    mu: 0.10,
+  },
+  {
+    symbol: "THORON",
+    name: "Thoron Corp",
+    nameEn: "Thoron Corp",
+    type: "stock",
+    sector: "Military",
+    basePrice: 9300,
+    volatility: 0.32,
+    mu: 0.09,
+  },
+  // ── Indices ──
+  {
+    symbol: "UECO",
+    name: "UECO Index",
+    nameEn: "UECO Index",
+    type: "index",
+    sector: "Economic",
+    basePrice: 3500,
+    volatility: 0.12,
+    mu: 0.04,
+    meanRevertStrength: 0.05,
+  },
+  {
+    symbol: "AURAL",
+    name: "AURALIS Index",
+    nameEn: "AURALIS Index",
+    type: "index",
+    sector: "Cultural",
+    basePrice: 2800,
+    volatility: 0.15,
+    mu: 0.05,
+    meanRevertStrength: 0.04,
+  },
+  // ── Covert ──
+  {
+    symbol: "GOLDV",
+    name: "Golden Venom",
+    nameEn: "Golden Venom",
+    type: "stock",
+    sector: "Covert",
+    basePrice: 1200,
+    volatility: 0.70,
+    mu: -0.05,
+  },
+  // ── Civilization Indices ──
+  {
+    symbol: "GRANDEL",
+    name: "グランベル",
+    nameEn: "Grandel",
+    type: "index",
+    sector: "Civilization",
+    basePrice: 15000,
+    volatility: 0.10,
+    mu: 0.06,
+    meanRevertStrength: 0.03,
+  },
+  {
+    symbol: "ELYSEON",
+    name: "エレシオン",
+    nameEn: "Elyseon",
+    type: "index",
+    sector: "Civilization",
+    basePrice: 9500,
+    volatility: 0.11,
+    mu: 0.05,
+    meanRevertStrength: 0.03,
+  },
+  {
+    symbol: "TYERIA",
+    name: "ティエリア",
+    nameEn: "Tyeria",
+    type: "index",
+    sector: "Civilization",
+    basePrice: 11200,
+    volatility: 0.13,
+    mu: 0.07,
+    meanRevertStrength: 0.03,
+  },
+  {
+    symbol: "FALLUJA",
+    name: "ファルージャ",
+    nameEn: "Fallujah",
+    type: "index",
+    sector: "Civilization",
+    basePrice: 7800,
+    volatility: 0.14,
+    mu: 0.04,
+    meanRevertStrength: 0.04,
+  },
+  {
+    symbol: "DIOCLE",
+    name: "ディオクレニス",
+    nameEn: "Dioclenis",
+    type: "index",
+    sector: "Civilization",
+    basePrice: 8400,
+    volatility: 0.12,
+    mu: 0.06,
+    meanRevertStrength: 0.03,
+  },
+  // ── N-Token Personal Crypto ──
+  {
+    symbol: "ACARL",
+    name: "アルゼン・カーリーン",
+    nameEn: "Arzen Carleen",
+    type: "crypto",
+    affiliation: "グランベル / 5大文明圏",
+    basePrice: 1500000,
+    volatility: 0.40,
+    mu: 0.15,
+  },
+  {
+    symbol: "MGABR",
+    name: "ミカエル・ガブリエリ",
+    nameEn: "Mikael Gabrieli",
+    type: "crypto",
+    affiliation: "ファールージャ社 / V7",
+    basePrice: 850000,
+    volatility: 0.45,
+    mu: 0.12,
+  },
+  {
+    symbol: "ILOPEZ",
+    name: "アイク・ロペス",
+    nameEn: "Ike Lopez",
+    type: "crypto",
+    affiliation: "SSレンジ / V7",
+    basePrice: 420000,
+    volatility: 0.38,
+    mu: 0.10,
+  },
+  {
+    symbol: "GHAUS",
+    name: "グレイモンド・ハウザー",
+    nameEn: "Greymond Hauser",
+    type: "crypto",
+    affiliation: "ティエリア / 5大文明圏",
+    basePrice: 380000,
+    volatility: 0.35,
+    mu: 0.09,
+  },
+  {
+    symbol: "RKAKI",
+    name: "レイド・カキザキ",
+    nameEn: "Raid Kakizaki",
+    type: "crypto",
+    affiliation: "アイアン・シンジケート / V7",
+    basePrice: 280000,
+    volatility: 0.42,
+    mu: 0.08,
+  },
+  {
+    symbol: "NCORI",
+    name: "ネイサン・コリンド",
+    nameEn: "Nathan Corind",
+    type: "crypto",
+    affiliation: "ディオクレニス / 5大文明圏",
+    basePrice: 250000,
+    volatility: 0.36,
+    mu: 0.10,
+  },
+  {
+    symbol: "MCERN",
+    name: "マドリス・カーネル",
+    nameEn: "Madris Cernel",
+    type: "crypto",
+    affiliation: "ファルージャ / 5大文明圏",
+    basePrice: 210000,
+    volatility: 0.30,
+    mu: 0.06,
+  },
+  {
+    symbol: "LSOL",
+    name: "リアナ・ソリス",
+    nameEn: "Liana Solis",
+    type: "crypto",
+    affiliation: "エレシオン / 5大文明圏",
+    basePrice: 180000,
+    volatility: 0.28,
+    mu: 0.07,
+  },
+  {
+    symbol: "TINGUE",
+    name: "ティナ/グエ",
+    nameEn: "Tina/Gue",
+    type: "crypto",
+    affiliation: "地下街",
+    basePrice: 195000,
+    volatility: 0.50,
+    mu: 0.05,
+  },
+  {
+    symbol: "FIONA",
+    name: "フィオナ",
+    nameEn: "Fiona",
+    type: "crypto",
+    affiliation: "ブルーローズ / V7",
+    basePrice: 140000,
+    volatility: 0.38,
+    mu: 0.06,
+  },
+  {
+    symbol: "IZUMI",
+    name: "イズミ（アルファ・ヴェノム）",
+    nameEn: "Izumi (Alpha Venom)",
+    type: "crypto",
+    affiliation: "シャドウ・リベリオン",
+    basePrice: 95000,
+    volatility: 0.55,
+    mu: 0.03,
+  },
+  {
+    symbol: "LAYLA",
+    name: "レイラ・ヴィレル・ノヴァ",
+    nameEn: "Layla Virell Nova",
+    type: "crypto",
+    affiliation: "アイリス / ファルージャ",
+    basePrice: 120000,
+    volatility: 0.33,
+    mu: 0.08,
+  },
+]
+
+// ─── Price Generation ───
+
+function generatePrices(def: AssetDefinition): AssetPrice[] {
+  const seed = hashString(def.symbol + "_E16_MARKET_v1")
+  const rng = mulberry32(seed)
+  const dates = generateDates(DAYS, END_DATE)
+  const dt = 1 / 252 // trading day fraction
+  const prices: AssetPrice[] = []
+
+  // Build narrative event map for fast lookup
+  const eventMap = new Map<string, number>()
+  for (const ev of NARRATIVE_EVENTS) {
+    if (ev.affectedSymbols.includes(def.symbol)) {
+      const existing = eventMap.get(ev.date) ?? 0
+      eventMap.set(ev.date, existing + ev.impact)
+    }
+  }
+
+  // GARCH-like volatility state
+  let garchVol = def.volatility
+  const garchOmega = def.volatility * 0.15
+  const garchAlpha = 0.20
+  const garchBeta = 0.65
+
+  let currentPrice = def.basePrice
+
+  for (let i = 0; i < DAYS; i++) {
+    const date = dates[i]
+
+    // GARCH volatility update
+    if (i > 0) {
+      const prevReturn = (prices[i - 1].close - prices[i - 1].open) / prices[i - 1].open
+      garchVol =
+        garchOmega + garchAlpha * Math.abs(prevReturn) + garchBeta * garchVol
+      garchVol = Math.max(def.volatility * 0.3, Math.min(garchVol, def.volatility * 3))
+    }
+
+    // GBM step
+    const z = boxMuller(rng)
+    const drift = def.mu - (garchVol * garchVol) / 2
+    let dailyReturn = drift * dt + garchVol * Math.sqrt(dt) * z
+
+    // Mean reversion for indices
+    if (def.meanRevertStrength !== undefined) {
+      const deviation = (currentPrice - def.basePrice) / def.basePrice
+      dailyReturn -= def.meanRevertStrength * deviation * dt
+    }
+
+    // Trending periods (seeds create natural clusters)
+    const trendSeed = rng()
+    if (trendSeed > 0.85) {
+      // Strong uptrend period
+      dailyReturn += 0.008
+    } else if (trendSeed < 0.15) {
+      // Downtrend period
+      dailyReturn -= 0.006
+    }
+
+    const open = currentPrice
+    let close = open * (1 + dailyReturn)
+    close = Math.max(close, open * 0.7) // floor at -30%
+
+    // Narrative event impact
+    const eventImpact = eventMap.get(date)
+    if (eventImpact !== undefined) {
+      close = close * (1 + eventImpact / 100)
+    }
+
+    // Ensure price is always positive
+    close = Math.max(close, 1)
+
+    // Generate realistic intraday high/low
+    const dayVol = Math.abs(close - open) / open
+    const rangeMultiplier = 1.5 + rng() * 2.5
+    const high = Math.max(open, close) * (1 + dayVol * rangeMultiplier * 0.5)
+    const low = Math.min(open, close) * (1 - dayVol * rangeMultiplier * 0.5)
+    low = Math.max(low, 0.5)
+
+    // Volume: base volume + randomness + spike on events
+    let volume = (1_000_000 + rng() * 4_000_000) * (def.type === "crypto" ? 0.3 : 1)
+    if (eventImpact !== undefined) {
+      volume *= 2.5 + Math.abs(eventImpact) / 10
+    }
+    // Volume tends to be higher on big move days
+    volume *= 1 + dayVol * 20
+    volume = Math.round(volume)
+
+    prices.push({
+      date,
+      open: Math.round(open * 100) / 100,
+      high: Math.round(high * 100) / 100,
+      low: Math.round(low * 100) / 100,
+      close: Math.round(close * 100) / 100,
+      volume,
+    })
+
+    currentPrice = close
+  }
+
+  return prices
+}
+
+function formatMarketCap(price: number, symbol: string): string {
+  // Fake but realistic market caps based on price
+  const mult = symbol.startsWith("G") ? 50 : symbol.length <= 5 ? 100 : 30
+  const cap = price * mult * 1_000_000
+  if (cap >= 1_000_000_000_000) {
+    return `${(cap / 1_000_000_000_000).toFixed(1)}Tn`
+  }
+  if (cap >= 1_000_000_000) {
+    return `${(cap / 1_000_000_000).toFixed(1)}Bn`
+  }
+  return `${(cap / 1_000_000).toFixed(0)}Mn`
+}
+
+// ─── Cache & Export ───
+
+const assetCache = new Map<string, Asset>()
+
+function buildAsset(def: AssetDefinition): Asset {
+  const cached = assetCache.get(def.symbol)
+  if (cached) return cached
+
+  const prices = generatePrices(def)
+  const lastPrice = prices[prices.length - 1].close
+  const prevPrice = prices[prices.length - 2].close
+  const change = lastPrice - prevPrice
+  const changePercent = (change / prevPrice) * 100
+
+  const asset: Asset = {
+    symbol: def.symbol,
+    name: def.name,
+    nameEn: def.nameEn,
+    type: def.type,
+    sector: def.sector,
+    affiliation: def.affiliation,
+    prices,
+    currentPrice: lastPrice,
+    change24h: change,
+    changePercent24h: changePercent,
+    marketCap: def.type !== "crypto" ? formatMarketCap(lastPrice, def.symbol) : undefined,
+  }
+
+  assetCache.set(def.symbol, asset)
+  return asset
+}
+
+export function getAllAssets(): Asset[] {
+  return ASSET_DEFS.map(buildAsset)
+}
+
+export function getAsset(symbol: string): Asset | undefined {
+  const def = ASSET_DEFS.find((d) => d.symbol === symbol)
+  if (!def) return undefined
+  return buildAsset(def)
+}
+
+export function getStocks(): Asset[] {
+  return getAllAssets().filter((a) => a.type === "stock")
+}
+
+export function getIndices(): Asset[] {
+  return getAllAssets().filter((a) => a.type === "index")
+}
+
+export function getCryptos(): Asset[] {
+  return getAllAssets().filter((a) => a.type === "crypto")
+}

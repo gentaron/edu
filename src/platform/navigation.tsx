@@ -1,8 +1,18 @@
 "use client"
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, Globe2, Users, LayoutGrid, Search, ChevronRight } from "lucide-react"
+import {
+  Menu,
+  X,
+  Globe2,
+  Users,
+  LayoutGrid,
+  Search,
+  ChevronRight,
+  ChevronDown,
+  TrendingUp,
+} from "lucide-react"
 import { useLang } from "@/lib/use-lang"
 import { LangToggle } from "@/platform/lang-toggle"
 
@@ -23,12 +33,14 @@ const SECTIONS = [
   { id: "ranking-link", label: "番付", labelEn: "Ranking", href: "/ranking" },
 ]
 
+type NavItem = (typeof SECTIONS)[number]
+
 type NavGroup = {
   id: string
   label: string
   labelEn: string
   icon: React.ComponentType<{ className?: string }>
-  items: (typeof SECTIONS)[number][]
+  items: NavItem[]
 }
 
 const MOBILE_GROUPS: NavGroup[] = [
@@ -72,6 +84,133 @@ const MOBILE_GROUPS: NavGroup[] = [
   },
 ]
 
+// Desktop groups with dropdown menus
+const DESKTOP_GROUPS: NavGroup[] = [
+  {
+    id: "world",
+    label: "世界",
+    labelEn: "World",
+    icon: Globe2,
+    items: [
+      SECTIONS.find((s) => s.id === "universe")!,
+      SECTIONS.find((s) => s.id === "civilizations")!,
+      SECTIONS.find((s) => s.id === "timeline")!,
+    ],
+  },
+  {
+    id: "characters",
+    label: "キャラ",
+    labelEn: "Characters",
+    icon: Users,
+    items: [
+      SECTIONS.find((s) => s.id === "auralis")!,
+      SECTIONS.find((s) => s.id === "mina")!,
+      SECTIONS.find((s) => s.id === "liminal")!,
+      SECTIONS.find((s) => s.id === "iris")!,
+      SECTIONS.find((s) => s.id === "characters")!,
+      SECTIONS.find((s) => s.id === "factions")!,
+    ],
+  },
+  {
+    id: "tools",
+    label: "ツール",
+    labelEn: "Tools",
+    icon: LayoutGrid,
+    items: [
+      SECTIONS.find((s) => s.id === "technology")!,
+      SECTIONS.find((s) => s.id === "card-game-link")!,
+      SECTIONS.find((s) => s.id === "wiki-link")!,
+      SECTIONS.find((s) => s.id === "story-link")!,
+      SECTIONS.find((s) => s.id === "ranking-link")!,
+    ],
+  },
+]
+
+// ─── Desktop Dropdown Component ───
+
+function DesktopDropdown({
+  group,
+  lang,
+  pathname,
+}: {
+  group: NavGroup
+  lang: "ja" | "en"
+  pathname: string
+}) {
+  const [open, setOpen] = useState(false)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const hasActive = group.items.some(
+    (s) => pathname === s.href || pathname.startsWith(s.href + "/")
+  )
+
+  const handleEnter = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    setOpen(true)
+  }, [])
+
+  const handleLeave = useCallback(() => {
+    timeoutRef.current = setTimeout(() => setOpen(false), 150)
+  }, [])
+
+  const Icon = group.icon
+
+  return (
+    <div className="relative" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+      <button
+        type="button"
+        className={`flex items-center gap-1 px-2.5 py-1 text-xs tracking-wide transition-all rounded-md ${
+          hasActive && !open ? "text-edu-accent" : open ? "text-edu-text" : "text-edu-muted hover:text-edu-text"
+        }`}
+      >
+        {lang === "en" ? group.labelEn : group.label}
+        <ChevronDown
+          className={`w-3 h-3 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {/* Dropdown panel */}
+      <div
+        className={`absolute top-full left-0 mt-1 w-48 rounded-lg border border-edu-border bg-edu-surface/95 backdrop-blur-xl shadow-xl shadow-black/30 transition-all duration-200 origin-top-left ${
+          open
+            ? "opacity-100 scale-100 pointer-events-auto"
+            : "opacity-0 scale-95 pointer-events-none"
+        }`}
+      >
+        {/* Group header */}
+        <div className="flex items-center gap-2 px-3 pt-3 pb-1.5">
+          <Icon className="w-3 h-3 text-edu-accent" />
+          <span className="text-[10px] font-semibold text-edu-accent tracking-wider uppercase">
+            {lang === "en" ? group.labelEn : group.label}
+          </span>
+        </div>
+        <div className="py-1">
+          {group.items.map((s) => {
+            const isActive = pathname === s.href || pathname.startsWith(s.href + "/")
+            return (
+              <Link
+                key={s.id}
+                href={s.href}
+                className={`flex items-center justify-between px-3 py-2 text-xs transition-colors ${
+                  isActive
+                    ? "text-edu-accent bg-edu-accent/10 font-medium"
+                    : "text-edu-text-dim hover:text-edu-text hover:bg-edu-card"
+                }`}
+              >
+                <span>{lang === "en" && s.labelEn ? s.labelEn : s.label}</span>
+                {isActive && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-edu-accent shrink-0" />
+                )}
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Main Navigation Component ───
+
 export function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -105,6 +244,8 @@ export function Navigation() {
 
   const closeMobile = useCallback(() => setMobileOpen(false), [])
 
+  const isFinanceActive = pathname === "/finance" || pathname.startsWith("/finance/")
+
   return (
     <>
       <nav
@@ -124,30 +265,33 @@ export function Navigation() {
               EDU
             </Link>
 
-            {/* Desktop nav */}
+            {/* Desktop nav — grouped dropdowns + Finance */}
             <div className="hidden lg:flex items-center gap-0.5">
-              {SECTIONS.map((s) => {
-                const isActive = pathname === s.href || pathname.startsWith(s.href + "/")
-                return (
-                  <Link
-                    key={s.id}
-                    href={s.href}
-                    className={`relative px-2.5 py-1 text-xs tracking-wide transition-all rounded-md ${
-                      isActive ? "text-edu-accent" : "text-edu-muted hover:text-edu-text"
-                    }`}
-                  >
-                    {lang === "en" && s.labelEn ? s.labelEn : s.label}
-                    {isActive && (
-                      <span
-                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4/5 h-0.5 rounded-full"
-                        style={{
-                          background: "linear-gradient(90deg, transparent, #c8a44e, transparent)",
-                        }}
-                      />
-                    )}
-                  </Link>
-                )
-              })}
+              {DESKTOP_GROUPS.map((group) => (
+                <DesktopDropdown key={group.id} group={group} lang={lang} pathname={pathname} />
+              ))}
+
+              {/* Finance link — standalone with accent highlight */}
+              <Link
+                href="/finance"
+                className={`relative flex items-center gap-1.5 px-2.5 py-1 text-xs tracking-wide transition-all rounded-md ${
+                  isFinanceActive
+                    ? "text-edu-bg bg-edu-accent font-semibold"
+                    : "text-edu-accent hover:bg-edu-accent/10 hover:text-edu-bg"
+                }`}
+                style={
+                  isFinanceActive
+                    ? {
+                        background: "linear-gradient(135deg, #c8a44e, #d4b45e)",
+                        boxShadow: "0 0 12px rgba(200,164,78,0.3)",
+                      }
+                    : undefined
+                }
+              >
+                <TrendingUp className="w-3.5 h-3.5" />
+                <span>{lang === "en" ? "Finance" : "マーケット"}</span>
+              </Link>
+
               <div className="ml-2">
                 <LangToggle lang={lang} setLang={setLang} />
               </div>
@@ -254,6 +398,30 @@ export function Navigation() {
               </div>
             )
           })}
+
+          {/* Finance link in mobile */}
+          <div className="mb-4">
+            <div className="flex items-center gap-2 px-3 pt-3 pb-1.5">
+              <TrendingUp className="w-3.5 h-3.5 text-edu-accent" />
+              <span className="text-[11px] font-semibold text-edu-accent tracking-wider uppercase">
+                {lang === "en" ? "Finance" : "マーケット"}
+              </span>
+            </div>
+            <Link
+              href="/finance"
+              onClick={closeMobile}
+              className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all ${
+                isFinanceActive
+                  ? "text-edu-bg bg-edu-accent font-semibold"
+                  : "text-edu-accent hover:bg-edu-accent/10"
+              }`}
+            >
+              <span>{lang === "en" ? "E16 Market" : "E16 マーケット"}</span>
+              {isFinanceActive && (
+                <span className="w-1.5 h-1.5 rounded-full bg-edu-bg shrink-0" />
+              )}
+            </Link>
+          </div>
         </div>
 
         {/* Panel footer — home link */}
