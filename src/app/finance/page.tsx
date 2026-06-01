@@ -20,7 +20,9 @@ import { useLang } from "@/lib/use-lang"
 import {
   getAllAssets,
   getAsset,
+  getCompositeIndex,
   NARRATIVE_EVENTS,
+  dateToEra,
   type Asset,
   type AssetPrice,
 } from "@/lib/market-data"
@@ -28,11 +30,12 @@ import {
 // ─── Constants ───
 
 const TIME_PERIODS = [
-  { id: "1D" as const, label: "1D", labelEn: "1D", days: 1 },
-  { id: "1W" as const, label: "1W", labelEn: "1W", days: 7 },
-  { id: "1M" as const, label: "1M", labelEn: "1M", days: 30 },
-  { id: "3M" as const, label: "3M", labelEn: "3M", days: 90 },
+  { id: "ALL" as const, label: "ALL", labelEn: "ALL", days: 999999 },
   { id: "1Y" as const, label: "1Y", labelEn: "1Y", days: 365 },
+  { id: "3M" as const, label: "3M", labelEn: "3M", days: 90 },
+  { id: "1M" as const, label: "1M", labelEn: "1M", days: 30 },
+  { id: "1W" as const, label: "1W", labelEn: "1W", days: 7 },
+  { id: "1D" as const, label: "1D", labelEn: "1D", days: 1 },
 ]
 
 type SortKey = "symbol" | "name" | "price" | "change" | "changePercent"
@@ -325,7 +328,7 @@ function InteractiveChart({
                 fontSize="10"
                 fontFamily="monospace"
               >
-                {hoveredPrice.date}
+                E{dateToEra(hoveredPrice.date)}
               </text>
               <text
                 x={Math.min(hoveredPoint.x - 58, pad.left + plotW - 123)}
@@ -340,6 +343,51 @@ function InteractiveChart({
             </g>
           </g>
         )}
+        {/* X-axis E16 era labels */}
+        {slice.length > 1 &&
+          (() => {
+            const first = slice[0]!
+            const last = slice[slice.length - 1]!
+            const startEra = dateToEra(first.date)
+            const endEra = dateToEra(last.date)
+            const eraRange = endEra - startEra
+            if (eraRange <= 0) return null
+            const numLabels = Math.min(7, Math.max(3, Math.floor(plotW / 90)))
+            const labels: number[] = []
+            for (let i = 0; i <= numLabels; i++) {
+              labels.push(Math.round(startEra + (eraRange * i) / numLabels))
+            }
+            return (
+              <>
+                {labels.map((era) => {
+                  const ratio = (era - startEra) / eraRange
+                  const x = pad.left + ratio * plotW
+                  return (
+                    <g key={era}>
+                      <line
+                        x1={x}
+                        y1={pad.top + plotH}
+                        x2={x}
+                        y2={pad.top + plotH + 4}
+                        stroke="#475569"
+                        strokeWidth="0.5"
+                      />
+                      <text
+                        x={x}
+                        y={pad.top + plotH + 16}
+                        fill="#64748b"
+                        fontSize="9"
+                        fontFamily="monospace"
+                        textAnchor="middle"
+                      >
+                        E{era}
+                      </text>
+                    </g>
+                  )
+                })}
+              </>
+            )
+          })()}
       </svg>
 
       {/* Narrative event labels below chart */}
@@ -638,7 +686,7 @@ function TimelineSection({ lang }: { lang: "ja" | "en" }) {
             <div className="edu-card p-3">
               <div className="flex items-center gap-2 mb-1">
                 <Clock className="w-3 h-3 text-edu-accent" />
-                <span className="text-[10px] font-mono text-edu-muted">{ev.date}</span>
+                <span className="text-[10px] font-mono text-edu-muted">E{dateToEra(ev.date)}</span>
               </div>
               <p className="text-xs text-edu-text leading-relaxed">
                 {lang === "ja" ? ev.descriptionJa : ev.descriptionEn}
@@ -677,8 +725,9 @@ export default function FinancePage() {
   const { lang } = useLang()
   const [selectedStock, setSelectedStock] = useState("FARUJA")
   const [selectedCrypto, setSelectedCrypto] = useState("ACARL")
-  const [stockPeriod, setStockPeriod] = useState<number>(365)
-  const [cryptoPeriod, setCryptoPeriod] = useState<number>(365)
+  const [stockPeriod, setStockPeriod] = useState<number>(999999)
+  const [cryptoPeriod, setCryptoPeriod] = useState<number>(999999)
+  const [compositePeriod, setCompositePeriod] = useState<number>(999999)
 
   const allAssets = useMemo(() => getAllAssets(), [])
   const stocks = useMemo(() => allAssets.filter((a) => a.type === "stock"), [allAssets])
@@ -687,6 +736,7 @@ export default function FinancePage() {
 
   const stockAsset = useMemo(() => getAsset(selectedStock), [selectedStock])
   const cryptoAsset = useMemo(() => getAsset(selectedCrypto), [selectedCrypto])
+  const compositeAsset = useMemo(() => getCompositeIndex(), [])
 
   // Gainers / Losers
   const topGainers = useMemo(
@@ -803,6 +853,66 @@ export default function FinancePage() {
                 ))}
               </div>
             </div>
+          </div>
+        </m.section>
+
+        {/* ─── Composite Index Chart ─── */}
+        <m.section {...sectionFade}>
+          <div className="edu-card p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+              <div className="flex items-center gap-3">
+                <Activity className="w-5 h-5 text-edu-accent" />
+                <div>
+                  <h2 className="text-sm font-bold text-edu-text">
+                    {lang === "ja" ? "総合指数" : "Composite Index"}
+                  </h2>
+                  <p className="text-[10px] text-edu-muted">E16 Market Composite (E16MC)</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex gap-0.5">
+                  {TIME_PERIODS.map((tp) => (
+                    <button
+                      key={tp.id}
+                      onClick={() => setCompositePeriod(tp.days)}
+                      className={`px-2.5 py-1 text-[10px] font-semibold rounded transition-all ${
+                        compositePeriod === tp.days
+                          ? "bg-edu-accent text-edu-bg"
+                          : "bg-edu-card-alt text-edu-muted hover:text-edu-text border border-edu-border"
+                      }`}
+                    >
+                      {tp.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {compositeAsset && (
+              <div className="flex items-end gap-4 mb-4">
+                <span className="text-2xl sm:text-3xl font-bold text-edu-text tracking-tight font-mono">
+                  {formatPrice(compositeAsset.currentPrice)}
+                </span>
+                <div className="flex flex-col">
+                  <span
+                    className={`text-sm font-semibold font-mono ${
+                      compositeAsset.changePercent24h >= 0 ? "text-emerald-400" : "text-rose-400"
+                    }`}
+                  >
+                    {formatChange(compositeAsset.change24h)} (
+                    {compositeAsset.changePercent24h >= 0 ? "+" : ""}
+                    {compositeAsset.changePercent24h.toFixed(2)}%)
+                  </span>
+                  <span className="text-[10px] text-edu-muted">
+                    {lang === "ja" ? "直近変動" : "Latest Change"}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {compositeAsset && (
+              <InteractiveChart asset={compositeAsset} periodDays={compositePeriod} lang={lang} />
+            )}
           </div>
         </m.section>
 

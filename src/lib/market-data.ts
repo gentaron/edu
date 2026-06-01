@@ -1,13 +1,41 @@
 /* ═══════════════════════════════════════════════════════════════
-   EDU Market Data Engine
-   Deterministic price generation using seeded pseudo-random numbers.
-   Produces the SAME prices on every page load.
+   EDU Market Data Engine v2
+   E16 Era-based deterministic price generation with daily updates.
+   Each asset starts from its founding era; data pre-generated
+   up to MAX_ERA and filtered to the current era for display.
    ═══════════════════════════════════════════════════════════════ */
+
+// ─── E16 Era System ───
+
+/** Reference: E529 = 2026-01-15 (from commit "E529以降 1日=1年 リアルタイム進行") */
+export const E16_REF_ERA = 529
+const E16_REF_DATE = new Date("2026-01-15")
+/** Pre-generate prices up to this era for seamless daily updates */
+const MAX_ERA = 1200
+
+/** Returns the current E16 era based on today's date */
+export function getCurrentEra(): number {
+  const now = new Date()
+  return E16_REF_ERA + Math.floor((now.getTime() - E16_REF_DATE.getTime()) / 86_400_000)
+}
+
+/** Convert an E16 era number to a YYYY-MM-DD date string */
+export function eraToDateStr(era: number): string {
+  const diff = era - E16_REF_ERA
+  const d = new Date(E16_REF_DATE.getTime() + diff * 86_400_000)
+  return dateStr(d)
+}
+
+/** Convert a YYYY-MM-DD date string to an E16 era number */
+export function dateToEra(ds: string): number {
+  const d = new Date(ds)
+  return E16_REF_ERA + Math.floor((d.getTime() - E16_REF_DATE.getTime()) / 86_400_000)
+}
 
 // ─── Types ───
 
 export interface AssetPrice {
-  date: string // YYYY-MM-DD
+  date: string // YYYY-MM-DD (internal; displayed as E16 era)
   open: number
   high: number
   low: number
@@ -30,10 +58,11 @@ export interface AssetDefinition {
   type: "stock" | "index" | "crypto"
   sector?: string
   basePrice: number
-  volatility: number // annualized σ
-  mu: number // annual drift μ
+  volatility: number // annualized sigma
+  mu: number // annual drift mu
   meanRevertStrength?: number // for indices
   affiliation?: string
+  foundedEra: number // E16 era when this asset was founded / became tradable
 }
 
 export interface Asset {
@@ -48,6 +77,7 @@ export interface Asset {
   change24h: number
   changePercent24h: number
   marketCap?: string
+  foundedEra: number
 }
 
 // ─── Seeded Pseudo-Random Number Generator (Mulberry32) ───
@@ -87,24 +117,11 @@ function boxMuller(rng: () => number): number {
 
 // ─── Date Utilities ───
 
-const DAYS = 365
-const END_DATE = new Date("2026-01-15")
-
 function dateStr(d: Date): string {
   const y = d.getFullYear()
   const m = String(d.getMonth() + 1).padStart(2, "0")
   const day = String(d.getDate()).padStart(2, "0")
   return `${y}-${m}-${day}`
-}
-
-function generateDates(count: number, endDate: Date): string[] {
-  const dates: string[] = []
-  const d = new Date(endDate)
-  for (let i = count - 1; i >= 0; i--) {
-    const back = new Date(d.getTime() - i * 86_400_000)
-    dates.push(dateStr(back))
-  }
-  return dates
 }
 
 // ─── Narrative Events ───
@@ -161,7 +178,7 @@ export const NARRATIVE_EVENTS: NarrativeEvent[] = [
   },
   {
     date: "2025-10-20",
-    descriptionJa: "ディオクレニス次元探査成功、NCORL急上昇",
+    descriptionJa: "ディオクレニス次元探査成功、NCORI急上昇",
     descriptionEn: "Dioclenis dimensional probe success — NCORI surges",
     affectedSymbols: ["NCORI", "DIOCLE", "LORENTZ"],
     impact: 11,
@@ -183,6 +200,29 @@ export const NARRATIVE_EVENTS: NarrativeEvent[] = [
 ]
 
 // ─── Asset Definitions ───
+// foundedEra assignments based on E16 universe lore:
+//   E0:   First settlers arrive (AD3500)
+//   E97:  n-token economy established, Corporatum Publica formed
+//   E100: Third prosperity period
+//   E120: Dimensional tech era (Dimension Horizon)
+//   E150: Maastricht Revolution, free economy
+//   E200: Post-Lombardia military expansion
+//   E270: AURALIS Proto founded
+//   E289: Fifth prosperity, Dimension Bridges
+//   E290: AURALIS Collective organized
+//   E301: ZAMLT founded
+//   E318: Alpha Kane awakens, ZAMLT collapses
+//   E325: Layla joins AURALIS
+//   E380: Tyeria #3, Queen Liana era
+//   E400: Slime Crisis ends, Tina/Gue underground control
+//   E420: Evatron Sigma-Unit (Alpha Venom origin)
+//   E475: Evatron collapses, Golden/Alpha Venom split
+//   E480: Fiona / Blue Rose rises
+//   E485: Ike Lopez / SS Range
+//   E488: Iron Syndicate / Raid Kakizaki
+//   E490: Mikael Gabrieli / V7 era
+//   E493: Madris Cernel / Fallujah
+//   E495: Arzen Carleeen / Nathan Corind (Cosmic Assembly)
 
 const ASSET_DEFS: AssetDefinition[] = [
   // ── Stocks ──
@@ -195,6 +235,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 12_450,
     volatility: 0.35,
     mu: 0.12,
+    foundedEra: 120,
   },
   {
     symbol: "ZEBRA",
@@ -205,6 +246,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 8200,
     volatility: 0.55,
     mu: -0.08,
+    foundedEra: 301,
   },
   {
     symbol: "ALOE",
@@ -215,6 +257,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 6800,
     volatility: 0.3,
     mu: 0.08,
+    foundedEra: 100,
   },
   {
     symbol: "MAMON",
@@ -225,6 +268,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 5400,
     volatility: 0.25,
     mu: 0.06,
+    foundedEra: 97,
   },
   {
     symbol: "LORENTZ",
@@ -235,6 +279,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 7100,
     volatility: 0.28,
     mu: 0.1,
+    foundedEra: 289,
   },
   {
     symbol: "THORON",
@@ -245,6 +290,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 9300,
     volatility: 0.32,
     mu: 0.09,
+    foundedEra: 200,
   },
   // ── Indices ──
   {
@@ -257,6 +303,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     volatility: 0.12,
     mu: 0.04,
     meanRevertStrength: 0.05,
+    foundedEra: 50,
   },
   {
     symbol: "AURAL",
@@ -268,6 +315,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     volatility: 0.15,
     mu: 0.05,
     meanRevertStrength: 0.04,
+    foundedEra: 290,
   },
   // ── Covert ──
   {
@@ -279,6 +327,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 1200,
     volatility: 0.7,
     mu: -0.05,
+    foundedEra: 475,
   },
   // ── Civilization Indices ──
   {
@@ -291,6 +340,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     volatility: 0.1,
     mu: 0.06,
     meanRevertStrength: 0.03,
+    foundedEra: 10,
   },
   {
     symbol: "ELYSEON",
@@ -302,6 +352,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     volatility: 0.11,
     mu: 0.05,
     meanRevertStrength: 0.03,
+    foundedEra: 15,
   },
   {
     symbol: "TYERIA",
@@ -313,6 +364,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     volatility: 0.13,
     mu: 0.07,
     meanRevertStrength: 0.03,
+    foundedEra: 18,
   },
   {
     symbol: "FALLUJA",
@@ -324,6 +376,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     volatility: 0.14,
     mu: 0.04,
     meanRevertStrength: 0.04,
+    foundedEra: 22,
   },
   {
     symbol: "DIOCLE",
@@ -335,6 +388,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     volatility: 0.12,
     mu: 0.06,
     meanRevertStrength: 0.03,
+    foundedEra: 12,
   },
   // ── N-Token Personal Crypto ──
   {
@@ -342,10 +396,11 @@ const ASSET_DEFS: AssetDefinition[] = [
     name: "アルゼン・カーリーン",
     nameEn: "Arzen Carleen",
     type: "crypto",
-    affiliation: "グランベル / 5大文明圏",
+    affiliation: "グランデル / 5大文明圏",
     basePrice: 1_500_000,
     volatility: 0.4,
     mu: 0.15,
+    foundedEra: 495,
   },
   {
     symbol: "MGABR",
@@ -356,6 +411,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 850_000,
     volatility: 0.45,
     mu: 0.12,
+    foundedEra: 490,
   },
   {
     symbol: "ILOPEZ",
@@ -366,6 +422,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 420_000,
     volatility: 0.38,
     mu: 0.1,
+    foundedEra: 485,
   },
   {
     symbol: "GHAUS",
@@ -376,6 +433,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 380_000,
     volatility: 0.35,
     mu: 0.09,
+    foundedEra: 380,
   },
   {
     symbol: "RKAKI",
@@ -386,6 +444,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 280_000,
     volatility: 0.42,
     mu: 0.08,
+    foundedEra: 488,
   },
   {
     symbol: "NCORI",
@@ -396,6 +455,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 250_000,
     volatility: 0.36,
     mu: 0.1,
+    foundedEra: 495,
   },
   {
     symbol: "MCERN",
@@ -406,6 +466,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 210_000,
     volatility: 0.3,
     mu: 0.06,
+    foundedEra: 493,
   },
   {
     symbol: "LSOL",
@@ -416,6 +477,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 180_000,
     volatility: 0.28,
     mu: 0.07,
+    foundedEra: 390,
   },
   {
     symbol: "TINGUE",
@@ -426,6 +488,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 195_000,
     volatility: 0.5,
     mu: 0.05,
+    foundedEra: 400,
   },
   {
     symbol: "FIONA",
@@ -436,6 +499,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 140_000,
     volatility: 0.38,
     mu: 0.06,
+    foundedEra: 480,
   },
   {
     symbol: "IZUMI",
@@ -446,6 +510,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 95_000,
     volatility: 0.55,
     mu: 0.03,
+    foundedEra: 475,
   },
   {
     symbol: "LAYLA",
@@ -456,15 +521,33 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 120_000,
     volatility: 0.33,
     mu: 0.08,
+    foundedEra: 325,
   },
 ]
 
 // ─── Price Generation ───
+// Generates deterministic prices from each asset's foundedEra to MAX_ERA.
+// Uses seeded PRNG so historical data is identical on every page load.
+// Only prices up to getCurrentEra() are exposed for display → daily updates.
 
 function generatePrices(def: AssetDefinition): AssetPrice[] {
-  const seed = hashString(def.symbol + "_E16_MARKET_v1")
+  const seed = hashString(def.symbol + "_E16_MARKET_v2")
   const rng = mulberry32(seed)
-  const dates = generateDates(DAYS, END_DATE)
+
+  // Date range: from foundedEra to MAX_ERA
+  const startStr = eraToDateStr(def.foundedEra)
+  const endStr = eraToDateStr(MAX_ERA)
+
+  // Build date array
+  const dates: string[] = []
+  let cur = new Date(startStr + "T00:00:00")
+  const end = new Date(endStr + "T00:00:00")
+  while (cur <= end) {
+    dates.push(dateStr(cur))
+    cur = new Date(cur.getTime() + 86_400_000)
+  }
+
+  const days = dates.length
   const dt = 1 / 252 // trading day fraction
   const prices: AssetPrice[] = []
 
@@ -485,7 +568,7 @@ function generatePrices(def: AssetDefinition): AssetPrice[] {
 
   let currentPrice = def.basePrice
 
-  for (let i = 0; i < DAYS; i++) {
+  for (let i = 0; i < days; i++) {
     const date = dates[i]!
 
     // GARCH volatility update
@@ -576,6 +659,9 @@ function formatMarketCap(price: number, symbol: string): string {
 
 // ─── Cache & Export ───
 
+/** Full price cache (foundedEra → MAX_ERA) for composite index computation */
+const fullPriceCache = new Map<string, AssetPrice[]>()
+/** Display-ready asset cache (filtered to current era) */
 const assetCache = new Map<string, Asset>()
 
 function buildAsset(def: AssetDefinition): Asset {
@@ -584,7 +670,37 @@ function buildAsset(def: AssetDefinition): Asset {
     return cached
   }
 
-  const prices = generatePrices(def)
+  // Get or generate full prices
+  let fullPrices = fullPriceCache.get(def.symbol)
+  if (!fullPrices) {
+    fullPrices = generatePrices(def)
+    fullPriceCache.set(def.symbol, fullPrices)
+  }
+
+  // Filter to current era for display
+  const currentEra = getCurrentEra()
+  const prices = fullPrices.filter((p) => dateToEra(p.date) <= currentEra)
+
+  if (prices.length < 2) {
+    // Not enough data yet (asset too new)
+    const asset: Asset = {
+      symbol: def.symbol,
+      name: def.name,
+      nameEn: def.nameEn,
+      type: def.type,
+      sector: def.sector,
+      affiliation: def.affiliation,
+      prices,
+      currentPrice: def.basePrice,
+      change24h: 0,
+      changePercent24h: 0,
+      marketCap: def.type !== "crypto" ? formatMarketCap(def.basePrice, def.symbol) : undefined,
+      foundedEra: def.foundedEra,
+    }
+    assetCache.set(def.symbol, asset)
+    return asset
+  }
+
   const lastPrice = prices[prices.length - 1]!.close
   const prevPrice = prices[prices.length - 2]!.close
   const change = lastPrice - prevPrice
@@ -602,6 +718,7 @@ function buildAsset(def: AssetDefinition): Asset {
     change24h: change,
     changePercent24h: changePercent,
     marketCap: def.type !== "crypto" ? formatMarketCap(lastPrice, def.symbol) : undefined,
+    foundedEra: def.foundedEra,
   }
 
   assetCache.set(def.symbol, asset)
@@ -630,4 +747,138 @@ export function getIndices(): Asset[] {
 
 export function getCryptos(): Asset[] {
   return getAllAssets().filter((a) => a.type === "crypto")
+}
+
+// ─── E16 Market Composite Index ───
+// Weighted average of all asset daily returns.
+// Weights: stocks 35%, indices 30%, crypto 35% (equal within each type).
+
+let compositeCache: Asset | null = null
+
+export function getCompositeIndex(): Asset {
+  if (compositeCache) {
+    return compositeCache
+  }
+
+  const allAssets = getAllAssets()
+  const stocks = allAssets.filter((a) => a.type === "stock")
+  const indices = allAssets.filter((a) => a.type === "index")
+  const cryptos = allAssets.filter((a) => a.type === "crypto")
+
+  // Weight per asset within its type group
+  const stockWeight = stocks.length > 0 ? 0.35 / stocks.length : 0
+  const indexWeight = indices.length > 0 ? 0.3 / indices.length : 0
+  const cryptoWeight = cryptos.length > 0 ? 0.35 / cryptos.length : 0
+
+  // Gather all full price arrays (needed for composite calculation)
+  const allFullPrices = ASSET_DEFS.map((def) => {
+    let fp = fullPriceCache.get(def.symbol)
+    if (!fp) {
+      fp = generatePrices(def)
+      fullPriceCache.set(def.symbol, fp)
+    }
+    return { def, prices: fp }
+  })
+
+  // Find the era range
+  const currentEra = getCurrentEra()
+  const minEra = Math.min(...ASSET_DEFS.map((d) => d.foundedEra))
+
+  // Build era → date mapping for the composite
+  const compositeStartStr = eraToDateStr(minEra)
+  const compositeEndStr = eraToDateStr(currentEra)
+  const compositeDates: string[] = []
+  let cur = new Date(compositeStartStr + "T00:00:00")
+  const end = new Date(compositeEndStr + "T00:00:00")
+  while (cur <= end) {
+    compositeDates.push(dateStr(cur))
+    cur = new Date(cur.getTime() + 86_400_000)
+  }
+
+  // Build date → close price maps for each asset
+  const priceMaps = new Map<string, Map<string, number>>()
+  for (const { def, prices: fp } of allFullPrices) {
+    const m = new Map<string, number>()
+    for (const p of fp) {
+      m.set(p.date, p.close)
+    }
+    priceMaps.set(def.symbol, m)
+  }
+
+  // Compute composite: weighted average daily returns
+  const baseValue = 1000
+  const compositePrices: AssetPrice[] = []
+  let compositeClose = baseValue
+
+  for (let i = 0; i < compositeDates.length; i++) {
+    const date = compositeDates[i]!
+    let weightedReturn = 0
+    let totalWeight = 0
+
+    for (const def of ASSET_DEFS) {
+      const pm = priceMaps.get(def.symbol)
+      if (!pm) {
+        continue
+      }
+
+      const closeToday = pm.get(date)
+      // Get previous day's price
+      const prevDate = i > 0 ? compositeDates[i - 1]! : null
+      const closePrev = prevDate ? pm.get(prevDate) : undefined
+
+      if (closeToday !== undefined && closePrev !== undefined && closePrev > 0) {
+        const dailyRet = (closeToday - closePrev) / closePrev
+        let w = 0
+        if (def.type === "stock") {
+          w = stockWeight
+        } else if (def.type === "index") {
+          w = indexWeight
+        } else if (def.type === "crypto") {
+          w = cryptoWeight
+        }
+        weightedReturn += w * dailyRet
+        totalWeight += w
+      }
+    }
+
+    if (totalWeight > 0) {
+      const avgReturn = weightedReturn / totalWeight
+      compositeClose = compositeClose * (1 + avgReturn)
+    }
+    compositeClose = Math.max(compositeClose, 1)
+
+    const open =
+      compositePrices.length > 0 ? compositePrices[compositePrices.length - 1]!.close : baseValue
+
+    compositePrices.push({
+      date,
+      open: Math.round(open * 100) / 100,
+      high: Math.round(Math.max(open, compositeClose) * 1.002 * 100) / 100,
+      low: Math.round(Math.min(open, compositeClose) * 0.998 * 100) / 100,
+      close: Math.round(compositeClose * 100) / 100,
+      volume: Math.round(5_000_000 + Math.random() * 10_000_000),
+    })
+  }
+
+  const lastPrice = compositePrices[compositePrices.length - 1]?.close ?? baseValue
+  const prevPrice = compositePrices[compositePrices.length - 2]?.close ?? baseValue
+  const change = lastPrice - prevPrice
+  const changePercent = (change / prevPrice) * 100
+
+  const composite: Asset = {
+    symbol: "E16MC",
+    name: "E16 マーケット総合指数",
+    nameEn: "E16 Market Composite",
+    type: "index",
+    sector: "Composite",
+    prices: compositePrices,
+    currentPrice: lastPrice,
+    change24h: change,
+    changePercent24h: changePercent,
+    marketCap: undefined,
+    foundedEra: minEra,
+  }
+
+  compositeCache = composite
+  return composite
 }
