@@ -319,9 +319,9 @@ export function Navigation() {
         aria-hidden="true"
       />
 
-      {/* Panel */}
+      {/* Panel — full-height flex column so inner area scrolls properly */}
       <div
-        className={`lg:hidden fixed top-0 right-0 bottom-0 z-[70] w-[85vw] max-w-[320px] bg-edu-surface border-l border-edu-border transition-transform duration-300 ease-out ${
+        className={`lg:hidden fixed top-0 right-0 bottom-0 z-[70] w-[85vw] max-w-[320px] flex flex-col bg-edu-surface border-l border-edu-border transition-transform duration-300 ease-out ${
           mobileOpen ? "translate-x-0" : "translate-x-full"
         }`}
         role="dialog"
@@ -329,48 +329,48 @@ export function Navigation() {
         aria-label="Navigation menu"
       >
         {/* Panel header */}
-        <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-edu-border/50">
+        <div className="flex items-center justify-between px-4 pt-3 pb-2.5 border-b border-edu-border/50 shrink-0">
           <span className="text-sm font-semibold text-edu-text tracking-widest">EDU</span>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <LangToggle lang={lang} setLang={setLang} />
             <button
               onClick={closeMobile}
-              className="flex items-center justify-center w-9 h-9 text-edu-muted hover:text-edu-text transition-colors"
+              className="flex items-center justify-center w-8 h-8 text-edu-muted hover:text-edu-text transition-colors"
               aria-label="Close menu"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>
 
         {/* Search link */}
-        <div className="px-3 pt-3">
+        <div className="px-3 pt-2 shrink-0">
           <Link
             href="/wiki"
             onClick={closeMobile}
-            className="flex items-center gap-3 px-3 py-3 rounded-lg text-sm text-edu-muted hover:text-edu-text hover:bg-edu-card transition-colors"
+            className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs text-edu-muted hover:text-edu-text hover:bg-edu-card transition-colors"
           >
-            <Search className="w-4 h-4" />
+            <Search className="w-3.5 h-3.5" />
             <span>{lang === "en" ? "Search Wiki..." : "Wikiを検索..."}</span>
           </Link>
         </div>
 
-        {/* Scrollable nav groups */}
-        <div className="flex-1 overflow-y-auto overscroll-contain px-3 pt-2 pb-8">
+        {/* Scrollable nav groups — compact grid layout */}
+        <div className="flex-1 overflow-y-auto overscroll-contain px-3 pt-1 pb-4">
           {MOBILE_GROUPS.map((group) => {
             const Icon = group.icon
             return (
-              <div key={group.id} className="mb-4">
+              <div key={group.id} className="mb-3">
                 {/* Group header */}
-                <div className="flex items-center gap-2 px-3 pt-3 pb-1.5">
-                  <Icon className="w-3.5 h-3.5 text-edu-accent" />
-                  <span className="text-[11px] font-semibold text-edu-accent tracking-wider uppercase">
+                <div className="flex items-center gap-1.5 px-2.5 pt-2 pb-1">
+                  <Icon className="w-3 h-3 text-edu-accent" />
+                  <span className="text-[10px] font-semibold text-edu-accent tracking-wider uppercase">
                     {lang === "en" ? group.labelEn : group.label}
                   </span>
                 </div>
 
-                {/* Group items */}
-                <div className="flex flex-col gap-0.5">
+                {/* Compact grid items */}
+                <div className="grid grid-cols-2 gap-1">
                   {group.items.map((s) => {
                     const isActive = pathname === s.href || pathname.startsWith(s.href + "/")
                     return (
@@ -378,16 +378,16 @@ export function Navigation() {
                         key={s.id}
                         href={s.href}
                         onClick={closeMobile}
-                        className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all ${
+                        className={`flex items-center justify-between px-2.5 py-2 rounded-lg text-xs transition-all ${
                           isActive
                             ? "text-edu-accent bg-edu-accent/10 font-medium"
                             : "text-edu-text-dim hover:text-edu-text hover:bg-edu-card"
                         }`}
                       >
-                        <span>{lang === "en" && s.labelEn ? s.labelEn : s.label}</span>
+                        <span className="truncate">{lang === "en" && s.labelEn ? s.labelEn : s.label}</span>
                         {isActive && (
                           <span
-                            className="w-1.5 h-1.5 rounded-full bg-edu-accent shrink-0"
+                            className="w-1 h-1 rounded-full bg-edu-accent shrink-0"
                             aria-hidden="true"
                           />
                         )}
@@ -399,41 +399,36 @@ export function Navigation() {
             )
           })}
 
-          {/* Finance link in mobile */}
-          <div className="mb-4">
-            <div className="flex items-center gap-2 px-3 pt-3 pb-1.5">
-              <TrendingUp className="w-3.5 h-3.5 text-edu-accent" />
-              <span className="text-[11px] font-semibold text-edu-accent tracking-wider uppercase">
-                {lang === "en" ? "Finance" : "マーケット"}
-              </span>
-            </div>
+          {/* Finance link in mobile — full width accent */}
+          <div className="mt-1">
             <Link
               href="/finance"
               onClick={closeMobile}
-              className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-all ${
+              className={`flex items-center justify-center gap-1.5 w-full px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
                 isFinanceActive
-                  ? "text-edu-bg bg-edu-accent font-semibold"
-                  : "text-edu-accent hover:bg-edu-accent/10"
+                  ? "text-edu-bg bg-edu-accent"
+                  : "text-edu-accent bg-edu-accent/8 hover:bg-edu-accent/15"
               }`}
             >
+              <TrendingUp className="w-3.5 h-3.5" />
               <span>{lang === "en" ? "E16 Market" : "E16 マーケット"}</span>
               {isFinanceActive && (
-                <span className="w-1.5 h-1.5 rounded-full bg-edu-bg shrink-0" />
+                <span className="w-1 h-1 rounded-full bg-edu-bg shrink-0" />
               )}
             </Link>
           </div>
         </div>
 
         {/* Panel footer — home link */}
-        <div className="border-t border-edu-border/50 px-5 py-3">
+        <div className="border-t border-edu-border/50 px-4 py-2.5 shrink-0">
           <Link
             href="/"
             onClick={closeMobile}
-            className={`flex items-center gap-2 text-sm transition-colors ${
+            className={`flex items-center gap-2 text-xs transition-colors ${
               pathname === "/" ? "text-edu-accent" : "text-edu-muted hover:text-edu-text"
             }`}
           >
-            <ChevronRight className="w-4 h-4 rotate-180" />
+            <ChevronRight className="w-3.5 h-3.5 rotate-180" />
             <span>{lang === "en" ? "Home" : "トップ"}</span>
           </Link>
         </div>
