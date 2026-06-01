@@ -68,7 +68,9 @@ function getSlicePrices(prices: AssetPrice[], days: number): AssetPrice[] {
 
 function isUp(prices: AssetPrice[]): boolean {
   if (prices.length < 2) return true
-  return prices[prices.length - 1].close >= prices[0].open
+  const latest = prices[prices.length - 1]
+  const first = prices[0]
+  return latest ? latest.close >= (first?.open ?? 0) : true
 }
 
 // ─── Sparkline Component (SVG mini chart) ───
@@ -98,7 +100,9 @@ function Sparkline({
     })
     .join(" ")
 
-  const up = closes[closes.length - 1] >= closes[0]
+  const lastClose = closes[closes.length - 1] ?? 0
+  const firstClose = closes[0] ?? 0
+  const up = lastClose >= firstClose
   const color = up ? "#34d399" : "#f43f5e"
 
   return (
@@ -144,11 +148,15 @@ function InteractiveChart({
     y: pad.top + plotH - ((c - min) / range) * plotH,
   }))
 
-  const linePath = points.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ")
+  const linePath = points
+    .map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`)
+    .join(" ")
+  const lastPoint = points[points.length - 1]
+  const firstPoint = points[0]
   const areaPath =
     linePath +
-    ` L${points[points.length - 1].x.toFixed(1)},${(pad.top + plotH).toFixed(1)}` +
-    ` L${points[0].x.toFixed(1)},${(pad.top + plotH).toFixed(1)} Z`
+    (lastPoint ? ` L${lastPoint.x.toFixed(1)},${(pad.top + plotH).toFixed(1)}` : "") +
+    (firstPoint ? ` L${firstPoint.x.toFixed(1)},${(pad.top + plotH).toFixed(1)} Z` : "")
 
   // Narrative events in this slice
   const sliceDates = new Set(slice.map((p) => p.date))
@@ -270,14 +278,11 @@ function InteractiveChart({
         <path d={linePath} fill="none" stroke={lineColor} strokeWidth="2" strokeLinejoin="round" />
 
         {/* Current price dot */}
-        {points.length > 0 && (
-          <circle
-            cx={points[points.length - 1].x}
-            cy={points[points.length - 1].y}
-            r="3"
-            fill={lineColor}
-          />
-        )}
+        {points.length > 0 &&
+          (() => {
+            const last = points[points.length - 1]!
+            return <circle cx={last.x} cy={last.y} r="3" fill={lineColor} />
+          })()}
 
         {/* Crosshair on hover */}
         {hoveredPoint && hoveredPrice && (
@@ -371,11 +376,13 @@ function TickerBar({ assets, lang }: { assets: Asset[]; lang: "ja" | "en" }) {
                   key={`${dup}-${a.symbol}`}
                   className="flex items-center gap-2 px-4 py-2 shrink-0 border-r border-edu-border/30"
                 >
-                  <span className="text-xs font-bold text-edu-accent tracking-wider">{a.symbol}</span>
-                  <span className="text-xs text-edu-text-dim">
-                    {formatPrice(a.currentPrice)}n
+                  <span className="text-xs font-bold text-edu-accent tracking-wider">
+                    {a.symbol}
                   </span>
-                  <span className={`text-xs font-semibold ${up ? "text-emerald-400" : "text-rose-400"}`}>
+                  <span className="text-xs text-edu-text-dim">{formatPrice(a.currentPrice)}n</span>
+                  <span
+                    className={`text-xs font-semibold ${up ? "text-emerald-400" : "text-rose-400"}`}
+                  >
                     {up ? "+" : ""}
                     {a.changePercent24h.toFixed(2)}%
                   </span>
@@ -392,25 +399,21 @@ function TickerBar({ assets, lang }: { assets: Asset[]; lang: "ja" | "en" }) {
 
 // ─── Stats Cards ───
 
-function StatsSection({
-  assets,
-  lang,
-}: {
-  assets: Asset[]
-  lang: "ja" | "en"
-}) {
-  const totalMarketCap = assets
-    .filter((a) => a.marketCap)
-    .length
+function StatsSection({ assets, lang }: { assets: Asset[]; lang: "ja" | "en" }) {
+  const totalMarketCap = assets.filter((a) => a.marketCap).length
   const totalVol24h = assets.reduce((sum, a) => {
     const last = a.prices[a.prices.length - 1]
-    return sum + last.volume
+    return sum + (last?.volume ?? 0)
   }, 0)
   const gainers = assets.filter((a) => a.changePercent24h >= 0).length
   const losers = assets.filter((a) => a.changePercent24h < 0).length
   const sentiment = gainers > losers ? "Bullish" : gainers < losers ? "Bearish" : "Neutral"
   const sentimentColor =
-    sentiment === "Bullish" ? "text-emerald-400" : sentiment === "Bearish" ? "text-rose-400" : "text-edu-muted"
+    sentiment === "Bullish"
+      ? "text-emerald-400"
+      : sentiment === "Bearish"
+        ? "text-rose-400"
+        : "text-edu-muted"
 
   const stats = [
     {
@@ -462,7 +465,9 @@ function StatsSection({
                 {lang === "ja" ? s.label : s.labelEn}
               </span>
             </div>
-            <div className={`text-lg font-bold tracking-tight ${s.accent ? s.accentColor : "text-edu-text"}`}>
+            <div
+              className={`text-lg font-bold tracking-tight ${s.accent ? s.accentColor : "text-edu-text"}`}
+            >
               {s.value}
             </div>
           </m.div>
@@ -582,11 +587,11 @@ function AssetTable({
                 className="border-b border-edu-border/30 hover:bg-edu-card-alt/50 transition-colors"
               >
                 <td className="py-2.5 px-3 font-bold text-edu-accent tracking-wider">{a.symbol}</td>
-                <td className="py-2.5 px-3 text-edu-text-dim">{lang === "ja" ? a.name : a.nameEn}</td>
+                <td className="py-2.5 px-3 text-edu-text-dim">
+                  {lang === "ja" ? a.name : a.nameEn}
+                </td>
                 {showAffiliation && (
-                  <td className="py-2.5 px-3 text-edu-muted text-[10px]">
-                    {a.affiliation ?? "—"}
-                  </td>
+                  <td className="py-2.5 px-3 text-edu-muted text-[10px]">{a.affiliation ?? "—"}</td>
                 )}
                 <td className="py-2.5 px-3 text-right font-mono text-edu-text">
                   {formatPrice(a.currentPrice)}n
@@ -640,7 +645,10 @@ function TimelineSection({ lang }: { lang: "ja" | "en" }) {
               </p>
               <div className="flex flex-wrap gap-1 mt-2">
                 {ev.affectedSymbols.map((sym) => (
-                  <span key={sym} className="px-1.5 py-0.5 text-[9px] bg-edu-border/50 text-edu-accent rounded">
+                  <span
+                    key={sym}
+                    className="px-1.5 py-0.5 text-[9px] bg-edu-border/50 text-edu-accent rounded"
+                  >
                     {sym}
                   </span>
                 ))}
@@ -750,10 +758,14 @@ export default function FinancePage() {
                   <div key={a.symbol} className="flex items-center justify-between py-1.5">
                     <div>
                       <span className="text-xs font-bold text-edu-accent">{a.symbol}</span>
-                      <span className="text-[10px] text-edu-muted ml-2">{lang === "ja" ? a.name : a.nameEn}</span>
+                      <span className="text-[10px] text-edu-muted ml-2">
+                        {lang === "ja" ? a.name : a.nameEn}
+                      </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs font-mono text-edu-text">{formatPrice(a.currentPrice)}n</span>
+                      <span className="text-xs font-mono text-edu-text">
+                        {formatPrice(a.currentPrice)}n
+                      </span>
                       <span className="text-xs font-mono text-emerald-400 ml-2">
                         +{a.changePercent24h.toFixed(2)}%
                       </span>
@@ -775,10 +787,14 @@ export default function FinancePage() {
                   <div key={a.symbol} className="flex items-center justify-between py-1.5">
                     <div>
                       <span className="text-xs font-bold text-edu-accent">{a.symbol}</span>
-                      <span className="text-[10px] text-edu-muted ml-2">{lang === "ja" ? a.name : a.nameEn}</span>
+                      <span className="text-[10px] text-edu-muted ml-2">
+                        {lang === "ja" ? a.name : a.nameEn}
+                      </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs font-mono text-edu-text">{formatPrice(a.currentPrice)}n</span>
+                      <span className="text-xs font-mono text-edu-text">
+                        {formatPrice(a.currentPrice)}n
+                      </span>
                       <span className="text-xs font-mono text-rose-400 ml-2">
                         {a.changePercent24h.toFixed(2)}%
                       </span>
@@ -852,7 +868,8 @@ export default function FinancePage() {
                       stockAsset.changePercent24h >= 0 ? "text-emerald-400" : "text-rose-400"
                     }`}
                   >
-                    {formatChange(stockAsset.change24h)} ({stockAsset.changePercent24h >= 0 ? "+" : ""}
+                    {formatChange(stockAsset.change24h)} (
+                    {stockAsset.changePercent24h >= 0 ? "+" : ""}
                     {stockAsset.changePercent24h.toFixed(2)}%)
                   </span>
                   <span className="text-[10px] text-edu-muted">
@@ -862,7 +879,9 @@ export default function FinancePage() {
               </div>
             )}
 
-            {stockAsset && <InteractiveChart asset={stockAsset} periodDays={stockPeriod} lang={lang} />}
+            {stockAsset && (
+              <InteractiveChart asset={stockAsset} periodDays={stockPeriod} lang={lang} />
+            )}
           </div>
 
           {/* N-Token Crypto Chart */}
@@ -925,7 +944,8 @@ export default function FinancePage() {
                       cryptoAsset.changePercent24h >= 0 ? "text-emerald-400" : "text-rose-400"
                     }`}
                   >
-                    {formatChange(cryptoAsset.change24h)} ({cryptoAsset.changePercent24h >= 0 ? "+" : ""}
+                    {formatChange(cryptoAsset.change24h)} (
+                    {cryptoAsset.changePercent24h >= 0 ? "+" : ""}
                     {cryptoAsset.changePercent24h.toFixed(2)}%)
                   </span>
                   <span className="text-[10px] text-edu-muted">
@@ -935,7 +955,9 @@ export default function FinancePage() {
               </div>
             )}
 
-            {cryptoAsset && <InteractiveChart asset={cryptoAsset} periodDays={cryptoPeriod} lang={lang} />}
+            {cryptoAsset && (
+              <InteractiveChart asset={cryptoAsset} periodDays={cryptoPeriod} lang={lang} />
+            )}
           </div>
         </m.section>
 

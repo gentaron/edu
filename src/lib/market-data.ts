@@ -53,12 +53,14 @@ export interface Asset {
 // ─── Seeded Pseudo-Random Number Generator (Mulberry32) ───
 
 function mulberry32(seed: number): () => number {
+  // eslint-disable-next-line unicorn/prefer-math-trunc -- intentional 32-bit integer truncation for PRNG
   let state = seed | 0
   return () => {
-    state = (state + 0x6d2b79f5) | 0
+    // eslint-disable-next-line unicorn/prefer-math-trunc -- intentional 32-bit integer truncation for PRNG
+    state = (state + 1_831_565_045) | 0
     let t = Math.imul(state ^ (state >>> 15), 1 | state)
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+    return ((t ^ (t >>> 14)) >>> 0) / 4_294_967_296
   }
 }
 
@@ -67,6 +69,7 @@ function hashString(str: string): number {
   let hash = 0
   for (let i = 0; i < str.length; i++) {
     const ch = str.charCodeAt(i)
+    // eslint-disable-next-line unicorn/prefer-math-trunc -- intentional 32-bit integer truncation for hash
     hash = ((hash << 5) - hash + ch) | 0
   }
   return Math.abs(hash)
@@ -75,7 +78,9 @@ function hashString(str: string): number {
 /** Box-Muller transform to generate standard normal from uniform [0,1) */
 function boxMuller(rng: () => number): number {
   let u1 = rng()
-  while (u1 === 0) u1 = rng() // avoid log(0)
+  while (u1 === 0) {
+    u1 = rng()
+  } // avoid log(0)
   const u2 = rng()
   return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2)
 }
@@ -117,21 +122,21 @@ export const NARRATIVE_EVENTS: NarrativeEvent[] = [
     descriptionJa: "E400: エヴァトロン弾圧、暗号市場への不信感",
     descriptionEn: "E400: Evatron suppression — crypto market panic",
     affectedSymbols: ["GOLDV", "TINGUE"],
-    impact: -12.0,
+    impact: -12,
   },
   {
     date: "2025-08-22",
     descriptionJa: "E515: V7結成、軍需株・ファールージャ社急騰",
     descriptionEn: "E515: V7 Formation — defense stocks & FARUJA soar",
     affectedSymbols: ["FARUJA", "THORON", "LORENTZ", "MGABR", "GHAUS"],
-    impact: 15.0,
+    impact: 15,
   },
   {
     date: "2025-09-18",
     descriptionJa: "E522: AURALIS Gen-2復活、文化的指標急上昇",
     descriptionEn: "E522: AURALIS Gen-2 Revival — cultural index surges",
     affectedSymbols: ["AURAL", "LSOL", "ACARL"],
-    impact: 10.0,
+    impact: 10,
   },
   {
     date: "2025-11-05",
@@ -145,7 +150,7 @@ export const NARRATIVE_EVENTS: NarrativeEvent[] = [
     descriptionJa: "グランベルGDP上方修正、文明圏指標全体上昇",
     descriptionEn: "Grandel GDP upward revision — civilization indices rise",
     affectedSymbols: ["GRANDEL", "UECO", "ACARL"],
-    impact: 8.0,
+    impact: 8,
   },
   {
     date: "2025-07-14",
@@ -159,14 +164,14 @@ export const NARRATIVE_EVENTS: NarrativeEvent[] = [
     descriptionJa: "ディオクレニス次元探査成功、NCORL急上昇",
     descriptionEn: "Dioclenis dimensional probe success — NCORI surges",
     affectedSymbols: ["NCORI", "DIOCLE", "LORENTZ"],
-    impact: 11.0,
+    impact: 11,
   },
   {
     date: "2025-05-30",
     descriptionJa: "ゴールデン・ヴェノム摘発、GOLDV暴落",
     descriptionEn: "Golden Venom crackdown — GOLDV crashes",
     affectedSymbols: ["GOLDV", "TINGUE"],
-    impact: -22.0,
+    impact: -22,
   },
   {
     date: "2026-01-08",
@@ -187,7 +192,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Faruja Corp",
     type: "stock",
     sector: "DimensionalTech",
-    basePrice: 12450,
+    basePrice: 12_450,
     volatility: 0.35,
     mu: 0.12,
   },
@@ -208,7 +213,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     type: "stock",
     sector: "Energy",
     basePrice: 6800,
-    volatility: 0.30,
+    volatility: 0.3,
     mu: 0.08,
   },
   {
@@ -229,7 +234,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     sector: "Construction",
     basePrice: 7100,
     volatility: 0.28,
-    mu: 0.10,
+    mu: 0.1,
   },
   {
     symbol: "THORON",
@@ -272,7 +277,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     type: "stock",
     sector: "Covert",
     basePrice: 1200,
-    volatility: 0.70,
+    volatility: 0.7,
     mu: -0.05,
   },
   // ── Civilization Indices ──
@@ -282,8 +287,8 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Grandel",
     type: "index",
     sector: "Civilization",
-    basePrice: 15000,
-    volatility: 0.10,
+    basePrice: 15_000,
+    volatility: 0.1,
     mu: 0.06,
     meanRevertStrength: 0.03,
   },
@@ -304,7 +309,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Tyeria",
     type: "index",
     sector: "Civilization",
-    basePrice: 11200,
+    basePrice: 11_200,
     volatility: 0.13,
     mu: 0.07,
     meanRevertStrength: 0.03,
@@ -338,8 +343,8 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Arzen Carleen",
     type: "crypto",
     affiliation: "グランベル / 5大文明圏",
-    basePrice: 1500000,
-    volatility: 0.40,
+    basePrice: 1_500_000,
+    volatility: 0.4,
     mu: 0.15,
   },
   {
@@ -348,7 +353,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Mikael Gabrieli",
     type: "crypto",
     affiliation: "ファールージャ社 / V7",
-    basePrice: 850000,
+    basePrice: 850_000,
     volatility: 0.45,
     mu: 0.12,
   },
@@ -358,9 +363,9 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Ike Lopez",
     type: "crypto",
     affiliation: "SSレンジ / V7",
-    basePrice: 420000,
+    basePrice: 420_000,
     volatility: 0.38,
-    mu: 0.10,
+    mu: 0.1,
   },
   {
     symbol: "GHAUS",
@@ -368,7 +373,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Greymond Hauser",
     type: "crypto",
     affiliation: "ティエリア / 5大文明圏",
-    basePrice: 380000,
+    basePrice: 380_000,
     volatility: 0.35,
     mu: 0.09,
   },
@@ -378,7 +383,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Raid Kakizaki",
     type: "crypto",
     affiliation: "アイアン・シンジケート / V7",
-    basePrice: 280000,
+    basePrice: 280_000,
     volatility: 0.42,
     mu: 0.08,
   },
@@ -388,9 +393,9 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Nathan Corind",
     type: "crypto",
     affiliation: "ディオクレニス / 5大文明圏",
-    basePrice: 250000,
+    basePrice: 250_000,
     volatility: 0.36,
-    mu: 0.10,
+    mu: 0.1,
   },
   {
     symbol: "MCERN",
@@ -398,8 +403,8 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Madris Cernel",
     type: "crypto",
     affiliation: "ファルージャ / 5大文明圏",
-    basePrice: 210000,
-    volatility: 0.30,
+    basePrice: 210_000,
+    volatility: 0.3,
     mu: 0.06,
   },
   {
@@ -408,7 +413,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Liana Solis",
     type: "crypto",
     affiliation: "エレシオン / 5大文明圏",
-    basePrice: 180000,
+    basePrice: 180_000,
     volatility: 0.28,
     mu: 0.07,
   },
@@ -418,8 +423,8 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Tina/Gue",
     type: "crypto",
     affiliation: "地下街",
-    basePrice: 195000,
-    volatility: 0.50,
+    basePrice: 195_000,
+    volatility: 0.5,
     mu: 0.05,
   },
   {
@@ -428,7 +433,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Fiona",
     type: "crypto",
     affiliation: "ブルーローズ / V7",
-    basePrice: 140000,
+    basePrice: 140_000,
     volatility: 0.38,
     mu: 0.06,
   },
@@ -438,7 +443,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Izumi (Alpha Venom)",
     type: "crypto",
     affiliation: "シャドウ・リベリオン",
-    basePrice: 95000,
+    basePrice: 95_000,
     volatility: 0.55,
     mu: 0.03,
   },
@@ -448,7 +453,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     nameEn: "Layla Virell Nova",
     type: "crypto",
     affiliation: "アイリス / ファルージャ",
-    basePrice: 120000,
+    basePrice: 120_000,
     volatility: 0.33,
     mu: 0.08,
   },
@@ -475,19 +480,19 @@ function generatePrices(def: AssetDefinition): AssetPrice[] {
   // GARCH-like volatility state
   let garchVol = def.volatility
   const garchOmega = def.volatility * 0.15
-  const garchAlpha = 0.20
+  const garchAlpha = 0.2
   const garchBeta = 0.65
 
   let currentPrice = def.basePrice
 
   for (let i = 0; i < DAYS; i++) {
-    const date = dates[i]
+    const date = dates[i]!
 
     // GARCH volatility update
     if (i > 0) {
-      const prevReturn = (prices[i - 1].close - prices[i - 1].open) / prices[i - 1].open
-      garchVol =
-        garchOmega + garchAlpha * Math.abs(prevReturn) + garchBeta * garchVol
+      const prev = prices[i - 1]!
+      const prevReturn = (prev.close - prev.open) / prev.open
+      garchVol = garchOmega + garchAlpha * Math.abs(prevReturn) + garchBeta * garchVol
       garchVol = Math.max(def.volatility * 0.3, Math.min(garchVol, def.volatility * 3))
     }
 
@@ -529,7 +534,7 @@ function generatePrices(def: AssetDefinition): AssetPrice[] {
     const dayVol = Math.abs(close - open) / open
     const rangeMultiplier = 1.5 + rng() * 2.5
     const high = Math.max(open, close) * (1 + dayVol * rangeMultiplier * 0.5)
-    const low = Math.min(open, close) * (1 - dayVol * rangeMultiplier * 0.5)
+    let low = Math.min(open, close) * (1 - dayVol * rangeMultiplier * 0.5)
     low = Math.max(low, 0.5)
 
     // Volume: base volume + randomness + spike on events
@@ -575,11 +580,13 @@ const assetCache = new Map<string, Asset>()
 
 function buildAsset(def: AssetDefinition): Asset {
   const cached = assetCache.get(def.symbol)
-  if (cached) return cached
+  if (cached) {
+    return cached
+  }
 
   const prices = generatePrices(def)
-  const lastPrice = prices[prices.length - 1].close
-  const prevPrice = prices[prices.length - 2].close
+  const lastPrice = prices[prices.length - 1]!.close
+  const prevPrice = prices[prices.length - 2]!.close
   const change = lastPrice - prevPrice
   const changePercent = (change / prevPrice) * 100
 
@@ -607,7 +614,9 @@ export function getAllAssets(): Asset[] {
 
 export function getAsset(symbol: string): Asset | undefined {
   const def = ASSET_DEFS.find((d) => d.symbol === symbol)
-  if (!def) return undefined
+  if (!def) {
+    return undefined
+  }
   return buildAsset(def)
 }
 
