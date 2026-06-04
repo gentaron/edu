@@ -1,27 +1,25 @@
 /* ═══════════════════════════════════════════════════════════════
-   EDU Market Data Engine v2
-   E16 Era-based deterministic price generation with daily updates.
-   Each asset starts from its founding era; data pre-generated
-   up to MAX_ERA and filtered to the current era for display.
+   EDU Market Data Engine v3
+   E16 Era-based deterministic price generation.
+   All assets start from their founding era; prices generated to E529.
+   Daily price perturbation via date-seeded PRNG for live updates.
    ═══════════════════════════════════════════════════════════════ */
 
 // ─── E16 Era System ───
 
-/** Reference: E529 = 2026-01-15 (from commit "E529以降 1日=1年 リアルタイム進行") */
-export const E16_REF_ERA = 529
+/** Current story era — locked at E529 (where the E16 universe currently is) */
+export const E16_STORY_ERA = 529
+/** Internal epoch for date↔era conversion */
 const E16_REF_DATE = new Date("2026-01-15")
-/** Pre-generate prices up to this era for seamless daily updates */
-const MAX_ERA = 1200
 
-/** Returns the current E16 era based on today's date */
+/** Returns the current E16 era (fixed at story era) */
 export function getCurrentEra(): number {
-  const now = new Date()
-  return E16_REF_ERA + Math.floor((now.getTime() - E16_REF_DATE.getTime()) / 86_400_000)
+  return E16_STORY_ERA
 }
 
 /** Convert an E16 era number to a YYYY-MM-DD date string */
 export function eraToDateStr(era: number): string {
-  const diff = era - E16_REF_ERA
+  const diff = era - E16_STORY_ERA
   const d = new Date(E16_REF_DATE.getTime() + diff * 86_400_000)
   return dateStr(d)
 }
@@ -29,7 +27,12 @@ export function eraToDateStr(era: number): string {
 /** Convert a YYYY-MM-DD date string to an E16 era number */
 export function dateToEra(ds: string): number {
   const d = new Date(ds)
-  return E16_REF_ERA + Math.floor((d.getTime() - E16_REF_DATE.getTime()) / 86_400_000)
+  return E16_STORY_ERA + Math.floor((d.getTime() - E16_REF_DATE.getTime()) / 86_400_000)
+}
+
+/** Get today's date string for daily seed */
+function todayStr(): string {
+  return dateStr(new Date())
 }
 
 // ─── Types ───
@@ -44,7 +47,7 @@ export interface AssetPrice {
 }
 
 export interface NarrativeEvent {
-  date: string // YYYY-MM-DD
+  date: string // YYYY-MM-DD (E16 era-mapped)
   descriptionJa: string
   descriptionEn: string
   affectedSymbols: string[]
@@ -125,104 +128,361 @@ function dateStr(d: Date): string {
 }
 
 // ─── Narrative Events ───
+// 35 events spanning the entire E16 timeline E0–E529.
+// Dates are era-mapped via eraToDateStr for correct chart placement.
 
 export const NARRATIVE_EVENTS: NarrativeEvent[] = [
+  // ── Pre-History & Early Colonization (E0–E100) ──
   {
-    date: "2025-06-10",
-    descriptionJa: "E318: ZAMLT崩壊の余波、ZEBRA社大幅下落",
-    descriptionEn: "E318 Aftermath: ZAMLT collapse — ZEBRA plunges",
-    affectedSymbols: ["ZEBRA"],
-    impact: -18.5,
+    date: eraToDateStr(0),
+    descriptionJa: "E0: 第一陣1,000名がシンフォニー・オブ・スターズに到着。A-Registry萌芽",
+    descriptionEn: "E0: First 1,000 settlers arrive at Symphony of Stars. A-Registry萌芽",
+    affectedSymbols: ["GRANDEL", "ELYSEON", "UECO"],
+    impact: 5,
   },
   {
-    date: "2025-04-15",
-    descriptionJa: "E400: エヴァトロン弾圧、暗号市場への不信感",
-    descriptionEn: "E400: Evatron suppression — crypto market panic",
-    affectedSymbols: ["GOLDV", "TINGUE"],
-    impact: -12,
-  },
-  {
-    date: "2025-08-22",
-    descriptionJa: "E515: V7結成、軍需株・ファールージャ社急騰",
-    descriptionEn: "E515: V7 Formation — defense stocks & FARUJA soar",
-    affectedSymbols: ["FARUJA", "THORON", "LORENTZ", "MGABR", "GHAUS"],
-    impact: 15,
-  },
-  {
-    date: "2025-09-18",
-    descriptionJa: "E522: AURALIS Gen-2復活、文化的指標急上昇",
-    descriptionEn: "E522: AURALIS Gen-2 Revival — cultural index surges",
-    affectedSymbols: ["AURAL", "LSOL", "ACARL"],
-    impact: 10,
-  },
-  {
-    date: "2025-11-05",
-    descriptionJa: "E528: リミナル・フォージ発射、技術株ブーム",
-    descriptionEn: "E528: Liminal Forge launch — tech sector boom",
-    affectedSymbols: ["FARUJA", "LORENTZ", "ALOE", "NCORI"],
-    impact: 12.5,
-  },
-  {
-    date: "2025-12-01",
-    descriptionJa: "グランベルGDP上方修正、文明圏指標全体上昇",
-    descriptionEn: "Grandel GDP upward revision — civilization indices rise",
-    affectedSymbols: ["GRANDEL", "UECO", "ACARL"],
+    date: eraToDateStr(6),
+    descriptionJa: "E6: 第一繁栄期。パラトン等の初期都市圏形成。文明圏指数基準値確立",
+    descriptionEn:
+      "E6: First prosperity. Early urban zones like Palaton. Civilization index baseline",
+    affectedSymbols: ["GRANDEL", "ELYSEON", "TYERIA", "DIOCLE", "FALLUJA"],
     impact: 8,
   },
   {
-    date: "2025-07-14",
-    descriptionJa: "ティエリア軍事演習、THORON受注増加",
-    descriptionEn: "Tyeria military exercises — THORON orders surge",
-    affectedSymbols: ["THORON", "GHAUS", "TYERIA"],
-    impact: 7.5,
+    date: eraToDateStr(14),
+    descriptionJa: "E14: エルトナ戦争 — 前衛意識 vs 原始意識。軍事株需要急増",
+    descriptionEn: "E14: The Eltna War. Defense stocks surge on military demand",
+    affectedSymbols: ["THORON", "FARUJA", "TYERIA"],
+    impact: 6,
   },
   {
-    date: "2025-10-20",
-    descriptionJa: "ディオクレニス次元探査成功、NCORI急上昇",
-    descriptionEn: "Dioclenis dimensional probe success — NCORI surges",
-    affectedSymbols: ["NCORI", "DIOCLE", "LORENTZ"],
+    date: eraToDateStr(62),
+    descriptionJa: "E62: チョンクォン戦争。一時的な市場混乱",
+    descriptionEn: "E62: Chonkwon War. Temporary market disruption",
+    affectedSymbols: ["UECO", "GRANDEL"],
+    impact: -7,
+  },
+  {
+    date: eraToDateStr(78),
+    descriptionJa: "E78: 第二繁栄期。人口4,000万。A-Registry 155階層整備完了",
+    descriptionEn: "E78: Second prosperity. Population 40M. A-Registry 155 tiers",
+    affectedSymbols: ["UECO", "GRANDEL", "MAMON", "ELYSEON"],
+    impact: 10,
+  },
+  {
+    date: eraToDateStr(88),
+    descriptionJa: "E88: ロンバルディア戦争開戦。軍需株急騰、一般株下落",
+    descriptionEn: "E88: Lombardia War begins. Military stocks soar, general stocks fall",
+    affectedSymbols: ["THORON", "TYERIA", "FARUJA"],
+    impact: 12,
+  },
+  {
+    date: eraToDateStr(97),
+    descriptionJa: "E97: 第三繁栄期。n-token経済確立。ネオンコロシアム開設。金融株ブーム",
+    descriptionEn: "E97: Third prosperity. n-token economy established. Neon Colosseum opens",
+    affectedSymbols: ["MAMON", "UECO", "ALOE", "GRANDEL"],
+    impact: 14,
+  },
+  {
+    date: eraToDateStr(100),
+    descriptionJa: "E100: バイオエンジニアリング爆発的進化。技術株・エネルギー株急騰",
+    descriptionEn: "E100: Bioengineering explosion. Tech and energy stocks surge",
+    affectedSymbols: ["FARUJA", "ALOE", "LORENTZ", "GRANDEL"],
     impact: 11,
   },
+  // ── Empire & Revolution (E100–E200) ──
   {
-    date: "2025-05-30",
-    descriptionJa: "ゴールデン・ヴェノム摘発、GOLDV暴落",
-    descriptionEn: "Golden Venom crackdown — GOLDV crashes",
+    date: eraToDateStr(114),
+    descriptionJa: "E114: クワンナ革命 — 分権化。A-Registry見直しで市場ボラティリティ増大",
+    descriptionEn: "E114: Kwannara Revolution — Decentralization. Market volatility spikes",
+    affectedSymbols: ["UECO", "MAMON"],
+    impact: -5,
+  },
+  {
+    date: eraToDateStr(120),
+    descriptionJa: "E120: 次元極地平開発。Dimension Horizon技術が画期的ブレイクスルー",
+    descriptionEn: "E120: Dimension Horizon developed. Breakthrough in dimensional tech",
+    affectedSymbols: ["FARUJA", "LORENTZ", "NCORI", "GRANDEL"],
+    impact: 16,
+  },
+  {
+    date: eraToDateStr(150),
+    descriptionJa: "E150: マーストリヒト革命。完全自由経済確立。全銘柄総上げ",
+    descriptionEn: "E150: Maastricht Revolution. Free economy established. Broad market rally",
+    affectedSymbols: [
+      "FARUJA",
+      "ZEBRA",
+      "ALOE",
+      "MAMON",
+      "LORENTZ",
+      "THORON",
+      "GRANDEL",
+      "UECO",
+      "ELYSEON",
+      "TYERIA",
+      "DIOCLE",
+      "FALLUJA",
+    ],
+    impact: 13,
+  },
+  {
+    date: eraToDateStr(153),
+    descriptionJa: "E153: 第四繁栄期。人口3億。GDP14京nトークン。次元技術で星間通信革命",
+    descriptionEn: "E153: Fourth prosperity. Population 300M. GDP 14 quadrillion n-tokens",
+    affectedSymbols: ["GRANDEL", "UECO", "FARUJA", "ALOE"],
+    impact: 9,
+  },
+  {
+    date: eraToDateStr(208),
+    descriptionJa: "E208: コーラの疫病。人口15%死亡。シャドウ・リベリオン結成。市場暴落",
+    descriptionEn: "E208: The Cora Plague. 15% population dies. Market crashes",
+    affectedSymbols: [
+      "GRANDEL",
+      "UECO",
+      "ELYSEON",
+      "TYERIA",
+      "DIOCLE",
+      "FALLUJA",
+      "FARUJA",
+      "ALOE",
+      "MAMON",
+      "THORON",
+    ],
+    impact: -18,
+  },
+  // ── ZAMLT Era (E200–E320) ──
+  {
+    date: eraToDateStr(270),
+    descriptionJa: "E270: AURALIS Proto創設。文化的指標の基礎が形成される",
+    descriptionEn: "E270: AURALIS Proto founded. Cultural index foundation forms",
+    affectedSymbols: ["AURAL"],
+    impact: 7,
+  },
+  {
+    date: eraToDateStr(278),
+    descriptionJa: "E278: パクス・ロンバルディカ末期。ZAMLT準備期の不確実性で市場下落",
+    descriptionEn: "E278: Late Pax Lombardica. Market dips on ZAMLT uncertainty",
+    affectedSymbols: ["UECO", "MAMON", "ZEBRA"],
+    impact: -8,
+  },
+  {
+    date: eraToDateStr(289),
+    descriptionJa: "E289: 第五繁栄期。次元ブリッジ完成。建設株・技術株急騰",
+    descriptionEn: "E289: Fifth prosperity. Dimension Bridges complete. Construction stocks soar",
+    affectedSymbols: ["LORENTZ", "FARUJA", "GRANDEL", "UECO"],
+    impact: 15,
+  },
+  {
+    date: eraToDateStr(301),
+    descriptionJa: "E301: ZAMLT誕生。5大コーポラトクラシー統合。ZEBRA株がIPO急騰",
+    descriptionEn: "E301: ZAMLT born. 5 corporatocracies merge. ZEBRA IPO surges",
+    affectedSymbols: ["ZEBRA", "MAMON", "UECO"],
+    impact: 18,
+  },
+  {
+    date: eraToDateStr(318),
+    descriptionJa: "E318: アルファ・ケイン覚醒、ZAMLTオムニバス・エンジン乗っ取り。ZEBRA暴落",
+    descriptionEn: "E318: Alpha Kane awakens, hacks ZAMLT Omnibus Engine. ZEBRA crashes",
+    affectedSymbols: ["ZEBRA", "MAMON"],
+    impact: -22,
+  },
+  // ── Golden Age & Crisis (E319–E400) ──
+  {
+    date: eraToDateStr(340),
+    descriptionJa: "E340: Slime Woman出現。ペルセポネ実験事故。暗号市場パニック",
+    descriptionEn: "E340: Slime Woman appears. Persephone experiment accident. Crypto panic",
+    affectedSymbols: ["LAYLA", "LSOL", "TINGUE"],
+    impact: -9,
+  },
+  {
+    date: eraToDateStr(350),
+    descriptionJa: "E350: 第五繁栄フェスティバル。ネオンコロシアム視聴率95%。文化的経済活性化",
+    descriptionEn: "E350: Fifth prosperity festival. 95% viewership. Cultural economy boost",
+    affectedSymbols: ["AURAL", "LSOL", "LAYLA", "GRANDEL"],
+    impact: 8,
+  },
+  {
+    date: eraToDateStr(370),
+    descriptionJa: "E370: アポロン・ドミニオン大戦宣戦布告。全市場暴落",
+    descriptionEn: "E370: Apollo-Dominion War declared. Broad market crash",
+    affectedSymbols: [
+      "FARUJA",
+      "ZEBRA",
+      "ALOE",
+      "MAMON",
+      "LORENTZ",
+      "THORON",
+      "GRANDEL",
+      "UECO",
+      "ELYSEON",
+      "TYERIA",
+      "DIOCLE",
+      "FALLUJA",
+      "AURAL",
+    ],
+    impact: -15,
+  },
+  {
+    date: eraToDateStr(378),
+    descriptionJa: "E378: セリアG4ファントムパルスで反撃。軍需株急騰",
+    descriptionEn: "E378: Celia counters with G4 Phantom Pulse. Military stocks surge",
+    affectedSymbols: ["THORON", "FARUJA", "LORENTZ", "TYERIA"],
+    impact: 14,
+  },
+  {
+    date: eraToDateStr(385),
+    descriptionJa: "E385: セリアのヴェノム艦隊がアポロン・セントラリスを崩壊、戦争終結。市場反発",
+    descriptionEn: "E385: Celia's Venom Fleet destroys Apollo Centralis. War ends. Market rebounds",
+    affectedSymbols: ["GRANDEL", "UECO", "ELYSEON", "FARUJA", "ALOE", "MAMON"],
+    impact: 20,
+  },
+  {
+    date: eraToDateStr(388),
+    descriptionJa: "E388: グランベル宇宙首位確定。GDP150兆ドル達成",
+    descriptionEn: "E388: Grandel secures cosmic #1. GDP reaches 150 trillion dollars",
+    affectedSymbols: ["GRANDEL", "UECO", "ACARL"],
+    impact: 12,
+  },
+  {
+    date: eraToDateStr(395),
+    descriptionJa: "E395: スライム危機ピーク。地下インフラ70%停止。全産業株下落",
+    descriptionEn: "E395: Slime Crisis peak. 70% energy halted. All industrial stocks fall",
+    affectedSymbols: ["FARUJA", "ZEBRA", "ALOE", "MAMON", "LORENTZ", "THORON", "UECO", "GRANDEL"],
+    impact: -16,
+  },
+  {
+    date: eraToDateStr(400),
+    descriptionJa: "E400: スライム危機終息。エヴァトロンがGigapolisを支配。暗号市場への不信感",
+    descriptionEn: "E400: Slime Crisis ends. Evatron takes control. Crypto market distrust",
+    affectedSymbols: ["GOLDV", "TINGUE", "IZUMI"],
+    impact: -12,
+  },
+  // ── Evatron Rule & Modern Era (E400–E529) ──
+  {
+    date: eraToDateStr(420),
+    descriptionJa: "E420: エヴァトロン軍Σ-Unit設立。シルバー・ヴェノムの暗躍。Covert株乱高下",
+    descriptionEn:
+      "E420: Evatron military Σ-Unit formed. Silver Venom shadow ops. Covert stocks volatile",
+    affectedSymbols: ["GOLDV", "IZUMI"],
+    impact: -10,
+  },
+  {
+    date: eraToDateStr(475),
+    descriptionJa:
+      "E475: エヴァトロン崩壊。ゴールデン・ヴェノムとアルファ・ヴェノムに分裂。GOLDV暴落",
+    descriptionEn: "E475: Evatron collapses. Golden/Alpha Venom split. GOLDV crashes",
     affectedSymbols: ["GOLDV", "TINGUE"],
     impact: -22,
   },
   {
-    date: "2026-01-08",
-    descriptionJa: "ファルージャ評議会新体制、MAMON上昇",
-    descriptionEn: "Fallujah Council reform — MAMON rises",
-    affectedSymbols: ["MAMON", "MCERN", "FALLUJA"],
-    impact: 6.5,
+    date: eraToDateStr(480),
+    descriptionJa: "E480: フィオナ台頭。ブルーローズ/V7勢力拡大",
+    descriptionEn: "E480: Fiona rises. Blue Rose / V7 power expands",
+    affectedSymbols: ["FIONA"],
+    impact: 15,
+  },
+  {
+    date: eraToDateStr(485),
+    descriptionJa: "E485: アイク・ロペス/SSレンジ台頭。V7の軍事・情報網拡大",
+    descriptionEn: "E485: Ike Lopez / SS Range rises. V7 military-intel network expands",
+    affectedSymbols: ["ILOPEZ", "MGABR"],
+    impact: 10,
+  },
+  {
+    date: eraToDateStr(488),
+    descriptionJa: "E488: アイアン・シンジケート/レイド・カキザキ台頭。地下経済活性化",
+    descriptionEn: "E488: Iron Syndicate / Raid Kakizaki rises. Underground economy activates",
+    affectedSymbols: ["RKAKI", "TINGUE"],
+    impact: 12,
+  },
+  {
+    date: eraToDateStr(490),
+    descriptionJa: "E490: ミカエル・ガブリエリ/V7結成。軍需株・ファールージャ社急騰",
+    descriptionEn: "E490: Mikael Gabrieli / V7 formed. Defense stocks & FARUJA soar",
+    affectedSymbols: ["MGABR", "FARUJA", "THORON", "LORENTZ", "GHAUS"],
+    impact: 15,
+  },
+  {
+    date: eraToDateStr(493),
+    descriptionJa: "E493: マドリス・カーネル。ファルージャ文明圏の指導的役割確立",
+    descriptionEn: "E493: Madris Cernel. Fallujah civilization leadership solidified",
+    affectedSymbols: ["MCERN", "FALLUJA"],
+    impact: 7,
+  },
+  {
+    date: eraToDateStr(495),
+    descriptionJa:
+      "E495: 第一回宇宙連合会合。アルゼン・カーリーン大統領就任。ネイサン・コリンド参加",
+    descriptionEn: "E495: 1st United Cosmic Assembly. President Arzen Carleeen inaugurated",
+    affectedSymbols: ["ACARL", "NCORI", "GRANDEL", "UECO"],
+    impact: 11,
+  },
+  {
+    date: eraToDateStr(500),
+    descriptionJa: "E500: テクノ文化ルネサンス。ネオンコロシアムが芸術祭に進化。文化的指標急上昇",
+    descriptionEn: "E500: Techno-Cultural Renaissance. Cultural index surges",
+    affectedSymbols: ["AURAL", "LSOL", "ACARL", "LAYLA"],
+    impact: 10,
+  },
+  {
+    date: eraToDateStr(510),
+    descriptionJa: "E510: 次元極地平技術の民主化。Dimension Horizon一般化。技術株ブーム",
+    descriptionEn: "E510: Dimension Horizon democratized. Tech sector boom",
+    affectedSymbols: ["FARUJA", "LORENTZ", "NCORI"],
+    impact: 12.5,
+  },
+  {
+    date: eraToDateStr(522),
+    descriptionJa: "E522: AURALIS Gen-2復活。Kate Claudia・Lily Steinerが活動再開",
+    descriptionEn: "E522: AURALIS Gen-2 Revival. Kate Claudia & Lily Steiner resume activities",
+    affectedSymbols: ["AURAL", "LSOL", "ACARL"],
+    impact: 10,
+  },
+  {
+    date: eraToDateStr(528),
+    descriptionJa: "E528: リミナル・フォージ発射。次元建造技術の画期的進展",
+    descriptionEn: "E528: Liminal Forge launch. Breakthrough in dimensional construction tech",
+    affectedSymbols: ["FARUJA", "LORENTZ", "ALOE", "NCORI"],
+    impact: 12.5,
+  },
+  {
+    date: eraToDateStr(529),
+    descriptionJa: "E529: 現在。銀河系コンソーシアム体制安定。全資産が日々の変動を反映",
+    descriptionEn:
+      "E529: Present day. Galactic Consortium stable. All assets reflect daily changes",
+    affectedSymbols: ["GRANDEL", "UECO", "FALLUJA", "ACARL"],
+    impact: 3,
   },
 ]
 
 // ─── Asset Definitions ───
 // foundedEra assignments based on E16 universe lore:
 //   E0:   First settlers arrive (AD3500)
-//   E97:  n-token economy established, Corporatum Publica formed
-//   E100: Third prosperity period
-//   E120: Dimensional tech era (Dimension Horizon)
-//   E150: Maastricht Revolution, free economy
-//   E200: Post-Lombardia military expansion
-//   E270: AURALIS Proto founded
-//   E289: Fifth prosperity, Dimension Bridges
-//   E290: AURALIS Collective organized
-//   E301: ZAMLT founded
-//   E318: Alpha Kane awakens, ZAMLT collapses
+//   E10:  Grandel civilization established
+//   E12:  Dioclenis founded
+//   E15:  Elyseon established
+//   E18:  Tyeria military expansion
+//   E22:  Fallujah cultural influence
+//   E50:  UECO economic framework
+//   E97:  n-token economy, MAMON founded
+//   E100: Third prosperity, ALOE Oil
+//   E120: Dimension Horizon tech, FARUJA founded
+//   E200: Post-Lombardia military, THORON founded
+//   E270: AURALIS Proto
+//   E289: Fifth prosperity, LORENTZ founded
+//   E301: ZAMLT founded (ZEBRA)
 //   E325: Layla joins AURALIS
-//   E380: Tyeria #3, Queen Liana era
-//   E400: Slime Crisis ends, Tina/Gue underground control
-//   E420: Evatron Sigma-Unit (Alpha Venom origin)
-//   E475: Evatron collapses, Golden/Alpha Venom split
-//   E480: Fiona / Blue Rose rises
-//   E485: Ike Lopez / SS Range
-//   E488: Iron Syndicate / Raid Kakizaki
-//   E490: Mikael Gabrieli / V7 era
-//   E493: Madris Cernel / Fallujah
-//   E495: Arzen Carleeen / Nathan Corind (Cosmic Assembly)
+//   E380: Tyeria #3 (GHAUS)
+//   E390: Queen Liana era (LSOL)
+//   E400: Tina/Gue underground control (TINGUE)
+//   E420: Alpha Venom origin (IZUMI)
+//   E475: Venom split (GOLDV)
+//   E480: Fiona (FIONA)
+//   E485: Ike Lopez (ILOPEZ)
+//   E488: Iron Syndicate (RKAKI)
+//   E490: V7 era (MGABR)
+//   E493: Madris Cernel (MCERN)
+//   E495: Cosmic Assembly (ACARL, NCORI)
 
 const ASSET_DEFS: AssetDefinition[] = [
   // ── Stocks ──
@@ -315,7 +575,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     volatility: 0.15,
     mu: 0.05,
     meanRevertStrength: 0.04,
-    foundedEra: 290,
+    foundedEra: 270,
   },
   // ── Covert ──
   {
@@ -510,7 +770,7 @@ const ASSET_DEFS: AssetDefinition[] = [
     basePrice: 95_000,
     volatility: 0.55,
     mu: 0.03,
-    foundedEra: 475,
+    foundedEra: 420,
   },
   {
     symbol: "LAYLA",
@@ -526,17 +786,17 @@ const ASSET_DEFS: AssetDefinition[] = [
 ]
 
 // ─── Price Generation ───
-// Generates deterministic prices from each asset's foundedEra to MAX_ERA.
+// Generates deterministic prices from foundedEra to E529.
 // Uses seeded PRNG so historical data is identical on every page load.
-// Only prices up to getCurrentEra() are exposed for display → daily updates.
+// Daily update: perturbs the final price using today's date as seed.
 
 function generatePrices(def: AssetDefinition): AssetPrice[] {
-  const seed = hashString(def.symbol + "_E16_MARKET_v2")
+  const seed = hashString(def.symbol + "_E16_MARKET_v3")
   const rng = mulberry32(seed)
 
-  // Date range: from foundedEra to MAX_ERA
+  // Date range: from foundedEra to story era
   const startStr = eraToDateStr(def.foundedEra)
-  const endStr = eraToDateStr(MAX_ERA)
+  const endStr = eraToDateStr(E16_STORY_ERA)
 
   // Build date array
   const dates: string[] = []
@@ -593,10 +853,8 @@ function generatePrices(def: AssetDefinition): AssetPrice[] {
     // Trending periods (seeds create natural clusters)
     const trendSeed = rng()
     if (trendSeed > 0.85) {
-      // Strong uptrend period
       dailyReturn += 0.008
     } else if (trendSeed < 0.15) {
-      // Downtrend period
       dailyReturn -= 0.006
     }
 
@@ -610,7 +868,6 @@ function generatePrices(def: AssetDefinition): AssetPrice[] {
       close = close * (1 + eventImpact / 100)
     }
 
-    // Ensure price is always positive
     close = Math.max(close, 1)
 
     // Generate realistic intraday high/low
@@ -620,12 +877,11 @@ function generatePrices(def: AssetDefinition): AssetPrice[] {
     let low = Math.min(open, close) * (1 - dayVol * rangeMultiplier * 0.5)
     low = Math.max(low, 0.5)
 
-    // Volume: base volume + randomness + spike on events
+    // Volume
     let volume = (1_000_000 + rng() * 4_000_000) * (def.type === "crypto" ? 0.3 : 1)
     if (eventImpact !== undefined) {
       volume *= 2.5 + Math.abs(eventImpact) / 10
     }
-    // Volume tends to be higher on big move days
     volume *= 1 + dayVol * 20
     volume = Math.round(volume)
 
@@ -644,8 +900,23 @@ function generatePrices(def: AssetDefinition): AssetPrice[] {
   return prices
 }
 
+// ─── Daily Price Perturbation ───
+// Uses today's date as seed to generate a small, realistic price change
+// based on the asset's historical volatility. This gives each day a
+// different "current" price while keeping all historical data stable.
+
+function applyDailyPerturbation(symbol: string, lastClose: number, volatility: number): number {
+  const today = todayStr()
+  const seed = hashString(symbol + "_DAILY_v3_" + today)
+  const rng = mulberry32(seed)
+  const z = boxMuller(rng)
+  const dailyVol = volatility * Math.sqrt(1 / 252)
+  // Clamp daily move to ±5% for realism
+  const move = Math.max(-0.05, Math.min(0.05, dailyVol * z))
+  return Math.max(lastClose * (1 + move), 1)
+}
+
 function formatMarketCap(price: number, symbol: string): string {
-  // Fake but realistic market caps based on price
   const mult = symbol.startsWith("G") ? 50 : symbol.length <= 5 ? 100 : 30
   const cap = price * mult * 1_000_000
   if (cap >= 1_000_000_000_000) {
@@ -659,9 +930,9 @@ function formatMarketCap(price: number, symbol: string): string {
 
 // ─── Cache & Export ───
 
-/** Full price cache (foundedEra → MAX_ERA) for composite index computation */
-const fullPriceCache = new Map<string, AssetPrice[]>()
-/** Display-ready asset cache (filtered to current era) */
+/** Deterministic historical prices (same on every load) */
+const priceCache = new Map<string, AssetPrice[]>()
+/** Display-ready asset cache (includes daily perturbation) */
 const assetCache = new Map<string, Asset>()
 
 function buildAsset(def: AssetDefinition): Asset {
@@ -670,19 +941,14 @@ function buildAsset(def: AssetDefinition): Asset {
     return cached
   }
 
-  // Get or generate full prices
-  let fullPrices = fullPriceCache.get(def.symbol)
-  if (!fullPrices) {
-    fullPrices = generatePrices(def)
-    fullPriceCache.set(def.symbol, fullPrices)
+  // Get or generate deterministic prices
+  let prices = priceCache.get(def.symbol)
+  if (!prices) {
+    prices = generatePrices(def)
+    priceCache.set(def.symbol, prices)
   }
 
-  // Filter to current era for display
-  const currentEra = getCurrentEra()
-  const prices = fullPrices.filter((p) => dateToEra(p.date) <= currentEra)
-
   if (prices.length < 2) {
-    // Not enough data yet (asset too new)
     const asset: Asset = {
       symbol: def.symbol,
       name: def.name,
@@ -701,10 +967,20 @@ function buildAsset(def: AssetDefinition): Asset {
     return asset
   }
 
-  const lastPrice = prices[prices.length - 1]!.close
-  const prevPrice = prices[prices.length - 2]!.close
-  const change = lastPrice - prevPrice
-  const changePercent = (change / prevPrice) * 100
+  // Apply daily perturbation to the last price point
+  const lastHistorical = prices[prices.length - 1]!.close
+  const prevHistorical = prices[prices.length - 2]!.close
+  const todayPrice = applyDailyPerturbation(def.symbol, lastHistorical, def.volatility)
+
+  // Override the last price in the display array with today's perturbed price
+  const displayPrices = [...prices]
+  displayPrices[displayPrices.length - 1] = {
+    ...displayPrices[displayPrices.length - 1]!,
+    close: Math.round(todayPrice * 100) / 100,
+  }
+
+  const change = todayPrice - prevHistorical
+  const changePercent = (change / prevHistorical) * 100
 
   const asset: Asset = {
     symbol: def.symbol,
@@ -713,11 +989,11 @@ function buildAsset(def: AssetDefinition): Asset {
     type: def.type,
     sector: def.sector,
     affiliation: def.affiliation,
-    prices,
-    currentPrice: lastPrice,
-    change24h: change,
-    changePercent24h: changePercent,
-    marketCap: def.type !== "crypto" ? formatMarketCap(lastPrice, def.symbol) : undefined,
+    prices: displayPrices,
+    currentPrice: Math.round(todayPrice * 100) / 100,
+    change24h: Math.round(change * 100) / 100,
+    changePercent24h: Math.round(changePercent * 100) / 100,
+    marketCap: def.type !== "crypto" ? formatMarketCap(todayPrice, def.symbol) : undefined,
     foundedEra: def.foundedEra,
   }
 
@@ -760,33 +1036,31 @@ export function getCompositeIndex(): Asset {
     return compositeCache
   }
 
+  // Build all assets first (populates priceCache)
   const allAssets = getAllAssets()
   const stocks = allAssets.filter((a) => a.type === "stock")
   const indices = allAssets.filter((a) => a.type === "index")
   const cryptos = allAssets.filter((a) => a.type === "crypto")
 
-  // Weight per asset within its type group
   const stockWeight = stocks.length > 0 ? 0.35 / stocks.length : 0
   const indexWeight = indices.length > 0 ? 0.3 / indices.length : 0
   const cryptoWeight = cryptos.length > 0 ? 0.35 / cryptos.length : 0
 
-  // Gather all full price arrays (needed for composite calculation)
+  // Gather all full price arrays
   const allFullPrices = ASSET_DEFS.map((def) => {
-    let fp = fullPriceCache.get(def.symbol)
+    let fp = priceCache.get(def.symbol)
     if (!fp) {
       fp = generatePrices(def)
-      fullPriceCache.set(def.symbol, fp)
+      priceCache.set(def.symbol, fp)
     }
     return { def, prices: fp }
   })
 
-  // Find the era range
-  const currentEra = getCurrentEra()
   const minEra = Math.min(...ASSET_DEFS.map((d) => d.foundedEra))
 
-  // Build era → date mapping for the composite
+  // Build composite date array
   const compositeStartStr = eraToDateStr(minEra)
-  const compositeEndStr = eraToDateStr(currentEra)
+  const compositeEndStr = eraToDateStr(E16_STORY_ERA)
   const compositeDates: string[] = []
   let cur = new Date(compositeStartStr + "T00:00:00")
   const end = new Date(compositeEndStr + "T00:00:00")
@@ -822,7 +1096,6 @@ export function getCompositeIndex(): Asset {
       }
 
       const closeToday = pm.get(date)
-      // Get previous day's price
       const prevDate = i > 0 ? compositeDates[i - 1]! : null
       const closePrev = prevDate ? pm.get(prevDate) : undefined
 
@@ -860,8 +1133,17 @@ export function getCompositeIndex(): Asset {
     })
   }
 
-  const lastPrice = compositePrices[compositePrices.length - 1]?.close ?? baseValue
-  const prevPrice = compositePrices[compositePrices.length - 2]?.close ?? baseValue
+  // Apply daily perturbation to composite too
+  const lastCompositeClose = compositePrices[compositePrices.length - 1]!.close
+  const prevCompositeClose = compositePrices[compositePrices.length - 2]!.close
+  const perturbedComposite = applyDailyPerturbation("E16MC", lastCompositeClose, 0.08)
+  compositePrices[compositePrices.length - 1] = {
+    ...compositePrices[compositePrices.length - 1]!,
+    close: Math.round(perturbedComposite * 100) / 100,
+  }
+
+  const lastPrice = perturbedComposite
+  const prevPrice = prevCompositeClose
   const change = lastPrice - prevPrice
   const changePercent = (change / prevPrice) * 100
 
@@ -872,9 +1154,9 @@ export function getCompositeIndex(): Asset {
     type: "index",
     sector: "Composite",
     prices: compositePrices,
-    currentPrice: lastPrice,
-    change24h: change,
-    changePercent24h: changePercent,
+    currentPrice: Math.round(lastPrice * 100) / 100,
+    change24h: Math.round(change * 100) / 100,
+    changePercent24h: Math.round(changePercent * 100) / 100,
     marketCap: undefined,
     foundedEra: minEra,
   }
