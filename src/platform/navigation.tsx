@@ -144,7 +144,7 @@ function DesktopDropdown({
   )
 
   const handleEnter = useCallback(() => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    if (timeoutRef.current) {clearTimeout(timeoutRef.current)}
     setOpen(true)
   }, [])
 

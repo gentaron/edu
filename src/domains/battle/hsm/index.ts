@@ -169,7 +169,7 @@ export class Hsm {
   getSnapshot(): HsmSnapshot {
     return {
       currentStates: [...this.activeStates],
-      context: { ...this.context } as Readonly<HsmContext>,
+      context: { ...this.context },
       history: [...this.transitionHistory],
       eventCount: this.eventCount,
     }
@@ -177,7 +177,7 @@ export class Hsm {
 
   /** Read-only view of the context. */
   getContext(): Readonly<HsmContext> {
-    return { ...this.context } as Readonly<HsmContext>
+    return { ...this.context }
   }
 
   /** Merge an update into the mutable context. */

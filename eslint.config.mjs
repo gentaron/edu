@@ -4,6 +4,7 @@ import sonarjs from "eslint-plugin-sonarjs";
 import unicorn from "eslint-plugin-unicorn";
 import noCrossDomainImport from "./eslint-rules/no-cross-domain-import.js";
 import requireJSDoc from "./eslint-rules/require-jsdoc.js";
+import noAiSlop from "./eslint-rules/no-ai-slop.js";
 
 const eslintConfig = tseslint.config(
   {
@@ -52,6 +53,7 @@ const eslintConfig = tseslint.config(
         rules: {
           "no-cross-domain-import": noCrossDomainImport,
           "require-jsdoc": requireJSDoc,
+          "no-ai-slop": noAiSlop,
         },
       },
     },
@@ -227,6 +229,7 @@ const eslintConfig = tseslint.config(
       // ─── Custom architecture rules ───
       "edu/no-cross-domain-import": "error",
       "edu/require-jsdoc": "error",
+      "edu/no-ai-slop": "warn",
     },
   },
 );

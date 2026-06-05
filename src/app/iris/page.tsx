@@ -2,13 +2,67 @@
 
 import Link from "next/link"
 import React from "react"
-import { Shield, Crown } from "lucide-react"
+import { Shield, Crown, Volume2, VolumeX, Pause } from "lucide-react"
 import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { IRIS_TIMELINE, IRIS_ABILITIES, IRIS_RELATIONS } from "@/lib/iris-data"
 import { locColor } from "@/lib/timeline-data"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
+import { useCharacterVoice } from "@/hooks/use-character-voice"
+
+const IRIS_DESCRIPTION_JA = `アイリスは、E16連星系においてTier 1、現役最強の戦闘能力を持つ英雄である。かつてはヴァーミリオンの諜報機関長を務めていたが、現在はトリニティ・アライアンスの指導者として、E16星系全体の秩序維持と平和構築に奔走している。`
+
+const IRIS_DESCRIPTION_EN = `Iris is a hero with Tier 1 Active Strongest combat abilities in the E16 binary system. She formerly served as the intelligence agency director of Vermillion, but now leads the Trinity Alliance, dedicating herself to maintaining order and building peace across the E16 system.`
+
+function VoiceButton({ textJa, textEn, characterId }: { textJa: string; textEn: string; characterId: string }) {
+  const { lang } = useLang()
+  const { state, speak, pause, resume, stop } = useCharacterVoice(characterId)
+
+  const handleToggle = () => {
+    if (state === "playing") {
+      pause()
+    } else if (state === "paused") {
+      resume()
+    } else {
+      speak(lang === "en" ? textEn : textJa)
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleToggle}
+      className="inline-flex items-center gap-1.5 text-xs bg-edu-surface border border-edu-border rounded-lg px-3 py-1.5 hover:border-edu-accent hover:text-edu-accent transition-colors"
+    >
+      {state === "playing" ? (
+        <Pause className="w-3.5 h-3.5" />
+      ) : state === "paused" ? (
+        <VolumeX className="w-3.5 h-3.5" />
+      ) : (
+        <Volume2 className="w-3.5 h-3.5" />
+      )}
+      {state === "playing"
+        ? tl("一時停止", "Pause", lang)
+        : state === "paused"
+          ? tl("再開", "Resume", lang)
+          : tl("音声で聴く", "Listen", lang)}
+      {state !== "idle" && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            stop()
+          }}
+          className="ml-1 text-edu-muted hover:text-red-400 transition-colors"
+          aria-label={tl("停止", "Stop", lang)}
+        >
+          ✕
+        </button>
+      )}
+    </button>
+  )
+}
 
 export default function IrisPage() {
   const { lang } = useLang()
@@ -18,6 +72,13 @@ export default function IrisPage() {
       <PageHeader
         icon={<Shield className="w-6 h-6 text-rose-400" />}
         title={lang === "en" ? "Iris" : "アイリス"}
+        extra={
+          <VoiceButton
+            textJa={IRIS_DESCRIPTION_JA}
+            textEn={IRIS_DESCRIPTION_EN}
+            characterId="iris"
+          />
+        }
         subtitle={
           lang === "ja" ? (
             <>

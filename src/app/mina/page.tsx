@@ -2,12 +2,66 @@
 
 import Link from "next/link"
 import React from "react"
-import { Users } from "lucide-react"
+import { Users, Volume2, VolumeX, Pause } from "lucide-react"
 import { type Lang, tl } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
 import { RevealSection, SectionHeader } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { MINA_TIMELINE } from "@/lib/mina-data"
+import { useCharacterVoice } from "@/hooks/use-character-voice"
+
+const MINA_DESCRIPTION_JA = `ミナ・エウレカ・エルンストは、E16連星系において最も影響力のある人物の一人である。AURALIS Collectiveの第二世代メンバーであり、同時にリミナル・フォージの創設者として、E528年の現代から過去の地球、AD 2026年への時空通信プロジェクトを主導している。彼女の多彩な才能と行動力は、E16文明の技術的・文化的発展に多大な影響を与えている。`
+
+const MINA_DESCRIPTION_EN = `Mina Eureka Ernst is one of the most influential figures in the E16 binary star system. AURALIS 2nd Gen member, and simultaneously the founder of Liminal Forge, leading the spacetime communication project from E528 to AD 2026 Earth. Her diverse talents and initiative have had a profound impact on E16 civilization's technological and cultural development.`
+
+function VoiceButton({ textJa, textEn, characterId }: { textJa: string; textEn: string; characterId: string }) {
+  const { lang } = useLang()
+  const { state, speak, pause, resume, stop } = useCharacterVoice(characterId)
+
+  const handleToggle = () => {
+    if (state === "playing") {
+      pause()
+    } else if (state === "paused") {
+      resume()
+    } else {
+      speak(lang === "en" ? textEn : textJa)
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleToggle}
+      className="inline-flex items-center gap-1.5 text-xs bg-edu-surface border border-edu-border rounded-lg px-3 py-1.5 hover:border-edu-accent hover:text-edu-accent transition-colors"
+    >
+      {state === "playing" ? (
+        <Pause className="w-3.5 h-3.5" />
+      ) : state === "paused" ? (
+        <VolumeX className="w-3.5 h-3.5" />
+      ) : (
+        <Volume2 className="w-3.5 h-3.5" />
+      )}
+      {state === "playing"
+        ? tl("一時停止", "Pause", lang)
+        : state === "paused"
+          ? tl("再開", "Resume", lang)
+          : tl("音声で聴く", "Listen", lang)}
+      {state !== "idle" && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            stop()
+          }}
+          className="ml-1 text-edu-muted hover:text-red-400 transition-colors"
+          aria-label={tl("停止", "Stop", lang)}
+        >
+          ✕
+        </button>
+      )}
+    </button>
+  )
+}
 
 export default function MinaPage() {
   const { lang } = useLang()
@@ -17,6 +71,13 @@ export default function MinaPage() {
       <PageHeader
         icon={<Users className="w-6 h-6 text-blue-400" />}
         title="ミナ・エウレカ・エルンスト"
+        extra={
+          <VoiceButton
+            textJa={MINA_DESCRIPTION_JA}
+            textEn={MINA_DESCRIPTION_EN}
+            characterId="mina"
+          />
+        }
         subtitle={
           <>
             Mina Eureka Ernst —{" "}

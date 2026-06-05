@@ -13,6 +13,7 @@ import {
   BookOpen,
   ChevronRight,
   ArrowLeft,
+  Download,
 } from "lucide-react"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import { type Lang, tl, tlTier } from "@/lib/lang"
@@ -153,6 +154,13 @@ function WikiPage() {
           <h1 className="text-xl font-bold text-edu-text">
             {tl("EDU Wiki 百科事典", "EDU Wiki Encyclopedia", lang)}
           </h1>
+          <a
+            href="/api/export?format=html&category=all"
+            className="inline-flex items-center gap-1.5 text-xs text-edu-muted bg-edu-surface border border-edu-border rounded-lg px-3 py-1.5 hover:border-edu-accent hover:text-edu-accent transition-colors"
+          >
+            <Download className="w-3.5 h-3.5" />
+            {tl("エクスポート", "Export", lang)}
+          </a>
         </div>
         <p className="text-xs text-edu-muted mb-6">
           {ALL_ENTRIES.length} {tl("件", "entries", lang)} —{" "}

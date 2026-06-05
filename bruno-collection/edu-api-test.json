@@ -1,0 +1,105 @@
+{
+  "name": "Edu API Test Suite",
+  "version": "1.0.0",
+  "tests": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api"
+      },
+      "expect": {
+        "status": 200,
+        "body": { "message": "Hello, world!" }
+      }
+    },
+    {
+      "name": "Get All Cards",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/game"
+      },
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Wiki Related Entries — Valid Request",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/wiki/related",
+        "headers": { "Content-Type": "application/json" },
+        "body": { "entryId": "Diana", "limit": 5 }
+      },
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Wiki Related Entries — Missing entryId",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/wiki/related",
+        "headers": { "Content-Type": "application/json" },
+        "body": {}
+      },
+      "expect": {
+        "status": 400
+      }
+    },
+    {
+      "name": "Tournament Bound — Valid Request",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/tournament/bound"
+      },
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Save Migrate — Valid Payload",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/save/migrate",
+        "headers": { "Content-Type": "application/json" },
+        "body": { "version": 1, "data": "dGVzdA==" }
+      },
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Export Wiki — HTML Format",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/export?format=html&category=characters"
+      },
+      "expect": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Export Wiki — Invalid Format",
+      "request": {
+        "method": "GET",
+        "url": "{{base_url}}/api/export?format=xml"
+      },
+      "expect": {
+        "status": 400
+      }
+    },
+    {
+      "name": "Generate Art — Missing API Key",
+      "request": {
+        "method": "POST",
+        "url": "{{base_url}}/api/generate-art",
+        "headers": { "Content-Type": "application/json" },
+        "body": { "cardId": "test", "style": "ANIME" }
+      },
+      "expect": {
+        "status": 503
+      }
+    }
+  ]
+}

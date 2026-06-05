@@ -1,3 +1,5 @@
+import { files, isStorageAvailable } from '@/platform/storage'
+
 export interface StoryMeta {
   slug: string
   title: string
@@ -423,6 +425,43 @@ export const ENTRY_IMAGE_MAP: Record<string, string> = {
   "Lillie Ardent": IMG("LillieArdent.png"),
   "ミナ・エウレカ・エルンスト": IMG("MinaEurekaErnst.png"),
   "Ninny Offenbach": IMG("NinnyOffenbach.png"),
+}
+
+/**
+ * Fetch story text via cloud storage (R2/S3) first,
+ * falling back to the GitHub raw URL.
+ *
+ * @param slug  - Story slug used to look up metadata.
+ * @param lang  - Language variant to fetch.
+ * @returns The full story text content.
+ */
+export async function getStoryTextAsync(slug: string, lang: 'ja' | 'en'): Promise<string> {
+  const story = getStoryBySlug(slug)
+  if (!story) {
+    throw new Error(`Story not found: ${slug}`)
+  }
+
+  const fileName =
+    story.isEnSource ? (lang === 'ja' ? story.fileNameAlt : story.fileName)
+    : (lang === 'en' ? story.fileNameAlt : story.fileName)
+
+  // ── Try cloud storage first ──
+  if (isStorageAvailable) {
+    try {
+      const storedFile = await files!.download(`stories/${fileName}`)
+      return await storedFile.text()
+    } catch {
+      // Fall through to GitHub
+    }
+  }
+
+  // ── Fallback: GitHub raw ──
+  const url = getStoryUrl(fileName)
+  const res = await fetch(url)
+  if (!res.ok) {
+    throw new Error(`Failed to fetch story ${slug} (${lang}): ${res.status}`)
+  }
+  return await res.text()
 }
 
 export function getAdjacentStories(story: StoryMeta): { prev?: StoryMeta; next?: StoryMeta } {

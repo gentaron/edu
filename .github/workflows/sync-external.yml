@@ -1,0 +1,96 @@
+name: Sync External Sites
+
+on:
+  schedule:
+    - cron: "0 6 * * *"  # Daily at 6am UTC
+  workflow_dispatch: {}
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      
+      - name: Install Scrapling
+        run: pip install scrapling
+      
+      - name: Run scraper
+        id: scrape
+        run: |
+          python scripts/scrape-external-sites.py --output-dir scripts/scrape-output
+        continue-on-error: true
+      
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -f scripts/scrape-output/external-sync-*.json ]; then
+            CHANGES=$(python -c "
+            import json, glob
+            files = sorted(glob.glob('scripts/scrape-output/external-sync-*.json'))
+            if files:
+                with open(files[-1]) as f:
+                    data = json.load(f)
+                print(data.get('changes_detected', 0))
+            else:
+                print(0)
+            ")
+            echo "changes=$CHANGES" >> $GITHUB_OUTPUT
+          else
+            echo "changes=0" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create PR if changes detected
+        if: steps.changes.outputs.changes != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get latest sync report
+          LATEST=$(ls -t scripts/scrape-output/external-sync-*.json 2>/dev/null | head -1)
+          if [ -z "$LATEST" ]; then
+            echo "No sync report found"
+            exit 0
+          fi
+          
+          # Create branch
+          BRANCH="sync-external-$(date +%Y%m%d)"
+          git config user.name "Edu Sync Bot"
+          git config user.email "sync-bot@edu.dev"
+          git checkout -b "$BRANCH"
+          
+          # Copy latest results
+          mkdir -p scripts/scrape-output
+          cp "$LATEST" scripts/scrape-output/latest-sync.json
+          git add scripts/scrape-output/
+          git commit -m "chore: sync external site data $(date +%Y-%m-%d)"
+          git push origin "$BRANCH"
+          
+          # Create PR following AGENTS.md Protocol
+          gh pr create \
+            --title "chore: external site data sync $(date +%Y-%m-%d)" \
+            --body "## External Site Data Sync
+            
+          Automated sync detected changes in ${{ steps.changes.outputs.changes }} site(s).
+          
+          ### AGENTS.md Protocol
+          - Domain: wiki (external data sync)
+          - Auto-generated, please review before merge
+          
+          ### Changed Files
+          - scripts/scrape-output/latest-sync.json
+          
+          ### Next Steps
+          1. Review the sync report
+          2. Update affected wiki/character data files if needed
+          3. Merge after review" \
+            --base main \
+            --label "automated" \
+            --label "data-sync"
