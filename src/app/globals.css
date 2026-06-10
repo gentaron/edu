@@ -89,6 +89,22 @@
   --sidebar-accent-foreground: #e2e8f0;
   --sidebar-border: #1e2a52;
   --sidebar-ring: #818cf8;
+
+  /* OKLCH Design Tokens (perceptually uniform) */
+  --oklch-cyan: oklch(0.72 0.13 195);
+  --oklch-violet: oklch(0.65 0.18 300);
+  --oklch-gold: oklch(0.78 0.14 85);
+  --oklch-red: oklch(0.58 0.22 25);
+  --oklch-green: oklch(0.72 0.15 155);
+  --oklch-pink: oklch(0.68 0.15 350);
+  --oklch-orange: oklch(0.75 0.15 60);
+  --oklch-bg: oklch(0.15 0.02 260);
+  --oklch-surface: oklch(0.18 0.03 260);
+  --oklch-card: oklch(0.22 0.03 260);
+  --oklch-border: oklch(0.28 0.04 260);
+  --oklch-text: oklch(0.9 0.01 260);
+  --oklch-muted: oklch(0.55 0.02 260);
+
   color-scheme: dark;
 }
 

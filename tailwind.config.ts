@@ -51,6 +51,14 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        /* OKLCH Design Tokens (perceptually uniform) */
+        "edu-cyan": "oklch(0.72 0.13 195)",
+        "edu-violet": "oklch(0.65 0.18 300)",
+        "edu-gold": "oklch(0.78 0.14 85)",
+        "edu-red": "oklch(0.58 0.22 25)",
+        "edu-green": "oklch(0.72 0.15 155)",
+        "edu-pink": "oklch(0.68 0.15 350)",
+        "edu-orange": "oklch(0.75 0.15 60)",
       },
       borderRadius: {
         lg: "var(--radius)",

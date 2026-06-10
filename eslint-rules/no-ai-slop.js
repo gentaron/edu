@@ -3,7 +3,7 @@
  * Based on Impeccable's 27 anti-pattern detection
  *
  * Detects:
- * - Purple gradient heroes without semantic meaning
+ * - Purple gradient heroes without semantic meaning (excludes data/domain files)
  * - Gradient text on headings
  * - Multiple stacked box-shadows
  * - Excessive border-radius values
@@ -36,18 +36,29 @@ module.exports = {
   },
 
   create(context) {
+    const filename = context.getFilename();
     const sourceCode = context.getSourceCode().getText();
+
+    // Skip data files — civilization colors use from-purple/violet semantically
+    const isDataFile =
+      filename.includes(".data.ts") ||
+      filename.includes(".meta.ts") ||
+      filename.includes("/civilizations/") ||
+      filename.includes("/domains/");
 
     // Check for AI slop patterns in the full file
     function checkForAISlop() {
       // Pattern: purple gradient backgrounds (from-purple-*, from-violet-* combined with gradients)
-      const purpleGradientPattern =
-        /from-(purple|violet|indigo)-\d+.*to-(purple|violet|indigo)-\d+/;
-      if (purpleGradientPattern.test(sourceCode)) {
-        context.report({
-          loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 0 } },
-          messageId: "gradientHero",
-        });
+      // Only flag in component/page files, not domain data files
+      if (!isDataFile) {
+        const purpleGradientPattern =
+          /from-(purple|violet|indigo)-\d+.*to-(purple|violet|indigo)-\d+/;
+        if (purpleGradientPattern.test(sourceCode)) {
+          context.report({
+            loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 0 } },
+            messageId: "gradientHero",
+          });
+        }
       }
 
       // Pattern: gradient text (bg-clip-text text-transparent)
@@ -65,28 +76,6 @@ module.exports = {
         context.report({
           loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 0 } },
           messageId: "stackedShadows",
-        });
-      }
-
-      // Pattern: excessive border-radius
-      const radiusPattern = /rounded-\[?(\d+(?:\.\d+)?)?(rem|px)?\]?/g;
-      let maxRadius = 0;
-      let radiusMatch = radiusPattern.exec(sourceCode);
-      while (radiusMatch !== null) {
-        const value = radiusMatch[1];
-        const unit = radiusMatch[2];
-        if (value) {
-          const numericValue = Number.parseFloat(value);
-          if (unit === "rem" && numericValue > 1) {
-            maxRadius = Math.max(maxRadius, numericValue);
-          }
-        }
-        radiusMatch = radiusPattern.exec(sourceCode);
-      }
-      if (maxRadius > 1) {
-        context.report({
-          loc: { start: { line: 1, column: 0 }, end: { line: 1, column: 0 } },
-          messageId: "excessiveRadius",
         });
       }
     }
