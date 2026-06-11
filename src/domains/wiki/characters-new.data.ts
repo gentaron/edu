@@ -63,7 +63,7 @@ export const WIKI_CHARACTERS_NEW = [
     category: "キャラクター",
     subCategory: "バーズ帝国",
     description:
-      "バーズ帝国初代法務大臣としてE10年からE48年まで在任し、帝国の司法制度を設計した法律家。マルクス・アウレリウスの法典を基に、市民裁判制度と刑事手続きの整備を主導した。特に「トルクアタの三原則」と呼ばれる罪刑法定主義・弁護権保障・適正手続の原則は、現在のEDU司法体系にも受け継がれている。厳格だつ正義感の強い性格で知られ、帝国初期の腐敗防止にも大きな役割を果たした。",
+      "バーズ帝国初代法務大臣としてE10年からE48年まで在任し、帝国の司法制度を設計した法律家。マルクス・アウレリウスの法典を基に、市民裁判制度と刑事手続きの整備を主導した。特に「トルクアタの三原則」と呼ばれる罪刑法定主義・弁護権保障・適正手続の原則は、現在のEDU司法体系にも受け継がれている。厳格だが正義感の強い性格で知られ、帝国初期の腐敗防止にも大きな役割を果たした。",
     descriptionEn: "A lawyer who served as the first Minister of Justice of the Barz Empire from E10 to E48, designing the empire's judicial system. Building upon the Marcus Aurelius Code, he led the establishment of citizen trial systems and criminal procedures. Particularly, the 'Three Principles of Torquata'—the principle of legality, the right to counsel, and due process—are still inherited in the current EDU judicial system. Known for his strict sense of justice, he played a major role in preventing corruption during the early empire.",
     era: "E10〜E48",
     affiliation: "バーズ帝国法務省",
@@ -172,7 +172,7 @@ export const WIKI_CHARACTERS_NEW = [
     subCategory: "第一移民期",
     description:
       "第二波移民船団の総隊長としてE50年からE120年まで活動し、新たな入植地の開拓と移民団の護衛を担った宇宙船長。バーズ帝国期の初期入植地から西大陸への拡張ルートを開拓し、その航海記録はのちのギガポリス建設の地理的基礎となった。E80年の異常宇宙線バーストの際には船団を巧みに回避し、全船の生存を実現した英雄的航海士。ノヴァ・ルートと呼ばれる彼の開拓航路は現在でも主要な星間航路として利用されている。",
-    descriptionEn: "As the commander of the Second Wave Immigration Fleet from E50 to E120, this space captain spearheaded the colonization of new settlements and protected immigrant convoys. He pioneered the expansion route from the early Barss Empire settlements to the Western Continent, with his navigational records forming the geographical foundation for later Gigapolis construction. During the anomalous cosmic ray burst in E80, he skillfully maneuvered the fleet to avoid disaster, ensuring the survival of all ships—a heroic feat of navigation. His开拓 route, known as the Nova Route, remains a major interstellar thoroughfare to this day.",
+    descriptionEn: "As the commander of the Second Wave Immigration Fleet from E50 to E120, this space captain spearheaded the colonization of new settlements and protected immigrant convoys. He pioneered the expansion route from the early Barss Empire settlements to the Western Continent, with his navigational records forming the geographical foundation for later Gigapolis construction. During the anomalous cosmic ray burst in E80, he skillfully maneuvered the fleet to avoid disaster, ensuring the survival of all ships—a heroic feat of navigation. His pioneering route, known as the Nova Route, remains a major interstellar thoroughfare to this day.",
     era: "E50〜E120",
     affiliation: "第二波移民船団",
     tier: "Tier 3",
@@ -383,7 +383,7 @@ export const WIKI_CHARACTERS_NEW = [
     category: "キャラクター",
     subCategory: "ギガポリス建設期",
     description:
-      "ギガポリス建設期の首席経済官としてE155年からE255年まで都市の経済政策を立案した経済学者。エル・フォルハウスの完全自由経済体制の理論的支柱となり、市場原理に基づく都市運営のモデルを構築した。E180年に導入したゴールド標準通貨制度はのちのnトークン経済の先駆けとなった。また、都市間貿易の促進と税制改革も推進し、ギガポリスを星域最大の経済都市へと成長させた経済の建筑师。",
+      "ギガポリス建設期の首席経済官としてE155年からE255年まで都市の経済政策を立案した経済学者。エル・フォルハウスの完全自由経済体制の理論的支柱となり、市場原理に基づく都市運営のモデルを構築した。E180年に導入したゴールド標準通貨制度はのちのnトークン経済の先駆けとなった。また、都市間貿易の促進と税制改革も推進し、ギガポリスを星域最大の経済都市へと成長させた経済の建築家。",
     descriptionEn: "The chief economic officer who formulated the city's economic policies from E155 to E255 during the Gigapolis construction period. He became the theoretical pillar of El Forhaus's complete free economic system, constructing a model for city operations based on market principles. The gold standard currency system he introduced in E180 became the precursor to later n-token economies. He also promoted inter-city trade and tax reforms, growing Gigapolis into the largest economic city in the star sector—the architect of the economy.",
     era: "E155〜E255",
     affiliation: "ギガポリス経済委員会",
