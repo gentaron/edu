@@ -279,9 +279,9 @@ export const WIKI_TERMS = [{
     category: "用語",
     subCategory: "歴史",
     description:
-      "かつて宇宙に名を馳せた巨大文明圏。最盛期GDP125兆ドル。中核惑星アポロン・セントラリスを拠点に、強力な軍事組織「アポロンの騎士団」を擁した。リーダー・ロナン・アーサがセリアに同盟を提案したが拒絶され全面戦争に発展。ヴェノム艦隊に敗れロナンは戦死。大戦後GDP32兆ドルに激減し現在は主要勢力から脱落。",
+      "かつて宇宙に名を馳せた巨大文明圏。中核惑星アポロン・セントラリスを拠点に、最盛期にはGDP125兆ドルに達する宇宙有数の経済・軍事大国であった。大戦前の黄金時代において、アポロンは高度な次元艦隊技術と強力な軍事組織「アポロンの騎士団」を擁し、宇宙の広範な領域に影響力を行使していた。リーダーのロナン・アーサは有能な指導者であり、セリア・ドミニクス率いるSelinopolis（後のDominion）に対して同盟の打診を行ったが、セリアはこれを拒絶。この外交的決裂はE370年の全面戦争への引き金となった。戦争はE375年のケンタウロスレーザー発射、E378年のG4ファントムパルス応戦を経て激化し、最終的にE385年、セリアのヴェノム艦隊によるアポロン・セントラリス攻略・爆砕という壊滅的な結末を迎えた。ロナン・アーサは戦死し、大戦後のアポロン文明圏はGDP32兆ドルに激減して宇宙の主要勢力から脱落。その没落はヘゲモニー・パラドックスの典型的な例として、現在の宇宙外交において最も引用される歴史的教訓となっている。",
     descriptionEn:
-      "A great civilization that once flourished in space. Its GDP reached 125 trillion dollars at its peak. Based on the core planet Apollo Centralis, it possessed a powerful military organization called the Knights of Apollo. Leader Ronan Arsa proposed an alliance to Seria, but was rejected, leading to all-out war. Defeated by the Venom fleet, Ronan was killed in battle. After the great war, the GDP plummeted to 32 trillion dollars, and it has since fallen from being a major power.",
+      "A great civilization that once made its name across the cosmos. Based on the core planet Apollo Centralis, it was one of the universe's premier economic and military powers, with a GDP reaching 125 trillion dollars at its peak. During its pre-war golden age, Apollo possessed advanced dimensional fleet technology and a powerful military organization called the Knights of Apollo, exercising influence across a vast region of space. Its leader, Ronan Arsa, was a capable commander who proposed an alliance to Celia Dominicus's Selinopolis (later Dominion), but Celia rejected the offer. This diplomatic rupture triggered the all-out war in E370. The war intensified through the E375 Centaurus Laser firing and the E378 G4 Phantom Pulse response, ultimately meeting a devastating conclusion in E385 when Celia's Venom fleet captured and shattered Apollo Centralis. Ronan Arsa was killed in battle, and post-war Apollo's GDP plummeted to 32 trillion dollars, causing it to fall from the ranks of major cosmic powers. Its downfall serves as the quintessential example of the Hegemony Paradox, becoming the most frequently cited historical lesson in contemporary cosmic diplomacy.",
     era: "歴史上",
     sourceLinks: [
       {
@@ -301,14 +301,14 @@ export const WIKI_TERMS = [{
     ],
   },{
     id: "Selinopolis" as WikiId,
-    name: "Selinopolis（ドミニオン）",
+    name: "セリノポリス（ドミニオン）",
     nameEn: "Selinopolis / Dominion",
     category: "用語",
     subCategory: "歴史",
     description:
-      "セリア・ドミニクスがGigapolisを掌握後に改名した都市国家。GDP25兆ドルに急成長。次元エネルギー技術の商業化と女性主導社会を確立。超巨大企業Phovosを設立。エヴァトロンと同盟してアポロンと大戦し勝利したがGDPは23兆ドルに激減。戦後エヴァトロンに吸収されセリアは追放。その遺産は現在のE16系に大きな影響を与えている。",
+      "セリア・ドミニクスがE335年にZAMLTを打倒してGigapolisを掌握し、Selinopolisと改名した後、E365年に至ってDominionへと再改称した都市国家である。セリアは就任直後から大胆な改革を断行し、ZAMLTの企業国家体制を解体して次元エネルギー技術の商業化を推進した。これによりGDPは急成長を遂げ、最盛期には81兆ドルに達した。超巨大企業Phovosを設立して次元エネルギーの独占的供給体制を構築するとともに、女性主導社会を確立し、AURALIS Collectiveを最盛期へ導いた。E365年にはエヴァトロンと軍事同盟を締結し、アポロン文明圏のロナン・アーサからの同盟提案を拒絶したことがE370年のアポロン・Dominion大戦の引き金となった。大戦ではエヴァトロンのヴェノム艦隊を活用してE385年にアポロン・セントラリスを攻略・爆砕し勝利を収めたが、戦後のGDPは23兆ドルに激減。疲弊したDominionはE400年にエヴァトロンに事実上吸収され、セリアは追放された。その遺産であるフェルミ音楽、nトークン経済、次元エネルギー技術は現在のE16文明圏の基盤を形成している。",
     descriptionEn:
-      "The city-state that Seria Dominikus renamed after taking control of Gigapolis. It grew rapidly to a GDP of 25 trillion dollars. Commercialized dimensional energy technology and established a female-led society. Founded the mega-corporation Phovos. Allied with Evatron and won the great war against Apollo, but the GDP plummeted to 23 trillion dollars. After the war, it was absorbed by Evatron and Seria was exiled. Its legacy has had a significant impact on the current E16 system.",
+      "The city-state that Celia Dominicus seized control of by overthrowing ZAMLT in E335, initially renaming Gigapolis to Selinopolis, and later re-renaming it to Dominion upon reaching E365. Celia implemented bold reforms immediately after taking office, dismantling ZAMLT's corporate state system and promoting the commercialization of dimensional energy technology. This drove rapid GDP growth, reaching 81 trillion dollars at its peak. She established the mega-corporation Phovos to build a monopolistic supply system for dimensional energy, established a female-led society, and guided AURALIS Collective to its golden age. In E365, she formed a military alliance with Evatron, and her rejection of Ronan Arsa's alliance proposal from the Apollo civilization triggered the Apollo-Dominion War in E370. In the war, she achieved victory by utilizing Evatron's Venom fleet to capture and shatter Apollo Centralis in E385, but post-war GDP plummeted to 23 trillion dollars. The exhausted Dominion was effectively absorbed by Evatron in E400, and Celia was exiled. Her legacy — Fermi music, the n-token economy, and dimensional energy technology — forms the foundation of the current E16 civilization.",
     era: "歴史上",
     sourceLinks: [
       {
@@ -345,7 +345,7 @@ export const WIKI_TERMS = [{
     ],
   },{
     id: "アポロン・Dominion大戦" as WikiId,
-    name: "アポロン・Dominion大戦",
+    name: "アポロン・ドミニオン大戦",
     nameEn: "Apollon Dominion War",
     category: "用語",
     subCategory: "戦争・歴史事件",
@@ -421,8 +421,8 @@ export const WIKI_TERMS = [{
 
     leaders: [
       {
-        id: "オメガ＝ユリシア" as WikiId as WikiId,
-        name: "オメガ＝ユリシア",
+        id: "オメガ＝ユリシス" as WikiId as WikiId,
+        name: "オメガ＝ユリシス",
         nameEn: "Omega=Ulysses",
         role: "EVILSリーダー",
         era: "E318年頃",

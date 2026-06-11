@@ -392,7 +392,7 @@ export const WIKI_HISTORY = [{
       "The battle during the Gigapolis Liberation War (E318) where the Techlos forces led by Alpha Cain and Chrono Valente conducted an infiltration operation on ZAMLT's important facility, the Silver Plant. During the Silver Plant assault, Linda made the tragic decision to sacrifice herself to stabilize the energy core of Protocol X. Her sacrifice became a turning point in the resistance movement against ZAMLT and strengthened Alpha Cain's resolve. The name \"Silver Plant\" derives from the silver dimensional energy光辉 emitted from the plant, and after ZAMLT's collapse, it is said to have become the origin of the name \"Silver Venom.\" This assault is passed down in the war history of the E16 civilization sphere as a representative example of how individual self-sacrifice brought about a historical turning point.",
   },{
     id: "hist-セリアによるSelinopolis宣言" as WikiId,
-    name: "セリアによるSelinopolis宣言",
+    name: "セリアによるセリノポリス宣言",
     nameEn: "Celia's Selinopolis Declaration",
     category: "歴史",
     subCategory: "歴史・時代",
@@ -590,4 +590,103 @@ export const WIKI_HISTORY = [{
       "E520年代以降の現代E16連星系は、銀河系コンソーシアムの設立、V7とトリニティ・アライアンスの二大陣営対立、アルファ・ヴェノムの暗躍という複雑な国際情勢下にある。Valoria連合圏の下でGigapolisは安定した都市運営を続け、テクノ文化ルネサンスの成果が市民生活に定着している。AURALIS Collective第二世代が文化振興の中核として活動し、惑星ビブリオやグランベルとの学術交流も活発化している。しかしクレセント地方ではフィオナの裏切り（E523〜E525年）によってV7内部に深刻な亀裂が生じており、アルファ・ヴェノムの脅威は未だ解消されていない。E16連星系は過去550年の激動の歴史から得た教訓を胸に、分散統治と国際協調のバランスを模索する新たな時代に突入している。過去の戦争と平和の循環が再び繰り返されるか、それとも新たな協力の枠組みが構築されるかが、現在進行中の歴史の核心的な問いである。",
     descriptionEn:
       "The modern E16 star system since the E520s exists under a complex international situation characterized by the establishment of the Galactic Consortium, the bipolar confrontation between V7 and the Trinity Alliance, and the covert activities of Alpha Venom. Under the Valoria Combined Zone, Gigapolis continues its stable urban governance, with the achievements of the Techno-Cultural Renaissance becoming integrated into citizens' daily lives. The second generation of the AURALIS Collective serves as the core of cultural promotion, and academic exchanges with the planets Biblio and Granbell have also become more active. However, in the Crescent region, Fiona's betrayal (E523-E525) created a serious rift within V7, and the threat of Alpha Venom remains unresolved. The E16 star system, carrying the lessons from its 550-year turbulent history, is entering a new era seeking balance between decentralized governance and international cooperation. Whether the cycle of past wars and peace will repeat itself, or whether a new framework of cooperation will be constructed, constitutes the central question of the ongoing history.",
+  },{
+    id: "hist-オメガユリシスとの接触" as WikiId,
+    name: "オメガ・ユリシスとの接触",
+    nameEn: "Contact with Omega=Ulysses",
+    category: "歴史",
+    subCategory: "戦争・歴史事件",
+    era: "E318年頃",
+    description:
+      "ZAMLTの5企業リーダーたちが虚無の塔（Tower of the Void）でEVILSのリーダーであるオメガ＝ユリシスと極秘会合を持った事件。次元の安定化を条件に一定の取引が行われたとされるが、この協力関係は最終的に破綻し、ZAMLT崩壊の遠因の一つとなった。E340年のスライム・ウーマン顕現もこの接触の影響である可能性が高い。次元極地平技術のリスクを象徴する事件として、現在でもE16文明圏の安全保障上の最大の懸念事項の一つとされている。",
+    descriptionEn:
+      "The incident where ZAMLT's five corporate leaders held a secret meeting with Omega=Ulysses, leader of the EVILS, at the Tower of the Void. A certain deal was reportedly made on the condition of dimensional stabilization, but this cooperative relationship eventually broke down, becoming one of the remote causes of ZAMLT's collapse. The manifestation of the Slime Woman in E340 is also highly likely to be an influence of this contact. Symbolizing the risks of dimensional horizon technology, it remains one of the biggest security concerns in the E16 civilization sphere.",
+  },{
+    id: "hist-スライムウーマン顕現" as WikiId,
+    name: "スライム・ウーマン顕現事件",
+    nameEn: "Slime Woman Manifestation Incident",
+    category: "歴史",
+    subCategory: "戦争・歴史事件",
+    era: "E340年",
+    description:
+      "ティムール・シャーのペルセポネ実験事故によってE340年に顕現した予期せぬ存在。スライム状の不定形生命体であり、その出現はE16文明圏に大きな衝撃を与えた。EVILSの次元的活動との関連が疑われ、ペルセポネ計画の倫理的問題が浮き彫りにされた。この事件はE380年からのスライム危機の前兆とも見なされており、次元極地平技術の制御不能な側面を露呈した象徴的な出来事として歴史に記録されている。",
+    descriptionEn:
+      "An unexpected existence that manifested in E340 due to an accident in Timur Shah's Persephone experiment. An amorphous slime-like life form whose appearance shocked the E16 civilization sphere. Suspected of being related to EVILS's dimensional activities, it highlighted the ethical issues of the Persephone Project. This incident is considered a precursor to the Slime Crisis from E380, and is recorded in history as a symbolic event that exposed the uncontrollable aspects of dimensional horizon technology.",
+  },{
+    id: "hist-アイリス最初の捕囚" as WikiId,
+    name: "アイリス最初の捕囚事件",
+    nameEn: "First Imprisonment of Iris",
+    category: "歴史",
+    subCategory: "戦争・歴史事件",
+    era: "E510年",
+    description:
+      "アイリスがシルバー・ヴェノムに捕囚された事件。長きにわたるシルバー・ヴェノムとの戦いの末にマスター・ヴェノムの罠にはまり、捕囚された。この事件はクレセント地方の国際情勢に激震を走らせ、ボグダス・ジャベリンのセバスチャン・ヴァレリウスが主導した救出作戦が始動する直接の契機となった。捕囚中のアイリスの運命はクレセント全域の関心事となり、V7設立（E515年）への政治的動機の一つとなった。",
+    descriptionEn:
+      "The incident where Iris was captured by Silver Venom. After a long struggle with Silver Venom, she fell into Master Venom's trap and was imprisoned. This incident sent shockwaves through the international situation in the Crescent region, becoming the direct catalyst for the rescue operation led by Sebastian Valerius of Bogdas Javelin. Iris's fate during captivity became a matter of concern throughout the Crescent, becoming one of the political motivations for the establishment of V7 in E515.",
+  },{
+    id: "hist-アイリス再拉致" as WikiId,
+    name: "アイリス再拉致事件",
+    nameEn: "Second Abduction of Iris",
+    category: "歴史",
+    subCategory: "戦争・歴史事件",
+    era: "E519年",
+    description:
+      "E518年にアルファ・ヴェノムを率いるイズミがシルバー・ヴェノム残党を吸収して勢力を拡大した後、E519年にイズミ自らの指揮でアイリスの再拉致を成功させた事件。フィオナの内通工作によってトリニティ・アライアンスの内部情報が漏洩しており、これが作戦成功の決定的な要因となった。この事件はV7とトリニティ・アライアンスの対立を決定的なものとし、クレセント地方を二分する大規模な軍事衝突の引き金となった。",
+    descriptionEn:
+      "After Izumi, leading Alpha Venom, absorbed Silver Venom remnants and expanded her power in E518, she personally orchestrated and successfully carried out the recapture of Iris in E519. Internal information from the Trinity Alliance had been leaked through Fiona's insider work, which became the decisive factor in the operation's success. This incident made the confrontation between V7 and the Trinity Alliance definitive, triggering a large-scale military conflict that divided the Crescent region.",
+  },{
+    id: "hist-ノスタルジア・コロニー襲撃" as WikiId,
+    name: "ノスタルジア・コロニー襲撃事件",
+    nameEn: "Nostalgia Colony Attack",
+    category: "歴史",
+    subCategory: "戦争・歴史事件",
+    era: "E509年",
+    description:
+      "アルファ・ヴェノムによるノスタルジア・コロニーへの壊滅的な攻撃事件。ミナ・エウレカの出生地であるこのコロニーは大規模な破壊と住民の犠牲を出した。この襲撃はミナ・エウレカの人生を決定的に変え、彼女がGenesis Vaultを通じて反ヴェノム活動の情報発信を始める直接の動機となった。アルファ・ヴェノムの攻撃性と残虐性を象徴する事件として、E16文明圏全体に衝撃を与えた。",
+    descriptionEn:
+      "The devastating attack on Nostalgia Colony by Alpha Venom. This colony, the birthplace of Mina Eureka, suffered massive destruction and civilian casualties. This attack decisively changed Mina Eureka's life, becoming the direct motivation for her to begin disseminating anti-Venom activity information through Genesis Vault. The incident sent shockwaves throughout the E16 civilization sphere as a symbol of Alpha Venom's aggression and brutality.",
+  },{
+    id: "hist-フィオナの裏切り" as WikiId,
+    name: "フィオナの裏切り発覚",
+    nameEn: "Discovery of Fiona's Betrayal",
+    category: "歴史",
+    subCategory: "戦争・歴史事件",
+    era: "E523〜E525年",
+    description:
+      "V7の急先鋒でありブルーローズ統率者であるフィオナが、E523年からE525年にかけてアルファ・ヴェノムのイズミと内通していることが発覚した事件。腹心のピアトリーノを通じてブルーローズ地下街を掌握し、二重スパイとしてクレセント全域に激震をもたらした。マリーナ・ボビンのミエルテンガ総統との共謀説も浮上し、クレセント地方の「真の黒幕」の可能性が指摘されている。この事件はV7内部の信用崩壊とトリニティ・アライアンスの弱体化を同時にもたらす画期的なスキャンダルとなった。",
+    descriptionEn:
+      "The scandal discovered between E523 and E525 that Fiona, V7's vanguard and Blue Rose leader, had been secretly communicating with Izumi of Alpha Venom. Through her confidant Piattino, she seized control of the Blue Rose underground district, sending shockwaves throughout the Crescent as a double agent. Theories of conspiracy with Marina Bobin's Mieltenga also emerged, pointing to the possibility of her being the \"true mastermind\" of the Crescent. This incident became a groundbreaking scandal that simultaneously caused a collapse of trust within V7 and weakened the Trinity Alliance.",
+  },{
+    id: "hist-event-AURALIS第二世代設立" as WikiId,
+    name: "AURALIS第二世代設立（イベント）",
+    nameEn: "Establishment of AURALIS 2nd Generation",
+    category: "歴史",
+    subCategory: "戦争・歴史事件",
+    era: "E522年",
+    description:
+      "E400年のエヴァトロン弾圧で活動を停止していたAURALISが、E522年に第二世代として正式に復活を果たした歴史的出来事。テクノ文化ルネサンス（E475〜E500）によって醸成された文化的気運を受け、クロニクル・ネーム制度を通じて初代の「名」を継承した新世代メンバーが結集した。ケイト・パットン、リリー・アーデント、ミナ・エウレカ・エルンスト、ニニー・オッフェンバッハらが参画。フェルミ音楽の現代的展開だけでなく、Offenbach種との共創活動や次元技術を活用した空間芸術など、従来の枠を超える表現活動を展開している。セリア黄金期の記憶と理念を現代に継承する最重要の文化的転換点として位置づけられている。",
+    descriptionEn:
+      "The historic event in E522 when AURALIS, which had suspended activities following Evatron's suppression in E400, was officially revived as the second generation. Building on the cultural momentum cultivated by the Techno-Cultural Renaissance (E475-E500), a new generation of members who inherited the first generation's \"names\" through the Chronicle Name system gathered. Kate Patton, Lily Ardent, Mina Eureka Ernst, and Ninny Offenbach participated. They engage in expression that transcends conventional boundaries, including not only modern developments in Fermi music but also collaborative art with the Offenbach species and spatial art utilizing dimensional technology. It is positioned as the most important cultural turning point that inherits the memories and ideals of the Celia Golden Age to the present day.",
+  },{
+    id: "hist-event-V7設立" as WikiId,
+    name: "V7設立（イベント）",
+    nameEn: "Establishment of V7 (Event)",
+    category: "歴史",
+    subCategory: "戦争・歴史事件",
+    era: "E515年",
+    description:
+      "E515年にフィオナの主導でクレセント地方の7カ国連合として設立されたVital Seven。正式名称は「命の七」を意味するVital Seven。ブルーローズ、ミエルテンガ、クロセヴィア、SSレンジ、アイアン・シンジケートなどの主要国が加盟し、集団安全保障体制を通じてアルファ・ヴェノムやシルバー・ヴェノムの脅威に対処するための軍事・経済同盟として発足した。設立の直接の契機はE510年のアイリス捕囚事件であり、単一国ではヴェノム勢力に対抗できないという認識が同盟推進の原動力となった。技術共有、nトークンの相互補助、ホライゾン・ゲートの共同管理などを含む包括的な協力框架を持ち、クレセント地方の地政学的構造を決定づける最大の政治的転換点となった。",
+    descriptionEn:
+      "The Vital Seven, established in E515 under Fiona's leadership as a seven-nation alliance in the Crescent region. Its formal name, Vital Seven, means \"Seven of Life.\" Major nations including Blue Rose, Mieltenga, Crosevia, SS Range, and Iron Syndicate joined, launching as a military and economic alliance to address threats from Alpha Venom and Silver Venom through a collective security framework. The direct catalyst for establishment was the Iris imprisonment incident of E510, with the recognition that no single nation could counter the Venom forces becoming the driving force for the alliance. Possessing a comprehensive cooperation framework including technology sharing, mutual n-token assistance, and joint Horizon Gate management, it became the largest political turning point that determined the geopolitical structure of the Crescent region.",
+  },{
+    id: "hist-トリニティ・アライアンス結成" as WikiId,
+    name: "トリニティ・アライアンス結成",
+    nameEn: "Formation of Trinity Alliance",
+    category: "歴史",
+    subCategory: "戦争・歴史事件",
+    era: "E520年",
+    description:
+      "E520年にヴァーミリオン・ミエルテンガ・ボグダス・ジャベリンの3勢力によって結成された軍事同盟。トリニティ（三位一体）の名称は三勢力が等しい立場で連合を構成していることに由来する。V7に対抗する目的で設立され、クレセント地方における二極対立の構造を決定づけた。ヴァーミリオンが文化的・歴史的正当性を、ミエルテンガが軍事力と産業基盤を、ボグダス・ジャベリンがテクロサス系譜の戦闘技術を提供し、相互補完的な戦力構成となっている。E519年のアイリス再拉致事件後の安全保障環境の悪化が結成の直接的要因であり、アイリスが指導者として同盟を牽引している。",
+    descriptionEn:
+      "A military alliance formed by three powers—Vermilion, Mieltenga, and Bogdas Javelin—in E520. The name Trinity derives from the equal standing of the three powers. Established to counter V7, it solidified the bipolar structure of the Crescent region. Vermilion provides cultural and historical legitimacy, Mieltenga offers military power and industrial infrastructure, and Bogdas Javelin contributes the combat techniques of the Techlosus lineage, creating a complementary force composition. The deterioration of the security environment following the Iris recapture incident of E519 was the direct factor, with Iris leading the alliance.",
   },] as const satisfies readonly WikiEntry[]

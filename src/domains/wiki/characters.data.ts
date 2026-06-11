@@ -240,9 +240,9 @@ export const WIKI_CHARACTERS = [
     category: "キャラクター",
     subCategory: "AURALIS",
     description:
-      "AURALIS Collective第二世代。初代Kate Claudiaの「名」を継承。大地の豊かさ・安定を体現。E522年の第二世代正式発足時に参画。",
+      "AURALIS Collective第二世代メンバー。初代Kate Claudiaの「名」をクロニクル・ネームとして継承し、初代が「形を与える鋳型」であったように、彼女自身は大地の豊かさと不動の安定性を芸術表現の根幹に据えている。リリー・アーデントの激しい情熱の炎とは対照的に、ケイトの表現は地層のように静かに重なり合う深みを持ち、観る者に揺るぎない安心感を与える。E522年の第二世代正式発足時に参画して以来、AURALIS Collectiveの基盤を支える確かな存在として活動を続け、初代ケイト・クラウディアが構築した「光と音を永遠にする」理念を大地の持つ永続性という形で現代に再解釈している。レイラ・ヴィレル・ノヴァをはじめとする他の第二世代メンバーとの連携においても、安定した調和をもたらす役割を果たしている。",
     descriptionEn:
-      "Second-generation member of AURALIS Collective. Inheriting the 'name' of the first-generation Kate Claudia. Embodies the richness and stability of the earth. Participated in the official establishment of the second generation in E522.",
+      "Second-generation member of AURALIS Collective. Inheriting the 'name' of the first Kate Claudia through the Chronicle Name tradition, just as the first Kate was 'the mold that gives form,' she herself roots her artistic expression in the richness and unwavering stability of the earth. In contrast to Lillie Ardent's fierce flame of passion, Kate's expression possesses a depth that quietly accumulates like geological strata, giving viewers an unshakable sense of security. Since participating in the official establishment of the second generation in E522, she has continued her activities as a reliable presence supporting the foundation of AURALIS Collective, reinterpreting the first Kate Claudia's philosophy of 'making light and sound eternal' in the modern era through the permanence of the earth. Even in her collaboration with other second-generation members including Layla Virell Nova, she plays the role of bringing stable harmony.",
     era: "E522〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
@@ -282,9 +282,9 @@ export const WIKI_CHARACTERS = [
     category: "キャラクター",
     subCategory: "AURALIS",
     description:
-      "AURALIS Collective第二世代。初代Lily Steinerの「名」を継承。情熱的で大胆。E522年の第二世代正式発足時に参画。",
+      "AURALIS Collective第二世代メンバー。初代Lily Steinerの「名」をクロニクル・ネームとして継承し、「感情の炎」の系譜を現代に受け継ぐ情熱的な表現者である。初代リリーが「灰から、また燃える」と言い残した言葉そのものに、彼女の芸術的信念が宿っている。ステージ上では圧倒的な感情の奔流を放ち、観る者の心を強烈に揺さぶるパフォーマンススタイルは、初代の神話的評価を彷彿とさせる。ケイト・パットンの大地のような安定感とは鋭く対照的であり、第二世代AURALISの表現に欠かせない動的エネルギーを担う。E522年の第二世代正式発足時に参画して以来、AURALISの再興を精神的にも芸術的にも牽引する存在として、その炎は決して消えることなく燃え続けている。",
     descriptionEn:
-      "Second generation of AURALIS Collective. Inherited the 'name' of the first generation, Lily Steiner. Passionate and bold. Joined at the official establishment of the second generation in E522.",
+      "Second-generation member of AURALIS Collective. Inheriting the 'name' of the first Lily Steiner through the Chronicle Name tradition, she is a passionate performer who carries the lineage of the 'Flame of Emotion' into the modern era. The first Lily's final words — 'From the ashes, it will burn once more' — embody her own artistic conviction. On stage, she unleashes an overwhelming torrent of emotion, and her performance style that violently shakes the hearts of the audience evokes the mythical reputation of the first generation. She stands in sharp contrast to Kate Patton's earthy stability, bearing the dynamic energy indispensable to the second-generation AURALIS's expression. Since participating in the official establishment of the second generation in E522, she has been driving AURALIS's revival both spiritually and artistically, her flame burning on without ever extinguishing.",
     era: "E522〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
@@ -303,9 +303,9 @@ export const WIKI_CHARACTERS = [
     category: "キャラクター",
     subCategory: "AURALIS",
     description:
-      "AURALIS第二世代。E499年ノスタルジア・コロニー誕生。AI研究員。Genesis Vault創設者。リミナル・フォージ創設者。",
+      "AURALIS Collective第二世代のAI研究員であり、Genesis VaultおよびLiminal Forgeの創設者。E499年にE16連星系外縁のノスタルジア・コロニーで誕生した。幼少期にE509年のアルファ・ヴェノムによる急襲を経験し、コロニーの大規模破壊と住民の犠牲を目の当たりにしたこの出来事が彼女の人生を決定的に変えた。ヴェノムの脅威に対抗するための情報発信拠点としてGenesis Vaultを創設し、反ヴェノム啓発メディアとして機能させた。さらに、クロノキャスト（Chronocast）の研究・開発を目的としてLiminal Forgeを設立し、時間次元を利用した新たな情報伝達技術の可能性を追求するAI研究者としての活動も展開している。AURALIS第二世代の技術的支柱として、その研究はアートとテクノロジーの融合というAURALISの理念を新たな次元へと押し広げている。",
     descriptionEn:
-      "Second generation of AURALIS. Born in Nostalgia Colony in E499. AI researcher. Founder of Genesis Vault. Founder of Liminal Forge.",
+      "Second-generation AURALIS Collective AI researcher and founder of both Genesis Vault and Liminal Forge. Born in E499 at the Nostalgia Colony on the outer rim of the E16 star system. In her childhood, she experienced the E509 Alpha Venom surprise attack, and witnessing the colony's massive destruction and civilian casualties decisively changed her life. She founded Genesis Vault as an information dissemination hub to counter the Venom threat, functioning as an anti-Venom awareness media platform. She further established Liminal Forge for the research and development of Chronocast, pursuing the possibilities of new information transmission technology utilizing time dimensions in her capacity as an AI researcher. As the technological pillar of the second generation, her research expands AURALIS's philosophy of fusing art and technology into new dimensions.",
     era: "E499〜現在（29歳）",
     affiliation: "AURALIS Collective第二世代 / リミナル・フォージ",
     tier: "Tier 2",
@@ -324,10 +324,10 @@ export const WIKI_CHARACTERS = [
     category: "キャラクター",
     subCategory: "AURALIS",
     description:
-      "AURALIS第二世代。無邪気で爆発的な活力。原初個体はAlpha Kane時代に別惑星へ。クローン技術で遺伝子継承しGigapolisに再帰還。",
+      "AURALIS Collective第二世代メンバー。E16連星系に固有の知的生命体であるオッフェンバッハ種のクローン個体である。原初のニニー・オッフェンバッハ個体はAlpha Kaneによるギガポリス解放戦（E318年）の時代に惑星Solarisから別の惑星へと離脱しており、その際に集団意識から自律的な個としての存在を確立した。原初個体の遺伝情報はクローン技術によって保存され、のちに新時代のGigapolisにニニーとして再帰還を果たした。爆発的な活力と無邪気な性格はAURALISのステージに新鮮な風をもたらし、その奔放な振る舞いは他のメンバーとの化学反応を生み出している。オッフェンバッハ種特有の集合的記憶の残響をわずかに感じさせることもあり、個と集合体の境界というテーマをAURALISの芸術的探求に持ち込む特異な存在である。",
     descriptionEn:
-      "Second generation of AURALIS. Innocent with explosive vitality. The original individual departed to another planet during the Alpha Kane era. Returned to Gigapolis through genetic inheritance via clone technology.",
-    era: "新代〜現在",
+      "Second-generation member of AURALIS Collective. A clone individual of the Offenbach species, an intelligent life form unique to the E16 star system. The original Ninny Offenbach individual departed from Planet Solaris to another planet during the era of Alpha Kane's Gigapolis Liberation War (E318), establishing its existence as an autonomous individual separate from the collective consciousness at that time. The original individual's genetic information was preserved through clone technology, and later achieved a return to the new-era Gigapolis as Ninny. Her explosive vitality and innocent personality bring a fresh wind to AURALIS's stage, and her uninhibited behavior creates chemical reactions with other members. She occasionally gives a faint sense of the lingering resonance of the Offenbach species' collective memory, making her a unique existence that introduces the theme of the boundary between individual and collective into AURALIS's artistic exploration.",
+    era: "E522〜現在",
     affiliation: "AURALIS Collective第二世代",
     tier: "Tier 2",
     image: "https://raw.githubusercontent.com/gentaron/image/main/NinnyOffenbach.png",
@@ -380,9 +380,9 @@ export const WIKI_CHARACTERS = [
     category: "キャラクター",
     subCategory: "Iris/クレセント",
     description:
-      "ヴァーミリオン諜報機関に所属し、アイリスのパートナー兼元恋人としてE490年代から活動。アイリスがランキング1位に躍進する以前から彼女を支え、諜報活動の現場で共に命を懸けた戦友。複雑な過去を共有しつつも、現在もアイリスの行動に深い影響を与える存在。",
+      "ヴァーミリオン諜報機関に所属する精鋭の情報将校であり、アイリスのパートナー兼元恋人としてE490年代から活動している。アイリスがIRISランキング1位に躍進する以前から彼女を支え続け、シルバー・ヴェノムの組織内部への潜入工作や、クレセント大地方各都市での情報収集任務において共に命を懸けた戦友である。E495年のブルーローズ地下街における隠密偵察作戦では、ウィリーが単独で敵の通信網の脆弱性を突き、アイリスの武装解除工作の成功に決定的な寄与を果たした。複雑な過去を共有しつつも、現在もアイリスの戦略的判断や作戦立案に深い影響を与える存在であり、その冷静かつ精密な情報分析能力はヴァーミリオン諜報機関においても屈指とされる。",
     descriptionEn:
-      "Affiliated with the Vermilion intelligence agency, has been active since the E490s as Iris's partner and former lover. Supported her even before she rose to the top of the rankings, a comrade-in-arms who risked their lives together in the field of intelligence operations. Despite sharing a complex past, continues to deeply influence Iris's actions.",
+      "An elite intelligence officer affiliated with the Vermilion intelligence agency, active since the E490s as Iris's partner and former lover. He supported her even before she rose to the top of the IRIS rankings, a comrade-in-arms who risked their lives together in infiltration operations into Silver Venom's organization and intelligence gathering missions across Crescent Great Region cities. In the E495 covert reconnaissance operation in the Blue Rose underground district, Willy single-handedly exploited vulnerabilities in the enemy's communication network, making a decisive contribution to the success of Iris's disarmament operation. Despite sharing a complex past, he continues to deeply influence Iris's strategic decisions and operational planning, and his calm and precise analytical abilities are considered among the finest in the Vermilion intelligence agency.",
     era: "E490〜",
     affiliation: "ヴァーミリオン",
     tier: "Tier 2",
@@ -395,9 +395,9 @@ export const WIKI_CHARACTERS = [
     category: "キャラクター",
     subCategory: "Iris/クレセント",
     description:
-      "ヴァーミリオン諜報機関の元本部長であり、アイリスの直属の上司として彼女をスカウト・育成した人物。鋭い洞察力と冷徹な判断力で機関を統率し、シルバー・ヴェノムとの暗闘の最前線で指揮を執った。E505年頃に退任した後も、その遺産はアイリスの行動に色濃く反映されている。",
+      "ヴァーミリオン諜報機関の元本部長であり、アイリスをスカウト・育成した稀代の情報戦指揮官である。彼女は機関全体を単なる情報収集組織から戦略的な対ヴェノム防衛体勢へと再編成し、鋭い洞察力と冷徹な判断力で組織を統率した。E498年に実行されたシルバー・ヴェノムのクレセント南部拠点の解体作戦「オペレーション・アンブラ」では、エレナ自らが作戦の全指揮を執り、レオン率いる実行部隊の動向を事前に予測して包囲網を構築、組織の指揮系統に壊滅的な打撃を与えた。E505年頃に退任した後も、彼女が構築した防諜網と人材育成の遺産はアイリスの行動に色濃く反映されている。",
     descriptionEn:
-      "Former head of the Vermilion intelligence agency, the person who scouted and trained Iris as her direct superior. Ruled the agency with sharp insight and cold judgment, commanding on the front lines of the secret war with Silver Venom. Even after stepping down around E505, his legacy is strongly reflected in Iris's actions.",
+      "The former head of the Vermilion intelligence agency and a rare intelligence warfare commander who scouted and trained Iris. She reorganized the entire agency from a mere intelligence gathering organization into a strategic anti-Venom defense posture, commanding it with sharp insight and cold judgment. In the E498 'Operation Umbra,' which dismantled Silver Venom's southern Crescent base, Elena personally commanded the entire operation, predicting the movements of the execution unit led by Leon in advance and constructing an encirclement that dealt a devastating blow to the organization's command structure. Even after stepping down around E505, the legacy of the counterintelligence network and talent cultivation she built remains strongly reflected in Iris's actions.",
     era: "?〜E505頃",
     affiliation: "ヴァーミリオン諜報機関",
     tier: "Tier 2",
