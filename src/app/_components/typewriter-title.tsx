@@ -13,71 +13,71 @@ interface QuoteEntry {
 
 const QUOTES: QuoteEntry[] = [
   {
-    text: "「光と音を永遠にする」",
-    textEn: '"Where Light and Sound Become Eternal"',
+    text: "光と音を永遠にする",
+    textEn: "Where Light and Sound Become Eternal",
     speaker: "AURALIS",
     speakerEn: "AURALIS",
     era: "E290–",
   },
   {
-    text: "「私はもう、あなたと一緒に歩むことはできない」",
-    textEn: '"I can no longer walk with you"',
+    text: "私はもう、あなたと一緒に歩むことはできない",
+    textEn: "I can no longer walk with you",
     speaker: "Ninny Offenbach",
     speakerEn: "Ninny Offenbach",
     era: "E319",
   },
   {
-    text: "「Gigapolis — セリア黄金期の伝統的な名称」",
-    textEn: '"Gigapolis — the traditional name from the Seria Golden Age"',
+    text: "Gigapolis — セリア黄金期の伝統的な名称",
+    textEn: "Gigapolis — the traditional name from the Seria Golden Age",
     speaker: "Mina Eureka Ernst",
     speakerEn: "Mina Eureka Ernst",
     era: "E499–",
   },
   {
-    text: "「E400のエヴァトロン弾圧で解体を余儀なくされた」",
-    textEn: '"Dismantled by the Evatron suppression in E400"',
+    text: "E400のエヴァトロン弾圧で解体を余儀なくされた",
+    textEn: "Dismantled by the Evatron suppression in E400",
     speaker: "AURALIS 第一世代",
     speakerEn: "AURALIS 1st Generation",
     era: "E400",
   },
   {
-    text: "「トリニティ・アライアンスは、この銀河を変える」",
-    textEn: '"The Trinity Alliance will change this galaxy"',
+    text: "トリニティ・アライアンスは、この銀河を変える",
+    textEn: "The Trinity Alliance will change this galaxy",
     speaker: "Iris",
     speakerEn: "Iris",
     era: "E510–",
   },
   {
-    text: "「Layla Virell Nova — ピンクの電撃、嵐を加速させる」",
-    textEn: '"Layla Virell Nova — Pink Voltage, accelerating the storm"',
+    text: "Layla Virell Nova — ピンクの電撃、嵐を加速させる",
+    textEn: "Layla Virell Nova — Pink Voltage, accelerating the storm",
     speaker: "AURALIS Archives",
     speakerEn: "AURALIS Archives",
     era: "E325–",
   },
   {
-    text: "「E528、Liminal Forgeが地球への放送を開始」",
-    textEn: '"E528 — Liminal Forge begins broadcasting to Earth"',
+    text: "E528、Liminal Forgeが地球への放送を開始",
+    textEn: "E528 — Liminal Forge begins broadcasting to Earth",
     speaker: "Liminal Forge",
     speakerEn: "Liminal Forge",
     era: "E528",
   },
   {
-    text: "「Lillie Ardent — 真夜中の炎、静かに燃え尽きることはない」",
-    textEn: '"Lillie Ardent — The Midnight Flame never quietly burns out"',
+    text: "Lillie Ardent — 真夜中の炎、静かに燃え尽きることはない",
+    textEn: "Lillie Ardent — The Midnight Flame never quietly burns out",
     speaker: "AURALIS Archives",
     speakerEn: "AURALIS Archives",
     era: "E522–",
   },
   {
-    text: "「Kate Patton — 大地の豊かさと安定、不動の意志」",
-    textEn: '"Kate Patton — Earth Resonance, unwavering resolve"',
+    text: "Kate Patton — 大地の豊かさと安定、不動の意志",
+    textEn: "Kate Patton — Earth Resonance, unwavering resolve",
     speaker: "AURALIS Archives",
     speakerEn: "AURALIS Archives",
     era: "E522–",
   },
   {
-    text: "「Timur Shahの第10次元Horasm理論がPersephoneを生んだ」",
-    textEn: '"Timur Shah\'s 10th-dimensional Horasm theory gave birth to Persephone"',
+    text: "Timur Shahの第10次元Horasm理論がPersephoneを生んだ",
+    textEn: "Timur Shah's 10th-dimensional Horasm theory gave birth to Persephone",
     speaker: "EDU Archives",
     speakerEn: "EDU Archives",
     era: "E0",
@@ -171,6 +171,9 @@ export function TypewriterTitle() {
     }
   }, [displayText])
 
+  // Speaker fades in after typing finishes (with a slight delay)
+  const showSpeaker = charIndex === displayText.length && !fadingOut
+
   return (
     <div
       className="mb-6"
@@ -180,7 +183,7 @@ export function TypewriterTitle() {
       }}
     >
       <p
-        className="text-xl sm:text-4xl lg:text-5xl font-bold text-edu-text leading-snug min-h-[2.5rem] sm:min-h-[5rem]"
+        className="text-xl sm:text-4xl lg:text-5xl font-bold text-edu-text leading-none whitespace-nowrap truncate min-h-[2.5rem] sm:min-h-[3.5rem]"
         style={{
           textShadow: "0 0 40px rgba(129, 140, 248, 0.15), 0 0 80px rgba(200, 164, 78, 0.08)",
         }}
@@ -192,14 +195,27 @@ export function TypewriterTitle() {
         />
       </p>
       <div className="mt-3 sm:mt-4 flex items-center justify-center gap-2 sm:gap-3">
+        <span
+          className="text-[11px] sm:text-xs text-edu-accent tracking-wider font-medium"
+          style={{
+            opacity: showSpeaker ? 1 : 0,
+            transform: showSpeaker ? "translateY(0)" : "translateY(4px)",
+            transition: "opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s",
+          }}
+        >
+          — {speaker}
+        </span>
         {currentQuote.era && (
-          <span className="text-[10px] sm:text-xs text-edu-muted/60 tracking-widest font-mono">
+          <span
+            className="text-[10px] sm:text-xs text-edu-muted/60 tracking-widest font-mono"
+            style={{
+              opacity: showSpeaker ? 1 : 0,
+              transition: "opacity 0.5s ease 0.5s",
+            }}
+          >
             {currentQuote.era}
           </span>
         )}
-        <span className="text-[11px] sm:text-xs text-edu-accent tracking-wider font-medium">
-          — {speaker}
-        </span>
       </div>
     </div>
   )

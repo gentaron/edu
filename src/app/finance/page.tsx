@@ -15,6 +15,7 @@ import {
   Coins,
   Crosshair,
   Star,
+  ChevronDown,
 } from "lucide-react"
 import { useLang } from "@/lib/use-lang"
 import {
@@ -667,54 +668,124 @@ function AssetTable({
   )
 }
 
-// ─── Narrative Events Timeline ───
+// ─── Narrative Events Timeline (grouped accordion) ───
+
+interface EraGroup {
+  label: string
+  labelEn: string
+  from: number
+  to: number
+}
+
+const ERA_GROUPS: EraGroup[] = [
+  { label: "先史・初期入植", labelEn: "Pre-History & Early Colonization", from: 0, to: 14 },
+  { label: "バーズ帝国期", labelEn: "Birds Empire", from: 15, to: 61 },
+  { label: "戦後・テラン共和国", labelEn: "After War & Terran Republic", from: 62, to: 77 },
+  { label: "第二次繁栄・技術啓蒙", labelEn: "Second Prosperity & Tech Enlightenment", from: 78, to: 96 },
+  { label: "第三次繁栄・コルポラトゥム", labelEn: "Third Prosperity & Corporatum Publica", from: 97, to: 119 },
+  { label: "マーストリヒト・第四次繁栄", labelEn: "Maastricht & Fourth Prosperity", from: 120, to: 208 },
+  { label: "パクス・ロンバルディカ", labelEn: "Pax Lombardica", from: 205, to: 278 },
+  { label: "メルディア戦争・第五次繁栄", labelEn: "Merdia War & Fifth Prosperity", from: 275, to: 318 },
+  { label: "ZAMLT後・黄金期", labelEn: "Post-ZAMLT & Golden Age", from: 319, to: 400 },
+  { label: "エヴァトロン支配・テリアン反乱", labelEn: "Evatron Rule & Terian Rebellion", from: 400, to: 475 },
+  { label: "テクノ文化ルネサンス・近代", labelEn: "Techno-Cultural Renaissance & Modern Era", from: 475, to: 529 },
+]
 
 function TimelineSection({ lang }: { lang: "ja" | "en" }) {
+  const [openGroup, setOpenGroup] = useState<number | null>(null)
+
+  const grouped = useMemo(() => {
+    const result: { group: EraGroup; events: typeof NARRATIVE_EVENTS }[] = []
+    for (const g of ERA_GROUPS) {
+      const events = NARRATIVE_EVENTS.filter((ev) => {
+        const era = dateToEra(ev.date)
+        return era >= g.from && era <= g.to
+      })
+      if (events.length > 0) result.push({ group: g, events })
+    }
+    return result
+  }, [])
+
   return (
-    <div className="relative">
-      <div className="absolute left-4 top-0 bottom-0 w-px bg-edu-border" />
-      <div className="space-y-4 pl-10">
-        {NARRATIVE_EVENTS.map((ev, i) => (
-          <m.div
-            key={ev.date}
-            initial={{ opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.06, duration: 0.4 }}
-            className="relative"
-          >
-            <div className="absolute -left-6 top-2 w-2.5 h-2.5 rounded-full bg-edu-accent border-2 border-edu-bg shadow-[0_0_8px_rgba(200,164,78,0.4)]" />
-            <div className="edu-card p-3">
-              <div className="flex items-center gap-2 mb-1">
-                <Clock className="w-3 h-3 text-edu-accent" />
-                <span className="text-[10px] font-mono text-edu-muted">E{dateToEra(ev.date)}</span>
-              </div>
-              <p className="text-xs text-edu-text leading-relaxed">
-                {lang === "ja" ? ev.descriptionJa : ev.descriptionEn}
-              </p>
-              <div className="flex flex-wrap gap-1 mt-2">
-                {ev.affectedSymbols.map((sym) => (
-                  <span
-                    key={sym}
-                    className="px-1.5 py-0.5 text-[9px] bg-edu-border/50 text-edu-accent rounded"
-                  >
-                    {sym}
+    <div className="space-y-2">
+      {grouped.map(({ group, events }) => {
+        const isOpen = openGroup === ERA_GROUPS.indexOf(group)
+        const avgImpact = events.reduce((s, e) => s + e.impact, 0) / events.length
+        return (
+          <div key={group.label} className="edu-card overflow-hidden">
+            <button
+              onClick={() => setOpenGroup(isOpen ? null : ERA_GROUPS.indexOf(group))}
+              className="w-full flex items-center gap-3 p-3 text-left hover:bg-edu-border/30 transition-colors"
+            >
+              <ChevronDown
+                className={`w-3.5 h-3.5 text-edu-accent shrink-0 transition-transform duration-200 ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+              />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs font-semibold text-edu-text">
+                    {lang === "ja" ? group.label : group.labelEn}
                   </span>
-                ))}
-                <span
-                  className={`px-1.5 py-0.5 text-[9px] rounded ${
-                    ev.impact >= 0
-                      ? "bg-emerald-500/10 text-emerald-400"
-                      : "bg-rose-500/10 text-rose-400"
-                  }`}
-                >
-                  {ev.impact >= 0 ? "+" : ""}
-                  {ev.impact.toFixed(1)}%
-                </span>
+                  <span className="text-[10px] font-mono text-edu-muted">
+                    E{group.from}–E{group.to}
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-edu-border/50 text-edu-accent">
+                    {events.length}events
+                  </span>
+                </div>
               </div>
-            </div>
-          </m.div>
-        ))}
-      </div>
+              <span
+                className={`text-[10px] font-mono px-1.5 py-0.5 rounded shrink-0 ${
+                  avgImpact >= 0
+                    ? "bg-emerald-500/10 text-emerald-400"
+                    : "bg-rose-500/10 text-rose-400"
+                }`}
+              >
+                avg {avgImpact >= 0 ? "+" : ""}
+                {avgImpact.toFixed(1)}%
+              </span>
+            </button>
+
+            {isOpen && (
+              <m.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="overflow-hidden"
+              >
+                <div className="px-3 pb-3 space-y-2 border-t border-edu-border/50 pt-2">
+                  {events.map((ev, i) => (
+                    <div
+                      key={ev.date}
+                      className="flex gap-3 items-start p-2 rounded-md bg-edu-bg/50 hover:bg-edu-border/20 transition-colors"
+                    >
+                      <span className="text-[10px] font-mono text-edu-accent shrink-0 pt-0.5 w-10 text-right">
+                        E{dateToEra(ev.date)}
+                      </span>
+                      <p className="text-xs text-edu-text leading-relaxed flex-1">
+                        {lang === "ja" ? ev.descriptionJa : ev.descriptionEn}
+                      </p>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <span
+                          className={`text-[9px] font-mono px-1 py-0.5 rounded ${
+                            ev.impact >= 0
+                              ? "bg-emerald-500/10 text-emerald-400"
+                              : "bg-rose-500/10 text-rose-400"
+                          }`}
+                        >
+                          {ev.impact >= 0 ? "+" : ""}
+                          {ev.impact.toFixed(1)}%
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </m.div>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }
