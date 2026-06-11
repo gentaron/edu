@@ -311,9 +311,9 @@ export const WIKI_GEOGRAPHY = [{
     category: "地理",
     subCategory: "その他",
     description:
-      "Gigapolis最大の闘技場であり、シンフォニー・オブ・スターズ西大陸における最大級のエンターテインメント施設。年間を通じてスティル・アレーナが開催され、世界中から参加者が集まる。闘技場のネオン照明が夜間に輝く姿はGigapolisのシンボル的一景として広く知られ、文化イベントや音楽フェスティバルの会場としても機能する。観客席は最大50万人を収容可能で、次元ホログラム技術による臨場感のある中継システムを完備。",
+      "Gigapolis最大の闘技場であり、シンフォニー・オブ・スターズ西大陸における最大級のエンターテインメント施設である。年間を通じてスティル・アレーナと呼ばれる格闘トーナメントが開催され、E16文明圏全域から実力者が参加して熱狂的な観衆を集めている。闘技場のネオン照明が夜間に輝く姿はGigapolisのシンボル的一景として広く知られ、大規模な文化イベントやフェルミ音楽のコンサート、国際的な音楽フェスティバルの会場としても多角的に機能している。観客席は最大50万人を収容可能で、次元ホログラム技術による全天周型の臨場感ある中継システムを完備しており、遠方の都市にいても実況と同程度の没入感を得ることができる。スティル・アレーナの覇者は西大陸の社会的名声を大きく高めるため、政治家や企業による選手への後援も活発に行われている。",
     descriptionEn:
-      "Gigapolis's largest arena and one of the largest entertainment facilities in the Symphony of Stars Western Continent. The Still Arena is held throughout the year, attracting participants from all over the world. The neon lights of the arena shining at night are widely known as a symbolic sight of Gigapolis, and it also functions as a venue for cultural events and music festivals. The spectator stands can accommodate up to 500,000 people and are equipped with an immersive broadcasting system using dimensional hologram technology.",
+      "The largest arena in Gigapolis and one of the most massive entertainment facilities on the Western Continent of the Symphony of Stars. The Still Arena, a combat tournament, is held throughout the year, attracting powerful fighters from across the entire E16 civilization zone and drawing enthusiastic crowds. The neon lights of the arena shining at night are widely known as a symbolic sight of Gigapolis, and it also serves a multifaceted role as a venue for large-scale cultural events, Fermi music concerts, and international music festivals. The spectator stands can accommodate up to 500,000 people and feature a full-surround immersive broadcasting system using dimensional hologram technology, allowing viewers in distant cities to experience the same level of immersion as being present. Champions of the Still Arena gain significant social prestige in the Western Continent, making active sponsorship of fighters by politicians and corporations a common practice.",
   },{
     id: "Abrivo" as WikiId,
     name: "アブリーヴォ",
@@ -321,9 +321,9 @@ export const WIKI_GEOGRAPHY = [{
     category: "地理",
     subCategory: "西大陸都市",
     description:
-      "Gigapolis圏の交易都市。シンフォニー・オブ・スターズ西大陸の物流ハブとして機能し、各地からの原材料と製品を中継する活気ある港湾都市。エル・フォルハウスのマーストリヒト革命後は自由貿易の拠点として発展した。",
+      "Gigapolis圏を代表する交易都市であり、シンフォニー・オブ・スターズ西大陸の物流ハブとして不可欠な役割を果たす活気ある港湾都市である。クレセント大地方やEros-7をはじめとする各地からの原材料と製品を中継し、西大陸経済の動脈として機能している。大規模な深水港と自動化された貨物コンテナ施設を備え、日々数千トンの物資が取り扱われている。エル・フォルハウスで起きたマーストリヒト革命の波及により従来の交易制限が撤廃され、自由貿易の拠点として急速に発展を遂げた。現在では西大陸随一の貿易量を誇り、nトークン経済の導入によって国際決済の効率化も進んでいる。多国籍の商人が集まる市場街区は、西大陸で最も多様な文化が交差する場所の一つとしても知られている。",
     descriptionEn:
-      "A trading city in the Gigapolis sphere. It functions as a logistics hub for the Symphony of Stars Western Continent, a vibrant port city that relays raw materials and products from various regions. After the Maastricht Revolution in El Forlhaus, it developed as a center for free trade.",
+      "A premier trading city representing the Gigapolis sphere and playing an essential role as the logistics hub of the Symphony of Stars Western Continent. It relays raw materials and products from various regions including the Crescent Great Region and Eros-7, functioning as an economic artery of the Western Continent. The city is equipped with a large-scale deep-water port and automated cargo container facilities, handling thousands of tons of goods daily. The lifting of traditional trade restrictions following the Maastricht Revolution in El Forlhaus led to its rapid development as a free trade center. It now boasts the largest trade volume on the Western Continent, and the introduction of the n-token economy has further streamlined international settlements. The market district, where multinational merchants gather, is also known as one of the most culturally diverse meeting points on the Western Continent.",
   },{
     id: "Ronve" as WikiId,
     name: "ロンヴ",
@@ -331,9 +331,9 @@ export const WIKI_GEOGRAPHY = [{
     category: "地理",
     subCategory: "西大陸都市",
     description:
-      "Gigapolis圏の城塞都市。西大陸の北部に位置し、ロンバルディア戦争（E88〜E98年）の際には前線基地として機能した堅固な防衛都市。現在でも要塞跡と軍事博物館が残り、テクロサス系譜の軍事伝統を伝える。",
+      "Gigapolis圏の歴史的城塞都市であり、西大陸の北部に位置する堅固な防衛都市である。東暦初期の入植時代に外敵の侵入に備えて築城され、分厚い城壁と天然の地形を利用した防御体系は数百年にわたって西大陸北部の安全を支えてきた。特にロンバルディア戦争（E88〜E98年）の際には前線基地として機能し、テクロサス系譜の軍事戦術が実戦で実証された重要な舞台となった。戦争の激化に伴い城塞は大規模な損傷を受けたが、戦後の復元工事によって当時の防衛構造が忠実に保存されている。現在では旧要塞跡と軍事博物館が観光資源として整備され、テクロサス系譜の軍事伝統と西大陸の防衛史を後世に伝える重要な歴史遺産として機能している。毎年多くの歴史研究者と観光客が訪れ、城壁の上から望む北部平野の全景は西大陸有数の絶景として名高い。",
     descriptionEn:
-      "A fortress city in the Gigapolis sphere. Located in the northern part of the Western Continent, it was a solid defensive city that functioned as a front-line base during the Lombardia War (E88-E98). Today, fortress ruins and a military museum remain, preserving the military tradition of the Teclosus lineage.",
+      "A historic fortress city in the Gigapolis sphere, located in the northern part of the Western Continent. It was originally constructed during the early Eastern Calendar colonization era to guard against external invasions, and its thick walls and terrain-based defensive system supported the safety of the northern Western Continent for centuries. During the Lombardia War (E88-E98) in particular, it functioned as a front-line base and served as an important stage where the military tactics of the Teclosus lineage were proven in actual combat. Although the fortress sustained heavy damage as the war intensified, post-war restoration faithfully preserved the original defensive structures. Today, the old fortress ruins and a military museum have been developed as tourist resources, functioning as an important historical heritage that preserves the military tradition of the Teclosus lineage and the defense history of the Western Continent for future generations. Many history researchers and tourists visit annually, and the panoramic view of the northern plains from atop the walls is renowned as one of the finest vistas on the Western Continent.",
   },{
     id: "Lille" as WikiId,
     name: "リール",
@@ -341,9 +341,9 @@ export const WIKI_GEOGRAPHY = [{
     category: "地理",
     subCategory: "西大陸都市",
     description:
-      "Gigapolis圏の通信・情報都市。西大陸の通信ネットワークの中継拠点として機能し、次元極地平技術の民生利用の試験地としても知られる。テクノ文化ルネサンス（E475〜E500）以降は新しいメディア産業の拠点として急成長している。",
+      "Gigapolis圏の通信・情報都市であり、西大陸通信ネットワークの要として機能する都市である。ホライゾン・ゲートの安定化通信と量子中継技術を駆使した通信網の主要ノードを担い、西大陸全域の情報流通を統括する役割を果たしている。また、次元極地平技術の民生利用の先進的な試験地として知られ、惑星ビブリオの研究機関と連携した実証実験が継続的に行われている。テクノ文化ルネサンス（E475〜E500）以降は、次元ホログラム放送や立体映像コンテンツなど新しいメディア産業の拠点として急成長を遂げた。現在では西大陸のメディア企業やジャーナリズム機関が集中する情報の中心地であり、E16文明圏の報道と世論形成において影響力を拡大し続けている。",
     descriptionEn:
-      "A communications and information city in the Gigapolis sphere. It functions as a relay point for the Western Continent's communication network and is also known as a testing ground for civilian use of dimensional horizon technology. Since the Techno Cultural Renaissance (E475-E500), it has grown rapidly as a center for the new media industry.",
+      "A communications and information city in the Gigapolis sphere, serving as a critical node of the Western Continent's communication network. It operates as a major hub of the communication grid, utilizing Horizon Gate stabilization communications and quantum relay technology to coordinate information distribution across the entire Western Continent. It is also known as a pioneering testing ground for civilian applications of dimensional horizon technology, with continuous demonstration experiments conducted in collaboration with research institutions on Planet Biblio. Since the Techno-Cultural Renaissance (E475-E500), it has experienced rapid growth as a hub for new media industries, including dimensional hologram broadcasting and three-dimensional visual content. Today, it serves as an information center where Western Continent media companies and journalism organizations are concentrated, steadily expanding its influence in shaping public opinion and news across the E16 civilization zone.",
   },{
     id: "Valoria" as WikiId,
     name: "ヴァロリア",
@@ -351,9 +351,9 @@ export const WIKI_GEOGRAPHY = [{
     category: "地理",
     subCategory: "西大陸都市",
     description:
-      "Gigapolis圏南部の戦略的要衝に位置する都市。壮麗なValoria宮殿を擁し、E319年にLv938+の実力者Jenがこの宮殿を掌握して以降、彼女を中心とするValoria連合圏の中核拠点として機能している。ZAMLT崩壊後の権力真空期にJenが西大陸の安定を確立した拠点でもあり、現在でも新ZAMLT期における主要な政治・軍事拠点として重要な役割を果たす。宮殿の地下には古代の次元兵器遺構が眠ると伝えられている。",
+      "Gigapolis圏南部の戦略的要衝に位置し、西大陸の政治的機能を一身に担う都市である。都市の中心にそびえる壮麗なValoria宮殿は、西大陸で最大規模の政治施設であり、各国の外交会議と軍事会議が常時開催される重要な拠点となっている。E319年にLv938+の実力者Jenがこの宮殿を掌握して以降、彼女を中心とするValoria連合圏の中核拠点として機能している。ZAMLT崩壊後の権力真空期にJenが西大陸の安定を確立した拠点でもあり、その圧倒的な実力を背景に周辺勢力を統合して政治秩序を再構築した。現在でも新ZAMLT期における主要な政治・軍事拠点として重要な役割を果たし、西大陸の安全保障と行政の実質的な中心地となっている。宮殿の地下には古代の次元兵器遺構が眠ると伝えられ、Jenがこの隠された力にアクセスしたことが彼女の急速な勢力拡大の要因の一つと推測されている。",
     descriptionEn:
-      "A city located at a strategic crossroads in southern Gigapolis. It boasts the magnificent Valoria Palace, and since E319 when the Lv938+ powerhouse Jen took control of this palace, it has functioned as the core base of the Valoria Alliance centered around her. It was also a base where Jen established stability in the Western Continent during the power vacuum after the collapse of ZAMLT, and it still plays an important role as a major political and military base in the new ZAMLT era. It is said that ancient dimensional weapon ruins sleep beneath the palace.",
+      "A city located at a strategic crossroads in southern Gigapolis, shouldering the political functions of the entire Western Continent. The magnificent Valoria Palace, towering at the city's center, is the largest political facility on the Western Continent and serves as an important hub where diplomatic and military conferences of various nations are held on an ongoing basis. Since E319 when the Lv938+ powerhouse Jen took control of this palace, it has functioned as the core base of the Valoria Alliance centered around her. It was also the base where Jen established stability in the Western Continent during the power vacuum after the collapse of ZAMLT, reconstructing the political order by integrating surrounding forces with her overwhelming power as a backdrop. It continues to play an important role as a major political and military base in the new ZAMLT era, serving as the de facto center of security and administration for the Western Continent. It is said that ancient dimensional weapon ruins sleep beneath the palace, and it is speculated that Jen's access to this hidden power was one of the factors behind her rapid expansion of influence.",
   },{
     id: "Persepolis" as WikiId,
     name: "ペルセポリス",
