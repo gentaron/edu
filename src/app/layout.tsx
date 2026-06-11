@@ -45,7 +45,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
-      <head>
+      <body
+        className={`${notoSansJP.variable} font-sans`}
+        style={{ fontFamily: "var(--font-sans), 'Noto Sans JP', sans-serif" }}
+      >
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-2ZFKSMV19K"
           strategy="afterInteractive"
@@ -58,15 +61,10 @@ export default function RootLayout({
             gtag('config', 'G-2ZFKSMV19K');
           `}
         </Script>
-      </head>
-      <WebsiteJsonLd />
-      <a href="#main-content" className="skip-link">
-        メインコンテンツへスキップ
-      </a>
-      <body
-        className={`${notoSansJP.variable} font-sans`}
-        style={{ fontFamily: "var(--font-sans), 'Noto Sans JP', sans-serif" }}
-      >
+        <WebsiteJsonLd />
+        <a href="#main-content" className="skip-link">
+          メインコンテンツへスキップ
+        </a>
         <LangProvider>
           <Navigation />
           <main id="main-content">

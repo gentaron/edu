@@ -1,0 +1,593 @@
+import type { WikiId, WikiEntry } from "@/types"
+
+export const WIKI_HISTORY = [{
+    id: "東暦" as WikiId,
+    name: "東暦（E暦）",
+    nameEn: "Eastern Calendar (E Calendar)",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E1 = AD 3501から始まる暦法で、E16連星系への最初の入植船団が到着した年を元年としている。それ以前の地球暦（西暦）との換算式は E年 = AD年 - 3500 であり、東暦E500年は西暦4001年に相当する。暦法の名称「東暦」は、地球から見てM104銀河が東方向に位置することに由来し、入植者たちが故郷地球との精神的な繋がりを保ちつつ新たな文明の時間を刻むために制定した。E16連星系の自転周期（44時間4分）に合わせた独自の暦体系が併用されており、1東暦年は地球の約1.02年に相当する。東暦はバーズ帝国の設立、パクス・ロンバルディカ、スライム危機、テクノ文化ルネサンスなど、E16文明圏の全歴史的出来事を記述する基準となっている。",
+    descriptionEn:
+      "The Eastern Calendar, beginning in AD 3501, uses the year the first colonization fleet arrived in the E16 star system as its year one. The conversion formula to the previous Earth calendar (Gregorian) is E year = AD year - 3500, making Eastern year 500 equivalent to AD 4001. The calendar's name \"Eastern\" derives from the M104 Galaxy's position to the east when viewed from Earth, established by settlers to maintain a spiritual connection to their homeworld while marking time for a new civilization. A unique calendar system, synchronized with the E16 star system's rotation period (44 hours, 4 minutes), is used concurrently, with one Eastern year equivalent to approximately 1.02 Earth years. The Eastern Calendar serves as the基准 for describing all historical events in the E16 civilization sphere, including the founding of the Vaz Empire, the Pax Lombardica, the Slime Crisis, and the Technocultural Renaissance.",
+  },{
+    id: "バーズ帝国" as WikiId,
+    name: "バーズ帝国",
+    nameEn: "Birds Empire",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E15年からE61年まで続いたE16連星系初の包括的統一政権で、軍閥ファランクスによって樹立された。ファランクスは初期植民地間の紛争を武力によって終結させ、シンフォニー・オブ・スターズ全域にわたる法秩序とインフラを構築した。バーズ帝国は帝国という名称ながらも、初期の入植者自治の伝統をある程度尊重し、各省庁に相当する地方総督府制度を導入した。E61年、ファランクスの死後、後継者争いと各地の独立運動によって帝国は分裂し、複数の小規模国家群に解体された。しかし、帝国期に整備された通信ネットワークと航路標識は後のパクス・ロンバルディカ期の繁栄の基盤となり、A-Registryの初期原型もこの時期に構想された。バーズ帝国の崩壊はE16文明圏における「統一と分岐」の循環の最初の例として歴史家に注目されている。初代皇帝ファランクス（E15〜E61）が軍閥ファランクスとして初期植民地間紛争を武力終結させ帝国を樹立。ファランクスの死後、後継者争いで帝国は分裂したが、その軍事伝統はテクロサス系譜として受け継がれ、現在のボグダス・ジャベリンに至っている。",
+    descriptionEn:
+      "The Vaz Empire, the first comprehensive unified government in the E16 star system, lasted from E15 to E61 and was established by the military faction Phalanx. Phalanx ended conflicts between early colonies through force and constructed a legal order and infrastructure across the Symphony of Stars. Despite its name, the Vaz Empire respected the tradition of early settler self-governance to some extent, introducing a system of regional governorates equivalent to various ministries. After Phalanx's death in E61, the empire fragmented into multiple smaller states due to succession disputes and independence movements across various regions. However, the communication networks and space route markers developed during the imperial period became the foundation for the prosperity of the later Pax Lombardica era, and the initial prototype of the A-Registry was conceived during this time. The collapse of the Vaz Empire is noted by historians as the first example of the cycle of \"unity and divergence\" in the E16 civilization sphere. The first emperor, Phalanx (E15-E61), ended conflicts between early colonies by force and established the empire. After Phalanx's death, the empire fractured due to succession disputes, but its military tradition was inherited by the Teklos lineage, leading to the current Bogdas Javelin.",
+
+    leaders: [
+      {
+        id: "ファランクス" as WikiId as WikiId,
+        name: "ファランクス",
+        nameEn: "Phalanx",
+        role: "バーズ帝国初代皇帝",
+        era: "E15〜E61",
+      },
+    ],
+  },{
+    id: "セリア黄金期" as WikiId,
+    name: "セリア黄金期",
+    nameEn: "Celia Golden Age",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E335年からE370年まで続いたE16文明圏の最盛期で、フェルミ音楽理論の完成、nトークン経済の確立、AURALIS第一世代の黄金時代を包含する。この時期、フェルミ音楽は単なる芸術形式を超えて、惑星間通信の符号化や医療治療への応用など社会的基盤技術として機能した。AURALISの「光と音を永遠にする」という理念は文明全体の文化規範となり、建築、服飾、都市計画に至るまで音響的調和が重視された。nトークン経済システムもこの時期に急速に普及し、物質的富だけでなく文化的貢献や知識の共有が経済的価値として評価される画期的な体制を構築した。しかし黄金期の過剰な楽観主義は内部の構造的矛盾を隠蔽しており、E370年以降、ZAMLTの台頭によってこの調和は急速に崩れていくことになる。\nこのセリア黄金期の根底には、防衛的加速主義(L1)と第2のゲーム(L3)の思想的地層が横たわっている。覇権競争に巻き込まれず、文化創造によって文明を守った先例として、この時代はL1の「防衛的技術」理念の萌芽を示している。軍事的拡張ではなく知的・文化的到達によって他文明との関係を構築したセリアの選択は、オムニウィン構想の先駆けとしてL3の思想的系譜に位置づけられる。",
+    descriptionEn:
+      "The Serian Golden Age, the peak period of the E16 civilization sphere from E335 to E370, encompassed the completion of Fermi musical theory, the establishment of the n-token economy, and the golden age of the first generation of AURALIS. During this period, Fermi music transcended mere art form to function as a foundational social technology, applied in interplanetary communication encoding and medical treatments. AURALIS's philosophy of \"making light and sound eternal\" became a cultural norm for the entire civilization, with acoustic harmony emphasized in architecture, fashion, and urban planning. The n-token economic system also rapidly spread during this time, constructing a groundbreaking system where not only material wealth but also cultural contributions and knowledge sharing were evaluated as economic value. However, the excessive optimism of the golden age concealed internal structural contradictions, and after E370, this harmony rapidly collapsed with the rise of ZAMLT. Beneath this Serian Golden Age lies the ideological strata of Defensive Accelerationism (L1) and the Second Game (L3). As a precedent for protecting civilization through cultural creation rather than being drawn into hegemonic competition, this era shows the萌芽 of L1's \"defensive technology\" philosophy. Seria's choice of building relations with other civilizations through intellectual and cultural achievements rather than military expansion is positioned in the ideological lineage of L3 as a precursor to the Omniwin concept.",
+  },{
+    id: "パクス・ロンバルディカ" as WikiId,
+    name: "パクス・ロンバルディカ",
+    nameEn: "Pax Lombardica",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E205年からE278年まで続いたコーポラタムパブリカ（株式会社共和国）の全盛期で、E16連星系における企業統治モデルの最も成功した時代である。パクス・ロンバルディカという名称は「ロンバルディアの平和」を意味し、主要企業群が協調して統治を行うことで約70年にわたる長期安定を実現した。この時代、企業は利潤追求だけでなく、インフラ整備、教育、医療、宇宙探査などの公共サービスを担い、国家の役割を代替する画期的な統治体制を確立した。惑星ビブリオのロレンツィオ国際大学もこの時期に設立され、学術研究への大規模投資が行われた。しかし企業間の寡占化が進み、市民の政治参加権が制限される傾向が強まったこと、そして企業利益と公共利益の対立が深まったことが、最終的にZAMLTによる強硬な経済覇権への移行を招く要因となった。",
+    descriptionEn:
+      "The peak period of the Corporatum Publica (Corporate Republic), lasting from E205 to E278, was the most successful era of corporate governance in the E16 star system. The name Pax Lombardica, meaning \"Lombardian Peace,\" reflects the long-term stability of about 70 years achieved through coordinated governance by major corporate groups. During this era, corporations undertook not only profit-seeking but also public services such as infrastructure development, education, healthcare, and space exploration, establishing an innovative governance system that replaced the functions of the state. The Lorenzo International University on the planet Vibrio was also founded during this period, with large-scale investments in academic research. However, as oligopolization among corporations advanced and the tendency to restrict citizens' political participation strengthened, and as conflicts between corporate interests and public interests deepened, these factors ultimately led to the transition to ZAMLT's aggressive economic hegemony.",
+  },{
+    id: "スライム危機" as WikiId,
+    name: "スライム危機",
+    nameEn: "Slime Crisis",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E380年からE400年まで約20年間続いた大規模災害で、Eros-7を原生地とするリーチ・ドレインの遺伝子変異によって引き起こされた。変異したリーチ・ドレインは従来の性的エネルギー吸収能力に加え、他の生命体の生体エネルギーをも吸収するようになり、感染力と増殖力が劇的に向上した。災害はEros-7から始まり、惑星間航行に乗ってシンフォニー・オブ・スターズや他の植民地に波及し、特に人口密集地域で壊滅的な被害をもたらした。ZAMLT期の経済優先政策によって生物災害対策が後回しにされていたことが被害拡大の要因とされ、この教訓は後にテクノ文化ルネサンス期の「技術の民主化」と「生態系との調和」という理念に強く反映された。スライム危機の収束にはEros-7のマトリカル社会が独自に開発した生物学的封じ込め技術が決定的な役割を果たし、この技術は後に医療や環境修復分野で広く応用されることになる。アヤカ・リンがアンダーグリッドでの制圧作戦を先陣を切って指揮し、レイラ・ヴィレル・ノヴァもオアシス・ハウスを拠点にスライム討伐で英雄的活躍を見せた。",
+    descriptionEn:
+      "A major disaster lasting approximately 20 years from E380 to E400, caused by genetic mutations in the Reach Drain native to Eros-7. The mutated Reach Drain, in addition to its conventional sexual energy absorption capabilities, began to absorb the bio-energy of other lifeforms, dramatically increasing its infectivity and reproductive capacity. The disaster began on Eros-7 and spread to the Symphony of Stars and other colonies via interplanetary travel, causing devastating damage especially in densely populated areas. The prioritization of economic policy over biological disaster prevention during the ZAMLT period is considered a factor in the expansion of the damage, and this lesson was strongly reflected in the later \"democratization of technology\" and \"harmony with the ecosystem\" principles of the Technocultural Renaissance period. The Matriscal society of Eros-7 independently developed biological containment technology that played a decisive role in containing the Slime Crisis, and this technology was later widely applied in medical and environmental restoration fields. Ayaka Rin led the suppression operation in the Undergrid, and Leila Viler Nova also performed heroic deeds in the Slime extermination operations based at Oasis House.",
+  },{
+    id: "テクノ文化ルネサンス" as WikiId,
+    name: "テクノ文化ルネサンス",
+    nameEn: "Techno-Cultural Renaissance",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E475年からE500年まで続いた文化・技術の飛躍期で、次元極地平技術の民用化と多文明融合が進んだ画期的な時代である。スライム危機の教訓から、従来は軍事・企業エリートに限定されていた次元極地平技術が一般市民にも開放され、ホライゾン・ゲートを通じた惑星間移動が日常化した。これによりE16連星系内の各地域間交流が爆発的に増加し、異なる植民地の文化が融合する新しい芸術・音楽・哲学が花開いた。テクノ文化ルネサンスはAURALIS第二世代の設立（E522年）を準備する文化的土壌となり、フェルミ音楽の現代的再解釈やOffenbach種との協創芸術などが生まれた。また、ペルセポネ計画の初期構想もこの時期に生み出され、次元階梯パンディクト理論の基礎研究が惑星ビブリオで開始された。\nこのテクノ文化ルネサンスの根底には、第2のゲーム(L3)の思想的地層が横たわっている。ZAMLT崩壊後の再構築において「覇権競争」ではなく「共存フレームワーク」を設計しようとしたこの動きは、ゼロサムゲームからオムニウィン（全員勝利）への転換を志向するL3の思想の大規模な歴史的実践であった。",
+    descriptionEn:
+      "A period of cultural and technological leap from E475 to E500, a groundbreaking era marked by the civilian application of dimensional pole horizon technology and the advancement of multi-civilization fusion. Learning from the lessons of the Slime Crisis, dimensional pole horizon technology, previously limited to military and corporate elites, was opened to the general public, making interplanetary travel via Horizon Gates a daily occurrence. This led to an explosive increase in interregional exchange within the E16 star system, and new art, music, and philosophy blossomed from the fusion of different colonial cultures. The Technocultural Renaissance prepared the cultural soil for the establishment of the second generation of AURALIS (E522), giving birth to modern reinterpretations of Fermi music and collaborative art with the Offenbach species. Additionally, the initial concept of the Persephone Plan was born during this period, and foundational research on dimensional ladder Pandect theory began on the planet Vibrio. Beneath this Technocultural Renaissance lies the ideological stratum of the Second Game (L3). This movement, which sought to design a \"coexistence framework\" rather than \"hegemonic competition\" in the reconstruction after ZAMLT's collapse, was a large-scale historical practice of L3's philosophy, aiming to transition from a zero-sum game to Omniwin (all-win).",
+  },{
+    id: "エルトナ戦争" as WikiId,
+    name: "エルトナ戦争",
+    nameEn: "Eltna War",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E14年に勃発したシンフォニー・オブ・スターズ史上最初期の大規模紛争。地球から到来した移民集団の間で、「前衛意識」を標榜する進歩派と、惑星の自然環境との調和を重んじる「原始意識」を奉じる保守派が激しく衝突した。人種的・文化的緊張の起源となった戦争であり、その対立構造は後のテラン朝共和制の成立過程にも影響を及ぼした。この戦争の教訓は、のちに技術啓蒙時代におけるバイオエンジニアリングの倫理議論の基礎となった。",
+    descriptionEn:
+      "The first large-scale conflict in the history of the Symphony of Stars, erupting in E14. It was a fierce collision between immigrant groups from Earth: the progressive faction advocating for \"vanguard consciousness\" and the conservative faction adhering to \"primitive consciousness\" that emphasized harmony with the planet's natural environment. A war that became the origin of racial and cultural tensions, its opposing structure also influenced the formation process of the later Teran dynasty republic. The lessons of this war later became the foundation for ethical debates on bioengineering during the Technological Enlightenment era.",
+  },{
+    id: "アフター戦争" as WikiId,
+    name: "アフター戦争",
+    nameEn: "After War",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E62年からE77年にかけて続いた大規模な内戦。チョンクォン戦争と並んで、シンフォニー・オブ・スターズ西大陸における王朝体制から共和制への移行をもたらした決定的な契機となった。封建的な支配構造に対する市民の不満が爆発し、各地で武装蜂起が発生。15年に及ぶ戦闘の末、旧支配層は崩壊し、新たな共和制の基盤が築かれた。この戦争はEDUの歴史において「自由への序章」として位置づけられている。",
+    descriptionEn:
+      "A large-scale civil war that lasted from E62 to E77. Along with the Chongquan War, it became a decisive factor in the transition from a dynastic system to a republic in the western continent of the Symphony of Stars. Citizens' dissatisfaction with the feudal ruling structure exploded, and armed uprisings occurred in various regions. After 15 years of combat, the old ruling class collapsed, and the foundation of a new republic was established. This war is positioned in EDU's history as the \"Prologue to Freedom.\"",
+  },{
+    id: "チョンクォン戦争" as WikiId,
+    name: "チョンクォン戦争",
+    nameEn: "Chonkwon War",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E62年からE77年にかけてアフター戦争と並行して戦われた大規模紛争。主に東方領域を舞台に、地方分権を求める勢力と中央集権体制の維持を図る勢力が激突した。チョンクォン地域の特殊性を背景に複雑な駆け引きが展開され、多数の都市が戦火に巻き込まれた。アフター戦争との相乗効果により、最終的にテラン朝共和制への移行が不可避となった。この戦争の名称はチョンクォン平原での決戦に由来する。",
+    descriptionEn:
+      "The large-scale conflict fought from E62 to E77, concurrent with the After War. Primarily staged in the Eastern Territories, it saw a clash between forces seeking regional decentralization and those attempting to maintain the centralized system. Against the backdrop of the special nature of the Chongquan region, complex maneuvers unfolded, with numerous cities drawn into the conflict. The combined effect with the After War made the transition to the Teran Dynasty Republic inevitable. The war's name derives from the decisive battle on the Chongquan Plain.",
+  },{
+    id: "テラン朝共和制" as WikiId,
+    name: "テラン朝共和制",
+    nameEn: "Terran Republic",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E62〜E77年のアフター戦争およびチョンクォン戦争の終結に伴い、旧封建体制に代わって成立した共和制政体。市民の代表による議会制度を導入し、西大陸初の本格的な民主主義的統治体制を確立した。しかし初期には共和制の運営経験不足から政治的混乱が続いた。技術啓蒙時代の幕開けとともに安定し、のちのマーストリヒト革命を経てコーポラトクラシー体制であるコーポラタムパブリカへと発展的に移行した。",
+    descriptionEn:
+      "The republican government established following the conclusion of the After War and the Chongquan War from E62 to E77, replacing the old feudal system. It introduced a parliamentary system with citizen representatives, establishing the first comprehensive democratic governance system on the Western Continent. However, initial political turmoil continued due to the inexperience in republican governance. It stabilized with the beginning of the Enlightenment Era, and later developed into the Corporatocracy of Corporatum Publica through the Maastricht Revolution.",
+  },{
+    id: "ロンバルディア戦争" as WikiId,
+    name: "ロンバルディア戦争",
+    nameEn: "Lombardia War",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E88年からE98年にかけてM104銀河全域を巻き込んだ史上最大規模の星間戦争。西大陸の内政不満と外惑星領域との資源争奪が複雑に絡み合い、複数の惑星系で同時に戦闘が勃発。次元兵器の試験的使用が行われた最初の大戦でもあり、その被害は甚大であった。戦後の処理過程でセクスタス連合が結成され、ロンバルディア帝国との対立構造が形成された。この戦争は銀河規模の安全保障体制の必要性を浮き彫りにした。",
+    descriptionEn:
+      "The largest interstellar war in history, engulfing the entire M104 galaxy from E88 to E98. Complex entanglement of Western Continental political dissatisfaction and resource competition with outer planetary regions led to simultaneous outbreaks of combat in multiple star systems. It was also the first major war to see experimental use of dimensional weapons, causing catastrophic damage. In the post-war process, the Sextus Alliance was formed, establishing a confrontational structure with the Lombardia Empire. This war highlighted the necessity of a galaxy-wide security system.",
+  },{
+    id: "メルディア戦争" as WikiId,
+    name: "メルディア戦争",
+    nameEn: "Meldia War",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E275年からE288年にかけてロンバルディア帝国とセクスタス連合の間で戦われた大規模な星間戦争。13年に及ぶ戦争の最終局面でロンバルディア帝国は次元兵器を初めて本格的に投入し、セクスタス連合の主要拠点を壊滅させて勝利を収めた。しかし次元兵器使用の倫理的議論は銀河全体に波紋を広げ、のちのアポロン・Dominion大戦における次元兵器の禁止条約の根拠となった。戦後のロンバルディア帝国の覇権確立は第五次繁栄期をもたらした。",
+    descriptionEn:
+      "The massive interstellar war fought between the Lombardia Empire and the Sextus Alliance from E275 to E288. In the final phase of the 13-year war, the Lombardia Empire first deployed dimensional weapons on a full scale, annihilating the main strongholds of the Sextus Alliance to achieve victory. However, the ethical debate over the use of dimensional weapons sent ripples throughout the galaxy, later becoming the basis for the dimensional weapons prohibition treaty in the Apollo-Dominion Great War. The post-war establishment of Lombardia's hegemony brought about the Fifth Prosperity Period.",
+  },{
+    id: "マーストリヒト革命" as WikiId,
+    name: "マーストリヒト革命",
+    nameEn: "Maastricht Revolution",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E150年にエル・フォルハウスが主導した経済革命。彼はGigapolisのセントラル・タワーを武力で占拠し、それまでの規制経済体制を廃止して完全自由経済を宣言した。この革命により企業の活動が大幅に自由化され、コーポラタムパブリカ体制から新たな経済秩序への転換が完了した。革命の理念は新ヘルシンキ宣言に受け継がれ、のちの惑星連邦構想の思想的基盤の一つとなった。エル・フォルハウスは革命後、初代経済自由委員会の委員長に就任した。",
+    descriptionEn:
+      "The economic revolution led by El Forhaus in E150. He forcibly occupied the Central Tower of Gigapolis, abolished the previous regulated economic system, and declared a completely free economy. This revolution greatly liberalized corporate activities, completing the transition from the Corporatum Publica system to a new economic order. The revolution's ideals were carried forward in the New Helsinki Declaration, later becoming one of the ideological foundations for the planetary federation concept. After the revolution, El Forhaus became the first chairman of the Economic Freedom Commission.",
+  },{
+    id: "クワンナラ革命" as WikiId,
+    name: "クワンナラ革命",
+    nameEn: "Kwannara Revolution",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E108年からE114年にかけて起こった大規模な社会革命。中央集権体制に対する地方勢力とクラン（氏族）の反発を背景に、分権化とクランの伝統的権利の復権を要求する声が高まった。革命の結果、地方自治権が大幅に拡大され、クラン・フォーラムの設立など分権的な統治体制が整備された。この革命はE325年のネオクラン同盟設立への遠因ともなり、西大陸政治における「中央対地方」の構造を形成する決定的な転換点となった。",
+    descriptionEn:
+      "The major social revolution that occurred from E108 to E114. Against the backdrop of resistance from regional powers and clans (tribes) against the centralized system, demands for decentralization and the restoration of traditional clan rights grew louder. As a result of the revolution, local autonomy was greatly expanded, and a decentralized governance system was established, including the formation of the Clan Forum. This revolution also became a remote cause for the establishment of the Neo-Clan Alliance in E325, becoming a decisive turning point that formed the \"central vs. local\" structure in Western Continental politics.",
+  },{
+    id: "新ヘルシンキ宣言" as WikiId,
+    name: "新ヘルシンキ宣言",
+    nameEn: "New Helsinki Declaration",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E151年にアリア・ソルが提案した画期的な外交構想。惑星連邦の設立と、次元極地平を活用した星間議会の組織化を柱とする構想であり、複数の惑星文明が平等な立場で参加する宇宙規模の連合体制を構想した。この宣言はマーストリヒト革命の翌年に発表され、経済の自由化に続く政治的統合のビジョンとして広範な支持を集めた。のちの銀河系コンソーシアム設立の理念的源流として高く評価されている。",
+    descriptionEn:
+      "The groundbreaking diplomatic vision proposed by Aria Sol in E151. Centered on the establishment of a Planetary Federation and the organization of an interstellar council utilizing dimensional poles, it envisioned a cosmic-scale alliance where multiple planetary civilizations could participate on equal footing. This declaration, made the year after the Maastricht Revolution, garnered broad support as a vision of political integration following economic liberalization. It is highly regarded as the ideological source for the later establishment of the Galactic Consortium.",
+  },{
+    id: "コーラの疫病" as WikiId,
+    name: "コーラの疫病",
+    nameEn: "Corra Plague",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E208年に発生した未曾有の大疫病。アンドロメダ銀河系からの移民者の遺伝子に特異的に作用するウイルスが変異して猛威を振るい、人口の約15パーセントにあたる約4,500万人が死亡する壊滅的被害をもたらした。この疫病は移民集団と在来住民の間に根深い不信感を生み出し、被害を受けた移民コミュニティを中心にシャドウ・リベリオンが結成される直接の契機となった。のちに疫病のウイルスは人工的に改造されたものである可能性が指摘されている。",
+    descriptionEn:
+      "The unprecedented great plague that occurred in E208. A virus that specifically acted on the genes of immigrants from the Andromeda galaxy mutated and wreaked havoc, causing catastrophic damage with approximately 45 million deaths, accounting for about 15% of the population. This plague created deep-seated distrust between immigrant and native populations, and directly led to the formation of the Shadow Rebellion, centered on affected immigrant communities. Later, it was suggested that the plague virus may have been artificially modified.",
+  },{
+    id: "テリアン反乱" as WikiId,
+    name: "テリアン反乱",
+    nameEn: "Terrian Rebellion",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E400年からE470年にわたり、エリオス・ウォルドが率いるテリアン反乱軍がエヴァトロンの支配に抵抗して戦った大規模な反乱。70年間に及ぶ抵抗運動は西大陸の歴史で最も長期にわたる武装闘争となった。エリオスは農民や市民を結集してゲリラ戦を展開し、エヴァトロンの資源供給網に深刻な打撃を与えた。しかしE470年にエリオスが捕縛・処刑されると反乱軍は一時衰退したが、残存勢力は地下活動を継続し、E475年のエヴァトロン崩壊の決定的な要因となった。",
+    descriptionEn:
+      "From E400 to E470, the Great Rebellion led by Erios Wald where the Terian resistance forces fought against Evatron's dominion. The 70-year-long resistance movement became the longest armed struggle in the history of the Western Continent. Erios rallied peasants and citizens to launch guerrilla warfare, dealing severe blows to Evatron's resource supply network. However, when Erios was captured and executed in E470, the rebellion temporarily declined, though the remaining forces continued underground activities and became a decisive factor in Evatron's collapse in E475.",
+  },{
+    id: "技術啓蒙時代" as WikiId,
+    name: "技術啓蒙時代",
+    nameEn: "Technological Enlightenment Era",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E80年からE90年にかけての約10年間にわたる技術爆発の黄金期。バイオエンジニアリングが飛躍的な進化を遂げ、セル・ウィーヴが一般市民に普及して放射線耐性と大幅な寿命延長が実現した。この時代の技術革新は人口を約5,000万人に急増させ、Gigapolisの都市インフラを劇的に拡大した。同時に、技術の倫理的境界をめぐる議論が活発化し、テクノ宗教運動の誕生とテラン朝共和制の思想的形成に大きな影響を与えた。",
+    descriptionEn:
+      "The golden age of technological explosion spanning approximately 10 years from E80 to E90. Bioengineering made a quantum leap, and Cell-Weave became widespread among ordinary citizens, achieving radiation resistance and significant lifespan extension. The technological innovations of this era rapidly increased the population to about 50 million, dramatically expanding Gigapolis's urban infrastructure. Simultaneously, debates over the ethical boundaries of technology intensified, greatly influencing the birth of techno-religious movements and the ideological formation of the Teran dynasty republic.",
+  },{
+    id: "テクノ宗教運動" as WikiId,
+    name: "テクノ宗教運動",
+    nameEn: "Techno-Religious Movement",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "次元極地平技術の発見を端緒として興隆した宗教・哲学運動。次元極地平を単なる物理現象としてではなく「宇宙の意志」の顕現として神聖視し、技術と信仰の融合を追求した。テミルタロンがこの運動の思想的指導者となり、拠点としてテンプル・オブ・ホライゾンを建設。サイケデリック・コスモロジーを提唱し、次元階梯パンディクトの原型を構想した。技術啓蒙時代の物質主義的傾向に対する精神的なアンチテーゼとして広範な支持を集め、Troyaneを聖地として現在でも信仰が続いている。",
+    descriptionEn:
+      "A religious and philosophical movement that emerged following the discovery of dimensional horizon technology. It revered the dimensional horizon not merely as a physical phenomenon but as the manifestation of \"the will of the universe,\" pursuing the fusion of technology and faith. Temirlaron became the ideological leader of this movement, establishing the Temple of Horizon as its base. He proposed psychedelic cosmology and conceived the prototype of the dimensional ladder pandect. It gathered broad support as a spiritual antithesis to the materialistic tendencies of the technological enlightenment era, and Troyane remains a sacred site where the faith continues to this day.",
+  },{
+    id: "ギガポリス解放戦" as WikiId,
+    name: "ギガポリス解放戦",
+    nameEn: "Gigapolis Liberation War",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E318年にアルファ・ケインが率いるシャドウ・リベリオンによって引き起こされたZAMLT打倒の戦争。アルファ・ケインはオムニバス・エンジンへの伝説的なハッキング攻撃を実行し、ZAMLTの経済的基盤に決定的な打撃を与えた。さらにGigapolisのメガタワー（ZAMLT本社）を武力占拠し、ZAMLTの資産の30%を低階層コミュニティに移転するという画期的な行動に出た。この戦争はエル・フォルハウスのマーストリヒト革命（E150年）から続くコーポラトクラシー体制への抵抗運動の最高潮であり、最終的にZAMLTの崩壊を決定づけた。ギガポリス解放戦の勝利はE319年のJenによるValoria宮殿掌握という新たな権力秩序の始まりを告げ、さらにE335年からE370年のセリア黄金期への道を開いた。この戦争はE16文明圏における「コーポラトクラシーの終焉」と「市民の自由の回復」を象徴する歴史的転換点として位置づけられている。シャドウ・リベリオンの地下活動のノウハウとテクロサスの軍事的支援が勝利の鍵であり、のちにシルバー・ヴェノムの母体となったシャドウ・リベリオン過激派の分岐もこの時期に生じたとされる。",
+    descriptionEn:
+      "The war to overthrow ZAMLT instigated by the Shadow Rebellion led by Alpha Kane in E318. Alpha Kane executed a legendary hacking attack on the Omni-Engine, delivering a decisive blow to ZAMLT's economic foundation. Furthermore, he took the bold step of forcibly occupying Gigapolis's Megatower (ZAMLT headquarters) and transferring 30% of ZAMLT's assets to lower-level communities. This war represented the climax of the resistance movement against the corporatocracy system that had continued since the Maastricht Revolution of El Forhaus (E150), ultimately sealing ZAMLT's collapse. The victory of the Gigapolis Liberation War signaled the beginning of a new power order with Jen's seizure of the Valoria Palace in E319, paving the way for the Serian Golden Age from E335 to E370. This war is positioned as a historical turning point symbolizing \"the end of corporatocracy\" and \"the restoration of civic freedom\" in the E16 civilization sphere. The expertise of the Shadow Rebellion's underground activities and military support from Techrosus were the keys to victory, and it is believed that the split into the Shadow Rebellion faction, which later became the precursor of Silver Venom, also occurred during this period.",
+  },{
+    id: "第五次繁栄期" as WikiId,
+    name: "第五次繁栄期",
+    nameEn: "Fifth Prosperity Period",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "メルディア戦争（E275〜E288）終結後、ロンバルディア帝国の覇権確立によってもたらされた繁栄期。次元兵器の軍事技術が民間に波及し、ホライゾン・ゲート技術の基礎研究が本格化した時期。しかし帝国の覇権は他勢力の反発を招き、のちのZAMLT台頭とコーポラトクラシー間の抗争の遠因となった。",
+    descriptionEn:
+      "The prosperous period brought by the establishment of Lombardia Empire's hegemony after the end of the Merdia War (E275-E288). This was when military technology of dimensional weapons spread to civilian sectors and fundamental research on Horizon Gate technology began in earnest. However, the empire's hegemony provoked resistance from other factions, becoming a distant cause for ZAMLT's rise and the conflicts between corporatocracies.",
+  },{
+    id: "hist-入植船団の到達" as WikiId,
+    name: "入植船団の到達",
+    nameEn: "Arrival of the Colonization Fleet",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "地球暦AD3501年（東暦E0年）、ティムール・シャー率いる入植船団がシンフォニー・オブ・スターズに到達した歴史的出来事。地球からM104銀河への数百年にわたる星間航行の末に辿り着いた移民集団は、Ea16とEb16の連星の光が大気で屈折して放つ万華鏡のような夜空に感銘を受け、この惑星に「シンフォニー・オブ・スターズ（星の交響曲）」と名付けた。到達直後の入植者は約5万人で、フェンドラ人、アーキアン、ポロンポロの三大移民集団をはじめとする多様な民族・文化的背景を持っていた。到着初年度は厳しい環境適応期であり、放射線耐性のない入植者の約12%が最初の数年で亡くなったが、バイオエンジニアリング技術の急速な発展によって生存率は急速に改善された。この到達日は東暦元年として定義され、E16文明圏全歴史の起点となっている。",
+    descriptionEn:
+      "The historical event in Earth Calendar AD3501 (Eastern Calendar E0) when the colonization fleet led by Timur Shah reached the Symphony of Stars. After centuries of interstellar navigation from Earth to the M104 galaxy, the immigrant group arrived at a planet impressed by the kaleidoscopic night sky created by the refracted light of the Ea16 and Eb16 binary star system. They named this planet \"Symphony of Stars (Symphony of the Stars).\" The arriving settlers numbered about 50,000, possessing diverse ethnic and cultural backgrounds including the three major immigrant groups: the Fendrans, Arkians, and Polonporos. The first year after arrival was a harsh period of environmental adaptation, with approximately 12% of settlers lacking radiation resistance dying within the first few years. However, the rapid development of bioengineering technology quickly improved survival rates. This arrival date was defined as Eastern Calendar Year One, becoming the starting point for all history in the E16 civilization sphere.",
+  },{
+    id: "hist-初期入植者社会" as WikiId,
+    name: "初期入植者社会",
+    nameEn: "Early Settler Society",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E0年からE15年のバーズ帝国建国までの期間に形成されたシンフォニー・オブ・スターズにおける最初期の入植者社会。到達直後の入植者たちはE6年に西大陸にパラトンを建設し、ついで東大陸にも最初の居住区を拡大した。初期社会は地球の民主主義的伝統を基盤として議会制の自治組織を構築したが、過酷な惑星環境への適応を優先するため、次第に実力主義的な傾向を強めていった。ティムール・シャーの10次元ホラズム理論がE0年頃に構想され、入植者たちに新たな宇宙観を提供したが、その実験は後にE340年のスライム・ウーマン顕現という予期せぬ結果をもたらした。初期入植者社会の遺産はパラトンの城壁遺構や各地の開拓記念碑として現在も保存され、E16文明圏の文化的起原を示す重要な歴史資産となっている。",
+    descriptionEn:
+      "The earliest settler society formed on the Symphony of Stars between E0 and the founding of the V Empire in E15. Shortly after arrival, settlers built Paraton on the Western Continent in E6, then expanded to the first residential areas on the Eastern Continent. The early society, based on Earth's democratic traditions, constructed a parliamentary autonomous organization, but gradually strengthened pragmatic tendencies to prioritize adaptation to the harsh planetary environment. Timur Shah's 10-dimensional Horazm theory was conceived around E0, offering settlers a new cosmic view, though its experiments later led to the unexpected manifestation of the Slime Woman in E340. The legacy of the early settler society is preserved today in the Paraton wall ruins and various pioneer monuments, serving as important historical assets indicating the cultural origins of the E16 civilization sphere.",
+  },{
+    id: "hist-ファランクスによる統一" as WikiId,
+    name: "ファランクスによる統一戦争",
+    nameEn: "Phalanx Unification Wars",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E12年からE15年にかけて軍閥ファランクスが展開した一連の武力統一戦争。初期入植者の各居住区が独立して発展した結果、資源分配と領土紛争をめぐる対立が深刻化し、各地で小規模な武力衝突が頻発していた。ファランクスはこれらの紛争を武力によって終結させ、シンフォニー・オブ・スターズ全域にわたる法秩序とインフラを構築した。統一戦争の過程でファランクスは軍事技術を大幅に進化させ、後のテクロサス系譜の原型となる戦術体系を確立した。E15年のバーズ帝国樹立の直接的な契機となったこの統一戦争は、E16文明圏における「統一と分岐」の循環の最初の例として歴史家に評価されている。",
+    descriptionEn:
+      "A series of unification wars waged by the military faction Phalanx from E12 to E15. As the various residential areas developed independently, conflicts over resource allocation and territorial disputes intensified, leading to frequent small-scale armed conflicts across the region. Phalanx ended these conflicts through force and established a legal order and infrastructure throughout the Symphony of Stars. During the unification wars, Phalanx significantly advanced military technology, establishing a tactical system that became the prototype for later Techrosus lineages. This unification war, which directly led to the establishment of the V Empire in E15, is evaluated by historians as the first example of the cycle of \"unity and divergence\" in the E16 civilization sphere.",
+  },{
+    id: "hist-帝国内乱と分裂" as WikiId,
+    name: "帝国内乱と分裂",
+    nameEn: "Imperial Civil War and Fragmentation",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E61年のファランクスの死後に始まったバーズ帝国の内乱と分裂の過程。ファランクスには明確な後継者がおらず、帝国の各省総督の間で後継者争いが勃発した。各地の独立運動と絡み合った15年に及ぶ内戦は帝国の分裂を決定的なものにし、複数の小規模国家群が並立する戦国時代への移行を促した。ファランクスが構築した通信ネットワークと航路標識は内乱期にも維持され、後のパクス・ロンバルディカ期の繁栄の基盤となったが、帝国の軍事伝統はテクロサス系譜として一部に受け継がれた。この分裂期に形成された地方分権的な政治構造は、のちのネオクラン同盟の理念に影響を与えたとされる。",
+    descriptionEn:
+      "The process of civil war and fragmentation that began after the death of Phalanx in E61. With no clear successor to Phalanx, a succession dispute erupted among the governors of the empire's various provinces. The 15-year civil war, intertwined with independence movements across the territories, decisively shattered the empire, prompting a transition to a Warring States era where multiple small nations coexisted. The communication networks and route beacons constructed by Phalanx were maintained during the turmoil, forming the foundation for the prosperity of the later Pax Lombardica period, though the empire's military tradition was partially carried on as the Teclosus lineage. This decentralized political structure formed during the fragmentation period is said to have influenced the later Neo-Cran Alliance ideology.",
+  },{
+    id: "hist-第二次移民波の到達" as WikiId,
+    name: "第二次移民波の到達",
+    nameEn: "Second Wave of Immigration",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E70年からE85年にかけて地球から到達した第二波の移民集団。第一次入植船団が築いた通信インフラを利用した第二波は、約20万人の移民をシンフォニー・オブ・スターズにもたらした。新たな移民は農業技術者、医師、技術者など多様な専門職を擁し、入植地の自給能力を飛躍的に向上させた。しかし人口の急増は先住の第一次入植者との緊張を生み出し、E88年のロンバルディア戦争の遠因の一つとなった。第二次移民波のもたらした多様な文化的背景は、のちのE16文明圏の文化的多様性の基盤となり、フェルミ音楽の理論体系にも影響を与えたと言われている。",
+    descriptionEn:
+      "The second wave of immigrant groups that arrived from Earth between E70 and E85. Utilizing the communication infrastructure built by the first colonization fleet, the second wave brought approximately 200,000 immigrants to the Symphony of Stars. The new immigrants included diverse professionals such as agricultural technicians, physicians, and engineers, dramatically enhancing the self-sufficiency of the settlements. However, the rapid population growth created tensions with the original first-wave colonists, becoming one of the underlying causes of the Lombardia War in E88. The diverse cultural backgrounds brought by the second wave of immigrants are said to have formed the foundation of the cultural diversity of the later E16 civilization sphere and influenced the theoretical system of Fermi music.",
+  },{
+    id: "hist-第一次星間航海" as WikiId,
+    name: "第一次星間航海",
+    nameEn: "First Interstellar Voyages",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E95年からE110年にかけて実施されたE16連星系内の最初の本格的な星間航海計画。バーズ帝国時代に構想された惑星間航行技術が、帝国分裂後も各地の技術者集団によって継承・発展され、Eros-7への最初の有人飛行がE97年に成功した。Eros-7からのリーチ・ドレインの発見は、入植者たちに新たな資源と危険の双方をもたらした。第一次星間航海の成果はのちの惑星ビブリオ建設（E120年頃）に継承され、E16連星系全域に居住圏を拡大する技術的基盤となった。この時期に確立された星間航行の航路標識と通信プロトコルは、現在でもE16連星系内の航行インフラの基礎として機能している。",
+    descriptionEn:
+      "The first comprehensive interstellar navigation plan within the E16 binary star system, implemented between E95 and E110. The interplanetary navigation technology conceived during the Barz Empire era was inherited and developed by various technician groups after the empire's fragmentation, leading to the first manned flight to Eros-7 in E97. The discovery of the Reach Drain from Eros-7 brought both new resources and dangers to the colonists. The achievements of the first interstellar voyage were later inherited in the construction of Planet Biblio (around E120), forming the technical foundation for expanding the inhabited zone throughout the entire E16 binary star system. The route beacons and communication protocols established during this period still function as the foundation of the navigation infrastructure within the E16 binary star system today.",
+  },{
+    id: "hist-コーポラタムパブリカ設立" as WikiId,
+    name: "コーポラタムパブリカの設立",
+    nameEn: "Founding of Corporatumpublica",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E120年に西大陸の主要企業群が連合して設立した株式会社共和国。コーポラトクラシー体制の最も成功した例として、14兆ドルのGDPを誇る経済連合体を構築した。コーポラタムパブリカは利潤追求だけでなく、インフラ整備、教育、医療、宇宙探査などの公共サービスも担い、国家の役割を代替する画期的な統治モデルを確立した。この体制はE205年のパクス・ロンバルディカ期に最盛期を迎え、約70年にわたる長期安定をもたらした。コーポラタムパブリカの設立はE16文明圏において「企業が国家となる」という独特の政治形態の起点となり、のちに20万以上のコーポラトクラシーがGigapolis全域で競合する時代を招くことになる。",
+    descriptionEn:
+      "The Corporate Republic established in E120 through the alliance of major corporate groups on the Western Continent. As the most successful example of a corporatocracy, it constructed an economic federation boasting a GDP of 14 trillion dollars. The Corporatum Publica not only pursued profit but also undertook public services such as infrastructure development, education, healthcare, and space exploration, establishing an innovative governance model that replaced the functions of the state. This system reached its peak during the Pax Lombardica period in E205, bringing about long-term stability that lasted for about 70 years. The establishment of the Corporatum Publica marked the beginning of the unique political form of \"the corporation becomes the state\" within the E16 civilization sphere, leading to an era where over 200,000 corporatocracies would compete throughout Gigapolis.",
+  },{
+    id: "hist-テクノ宗教運動の台頭" as WikiId,
+    name: "テクノ宗教運動の台頭",
+    nameEn: "Rise of Techno-Religious Movement",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E80年頃から始まった次元極地平技術の発見を端緒とする宗教・哲学運動の台頭期。テミルタロンがこの運動の思想的指導者となり、次元極地平を「宇宙の意志」の顕現として神聖視する教義を構築した。テミルタロンはテンプル・オブ・ホライゾンを建設し、サイケデリック・コスモロジーを提唱して次元階梯パンディクトの構想の原型を提供した。テクノ宗教運動は技術啓蒙時代の合理主義に対する精神的なアンチテーゼとして広範な支持を集め、Troyaneを聖地とする信仰共同体を形成した。この運動の思想的遺産はAURALISの創設理念にも影響を与え、E16文明圏の精神文化に深い根を下ろしている。",
+    descriptionEn:
+      "The rise period of religious and philosophical movements beginning with the discovery of dimensional horizon technology around E80. Temirlaron became the ideological leader of this movement, constructing a doctrine that revered the dimensional horizon as the manifestation of \"the will of the universe.\" Temirlaron built the Temple of Horizon and proposed psychedelic cosmology, providing the prototype for the concept of the dimensional ladder pandect. The techno-religious movement gathered broad support as a spiritual antithesis to the rationalism of the Enlightenment era, forming a faith community that regarded Troyane as a sacred land. The ideological legacy of this movement influenced the founding philosophy of AURALIS and took deep root in the spiritual culture of the E16 civilization sphere.",
+  },{
+    id: "hist-ギガポリス都市計画" as WikiId,
+    name: "ギガポリス都市計画",
+    nameEn: "Gigapolis Urban Planning",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E140年頃に西大陸のコーポラトクラシー連合によって開始されたパラトン周辺の大規模都市統合計画。技術啓蒙時代の人口爆発に対応するため、パラトンを核とした複数都市の統合が計画され、E150年のマーストリヒト革命までにメガロポリス化が進行した。都市計画はセントラル・タワーを中心とする放射状の区画構造を採用し、後にテスラ地区、大広場、テック・コリドーなどの多様な機能地区が形成された。ギガポリスの都市計画はシンフォニー・オブ・スターズの表面重力（0.92G）と自転周期（44時間4分）に最適化された独自の建築様式を生み出し、のちにE16連星系の政治・経済・文化の中心地となる基盤を築いた。",
+    descriptionEn:
+      "The large-scale urban integration plan around Paraton initiated by the corporatocracy alliance of the Western Continent around E140. To address the population explosion of the Enlightenment era, the integration of multiple cities centered around Paraton was planned, and by the time of the Maastricht Revolution in E150, it had progressed into a megalopolis. The urban planning adopted a radial district structure centered on the Central Tower, and later diverse functional districts such as the Tesla District, Grand Plaza, and Tech Corridor were formed. The Gigapolis urban planning produced a unique architectural style optimized for the surface gravity (0.92G) and rotation period (44 hours 4 minutes) of the Symphony of Stars, laying the foundation for what would later become the political, economic, and cultural center of the E16 binary star system.",
+  },{
+    id: "hist-パクス・ロンバルディカの成立" as WikiId,
+    name: "パクス・ロンバルディカの成立",
+    nameEn: "Establishment of Pax Lombardica",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E205年に主要企業群が協調統治体制への移行を宣言し、E205年からE278年まで続いた「ロンバルディアの平和」時代の幕開け。ロンバルディア帝国がコーポラトクラシー間の協調体制の枠組みを提供し、約70年にわたる長期安定を実現した。この時期には惑星ビブリオのロレンツィオ国際大学が設立され、次元極地平理論の基礎研究が本格化した。しかし企業間の寡占化が進み、市民の政治参加権が制限される傾向が強まったことが、最終的にZAMLTによる強硬な経済覇権への移行を招く要因となった。パクス・ロンバルディカの繁栄はE16文明圏において「企業統治の黄金時代」として記憶され、その制度的遺産は現在のUECOの枠組みにも影響を与えている。",
+    descriptionEn:
+      "The beginning of the \"Pax Lombardica\" era, which lasted from E205 to E278, when major corporate groups declared a transition to a coordinated governance system. The Lombardia Empire provided the framework for a cooperative system among corporatocracies, achieving long-term stability for about 70 years. During this period, the Lorenzo International University was established on Planet Biblio, and fundamental research into dimensional horizon theory began in earnest. However, as oligopolization among corporations advanced and the political participation rights of citizens became increasingly restricted, these factors ultimately led to the transition to ZAMLT's aggressive economic hegemony. The prosperity of the Pax Lombardica is remembered in the E16 civilization sphere as the \"golden age of corporate governance,\" and its institutional legacy continues to influence the framework of the current UECO.",
+  },{
+    id: "hist-惑星ビブリオの建設" as WikiId,
+    name: "惑星ビブリオの建設",
+    nameEn: "Construction of Planet Biblio",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E120年頃から始まった学術都市惑星ビブリオの建設計画。パクス・ロンバルディカ期（E205〜E278）に本格的な開発が進み、惑星全体が学術機関と研究施設によって構成される学術専用惑星として完成した。ビブリオの建設はE16文明圏における知識基盤の集約を目的とし、ロレンツィオ国際大学をはじめとする研究施設が次々と開設された。A-Registryの最高等級記録館もビブリオに置かれ、E16文明圏の全歴史文書と市民データのバックアップが保管されることになった。ビブリオの建設は「知識こそが文明の最高価値である」という理念の具現化であり、テクノ文化ルネサンス期にはペルセポネ計画の理論的基盤がこの惑星で構築された。",
+    descriptionEn:
+      "The construction plan for the academic planet Biblio, beginning around E120. Full-scale development progressed during the Pax Lombardica period (E205-278), and the planet was completed as an academic专用 planet composed entirely of academic institutions and research facilities. The construction of Biblio aimed to centralize the knowledge base of the E16 civilization sphere, and research facilities including the Lorenzo International University were established one after another. The highest-level archive of the A-Registry was also placed on Biblio, where all historical documents and citizen data of the E16 civilization sphere were backed up. The construction of Biblio was the embodiment of the philosophy that \"knowledge is the highest value of civilization,\" and during the Techno-Cultural Renaissance period, the theoretical foundation for the Persephone Plan was constructed on this planet.",
+  },{
+    id: "hist-ダイアナの台頭" as WikiId,
+    name: "ダイアナの台頭",
+    nameEn: "Rise of Diana",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E260年からE280年にかけて活動した初代Wonder Woman、ダイアナの歴史的台頭期。AURALIS Protoの文化的恩恵をシンフォニー・オブ・スターズ全土にもたらした伝説的人物であり、その圧倒的な存在感と人々を鼓舞する力でEDU史上最も愛される英雄の一人として語り継がれる。ダイアナの台頭はパクス・ロンバルディカ期からコーポラトクラシー間抗争期への移行期において、文化と人道の価値を再確認する象徴的な出来事であった。彼女の影響力はのちのAURALIS Collective創設者たちに深い影響を与え、AURALISの創設理念の源流の一つとなった。ダイアナの没後も彼女の精神は「Wonder Woman」としての象徴的役割を通じて継承され、E16文明圏における英雄的理想の原型として機能し続けている。",
+    descriptionEn:
+      "The historical rise of the first Wonder Woman, Diana, who was active from E260 to E280. A legendary figure who brought the cultural benefits of AURALIS Proto to all of Symphony of Stars, she is remembered as one of the most beloved heroes in EDU history for her overwhelming presence and power to inspire people. Diana's ascent was a symbolic event that reaffirmed the values of culture and humanity during the transition from the Pax Lombardica era to the Corporateocracy Conflict era. Her influence deeply affected the founders of the later AURALIS Collective, becoming one of the sources of AURALIS's founding philosophy. Even after her death, her spirit continues to be inherited through the symbolic role of \"Wonder Woman,\" functioning as the prototype of heroic ideals in the E16 civilization sphere.",
+  },{
+    id: "hist-AURALISの誕生" as WikiId,
+    name: "AURALISの誕生",
+    nameEn: "Birth of AURALIS",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E270年にKate ClaudiaとLily Steinerが出会い、表現を諦めない人々の集団としてAURALISの原型が形成された歴史的出来事。E290年の正式組織化に至るまでの20年間は、アンダーグラウンドの芸術サークルとして活動し、フェルミ音楽の最先端の表現を追求した。Kate Claudiaは「設計者」としてAURALISの構造とビジョンを構築し、Lily Steinerは「感情の炎」として舞台で性別の境界を歌う革命的な表現を確立した。二人の協働は「光と音を永遠にする」というAURALISの根本理念を生み出し、のちのセリア黄金期（E335〜E370年）にAURALISが文明全体の文化規範となる基盤を築いた。AURALISの誕生はE16文明圏における芸術運動の分岐点として、全ての文化史研究で言及される画期的出来事である。",
+    descriptionEn:
+      "The historical event in E270 when Kate Claudia and Lily Steiner met, forming the prototype of AURALIS as a group of people who never gave up on expression. For the 20 years leading up to its formal organization in E290, it operated as an underground art circle, pursuing cutting-edge expressions of Fermi music. Kate Claudia, as \"The Architect,\" built AURALIS's structure and vision, while Lily Steiner, as \"The Flame of Emotion,\" established revolutionary expressions that transcended gender boundaries through her singing on stage. Their collaboration produced AURALIS's fundamental philosophy of \"making light and sound eternal,\" laying the foundation for AURALIS to become the cultural norm of the entire civilization during the later Celia Golden Age (E335-E370). The birth of AURALIS is a pivotal event in the art movement of the E16 civilization sphere, mentioned in all cultural history studies as a groundbreaking moment.",
+  },{
+    id: "hist-AURALIS正式設立" as WikiId,
+    name: "AURALIS正式設立",
+    nameEn: "Official Establishment of AURALIS",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E290年にKate ClaudiaとLily Steinerがアンダーグラウンドの芸術サークルから正式な芸術組織としてAURALISを設立した出来事。正式設立に伴い、メンバーの拡大と組織体制の整備が進み、フェルミ音楽の公演活動と次元極地平技術を応用した総合芸術の創作が本格化した。AURALISの設立はシンフォニー・オブ・スターズの文化 scene に革命をもたらし、従来の娯楽としての芸術から文明規範としての芸術への転換を促した。設立時のメンバーの中には、のちにAURALIS Collectiveの第二世代で活躍するメンバーの先駆者も含まれていた。AURALISの正式設立はE16文明圏の芸術史において「文化の覚醒」として評価され、フェルミ音楽の黄金期への入口となった。",
+    descriptionEn:
+      "The event in E290 when Kate Claudia and Lily Steiner established AURALIS as a formal art organization from an underground art circle. With its formal establishment, membership expanded and organizational systems were improved, and full-scale activities began in Fermi music performances and the creation of comprehensive arts using dimensional horizon technology. AURALIS's establishment brought a revolution to the cultural scene of Symphony of Stars, promoting a transformation from art as entertainment to art as a civilizational norm. Among the founding members were pioneers who would later become prominent in the second generation of the AURALIS Collective. AURALIS's formal establishment is evaluated in the art history of the E16 civilization sphere as the \"Cultural Awakening,\" becoming the gateway to the golden age of Fermi music.",
+  },{
+    id: "hist-ZAMLT設立" as WikiId,
+    name: "ZAMLT設立と5企業覇権",
+    nameEn: "Establishment of ZAMLT",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E301年にZAMLT（5つの超巨大企業の連合体）がGigapolisに本社を置き、E16連星系の経済覇権を掌握した歴史的転換点。コーポラタムパブリカの末期に台頭した5企業が合流してZAMLTを設立し、20万以上のコーポラトクラシー間の覇権争いを5企業への集約によって終結させた。ZAMLTはオムニバス・エンジンと呼ばれる独自の金融システムを構築し、E16連星系の経済活動の大部分を統制した。次元極地平技術の軍事転用と兵器生産も進め、シルバープラントや次元の塔などの巨大施設を建造した。ZAMLTの覇権は市民の政治参加権を制限し、A-Registryの階級制度を社会固定化装置として悪用する側面も持ち、のちのアルファ・ケインによるギガポリス解放戦（E318年）の直接的な要因となった。",
+    descriptionEn:
+      "The historical turning point in E301 when ZAMLT (a coalition of five mega-corporations) established its headquarters in Gigapolis and seized economic hegemony of the E16 star system. The five corporations that rose during the late Corporatum Publica era merged to form ZAMLT, ending over 200,000 power struggles among Corporateocracies by consolidating power into five corporations. ZAMLT built its own financial system called the OmniBus Engine, controlling most of the economic activities in the E16 star system. It also advanced the military application of dimensional horizon technology and weapon production, constructing massive facilities like Silver Plants and Dimensional Towers. ZAMLT's hegemony restricted citizens' political participation rights and exploited the A-Registry class system as a social stabilization device, becoming a direct cause of the later Gigapolis Liberation War (E318) led by Alpha Cain.",
+  },{
+    id: "hist-アルファ・ケインの覚醒" as WikiId,
+    name: "アルファ・ケインの覚醒",
+    nameEn: "Awakening of Alpha Kane",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E316年からE318年にかけて、テスラ地区で育ったアルファ・ケインがスティル・アレーナで優勝し、伴共役の覚醒という奇跡的な現象を起こした一連の歴史的事件。アルファ・ケインはスティル・アレーナでその圧倒的な戦闘力を証明し、ZAMLT支配下の低階層市民に希望の象徴となった。E318年にはシャドウ・リベリオンを組織し、テクロサスの戦士たちと連携してギガポリス解放戦を決起した。伴共役の覚醒はZAMLTの次元エネルギー技術の原理を覆す未知の現象であり、この覚醒を持ってケインはZAMLTのオムニバス・エンジンへの伝説的なハッキング攻撃を実行し、Gigapolisのメガタワーを武力占拠した。ケインの覚醒と解放戦はE16文明圏における「コーポラトクラシーの終焉」の象徴として歴史に刻まれている。",
+    descriptionEn:
+      "A series of historical events from E316 to E318 where Alpha Cain, raised in the Tesla District, won the Still Arena and triggered the miraculous phenomenon of awakening his conjugate pair. Alpha Cain proved his overwhelming combat prowess in the Still Arena, becoming a symbol of hope for citizens in the lower classes under ZAMLT's rule. In E318, he organized the Shadow Rebellion and launched the Gigapolis Liberation War in coordination with the warriors of Techlos. The awakening of his conjugate pair was an unknown phenomenon that overturned the principles of ZAMLT's dimensional energy technology. With this awakening, Cain executed a legendary hacking attack on ZAMLT's OmniBus Engine and forcibly occupied the Megatower of Gigapolis. Cain's awakening and liberation war are etched in history as the symbol of \"the fall of Corporateocracy\" in the E16 civilization sphere.",
+  },{
+    id: "hist-シルバープラント攻略戦" as WikiId,
+    name: "シルバープラント攻略戦",
+    nameEn: "Silver Plant Assault",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "ギガポリス解放戦（E318年）の中で、アルファ・ケインとクロノ・ヴァーレント率いるテクロサス部隊がZAMLTの重要施設シルバープラントへの浸透作戦を実施した戦闘。シルバープラント攻略戦の最中で、リンダがプロトコルXのエネルギーコアを安定化させるために自らを犠牲にするという悲劇的な決断を下した。彼女の犠牲はZAMLTに対する抵抗運動の転換点となり、アルファ・ケインの決意を固めさせた。シルバープラントの名はプラントから放出される銀色の次元エネルギー光輝に由来し、ZAMLT崩壊後は「シルバー・ヴェノム」の名称の由来となったという説がある。この攻略戦はE16文明圏の戦争史において、個人の自己犠牲が歴史的転換をもたらした代表的な例として語り継がれている。",
+    descriptionEn:
+      "The battle during the Gigapolis Liberation War (E318) where the Techlos forces led by Alpha Cain and Chrono Valente conducted an infiltration operation on ZAMLT's important facility, the Silver Plant. During the Silver Plant assault, Linda made the tragic decision to sacrifice herself to stabilize the energy core of Protocol X. Her sacrifice became a turning point in the resistance movement against ZAMLT and strengthened Alpha Cain's resolve. The name \"Silver Plant\" derives from the silver dimensional energy光辉 emitted from the plant, and after ZAMLT's collapse, it is said to have become the origin of the name \"Silver Venom.\" This assault is passed down in the war history of the E16 civilization sphere as a representative example of how individual self-sacrifice brought about a historical turning point.",
+  },{
+    id: "hist-セリアによるSelinopolis宣言" as WikiId,
+    name: "セリアによるSelinopolis宣言",
+    nameEn: "Celia's Selinopolis Declaration",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E335年にセリア・ドミニクスがZAMLTを打倒した後、GigapolisをSelinopolisと改名し、超巨大企業Phovosを設立して次元エネルギー技術の商業化を宣言した歴史的転換点。セリアはGDP25兆ドル規模の経済基盤を構築し、「文化と経済の融合」という独自の統治理念を実現した。フェルミ音楽の演奏やAURALISの芸術活動がnトークンで評価される画期的な仕組みを導入し、文化的貢献が直接経済的報酬に結びつく社会制度を確立した。さらに女性主導社会の原型も構築し、主要な意思決定機関に女性が多数を占める体制を実現した。セリアのSelinopolis宣言はE335年からE370年のセリア黄金期の幕開けとなり、E16文明圏の文化的アイデンティティの基盤を形成した。",
+    descriptionEn:
+      "The historical turning point in E335 when Celia Dominicus overthrew ZAMLT, renamed Gigapolis to Selinopolis, and established the mega-corporation Phovos, declaring the commercialization of dimensional energy technology. Celia built an economic foundation with a GDP of 25 trillion dollars and realized a unique governance philosophy of \"fusion of culture and economy.\" She introduced a groundbreaking system where Fermi music performances and AURALIS's artistic activities were evaluated in n-tokens, establishing a social system where cultural contributions were directly linked to economic rewards. She also built the prototype of a female-led society, achieving a system where women formed the majority in key decision-making bodies. Celia's Selinopolis Declaration marked the beginning of the Celia Golden Age from E335 to E370, forming the foundation of the cultural identity of the E16 civilization sphere.",
+  },{
+    id: "hist-フェルミ音楽の最盛期" as WikiId,
+    name: "フェルミ音楽の最盛期",
+    nameEn: "Peak of Fermi Music",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E335年からE370年のセリア黄金期において、フェルミ音楽がE16文明圏の基盤文化として最盛期を迎えた時代。次元極地平の共振現象を音響に応用したフェルミ音楽は、聴覚だけでなく感情に直接働きかける革新的な音楽体系として文明全体に普及した。Poitiersに研究機関と芸術院が集積し、フェルミ音楽の理論体系化が進められた。AURALIS第一世代はフェルミ音楽を核とした総合芸術運動を展開し、「光と音を永遠にする」という理念のもとで文明全体の文化規範を形成した。フェルミ音楽の最盛期はE16文明圏における芸術の黄金時代であり、現在でも復興祭が定期的に開催され、その遺産はテクノ文化ルネサンス期に次元技術と融合した新たな音楽表現として継承されている。",
+    descriptionEn:
+      "The era during the Celia Golden Age from E335 to E370 when Fermi music reached its peak as the foundational culture of the E16 civilization sphere. Fermi music, which applied the resonance phenomena of the dimensional horizon to sound, spread throughout civilization as an innovative musical system that directly appealed to emotions, not just hearing. Research institutions and art academies accumulated in Poitiers, advancing the theoretical systematization of Fermi music. The first generation of AURALIS launched a comprehensive art movement centered on Fermi music, forming the cultural norm of the entire civilization under the philosophy of \"making light and sound eternal.\" The golden age of Fermi music was the artistic golden age of the E16 civilization sphere, and today revival festivals are still held regularly, its legacy being inherited as new musical expressions fused with dimensional technology during the Techno-Cultural Renaissance period.",
+  },{
+    id: "hist-アポロンとの同盟拒絶と開戦" as WikiId,
+    name: "アポロンとの同盟拒絶と開戦",
+    nameEn: "Rejection of Apollon Alliance and Outbreak of War",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E370年にアポロン文明圏のリーダー・ロナン・アーサがセリア・ドミニクスに同盟を提案したが拒絶され、全面戦争が勃発した一連の事件。ロナン・アーサはアポロン文明圏の拡大を目的として、セリア率いるSelinopolis（ドミニオン）との軍事同盟を求めたが、セリアは独自路線を貫くために同盟を拒絶した。この拒絶をきっかけにアポロンは宣戦布告し、E375年のケンタウロスレーザー発射、E378年のG4ファントムパルス応戦を経て、E385年にセリアのヴェノム艦隊がアポロン・セントラリスを攻略・爆砕して戦争は終結した。この大戦は両文明に壊滅的損害をもたらし、宇宙秩序を大きく変容させた。セリアの同盟拒絶の理由は現在も歴史家の間で議論の的であり、独自の外交判断であったか、あるいは内在的な危機感に基づくものであったかの見解が分かれている。",
+    descriptionEn:
+      "The series of events beginning in E370 when Apollo civilization's leader Ronan Arth proposed an alliance to Celia Dominicus, which was rejected, sparking total war. Ronan Arth, seeking to expand the Apollo civilization sphere, requested a military alliance with Selinopolis (Dominion) led by Celia, but Celia rejected the alliance to maintain her independent course. This rejection prompted Apollo to declare war, and after the E375 Centaurus Laser launch and the E378 G4 Phantom Pulse counterattack, the war concluded in E385 when Celia's Venom fleet conquered and shattered Apollo Centralis. This great war brought catastrophic damage to both civilizations and drastically altered the cosmic order. The reason for Celia's rejection of the alliance remains a topic of debate among historians, with divided views on whether it was based on independent diplomatic judgment or an intrinsic sense of crisis.",
+  },{
+    id: "hist-G4ファントムパルスと勝利" as WikiId,
+    name: "G4ファントムパルスと大戦勝利",
+    nameEn: "G4 Phantom Pulse and War Victory",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E378年にセリア・ドミニクスがアポロンのケンタウロスレーザーに対抗して投入したG4ファントムパルスと、それに続くE385年のアポロン・セントラリス攻略による大戦の勝利。G4ファントムパルスは次元極地平技術の軍事応用の最高到達点とされ、アポロンの軍事力を圧倒した。E385年にはセリアのヴェノム艦隊がアポロン・セントラリスを攻略・爆砕し、アポロン文明圏に壊滅的な打撃を与えた。しかし勝利の代償は大きく、SelinopolisのGDPは23兆ドルに激減した。さらにこの大戦の疲弊はのちのE400年にエヴァトロンによるGigapolis占領を許す結果となった。大戦の勝利はセリアの軍事的天才としての評価を確立したが、同時に戦後の疲弊が文明全体に深刻な影響を及ぼすことになった。",
+    descriptionEn:
+      "The G4 Phantom Pulse deployed by Celia Dominicus in E378 to counter Apollo's Centaurus Laser, followed by the victory in the great war through the conquest of Apollo Centralis in E385. The G4 Phantom Pulse is considered the pinnacle of military application of dimensional horizon technology, overwhelming Apollo's military might. In E385, Celia's Venom fleet conquered and shattered Apollo Centralis, delivering a devastating blow to the Apollo civilization sphere. However, the price of victory was immense, with Selinopolis' GDP plummeting to 23 trillion dollars. Furthermore, the exhaustion from this great war later resulted in the E400 occupation of Gigapolis by Evatron. While the victory established Celia's reputation as a military genius, the post-war exhaustion had a profound impact on the entire civilization.",
+  },{
+    id: "hist-エヴァトロンによるGigapolis占領" as WikiId,
+    name: "エヴァトロンによるGigapolis占領",
+    nameEn: "Evatron Occupation of Gigapolis",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E400年にエヴァトロンがアポロン・Dominion大戦後の疲弊に乗じてGigapolisを武力占領し、セリア・ドミニクスを追放して独裁的支配を開始した歴史的事件。エヴァトロンの初代リーダー・グリム・ダルゴスはGigapolisを「エヴァポリス」と強制改名し、市民の基本的人権を大幅に制限する独裁的法体系を施行した。AURALISを弾圧し、芸術・文化活動を禁止したほか、極秘部隊Σ-Unitを設立して精神操作研究と生体改造実験を行った。この占領は75年間にわたり続いたが、テリアン反乱（E400〜E470年）やシャドウ・ユニオンの抵抗活動によって支配体制は徐々に侵食され、最終的にE475年のエヴァトロン崩壊へと至った。エヴァトロンによる占領はE16文明圏における「暗黒の時代」として記憶され、のちのネオクラン同盟の設立理念に決定的な影響を与えた。",
+    descriptionEn:
+      "The historical event in E400 when Evatron, taking advantage of the exhaustion following the Apollo-Dominion War, forcibly occupied Gigapolis, exiled Celia Dominicus, and began dictatorial rule. Evatron's first leader, Grim Dargos, forcibly renamed Gigapolis to \"Evapolis\" and implemented a dictatorial legal system that severely restricted citizens' basic human rights. He suppressed AURALIS, banned artistic and cultural activities, and established a secret unit, Σ-Unit, to conduct mind manipulation research and biological modification experiments. This occupation lasted for 75 years, but the regime was gradually eroded by the Terian Rebellion (E400-E470) and resistance activities by the Shadow Union, ultimately leading to Evatron's collapse in E475. The Evatron occupation is remembered as the \"Dark Age\" in the E16 civilization sphere and had a decisive influence on the founding principles of the later Neo-Clan Alliance.",
+  },{
+    id: "hist-AURALIS弾圧と逮捕" as WikiId,
+    name: "AURALIS弾圧とメンバー逮捕",
+    nameEn: "AURALIS Suppression and Arrests",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E400年のエヴァトロンによるGigapolis占領に伴い、AURALISが「秩序を乱す反社会的組織」として弾圧され、主要メンバーが逮捕された事件。エヴァトロンは芸術・文化活動を法的に禁止し、Kate Claudia、Lily SteinerをはじめとするAURALISの指導的メンバーが相次いで拘束された。Lily Steinerは最後のステージで「AURALISは消えない。灰から、また燃える」と言い残して逮捕されたが、その後の消息は不明のままである。この弾圧はE16文明圏の文化史において最も深刻な損失の一つとされ、セリア黄金期に花開いた芸術運動が強制的に中断させられた。しかしAURALISの理念は地下活動を通じて秘密裏に継承され、のちのE522年のAURALIS Collective第二世代の設立へと繋がっていった。",
+    descriptionEn:
+      "The event in E400 when AURALIS was suppressed as a \"socially disruptive organization\" following Evatron's occupation of Gigapolis, leading to the arrest of its key members. Evatron legally prohibited artistic and cultural activities, and leading members of AURALIS, including Kate Claudia and Lily Steiner, were successively detained. In her final performance, Lily Steiner declared, \"AURALIS will not disappear. From the ashes, it will burn again\" before being arrested, but her subsequent whereabouts remain unknown. This suppression is considered one of the most severe losses in the cultural history of the E16 civilization sphere, forcibly interrupting the artistic movement that had flourished during Celia's golden age. However, AURALIS's ideals were secretly preserved through underground activities, eventually leading to the establishment of the AURALIS Collective's second generation in E522.",
+  },{
+    id: "hist-Σ-Unitの設立" as WikiId,
+    name: "Σ-Unit (Sigma Unit)",
+    nameEn: "Establishment of Sigma Unit",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E410年にエヴァトロンが法的灰色地帯で設立した極秘部隊。エヴァトロンの初代リーダー・グリム・ダルゴスが制定した特別法によって正当化されたΣ-Unitは、精神操作研究と生体改造実験を任務としていた。市民の監視、反体制運動の摘発、テリアン反乱軍への潜入工作などを行い、エヴァトロン支配の恐怖の象徴として市民に恐れられた。Σ-Unitの活動内容の一部はE475年のエヴァトロン崩壊後に発覚し、その非人道的な実態は国際的な非難を浴びた。Σ-Unitの設立はエヴァトロン支配の暗黒面を象徴する出来事であり、のちの人権回復と法改革の重要な根拠となった。",
+    descriptionEn:
+      "The secret unit established by Evatron in E410 through legal loopholes. The Σ-Unit, justified by special laws enacted by Evatron's first leader Grim Dargos, was tasked with mind manipulation research and biological modification experiments. It conducted surveillance of citizens, suppression of anti-regime movements, and infiltration operations against the Terian Rebellion forces, becoming a symbol of terror under Evatron rule that citizens feared. Parts of the Σ-Unit's activities were revealed after Evatron's collapse in E475, and its inhumane practices drew international condemnation. The establishment of the Σ-Unit symbolized the dark side of Evatron's rule and later became a crucial basis for human rights restoration and legal reforms.",
+  },{
+    id: "hist-テリアン処刑" as WikiId,
+    name: "テリアン処刑",
+    nameEn: "Execution of Elios Wald",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E470年にエヴァトロン軍が捕縛したテリアン反乱軍の指導者エリオス・ウォルドを公開処刑した歴史的事件。エリオスはE400年から70年間にわたり、エヴァトロンの支配に対する武装抵抗を組織し、農民や市民を結集してゲリラ戦を展開してきた悲劇の英雄であった。彼の処刑はテリアン反乱軍を一時衰退させたが、残存勢力は地下活動を継続し、のちのE475年のエヴァトロン崩壊の決定的な要因となった。エリオスの処刑は市民全体に深い衝撃と怒りをもたらし、テクロサス東方支隊のクレセント大地方常駐（E470年）を促す契機となった。エリオスの遺志は「A籍制度の廃止と市民の自由回復」というスローガンとして抵抗運動に受け継がれ、現在でもE470年は「自由の殉教者を偲ぶ日」として記念されている。",
+    descriptionEn:
+      "The historical event in E470 when Evatron's military publicly executed Erios Wald, the captured leader of the Terian Rebellion forces. Erios was a tragic hero who had organized armed resistance against Evatron's rule for 70 years since E400, rallying peasants and citizens in guerrilla warfare. His execution temporarily weakened the Terian Rebellion, but the remaining forces continued underground activities, becoming a decisive factor in Evatron's collapse in E475. Erios's execution brought deep shock and anger to the entire citizenry and prompted the deployment of the Crescent Grand Prefecture's Teclosas Eastern Detachment (E470). Erios's legacy was carried forward in the resistance movement through the slogan \"Abolition of the A-Registry and restoration of citizen freedom,\" and E470 is still commemorated annually as \"Day of Remembrance for the Martyrs of Freedom.\"",
+  },{
+    id: "hist-エヴァトロン崩壊" as WikiId,
+    name: "エヴァトロン崩壊",
+    nameEn: "Fall of Evatron",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E475年に75年間続いたエヴァトロンの独裁支配が崩壊し、Gigapolisが市民の手に取り戻された歴史的転換点。テリアン反乱軍の残存勢力、シャドウ・ユニオンの地下活動、テクロサス東方支隊の軍事的圧力が相乗効果をもたらし、エヴァトロンの支配体制は内部から崩壊していった。崩壊後、市民の総意によりGigapolisの名称が即座に復帰し、エヴァポリスという強制的な改名は撤回された。この崩壊はE16文明圏における「自由の回復」の象徴として現在でも毎年記念日が祝われている。エヴァトロン崩壊はポスト・エヴァトロン秩序の始まりを告げ、ネオクラン同盟主導で民主的な法改革が実施され、のちのテクノ文化ルネサンス（E475〜E500年）への道を開いた。",
+    descriptionEn:
+      "The historical turning point in E475 when Evatron's 75-year dictatorial rule collapsed and Gigapolis was reclaimed by its citizens. The combined efforts of remaining Terian Rebellion forces, Shadow Union resistance activities, and military pressure from the Teclosas Eastern Detachment caused Evatron's regime to collapse from within. After the collapse, the collective will of the citizens immediately restored the name Gigapolis, reversing the forced renaming to Evapolis. This collapse is still commemorated annually as a symbol of \"Liberation\" in the E16 civilization sphere. Evatron's collapse marked the beginning of the post-Evatron order, under which the Neo-Clan Alliance led democratic legal reforms, paving the way for the later Techno-Cultural Renaissance (E475-E500).",
+  },{
+    id: "hist-ネオクラン同盟の台頭" as WikiId,
+    name: "ネオクラン同盟の台頭",
+    nameEn: "Rise of Neo-Clan Alliance",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E325年に設立され、エヴァトロン崩壊後（E475年〜）に本格的に台頭したネオクラン同盟の政治的影響力の拡大期。ネオクラン同盟はクワンナラ革命（E108〜E114年）の分権化とクランの伝統的権利の復権という理念を継承し、分散統治と市民参加型政治を基本原理としていた。エヴァトロン崩壊後、同盟は法改革、A-Registryの階級緩和、教育の機会均等化など幅広い政策を推進し、ポスト・エヴァトロン秩序の政治的基盤を構築した。ネオクラン同盟の理念はファティマ連邦の分散型統治モデルと共鳴し、クレセント地方にも影響を与えた。UECOの星間経済協同組合の設立にも主導的な役割を果たし、E16文明圏の民主化と安定化に不可欠な存在として現在も活動を続けている。",
+    descriptionEn:
+      "The period of expanding political influence of the Neo-Clan Alliance, founded in E325 and rising to prominence after Evatron's collapse (E475-). The Neo-Clan Alliance inherited the ideals of the Quannara Revolution (E108-E114) regarding decentralization and restoration of traditional clan rights, with decentralized governance and citizen-participatory politics as its basic principles. After Evatron's collapse, the alliance implemented wide-ranging policies including legal reforms, relaxation of A-Registry class restrictions, and equalization of educational opportunities, constructing the political foundation of the post-Evatron order. The Neo-Clan Alliance's ideals resonated with the Fatima Federation's decentralized governance model and also influenced the Crescent region. It played a leading role in the establishment of UECO's Interspace Economic Cooperative, continuing its activities to this day as an indispensable presence for the democratization and stabilization of the E16 civilization sphere.",
+  },{
+    id: "hist-スライム危機の収束" as WikiId,
+    name: "スライム危機の収束",
+    nameEn: "Resolution of Slime Crisis",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E380年からE400年まで約20年間続いたスライム危機の収束過程。変異したリーチ・ドレインによる大規模災害はEros-7からシンフォニー・オブ・スターズ全域に波及し、壊滅的な被害をもたらしたが、Eros-7のマトリカル社会が独自に開発した生物学的封じ込め技術が決定的な役割を果たした。シンフォニー・オブ・スターズでは、アヤカ・リンがアンダーグリッドでの制圧作戦を先陣を切って指揮し、レイラ・ヴィレル・ノヴァもオアシス・ハウスを拠点にスライム討伐で英雄的活躍を見せた。収束後、リーチ・ドレイン対策医療はSUDOMの主要産業として発展し、この技術は医療や環境修復分野で広く応用されることになった。スライム危機の教訓はテクノ文化ルネサンス期の「技術の民主化」と「生態系との調和」という理念に強く反映され、環境保護法の整備を促す決定的な要因となった。",
+    descriptionEn:
+      "The convergence process of the Slime Crisis, which lasted approximately 20 years from E380 to E400. The large-scale disasters caused by mutated Reach Drains spread from Eros-7 throughout the Symphony of Stars, bringing catastrophic damage, but the biological containment technology independently developed by the Matrical society of Eros-7 played a decisive role. In the Symphony of Stars, Ayaka Rin led the suppression operation in the Undergrid, and Leila Virel Nova also performed heroic feats in Slime extermination operations based at Oasis House. After the convergence, Reach Drain countermeasure medicine developed into a major industry of SUDOM, and this technology was widely applied in medical and environmental restoration fields. The lessons of the Slime Crisis were strongly reflected in the \"democratization of technology\" and \"harmony with the ecosystem\" ideals of the Techno-Cultural Renaissance period, becoming a decisive factor in promoting the development of environmental protection laws.",
+  },{
+    id: "hist-テクノ文化ルネサンスの始まり" as WikiId,
+    name: "テクノ文化ルネサンスの始まり",
+    nameEn: "Beginning of Techno-Cultural Renaissance",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E475年にエヴァトロン崩壊後の民主化と自由化を背景に始まった文化・技術の飛躍期。次元極地平技術が軍事・企業エリートから一般市民に開放され、ホライゾン・ゲートを通じた惑星間移動が日常化した。これによりE16連星系内の各地域間交流が爆発的に増加し、異なる植民地の文化が融合する新しい芸術・音楽・哲学が花開いた。テクノ文化ルネサンスはAURALIS第二世代の設立（E522年）を準備する文化的土壌となり、フェルミ音楽の現代的再解釈やOffenbach種との協創芸術などが生まれた。また、ペルセポネ計画の初期構想もこの時期に生み出され、次元階梯パンディクト理論の基礎研究が惑星ビブリオで開始された。このルネサンスはE16文明圏に「技術と文化の融合」という新たなパラダイムをもたらした。",
+    descriptionEn:
+      "A period of cultural and technological leap that began against the backdrop of democratization and liberalization after the collapse of Evatron in E475. Dimensional horizon technology was opened from military and corporate elites to general citizens, and interplanetary travel through Horizon Gates became commonplace. This led to an explosive increase in exchanges between various regions within the E16 star system, and new arts, music, and philosophy that fused cultures from different colonies blossomed. The Techno-Cultural Renaissance became the cultural soil that prepared for the establishment of AURALIS's second generation (E522), giving birth to modern reinterpretations of Fermi music and collaborative art with the Offenbach species. Additionally, the initial concept of the Persephone Plan was born during this period, and the basic research on dimensional ladder Pandict theory began on the planet Biblio. This Renaissance brought a new paradigm of \"fusion of technology and culture\" to the E16 civilization sphere.",
+  },{
+    id: "hist-V7設立" as WikiId,
+    name: "V7（Vital Seven）の設立",
+    nameEn: "Founding of V7 (Vital Seven)",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E515年にフィオナの主導でクレセント大地方の7カ国が結成した軍事同盟V7（Vital Seven）の設立。ブルーローズ、SSレンジ、アイアン・シンジケート、SUDOM、クロセヴィア、ミエルテンガに加えてその他の加盟国から構成され、クレセント地方における集団防衛と技術開発の枠組みを構築した。V7の設立はクレセント地方における勢力均衡を大きく変化させ、フィオナの外交手腕によって次元極地平技術の民用化と文化的開放性を推進する同盟として機能した。しかしE520年のトリニティ・アライアンス結成に対抗する軍事同盟としての側面も強く、クレセント地方の二大陣営対立構造の始まりとなった。V7の設立はE515年以降のクレセント政治情勢の基本構造を決定づけ、のちのフィオナの裏切り発覚（E523〜E525年）によって大きな試練を受けることになる。",
+    descriptionEn:
+      "The establishment of V7 (Vital Seven), a military alliance formed in E515 under Fiona's leadership by seven countries of the Crescent region. Composed of Blue Rose, SS Range, Iron Syndicate, SUDOM, Crossavia, Mieltenga, and other member countries, it established a framework for collective defense and technological development in the Crescent region. The establishment of V7 greatly changed the balance of power in the Crescent region and functioned as an alliance promoting the civilian use of dimensional horizon technology and cultural openness through Fiona's diplomatic skills. However, it also strongly served as a military alliance to counter the Trinity Alliance formed in E520, marking the beginning of a two-camp confrontation structure in the Crescent region. The establishment of V7 determined the basic structure of the Crescent political situation after E515 and would later face a major test due to the exposure of Fiona's betrayal (E523-E525).",
+  },{
+    id: "hist-トリニティ・アライアンス結成" as WikiId,
+    name: "トリニティ・アライアンス結成",
+    nameEn: "Formation of Trinity Alliance",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E520年にヴァーミリオン、ミエルテンガ、ボグダス・ジャベリンを中心に結成されたクレセント地方の軍事同盟。トリニティ・アライアンスはV7に対抗する勢力として機能し、クレセント地方における二大陣営対立構造の完成を告げた。アイリスがシルバー・ヴェノムからの再救出（E519年）後、トリニティ・アライアンスの指導者として台頭し、セバスチャン・ヴァレリウス率いるボグダス・ジャベリンが軍事的支柱を担った。トリニティ・アライアンスは旧来のクレセント秩序の維持と軍事的安定を主な目的としており、V7の技術革新路線とは異なる安全保障観点を持つ。しかしフィオナの裏切り（E523〜E525年）によって内部から崩壊の危機に直面し、クレセント地方の政治情勢は混迷の度合いを深めている。",
+    descriptionEn:
+      "A military alliance of the Crescent region formed in E520, centered on Vermillion, Mieltenga, and Bogdas Javelin. The Trinity Alliance functioned as a force against V7, announcing the completion of a two-camp confrontation structure in the Crescent region. After rescuing Iris from Silver Venom again in E519, she rose as the leader of the Trinity Alliance, and Bogdas Javelin led by Sebastian Valerius served as the military pillar. The Trinity Alliance's main purpose was to maintain the old Crescent order and military stability, holding a different security perspective from V7's technological innovation path. However, it faced a crisis of collapse from within due to Fiona's betrayal (E523-E525), and the political situation in the Crescent region has deepened in confusion.",
+  },{
+    id: "hist-銀河系コンソーシアム設立" as WikiId,
+    name: "銀河系コンソーシアム設立",
+    nameEn: "Establishment of Galactic Consortium",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E520年に設立された銀河系規模の協力機構で、E16文明圏と他宇宙文明圏との対話と協力を目的としている。銀河系コンソーシアムはグランベル（経済1位）、エレシオン（医療2位）、ティエリア（軍事3位）、ファルージャ（文化4位）、ディオクレニス（探査5位）の五大文明圏を核に構成され、ヘゲモニー・パラドックスの回避と宇宙規模の秩序構築を掲げている。コンソーシアムの設立はE16文明圏が銀河規模の国際舞台に進出する画期的な出来事であり、E528年の第一回宇宙連合会合の開催へと繋がった。コンソーシアムの下で標準宇宙暦の制定や宇宙文明圏間の通商ルートの整備が進められており、E16文明圏の外交・経済・安全保障に新たな枠組みを提供している。",
+    descriptionEn:
+      "A galaxy-scale cooperative organization established in E520, aiming for dialogue and cooperation between the E16 civilization sphere and other cosmic civilization spheres. The Galactic Consortium is composed around five major civilization spheres: Granbel (economic #1), Elesion (medical #2), Tiera (military #3), Faluja (cultural #4), and Dioclenis (exploration #5), advocating for the avoidance of the Hegemony Paradox and the construction of a cosmic-scale order. The establishment of the Consortium was a groundbreaking event for the E16 civilization sphere to advance onto the galaxy-scale international stage, leading to the holding of the first United Cosmic Assembly in E528. Under the Consortium, the establishment of the standard cosmic calendar and the development of trade routes between cosmic civilization spheres are being promoted, providing a new framework for the diplomacy, economy, and security of the E16 civilization sphere.",
+  },{
+    id: "hist-第一回宇宙連合会合" as WikiId,
+    name: "第一回宇宙連合会合",
+    nameEn: "First Universal Federation Summit",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E528年にグランベルの首都オルダシティで開催された、銀河系コンソーシアム主導の宇宙規模の外交会合。グランベル大統領アルゼン・カーリーンの「共存繁栄」演説をはじめ、ティエリア総帥グレイモンド・ハウザーの「軍事力の必要性」、エレシオン女王リアナ・ソリスの「平和・技術共有」、ファルージャ評議会代表マドリス・カーネルの「文化の力」、ディオクレニス科学宰相ネイサン・コリンドの「ヘゲモニー・パラドックス回避・共同探査」という五つの主要演説が行われた。この会合は宇宙秩序の構築に向けた本格的な対話の始まりを示し、E16文明圏と他宇宙文明圏の関係に新たな時代を画した。オルダ・プライムホールを会場として使用し、宇宙規模の外交協議の場として機能した。以後、定期的な会合開催が計画されている。",
+    descriptionEn:
+      "A galaxy-scale diplomatic meeting held in E528 in the capital of Granbel, Oldacity, under the leadership of the Galactic Consortium. Five major speeches were delivered: President Arsen Carleen of Granbel's \"Coexistence and Prosperity,\" Generalissimo Graymond Houser of Tiera's \"Necessity of Military Power,\" Queen Liana Solis of Elesion's \"Peace and Technology Sharing,\" Madris Carnel, representative of the Faluja Council, on \"The Power of Culture,\" and Nathan Corind, Science Minister of Dioclenis, on \"Avoiding the Hegemony Paradox and Joint Exploration.\" This meeting marked the beginning of substantive dialogue toward building a cosmic order and opened a new era in the relationship between the E16 civilization sphere and other cosmic civilization spheres. Using the Olda Prime Hall as its venue, it functioned as a diplomatic consultation forum on a cosmic scale. Regular meetings are planned to be held thereafter.",
+  },{
+    id: "hist-AURALIS第二世代の設立" as WikiId,
+    name: "AURALIS Collective第二世代の設立",
+    nameEn: "Establishment of AURALIS Collective 2nd Gen",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E522年にレイラ・ヴィレル・ノヴァの目覚めを契機として設立されたAURALIS Collectiveの第二世代。初代Kate Claudiaの「名」を継承したKate Patton、初代Lily Steinerの「名」を継承したLillie Ardentをはじめ、ミナ・エウレカ・エルンスト、ニニー・オッフェンバッハらが参加した。第二世代の設立は、E400年のエヴァトロン弾圧以来途絶えていたAURALISの理念の復活を象徴する出来事であり、テクノ文化ルネサンス期に育まれた新しい世代が「光と音を永遠にする」という理念を現代に甦らせた。第二世代は初代とは異なり、Offenbach種との協創や次元技術の芸術応用など、より開放的で多元的な活動を展開している。E522年の設立以降、AURALIS CollectiveはE16文明圏の文化振興と平和活動の中核組織として機能し続けている。",
+    descriptionEn:
+      "The second generation of AURALIS Collective, established in E522 with the awakening of Leila Virel Nova as its catalyst. Including Kate Patton, who inherited the \"name\" of the first-generation Kate Claudia, and Lillie Ardent, who inherited the \"name\" of the first-generation Lily Steiner, as well as Mina Eureka Ernst, Niny Offenbach, and others participated. The establishment of the second generation symbolized the revival of AURALIS's principles, which had been cut off since the Evatron suppression in E400, with the new generation nurtured during the Techno-Cultural Renaissance reviving the concept of \"making light and sound eternal\" in the modern era. Unlike the first generation, the second generation is developing more open and diverse activities, such as collaboration with the Offenbach species and artistic applications of dimensional technology. Since its establishment in E522, AURALIS Collective has continued to function as a core organization for cultural promotion and peace activities in the E16 civilization sphere.",
+  },{
+    id: "hist-シルバー・ヴェノムの台頭" as WikiId,
+    name: "シルバー・ヴェノムの台頭",
+    nameEn: "Rise of Silver Venom",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E475年のエヴァトロン崩壊後、Σ-Unitの残党から独立したマスター・ヴェノムによって設立された暗黒組織シルバー・ヴェノムの台頭期。シルバー・ヴェノムはZAMLTのシルバープラント遺構との歴史的関連を持ち、次元極地平技術を軍事転用した独自の兵器体系を構築した。E485年頃から活発化し、レオンやレヴィリア・サーペンティナらの幹部が組織の拡大を牽引した。シルバー・ヴェノムはクレセント地方で暗躍し、E510年にアイリスを捕囚するなどの大規模な犯罪活動を実行した。しかしE518年にイズミが後継として組織を引き継ぎ、アルファ・ヴェノムへの改編を行ったことで、シルバー・ヴェノムとしての活動は終息した。シルバー・ヴェノムの台頭はポスト・エヴァトロン秩序の脆弱性を露呈し、クレセント地方における暗黒組織問題の深刻さを浮き彫りにした。",
+    descriptionEn:
+      "The rise period of the dark organization Silver Venom, established by Master Venom, who broke away from the remnants of Σ-Unit after the collapse of Evatron in E475. Silver Venom has a historical connection to the Silver Plant ruins of ZAMLT and built its own weapon system by militarily applying dimensional horizon technology. It became active around E485, with executives such as Leon and Levilia Serpentina leading the organization's expansion. Silver Venom operated covertly in the Crescent region and carried out large-scale criminal activities such as imprisoning Iris in E510. However, in E518, Izumi succeeded the organization and reorganized it into Alpha Venom, ending Silver Venom's activities. The rise of Silver Venom exposed the vulnerability of the post-Evatron order and highlighted the seriousness of the dark organization problem in the Crescent region.",
+  },{
+    id: "hist-アルファ・ヴェノムの台頭" as WikiId,
+    name: "アルファ・ヴェノムの台頭",
+    nameEn: "Rise of Alpha Venom",
+    category: "歴史",
+    subCategory: "戦争・事件",
+    description:
+      "E518年にイズミがシルバー・ヴェノム残党を吸収して設立した暗黒組織アルファ・ヴェノムの台頭期。イズミはシルバー・ヴェノムの組織を大幅に拡大・再編し、ボブリスティ、カタリナ、ギル、ゴルディロックス、AJらの幹部を擁する強力な組織に仕上げた。E519年にはイズミ自らの指揮でアイリスの再拉致を成功させ、V7内部への浸透工作ではフィオナを内通者として抱き込むことに成功した。アルファ・ヴェノムの台頭はクレセント地方の安全保障に深刻な脅威をもたらし、トリニティ・アライアンスとV7の対立をさらに激化させた。E523年からE525年にかけてフィオナの裏切りが発覚するまで、アルファ・ヴェノムはクレセント全域に影響力を拡大し続け、E16文明圏における最大の安全保障上の課題となっている。",
+    descriptionEn:
+      "The rise period of the dark organization Alpha Venom, established in E518 when Izumi absorbed the remnants of Silver Venom. Izumi significantly expanded and reorganized the Silver Venom organization, transforming it into a powerful organization with key executives including Bobristy, Catalina, Gil, Goldilocks, and AJ. In E519, under Izumi's direct command, they successfully recaptured Iris and succeeded in recruiting Fiona as an infiltrator within V7. Alpha Venom's rise posed a serious threat to the security of the Crescent region and further intensified the conflict between the Trinity Alliance and V7. From E523 to E525, until Fiona's betrayal was discovered, Alpha Venom continued to expand its influence throughout the Crescent region, becoming the most significant security challenge in the E16 civilization sphere.",
+  },{
+    id: "hist-現代のE16連星系" as WikiId,
+    name: "現代のE16連星系",
+    nameEn: "Modern E16 Binary System",
+    category: "歴史",
+    subCategory: "歴史・時代",
+    description:
+      "E520年代以降の現代E16連星系は、銀河系コンソーシアムの設立、V7とトリニティ・アライアンスの二大陣営対立、アルファ・ヴェノムの暗躍という複雑な国際情勢下にある。Valoria連合圏の下でGigapolisは安定した都市運営を続け、テクノ文化ルネサンスの成果が市民生活に定着している。AURALIS Collective第二世代が文化振興の中核として活動し、惑星ビブリオやグランベルとの学術交流も活発化している。しかしクレセント地方ではフィオナの裏切り（E523〜E525年）によってV7内部に深刻な亀裂が生じており、アルファ・ヴェノムの脅威は未だ解消されていない。E16連星系は過去550年の激動の歴史から得た教訓を胸に、分散統治と国際協調のバランスを模索する新たな時代に突入している。過去の戦争と平和の循環が再び繰り返されるか、それとも新たな協力の枠組みが構築されるかが、現在進行中の歴史の核心的な問いである。",
+    descriptionEn:
+      "The modern E16 star system since the E520s exists under a complex international situation characterized by the establishment of the Galactic Consortium, the bipolar confrontation between V7 and the Trinity Alliance, and the covert activities of Alpha Venom. Under the Valoria Combined Zone, Gigapolis continues its stable urban governance, with the achievements of the Techno-Cultural Renaissance becoming integrated into citizens' daily lives. The second generation of the AURALIS Collective serves as the core of cultural promotion, and academic exchanges with the planets Biblio and Granbell have also become more active. However, in the Crescent region, Fiona's betrayal (E523-E525) created a serious rift within V7, and the threat of Alpha Venom remains unresolved. The E16 star system, carrying the lessons from its 550-year turbulent history, is entering a new era seeking balance between decentralized governance and international cooperation. Whether the cycle of past wars and peace will repeat itself, or whether a new framework of cooperation will be constructed, constitutes the central question of the ongoing history.",
+  },] as const satisfies readonly WikiEntry[]

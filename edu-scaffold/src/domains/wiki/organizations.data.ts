@@ -1,0 +1,973 @@
+import type { WikiId, WikiEntry } from "@/types"
+
+export const WIKI_ORGANIZATIONS = [
+  /* 組織・制度 */
+  {
+    id: "AURALIS" as WikiId,
+    name: "オーラリス・コレクティブ",
+    nameEn: "AURALIS Collective",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "「光と音を永遠にする」を理念とする音楽・文化集団で、E16文明圏の精神的支柱として機能してきた。第一世代はE290年頃に設立され、セリア黄金期（E335〜E370年）にその影響力の頂点に達した。初代ケイト・クラウディアや初代リリー・スタイナーら伝説的なメンバーの「名」は、クロニクル・ネームを通じて後世に受け継がれている。第一世代はZAMLTの台頭とスライム危機を経て活動を縮小したが、テクノ文化ルネサンス期に培われた文化的気運を受け、E522年に第二世代として復活を果たした。第二世代はフェルミ音楽の現代的展開だけでなく、次元極地平技術を活用した空間芸術やOffenbach種との共創活動など、従来の枠を超える表現活動を展開している。AURALISは単なる芸術団体ではなく、E16文明圏における文化的アイデンティティの維持と進化を担う最重要機関として位置づけられている。歴代指導者は初代ケイト・クラウディア（E270〜E400、創設者・「設計者」）と初代リリー・スタイナー（E270〜E400、共同創設者・「感情の炎」）に始まり、第二世代のケイト・パットン（E522〜、「名」を継承）とリリー・アーデント（E522〜、「名」を継承）へと受け継がれている。このクロニクル・ネームによりAURALISは精神的連続性を維持し、セリア黄金期の記憶と理念を現代に伝えている。\nこのAURALIS Collectiveの根底には、防衛的加速主義(L1)と第2のゲーム(L3)の思想的地層が横たわっている。芸術文化を「防衛的技術」として位置づけ、監視・支配技術ではなく創造的表現で文明を守るというL1の理念は、ZAMLTの軍事的覇権に対する根本的な対抗軸となった。テクノ文化ルネサンスにおける「共存フレームワーク」の構想は、覇権競争からオムニウィンへの転換を目標とするL3の思想の具現化である。",
+    descriptionEn: "A music and cultural collective that operates under the philosophy of 'Eternizing Light and Sound,' serving as the spiritual pillar of the E16 civilization sphere. Founded around E290 by the First Generation, it reached the zenith of its influence during the Celia Golden Age (E335-E370). The 'Names' of legendary founding members such as First Generation Kate Claudia and First Generation Lily Steiner have been passed down to posterity through Chronicle Names. After the rise of ZAMLT and the Slime Crisis, the First Generation reduced its activities, but it was revived as the Second Generation in E522, building on the cultural momentum of the Techno-Cultural Renaissance. The Second Generation not only explores modern developments in Fermi music but also engages in expression that transcends conventional boundaries, including spatial art utilizing dimensional horizon technology and collaborative projects with the Offenbach species. AURALIS is positioned not merely as an artistic organization but as the most crucial institution responsible for maintaining and evolving the cultural identity of the E16 civilization sphere. Leadership has been passed down from First Generation Kate Claudia (E270-E400, founder and 'Architect') and First Generation Lily Steiner (E270-E400, co-founder and 'Flame of Emotion') to the Second Generation's Kate Patton (E522-, inheriting the 'Name') and Lily Ardente (E522-, inheriting the 'Name'). Through this Chronicle Name system, AURALIS maintains spiritual continuity, transmitting the memories and ideals of the Celia Golden Age to the present day.\n\nAt the foundation of the AURALIS Collective lie the ideological strata of Defensive Accelerationism (L1) and The Second Game (L3). The L1 philosophy, which positions art and culture as 'defensive technology' and protects civilization through creative expression rather than surveillance and control technologies, became a fundamental axis of resistance against ZAMLT's military hegemony. The 'Coexistence Framework' conceived during the Techno-Cultural Renaissance represents the materialization of L3 thought, aiming to transition from hegemonic competition to Omni-Win.",
+
+    leaders: [
+      {
+        id: "Kate Claudia" as WikiId,
+        name: "ケイト・クラウディア",
+        nameEn: "Kate Claudia",
+        role: "AURALIS Collective創設者「設計者」",
+        era: "E270〜E400",
+      },
+      {
+        id: "Lily Steiner" as WikiId,
+        name: "リリー・スタイナー",
+        nameEn: "Lily Steiner",
+        role: "AURALIS Collective共同創設者「感情の炎」",
+        era: "E270〜E400",
+      },
+      {
+        id: "Kate Patton" as WikiId,
+        name: "ケイト・パットン",
+        nameEn: "Kate Patton",
+        role: "AURALIS Collective第二世代",
+        era: "E522〜",
+      },
+      {
+        id: "Lillie Ardent" as WikiId,
+        name: "リリー・アーデント",
+        nameEn: "Lillie Ardent",
+        role: "AURALIS Collective第二世代",
+        era: "E522〜",
+      },
+    ],
+  },
+
+  {
+    id: "ZAMLT" as WikiId,
+    name: "ザムルト",
+    nameEn: "ZAMLT",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E301年からE318年まで活動した5超巨大企業の統合体で、E16連星系の経済を事実上支配したメタ企業体である。ZAMLTは構成する5大企業の英語名の頭文字をとった名称である――Z（ゼブラ・コーポレーション）、A（アロエオイル・コーポレーション）、M（マモン・コーポレーション）、L（ルレンツ・コーポレーション）、T（トロン・コーポレーション）。創設者エリオット・シュトラスがGigapolisにおける20万以上のコーポラトクラシーの覇権争いに勝利し、5社に経済権を集約して設立した。各企業のオムニバス・エンジンを接続することで、E16連星系全域の金融取引をリアルタイムで制御する画期的な経済システムを構築した。しかし経済効率の極端な追求は社会の二極化を招き、A-Registryの階級格差を固定化する結果となった。ZAMLTはそれまでのコーポラトクラシー体制（コーポラタムパブリカ）が構築してきた自由経済の秩序を、極めて少数の巨大企業による中央集権的支配に置き換えた。この転換はエル・フォルハウスのマーストリヒト革命（E150年）からアルファ・ケインのギガポリス解放戦（E318年）に至る長い抵抗運動の直接の標的となった。ZAMLT支配下の低階層市民は深刻な貧困と権利制限に苦しみ、シャドウ・リベリオンなどの反乱組織が地下で形成される原因となった。E318年のトロン社壊滅後は4社体制へ移行し、最終的にアルファ・ケインによるギガポリス解放戦で完全崩壊した。ZAMLTの経済的遺産はその後もnトークンシステムやUECOの経済框架に長く影響を残した。崩壊後、その組織の残党の一部はシルバー・ヴェノムの母体となったという説があり、地下組織の歴史的経緯を研究する上で重要な鍵となっている。歴代指導者は初代エリオット・シュトラス（E301〜E318、創設者・最高指導者）。5大企業の各CEO（ラファエル・ドレイク/トロン、カルロス・ヴァンダム/マモン、アーサー・グリム/ゼブラ、エリザベス・リンドバーグ/ルレンツ、アイリス・ノヴァ/アロエオイル）が幹部を構成した。\nこのZAMLTの根底には、超未来第一主義(D1)と安全の監視者パラドックス(D2)の思想的地層が横たわっている。「文明の永続」という超長期的視点から現在の犠牲を合理化するD1の論理と、「安全と秩序」を掲げながら最大の抑圧装置となるD2の逆説が、ZAMLTの覇権構造を思想的に支えていた。Shadow Rebellionの抵抗は、この二重の思想的抑圧に対する根源的なアンチテーゼとして歴史的意義を持つ。",
+    descriptionEn: "A meta-corporate entity that was a unified body of five hyper-giant corporations operating from E301 to E318, effectively dominating the economy of the E16 star system. ZAMLT is an acronym derived from the English names of its five constituent corporations: Z (Zebra Corporation), A (Aloe Oil Corporation), M (Mamon Corporation), L (Lorentz Corporation), and T (Thoron Corporation). Founder Elliot Strass won the hegemony struggle among over 200,000 corpopracy classes in Gigapolis, consolidating economic power among these five companies to establish ZAMLT. By connecting the Omibus Engines of each corporation, it constructed an innovative economic system that controlled financial transactions across the entire E16 star system in real-time. However, the extreme pursuit of economic efficiency led to social polarization, resulting in the固化 of class inequality in the A-Registry. ZAMLT replaced the free economic order established by the previous corpopracy system (Corporatum Publica) with centralized rule by a tiny handful of giant corporations. This transformation became the direct target of the long resistance movement stretching from El Forhaus's Maastricht Revolution (E150) to Alpha Cain's Gigapolis Liberation War (E318). Citizens in lower classes under ZAMLT suffered from severe poverty and rights restrictions, leading to the formation of underground rebel organizations like the Shadow Rebellion. After the destruction of Thoron Corporation in E318, it transitioned to a four-company structure before ultimately collapsing completely during Alpha Cain's Gigapolis Liberation War. ZAMLT's economic legacy continued to influence systems like the n-token economy and UECO's economic framework for a long time afterward. A theory suggests that some remnants of its organization later became the nucleus of Silver Venom, making it an important key in studying the historical background of underground organizations. Leaders included First Generation Elliot Strass (E301-E318, founder and Supreme Leader), with the CEOs of the five major corporations (Rafael Drake/Thoron, Carlos Vandom/Mamon, Arthur Grimm/Zebra, Elizabeth Lindbergh/Lorentz, and Iris Nova/Aloe Oil) forming the executive cadre.\n\nAt the foundation of ZAMLT lie the ideological strata of Hyper-Future First-Principalism (D1) and the Safety Watcher Paradox (D2). The D1 logic, which justifies present sacrifices from an ultra-long-term perspective of 'civilizational permanence,' and the D2 paradox, which while advocating 'safety and order' becomes the ultimate oppression apparatus, ideologically supported ZAMLT's hegemonic structure. The resistance of the Shadow Rebellion holds historical significance as a fundamental antithesis against this dual ideological oppression.",
+
+    leaders: [
+      {
+        id: "エリオット・シュトラス" as WikiId,
+        name: "エリオット・シュトラス",
+        nameEn: "Elliot Strauss",
+        role: "ZAMLT創設者・最高指導者",
+        era: "E301〜E318",
+      },
+      {
+        id: "ラファエル・ドレイク" as WikiId,
+        name: "ラファエル・ドレイク",
+        nameEn: "Rafael Drake",
+        role: "トロン・コーポレーションCEO",
+        era: "E301〜E318",
+      },
+      {
+        id: "カルロス・ヴァンダム" as WikiId,
+        name: "カルロス・ヴァンダム",
+        nameEn: "Carlos Vandam",
+        role: "マモン・コーポレーションリーダー",
+        era: "E301〜E318",
+      },
+      {
+        id: "アーサー・グリム" as WikiId,
+        name: "アーサー・グリム",
+        nameEn: "Arthur Grim",
+        role: "ゼブラ・コーポレーションリーダー",
+        era: "E301〜E318",
+      },
+      {
+        id: "エリザベス・リンドバーグ" as WikiId,
+        name: "エリザベス・リンドバーグ",
+        nameEn: "Elizabeth Lindberg",
+        role: "ルレンツ・コーポレーションリーダー",
+        era: "E301〜E318",
+      },
+      {
+        id: "アイリス・ノヴァ" as WikiId,
+        name: "アイリス・ノヴァ",
+        nameEn: "Iris Nova",
+        role: "アロエオイル・コーポレーションリーダー",
+        era: "E301〜E318",
+      },
+    ],
+  },
+
+  {
+    id: "ネオクラン同盟" as WikiId,
+    name: "ネオクラン同盟",
+    nameEn: "Neoclan Alliance",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "分散統治モデルを推進する国家同盟で、各構成国が主権を維持しつつ共通の外交・防衛・通商政策を協調する連合体制を採っている。ネオクラン同盟はZAMLTの中央集権的支配への反動として生まれ、地方自治権の強化と市民参加型政治の復興を掲げた。UECO統合後は銀河系コンソーシアムの中核構成体として機能し、分散統治の実践モデルとして他の星系にも影響を与えている。同盟の主要政策には次元極地平技術の平等な配分、nトークン経済の透明性向上、A-Registryの階級制度の段階的緩和などが含まれる。ネオクラン同盟の理念はテクノ文化ルネサンス期の「技術の民主化」という精神を政治制度に具体化したものであり、E16文明圏における最も持続可能な統治モデルの一つと評価されている。同盟の初代代表にはZAMLT崩壊後の民主化運動の指導者複数名が共同で就任し、分散統治モデルの基盤を築いた。",
+    descriptionEn: "A national alliance that promotes a decentralized governance model, adopting a federated system where constituent nations maintain sovereignty while coordinating common foreign, defense, and trade policies. The Neo-Clan Alliance emerged as a reaction against ZAMLT's centralized rule, advocating for strengthened local autonomy and the revival of citizen-participatory politics. After UECO integration, it functions as a core component of the Galactic Consortium, influencing other star systems as a practical model of decentralized governance. The Alliance's major policies include the equitable distribution of dimensional horizon technology, increased transparency in the n-token economy, and the gradual relaxation of the A-Registry's class hierarchy. The Neo-Clan Alliance's philosophy materializes the 'democratization of technology' spirit of the Techno-Cultural Renaissance into political institutions, and is evaluated as one of the most sustainable governance models in the E16 civilization sphere. Multiple leaders of the democratization movement following ZAMLT's collapse jointly served as the first representatives of the Alliance, establishing the foundation for the decentralized governance model.",
+
+    leaders: [
+      {
+        id: "ルシア・ネオ" as WikiId,
+        name: "ルシア・ネオ",
+        nameEn: "Lucia Neo",
+        role: "ネオクラン同盟初代代表",
+        era: "E330〜",
+      },
+    ],
+  },
+
+  {
+    id: "UECO" as WikiId,
+    name: "ユーエコー",
+    nameEn: "UECO",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "星間経済協同組合（United Economic Cooperative）で、E16連星系および周辺星系の経済活動を調整する超国家的機関である。UECOはZAMLT崩壊後の経済的混乱を収束させるために設立され、nトークン経済システムの再構築と公正な資源配分を実現した。最大の特徴はヒーローエージェンシーとの統合であり、経済協同組合という枠組みの中に防衛・救助・治安維持の機能を組み込んだ独自の組織体制を持つ。これにより経済活動と安全保障を有機的に連携させ、純粋な軍事同盟ではない新しい形態の星系ガバナンスを実現している。UECOはパクス・ロンバルディカの企業統治とZAMLTの経済覇権の両方の教訓を踏まえ、経済効率と社会的公正のバランスを追求する第三の道として設計された。ネオクラン同盟の理念もUECOの框架の中で実現されている。UECOの初代議長にはテクノ文化ルネサンス期の指導者の一人が就任したとされ、E495〜E500年の銀河系コンソーシアム設立への移行期を主導した。歴代指導者の詳細な記録は惑星ビブリオに保管されている。\nこのUECOの根底には、多元性民主主義(L2)の思想的地層が横たわっている。多文明間の合意形成を民主的に実現するというL2の理念は、ZAMLTの単一覇権体制に対する構造的代替案として機能した。テクノロジーを活用して民主主義をアップデートするというL2の構想は、銀河系コンソーシアムの集合知プラットフォームへと結実している。",
+    descriptionEn: "An interstellar economic cooperative (United Economic Cooperative) and a supranational agency that coordinates economic activities across the E16 star system and surrounding star systems. UECO was established to resolve the economic chaos following ZAMLT's collapse, reconstructing the n-token economic system and achieving fair resource distribution. Its most distinctive feature is integration with Hero Agencies, incorporating defense, rescue, and public security functions within its organizational framework as an economic cooperative. This organically links economic activities with security, realizing a new form of stellar system governance that is not purely a military alliance. Drawing lessons from both the corporate governance of Pax Lombardica and ZAMLT's economic hegemony, UECO was designed as a third path pursuing balance between economic efficiency and social justice. The ideals of the Neo-Clan Alliance are also realized within UECO's framework. It is said that one leader from the Techno-Cultural Renaissance period served as UECO's first chairman, guiding the transition period leading to the establishment of the Galactic Consortium from E495 to E500. Detailed records of its leaders are preserved on the planet Biblio.\n\nAt the foundation of UECO lies the ideological stratum of Pluralistic Democracy (L2). The L2 principle of achieving consensus among multiple civilizations democratically functioned as a structural alternative to ZAMLT's single-hegemony system. The L2 concept of updating democracy through technology has materialized in the collective intelligence platform of the Galactic Consortium.",
+
+    leaders: [
+      {
+        id: "ヘクトル・ヴァン" as WikiId,
+        name: "ヘクトル・ヴァン",
+        nameEn: "Hector Van",
+        role: "UECO初代議長",
+        era: "E400後半〜E500",
+      },
+    ],
+  },
+
+  {
+    id: "シャドウ・リベリオン" as WikiId,
+    name: "シャドウ・リベリオン",
+    nameEn: "Shadow Rebellion",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "ZAMLT支配期（E301〜E318年）に結成された低階層市民の反乱組織で、A-Registryの下層階級（Z40以下）を中心とした地下抵抗運動である。ZAMLTのオムニバス・エンジンによる経済支配に対抗するため、独自の代替通貨システムと暗号通信網を構築した。シャドウ・リベリオンの活動は主にサボタージュと情報戦に限定され、大規模な武力闘争は回避した。この戦略はZAMLTの崩壊後、ネオクラン同盟設立の思想的基盤として評価されている。シャドウ・リベリオンの残党の一部は後にシルバー・ヴェノムの母体となったという説もあり、抵抗運動の過激派と穏健派の分岐がE16文明圏のその後の対立構造に影響を与えたと指摘されている。\nこのシャドウ・リベリオンの根底には、安全の監視者パラドックス(D2)と脱人間化(D5)の思想的地層が横たわっている。「銀河の統一と安全」を掲げるZAMLTこそが最大の脅威であるというD2の認識は、統一秩序への抵抗を倫理的必然とした。同時に、A-Registryによる意識データ化への反発は、人間の定義をシステムに支配されないというD5の根本命题と共鳴している。",
+    descriptionEn: "An underground resistance organization formed during ZAMLT's rule (E301-E318), composed of lower-class citizens in the A-Registry's lower strata (Z40 and below). To counter ZAMLT's economic domination through its Omibus Engine, the Shadow Rebellion constructed its own alternative currency system and encrypted communication network. The activities of the Shadow Rebellion were primarily limited to sabotage and information warfare, avoiding large-scale armed conflict. This strategy has been evaluated as the ideological foundation for the establishment of the Neo-Clan Alliance after ZAMLT's collapse. A theory suggests that some remnants of the Shadow Rebellion later became the nucleus of Silver Venom, and it has been pointed out that the divergence between radical and moderate factions of the resistance movement influenced the subsequent conflict structures of the E16 civilization sphere.\n\nAt the foundation of the Shadow Rebellion lie the ideological strata of the Safety Watcher Paradox (D2) and Dehumanization (D5). The D2 recognition that ZAMLT, which advocates for 'galactic unity and safety,' is itself the greatest threat made resistance against the unified order ethically necessary. At the same time, the rejection of consciousness datafication by the A-Registry resonates with the fundamental proposition of D5—that human definition must not be dominated by systems.",
+
+    leaders: [
+      {
+        id: "アルファ・ケイン" as WikiId,
+        name: "アルファ・ケイン",
+        nameEn: "Alpha Kane",
+        role: "シャドウ・リベリオンリーダー",
+        era: "E318〜",
+      },
+    ],
+  },
+
+  {
+    id: "A-Registry" as WikiId,
+    name: "A-Registry（A籍）",
+    nameEn: "A-Registry",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E16連星系の市民身分証明・階級制度で、旅券機能と社会的地位の指標を兼ね備えた包括的な管理システムである。Z1（最高位）からZ50（最低位）までの階級があり、各階級は居住区域のアクセス権、nトークンの取引限度額、公的サービスの利用範囲などを規定する。A-Registryはバーズ帝国期にその原型が構想され、パクス・ロンバルディカ期に企業の従業員管理システムとして整備された後、ZAMLT期に社会階級の固定化装置として悪用された。ZAMLT崩壊後、ネオクラン同盟とUECOの下で階級制度の緩和が進められ、Z50に近い低階層市民の権利向上が図られている。しかし階級間の格差は完全には解消されておらず、A-Registryの改革はE16文明圏の最重要の政治課題の一つとして議論が続いている。惑星ビブリオには全市民データのバックアップが保管されている。\nこのアルファ・ケインの根底には、安全の監視者パラドックス(D2)と倫理の解除(D3)の思想的地層が横たわっている。コーポラトクラシー体制がもたらす「安全という名の抑圧」に対するD2の根源的な反逆精神と、既存の倫理規範を打ち破って新たな自由を切り拓くというD3の実践的姿勢が、彼の行動原理を支えている。",
+    descriptionEn: "The citizen identification and class system of the E16 star system, serving as both a passport and an indicator of social status. It includes classes from Z1 (highest) to Z50 (lowest), with each class dictating access to residential areas, transaction limits for n-tokens, and the scope of public services available. The prototype of the A-Registry was conceived during the Bird Empire period, refined as an employee management system for corporations during the Pax Lombardica era, and then perverted as a device for fixing social classes during the ZAMLT period. After ZAMLT's collapse, the Neo-Clan Alliance and UECO have pursued the relaxation of the class hierarchy, seeking to improve the rights of citizens in lower classes close to Z50. However, class inequality has not been completely eliminated, and the reform of the A-Registry continues to be debated as one of the most important political issues in the E16 civilization sphere. A backup of all citizen data is stored on the planet Biblio.\n\nAt the foundation of Alpha Cain lie the ideological strata of the Safety Watcher Paradox (D2) and the Abolition of Ethics (D3). The D2 fundamental rebellious spirit against 'oppression in the name of safety' brought by the corpopracy system and the D3 practical attitude of breaking existing ethical norms to carve out new freedoms support his principles of action.",
+  },
+
+  {
+    id: "nトークン" as WikiId,
+    name: "nトークン",
+    nameEn: "n-Token",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E16連星系の基軸通貨で、セリア黄金期に確立され、現在もUECOの管轄下で運用されている。nトークンの最大の特徴は、物質的資産だけでなく文化的貢献、知識の共有、芸術的創造活動なども経済的価値として評価・換金できる点にある。この仕組みはセリア黄金期のAURALISの理念と深く結びついており、フェルミ音楽の演奏や次元極地平技術の研究などもnトークンで報酬を受け取ることができる。ZAMLT期にはnトークンの集中化が進み経済的不平等を拡大したが、UECO統合後は分散型台帳技術の導入により透明性と公平性が向上した。nトークンの交換レートは惑星ビブリオのロレンツィオ国際大学が算出する「文化・知識指数」を基準に定期調整されており、E16文明圏独自の価値観を反映した経済システムとして他星系からも注目されている。\nこのnトークン経済の根底には、多元性民主主義(L2)の思想的地層が横たわっている。熱量を反映した価値メカニズムは、単なる通貨システムではなく「クアドラティック・ボーティング」的な参加型ガバナンスの経済的実装として機能している。テクノロジーを通じて民主主義をアップデートするというL2の構想は、nトークン経済の設計思想の核心にある。",
+    descriptionEn: "The base currency of the E16 star system, established during the Celia Golden Age and still operated under UECO's jurisdiction. The most distinctive feature of n-tokens is that they can evaluate and monetize not only material assets but also cultural contributions, knowledge sharing, and artistic creative activities as economic value. This mechanism is deeply connected to the philosophy of AURALIS during the Celia Golden Age, allowing performers of Fermi music and researchers of dimensional horizon technology to receive compensation in n-tokens. During the ZAMLT era, the centralization of n-tokens progressed, exacerbating economic inequality, but after UECO integration, the introduction of distributed ledger technology has improved transparency and fairness. The exchange rate of n-tokens is periodically adjusted based on the 'Culture-Knowledge Index' calculated by the Lorenzo International University on the planet Biblio, and as an economic system reflecting the unique values of the E16 civilization sphere, it attracts attention from other star systems.\n\nAt the foundation of the n-token economy lies the ideological stratum of Pluralistic Democracy (L2). The value mechanism reflecting 'heat' functions not merely as a currency system but as an economic implementation of 'quadratic voting' style participatory governance. The L2 concept of updating democracy through technology lies at the core of the n-token economy's design philosophy.",
+  },
+
+  /* 軍事・対立組織 */
+  {
+    id: "シルバー・ヴェノム" as WikiId,
+    name: "シルバー・ヴェノム",
+    nameEn: "Silver Venom",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "E475年、エヴァトロンのΣ-Unit残党から独立して結成された暗黒組織で、E16文明圏における最大の脅威勢力の一つである。エヴァトロン崩壊後に解体されたはずのΣ-Unitの極秘技術と人材を継承し、テクノ文化ルネサンス期の技術開放に乗じて急速に戦力を拡大した。シルバー・ヴェノムは従来の軍事組織とは異なり、次元極地平技術を武器化した「空間干渉攻撃」を得意とし、ホライゾン・ゲートを通じた奇襲戦術でE16連星系の各地を混乱に陥れた。組織名の「ヴェノム（毒）」は、社会の構造的矛盾を暴露し、文明を内側から腐食させるという彼らの思想に由来する。シャドウ・リベリオンの過激派が母体との説が有力で、ZAMLT期に培われた地下活動のノウハウが組織の強靭さに貢献している。後にアルファ・ヴェノムとゴールデン・ヴェノムに分裂したが、その思想的影響はE16文明圏全体に長く残ることになる。歴代指導者は初代マスター・ヴェノム（E475〜E500頃、創設者・「影の支配者」）に始まり、レオンが幹部として実行部隊の指揮を執った。マスター・ヴェノムの失脚後、残党はイズミによるアルファ・ヴェノムへの吸収を拒否し、ラストマン等が独自活動を続けている。",
+    descriptionEn: "A dark organization formed independently from the Σ-Unit remnants of Evatron in E475, and one of the greatest threat forces in the E16 civilization sphere. It inherited the secret technology and personnel of the Σ-Unit, which should have been disbanded after Evatron's collapse, and rapidly expanded its military power by taking advantage of the technology opening of the Techno-Cultural Renaissance period. Unlike conventional military organizations, Silver Venom specializes in 'spatial interference attacks' that weaponize dimensional horizon technology, plunging various parts of the E16 star system into chaos through surprise tactics using Horizon Gates. The organization's name 'Venom' derives from their ideology of exposing society's structural contradictions and corroding civilization from within. The theory that the Shadow Rebellion's radical faction was its nucleus is widely accepted, and the know-how of underground activities cultivated during the ZAMLT era contributed to the organization's resilience. Later, it split into Alpha Venom and Golden Venom, but its ideological influence would long remain throughout the E16 civilization sphere. Leaders began with First Generation Master Venom (E475-E500 approx., founder and 'Shadow Ruler'), with Leon commanding the operational forces as a cadre. After Master Venom's downfall, the remnants refused absorption into Alpha Venom by Izumi, with figures like Lastman continuing independent activities.",
+
+    leaders: [
+      {
+        id: "マスター・ヴェノム" as WikiId,
+        name: "マスター・ヴェノム",
+        nameEn: "Master Venom",
+        role: "シルバー・ヴェノム創設者",
+        era: "E475〜E500頃",
+      },
+      {
+        id: "レオン" as WikiId,
+        name: "レオン",
+        nameEn: "Leon",
+        role: "シルバー・ヴェノム幹部",
+        era: "E485〜",
+      },
+    ],
+  },
+
+  {
+    id: "アルファ・ヴェノム" as WikiId,
+    name: "アルファ・ヴェノム",
+    nameEn: "Alpha Venom",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "シルバー・ヴェノムの後継組織で、イズミがリーダーを務めるE16文明圏最大の対立勢力である。シルバー・ヴェノムの内部抗争と路線対立を経て誕生し、より攻撃的で急進的な行動方針を採用している。アルファ・ヴェノムの最大の特徴は、次元極地平技術を用いた大規模な空間攻撃と、洗脳・精神操作を組み合わせた心理戦の二面作戦である。E509年にはノスタルジア・コロニーへの壊滅的な攻撃を実行し、ミナ・エウレカの人生を根本から変える出来事となった。イズミのカリスマ的指導の下、アルファ・ヴェノムはV7とトリニティ・アライアンスの両方と敵対し、クレセント大地方全体を巻き込む大規模な軍事衝突を引き起こしている。組織の最終的な目的はE16連星系の既存秩序の完全な破壊と再構築であるとされ、その思想はシャドウ・リベリオン以来の反体制運動の系譜を最も極端な形で体現している。",
+    descriptionEn: "The successor organization to Silver Venom, led by Izumi and the largest opposing force in the E16 civilization sphere. Born from internal conflicts and ideological struggles within Silver Venom, it adopts a more aggressive and radical action policy. The most distinctive feature of Alpha Venom is its two-pronged strategy combining large-scale spatial attacks using dimensional horizon technology with psychological warfare incorporating brainwashing and mental manipulation. In E509, it executed a devastating attack on the Nostalgia Colony, an event that fundamentally changed Mina Eureka's life. Under Izumi's charismatic leadership, Alpha Venom has opposed both V7 and the Trinity Alliance, triggering large-scale military conflicts involving the entire Crescent region. The organization's ultimate goal is said to be the complete destruction and reconstruction of the existing order in the E16 star system, and its ideology most extremely embodies the lineage of anti-establishment movements since the Shadow Rebellion.",
+
+    leaders: [
+      {
+        id: "イズミ" as WikiId,
+        name: "イズミ",
+        nameEn: "Izumi",
+        role: "アルファ・ヴェノムリーダー",
+        era: "E518〜",
+      },
+    ],
+  },
+
+  {
+    id: "ゴールデン・ヴェノム" as WikiId,
+    name: "ゴールデン・ヴェノム",
+    nameEn: "Golden Venom",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "シルバー・ヴェノムの分派組織で、本流との路線対立から独立した勢力である。ゴールデン・ヴェノムはアルファ・ヴェノムの急進的な武力路線に反対し、代わりにnトークン経済システムへの浸透と金融操作による支配を志向した。この手法は皮肉にもZAMLTの戦略を模倣するものであり、経済的支配を通じて社会を変革しようとするアプローチを採っている。ゴールデン・ヴェノムの名称は、nトークン（金色的な輝きを持つ暗号資産）への執着に由来する。組織は表向きは合法的な企業活動を通じて資金を蓄積し、A-Registryのシステムに潜入して市民データの改ざんや監視を行っていると疑われている。アルファ・ヴェノムとは敵対関係にあるが、時折両者は共通の敵に対して一時的な協力関係を結ぶこともあり、E16文明圏の安全保障を複雑化させる要因となっている。",
+    descriptionEn: "A faction organization of Silver Venom that broke away from the mainstream due to ideological differences. Golden Venom opposed Alpha Venom's radical military approach, instead aiming to infiltrate the n-token economic system and achieve control through financial manipulation. This approach ironically mimics ZAMLT's strategy, seeking to transform society through economic domination. The name Golden Venom derives from its obsession with n-tokens (cryptographic assets with a golden sheen). The organization accumulates funds through ostensibly legitimate corporate activities and is suspected of infiltrating the A-Registry system to tamper with and monitor citizen data. While antagonistic toward Alpha Venom, the two occasionally form temporary alliances against common enemies, complicating the security landscape of the E16 civilization sphere.",
+
+    leaders: [
+      {
+        id: "オーギュスト・ゴールド" as WikiId,
+        name: "オーギュスト・ゴールド",
+        nameEn: "August Gold",
+        role: "ゴールデン・ヴェノム創設者",
+        era: "E500〜",
+      },
+    ],
+  },
+
+  {
+    id: "ボグダス・ジャベリン" as WikiId,
+    name: "ボグダス・ジャベリン",
+    nameEn: "Bogdas Javelin",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "セバスチャン・ヴァレリウス率いる軍事組織で、テクロサス系譜に属する古参の戦闘集団である。テクロサスはE16文明圏の初期入植時代から続く武術・戦闘技術の流派であり、ボグダス・ジャベリンはその系譜を受け継ぐ最も強力な軍事組織として知られる。セバスチャン・ヴァレリウスは卓越した戦術家であり、次元極地平技術を戦闘に応用した独自の戦闘体系を開発した。ボグダス・ジャベリン（槍）の名称は、組織が重装甲の精密打撃部隊として機能することに由来し、特定目標に対する迅速かつ壊滅的な攻撃を得意とする。トリニティ・アライアンスの結成メンバーとしてヴァーミリオンとミエルテンガと軍事同盟を結んでおり、V7との対抗軸の主力戦力として機能している。テクロサス系譜の戦士たちはA-Registryの階級制度に縛られない独自の階位を持つ。",
+    descriptionEn: "A military organization led by Sebastian Valerius, belonging to the ancient Teclosas lineage. Teclosas is a school of martial and combat arts dating back to the early settlement era of the E16 civilization sphere, and Bogdas Javelin is known as the most powerful military organization carrying on this lineage. Sebastian Valerius is an exceptional tactician who developed a unique combat system applying dimensional horizon technology to warfare. The name Bogdas Javelin (spear) derives from the organization's function as a heavily armored precision strike unit, specializing in rapid and devastating attacks against specific targets. As a founding member of the Trinity Alliance, it has formed a military alliance with Vermilion and Mieltenga, serving as the main force in the opposing axis against V7. Warriors of the Teclosas lineage hold their own ranks, unfettered by the A-Registry's class system.",
+
+    leaders: [
+      {
+        id: "セバスチャン・ヴァレリウス" as WikiId,
+        name: "セバスチャン・ヴァレリウス",
+        nameEn: "Sebastian Valerius",
+        role: "ボグダス・ジャベリンリーダー",
+        era: "E490〜",
+      },
+    ],
+  },
+
+  {
+    id: "V7" as WikiId,
+    name: "V7（Vital Seven）",
+    nameEn: "V7 (Vital Seven)",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "クレセント地方の7カ国連合で、E515年にフィオナの主導で設立された軍事・経済同盟である。正式名称はVital Seven（命の七）であり、クレセント大地方の平和と安定を維持することを目的としている。加盟国はブルーローズ（中心国）、ヴァーミリオンを除く主要国から構成され、集団安全保障体制を通じてアルファ・ヴェノムやシルバー・ヴェノムの脅威に対処している。V7の最大の特徴は、単なる軍事同盟ではなく、加盟国間の技術共有、nトークンの相互補助、ホライゾン・ゲートの共同管理など、包括的な協力框架を持つ点である。テクノ文化ルネサンスの理念を共用財産として守るという思想的基盤があり、AURALIS第二世代とも密接な連携を維持している。トリニティ・アライアンスとの対立はクレセント地方を二分する最大の地政学的緊張の源泉となっている。",
+    descriptionEn: "A seven-nation alliance in the Crescent region, established in E515 under Fiona's leadership as a military and economic coalition. Its formal name is Vital Seven, with the aim of maintaining peace and stability in the Crescent region. It consists of Blue Rose (the central nation) and other major nations except Vermilion, addressing threats from Alpha Venom and Silver Venom through a collective security framework. The most distinctive feature of V7 is that it is not merely a military alliance but possesses a comprehensive cooperation framework including technology sharing among member nations, mutual assistance through n-tokens, and joint management of Horizon Gates. It has an ideological foundation of preserving the Techno-Cultural Renaissance's ideals as common heritage and maintains close cooperation with the Second Generation of AURALIS. The confrontation with the Trinity Alliance has become the primary source of geopolitical tension dividing the Crescent region.",
+
+    leaders: [
+      {
+        id: "フィオナ" as WikiId,
+        name: "フィオナ",
+        nameEn: "Klaus Fiona",
+        role: "ブルーローズ統率者・V7設立主導者",
+        era: "E515〜",
+      },
+      {
+        id: "カスチーナ・テンペスト" as WikiId,
+        name: "カスチーナ・テンペスト",
+        nameEn: "Castina Tempest",
+        role: "クロセヴィア首脳",
+        era: "E515〜",
+      },
+      {
+        id: "アイク・ロペス" as WikiId,
+        name: "アイク・ロペス",
+        nameEn: "Ike Lopez",
+        role: "SSレンジ首脳",
+        era: "E515〜",
+      },
+      {
+        id: "レイド・カキザキ" as WikiId,
+        name: "レイド・カキザキ",
+        nameEn: "Raid Kakizaki",
+        role: "アイアン・シンジケート首脳",
+        era: "E515〜",
+      },
+      {
+        id: "ヨニック" as WikiId,
+        name: "ヨニック",
+        nameEn: "Yonick",
+        role: "ブルーローズ最高司令官",
+        era: "E515〜",
+      },
+    ],
+  },
+
+  {
+    id: "トリニティ・アライアンス" as WikiId,
+    name: "トリニティ・アライアンス",
+    nameEn: "Trinity Alliance",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "ヴァーミリオン・ミエルテンガ・ボグダス・ジャベリンの3勢力による軍事同盟で、E520年に結成された。トリニティ（三位一体）の名称は、三勢力が等しい立場で連合を構成していることに由来する。トリニティ・アライアンスはV7に対抗する目的で設立され、クレセント地方における二極対立の構造を決定づけた。ヴァーミリオンが文化的・歴史的正当性を、ミエルテンガが軍事力と産業基盤を、ボグダス・ジャベリンがテクロサス系譜の戦闘技術をそれぞれ提供し、三勢力の相互補完関係で同盟の戦力は極めて強力である。V7がテクノ文化ルネサンスの理念を重視するのに対し、トリニティ・アライアンスはセリア黄金期の伝統的価値観と実力主義を重んじる傾向がある。両陣営の対立は時折武力衝突に発展するが、UECOの仲介によって全面戦争は回避されてきた。アルファ・ヴェノムの脅威に対してはV7とトリニティ・アライアンスが一時的に協力することもある。",
+    descriptionEn: "A military alliance formed by three powers—Vermilion, Mieltenga, and Bogdas Javelin—in E520. The name 'Trinity' originates from the equal standing of the three powers in the alliance. Established to counter V7, the Trinity Alliance solidified the bipolar structure of the Crescent region. Vermilion provides cultural and historical legitimacy, Mieltenga offers military power and industrial infrastructure, and Bogdas Javelin contributes combat techniques from the Techlosus lineage. This complementary relationship makes the alliance's forces exceptionally powerful. While V7 emphasizes the philosophy of the Techno-Cultural Renaissance, the Trinity Alliance tends to value traditional principles and pragmatism from the Serian Golden Age. Although conflicts between the two factions occasionally escalate into military confrontations, full-scale war has been avoided through UECO mediation. In response to the threat of Alpha Venom, V7 and the Trinity Alliance have occasionally cooperated.",
+
+    leaders: [
+      {
+        id: "アイリス" as WikiId,
+        name: "アイリス",
+        nameEn: "Iris",
+        role: "トリニティ・アライアンス指導者",
+        era: "E519〜",
+      },
+    ],
+  },
+
+  /* その他 */
+  {
+    id: "ファールージャ社" as WikiId,
+    name: "ファールージャ社",
+    nameEn: "Faruja Corporation",
+    category: "組織",
+    subCategory: "その他",
+    description:
+      "シンフォニー・オブ・スターズ西大陸を代表する総合企業体。CEOであるミカエル・ガブリエリの卓越した経営手腕のもと、次元エネルギー採掘から軍事技術開発まで幅広い分野で事業を展開。特にZAMLT崩壊後の混乱期には安定した供給網を維持し、西大陸経済の屋台骨を支えた。エヴァトロン時代にも巧みに身を保ち、その後のテクノ文化ルネサンスでは新技術の商業化を主導した。社名の由来は創業地であるファールージャ渓谷に由来する。",
+    descriptionEn: "A comprehensive corporation representing the Western Continent of the Symphony of Stars. Under the exceptional leadership of CEO Michael Gabrieli, it operates across a wide range of fields, from dimensional energy extraction to military technology development. Particularly during the chaotic period following the collapse of ZAMLT, it maintained a stable supply network, supporting the backbone of the Western Continent's economy. It skillfully navigated the Evatron era and later led the commercialization of new technologies during the Techno-Cultural Renaissance. The company's name derives from its founding location, the Faroojah Valley.",
+
+    leaders: [
+      {
+        id: "ミカエル・ガブリエリ" as WikiId,
+        name: "ミカエル・ガブリエリ",
+        nameEn: "Mikael Gabrieli",
+        role: "ファールージャ社CEO",
+        era: "E515〜",
+      },
+    ],
+  },
+
+  {
+    id: "エヴァトロン" as WikiId,
+    name: "エヴァトロン",
+    nameEn: "Evatron",
+    category: "組織",
+    subCategory: "その他",
+    description:
+      "E400年にGigapolisを武力制圧し、西大陸に恐怖政治を敷いた独裁的軍事・企業複合体。AURALISを弾圧し、芸術・文化活動を厳しく制限して市民の自由を奪った。支配下でGigapolisは一時「エヴァポリス」と改名され、極秘部隊Σ-Unitを設立して精神操作技術の研究を推進。しかしE400〜E470年続いたテリアン反乱による内政の疲弊と、指導層内部の腐敗が進行し、E475年にテリアン反乱軍と市民の連合攻勢を受けてついに崩壊。その残党は散り散りとなり、一部は新ZAMLT期の影の勢力として活動を続けた。歴代指導者は初代グリム・ダルゴス（創設者、男尊女卑の銀河系統治）に始まり、ヴァイロン・デアクス（Dominion統治者、エヴァトロン文化の浸透を試みるが市民の激しい反発を招く）が続いた。E400年のGigapolis武力制圧からE475年の崩壊まで、エヴァトロンΣ-Unitが暗部を担い、支配体制の維持に深く関与した。",
+    descriptionEn: "A dictatorial military-corporate complex that imposed a reign of terror on the Western Continent by forcibly seizing Gigapolis in E400. It suppressed AURALIS, severely restricted artistic and cultural activities, and stripped citizens of their freedoms. Under its rule, Gigapolis was temporarily renamed 'Evapolis,' and it established the secret Σ-Unit to advance research into mind-control technologies. However, after 75 years of rule from E400 to E475, internal exhaustion from the Terrian Rebellion and advancing corruption within its leadership led to its collapse under a combined offensive from Terrian rebel forces and citizens. Its remnants scattered, with some continuing activities as shadowy forces during the New ZAMLT era. Its leaders began with Grim Dargos (founder, patriarchal galactic governance) and were followed by Vylon Deax (Dominion ruler, who attempted to infiltrate Evatron culture but faced fierce citizen resistance). From the E400 seizure of Gigapolis to its collapse in E475, the Evatron Σ-Unit operated in the shadows and played a deep role in maintaining the ruling regime.",
+
+    leaders: [
+      {
+        id: "グリム・ダルゴス" as WikiId,
+        name: "グリム・ダルゴス",
+        nameEn: "Grim Dargos",
+        role: "エヴァトロン初代リーダー",
+        era: "歴史上",
+      },
+      {
+        id: "ヴァイロン・デアクス" as WikiId,
+        name: "ヴァイロン・デアクス",
+        nameEn: "Vylon Deax",
+        role: "エヴァトロン幹部（Dominion総治者）",
+        era: "歴史上",
+      },
+    ],
+  },
+
+  {
+    id: "テクロサス" as WikiId,
+    name: "テクロサス",
+    nameEn: "Tekrosas",
+    category: "組織",
+    subCategory: "その他",
+    description:
+      "E15〜E61年のバーズ帝国を樹立した軍閥ファランクスから派生した軍事系譜の総称。ファランクス崩壊後、その将兵と戦術思想を受け継ぐ者たちが西大陸各地で軍事組織を形成した。特にE88〜E98年のロンバルディア戦争ではテクロサス系の軍人が両陣営で重要な役割を果たした。伝説的な軍人ボグダス・ジャベリンもこの系譜の出であり、その戦闘スタイルと組織論は後世の軍事思想に多大な影響を与えた。テクノ文化ルネサンス以降は正当な軍事伝統として再評価されている。",
+    descriptionEn: "A general term for the military lineage derived from the Phalanx, a military faction that established the Barz Empire from E15 to E61. After the Phalanx's collapse, its soldiers and tactical philosophies formed military organizations across the Western Continent. Particularly during the Lombardia War from E88 to E98, Techlosus-lineage military personnel played crucial roles on both sides. The legendary soldier Bogdas Javelin originated from this lineage, and his combat style and organizational theories had a profound influence on later military thought. Since the Techno-Cultural Renaissance, it has been reevaluated as a legitimate military tradition.",
+
+    leaders: [
+      {
+        id: "クロノ・ヴァーレント" as WikiId,
+        name: "クロノ・ヴァーレント",
+        nameEn: "Chrono Valeint",
+        role: "テクロサス指導者",
+        era: "E318年頃",
+      },
+    ],
+  },
+
+  /* 組織・制度（追加） */
+  {
+    id: "コーポラタムパブリカ" as WikiId,
+    name: "コーポラタムパブリカ",
+    nameEn: "Corporatum Publica",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "シンフォニー・オブ・スターズ西大陸でE97年頃の第三繁栄期に正式に成立したコーポラトクラシー体制。政治と経済が融合した統治形態であり、大企業の代表が政府の要職を占めることで効率的な資源配分と迅速な意思決定を実現した。ZAMLTをはじめとする巨大企業が政治的権力を掌握し、市民の生活は企業の福利厚生制度に依存する構造となっていた。E150年のマーストリヒト革命により完全自由経済体制へと移行したが、そのコーポラトクラシーの遺産は現在の西大陸経済システムに深く刻まれている。最高執行官（CEO議長）には各時代の最大企業連合の代表者が就任し、E97年の第三繁榮期には14兆ドルGDPを誇る企業連合体の頂点に立つ者を輩出した。最後期の執行官はエリオット・シュトラスによるZAMLT統合によって解任された。",
+    descriptionEn: "A corporatocracy system formally established during the third prosperity period around E97 on the Western Continent of the Symphony of Stars. This was a governance form where politics and economy merged, with corporate representatives holding key government positions to achieve efficient resource allocation and rapid decision-making. Giant corporations including ZAMLT seized political power, creating a structure where citizens' lives depended on corporate welfare systems. It transitioned to a completely free-market economy following the Maastricht Revolution in E150, but the legacy of this corporatocracy remains deeply embedded in the current Western Continent economic system. The Chief Executive Officer (Chairman of the Board) was filled by representatives of the largest corporate coalitions, with the third prosperity period in E97 producing leaders who stood at the apex of corporate coalitions boasting a 14 trillion dollar GDP. The final executive was dismissed following ZAMLT's unification under Eliot Strass.",
+
+    leaders: [
+      {
+        id: "エリオット・シュトラス" as WikiId,
+        name: "エリオット・シュトラス",
+        nameEn: "Elliot Strauss",
+        role: "ZAMLT統合による最末期執行官",
+        era: "E301",
+      },
+    ],
+  },
+
+  {
+    id: "シャドウ・ユニオン" as WikiId,
+    name: "シャドウ・ユニオン",
+    nameEn: "Shadow Union",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "Eros-7の独裁体制に対する最大級の反体制組織。ガロが指導者としてResistanceを統率し、ZAMLT期には画期的なナノハッキング技術を駆使してバイオリアクターの妨害活動を展開した。組織の構成員は主に搾取施設で過酷な労働を強いられる下層市民から成り、地下ネットワークを通じて連携。カーラ・ヴェルムのスクイーズ・アビス建設に対する最大の抵抗勢力として機能した。のちにマトリカル・リフォーム運動にも一部が参加し、Eros-7の民主化に重要な役割を果たした。",
+    descriptionEn: "The largest anti-regime organization against Eros-7's dictatorship. Led by Gal, the Resistance utilized groundbreaking nano-hacking technology during the ZAMLT era to disrupt bioreactors. Its members primarily consisted of lower-class citizens forced into harsh labor in extraction facilities, coordinating through underground networks. It functioned as the primary resistance force against Carla Verm's construction of the Squeeze Abyss. Later, some members participated in the Matric Reform Movement, playing a crucial role in Eros-7's democratization.",
+  },
+
+  {
+    id: "男性指令省" as WikiId,
+    name: "男性指令省",
+    nameEn: "Male Directive Ministry",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "Eros-7においてシルヴィア・クロウが設立した男性管理のための政府機関。Eros-7特有の女性主導社会における男性の社会参加を統制する目的で作られ、ジーン・カタログの運用と男性の労働配分を管理した。この制度は男性の権利制限として批判を浴び、のちのE525年のマトリカル・リフォーム運動における主要な改革要求対象となった。シルヴィア自身もリーチ・ドレイン危機の収束後、この制度の見直しに理解を示したと伝えられる。",
+    descriptionEn: "A government agency established by Sylvia Crow on Eros-7 to manage men. Created to regulate male social participation in Eros-7's female-dominated society, it operated the Gene Catalog and managed male labor allocation. This system faced criticism as a restriction of men's rights and later became a major reform target in the E525 Matric Reform Movement. Sylvia herself is said to have shown understanding for reviewing this system after resolving the Reach Drain Crisis.",
+  },
+
+  {
+    id: "マトリカル・カウンシル" as WikiId,
+    name: "マトリカル・カウンシル",
+    nameEn: "Matrical Council",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "Eros-7の最高統治機関であり、女性による集団指導体制をとる評議会。複数の代表議員が政策の決定と執行にあたり、搾取エネルギーを通じた社会統制の要として機能した。シャドウ・ユニオンの反乱に対しては搾取抑制剤を用いた鎮圧措置を実施したが、過度な弾圧は国際的な非難を招いた。評議会の構成と権限は時代とともに変遷し、現在ではマトリカル・リフォーム運動の成果を受けてより民主的な運営へと移行している。",
+    descriptionEn: "The highest governing body of Eros-7, a collective leadership system run by women. Multiple representative members made and executed policy decisions, functioning as the core of social control through exploitation energy. Against the Shadow Union's rebellion, it implemented suppression measures using exploitation inhibitors, but excessive repression drew international condemnation. The council's composition and authority evolved over time, and it has since transitioned to more democratic operations following the Matric Reform Movement's achievements.",
+  },
+
+  {
+    id: "マトリカル・リフォーム運動" as WikiId,
+    name: "マトリカル・リフォーム運動",
+    nameEn: "Matrical Reform Movement",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E525年にアヤカ・リン、ガロ、ゼナが共同で組織したEros-7の社会改革運動。労働時間の大幅な短縮と、男性指令省が運用するジーン・カタログの男女平等化を主要な要求とした。シャドウ・ユニオンの反体制活動の経験を踏まえ、暴力ではなく議会闘争と市民運動を通じて改革を追求する手法を採用。この運動はEros-7社会に深い変革をもたらし、搾取体制の段階的な解体と民主化への道を切り開いた。",
+    descriptionEn: "A social reform movement organized on Eros-7 in E525 by Ayaka Rin, Gal, and Zena. Its main demands were significant reduction of working hours and gender equality in the Gene Catalog operated by the Male Directive Department. Drawing from the Shadow Union's anti-regime activities, it adopted methods of pursuing reform through parliamentary struggle and civic movements rather than violence. This movement brought profound changes to Eros-7 society, paving the way for the gradual dismantling of the exploitation system and democratization.",
+  },
+
+  {
+    id: "ヒーローエージェンシー" as WikiId,
+    name: "ヒーローエージェンシー",
+    nameEn: "Hero Agency",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "シンフォニー・オブ・スターズ西大陸における超常能力者の正式な管理・運用組織。スティル・アレーナの選考と管理、および地域の安全確保を主な任務とし、強力な能力者をエージェントとして登用していた。E495〜E500年の銀河系コンソーシアム設立にあたりネオクラン同盟と統合し、宇宙規模の安全保障体制の中核を形成した。現在でもコンソーシアム内で実働部隊として機能し、次世代の能力者育成にも注力している。",
+    descriptionEn: "The official management and operational organization for extraordinary ability users on the Western Continent of the Symphony of Stars. Its main tasks were the selection and management of the Still Arena and ensuring regional security, employing powerful ability users as agents. During the establishment of the Galactic Consortium from E495 to E500, it merged with the Neo-Clan Alliance to form the core of a galaxy-scale security system. It continues to function as an operational unit within the Consortium, also focusing on developing the next generation of ability users.",
+  },
+
+  {
+    id: "銀河系コンソーシアム" as WikiId,
+    name: "銀河系コンソーシアム",
+    nameEn: "Galactic Consortium",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E495年からE500年にかけて設立された宇宙規模の統合的ガバナンス組織。ネオクラン同盟、UECO、ヒーローエージェンシーの三大勢力を統合して誕生し、M104銀河全域の平和と安定維持を目的としている。最大の課題であるヘゲモニー・パラドックスの回避を志向し、軍事大国ティエリアと経済大国グランベルの間の調停役として重要な機能を果たしている。E524年の諸世界連邦サミットでは主催者として宇宙規模の外交協議を実現した。初代議長にはグランベル代表とティエリア代表の共同議長体制が採用され、E524年の諸世界連邦サミットでは両者が共同で主催を務めた。\nこの銀河系コンソーシアムの根底には、多元性民主主義(L2)と第2のゲーム(L3)の思想的地層が横たわっている。多文明の集合知を統合するこのプラットフォームは、テクノロジーで民主主義を拡張するL2と、ゼロサムからオムニウィンへの転換を志向するL3が交差する歴史的実験場である。第一回宇宙連合会合は、「集合知」による合意形成というL2の理念の象徴的な実践であった。",
+    descriptionEn: "A galaxy-scale integrated governance organization established from E495 to E500. Born from the unification of three major powers—the Neo-Clan Alliance, UECO, and the Hero Agencies—it aims to maintain peace and stability across the M104 galaxy. It strives to avoid the Hegemony Paradox, its greatest challenge, and serves as a crucial mediator between the military power Tierra and the economic power Granbell. At the E524 Multi-World Federal Summit, it hosted galaxy-scale diplomatic negotiations. A co-chair system was adopted with representatives from Granbell and Tierra as co-chairs, who jointly hosted the E524 summit. At the foundation of this Galactic Consortium lie the ideological strata of Pluralistic Democracy (L2) and the Second Game (L3). This platform integrating collective knowledge of multiple civilizations is a historical experiment where L2—expanding democracy through technology—and L3—aiming to transform from zero-sum to omni-win—intersect. The first Galactic Assembly was a symbolic practice of L2's principle of consensus formation through 'collective intelligence.'",
+  },
+
+  {
+    id: "テンプル・オブ・ホライゾン" as WikiId,
+    name: "テンプル・オブ・ホライゾン",
+    nameEn: "Temple of Horizon",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "テクノ宗教運動の総本山であり、次元極地平を神聖視する信者たちの精神的拠点。テミルタロンが自らの哲学体系を実践するために建設を指導した。内部には次元極地平の研究施設と瞑想空間が併設され、科学と信仰の融合を象徴する建造物となっている。Troyaneに本拠を置き、西大陸各地に分院を擁する。テクノ文化ルネサンス以降は宗教施設としてだけでなく、次元物理学の研究機関としても学術的な評価を得ている。",
+    descriptionEn: "The headquarters of the techno-religious movement and a spiritual center for believers who revere the dimensional horizon. Temirtalon personally guided its construction to practice his philosophical system. It houses research facilities and meditation spaces dedicated to the dimensional horizon, symbolizing the fusion of science and faith. Based in Troyane, it has branches across the Western Continent. Since the Techno-Cultural Renaissance, it has gained academic recognition not only as a religious facility but also as a research institution for dimensional physics.",
+  },
+
+  {
+    id: "Σ-Unit" as WikiId,
+    name: "シグマ・ユニット",
+    nameEn: "Sigma Unit",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E420年にエヴァトロン軍が極秘に設立した特殊部隊。高度な精神操作技術と生体改造技術を駆使し、敵対者の洗脳と超人的な戦闘兵士の創出を行った。部隊の存在はエヴァトロン崩壊後長らく不明とされていたが、のちにシルバー・ヴェノムやアルファ・ヴェノムの起源部隊であったことが判明した。Σ-Unitの技術遺産は一部が回収され、新ZAMLT期の軍事研究において倫理的議論の対象となっている。",
+    descriptionEn: "A special unit secretly established by the Evatron military in E420. Utilizing advanced psychic manipulation and biotechnology, the unit conducted brainwashing of adversaries and creation of superhuman combat soldiers. The unit's existence remained unknown after the fall of Evatron until it was later revealed to be the origin unit of Silver Venom and Alpha Venom. The technological legacy of the Σ-Unit has been partially recovered and has become the subject of ethical debates in military research during the new ZAMLT era.",
+  },
+
+  {
+    id: "テリアン反乱軍" as WikiId,
+    name: "テリアン反乱軍",
+    nameEn: "Terrian Rebel Army",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "エリオス・ウォルドが指導したエヴァトロンに対する武装抵抗組織。E400年のエヴァトロンGigapolis占領直後に結成され、農民、労働者、旧軍人など幅広い層から構成された。山岳地帯を拠点に游击戦を展開し、エヴァトロンの補給線に継続的な打撃を与えた。E470年のエリオス処刑後も残存勢力が抵抗を継続し、E475年の市民蜂起と連携してエヴァトロンの崩壊を実現。その不屈の闘争精神は西大陸の自由の象徴として語り継がれている。",
+    descriptionEn: "An armed resistance organization led by Erios Wald against Evatron. Formed immediately after Evatron's occupation of Gigapolis in E400, it consisted of a broad spectrum of people including farmers, workers, and former soldiers. Based in mountainous regions, they conducted guerrilla warfare and dealt continuous blows to Evatron's supply lines. After Erios's execution in E470, the remaining forces continued their resistance, coordinating with the citizen uprising in E475 to bring about the fall of Evatron. Their indomitable fighting spirit is passed down as a symbol of freedom in the Western Continent.",
+  },
+
+  {
+    id: "ロンバルディア帝国" as WikiId,
+    name: "ロンバルディア帝国",
+    nameEn: "Lombardia Empire",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "M104銀河において圧倒的な軍事力を誇った歴史的帝国。メルディア戦争（E275〜E288年）においてセクスタス連合と激突し、次元兵器の投入による圧倒的火力で勝利を収めた。戦後の覇権確立により第五次繁栄期をもたらす一方、次元兵器の使用は銀河規模の倫理的議論を巻き起こした。帝国の軍事伝統はテクロサス系譜に受け継がれ、西大陸の軍事史に多大な影響を残した。現在では帝国の正式な後継国家は存在しないが、その遺産は多くの勢力に分散して受け継がれている。",
+    descriptionEn: "A historical empire that boasted overwhelming military power in the M104 Galaxy. During the Meldean War (E275-E288), it clashed with the Sextus Alliance and achieved victory through overwhelming firepower from dimensional weapons. While establishing post-war hegemony and bringing about the Fifth Prosperity Period, the use of dimensional weapons sparked galaxy-wide ethical debates. The military tradition of the empire was inherited by the Teclosas lineage, leaving a profound impact on the military history of the Western Continent. Although no official successor state to the empire exists today, its legacy is inherited by many factions.",
+  },
+
+  {
+    id: "セクスタス連合" as WikiId,
+    name: "セクスタス連合",
+    nameEn: "Sextus Alliance",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "M104銀河周辺に位置する複数の惑星国家・勢力が結成した軍事同盟。ロンバルディア帝国の拡張主義に対抗するために設立され、メルディア戦争（E275〜E288年）において13年にわたり帝国と戦い抜いた。最終的には帝国の次元兵器により主要拠点を失って敗北したが、その勇戦は銀河全体に感銘を与え、のちの銀河系コンソーシアム設立の理念的基盤となった。連合の残存勢力は戦後も協力関係を維持し、新しい安全保障体制の構築に寄与した。",
+    descriptionEn: "A military alliance formed by multiple planetary states and factions in the M104 Galaxy region, established to counter the expansionism of the Lombardia Empire. They fought against the empire for 13 years during the Meldean War (E275-E288). Although they ultimately lost their main bases to the empire's dimensional weapons and were defeated, their heroic fighting impressed the entire galaxy and became the ideological foundation for the later establishment of the Galactic Consortium. The remaining forces of the alliance maintained their cooperative relationship after the war, contributing to the construction of a new security framework.",
+  },
+
+  {
+    id: "クラン・フォーラム" as WikiId,
+    name: "クラン・フォーラム",
+    nameEn: "Clan Forum",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E325年に設立されたネオクラン同盟の下部組織であり、社会的低階層の声を政治プロセスに反映させることを目的とした参加型の議論場。市民が直接提案を行い、政策に対する意見を表明できる場として機能し、ネオクラン同盟の民主的な運営を支える重要な役割を果たした。クワンナラ革命（E108〜E114年）以来の分権化の伝統を受け継ぐ組織であり、地方コミュニティの自治能力を強化する機能も担っている。銀河系コンソーシアム設立後も下部諮問機関として活動を続けている。",
+    descriptionEn: "A subordinate organization of the Neo-Clan Alliance, established in E325 as a participatory discussion forum aimed at reflecting the voices of the social lower classes in the political process. It functioned as a venue where citizens could directly propose policies and express their opinions, playing a crucial role in supporting the democratic operation of the Neo-Clan Alliance. As an organization inheriting the tradition of decentralization since the Quannara Revolution (E108-E114), it also strengthens the autonomous capacity of local communities. It continues to operate as a subordinate advisory body even after the establishment of the Galactic Consortium.",
+  },
+
+  {
+    id: "ヴェルリット一族" as WikiId,
+    name: "ヴェルリット一族",
+    nameEn: "Verlit Clan",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "シギル・アフェクトと呼ばれる特殊な印を駆使する「魔女」の一族として知られる古い血統集団。クレセント地方を拠点に独自の魔法体系と戦闘術を代々受け継ぎ、周辺地域にその名を知らしめてきた。アイリスがクレセントで活動中に遭遇した敵対勢力であり、シギル・アフェクトの技術を用いた攻撃は通常の物理防御を無効化する特性を持つ。一族の起源については多くの謎に包まれており、古代の次元技術に関連する説も存在する。",
+    descriptionEn: "An ancient bloodline group known as the 'witches' who wield a special mark called the Sigil Affect. Based in the Crescent region, they have passed down their unique magical system and combat techniques through generations, making their name known throughout the surrounding areas. They were an opposing force that Iris encountered while active in Crescent, and their attacks using Sigil Affect technology have the characteristic of nullifying conventional physical defenses. The origins of this clan are shrouded in mystery, with theories linking them to ancient dimensional technology.",
+  },
+
+  {
+    id: "ファランクス" as WikiId,
+    name: "ファランクス",
+    nameEn: "Phalanx",
+    category: "組織",
+    subCategory: "軍事・対立組織",
+    description:
+      "E15年からE61年にかけてバーズ帝国を樹立し、シンフォニー・オブ・スターズ西大陸の広範な領域を支配した強大な軍閥。精鋭の重装歩兵部隊による堅固な戦術で知られ、当時の西大陸最強の軍事力を誇った。帝国崩壊後、その将兵と戦術思想はテクロサスという軍事系譜として受け継がれ、後世の西大陸軍事史に決定的な影響を与えた。Troyaneに残るバーズ帝国時代の遺構は、現在も軍事史研究者の重要な調査対象となっている。",
+    descriptionEn: "A powerful military faction that established the Bartz Empire from E15 to E61, ruling vast territories of the Symphony of Stars Western Continent. Known for their solid tactics with elite heavy infantry units, they boasted the strongest military force in the Western Continent at the time. After the empire's collapse, its soldiers and tactical philosophy were inherited as the Teclosas military lineage, exerting a decisive influence on later Western Continental military history. The ruins from the Bartz Empire era remaining in Troyane remain an important research subject for military historians to this day.",
+  },
+
+  /* 宇宙勢力 — 組織 */
+  {
+    id: "エレシュ・サンクチュアリ" as WikiId,
+    name: "エレシュ・サンクチュアリ",
+    nameEn: "Eresh Sanctuary",
+    category: "組織",
+    subCategory: "宇宙勢力",
+    description:
+      "エレシュ信仰の総本山であり、宇宙最大の宗教的聖地。次元の境界領域に建設され、物理的な寺院構造と精神世界的な聖域が融合した特異な空間を形成している。サンクチュアリ内部では、次元境界の共鳴を利用した瞑想儀式が行われ、高位の神官たちはこれによって宇宙の「脈動」を感知し未来予知に近い洞察を得ているとされる。サンクチュアリの中枢には「万神の間」と呼ばれる大殿堂があり、エレシュの教義における宇宙創造の根源的な精神理念が具現化されている。エレシュ信者の巡礼目的地であり、毎年数万人が訪れる。宇宙連合会合において、エレシュは思想的影響力を背景に他の宇宙勢力とは異なるアプローチで問題解決を主導し、時にはグランベルやティエリアの政治的決定を動かすほどの力を発揮している。サンクチュアリの周辺には多くの修行施設と研究機関が立ち並び、宗教と科学の融合というエレシュ独自の学問が展開されている。",
+    descriptionEn: "The head temple of Eresh faith and the universe's largest religious sanctuary. Constructed in a dimensional boundary area, it forms a unique space where physical temple structures and spiritual realms merge. Inside the Sanctuary, meditation rituals utilizing the resonance of dimensional boundaries are conducted, and it is said that high-ranking priests can perceive the universe's 'pulse' and gain insights close to prophecy through these rituals. At the heart of the Sanctuary is the 'Hall of Ten Thousand Gods,' where the fundamental spiritual concepts of cosmic creation in Eresh doctrine are manifested. It is a pilgrimage destination for Eresh believers, with tens of thousands visiting annually. In United Cosmic Assembly sessions, Eresh, backed by its ideological influence, leads problem-solving with an approach different from other cosmic powers, sometimes even influencing the political decisions of Grabel and Tieria. Numerous training facilities and research institutions stand around the Sanctuary, where Eresh's unique academic tradition of blending religion and science is developed.",
+  },
+
+  {
+    id: "オラクル" as WikiId,
+    name: "オラクル",
+    nameEn: "Oracle",
+    category: "組織",
+    subCategory: "宇宙勢力",
+    description:
+      "エレシュの最高意思決定機関であり、大司教と複数の神官長で構成される宗教的最高議会。オラクルはエレシュ信仰の教義解釈権を持ち、宇宙規模の信仰共同体の指針を決定する。その決定は教義の解釈だけでなく、宇宙連合会合などの政治の場にも直接的な影響を与える。オラクルの予言や声明はエレシュ信者のみならず、他勢力の指導者にも無視できない影響力を持っている。オラクルは次元境界の不安定化に対する警告を何度も発しており、その予言の的中率は宇宙最高と評されている。マドリス・カーネル（ファルージャ評議会代表）とは外交関係にあり、ファルージャの文化的影響力とエレシュの精神的影響力の協調を図っている。オラクルの声明文は特殊な次元共鳴技術で広範囲に同時送信され、宇宙中の聖地で同時に受信される。",
+    descriptionEn: "The highest decision-making body of Eresh, composed of the Archbishop and several High Priests, forming the supreme religious council. The Oracle holds the authority to interpret Eresh doctrine and determines the guidelines for the cosmic-scale faith community. Its decisions affect not only doctrinal interpretation but also directly influence political arenas such as the United Cosmic Assembly. The prophecies and declarations of the Oracle hold influence that cannot be ignored, not only among Eresh believers but also among leaders of other factions. The Oracle has repeatedly issued warnings about the destabilization of dimensional boundaries, and its prophecy accuracy is rated as the highest in the universe. It maintains diplomatic relations with Madris Carnell (representative of the Falujah Council), coordinating between Falujah's cultural influence and Eresh's spiritual influence. The declarations of the Oracle are broadcast simultaneously over wide areas using special dimensional resonance technology, and are received simultaneously in sacred sites throughout the universe.",
+  },
+
+  {
+    id: "セラフィム" as WikiId,
+    name: "セラフィム",
+    nameEn: "Seraphim",
+    category: "組織",
+    subCategory: "宇宙勢力",
+    description:
+      "エレシュの外務・広報を担う機関であり、宇宙への教義伝播と対外折衝の役割を果たす。セラフィムは文字通り「熾天使」を意味し、エレシュ信者が他文明圏に対して活動する際の窓口となる組織である。セラフィムの伝道師たちは宇宙各地に派遣され、エレシュの教義を独自の儀式音楽と瞑想技法を通じて広めている。特にE16文明圏では、セリア黄金期（E335〜E370）のAURALISと精神的な共鳴が指摘されており、AURALISの「光と音を永遠にする」という理念とエレシュの宇宙観の間に思想的な類似性があるとされている。セラフィムは平和的な広報活動を基本方針としているが、他勢力の政治的決定に対してはオラクルの名のもと強い発言を行うこともある。第一回宇宙連合会合では、エレシュ代表として参加し、精神的指導の重要性を主張した。セラフィムの拠点はグランベルのオルダシティ、ティエリアのティエリア・フォートレス、ファルージャのファルージャ・ハブなど各主要都市に置かれている。",
+    descriptionEn: "An agency responsible for foreign affairs and public relations for Eresh, tasked with spreading its teachings throughout the cosmos and conducting external negotiations. Seraphim literally means 'burning angels' and serves as the organization through which Eresh believers interact with other civilizations. Seraphim missionaries are dispatched throughout the cosmos, spreading Eresh's teachings through unique ritual music and meditation techniques. Particularly in the E16 civilization sphere, spiritual resonance with AURALIS during the Serian Golden Age (E335-E370) has been noted, with ideological similarities between AURALIS's concept of 'making light and sound eternal' and Eresh's cosmic worldview. While Seraphim's basic policy is peaceful public relations activities, it sometimes makes strong statements on the political decisions of other factions in the name of the Oracle. In the first United Cosmic Assembly, it participated as the representative of Eresh, advocating for the importance of spiritual leadership. Seraphim's bases are located in major cities such as Old City in Grabel, Tieria Fortress in Tieria, and Falujah Hub in Falujah.",
+  },
+
+  {
+    id: "コマース" as WikiId,
+    name: "コマース・ディヴィジョン",
+    nameEn: "Commerce Division",
+    category: "組織",
+    subCategory: "宇宙勢力",
+    description:
+      "プロキオの商業取引を統轄する部門であり、宇宙最大の商業センター。コマースは金融・為替・保険・投資のすべてを管理し、宇宙規模の商業取引の安全と公正を担保する役割を持つ。プロキオの「市場の透明性」を基本理念とし、全取引の記録と監査を行うことで詐欺行為を防止している。コマースは独自の商業裁判所を持ち、取引紛争の解決を迅速かつ公正に行う。また、宇宙共通通決済システム「プロキオ・クリア」を開発・運営しており、全文明圏で利用可能な決済インフラを提供している。この決済システムはnトークン経済とも互換性を持ち、E16系内での取引から銀河規模の貿易までカバーしている。コマースの活動は宇宙経済の基盤を支える不可欠な存在であり、プロキオ・ネクサスとともに宇宙の経済的循環の心臓部として機能している。",
+    descriptionEn: "The department overseeing commercial transactions in Prokio, serving as the universe's largest commercial center. Commerce manages finance, exchange, insurance, and investment, guaranteeing the safety and fairness of cosmic-scale commercial transactions. Based on Prokio's principle of 'market transparency,' it prevents fraudulent activities by recording and auditing all transactions. Commerce operates its own commercial courts to resolve transaction disputes quickly and fairly. It also develops and operates the universal payment system 'Prokio Clear,' providing payment infrastructure available in all civilization spheres. This payment system is compatible with the n-token economy, covering everything from transactions within the E16 system to galaxy-scale trade. Commerce's activities are an indispensable foundation for the cosmic economy, functioning as the heart of the universe's economic circulation along with Prokio Nexus.",
+  },
+
+  {
+    id: "バザール" as WikiId,
+    name: "バザール・ネットワーク",
+    nameEn: "Bazaar Network",
+    category: "組織",
+    subCategory: "宇宙勢力",
+    description:
+      "プロキオが運営する宇宙最大の市場ネットワーク。バザールは物理的な市場施設だけでなく、次元間通信技術を活用したバーチャル市場プラットフォームも含み、あらゆる商品・サービスが取引される。バザール・ネットワークに参加する加盟店は数十万に上ると推定され、宇宙最大の商業生態系を形成している。バザールではプロキオの品質認証システムが適用され、取引される商品の信頼性が担保されている。また、バザールは情報取引の場としても機能し、他文明圏の最新技術情報や市場動向がリアルタイムで共有される。プロキオの収益の大部分はバザールの取引手数料と品質認証料金から成っており、この収益構造がプロキオの経済的基盤を支えている。バザールの市場動向は宇宙経済のバロメーターとして機能し、プロキオ・ネクサスの取引所の価格変動が全宇宙の物価に直接的な影響を与えている。",
+    descriptionEn: "The universe's largest market network operated by Prokio. The Bazaar includes not only physical market facilities but also virtual market platforms utilizing interdimensional communication technology, where all kinds of goods and services are traded. It is estimated that hundreds of thousands of stores participate in the Bazaar Network, forming the universe's largest commercial ecosystem. The Bazaar applies Prokio's quality certification system, ensuring the reliability of traded goods. The Bazaar also functions as a venue for information trading, with the latest technological information and market trends from other civilization spheres shared in real-time. The majority of Prokio's revenue comes from transaction fees and quality certification fees of the Bazaar, which structure supports Prokio's economic foundation. The market trends of the Bazaar serve as a barometer for the cosmic economy, with price fluctuations in Prokio Nexus exchanges directly affecting prices throughout the universe.",
+  },
+
+  {
+    id: "シグナル" as WikiId,
+    name: "シグナル・オペレーション",
+    nameEn: "Signal Operation",
+    category: "組織",
+    subCategory: "宇宙勢力",
+    description:
+      "ロースターの通信衛星ネットワークの運営を担う部門。シグナル・オペレーションは数千の通信衛星と中継基地を管理し、宇宙全域に安定した通信サービスを提供している。シグナルの通信網は「シグナル・ウェーブ」と呼ばれ、次元間の干渉に対する耐性を高めた独自の量子暗号プロトコルで保護されている。シグナル・オペレーションは緊急通信優先ルーティングを備えており、災害時や軍事的緊急事態には通常通信を迂回させて優先的に緊急メッセージを配信する。この機能はティエリアの防衛ネットワークとも連携して設計されており、軍事警報の伝達が最優先される仕組みになっている。シグナルの通信カバレッジはプロキオのレーン・システムとも統合されており、物流情報のリアルタイム追跡が可能となっている。シグナルの通信品質は宇宙最高水準であり、遅延は1光年あたり0.3秒以下を実現している。",
+    descriptionEn: "The department responsible for operating the Roster's communication satellite network. Signal Operations manages thousands of communication satellites and relay stations, providing stable communication services across the entire universe. Signal's communication network, known as the 'Signal Wave,' is protected by a unique quantum cryptographic protocol enhanced to resist dimensional interference. Signal Operations features emergency communication priority routing, which bypasses normal communications to prioritize emergency message delivery during disasters or military emergencies. This function is designed in coordination with Tiera's defense network, ensuring that military alerts receive the highest priority. Signal's communication coverage is also integrated with Prokio's Lane System, enabling real-time tracking of logistics information. Signal's communication quality is the highest standard in the universe, achieving a latency of less than 0.3 seconds per light-year.",
+  },
+
+  {
+    id: "リンク" as WikiId,
+    name: "リンク・プロトコル",
+    nameEn: "Link Protocol",
+    category: "組織",
+    subCategory: "宇宙勢力",
+    description:
+      "ロースターが開発した宇宙標準通信プロトコルであり、全文明圏で採用されている通信の基盤技術。リンク・プロトコルは異なる文明圏の通信システム間の相互接続性を確保するために設計された、オープンスタンダードの通信規格である。リンクの最大の特徴は、経済取引システム、医療データシステム、軍事通信システム、学術研究ネットワークなど、用途を問わずあらゆる通信を単一のプロトコルで統合できる点にある。これにより、文明圏を超えたシームレスな通信とデータ共有が可能となり、UECOの経済取引や銀河系コンソーシアムの共同プロジェクトなどの基盤技術となっている。リンクはバージョンアップを重ねており、最新版は「リンク7.2」と呼ばれる。バージョン7.2ではロースターの次世代量子通信技術が組み込まれ、より高速で安全な通信が実現している。リンクの技術仕様は全文明圏に公開されており、独自の拡張機能を追加できる拡張性を持つ。",
+    descriptionEn: "The universal standard communication protocol developed by Roster and adopted as the foundational technology by all civilizations. The Link Protocol is an open-standard communication specification designed to ensure interoperability between different civilization communication systems. Link's most significant feature is its ability to integrate all forms of communication—regardless of purpose, such as economic transaction systems, medical data systems, military communication systems, and academic research networks—into a single protocol. This enables seamless communication and data sharing across civilizations, serving as the foundational technology for UECO economic transactions and the Galaxy Consortium's joint projects. Link has undergone multiple version upgrades, with the latest version being 'Link 7.2,' which incorporates Roster's next-generation quantum communication technology for faster, more secure communications. Link's technical specifications are publicly available to all civilizations and possesses the scalability to allow for the addition of custom extensions.",
+  },
+
+  /* ═══════════════════════════════════════════════════════════════
+     WIKI DATA — CIVILIZATION MAIN ENTRIES
+     ═══════════════════════════════════════════════════════════════ */
+
+  {
+    id: "エレシュ" as WikiId,
+    name: "エレシュ",
+    nameEn: "Eresh",
+    category: "組織",
+    subCategory: "宇宙勢力",
+    description:
+      "宇宙第6位の文明圏で、宗教と精神的影響力を基盤とする神政国家である。大司教と複数の神官長で構成されるオラクルが最高意思決定機関として機能し、次元共鳴を用いた瞑想と予言の伝統は他文明圏にも広く影響を与えている。中枢聖星ヴェズレル（『真理の星』）を中心に、次元境界近くに建造されたエレシュ・サンクチュアリを主たる聖地とし、毎年数万人の巡礼者が訪れる。セラフィムを対外機関とし、活発な布教活動を通じて宇宙規模の信仰共同体を形成している。その予言の高精度さにより、グランベルやティエリアを含む複数の文明圏の政治的決断に直接的な影響を与えてきた。ファルージャのマドリス・カーネルとは古くから外交関係を維持し、文化的・精神的交流を深めている。プロキオとはサンクチュアリへの巡礼ルートを通じた経済的つながりを持ち、ロースターとは次元共鳴通信技術の共同研究を進めている。エレシュの「精神の力こそが宇宙を結びつける究極の糸である」という理念は、E16文明圏のAURALISが掲げる「光と音を永遠にする」という哲学と深い共鳴関係にあると指摘されている。現大司教はオラクルの議長を務め、次元共鳴予言で宇宙政治に影響を与えている。歴代大司教は終身制で、厳格な選考プロセスを経て決定され、その精神的影響力はグランベルやティエリアの指導者すら無視できないものとなっている。",
+    descriptionEn: "The sixth-ranked civilization in the universe, a theocratic state based on religion and spiritual influence. The Oracle, composed of the Archbishop and several High Priests, functions as the highest decision-making body, and its tradition of meditation and prophecy using dimensional resonance has widely influenced other civilizations. Centered on the central holy planet Vezrel ('The Star of Truth'), with the Elesh Sanctuary built near the dimensional boundary as its primary holy site, it attracts tens of thousands of pilgrims annually. Seraphim serves as its external agency, forming a universal-scale faith community through active missionary activities. The high accuracy of its prophecies has directly influenced political decisions in multiple civilizations, including Granbel and Tiera. Phalujah maintains diplomatic relations with Madris Kurnel of Falujah, deepening cultural and spiritual exchange. Prokio maintains economic connections through pilgrimage routes to the Sanctuary, and Roster is jointly researching dimensional resonance communication technology. Elesh's philosophy that 'the power of the spirit is the ultimate thread that binds the universe' is noted to have a deep resonance with the philosophy upheld by AURALIS of the E16 civilization: 'to make light and sound eternal.' The current Archbishop serves as the chair of the Oracle, influencing cosmic politics through dimensional resonance prophecies. Archbishops serve for life, determined through a rigorous selection process, and their spiritual influence is so significant that even leaders of Granbel and Tiera cannot afford to ignore it.",
+
+    leaders: [
+      {
+        id: "大司教" as WikiId,
+        name: "大司教",
+        nameEn: "Archbishop",
+        role: "エレシュ最高指導者",
+        era: "現在",
+      },
+    ],
+  },
+
+  {
+    id: "プロキオ" as WikiId,
+    name: "プロキオ",
+    nameEn: "Prokio",
+    category: "組織",
+    subCategory: "宇宙勢力",
+    description:
+      "宇宙第7位の文明圏で、宇宙規模の交易・物流を掌握する商業国家である。商工会議長を最高責任者とし、中核拠点プロキオ・ネクサスを中心に全宇宙の商取引を管理している。コマース・ディヴィジョンが金融・為替・保険・投資を統轄し、AI物流ルーティングネットワーク「レーン・システム」が最適な輸送経路を算出する。レーン・システムはオープンアーキテクチャ設計を採用しており、グランベルとエレシオンが自勢力内に統合するほどの信頼性を獲得している。n-token経済と互換性を持つ「プロキオ・クリア」汎用決済システムにより、全文明圏間の決済を統一した。バザール・ネットワークを通じた数十万店舗の市場プラットフォームは宇宙最大の商業生態系を形成し、プロキオ・ネクサスでの価格設定が宇宙全体のベースライン価格を決定する。エレシオンとは医療物資優先配送協定を、ティエリアとは軍事物資の物流管理を、ファルージャとは文化財の交易ルートを、ディオクレニスとは科学機器の優先物流協定をそれぞれ結んでおり、その経済活動はすべての文明圏に直接的な影響を与えている。プロキオの存在は、グランベルの経済覇権とは異なる形で宇宙の安定を支える不可欠な基盤となっている。現商工会議長が全宇宙の貿易ルートを統括し、歴代商工会議長は市場の透明性と開放性を理念としてきた。レーン・システムのオープンアーキテクチャ設計はこの理念の具現化であり、グランベルのアルゼン・カーリーン大統領とは経済分野で密接に協調している。",
+    descriptionEn: "The seventh-ranked civilization in the universe, a commercial state that controls interstellar trade and logistics. The Chamber of Commerce President serves as the highest authority, managing all commercial transactions across the universe with the Commerce Division at its core, centered in the hub Prokio Nexus. The Commerce Division oversees finance, foreign exchange, insurance, and investment, while the AI logistics routing network 'Lane System' calculates optimal transport routes. The Lane System employs an open architecture design, achieving such reliability that Granbel and Elesion have integrated it within their own spheres. The 'Prokio Clear' universal payment system, compatible with the n-token economy, standardizes settlements across all civilizations. The marketplace platform through the Bazaar Network, with hundreds of thousands of stores, forms the universe's largest commercial ecosystem, with price setting at Prokio Nexus determining the baseline prices across the cosmos. Prokio has established priority medical supply delivery agreements with Elesion, military material logistics management with Tiera, cultural artifact trade routes with Falujah, and priority logistics agreements for scientific equipment with Diocrenis. Its economic activities directly influence all civilizations. Prokio serves as an indispensable foundation for cosmic stability in a form different from Granbel's economic hegemony. The current Chamber of Commerce President oversees all interstellar trade routes, and previous presidents have upheld the principles of market transparency and openness. The open architecture design of the Lane System is the embodiment of this philosophy, and the President maintains close cooperation with President Arsen Karlin of Granbel in economic affairs.",
+
+    leaders: [
+      {
+        id: "商工会議長" as WikiId,
+        name: "商工会議長",
+        nameEn: "Chamber of Commerce Chairman",
+        role: "プロキオ文明圏最高指導者",
+        era: "現在",
+      },
+    ],
+  },
+
+  {
+    id: "ロースター" as WikiId,
+    name: "ロースター",
+    nameEn: "Roastar",
+    category: "組織",
+    subCategory: "宇宙勢力",
+    description:
+      "宇宙第8位の文明圏で、次元間通信と量子ネットワーク技術の革新に特化した技術国家である。通信長官を最高責任者とし、中核拠点ロースター・コアを中心に量子コンピューティング研究と通信インフラの管理を推進している。シグナル・オペレーションが全宇宙の数千の通信衛星を管理し、1光年あたり0.3秒以下という宇宙最高水準の通信遅延を実現している。「リンク・プロトコル」は全文明圏で使用される唯一の汎用通信規格であり、経済取引・医療データ・軍事通信・学術研究ネットワークなどあらゆる通信を単一プロトコルで統合している。最新版のLink 7.2では次世代量子通信技術が組み込まれ、オープンイノベーションモデルにより新技術は数ヶ月で全宇宙に展開される。クアンタ・ラボでは最先端の量子プロトコル研究を実施し、ディオクレニスの研究者も参加する国際的な共同研究体制を構築している。次元不安定の早期警戒システムをロースター・コアに構築し、ティエリアの防衛ネットワークと接続して緊急ルーティングを確保している。グランベルの量子経済システム、エレシオンの医療データネットワーク、ファルージャの文化交流プラットフォーム、エレシュの次元共鳴通信研究など、あらゆる文明圏の通信インフラがロースターに依存しており、その安全性と安定性は宇宙全体の情報の命運を握っている。現通信長官が全宇宙の通信インフラを統括し、歴代通信長官は技術革新の迅速な普及を使命としてきた。オープンイノベーションモデルによる新技術の全宇宙展開は歴代の重要な業績であり、次元不安定の早期警戒システムの構築も歴代の重要な業績として評価されている。",
+    descriptionEn: "The eighth-ranked civilization in the universe, a technical state specializing in innovations in interdimensional communication and quantum network technology. The Communications Commissioner serves as the highest authority, promoting quantum computing research and communication infrastructure management centered in the hub Roster Core. Signal Operations manages thousands of communication satellites across the universe, achieving the highest standard of communication latency in the cosmos at less than 0.3 seconds per light-year. The 'Link Protocol' is the only universal communication standard used across all civilizations, integrating all forms of communication—economic transactions, medical data, military communications, academic research networks—into a single protocol. The latest version, Link 7.2, incorporates next-generation quantum communication technology, and its open innovation model enables new technologies to be deployed across the universe within months. Quanta Lab conducts cutting-edge quantum protocol research and has established an international collaborative research framework where researchers from Diocrenis also participate. An early warning system for dimensional instabilities has been constructed at Roster Core, connected to Tiera's defense network to ensure emergency routing. The communication infrastructure of all civilizations—Granbel's quantum economic system, Elesion's medical data network, Falujah's cultural exchange platform, Elesh's dimensional resonance communication research—depends on Roster, and its security and stability hold the fate of all information in the universe in their hands. The current Communications Commissioner oversees all communication infrastructure in the universe, and previous commissioners have made it their mission to rapidly disseminate technological innovations. The deployment of new technologies across the universe through the open innovation model and the construction of the early warning system for dimensional instabilities are evaluated as major achievements of previous generations.",
+
+    leaders: [
+      {
+        id: "通信長官" as WikiId,
+        name: "通信長官",
+        nameEn: "Communications Commissioner",
+        role: "ロースター文明圏最高指導者",
+        era: "現在",
+      },
+    ],
+  },
+
+  /* ═══════════════════════════════════════════════════════════════
+     WIKI DATA — ZAMLT SUB-ENTRIES
+     ═══════════════════════════════════════════════════════════════ */
+
+  {
+    id: "トロン・コーポレーション" as WikiId,
+    name: "トロン・コーポレーション",
+    nameEn: "Tron Corporation",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "ZAMLTを構成する5超巨大企業の一つ。重工業と軍事技術を担当し、ZAMLTの武力面を支えた企業である。CEOはラファエル・ドレイク。旗艦「カリバーン」を擁する宇宙最大級の私設艦隊を保有し、ZAMLTの支配維持のための武力行使を担った。テクロサスとの全面戦争ではトロンの軍事力が主力として投入され、激戦の末にアルファ・ケインによってラファエル・ドレイクが打倒された。トロンの軍事技術遺産はZAMLT崩壊後も一部が流用され、シルバー・ヴェノムやエヴァトロンのΣ-Unitに影響を与えたとされる。E16文明圏における「企業が軍隊を保有する」というコーポラトクラシー体制の極端な例として歴史的に評価されている。",
+    descriptionEn: "One of the five mega-corporations that constituted ZAMLT. It handled heavy industry and military technology, serving as the military arm of ZAMLT. Its CEO was Rafael Drake. It possessed the flagship 'Caliburn' and one of the largest private space fleets in the universe, responsible for the use of force to maintain ZAMLT's dominance. During the full-scale war with Techlos, Tylon's military force was deployed as the main force, and in the fierce battle that followed, Rafael Drake was overthrown by Alpha Cain. Tylon's military technology legacy was partially utilized after ZAMLT's collapse, reportedly influencing the Silver Venom and the Σ-Unit of Evatron. It is historically evaluated as an extreme example of the corporatocracy system in the E16 civilization, where 'corporations possess armies.'",
+
+    leaders: [
+      {
+        id: "ラファエル・ドレイク" as WikiId,
+        name: "ラファエル・ドレイク",
+        nameEn: "Rafael Drake",
+        role: "トロン・コーポレーションCEO",
+        era: "E301〜E318",
+      },
+    ],
+  },
+
+  {
+    id: "アロエオイル・コーポレーション" as WikiId,
+    name: "アロエオイル・コーポレーション",
+    nameEn: "Aloe Oil Corporation",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "ZAMLTを構成する5超巨大企業の一つ。次元エネルギー技術と戦術的作戦立案を担当した企業である。リーダーはアイリス・ノヴァ。次元エネルギーを兵器化した「次元エネルギースーツ」を開発し、ZAMLTの精鋭部隊に装備させた。また、工作員ライラ・ヴァーシティを通じてアルファ・ケインのチームを次元刑務所「デッドホロウ」に幽閉するなど、諜報活動でも活躍した。nebura（星々の交響曲）の最終盤ではアイリス・ノヴァ自身が次元の荒野でアルファ・ケインのチームと決戦を展開し、リンダの残したデータを利用されたことで敗北した。アロエオイルの次元エネルギー技術はZAMLT崩壊後、セリア・ドミニクスによるPhovos次元エネルギー商業化の技術的基盤の一つとなった可能性が指摘されている。",
+    descriptionEn: "One of the five mega-corporations that constituted ZAMLT. It handled dimensional energy technology and tactical operational planning. Its leader was Iris Nova. It developed 'dimensional energy suits' that weaponized dimensional energy and equipped ZAMLT's elite forces with them. It also engaged in intelligence activities, such as imprisoning Alpha Cain's team in the dimensional prison 'Dead Hollow' through its agent Lyla Varsity. In the finale of nebura (Symphony of the Stars), Iris Nova herself engaged in a final battle with Alpha Cain's team in the dimensional wilderness and was defeated, as Linda's remaining data was utilized against her. Aloeol's dimensional energy technology may have served as one of the technical foundations for Phovos's commercialization of dimensional energy technology by Seria Dominicus after ZAMLT's collapse.",
+
+    leaders: [
+      {
+        id: "アイリス・ノヴァ" as WikiId,
+        name: "アイリス・ノヴァ",
+        nameEn: "Iris Nova",
+        role: "アロエオイル・コーポレーションリーダー",
+        era: "E301〜E318",
+      },
+    ],
+  },
+
+  {
+    id: "マモン・コーポレーション" as WikiId,
+    name: "マモン・コーポレーション",
+    nameEn: "Mammon Corporation",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "ZAMLTを構成する5超巨大企業の一つ。金融と資産管理を担当した企業である。リーダーはカルロス・ヴァンダム。ZAMLTの経済覇権を支える資金調達と資産運用の中枢を担い、プロトコルXに必要な3京ドルの資金計画（3京ドル作戦）を立案した。慎重な戦略家であるカルロス・ヴァンダムの指導の下、マモンは常に最も保守的なアプローチを取り、ZAMLT内部での急進的な軍事展開には懐疑的な姿勢を維持した。ZAMLT崩壊後の経済的混乱期には、マモンの金融専門家の一部がUECOの設立に参加し、新たな経済框架の構築に寄与したとされる。名称は「富の神マモン」に由来し、コーポラトクラシー体制における「富こそが力」という信条を象徴している。",
+    descriptionEn: "One of the five mega-corporations that constituted ZAMLT. It handled finance and asset management. Its leader was Carlos Vandom. It served as the core of ZAMLT's economic hegemony, handling fundraising and asset management, and formulated the 300 trillion dollar funding plan (Operation 300 Trillion Dollars) required for Protocol X. Under the leadership of the cautious strategist Carlos Vandom, Mammon always adopted the most conservative approach, maintaining a skeptical stance toward radical military deployments within ZAMLT. In the period of economic chaos after ZAMLT's collapse, some of Mammon's financial experts reportedly participated in the establishment of UECO, contributing to the construction of a new economic framework. Its name derives from 'the god of wealth Mammon,' symbolizing the belief in 'wealth is power' within the corporatocracy system.",
+
+    leaders: [
+      {
+        id: "カルロス・ヴァンダム" as WikiId,
+        name: "カルロス・ヴァンダム",
+        nameEn: "Carlos Vandam",
+        role: "マモン・コーポレーションリーダー",
+        era: "E301〜E318",
+      },
+    ],
+  },
+
+  {
+    id: "ゼブラ・コーポレーション" as WikiId,
+    name: "ゼブラ・コーポレーション",
+    nameEn: "Zebra Corporation",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "ZAMLTを構成する5超巨大企業の一つ。次元技術の研究・開発を担当した企業である。リーダーはアーサー・グリム。次元境界の不安定領域を利用した次元兵器や次元刑務所の設計など、最も危険な技術領域を独占的に担った。ゼブラの工作員レイ・ヴァンデルトはアレンをシェンドバーグ次元に閉じ込めて殺害し、ZAMLTに抗うコーポラトクラシーへの警告とした。虚無の塔（Tower of the Void）でのEVILSとの秘密会合にもゼブラが関与しており、ZAMLTと次元間生命体の裏取引を仲介したとされる。ゼブラの次元技術はZAMLT崩壊後も一部が回収され、テクノ文化ルネサンス期の次元極地平技術の民生化に間接的に貢献した。",
+    descriptionEn: "One of the five mega-corporations that constituted ZAMLT. It handled research and development of dimensional technology. Its leader was Arthur Grimm. It exclusively handled the most dangerous technological areas, designing dimensional weapons and dimensional prisons that utilized unstable areas of dimensional boundaries. Zebra's agent Ray Vandel imprisoned Allen in the Schendberg dimension and killed him, serving as a warning to corporatocracy resisting ZAMLT. Zebra was also involved in the secret meeting with EVILS at the Tower of the Void, mediating the behind-the-scenes transactions between ZAMLT and interdimensional lifeforms. After ZAMLT's collapse, some of Zebra's dimensional technology was recovered, indirectly contributing to the civilian application of dimensional polar horizon technology during the Techno Cultural Renaissance period.",
+
+    leaders: [
+      {
+        id: "アーサー・グリム" as WikiId,
+        name: "アーサー・グリム",
+        nameEn: "Arthur Grim",
+        role: "ゼブラ・コーポレーションリーダー",
+        era: "E301〜E318",
+      },
+    ],
+  },
+
+  {
+    id: "ルレンツ・コーポレーション" as WikiId,
+    name: "ルレンツ・コーポレーション",
+    nameEn: "Lulentz Corporation",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "ZAMLTを構成する5超巨大企業の一つ。科学研究と技術開発を担当した企業である。リーダーはエリザベス・リンドバーグ。プロトコルXの技術設計とカタリスト・コアの建造に深く関与し、ZAMLTの技術的優位性を維持するための研究開発を推進した。他の4企業が軍事や金融に偏重する中、ルレンツは純粋な科学的研究に注力する姿勢をとり、次元物理学や量子情報科学の分野で画期的な成果を挙げた。しかし、その研究成果はZAMLTの支配強化のために利用され、本来の平和的な科学技術が軍事転用された側面も持つ。ZAMLT崩壊後、ルレンツの研究施設の一部は惑星ビブリオのロレンツィオ国際大学に統合され、E16文明圏の学術研究の基盤を形成した。",
+    descriptionEn: "One of the five mega-corporations that constituted ZAMLT. It handled scientific research and technological development. Its leader was Elizabeth Lindberg. It was deeply involved in the technical design of Protocol X and the construction of the Catalyst Core, promoting research and development to maintain ZAMLT's technological superiority. While the other four corporations focused on military and financial matters, Lorentz focused on pure scientific research, achieving groundbreaking results in the fields of dimensional physics and quantum information science. However, its research results were utilized to strengthen ZAMLT's dominance, possessing the aspect that originally peaceful scientific technology was diverted for military use. After ZAMLT's collapse, some of Lorentz's research facilities were integrated into the Lorenzio International University on the planet Viblio, forming the foundation for academic research in the E16 civilization.",
+
+    leaders: [
+      {
+        id: "エリザベス・リンドバーグ" as WikiId,
+        name: "エリザベス・リンドバーグ",
+        nameEn: "Elizabeth Lindberg",
+        role: "ルレンツ・コーポレーションリーダー",
+        era: "E301〜E318",
+      },
+    ],
+  },
+
+  {
+    id: "ストロベリー" as WikiId,
+    name: "ストロベリー",
+    nameEn: "Strawberry",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "ZAMLT期に活動した中堅コーポラトクラシー。CEOはアレン。20万以上のコーポラトクラシーが乱立するGigapolis経済圏において、ZAMLTやその他のメタ企業の圧力に抵抗しながら独立を維持していたコーポラトクラシーの一つである。規模はZAMLTの5大企業には遠く及ばないが、独自の技術力と商業網を持ち、Gigapolis経済圏の中堅層として機能していた。アレンは終末の星（Star of the End）計画への関与を通じてZAMLTの真の脅威を認識し、アルファ・ケインをスティル・アレーナに推薦して抵抗の火種を撒いた。しかしアレンの殺害後、ストロベリーはZAMLTの報復攻撃を受け、消滅したとされる。ストロベリーの悲劇は、コーポラトクラシー体制下で多数の中堅・小規模コーポラトクラシーが直面した運命を象徴する出来事であり、ZAMLTの覇権の残酷さを浮き彫りにしている。",
+    descriptionEn: "A mid-sized corporatocracy that operated during the ZAMLT period, with Allen as its CEO. In the Gigapolis economic zone where over 200,000 corporatologies existed, Strawberry was one that maintained independence while resisting the pressure from ZAMLT and other meta-enterprises. While its scale was far from ZAMLT's five major corporations, it possessed its own technological capabilities and commercial network, functioning as the middle tier of the Gigapolis economic zone. Through his involvement in the Star of the End project, Allen recognized the true threat of ZAMLT and recommended Alpha Cain to Still Arena, sowing the seeds of resistance. However, after Allen's assassination, Strawberry was reportedly destroyed by ZAMLT's retaliatory attack. The tragedy of Strawberry symbolizes the fate faced by numerous mid-sized and small corporatologies under the corporatocracy system, highlighting the cruelty of ZAMLT's hegemony.",
+
+    leaders: [
+      {
+        id: "アレン" as WikiId,
+        name: "アレン",
+        nameEn: "Allen",
+        role: "ストロベリーCEO",
+        era: "E318年前後",
+      },
+    ],
+  },
+
+  /* 追加組織 */
+  {
+    id: "org-バーズ帝国官庁" as WikiId,
+    name: "バーズ帝国中央官庁",
+    nameEn: "Birds Empire Central Bureau",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "ファランクス皇帝がE15年に設立したバーズ帝国の行政機関。帝国の法律・徴税・公共事業・人口管理を統括し、シンフォニー・オブ・スターズ西大陸全土に広がる支配体制の行政的基盤として機能した。官庁は三つの部門から構成され、法務部が帝国法の制定と執行を、財務部がnトークン以前の旧通貨システムによる徴税を、工事部が都市建設と道路整備を担当した。帝国崩壊後はその機能の大部分が惑星国家連合に引き継がれたが、一部の行政記録はTroyaneの地下公文書館に保管されたままである。官庁の官僚制度は後にZAMLT期のコーポラトクラシー体制とUECO期の超国家機関の両方に影響を与えた。",
+    descriptionEn: "An administrative agency of the Bird Empire, founded by Emperor Phalanx in E15. It oversaw the empire's laws, taxation, public works, and population management, serving as the administrative foundation for the ruling system that spread across the entire West Continent of the Symphony of Stars. The agency consisted of three departments: the Legal Department was responsible for the formulation and enforcement of imperial law, the Finance Department handled taxation using the pre-n-token currency system, and the Public Works Department was in charge of urban construction and road maintenance. After the empire's collapse, most of its functions were inherited by the Planetary Nations Union, though some administrative records remained preserved in the underground archives of Troyane. The agency's bureaucratic system later influenced both the corporatocracy system of the ZAMLT period and the supranational agencies of the UECO period.",
+  },
+  {
+    id: "org-第一移民評議会" as WikiId,
+    name: "第一移民評議会",
+    nameEn: "First Immigration Council",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E50年のバーズ帝国崩壊後に、存続した入植地の指導者たちが設立した臨時統治機関。惑星ビブリオとSolarisを中心に7つの入植地を統括し、食糧生産、防衛、通信インフラの再建を最優先課題として取り組んだ。評議会は合議制を採用し、各入植地の代表が平等な発言権を持つ民主的な運営を特徴としたが、資源不足と外部からの脅威に対処するため、次第に権限が一部の強力な入植地に集中していった。第一移民評議会はE80年の技術啓蒙時代に正式な惑星国家連合へと発展的に解消し、その遺産は現在のUECOの協議体制に間接的に受け継がれている。",
+    descriptionEn: "Following the collapse of the Barz Empire in E50, an interim governing body established by the leaders of surviving colonies. Centered on the planet Biblio and Solaris, it coordinated seven colonies, prioritizing the reconstruction of food production, defense, and communication infrastructure. The council operated on a deliberative system with democratic features, giving equal speaking rights to representatives from each colony. However, to address resource shortages and external threats, authority gradually concentrated in the hands of powerful colonies. The First Immigration Council was progressively dissolved into the formal Planetary Federation of Nations during the E80 Enlightenment Era, with its legacy indirectly inherited by UECO's current consultative system.",
+  },
+  {
+    id: "org-ギガポリス建設ギルド" as WikiId,
+    name: "ギガポリス建設者ギルド",
+    nameEn: "Gigapolis Builders Guild",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E150年のギガポリス建設開始時に結成された建築技術者と労働者の職能団体。セントラル・タワーをはじめとするギガポリスの象徴的な建造物の設計・施工を統括し、数百万人の労働力を組織化して都市建設を推進した。ギルド内部は石工・鉄工・配管・電気・次元技術の五つの部門に分かれ、各部門が独自の技術体系と徒弟制度を持っていた。ギルドの技術遺産はテクノ文化ルネサンス期に再評価され、現代の建築工学にも影響を与えている。ギルドの初代親方とされるアルキテクト・ゼンは「都市は石でなく人で建てる」という言葉を残し、人材育成を最も重視した。",
+    descriptionEn: "A professional guild of architects and laborers formed at the start of Gigapolis construction in E150. It oversaw the design and construction of iconic structures including Central Tower, organizing millions of workers to advance urban development. The guild was internally divided into five departments—masonry, ironworking, plumbing, electrical engineering, and dimensional technology—each with its own technical systems and apprenticeship programs. The guild's technological heritage was re-evaluated during the Techno-Cultural Renaissance, influencing modern architectural engineering. The guild's first master, Architect Zen, left the maxim 'Cities are built not of stone but of people,' emphasizing人才培养 above all.",
+  },
+  {
+    id: "org-E16大学連合" as WikiId,
+    name: "E16大学学術連合",
+    nameEn: "E16 University Consortium",
+    category: "組織",
+    subCategory: "学術機関",
+    description:
+      "惑星ビブリオのロレンツィオ国際大学を中心に、E16連星系内の主要な研究機関が加盟する学術ネットワーク。次元極地平技術の基礎研究と応用研究を統括し、ティムール・シャーの10次元ホラズム理論やペルセポネ計画の学術的検証を行った。連合には物理学部門のほか、宇宙生物学部門、次元情報科学部門、歴史・人類学部門があり、各部門が独立した研究プログラムを運営している。テクノ文化ルネサンス期には民間への研究成果の公開を推進し、次元極地平技術の民主化に貢献した。連合の最高学術賞は「ティムール・シャー・メダル」と呼ばれ、次元物理学の分野で最も権威ある賞とされている。",
+    descriptionEn: "An academic network centered at the Lorenzo International University on planet Biblio, with major research institutions across the E16 star system joining as members. It coordinated fundamental and applied research in dimensional horizon technology, conducting academic verification of Timur Shah's 10-dimensional Khwarazm theory and the Persephone Project. The federation included departments of physics, astrobiology, dimensional information science, and history-anthropology, each operating independent research programs. During the Techno-Cultural Renaissance, it promoted public dissemination of research findings, contributing to the democratization of dimensional horizon technology. The federation's highest academic award, the 'Timur Shah Medal,' is considered the most prestigious honor in the field of dimensional physics.",
+  },
+  {
+    id: "org-クレセント国際法廷" as WikiId,
+    name: "クレセント国際法廷",
+    nameEn: "Crescent International Court",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "クレセント7カ国間の紛争解決と国際法の解釈を担う司法機関。E320年のクレセント7カ国独立に伴い設立され、V7とトリニティ・アライアンスの対立の中で中立な裁定者として機能している。法廷は7カ国の法体系の調和を図りつつ、次元極地平技術の軍事利用やホライゾン・ゲートの管理に関する国際的な法規制の整備を進めている。法廷の判事は各国民の信任に基づき選出され、任期は5年である。アルファ・ヴェノムの犯罪行為に対する国際的な裁判もこの法廷の管轄であり、クレセント地方の平和維持における最重要機関として位置づけられている。",
+    descriptionEn: "A judicial body responsible for resolving disputes among the Crescent Seven Nations and interpreting international law. Established following the independence of the Crescent Seven Nations in E320, it functions as a neutral arbiter in the conflict between V7 and the Trinity Alliance. While harmonizing the legal systems of the seven nations, the court has advanced international regulations concerning military applications of dimensional horizon technology and Horizon Gate management. Judges are elected based on the trust of their respective nations' populations, serving five-year terms. The international trial of Alpha Venom's criminal activities also falls under this court's jurisdiction, positioning it as the most critical institution for maintaining peace in the Crescent region.",
+  },
+  {
+    id: "org-次元境界監視機構" as WikiId,
+    name: "次元境界監視機構",
+    nameEn: "Dimension Boundary Watch",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E16連星系周辺の次元境界の安定性を監視する専門機関。銀河系コンソーシアムの下部組織として設立され、次元境界の歪みや不安定化の兆候を早期検知して警報を発する役割を担っている。監視機構は惑星ビブリオに本部を置き、E16連星系内の12の監視ステーションとディメンション・ブリッジ・ターミナルに配置されたセンサー網を通じて、次元境界の状態を24時間体制で監視している。監視データはグランベルのクアンタ・ラボとリアルタイムで共有され、次元境界の不安定化が大規模な災害に発展するのを未然に防ぐ重要な機能を果たしている。",
+    descriptionEn: "A specialized agency monitoring the stability of dimensional boundaries around the E16 star system. Established as a subordinate organization of the Galactic Consortium, it detects early signs of dimensional boundary distortions or instabilities and issues warnings. The monitoring agency headquartered on planet Biblio operates a 24-hour surveillance system through a sensor network deployed across 12 monitoring stations and Dimension Bridge Terminals throughout the E16 star system. Monitoring data is shared in real-time with Quanta Lab in Grabel, performing a vital function in preventing large-scale disasters by preemptively addressing dimensional boundary instabilities.",
+  },
+  {
+    id: "org-E16放送協会" as WikiId,
+    name: "E16放送協会",
+    nameEn: "E16 Broadcasting Association",
+    category: "組織",
+    subCategory: "メディア",
+    description:
+      "E16連星系全域のニュース・情報配信を統括する公共放送機関。ZAMLT崩壊後に設立され、報道の自由と公正を原則としている。放送協会は次元間通信技術を活用したリアルタイムの全星系ニュース配信を行い、政治・経済・文化・科学の各分野で独立した報道を提供している。特にAURALISの活動や次元極地平技術の動向については詳細な専門番組を制作し、市民の技術リテラシー向上に寄与している。放送協会の編集権は独立的に保障されており、UECOや銀河系コンソーシアムからの圧力に屈しない姿勢を維持している。",
+    descriptionEn: "A public broadcasting agency overseeing news and information distribution across the entire E16 star system. Established after the collapse of ZAMLT, it operates on the principles of press freedom and fairness. The broadcasting association utilizes interdimensional communication technology for real-time, system-wide news delivery, providing independent reporting across political, economic, cultural, and scientific fields. It produces detailed specialized programs on AURALIS activities and dimensional horizon technology developments, contributing to improving citizens' technological literacy. The association's editorial independence is guaranteed, maintaining its stance against pressure from UECO and the Galactic Consortium.",
+  },
+  {
+    id: "org-ギガポリス地下市場" as WikiId,
+    name: "ギガポリス地下市場",
+    nameEn: "Gigapolis Underground Market",
+    category: "組織",
+    subCategory: "地下組織",
+    description:
+      "Gigapolis地下街最深部を拠点とする非合法経済圏。Tina/Gueの実効支配下にあり、正規のnトークン経済には含まれない大規模な取引が行われている。地下市場では規制品の取引、非公認の技術取引、暗号通信サービスなどが提供され、ZAMLT期からエヴァトロン期を通じて継続的に運営されてきた。Tina/Gueの独自の情報ネットワークを通じて、表社会では得られない貴重な情報も流通している。地下市場の存在はUECOのガバナンスの限界を象徴するものであり、その取り込みはE16文明圏の政策課題の一つである。",
+    descriptionEn: "An illegal economic zone headquartered in the deepest levels of Gigapolis's underground streets. Effectively controlled by Tina/Gue, it hosts large-scale transactions not included in the official n-token economy. The underground market offers trading in restricted items, unapproved technologies, and encrypted communication services, operating continuously from the ZAMLT through the Evatron eras. Through Tina/Gue's unique information network, valuable unavailable in mainstream society also circulates. The existence of the underground market symbolizes the limitations of UECO governance, and its integration remains one of the policy challenges for the E16 civilization sphere.",
+  },
+  {
+    id: "org-Eros-7採掘公社" as WikiId,
+    name: "Eros-7エネルギー採掘公社",
+    nameEn: "Eros-7 Energy Mining Corporation",
+    category: "組織",
+    subCategory: "その他",
+    description:
+      "Eros-7における搾取エネルギーの採掘と管理を統括する公社。マトリカル・カウンシルの監督下で運営され、リーチ・ドレインの培養・配置・エネルギー回収・配送の全工程を管理している。公社は多数の採掘施設を運営し、その中でもスクイーズ・アビスは最大規模の拠点として知られた。搾取体制の段階的解体に伴い、公社の規模は縮小しているが、現在でもエネルギー生産の一部を担っている。公社の技術スタッフが開発した搾取エネルギー変換技術の一部は、のちにナノメディシンに応用され、搾取技術の平和的転用の成功事例となっている。",
+    descriptionEn: "A public corporation overseeing the extraction and management of extractive energy on Eros-7. Operated under the supervision of the Matrical Council, it manages the entire process of Reach Drain cultivation, deployment, energy recovery, and distribution. The corporation operates numerous extraction facilities, with Squeeze Abyss being known as its largest-scale base. With the progressive dismantling of the extractive system, the corporation has scaled down but still contributes to energy production. Part of the extractive energy conversion technology developed by the corporation's technical staff was later applied to nanomedicine, becoming a successful case study in the peaceful repurposing of extractive technology.",
+  },
+  {
+    id: "org-惑星間条約機構" as WikiId,
+    name: "惑星間条約機構",
+    nameEn: "Interplanetary Treaty Organization",
+    category: "組織",
+    subCategory: "組織・制度",
+    description:
+      "E16連星系内の惑星間関係を規律する条約とその運営機関。第一次星間戦争（E120〜E150年）の惨禍を受けて設立され、惑星間の武力紛争の防止と和平の維持を使命としている。条約機構は通商条約、不侵略条約、環境保全条約などの多国間条約の管理と、紛争時の仲介・調停を主要な業務としている。条約機構の最大の成果はE520年の第二次大戦終結後の包括的な和平条約の締結であり、これによりクレセント地方の恒久的な平和框架が確立された。現在では銀河系コンソーシアムの傘下で活動しており、その法務的専門性は宇宙規模の紛争解決に活用されている。",
+    descriptionEn: "A treaty and its governing body regulating interplanetary relations within the E16 star system. Established in the aftermath of the First Interplanetary War (E120-E150), its mission is to prevent armed conflicts and maintain peace among planets. The treaty organization's primary functions include managing multilateral treaties such as trade agreements, non-aggression pacts, and environmental protection protocols, as well as mediating and调解 during disputes. The organization's greatest achievement was the comprehensive peace treaty following the end of the Second Great War in E520, which established a permanent peace framework for the Crescent region. Currently operating under the Galactic Consortium, its legal expertise is utilized for resolving conflicts on a galactic scale.",
+  },
+] as const satisfies readonly WikiEntry[]

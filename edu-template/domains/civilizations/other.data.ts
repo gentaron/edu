@@ -1,0 +1,138 @@
+import type { CivilizationId, WikiId } from "../../platform/schemas/branded"
+import type { Civilization } from "@/types"
+
+export const OTHER_CIVILIZATIONS = [
+  {
+    id: "eresh" as CivilizationId,
+    rank: 6,
+    name: "エレシュ",
+    nameEn: "Eresh",
+    color: "text-purple-400",
+    borderColor: "border-purple-400/30 hover:border-purple-400/60",
+    bgColor: "from-purple-500/20 via-purple-600/10 to-purple-700/20",
+    icon: "Sparkles",
+    leader: "大司教",
+    leaderWikiId: "大司教" as WikiId,
+    specialization: "宗教・精神的影響力",
+    description:
+      "宇宙規模の信仰共同体を形成する宗教・精神的文明圏。大司教と神官長から成るオラクルが最高意思決定機関として機能し、その予言は極めて高い的中率を誇る。中枢聖星ヴェズレル（『真理の星』）を中心に、次元境界近くに建造されたサンクチュアリを主たる聖地としている。次元共鳴を用いた瞑想と予言の伝統が他文明圏にも広く影響を与えている。",
+    history:
+      "古代より次元境界の共鳴現象に基づく独自の精神修練法を発展させ、やがてオラクル（大司教＋神官長）を頂点とする神政体制を確立した。中枢聖星ヴェズレルを『真理の星』として神聖視し、次元境界近くにサンクチュアリを建造して信仰の中心とした。セラフィムを外部担当機関とし、活発な布教活動を通じて他文明圏への精神的影響力を拡大。その予言の高精度さにより、グランベル、ティエリアを含む複数の文明圏の政治的決断に直接的な影響を与えてきた。ファルージャのマドリス・カーネルとは古くから外交関係を維持し、文化的・精神的交流を深めている。",
+    currentStatus:
+      "オラクルによる次元共鳴予言が宇宙規模の意思決定に影響を与え続けている。サンクチュアリは全宇宙からの巡礼者で賑わい、セラフィムは他文明圏との外交・布教活動を積極的に展開中。ヴェズレルを拠点とする次元共鳴瞑想の実践は、科学的研究対象としても注目されている。",
+    relationships: [
+      "ファルージャ — マドリス・カーネルを通じた外交・精神的交流",
+      "グランベル — 予言を通じた政治的影響力の行使",
+      "ティエリア — 精神的指針の提供と軍事的緊張緩和の調停",
+      "プロキオ — サンクチュアリへの巡礼ルートを通じた経済的つながり",
+      "ロースター — 次元共鳴通信技術の共同研究",
+    ],
+    specializationEn: "Religion \u00b7 Spiritual Influence",
+    descriptionEn:
+      "A religious and spiritual civilization forming a cosmic-scale faith community. The Oracle, composed of the Archbishop and High Priest, functions as the supreme decision-making body, and its prophecies boast an extremely high accuracy rate. Centered on the sacred central planet Vezrel ('Star of Truth'), the Sanctuary built near dimensional boundaries serves as its primary holy site. Its tradition of meditation and prophecy using dimensional resonance has widely influenced other civilizations.",
+    historyEn:
+      "Since ancient times, it has developed unique spiritual training methods based on dimensional boundary resonance phenomena, eventually establishing a theocratic system with the Oracle (Archbishop + High Priest) at its apex. It venerates the sacred central planet Vezrel as the 'Star of Truth' and built the Sanctuary near dimensional boundaries as the center of worship. Through Seraphim as its external agency, it has expanded its spiritual influence on other civilizations through active missionary activities. The high accuracy of its prophecies has directly influenced political decisions across multiple civilizations including Granbell and Tyeria.",
+    currentStatusEn:
+      "The Oracle's dimensional resonance prophecies continue to influence cosmic-scale decision-making. The Sanctuary bustles with pilgrims from across the cosmos, and Seraphim actively conducts diplomatic and missionary activities with other civilizations.",
+    relationshipsEn: [
+      "Fallujah \u2014 Diplomatic and spiritual exchange through Madris Cernel",
+      "Granbell \u2014 Political influence through prophecy",
+      "Tyeria \u2014 Spiritual guidance and military tension mediation",
+      "Prokio \u2014 Economic ties through pilgrimage routes to Sanctuary",
+      "Roastar \u2014 Joint research on dimensional resonance communication technology",
+    ],
+    wikiId: "エレシュ" as WikiId,
+    href: "/civilizations/eresh",
+    planets: ["エレシュ・サンクチュアリ", "オラクル", "ヴェズレル", "セラフィム"],
+  },
+  {
+    id: "prokio" as CivilizationId,
+    rank: 7,
+    name: "プロキオ",
+    nameEn: "Prokio",
+    color: "text-orange-400",
+    borderColor: "border-orange-400/30 hover:border-orange-400/60",
+    bgColor: "from-orange-500/20 via-orange-600/10 to-orange-700/20",
+    icon: "Package",
+    leader: "商工会議長",
+    leaderWikiId: "商工会議長" as WikiId,
+    specialization: "宇宙規模の交易・物流",
+    description:
+      "宇宙中のあらゆる貿易ルートを掌握する交易・物流文明圏。商工会議長を最高責任者とし、プロキオ・ネクサスを中心拠点として全宇宙の商取引を管理している。コマース部門が全商業取引を統轄し、AI物流ルーティングネットワーク『Lane System』が最適な輸送経路を算出。オープンアーキテクチャによりグランベルやエレシオンにも統合されている。プロキオ・ネクサスでの価格設定が宇宙全体のベースライン価格を決定する。",
+    history:
+      "古くから宇宙各地の交易拠点を統合し、次第に全貿易ルートの掌握に至った。商工会議長の指導の下、コマース部門が組織化され、商取引の標準化を推進。AI物流ルーティングネットワーク『Lane System』の開発により、宇宙規模の物流最適化を実現した。このオープンアーキテクチャ設計により、グランベルとエレシオンが自勢力内にLane Systemを統合。さらに、n-tokenと互換性を持つ『Prokio Clear』汎用決済システムを開発し、全文明圏間の決済を統一した。バザール・ネットワークを通じた市場プラットフォームの運用で、その経済活動はすべての文明圏の経済に直接的な影響を与えている。",
+    currentStatus:
+      "プロキオ・ネクサスでの価格設定が宇宙全体のベースライン価格として機能し続けている。Lane Systemのオープンアーキテクチャがさらに多くの文明圏に採用され、Prokio Clear決済システムの普及により取引の標準化が進行中。商工会議長は全宇宙の経済安定に向けた政策調整を継続中。",
+    relationships: [
+      "グランベル — Lane Systemの統合とProkio Clear決済の採用",
+      "エレシオン — Lane Systemの統合と医療物資優先配送協定",
+      "ティエリア — 軍事物資の物流管理を通じた関係",
+      "ファルージャ — 文化財・芸術品の交易ルート提供",
+      "ディオクレニス — 科学機器の優先物流協定",
+      "エレシュ — サンクチュアリへの巡礼ルート運営",
+    ],
+    specializationEn: "Cosmic-Scale Trade \u00b7 Logistics",
+    descriptionEn:
+      "A trade and logistics civilization controlling all trade routes throughout the cosmos. With the Trade Council Chairman as its supreme executive, it manages all commercial transactions across the cosmos centered on Prokio Nexus. The Commerce Department oversees all commercial transactions, while the AI logistics routing network 'Lane System' calculates optimal transport routes. Its open architecture has been integrated into Granbell and Elyseon as well.",
+    historyEn:
+      "Having gradually unified all trade routes by consolidating trade hubs across the cosmos since ancient times. Under the Trade Council Chairman's leadership, the Commerce Department was organized and commercial standardization was promoted. The development of the AI logistics routing network 'Lane System' realized cosmic-scale logistics optimization. Its open architecture design allowed Granbell and Elyseon to integrate Lane System within their spheres.",
+    currentStatusEn:
+      "Price setting at Prokio Nexus continues to function as the baseline price for the entire cosmos. The Lane System's open architecture is being adopted by more civilizations, and transaction standardization is progressing through the Prokio Clear payment system.",
+    relationshipsEn: [
+      "Granbell \u2014 Lane System integration and Prokio Clear adoption",
+      "Elyseon \u2014 Lane System integration and medical supply priority delivery agreement",
+      "Tyeria \u2014 Relationship through military logistics management",
+      "Fallujah \u2014 Cultural goods and art trade route provision",
+      "Dioclenis \u2014 Priority logistics agreement for scientific equipment",
+      "Eresh \u2014 Pilgrimage route operation to Sanctuary",
+    ],
+    planets: ["プロキオ・ネクサス", "コマース", "レーン", "バザール"],
+    wikiId: "プロキオ" as WikiId,
+    href: "/civilizations/prokio",
+  },
+  {
+    id: "roastar" as CivilizationId,
+    rank: 8,
+    name: "ロースター",
+    nameEn: "Roastar",
+    color: "text-pink-400",
+    borderColor: "border-pink-400/30 hover:border-pink-400/60",
+    bgColor: "from-pink-500/20 via-pink-600/10 to-pink-700/20",
+    icon: "Radio",
+    leader: "通信長官",
+    leaderWikiId: "通信長官" as WikiId,
+    specialization: "次元間通信・量子ネットワーク",
+    description:
+      "次元間通信と量子ネットワーク技術の革新に特化した技術文明圏。通信長官を最高責任者とし、ロースター・コアを中心拠点として量子コンピューティング研究を推進している。シグナル・オペレーションが全宇宙の衛星通信ネットワークを管理し、クアンタ・ラボで最先端の量子プロトコル研究を実施。『Link Protocol』は全文明圏で使用される唯一の汎用通信規格であり、現在のバージョンはLink 7.2。オープンイノベーションモデルにより、新技術は数ヶ月で全宇宙に展開される。",
+    history:
+      "次元間通信の研究から出発し、やがて全文明圏の通信インフラを統合するまでに成長した。ロースター・コアに量子コンピューティング・センターを建設し、全宇宙の通信を一元管理する体制を確立。シグナル・オペレーションによる衛星通信ネットワークの構築で、次元境界を越えた安定通信を実現。『Link Protocol』を汎用通信規格として策定し、全文明圏が採用。クアンタ・ラボでは常時最先端の量子プロトコル研究が行われ、ディオクレニスの研究者も参加。次元不安定の早期警戒システムをロースター・コアに構築し、ティエリアの防衛ネットワークと接続して緊急ルーティングを確保している。Link 7.2の登場により、次世代量子技術が通信品質を飛躍的に向上させた。",
+    currentStatus:
+      "Link 7.2の普及が全宇宙で進行中。次世代量子技術の研究がクアンタ・ラボで加速しており、オープンイノベーションモデルにより新技術の全宇宙展開が数ヶ月単位で実現。ロースター・コアの次元不安定早期警戒システムは全文明圏の安全に不可欠なインフラとして機能している。通信長官の下、全文明圏の通信トラフィックの安定運用を継続中。",
+    relationships: [
+      "ティエリア — 防衛ネットワークと接続し緊急ルーティングを確保",
+      "ディオクレニス — クアンタ・ラボでの共同研究、研究者の派遣",
+      "グランベル — 通信インフラの主要顧客、技術標準の協調",
+      "エレシオン — 医療通信回線の優先確保協定",
+      "ファルージャ — 文化放送ネットワークの運営支援",
+      "エレシュ — 次元共鳴通信技術の共同研究",
+    ],
+    specializationEn: "Interdimensional Communication \u00b7 Quantum Networks",
+    descriptionEn:
+      "A technological civilization specializing in interdimensional communication and quantum network technology innovation. With the Communications Commissioner as its supreme executive, it promotes quantum computing research centered on Roastar Core. Signal Operations manages the entire cosmos's satellite communication network, while Quanta Lab conducts cutting-edge quantum protocol research. The 'Link Protocol' is the only universal communication standard used across all civilizations, currently at version Link 7.2.",
+    historyEn:
+      "Starting from interdimensional communication research, it grew to integrate the entire cosmos's communication infrastructure. It established a quantum computing center at Roastar Core and created a unified management system for all cosmic communications. Through Signal Operations' satellite communication network construction, it achieved stable communication across dimensional boundaries.",
+    currentStatusEn:
+      "Link 7.2 adoption is progressing across the entire cosmos. Next-generation quantum technology research is accelerating at Quanta Lab, with the open innovation model enabling cosmic-scale deployment of new technologies within months.",
+    relationshipsEn: [
+      "Tyeria \u2014 Connected to defense network ensuring emergency routing",
+      "Dioclenis \u2014 Joint research at Quanta Lab, researcher dispatch",
+      "Granbell \u2014 Major customer of communication infrastructure, technology standard coordination",
+      "Elyseon \u2014 Priority medical communication line agreement",
+      "Fallujah \u2014 Cultural broadcast network operation support",
+      "Eresh \u2014 Joint research on dimensional resonance communication technology",
+    ],
+    planets: ["ロースター・コア", "シグナル", "クアンタ", "リンク"],
+    wikiId: "ロースター" as WikiId,
+    href: "/civilizations/roastar",
+  },
+] as const satisfies readonly Civilization[]
