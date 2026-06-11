@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import type { ReactNode } from "react"
+import Script from "next/script"
 import { Noto_Sans_JP } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "@/platform/ui/toaster"
@@ -44,6 +45,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja" suppressHydrationWarning>
+      <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-2ZFKSMV19K"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-2ZFKSMV19K');
+          `}
+        </Script>
+      </head>
       <WebsiteJsonLd />
       <a href="#main-content" className="skip-link">
         メインコンテンツへスキップ
