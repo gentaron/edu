@@ -1,0 +1,36 @@
+name: CI
+
+# Single merge gate for the Next.js app. `bun run build` mirrors the
+# Netlify deploy (it runs prebuild data validation + the TypeScript
+# type check), so a green CI means a deployable main.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DATABASE_URL: "file:./ci.db"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build (validate-data + tsc + next build)
+        run: bun run build
+
+      - name: Test
+        run: bun run test

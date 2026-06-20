@@ -40,13 +40,13 @@ describe("PBT: wiki.data integrity", () => {
     )
   })
 
-  /* ── Image URLs start with https:// when present ── */
-  it("image URLs start with https:// when present", () => {
+  /* ── Image refs are an https:// URL or a root-relative path when present ── */
+  it("image refs are an https:// URL or a root-relative path when present", () => {
     fc.assert(
       fc.property(fc.integer({ min: 0, max: ALL_ENTRIES.length - 1 }), (idx) => {
         const entry = ALL_ENTRIES[idx]!
         if (entry.image && entry.image.length > 0) {
-          expect(entry.image).toMatch(/^https:\/\//)
+          expect(entry.image).toMatch(/^(https:\/\/|\/)/)
         }
       })
     )

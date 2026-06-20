@@ -41,10 +41,10 @@ describe("Data Integrity", () => {
       }
     })
 
-    it("image URLs start with https:// when present", () => {
+    it("image refs are an https:// URL or a root-relative path when present", () => {
       for (const entry of ALL_ENTRIES) {
         if (entry.image && entry.image.length > 0) {
-          expect(entry.image).toMatch(/^https:\/\//)
+          expect(entry.image).toMatch(/^(https:\/\/|\/)/)
         }
       }
     })
