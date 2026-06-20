@@ -47,8 +47,8 @@ export const TIMELINE_DATA: {
     borderColor: "border-edu-accent/30",
     events: [
       e(
-        "【天文背景】E16連星系はM104銀河（ソンブレロ銀河）のハロー領域に位置。主星Ea16（スペクトル型K2、質量1.2太陽質量）と伴星Eb16（スペクトル型M3、質量0.4太陽質量）が0.8AUの楕円軌道で安定した重力場を形成",
-        "[Astronomical Background] The E16 binary system is located in the halo region of the M104 Galaxy (Sombrero Galaxy). The primary star Ea16 (spectral type K2, mass 1.2 solar masses) and companion star Eb16 (spectral type M3, mass 0.4 solar masses) form a stable gravitational field in a 0.8AU elliptical orbit",
+        "【天文背景】E16連星系はM104銀河（ソンブレロ銀河）のハロー領域に位置。主星Ea16（スペクトル型K2、質量約0.80太陽質量）と伴星Eb16（スペクトル型M3、質量0.4太陽質量）が約12AUの長楕円軌道（離心率0.2前後）で安定した重力場を形成",
+        "[Astronomical Background] The E16 binary system is located in the halo region of the M104 Galaxy (Sombrero Galaxy). The primary star Ea16 (spectral type K2, mass approximately 0.80 solar masses) and companion star Eb16 (spectral type M3, mass 0.4 solar masses) form a stable gravitational field in an approximately 12AU long elliptical orbit (eccentricity ~0.2)",
         "E16星系"
       ),
       e(
