@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config"
+import { defineConfig, configDefaults } from "vitest/config"
 import react from "@vitejs/plugin-react"
 import path from "path"
 
@@ -8,6 +8,9 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
+    // edu-scaffold / edu-template are standalone duplicate copies (also
+    // excluded from tsconfig); only the real app under src/ is tested.
+    exclude: [...configDefaults.exclude, "edu-scaffold/**", "edu-template/**"],
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov", "json-summary"],

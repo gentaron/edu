@@ -48,6 +48,8 @@
     "prisma",
     "edu",
     "edu-repo",
+    "edu-scaffold",
+    "edu-template",
     "crates",
     "src/**/*.data.ts",
     "src/**/*.meta.ts",

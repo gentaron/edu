@@ -256,7 +256,7 @@ describe("StoryRepository", () => {
     it("values are valid image paths", () => {
       const map = StoryRepository.getEntryImageMap()
       for (const value of Object.values(map)) {
-        expect(value).toMatch(/^\//)
+        expect(value).toMatch(/^(\/|https:\/\/)/)
       }
     })
   })

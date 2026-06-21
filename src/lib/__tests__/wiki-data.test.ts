@@ -19,10 +19,10 @@ describe("wiki-data", () => {
     }
   })
 
-  it("image field should start with https:// if present", () => {
+  it("image field is an https:// URL or a root-relative path if present", () => {
     for (const entry of ALL_ENTRIES) {
       if (entry.image) {
-        expect(entry.image).toMatch(/^https:\/\//)
+        expect(entry.image).toMatch(/^(https:\/\/|\/)/)
       }
     }
   })

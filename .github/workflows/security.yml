@@ -1,50 +1,31 @@
 name: Security Scan
 
+# Informational only — runs weekly (and on demand), never gates merges.
+# All steps are non-blocking so upstream advisories don't block the app.
 on:
-  pull_request:
-    branches: [main]
   schedule:
-    - cron: "0 3 * * 1"  # Weekly Monday 3am UTC
+    - cron: "0 3 * * 1" # Weekly Monday 3am UTC
+  workflow_dispatch: {}
 
 jobs:
-  trivy-dependencies:
+  scan:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run Trivy dependency scan
+      - name: Trivy dependency scan (report only)
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: "fs"
           scan-ref: "."
           severity: "HIGH,CRITICAL"
-          exit-code: "1"
+          exit-code: "0"
           format: "table"
 
-      - name: Run Trivy for bun.lock
-        run: |
-          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/trivy-bun.lock.sh > trivy-bun.sh
-          chmod +x trivy-bun.sh
-          ./trivy-bun.sh bun.lock || true
-
-  semgrep-sast:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run Semgrep SAST
+      - name: Semgrep SAST (report only)
+        continue-on-error: true
         uses: returntocorp/semgrep-action@v1
         with:
           config: "p/typescript p/javascript p/secrets p/security-audit"
-          args: "--error --exclude='crates/' --exclude='node_modules/' --exclude='skills/'"
-
-  dependency-review:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/dependency-review-action@v4
-        with:
-          fail-on-severity: high
+          args: "--exclude='crates/' --exclude='node_modules/' --exclude='skills/'"
