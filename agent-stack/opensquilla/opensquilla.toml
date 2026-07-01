@@ -1,0 +1,71 @@
+# =============================================================================
+# OpenSquilla 設定ファイル
+# SquillaRouter の推奨ルーティング設定
+# =============================================================================
+
+[gateway]
+listen = "0.0.0.0:18791"
+# セキュリティ: デフォルトは localhost のみバインド
+# Docker環境では 0.0.0.0 で全インターフェースにバインド
+
+[router]
+mode = "recommended"
+# モード一覧:
+#   recommended     — タスク複雑度に基づく自動ルーティング（推奨）
+#   openrouter-mix  — OpenRouterの複数モデルをミックス
+#   disabled        — ルーティング無効（単一プロバイダー）
+
+[router.recommended]
+# 簡単タスク → 安価なモデル
+easy_models = ["openrouter:meta-llama/llama-3.1-8b-instruct", "ollama:llama3.1"]
+# 中程度タスク → 中価格モデル
+medium_models = ["openrouter:anthropic/claude-3.5-haiku", "openrouter:google/gemini-2.0-flash"]
+# 困難タスク → 高性能モデル
+hard_models = ["openrouter:anthropic/claude-sonnet-4", "openrouter:openai/gpt-4o"]
+
+[providers.openrouter]
+api_key_env = "OPENROUTER_API_KEY"
+base_url = "https://openrouter.ai/api/v1"
+
+[providers.openai]
+api_key_env = "OPENAI_API_KEY"
+base_url = "https://api.openai.com/v1"
+
+[providers.ollama]
+base_url = "http://ollama:11434/v1"
+api_key = "ollama"
+
+[search]
+# Web検索プロバイダー（複数設定可能、フォールバック）
+enabled = true
+providers = ["duckduckgo", "tavily"]
+
+[search.duckduckgo]
+# DuckDuckGo はAPIキー不要
+type = "duckduckgo"
+
+[search.tavily]
+type = "tavily"
+api_key_env = "TAVILY_API_KEY"
+
+[memory]
+# 永続記憶 — Markdown + SQLite ハイブリッド
+enabled = true
+backend = "sqlite"
+path = "/data/memory.db"
+semantic_search = true
+# セマンティック検索にはデフォルトのオンデバイス埋め込みを使用
+
+[sandbox]
+# レイヤードサンドボックス設定
+mode = "restricted"
+# モード一覧:
+#   restricted — ファイルシステム・ネットワーク制限あり
+#   full       — ワークスペース内は制限なし
+#   bypass     — 全制限なし（開発用のみ）
+
+[sandbox.restricted]
+allowed_paths = ["/data/workspace"]
+network_allowed = ["api.openai.com", "api.anthropic.com", "openrouter.ai"]
+ssrf_guard = true
+trusted_fake_ip_cidrs = ["127.0.0.0/8", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]

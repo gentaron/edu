@@ -1,0 +1,57 @@
+{
+  "$schema": "https://raw.githubusercontent.com/lbb00/ai-rules-sync/main/schema.json",
+  "version": "1.0.0",
+  "description": "Eduプロジェクト AIエージェントルール同期設定",
+  "sources": [
+    {
+      "name": "edu-shared-rules",
+      "type": "git",
+      "url": "https://github.com/gentaron/edu.git",
+      "branch": "main",
+      "path": "agent-stack/ai-rules-sync/shared-rules"
+    }
+  ],
+  "targets": {
+    "claude": {
+      "rules": [
+        {
+          "source": "edu-shared-rules",
+          "file": "typescript-best-practices.mdc",
+          "description": "TypeScript ベストプラクティス（EDUプロジェクト標準）"
+        },
+        {
+          "source": "edu-shared-rules",
+          "file": "nextjs-patterns.mdc",
+          "description": "Next.js 16 App Router パターン集"
+        }
+      ],
+      "md": {
+        "source": "edu-shared-rules",
+        "file": "CLAUDE.md",
+        "description": "Claude Code用メインルールファイル"
+      }
+    },
+    "cursor": {
+      "rules": [
+        {
+          "source": "edu-shared-rules",
+          "file": "typescript-best-practices.mdc",
+          "description": "TypeScript ベストプラクティス（EDUプロジェクト標準）"
+        },
+        {
+          "source": "edu-shared-rules",
+          "file": "nextjs-patterns.mdc",
+          "description": "Next.js 16 App Router パターン集"
+        }
+      ]
+    },
+    "copilot": {
+      "instructions": [
+        {
+          "source": "edu-shared-rules",
+          "file": "typescript-best-practices.mdc"
+        }
+      ]
+    }
+  }
+}

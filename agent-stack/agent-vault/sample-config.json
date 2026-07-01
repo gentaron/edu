@@ -1,0 +1,65 @@
+{
+  "$schema": "https://agent-vault.dev/schema/v1",
+  "vaults": {
+    "edu-vault": {
+      "description": "Eduプロジェクト用AIエージェント認証ヴォールト",
+      "credential_store": "postgres",
+      "egress_policy": {
+        "unmatched_host_policy": "deny",
+        "allowed_hosts": [
+          "api.openai.com",
+          "api.anthropic.com",
+          "generativelanguage.googleapis.com",
+          "openrouter.ai",
+          "api.tavily.com",
+          "localhost:11434",
+          "qdrant:6333"
+        ],
+        "denied_hosts": [],
+        "log_all_requests": true
+      }
+    }
+  },
+  "agents": {
+    "claude-code-agent": {
+      "vault": "edu-vault",
+      "description": "Claude Code用エージェント — コーディング支援",
+      "token_ttl": "24h",
+      "allowed_services": ["api.openai.com", "api.anthropic.com", "openrouter.ai"]
+    },
+    "omniroute-agent": {
+      "vault": "edu-vault",
+      "description": "OmniRoute用エージェント — マルチプロバイダールーティング",
+      "token_ttl": "72h",
+      "allowed_services": ["api.openai.com", "api.anthropic.com", "generativelanguage.googleapis.com", "openrouter.ai", "localhost:11434"]
+    },
+    "opensquilla-agent": {
+      "vault": "edu-vault",
+      "description": "OpenSquilla用エージェント — トークン効率エージェント",
+      "token_ttl": "168h",
+      "allowed_services": ["openrouter.ai", "api.openai.com", "api.tavily.com", "localhost:11434"]
+    }
+  },
+  "credentials": {
+    "examples": [
+      {
+        "service": "api.openai.com",
+        "name": "OpenAI API Key",
+        "env_key": "OPENAI_API_KEY",
+        "placeholder": "__openai_api_key__"
+      },
+      {
+        "service": "api.anthropic.com",
+        "name": "Anthropic API Key",
+        "env_key": "ANTHROPIC_API_KEY",
+        "placeholder": "__anthropic_api_key__"
+      },
+      {
+        "service": "openrouter.ai",
+        "name": "OpenRouter API Key",
+        "env_key": "OPENROUTER_API_KEY",
+        "placeholder": "__openrouter_api_key__"
+      }
+    ]
+  }
+}

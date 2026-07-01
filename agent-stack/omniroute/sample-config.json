@@ -1,0 +1,103 @@
+{
+  "$schema": "https://omniroute.dev/schema/v1",
+  "version": "1.0.0",
+  "server": {
+    "port": 20128,
+    "host": "0.0.0.0",
+    "relay_backend": "ts"
+  },
+  "compression": {
+    "enabled": true,
+    "rtk": {
+      "enabled": true,
+      "max_compression_ratio": 0.15,
+      "description": "Request Token Knockout — プロンプト内の冗長トークンを削除して15-95%削減"
+    },
+    "caveman": {
+      "enabled": true,
+      "description": "Caveman圧縮 — RTKとスタックしてさらに圧縮率を向上"
+    }
+  },
+  "routing": {
+    "strategy": "auto",
+    "description": "9因子スコアリングによる自動ルーティング（17戦略から選択可能）",
+    "available_strategies": [
+      "priority",
+      "weighted",
+      "fill-first",
+      "round-robin",
+      "p2c",
+      "random",
+      "least-used",
+      "cost-optimized",
+      "reset-aware",
+      "reset-window",
+      "headroom",
+      "strict-random",
+      "auto",
+      "lkgp",
+      "context-optimized",
+      "context-relay",
+      "fusion"
+    ],
+    "fallback": {
+      "enabled": true,
+      "max_retries": 3,
+      "circuit_breaker": {
+        "failure_threshold": 5,
+        "recovery_timeout": "60s"
+      }
+    }
+  },
+  "tiers": {
+    "subscription": {
+      "description": "月額サブスクリプションプロバイダー（最優先）",
+      "providers": []
+    },
+    "api_key": {
+      "description": "APIキープロバイダー（セカンダリ）",
+      "providers": [
+        {
+          "name": "openai-gpt4o",
+          "base_url": "https://api.openai.com/v1",
+          "model": "gpt-4o",
+          "api_key_env": "OPENAI_API_KEY"
+        },
+        {
+          "name": "anthropic-claude-sonnet",
+          "base_url": "https://api.anthropic.com/v1",
+          "model": "claude-sonnet-4-20250514",
+          "api_key_env": "ANTHROPIC_API_KEY"
+        }
+      ]
+    },
+    "cheap": {
+      "description": "低コストプロバイダー（サードティア）",
+      "providers": [
+        {
+          "name": "openrouter-mix",
+          "base_url": "https://openrouter.ai/api/v1",
+          "model": "auto",
+          "api_key_env": "OPENROUTER_API_KEY"
+        }
+      ]
+    },
+    "free": {
+      "description": "無料プロバイダー（最終フォールバック）",
+      "providers": [
+        {
+          "name": "ollama-local",
+          "base_url": "http://ollama:11434/v1",
+          "model": "llama3.1",
+          "api_key": "ollama"
+        }
+      ]
+    }
+  },
+  "memory": {
+    "enabled": true,
+    "backend": "qdrant",
+    "qdrant_url": "http://qdrant:6333",
+    "collection": "omniroute-memory"
+  }
+}

@@ -1,0 +1,189 @@
+version: "3.9"
+
+# =============================================================================
+# AI Agent Stack — 統合教育環境
+# 全サービスを一括起動: docker compose up -d
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # Agent Vault — 認証プロキシ・ヴォールト
+  # MITMプロキシでAIエージェントのAPIキー漏洩を防止
+  # UI: http://localhost:14321  Proxy: http://localhost:14322
+  # ---------------------------------------------------------------------------
+  agent-vault:
+    image: infisical/agent-vault:latest
+    container_name: edu-agent-vault
+    ports:
+      - "14321:14321"  # Management UI / API
+      - "14322:14322"  # MITM Proxy
+    environment:
+      - AGENT_VAULT_MASTER_PASSWORD=${AGENT_VAULT_MASTER_PASSWORD:-change-me-in-production}
+      - DATABASE_URL=postgres://agentvault:${AGENT_VAULT_DB_PASSWORD:-vaultpass}@agent-vault-db:5432/agentvault?sslmode=disable
+    volumes:
+      - agent-vault-data:/data
+    depends_on:
+      agent-vault-db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:14321/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - agent-stack
+
+  agent-vault-db:
+    image: postgres:16-alpine
+    container_name: edu-agent-vault-db
+    environment:
+      - POSTGRES_USER=agentvault
+      - POSTGRES_PASSWORD=${AGENT_VAULT_DB_PASSWORD:-vaultpass}
+      - POSTGRES_DB=agentvault
+    volumes:
+      - agent-vault-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agentvault -d agentvault"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - agent-stack
+
+  # ---------------------------------------------------------------------------
+  # OmniRoute — AIゲートウェイ
+  # 236プロバイダー対応, RTK+Caveman圧縮, 17ルーティング戦略
+  # Dashboard: http://localhost:20128  API: http://localhost:20128/v1
+  # ---------------------------------------------------------------------------
+  omniroute:
+    image: diegosouzapw/omniroute:latest
+    container_name: edu-omniroute
+    ports:
+      - "20128:20128"
+    environment:
+      - PORT=20128
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - GOOGLE_GENERATIVE_AI_API_KEY=${GOOGLE_GENERATIVE_AI_API_KEY:-}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - OLLAMA_BASE_URL=http://ollama:11434
+    volumes:
+      - omniroute-data:/app/data
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:20128/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks:
+      - agent-stack
+
+  # ---------------------------------------------------------------------------
+  # OpenSquilla — トークン効率マイクロカーネルAIエージェント
+  # SquillaRouter がタスク複雑度に応じて最安モデルに自動ルーティング
+  # Gateway: http://localhost:18791
+  # ---------------------------------------------------------------------------
+  opensquilla:
+    image: opensquilla/opensquilla:latest
+    container_name: edu-opensquilla
+    ports:
+      - "18791:18791"
+    environment:
+      - OPENSQUILLA_LISTEN=0.0.0.0:18791
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - TAVILY_API_KEY=${TAVILY_API_KEY:-}
+    volumes:
+      - opensquilla-data:/data
+      - ./opensquilla/opensquilla.toml:/app/opensquilla.toml:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:18791/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - agent-stack
+
+  # ---------------------------------------------------------------------------
+  # Qdrant — ベクトルDB（OmniRoute / OpenSquilla 共通の記憶層）
+  # Dashboard: http://localhost:6333/dashboard
+  # ---------------------------------------------------------------------------
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: edu-qdrant
+    ports:
+      - "6333:6333"  # HTTP API
+      - "6334:6334"  # gRPC
+    volumes:
+      - qdrant-data:/qdrant/storage
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:6333/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - agent-stack
+
+  # ---------------------------------------------------------------------------
+  # Ollama — ローカルLLM（フォールバック・プライバシー用途）
+  # API: http://localhost:11434
+  # ---------------------------------------------------------------------------
+  ollama:
+    image: ollama/ollama:latest
+    container_name: edu-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks:
+      - agent-stack
+
+  # ---------------------------------------------------------------------------
+  # Knowledge Vault UI — pgAdmin（Agent Vault DB の管理用）
+  # Dashboard: http://localhost:5050
+  # ---------------------------------------------------------------------------
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: edu-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@edu.local
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      agent-vault-db:
+        condition: service_healthy
+    networks:
+      - agent-stack
+
+networks:
+  agent-stack:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  agent-vault-data:
+  agent-vault-db-data:
+  omniroute-data:
+  opensquilla-data:
+  qdrant-data:
+  ollama-data:
+  pgadmin-data:
