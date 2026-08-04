@@ -1,0 +1,93 @@
+# Automated dependency updates.
+#
+# This repo has two dependency trees that matter and were previously covered
+# by nothing: npm (the Next.js app) and cargo (13 crates, several of which
+# compile to WASM that ships to the browser).
+#
+# `security.yml` runs Trivy + Semgrep weekly but is deliberately non-blocking
+# and report-only — it tells you a CVE exists, it does not open the PR.
+version: 2
+
+updates:
+  # ── Next.js app ───────────────────────────────────────────
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "03:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 10
+    labels:
+      - dependencies
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      # Next.js/React major bumps need coordinated review; keep them together
+      # so the merge gate runs once instead of once per package.
+      next:
+        patterns:
+          - "next"
+          - "@next/*"
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      prisma:
+        patterns:
+          - "prisma"
+          - "@prisma/*"
+      testing:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "@testing-library/*"
+      linting:
+        patterns:
+          - "eslint"
+          - "eslint-*"
+          - "@typescript-eslint/*"
+          - "prettier"
+      # Everything else, patch-only, in one PR.
+      patch:
+        update-types:
+          - patch
+
+  # ── Rust crates ───────────────────────────────────────────
+  #
+  # Treat these PRs as determinism-relevant, not routine: a dependency bump
+  # can move the WASM hash (wasm-hash-lock.yml) or change cross-platform
+  # behaviour (cross-platform-determinism.yml). Let the full workflow set run
+  # before merging. See CONTRIBUTING.md.
+  - package-ecosystem: cargo
+    directory: /crates
+    schedule:
+      interval: weekly
+      day: monday
+      time: "03:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - rust
+      - determinism
+    commit-message:
+      prefix: chore
+      include: scope
+
+  # ── GitHub Actions ────────────────────────────────────────
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "03:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - ci
+    commit-message:
+      prefix: chore
+      include: scope
