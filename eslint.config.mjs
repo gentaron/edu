@@ -4,6 +4,7 @@ import sonarjs from "eslint-plugin-sonarjs";
 import unicorn from "eslint-plugin-unicorn";
 import noCrossDomainImport from "./eslint-rules/no-cross-domain-import.js";
 import requireJSDoc from "./eslint-rules/require-jsdoc.js";
+import reactHooks from "eslint-plugin-react-hooks";
 import noAiSlop from "./eslint-rules/no-ai-slop.js";
 
 const eslintConfig = tseslint.config(
@@ -21,6 +22,12 @@ const eslintConfig = tseslint.config(
       "public/**",
       "eslint-rules/**",
       "edu-repo/**",
+      // tsconfig.json が exclude しているのに eslint 側だけ漏れていた。
+      // 型情報付きルール (recommendedTypeChecked) が
+      // 「project service に無いファイル」を解析しようとして
+      // パースエラーを 249 件出し、実コードの指摘 14 件が埋もれていた。
+      "edu-scaffold/**",
+      "edu-template/**",
       "coverage/**",
       "src/app/**",
       "*.config.mjs",
@@ -49,6 +56,12 @@ const eslintConfig = tseslint.config(
     plugins: {
       sonarjs,
       unicorn,
+      // このオブジェクトで plugins を再定義しているため、react-hooks も
+      // ここに載せないと下の "react-hooks/*" ルールが解決できず、
+      // **ESLint が起動すらしなくなる**（flat config の plugins は
+      // config オブジェクト単位で解決される。上の nextCoreWebVitals が
+      // 登録していても、このオブジェクトからは見えない）。
+      "react-hooks": reactHooks,
       "edu": {
         rules: {
           "no-cross-domain-import": noCrossDomainImport,
