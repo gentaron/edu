@@ -40,7 +40,7 @@ name = "apolon-compiler"
 version = "0.1.0"
 dependencies = [
  "wasm-encoder",
- "wasmparser",
+ "wasmparser 0.220.1",
 ]
 
 [[package]]
@@ -442,10 +442,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "leb128"
-version = "0.2.6"
+name = "leb128fmt"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6cc46bac87ef8093eed6f272babb833b6443374399985ac8ed28471ee0918545"
+checksum = "09edd9e8b54e49e587e4f6295a7d29c3ea94d469cb40ab8ca70b288248a81db2"
 
 [[package]]
 name = "libc"
@@ -899,12 +899,12 @@ checksum = "60238e5b4b1b295701d6f9a66d2a126fe19990348f5fb9dae3b623a370119d94"
 
 [[package]]
 name = "wasm-encoder"
-version = "0.220.1"
+version = "0.255.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e913f9242315ca39eff82aee0e19ee7a372155717ff0eb082c741e435ce25ed1"
+checksum = "9b524283fb5df62eec102ed0574838961bdd7ba5ac9c50d38e2756c51c971a42"
 dependencies = [
- "leb128",
- "wasmparser",
+ "leb128fmt",
+ "wasmparser 0.255.0",
 ]
 
 [[package]]
@@ -919,6 +919,17 @@ dependencies = [
  "indexmap",
  "semver",
  "serde",
+]
+
+[[package]]
+name = "wasmparser"
+version = "0.255.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e8e329ef4b5d46e73b91d3ac6924417cad55a8cbbf869c199283383427c3320b"
+dependencies = [
+ "bitflags",
+ "indexmap",
+ "semver",
 ]
 
 [[package]]
