@@ -1,0 +1,65 @@
+name: CodeQL Security Analysis
+
+# Dataflow analysis for the Next.js app. This complements `security.yml`
+# (Trivy + Semgrep) rather than replacing it: those scan dependencies and
+# match patterns; CodeQL follows taint through the code.
+#
+# Like security.yml, this is NOT a merge gate — the merge gate is ci.yml.
+# Findings land in the Security tab.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Weekly scan on Mondays at 02:00 UTC
+    - cron: '0 2 * * 1'
+
+permissions:
+  contents: read
+  security-events: write
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-latest
+    # This is a 92 MB repo; the extraction step is the slow part.
+    timeout-minutes: 40
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-extended
+          config: |
+            paths-ignore:
+              - node_modules
+              - .next
+              - crates          # Rust — not covered by this language pack
+              - proofs          # Lean 4
+              - download
+              - bruno-collection
+              - edu-scaffold
+              - edu-template
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # No --frozen-lockfile here: a lockfile drift should fail the merge
+      # gate in ci.yml, not silently turn the security scan red.
+      - name: Install dependencies
+        run: bun install
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:javascript-typescript'

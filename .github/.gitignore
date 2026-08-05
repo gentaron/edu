@@ -4,3 +4,7 @@
 !workflows/
 !workflows/**
 !/.gitignore
+# ...and not the Dependabot config. Without this exception the file above
+# swallows it silently: `git add` reports nothing, and Dependabot never runs
+# because GitHub only reads it from the default branch.
+!/dependabot.yml
