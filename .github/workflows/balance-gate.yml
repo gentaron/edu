@@ -52,7 +52,7 @@ jobs:
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
       - name: Cache Lake packages
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             proofs/lean/Apolon/.lake
@@ -129,7 +129,7 @@ jobs:
           components: rustfmt, clippy
 
       - name: Cache Cargo
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.cargo/registry
