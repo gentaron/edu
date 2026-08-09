@@ -6,6 +6,6 @@ description = "Compiler for the Apolon DSL — card ability language for the edu
 
 [dependencies]
 wasm-encoder = "0.220"
-wasmparser = "0.220"
+wasmparser = "0.255"
 
 [dev-dependencies]
