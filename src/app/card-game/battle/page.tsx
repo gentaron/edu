@@ -1,11 +1,11 @@
 "use client"
 
-import React, { useEffect, useRef, useCallback, Suspense } from "react"
+import React, { useEffect, useRef, useCallback, useMemo, Suspense } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import dynamic from "next/dynamic"
 import { useRouter, useSearchParams } from "next/navigation"
-import { m, AnimatePresence } from "framer-motion"
+import { m, AnimatePresence, MotionConfig } from "framer-motion"
 import { Swords, Heart, Shield, Crown, Zap, Sparkles, Crosshair, Skull, User } from "lucide-react"
 import { ENEMIES } from "@/domains/cards/cards.data"
 import { useDeckStore, useBattleStore } from "@/lib/stores"
@@ -82,19 +82,74 @@ function BattleContent() {
 
   const selectedChar = selectedCharIndex === null ? null : fieldCharacters[selectedCharIndex]
 
+  // Start (or restart) the battle the URL asks for.
+  // - Read the deck from the store, not from this render: during hydration zustand hands
+  //   React the pre-hydration snapshot (an empty deck), which used to bounce every direct
+  //   link or reload of a battle back to the enemy select screen.
+  // - If a different (or finished) battle is still in the store — you left mid-fight via
+  //   "← 敵選択" and picked someone else — start the one in the URL instead of resuming it.
+  const enemyParam = searchParams.get("enemy")
   useEffect(() => {
-    const enemyId = searchParams.get("enemy")
-    if (enemyId && !selectedEnemy) {
-      const enemy = ENEMIES.find((e) => e.id === enemyId)
-      if (enemy && deck.length >= 5) {
-        startBattle(enemy, deck)
-      } else {
+    const currentDeck = useDeckStore.getState().deck
+    const battle = useBattleStore.getState()
+    const enemy = enemyParam ? ENEMIES.find((e) => e.id === enemyParam) : undefined
+    if (!enemy || currentDeck.length < 5) {
+      if (!battle.selectedEnemy) {
         router.replace("/card-game/select")
       }
-    } else if (!selectedEnemy) {
-      router.replace("/card-game/select")
+      return
     }
+    const sameBattle = battle.selectedEnemy?.id === enemy.id && battle.phase !== "victory" && battle.phase !== "defeat" && battle.phase !== "idle"
+    if (!sameBattle) {
+      startBattle(enemy, currentDeck)
+    }
+  }, [enemyParam, router, startBattle])
+
+  // Leaving the page ends the battle and cancels its pending timers.
+  useEffect(() => () => useBattleStore.getState().resetBattle(), [])
+
+  // Keyboard: 1–5 pick a character, Z/X/C/V = 攻撃/防御/効果/必殺
+  useEffect(() => {
+    const keys: Record<string, "攻撃" | "防御" | "効果" | "必殺"> = { z: "攻撃", x: "防御", c: "効果", v: "必殺" }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) {
+        return
+      }
+      const target = e.target as HTMLElement | null
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) {
+        return
+      }
+      const n = Number(e.key)
+      if (Number.isInteger(n) && n >= 1 && n <= 9) {
+        useBattleStore.getState().selectCharacter(n - 1)
+        return
+      }
+      const ability = keys[e.key.toLowerCase()]
+      if (ability) {
+        const st = useBattleStore.getState()
+        if (ability === "防御" && st.selectedEnemy?.id === "void-spider" && st.turn % 2 === 0) {
+          return
+        }
+        st.playAbility(ability)
+      }
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
   }, [])
+
+  // Background motes: random ONCE. Recomputing them in render restarted all six
+  // animations on every state change, which is most of the jank you could see.
+  const motes = useMemo(
+    () =>
+      Array.from({ length: 6 }, (_, i) => ({
+        x: `${Math.random() * 100}%`,
+        y: `${Math.random() * 100}%`,
+        from: `${Math.random() * 100}%`,
+        duration: 8 + Math.random() * 6,
+        delay: i * 1.5,
+      })),
+    []
+  )
 
   useEffect(() => {
     if (phase === "resolving" && lastCharIndex !== null) {
@@ -159,7 +214,7 @@ function BattleContent() {
   }
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <ScreenFlash color="rgba(239,68,68,0.2)" active={phase === "enemyTurn"} intensity={0.2} />
       <ScreenFlash
         color={
@@ -184,18 +239,13 @@ function BattleContent() {
       >
         {/* BG Particles */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-          {Array.from({ length: 6 }, (_, i) => (
+          {motes.map((mt, i) => (
             <m.div
               key={i}
-              className="absolute w-1 h-1 rounded-full bg-white/10"
-              initial={{ x: `${Math.random() * 100}%`, y: `${Math.random() * 100}%` }}
-              animate={{ y: [`${Math.random() * 100}%`, `-10%`], opacity: [0, 0.3, 0] }}
-              transition={{
-                duration: 8 + Math.random() * 6,
-                repeat: Infinity,
-                delay: i * 1.5,
-                ease: "linear",
-              }}
+              className="absolute w-1 h-1 rounded-full bg-white/10 will-change-transform"
+              initial={{ x: mt.x, y: mt.y }}
+              animate={{ y: [mt.from, `-10%`], opacity: [0, 0.3, 0] }}
+              transition={{ duration: mt.duration, repeat: Infinity, delay: mt.delay, ease: "linear" }}
             />
           ))}
         </div>
@@ -213,7 +263,7 @@ function BattleContent() {
             <Swords className="w-4 h-4 text-rose-400" />
             <span className="text-xs font-bold text-edu-text">Battle</span>
             <span className="text-[10px] text-edu-muted ml-auto">
-              ターン {turn} | 味方 {aliveCount}/5
+              ターン {turn} | 味方 {aliveCount}/{fieldCharacters.length}
             </span>
           </div>
         </div>
@@ -410,11 +460,14 @@ function BattleContent() {
                   >
                     {isPlayerTurn ? "クリックしてキャラを選択 →" : ""}
                   </m.span>
+                  <span className="text-[8px] text-edu-muted/50 ml-auto hidden sm:inline">
+                    キー: 1–{fieldCharacters.length} 選択 · Z 攻撃 · X 防御 · C 効果 · V 必殺
+                  </span>
                 </div>
                 <div className="flex gap-2 justify-center flex-wrap">
                   {fieldCharacters.map((fc, i) => (
                     <FieldCharSlot
-                      key={fc.card.id}
+                      key={`${fc.card.id}-${i}`}
                       char={fc}
                       index={i}
                       isSelected={selectedCharIndex === i}
@@ -634,7 +687,7 @@ function BattleContent() {
           )}
         </div>
       </m.div>
-    </>
+    </MotionConfig>
   )
 }
 

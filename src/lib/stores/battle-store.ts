@@ -58,6 +58,44 @@ interface BattleState {
   resetBattle: () => void
 }
 
+/* ── Timers belong to one battle ──────────────────────────────────────
+   Every delayed step (enemy turn, victory, turn hand-back) is scheduled
+   through `later()`, tagged with the battle it belongs to. Starting a new
+   battle or resetting bumps the epoch and cancels everything pending, so a
+   timer from a battle you already left can never act on the next one
+   (previously: attack, leave, pick another enemy → the old enemy's turn
+   fired inside the new battle, or a new battle flipped straight to victory). */
+let battleEpoch = 0
+const pending = new Set<ReturnType<typeof setTimeout>>()
+function later(fn: () => void, ms: number) {
+  const epoch = battleEpoch
+  const id = setTimeout(() => {
+    pending.delete(id)
+    if (epoch === battleEpoch) {
+      fn()
+    }
+  }, ms)
+  pending.add(id)
+}
+function cancelPending() {
+  battleEpoch++
+  for (const id of pending) {
+    clearTimeout(id)
+  }
+  pending.clear()
+}
+
+/** Index of a random alive character, or -1. By position, so duplicate cards can never redirect a hit. */
+function randomAliveIndex(fieldChars: FieldChar[]): number {
+  const alive: number[] = []
+  fieldChars.forEach((fc, i) => {
+    if (!fc.isDown) {
+      alive.push(i)
+    }
+  })
+  return alive.length === 0 ? -1 : alive[Math.floor(Math.random() * alive.length)]!
+}
+
 function addLog(setter: (fn: (s: BattleState) => Partial<BattleState>) => void, msg: string) {
   setter((s) => ({ log: [...s.log.slice(-29), msg] }))
 }
@@ -70,12 +108,11 @@ function hitRandomChar(
   emoji: string,
   msgPrefix: string
 ): { fieldChars: FieldChar[]; hitIndex: number | null } {
-  const alive = fieldChars.filter((fc) => !fc.isDown)
-  if (alive.length === 0) {
+  const idx = randomAliveIndex(fieldChars)
+  if (idx === -1) {
     return { fieldChars, hitIndex: null }
   }
-  const target = alive[Math.floor(Math.random() * alive.length)]!
-  const idx = fieldChars.findIndex((fc) => fc.card.id === target.card.id)
+  const target = fieldChars[idx]!
   const newHp = Math.max(0, target.hp - damage)
   const updated = [...fieldChars]
   updated[idx] = { ...target, hp: newHp, isDown: newHp <= 0 }
@@ -112,6 +149,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
   charHitIndex: null,
 
   startBattle: (enemy, deck) => {
+    cancelPending()
     // Migrate old localStorage cards to fill missing effectType/effectValue
     const migratedDeck = deck.map(migrateCard)
     const field: FieldChar[] = migratedDeck.map((c) => {
@@ -136,7 +174,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       enemyAttackReduction: 0,
       log: [
         `⚔️ ${enemy.name} との戦闘開始！`,
-        `— 5体の味方がフィールドに出撃！ —`,
+        `— ${field.length}体の味方がフィールドに出撃！ —`,
         enemy.id === "frost-guardian" ? "❄️ 絶対零度の冷気が味方全体を襲う！全員に1ダメージ！" : "",
       ].filter(Boolean),
       lastAbilityUsed: null,
@@ -275,7 +313,9 @@ export const useBattleStore = create<BattleState>((set, get) => ({
     addLog(set, logMsg)
 
     if (newEnemyHp <= 0) {
-      setTimeout(() => {
+      // Show the final blow at once (the bar used to sit at the old HP for 0.8s)
+      set({ enemyHp: 0, fieldCharacters: newFieldChars })
+      later(() => {
         set((prev) => ({
           phase: "victory",
           enemyHp: 0,
@@ -299,7 +339,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
     })
     get().checkPhaseTransition()
 
-    setTimeout(() => {
+    later(() => {
       set({ screenShake: false, enemyFlash: false, healFlash: false, shieldFlash: false })
       get().executeEnemyTurn()
     }, 1200)
@@ -338,11 +378,10 @@ export const useBattleStore = create<BattleState>((set, get) => ({
     let newFieldChars = [...s.fieldCharacters]
     let hitCharIdx: number | null = null
     if (effectiveDamage > 0) {
-      const alive = newFieldChars.filter((fc) => !fc.isDown)
-      if (alive.length > 0) {
-        const target = alive[Math.floor(Math.random() * alive.length)]!
-        const idx = newFieldChars.findIndex((fc) => fc.card.id === target.card.id)
-        if (idx !== -1) {
+      const idx = randomAliveIndex(newFieldChars)
+      if (idx !== -1) {
+        const target = newFieldChars[idx]!
+        {
           const newHp = Math.max(0, target.hp - effectiveDamage)
           newFieldChars[idx] = { ...target, hp: newHp, isDown: newHp <= 0 }
           hitCharIdx = idx
@@ -357,11 +396,10 @@ export const useBattleStore = create<BattleState>((set, get) => ({
 
     // Poison damage → random alive character
     if (s.poisonActive) {
-      const alive = newFieldChars.filter((fc) => !fc.isDown)
-      if (alive.length > 0) {
-        const target = alive[Math.floor(Math.random() * alive.length)]!
-        const idx = newFieldChars.findIndex((fc) => fc.card.id === target.card.id)
-        if (idx !== -1) {
+      const idx = randomAliveIndex(newFieldChars)
+      if (idx !== -1) {
+        const target = newFieldChars[idx]!
+        {
           const newHp = Math.max(0, target.hp - 1)
           newFieldChars[idx] = { ...target, hp: newHp, isDown: newHp <= 0 }
           hitCharIdx = idx
@@ -411,15 +449,11 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       const alive = newFieldChars.filter((fc) => !fc.isDown)
       const targets = Math.min(alive.length, s.enemyCurrentPhase)
       for (let i = 0; i < targets; i++) {
-        const remainingAlive = newFieldChars.filter((fc) => !fc.isDown)
-        if (remainingAlive.length === 0) {
+        const idx = randomAliveIndex(newFieldChars)
+        if (idx === -1) {
           break
         }
-        const target = remainingAlive[Math.floor(Math.random() * remainingAlive.length)]!
-        const idx = newFieldChars.findIndex((fc) => fc.card.id === target.card.id)
-        if (idx === -1) {
-          continue
-        }
+        const target = newFieldChars[idx]!
         const dmg = 2 + s.enemyCurrentPhase
         const newHp = Math.max(0, target.hp - dmg)
         newFieldChars[idx] = { ...target, hp: newHp, isDown: newHp <= 0 }
@@ -449,7 +483,7 @@ export const useBattleStore = create<BattleState>((set, get) => ({
 
     const newTurn = s.turn + 1
 
-    setTimeout(() => {
+    later(() => {
       set({
         enemyHp: newEnemyHp,
         shieldBuffer: 0,
@@ -493,10 +527,9 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       if (s.selectedEnemy.id === "void-reaper") {
         // Phase transition damage → random character (previously was playerHp)
         const updatedChars = [...get().fieldCharacters]
-        const aliveChars = updatedChars.filter((fc) => !fc.isDown)
-        if (aliveChars.length > 0) {
-          const target = aliveChars[Math.floor(Math.random() * aliveChars.length)]!
-          const idx = updatedChars.findIndex((fc) => fc.card.id === target.card.id)
+        const idx = randomAliveIndex(updatedChars)
+        if (idx !== -1) {
+          const target = updatedChars[idx]!
           const charHp = Math.max(0, target.hp - 4)
           updatedChars[idx] = { ...target, hp: charHp, isDown: charHp <= 0 }
           addLog(set, `🌪️ 次元断絶の衝撃で${target.card.name}に4ダメージ！`)
@@ -504,10 +537,9 @@ export const useBattleStore = create<BattleState>((set, get) => ({
             addLog(set, `🌪️ ${target.card.name}は次元断絶に飲み込まれた！`)
           }
           // Additional 3 damage to another character
-          const remainingAlive = updatedChars.filter((fc) => !fc.isDown)
-          if (remainingAlive.length > 0) {
-            const target2 = remainingAlive[Math.floor(Math.random() * remainingAlive.length)]!
-            const idx2 = updatedChars.findIndex((fc) => fc.card.id === target2.card.id)
+          const idx2 = randomAliveIndex(updatedChars)
+          if (idx2 !== -1) {
+            const target2 = updatedChars[idx2]!
             const charHp2 = Math.max(0, target2.hp - 3)
             updatedChars[idx2] = { ...target2, hp: charHp2, isDown: charHp2 <= 0 }
             if (charHp2 <= 0) {
@@ -525,7 +557,8 @@ export const useBattleStore = create<BattleState>((set, get) => ({
     }
   },
 
-  resetBattle: () =>
+  resetBattle: () => {
+    cancelPending()
     set({
       phase: "idle",
       shieldBuffer: 0,
@@ -546,5 +579,6 @@ export const useBattleStore = create<BattleState>((set, get) => ({
       healFlash: false,
       shieldFlash: false,
       charHitIndex: null,
-    }),
+    })
+  },
 }))
