@@ -247,3 +247,16 @@ cd lean && lake exe balance_gate         # Balance verification
 ## License
 
 [MIT](LICENSE)
+
+<!-- ecosystem:begin (自動生成: gentaron/infocollect の ecosystem/registry.json から。手で直さない) -->
+
+## つながり
+
+gentaron のリポジトリ群のうち **EDU 宇宙** の一つ。EDU — E16 連星系を舞台とするオリジナル SF ユニバースの本体サイト。
+
+- **受け取る**: [edutext](https://github.com/gentaron/edutext)（EDU の原典）、[image](https://github.com/gentaron/image)（キャラクターアート）
+- **同じ島**: [eurekaspace](https://github.com/gentaron/eurekaspace)、[irisworlds](https://github.com/gentaron/irisworlds)、[laylaland](https://github.com/gentaron/laylaland)、[edunft](https://github.com/gentaron/edunft)、[gamemina](https://github.com/gentaron/gamemina)
+
+全体の地図 → [ecosystem](https://github.com/gentaron/infocollect/blob/HEAD/ecosystem/README.md)
+
+<!-- ecosystem:end -->
