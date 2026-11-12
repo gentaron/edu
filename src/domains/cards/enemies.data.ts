@@ -1,5 +1,7 @@
 import type { EnemyId, Enemy } from "@/types"
 
+const I = (n: string) => `https://raw.githubusercontent.com/gentaron/image/main/${n}`
+
 /* ═══════════════════════════════════════════════════════
    10体のエネミー
    ═══════════════════════════════════════════════════════ */
@@ -13,7 +15,7 @@ export const ENEMIES = [
     titleEn: "Guardian of Stardust",
     maxHp: 28,
     attackPower: 4,
-    imageUrl: "/logo.svg",
+    imageUrl: I("StardustDragon.png"),
     description: "E16連星系の深部に棲む古代竜。星屑を纏い、その息吹は小惑星を灰に変える。",
     descriptionEn:
       "An ancient dragon dwelling in the depths of the E16 star cluster. Cloaked in stardust, its breath turns asteroids to ash.",
@@ -37,7 +39,7 @@ export const ENEMIES = [
     titleEn: "Wandering Wraith",
     maxHp: 22,
     attackPower: 3,
-    imageUrl: "/logo.svg",
+    imageUrl: I("PhantomWalker.png"),
     description: "次元境界を彷徨う幽霊のような存在。実体を持たず、傷ついても自ら再生する。",
     descriptionEn:
       "A ghost-like entity wandering the dimensional boundary. Lacks physical form and regenerates when wounded.",
@@ -63,7 +65,7 @@ export const ENEMIES = [
     titleEn: "Keeper of the Abandoned Factory",
     maxHp: 35,
     attackPower: 5,
-    imageUrl: "/logo.svg",
+    imageUrl: I("IronGolem.png"),
     description: "放棄された軍事工場で自動稼働する巨大な機械番人。装甲はどんな攻撃も弾く。",
     descriptionEn:
       "A colossal mechanical sentinel that runs automatically in an abandoned military factory. Its armor deflects any attack.",
@@ -88,7 +90,7 @@ export const ENEMIES = [
     titleEn: "Multi-Headed Dragon of the Swamp",
     maxHp: 30,
     attackPower: 3,
-    imageUrl: "/logo.svg",
+    imageUrl: I("VenomHydra.png"),
     description: "瘴気に満ちた沼に潜む多頭の竜。首を斬っても再生し、毒で敵を蝕む。",
     descriptionEn:
       "A multi-headed dragon lurking in a miasma-filled swamp. Heads regenerate when severed, and its venom corrodes enemies.",
@@ -120,7 +122,7 @@ export const ENEMIES = [
     titleEn: "Armor of Absolute Zero",
     maxHp: 42,
     attackPower: 5,
-    imageUrl: "/logo.svg",
+    imageUrl: I("FrostGuardian.png"),
     description: "永久凍土の最深部で眠る氷の巨人。その鎧は絶対零度の冷気で硬化している。",
     descriptionEn:
       "A frost giant sleeping in the deepest permafrost. Its armor is hardened by the cold of absolute zero.",
@@ -145,7 +147,7 @@ export const ENEMIES = [
     titleEn: "Incarnation of Hellfire",
     maxHp: 36,
     attackPower: 7,
-    imageUrl: "/logo.svg",
+    imageUrl: I("FlameSpiritKing.png"),
     description: "太古の火山に宿る炎の精霊。その熱量は防壁すら溶かし、近づく者を灰に変える。",
     descriptionEn:
       "A fire spirit inhabiting an ancient volcano. Its heat melts even barriers, turning all who approach to ash.",
@@ -171,7 +173,7 @@ export const ENEMIES = [
     titleEn: "Weaver of the Void",
     maxHp: 45,
     attackPower: 4,
-    imageUrl: "/logo.svg",
+    imageUrl: I("AbyssSpider.png"),
     description: "次元の裂け目に巣食う巨大蜘蛛。透明な糸で獲物を縛り上げ、動きを封じる。",
     descriptionEn:
       "A colossal spider nesting in dimensional rifts. It binds prey with invisible threads, sealing their movement.",
@@ -197,7 +199,7 @@ export const ENEMIES = [
     titleEn: "The Wingless Judge",
     maxHp: 65,
     attackPower: 8,
-    imageUrl: "/logo.svg",
+    imageUrl: I("FallenAngel.png"),
     description:
       "かつてAURALISの守護天使だったが、次元崩壊に巻き込まれ堕天した。3段階の怒りを持つ。",
     descriptionEn:
@@ -230,7 +232,7 @@ export const ENEMIES = [
     titleEn: "Reaper of Spacetime",
     maxHp: 75,
     attackPower: 9,
-    imageUrl: "/logo.svg",
+    imageUrl: I("VoidReaper.png"),
     description: "虚無から現れ、存在そのものを刈り取る死神。3フェーズの力で時空を歪める。",
     descriptionEn:
       "A reaper that emerges from the void to harvest existence itself. Warps spacetime with three phases of power.",
@@ -268,7 +270,7 @@ export const ENEMIES = [
     titleEn: "Sovereign of Demise",
     maxHp: 100,
     attackPower: 11,
-    imageUrl: "/logo.svg",
+    imageUrl: I("VoidKing.png"),
     description:
       "全ての虚無の根源。宇宙の終わりを体現する存在。必殺能力のみが最終フェーズを突破できる。",
     descriptionEn:
