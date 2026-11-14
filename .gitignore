@@ -84,3 +84,8 @@ test-results/*.png
 public/rag/corpus.json
 prisma/dev.db
 edu/
+
+# secrets
+.env
+.env.*
+!.env.example
