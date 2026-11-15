@@ -7,15 +7,18 @@ on:
     - cron: "0 3 * * 1" # Weekly Monday 3am UTC
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 jobs:
   scan:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Trivy dependency scan (report only)
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@38b337fff0a2f984d5be173c99e3f633438167ec # master
         with:
           scan-type: "fs"
           scan-ref: "."
@@ -25,7 +28,7 @@ jobs:
 
       - name: Semgrep SAST (report only)
         continue-on-error: true
-        uses: returntocorp/semgrep-action@v1
+        uses: returntocorp/semgrep-action@713efdd345f3035192eaa63f56867b88e63e4e5d # v1
         with:
           config: "p/typescript p/javascript p/secrets p/security-audit"
           args: "--exclude='crates/' --exclude='node_modules/' --exclude='skills/'"

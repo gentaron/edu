@@ -13,15 +13,18 @@ on:
       - 'crates/edu-verifier/**'
       - 'crates/edu-engine-core/**'
 
+permissions:
+  contents: read
+
 jobs:
   test-prover:
     name: edu-prover tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-prover-${{ hashFiles('crates/edu-prover/Cargo.lock') }}
@@ -36,10 +39,10 @@ jobs:
     name: edu-verifier tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
       - name: Cache cargo
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-verifier-${{ hashFiles('crates/edu-verifier/Cargo.lock') }}
@@ -51,9 +54,10 @@ jobs:
     name: Clippy (prover + verifier)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
+          toolchain: stable
           components: clippy
       - name: Run clippy
         working-directory: crates
@@ -64,8 +68,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test-prover, test-verifier]
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
       - name: Build verifier WASM
         working-directory: crates
         run: |
