@@ -31,6 +31,9 @@ env:
   CARGO_TERM_COLOR: always
   CARGO_INCREMENTAL: 0
 
+permissions:
+  contents: read
+
 jobs:
   # ─────────────────────────────────────────────────────────────
   # Compile all .apo → WASM and hash
@@ -42,10 +45,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
           toolchain: "1.85"
           targets: wasm32-unknown-unknown
@@ -56,7 +59,7 @@ jobs:
           echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
 
       - name: Cache Cargo
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: |
             ~/.cargo/registry
@@ -147,7 +150,7 @@ jobs:
           echo "errors=$ERRORS" >> "$GITHUB_OUTPUT"
 
       - name: Upload computed hashes
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: wasm-computed-hashes
           path: /tmp/wasm-out/computed-hashes.txt
@@ -155,10 +158,13 @@ jobs:
 
       - name: Block on mismatch
         if: steps.hash.outputs.mismatches != '0' || steps.hash.outputs.errors != '0'
+        env:
+          SECURITY_INPUT_1: ${{ steps.hash.outputs.mismatches }}
+          SECURITY_INPUT_2: ${{ steps.hash.outputs.errors }}
         run: |
           echo "::error::WASM hash lock check FAILED"
-          echo "  Mismatches: ${{ steps.hash.outputs.mismatches }}"
-          echo "  Missing:    ${{ steps.hash.outputs.errors }}"
+          echo "  Mismatches: ${SECURITY_INPUT_1}"
+          echo "  Missing:    ${SECURITY_INPUT_2}"
           echo ""
           echo "To fix:"
           echo "  1. Review the changes that caused the mismatch"

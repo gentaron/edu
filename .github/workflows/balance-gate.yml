@@ -33,6 +33,9 @@ env:
   CARGO_INCREMENTAL: 0
   RUSTFLAGS: "-D warnings"
 
+permissions:
+  contents: read
+
 jobs:
   # ─────────────────────────────────────────────────────────────
   # Gate 1: Lean 4 Proof Compilation
@@ -44,7 +47,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Install elan
         run: |
@@ -52,7 +55,7 @@ jobs:
           echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
 
       - name: Cache Lake packages
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: |
             proofs/lean/Apolon/.lake
@@ -120,16 +123,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@b725eda525362e7cf34af9a7243cac1e3f01a7ec # stable
         with:
           toolchain: "1.85"
           components: rustfmt, clippy
 
       - name: Cache Cargo
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: |
             ~/.cargo/registry
@@ -166,7 +169,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Count sorryAx and compare with docs
         run: |
@@ -207,10 +210,14 @@ jobs:
 
     steps:
       - name: Evaluate gate results
+        env:
+          SECURITY_INPUT_1: ${{ needs.lean-build.result }}
+          SECURITY_INPUT_2: ${{ needs.termination-test.result }}
+          SECURITY_INPUT_3: ${{ needs.axiom-audit.result }}
         run: |
-          LEAN="${{ needs.lean-build.result }}"
-          TERM="${{ needs.termination-test.result }}"
-          AXIOM="${{ needs.axiom-audit.result }}"
+          LEAN="${SECURITY_INPUT_1}"
+          TERM="${SECURITY_INPUT_2}"
+          AXIOM="${SECURITY_INPUT_3}"
 
           echo "lean-build:       $LEAN"
           echo "termination-test: $TERM"
