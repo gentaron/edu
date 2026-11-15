@@ -8,7 +8,8 @@
   "role": "EDU — E16 連星系を舞台とするオリジナル SF ユニバースの本体サイト",
   "stack": "Next.js · Bun · Netlify",
   "produces": [
-    "site"
+    "site",
+    "wiki-index"
   ],
   "consumes": [
     "lore",
@@ -30,7 +31,15 @@
       "url": "https://github.com/gentaron/image"
     }
   ],
-  "downstream": [],
+  "downstream": [
+    {
+      "repo": "infocollect",
+      "flows": [
+        "wiki-index"
+      ],
+      "url": "https://github.com/gentaron/infocollect"
+    }
+  ],
   "siblings": [
     "edutext",
     "image",
