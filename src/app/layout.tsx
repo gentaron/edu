@@ -29,13 +29,7 @@ export const metadata: Metadata = {
     "SF",
     "ユニバース",
   ],
-  icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "48x48" },
-      { url: "/icon.png", type: "image/png", sizes: "1024x1024" },
-    ],
-    apple: "/apple-icon.png",
-  },
+  manifest: "/manifest.webmanifest",
 }
 
 export default function RootLayout({
@@ -60,6 +54,13 @@ export default function RootLayout({
             gtag('js', new Date());
             gtag('config', 'G-2ZFKSMV19K');
           `}
+        </Script>
+        <Script id="pwa-install-worker" strategy="afterInteractive">
+          {`if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
+            navigator.serviceWorker.getRegistration().then((registration) => {
+              if (!registration) return navigator.serviceWorker.register('/install-worker.js');
+            }).catch(console.error);
+          }`}
         </Script>
         <WebsiteJsonLd />
         <a href="#main-content" className="skip-link">
