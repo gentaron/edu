@@ -46,7 +46,7 @@ export function characterResponse(view: string | null, id: string | null) {
   const day = today()
 
   if (view === "population") {
-    const { current } = currentStates()
+    const { current, modelVersion } = currentStates()
     const rows = active.map((p, i) => {
       const s = current[i]!
       if (!s || ![s.h, s.w, s.a].every(Number.isFinite)) throw new Error("Missing state: " + p.id)
@@ -55,7 +55,7 @@ export function characterResponse(view: string | null, id: string | null) {
         h: s.h, w: s.w, wi: wealthIndex(s.w), a: s.a, assets: s.assets, debt: s.debt, care: s.care, pressure: s.pressure, opportunity: s.opportunity, expression: s.expression,
       }
     })
-    return NextResponse.json({ day, schema: 3, source: IDENTITY_SOURCE, confirmedCount, rows }, { headers })
+    return NextResponse.json({ day, schema: 3, modelVersion, source: IDENTITY_SOURCE, confirmedCount, rows }, { headers })
   }
 
   if (!id) {
@@ -73,6 +73,7 @@ export function characterResponse(view: string | null, id: string | null) {
   // A registry ID folded into a Wiki entry redirects to that entry.
   if (pageOf(id) !== id) return NextResponse.json({ schema: 3, redirect: pageOf(id) }, { headers })
   const members = membersOf.get(id) ?? (person(id) ? [id] : [])
+  const { modelVersion, convergence } = currentStates()
   const sorted = cohortSorted()
   const people = members.map((cid) => {
     const p = person(cid)!, s = requiredState(cid), n = nickname(cid)
@@ -80,7 +81,8 @@ export function characterResponse(view: string | null, id: string | null) {
       person: p,
       portrait: portraitFor(cid),
       nickname: n?.nickname ?? "", nicknameEn: n?.nicknameEn ?? "",
-      state: s ? { h: s.h, w: s.w, a: s.a, assets: s.assets, debt: s.debt, care: s.care, pressure: s.pressure, opportunity: s.opportunity, triad: s.triad, triadField: s.triadField } : null,
+      state: s ? { h: s.h, w: s.w, a: s.a, assets: s.assets, debt: s.debt, care: s.care, pressure: s.pressure, opportunity: s.opportunity, triad: s.triad, triadField: s.triadField, triangleCount: s.triangleCount,
+        cycle: s.cycle ? { ...s.cycle, people: s.cycle.ids.map((id) => ref(pageOf(id))) } : null } : null,
       percentile: s ? { h: below(sorted.h, s.h), w: below(sorted.w, s.w), a: below(sorted.a, s.a) } : null,
     }
   })
@@ -88,7 +90,7 @@ export function characterResponse(view: string | null, id: string | null) {
   const mid = (v: number[]) => v[v.length >> 1] ?? 0
   const peersFrom = members.find((c) => stateOf(c))
   return NextResponse.json({
-    id, day, schema: 3, cohort: active.length, confirmedCount, total: roster.length, source: IDENTITY_SOURCE,
+    id, day, schema: 3, modelVersion, convergence, cohort: active.length, confirmedCount, total: roster.length, source: IDENTITY_SOURCE,
     median: { h: mid(sorted.h), w: mid(sorted.w), a: mid(sorted.a) },
     people,
     links: {

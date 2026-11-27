@@ -1,29 +1,25 @@
-# EDU Triadic State Model — version 5 (present only)
+# EDU relational state model v6
 
-The Wiki shows only where each contemporary stands **now**. There is no time stepping, burn-in, history, scenario or time slider anywhere. Earlier versions (v1–v4) integrated 180+ days of stochastic dynamics; they are withdrawn.
+The solver computes a fixed point for the supplied instant. The live Wiki caches its first computation per UTC day. The registry supplies identities; the fields below are generated from a fictional model.
 
-## What is computed
+## The cubic vertex
 
-For the 1,706 E528 contemporaries in the non-numeric edutext registry, the state x = (x_h, x_w, x_a) ∈ (−1, 1)³ is the self-consistent mean-field equilibrium in today's environment:
+Each index of Φ is a person. The symmetric graph starts from the six ID-seeded peer draws per person, removes loops and duplicate edges, and connects consecutive distinct sampled peers. A missing edge and every diagonal entry have value zero. On an edge,
 
-    −E(x) = Σ_k b_k x_k + Σ_{k<l} J_kl x_k x_l + g·x_h·x_w·x_a + γ Σ_k x_k m_k
-    x_k = tanh(∂(−E)/∂x_k)
+    Φᵢⱼ = wᵢⱼ · (xᵢ + xⱼ)/2
+    wᵢⱼ = (.50, .30, .20) for a same-region tie; (.20, .35, .45) otherwise
 
-- health h = (1+x_h)/2, wealth index = (1+x_w)/2, authority/reputation a = (1+x_a)/2
-- b_k: today's regional care, pressure and opportunity (canon 197-day planetary and 29-year binary phases at this instant), trait expression, plus one stable individual draw per person seeded only by the registry ID (FNV-1a)
-- J (h–w .22, h–a .16, w–a .26): symmetric pairwise coupling
-- g = .30: the three-point term. It enters axis k as g × (product of the other two axes), equals the exact gradient of g·x_h·x_w·x_a, is bounded by |g|, and vanishes when either partner axis is neutral
-- γ = .20: peers (mean of six social-graph neighbours); regional means feed back into services
-- max row sum of J + |g| + γ = 0.98 < 1, so the damped fixed-point iteration is a contraction in the interior and the equilibrium is unique; it is solved to residual < 1e−10 (≈120 iterations, ≈0.2 s for everyone)
+Here xᵢ = (x_h, x_w, x_a) is the state of person i. Those axes enter the edge projection. The contraction over people is
 
-Net wealth w = 5·tan(π(wealth index − 1/2)) in annual essential baskets (10M n each, an explicit assumption), giving heavy tails; debt = max(0, −w) + an individual leverage draw scaled by pressure; assets = w + debt.
+    V₃ = g Tr(Φ³)/(6D) = (g/D) Σᵢ<ⱼ<ₖ Φᵢⱼ Φⱼₖ Φₖᵢ
+    ∂V₃/∂xᵢ = (g/(2D)) Σ_{triangles {i,j,k} containing i} Φⱼₖ (wᵢⱼ Φₖᵢ + wₖᵢ Φᵢⱼ)
 
-## Why v5
+D is the largest number of triangles incident on any vertex, floored at 1. The factor 6 counts all rotations and both orientations of an unordered triangle. With x components between −1 and 1, the absolute sum of the three cubic forces on one person is at most |g| = .30. The local scalar shown on the Wiki is g(Φ³)ᵢᵢ/(6D). Summing it across people recovers V₃. A person with no closed triangle has zero local contribution and zero cubic force. The Wiki shows the largest absolute product among that person's triangles, with each of its three signed ties.
 
-The v4 dynamics drove many people to exactly 0 or 100 (boundary saturation from unbounded drift and the cubic vertex). In v5 the tanh self-consistency and the bounded three-point term keep about 1% at the extremes (tests require < 3%).
+## Fixed point and display
 
-## Guarantees (tests)
+Each input to tanh combines the regional and trait fields, the original pairwise within-person terms, the mean peer field and the gradient above. The damped solver measures the undamped residual maxᵢ,ₖ |tanh(fieldsᵢ,ₖ) − xᵢ,ₖ| at the returned state. It exposes iteration count and convergence against 10⁻¹⁰. This is a numerical convergence check, without a general uniqueness result.
 
-Deterministic for a given instant; converged; three-point term equals the finite-difference gradient and is bounded; contraction condition; no boundary pile-up; names, gender identity and sexual orientation never enter.
+Health h and authority a are (1 + x)/2 on their respective coordinates. The wealth coordinate maps to w = 5 tan(π((1 + x_w)/2 − 1/2)) with the existing finite clipping. Debt and gross assets keep the existing balance-sheet transform. Names, identity and roster order do not enter the calculation. Regional services and the canonical planetary and binary phases remain inputs to today's equilibrium.
 
-Values are a synthetic model of the fictional world, not canon figures. Names and aliases come from edutext (identity.json, scripts/sync-edutext-identity.py).
+The edges and their channel weights are modeling assumptions. They do not assert relationships from the source narrative. The finite-dimensional trace is used as a mathematical interaction in the fictional simulation.
