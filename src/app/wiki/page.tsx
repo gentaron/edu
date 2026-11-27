@@ -183,6 +183,10 @@ function WikiPage() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4">
+        <Link href="/wiki/state" className="block edu-card p-4 mb-5 border border-edu-border hover:border-edu-accent">
+          <span className="text-sm font-bold text-edu-text">{tl("三相動態観測所", "Triadic State Observatory", lang)}</span>
+          <p className="text-xs text-edu-muted mt-1">{tl("全人物台帳・健康・資産・権威名声の現在状態と推移", "Character registry and dynamic health, wealth, authority trends", lang)}</p>
+        </Link>
         {/* Search results */}
         {isSearching ? (
           <div>

@@ -91,6 +91,7 @@ export default function WikiEntryPage() {
 
       <main className="px-4 pb-16">
         <div className="max-w-3xl mx-auto">
+          {entry.category === "キャラクター" && <Link href="/wiki/state" className="block edu-card p-3 mb-5 text-sm text-edu-accent">{tl("現在状態・三指標の観測所（姓名で検索）", "Current state observatory (search by name)", lang)}</Link>}
           {/* Portrait */}
           {entry.image && (
             <RevealSection className="flex justify-center mb-8 sm:mb-10">
