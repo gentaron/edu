@@ -6,7 +6,7 @@ import { Search, BarChart3 } from "lucide-react"
 import { tl, type Lang } from "@/lib/lang"
 import { characterMatch } from "./character-search"
 
-export interface DirectoryRow { aliases?: string[]; stateMembers?: { cid: string; name: string; state: { h: number; wi: number; a: number } | null }[]; id: string; name: string; nameEn: string; region: string; regionEn: string; role: string; roleEn: string; wiki: boolean; state: { h: number; wi: number; a: number } | null }
+export interface DirectoryRow { status?: string; aliases?: string[]; stateMembers?: { cid: string; name: string; state: { h: number; wi: number; a: number } | null }[]; id: string; name: string; nameEn: string; region: string; regionEn: string; role: string; roleEn: string; wiki: boolean; state: { h: number; wi: number; a: number } | null }
 
 const macro = (region: string) => { const r = region.replace(/\s*\(.*\)\s*$/, ""); return (/^Gigapolis/i.test(r) ? "Gigapolis" : /^Crescent/i.test(r) ? "Crescent" : /^Granbell/i.test(r) ? "Granbell" : /AURALIS/i.test(r) ? "AURALIS" : r ? "Other" : "—") }
 const SORTS = ["name", "h", "wi", "a"] as const
@@ -30,8 +30,8 @@ export function CharacterDirectory({ rows, lang, scrollable = false, error = fal
   const list = useMemo(() => {
     const needle = q.trim().toLowerCase()
     const out = (rows ?? []).filter((r) => (zone === "all" || macro(r.regionEn) === zone) && (!needle || characterMatch(needle, [r.id, r.name, r.nameEn, r.region, r.regionEn, r.role, r.roleEn, ...(r.aliases ?? [])]) >= 0))
-    return sort === "name" ? out : [...out].sort((a, b) => (b.state?.[sort] ?? -1) - (a.state?.[sort] ?? -1))
-  }, [rows, q, zone, sort])
+    return sort === "name" ? [...out].sort((a,b) => (lang === "en" ? a.nameEn || a.name : a.name).localeCompare(lang === "en" ? b.nameEn || b.name : b.name, lang === "en" ? "en" : "ja")) : [...out].sort((a, b) => (b.state?.[sort] ?? -1) - (a.state?.[sort] ?? -1))
+  }, [rows, q, zone, sort, lang])
   useEffect(() => setLimit(60), [q, zone, sort])
   useEffect(() => {
     const el = sentinel.current
@@ -84,7 +84,7 @@ export function CharacterDirectory({ rows, lang, scrollable = false, error = fal
                 <p className="truncate text-sm font-medium text-edu-text group-hover:text-cyan-100">{lang === "en" && r.nameEn ? r.nameEn : r.name}</p>
                 <p className="mt-0.5 truncate text-[11px] text-edu-muted">{[lang === "en" ? r.regionEn : r.region, lang === "en" ? r.roleEn : r.role].filter(Boolean).join(" · ") || r.id}</p>
               </div>
-              {r.wiki && <span className="rounded-full border border-amber-300/30 px-2 py-0.5 text-[9px] text-amber-200">Wiki</span>}
+              {r.status !== "current" && <span className="text-[9px] text-edu-muted">{tl("仮定値", "Conditional", lang)}</span>}
               <div className="shrink-0 space-y-1">{r.stateMembers && r.stateMembers.length > 1 ? r.stateMembers.map(m => <div key={m.cid}><p className="text-[9px] text-edu-muted">{m.name}</p><Mini s={m.state} lang={lang} /></div>) : <Mini s={r.state} lang={lang} />}</div>
             </Link>
           ))}

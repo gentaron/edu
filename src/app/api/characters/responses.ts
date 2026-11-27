@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import type { State } from "@/app/wiki/state/living-model.mjs"
 import {
-  IDENTITY_SOURCE, active, currentStates, links, macroRegion, membersOf, nickname, ownerOf, pageOf, pages, person, ref, roster, stateOf, today,
+  IDENTITY_SOURCE, active, confirmedCount, currentStates, links, macroRegion, membersOf, nickname, pageOf, pages, person, ref, roster, stateOf, today,
 } from "./graph"
 
 const headers = { "Cache-Control": "private, no-store, max-age=0", "Netlify-CDN-Cache-Control": "no-store", "CDN-Cache-Control": "no-store" }
@@ -45,11 +45,11 @@ export function characterResponse(view: string | null, id: string | null) {
     const rows = active.map((p, i) => {
       const s = current[i]!
       return {
-        id: pageOf(p.id), cid: p.id, aliases: [...new Set([...aliasesFor(p.id), ref(pageOf(p.id)).name, ref(pageOf(p.id)).nameEn])], name: p.name || p.formal, nameEn: p.nameEn || p.formalEn, formal: p.formal, formalEn: p.formalEn, region: p.region, regionEn: p.regionEn, macro: macroRegion(p.regionEn), role: p.role, roleEn: p.roleEn,
+        id: pageOf(p.id), cid: p.id, status: p.status, aliases: [...new Set([...aliasesFor(p.id), ref(pageOf(p.id)).name, ref(pageOf(p.id)).nameEn])], name: p.name || p.formal, nameEn: p.nameEn || p.formalEn, formal: p.formal, formalEn: p.formalEn, region: p.region, regionEn: p.regionEn, macro: macroRegion(p.regionEn), role: p.role, roleEn: p.roleEn,
         h: s.h, w: s.w, wi: wealthIndex(s.w), a: s.a, assets: s.assets, debt: s.debt, care: s.care, pressure: s.pressure, opportunity: s.opportunity, expression: s.expression,
       }
     })
-    return NextResponse.json({ day, source: IDENTITY_SOURCE, rows }, { headers })
+    return NextResponse.json({ day, source: IDENTITY_SOURCE, confirmedCount, rows }, { headers })
   }
 
   if (!id) {
@@ -57,13 +57,13 @@ export function characterResponse(view: string | null, id: string | null) {
     const rows = pages.map((p) => {
       const members = membersOf.get(p.id) ?? (person(p.id) ? [p.id] : [])
       const r = members[0] ? person(members[0]) : undefined
-      return { ...p, aliases: [...new Set(members.flatMap((cid) => [cid, ...aliasesFor(cid)]))], stateMembers: members.map((cid) => ({ cid, name: person(cid)?.name ?? cid, state: mini(cid) })), region: r?.region ?? "", regionEn: r?.regionEn ?? "", role: r?.role ?? "", roleEn: r?.roleEn ?? "", wiki: !person(p.id), state: members.length === 1 ? mini(members[0]!) : null }
+      return { ...p, status: r?.status ?? "wiki-only", aliases: [...new Set(members.flatMap((cid) => [cid, ...aliasesFor(cid)]))], stateMembers: members.map((cid) => ({ cid, name: person(cid)?.name ?? cid, state: mini(cid) })), region: r?.region ?? "", regionEn: r?.regionEn ?? "", role: r?.role ?? "", roleEn: r?.roleEn ?? "", wiki: !person(p.id), state: members.length === 1 ? mini(members[0]!) : null }
     })
     return NextResponse.json({ day, source: IDENTITY_SOURCE, rows }, { headers })
   }
 
   // A registry ID folded into a Wiki entry redirects to that entry.
-  if (ownerOf.has(id)) return NextResponse.json({ redirect: ownerOf.get(id) }, { headers })
+  if (pageOf(id) !== id) return NextResponse.json({ redirect: pageOf(id) }, { headers })
   const members = membersOf.get(id) ?? (person(id) ? [id] : [])
   const sorted = cohortSorted()
   const people = members.map((cid) => {
@@ -79,7 +79,7 @@ export function characterResponse(view: string | null, id: string | null) {
   const mid = (v: number[]) => v[v.length >> 1] ?? 0
   const peersFrom = members.find((c) => stateOf(c))
   return NextResponse.json({
-    id, day, cohort: active.length, total: roster.length, source: IDENTITY_SOURCE,
+    id, day, cohort: active.length, confirmedCount, total: roster.length, source: IDENTITY_SOURCE,
     median: { h: mid(sorted.h), w: mid(sorted.w), a: mid(sorted.a) },
     people,
     links: {

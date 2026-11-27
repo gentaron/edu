@@ -19,6 +19,7 @@ export interface CharacterDetail {
   id: string
   day: number
   cohort: number
+  confirmedCount?: number
   total: number
   source: string
   median: Axis
@@ -125,6 +126,7 @@ export function CharacterStatePanel({ result, lang }: { result: DetailResult; la
       <div className="relative space-y-8">
         {d.people.map((m) => (
           <div key={m.person.id}>
+            {m.person.status !== "current" && <p className="mb-3 rounded-xl border border-amber-300/20 p-2 text-xs text-edu-muted">{tl("仮定モデル値：E528での存命・所属は原典未確認（Wiki独自人物を含む）。現代環境に置いた場合の推定であり、公式設定値ではありません。", "Conditional model: E528 status or source identity is unconfirmed. Values assume today’s environment; not canon facts.", lang)}</p>}
             {d.people.length > 1 && <p className="mb-3 text-sm font-medium text-edu-text">{lang === "en" ? m.person.formalEn : m.person.formal} <span className="text-xs text-edu-muted">{m.person.id}</span></p>}
             {m.state && m.percentile ? (
               <div className="grid items-center gap-6 sm:grid-cols-[minmax(0,1fr)_220px]">
@@ -159,7 +161,7 @@ export function CharacterStatePanel({ result, lang }: { result: DetailResult; la
         ))}
       </div>
       <div className="relative mt-6 flex flex-wrap items-center justify-between gap-2 text-[10px] text-edu-muted">
-        <span>{tl(`今日の環境で同時代${d.cohort.toLocaleString()}人が釣り合う状態（時間を進める計算はしない）。白線は全体の中央値。`, `Today's self-consistent state of ${d.cohort.toLocaleString()} contemporaries (no time stepping). White tick = cohort median.`, lang)}</span>
+        <span>{tl(`今日の環境で登録${d.cohort.toLocaleString()}人を計算（原典現代対象${d.confirmedCount ?? d.cohort}人、その他は仮定値）。時間発展なし。白線は全モデルの中央値。`, `Today's equilibrium for ${d.cohort.toLocaleString()} registered characters (${d.confirmedCount ?? d.cohort} source-current; others conditional). No time stepping. White tick = model median.`, lang)}</span>
         <Link href="/wiki/analytics" className="text-cyan-300 hover:text-cyan-200">{tl("人口分析で見る →", "Open population analytics →", lang)}</Link>
       </div>
     </section>

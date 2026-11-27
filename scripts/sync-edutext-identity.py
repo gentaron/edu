@@ -15,7 +15,7 @@ WIKI_DUMP = pathlib.Path(sys.argv[2]) if len(sys.argv) > 2 else None
 # Same-person links that names alone cannot decide. Each cites the edutext evidence.
 OVERRIDES = {
     "Diana": (["C095"], "DianaWorld.txt: Diana is the Wonder Woman of the story; wiki: first Wonder Woman"),
-    "Tina/Gue": (["C013", "C012"], "Joint entry; edutext lists ティナ (C013) and グエ (C012) as Gigapolis underground E400+"),
+    "グエ": (["C012"], "character-names and character-birthdays: Gue C012 and Tina C013 have separate IDs, names and birthdays"),
     "弦太郎": (["C008"], "character-names: C008 ゲンタロウ, given name 弦太郎 (Gentaroworld.txt)"),
     "Kate Claudia": (["C003"], "character-names: C003 first-generation Katherine Claudia Patton, founder era"),
     "Kate Patton": (["C004"], "character-names: C004 second-generation Katherine Eleanor Patton (E522+)"),

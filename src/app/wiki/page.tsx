@@ -281,7 +281,7 @@ function WikiPage() {
               {tl("カテゴリ一覧に戻る", "Back to categories", lang)}
             </Link>
             <h2 className="mb-1 bg-gradient-to-r from-cyan-200 via-sky-200 to-violet-200 bg-clip-text text-2xl font-semibold text-transparent">{tl("キャラクター名鑑", "Character directory", lang)}</h2>
-            <p className="mb-4 text-xs text-edu-muted">{tl("1人1ページ。姓名・愛称はedutextの登録に基づく。バーは健康・資産・名声の現在地。", "One page per person. Names follow edutext. Bars show current health, wealth and reputation.", lang)}</p>
+            <p className="mb-4 text-xs text-edu-muted">{tl("1人1ページ。全登録人物を計算。原典現代未確認・Wiki独自の人物は仮定値として表示。", "One page per person. All characters are modeled; unconfirmed and Wiki-only identities are conditional.", lang)}</p>
             <CharacterDirectory rows={directory} error={directoryError} lang={lang} />
           </div>
         ) : showCategory && activeCategoryConfig ? (

@@ -53,15 +53,15 @@ export const WIKI_CHARACTERS = [
     ],
   },
   {
-    id: "Tina/Gue" as WikiId,
-    name: "ティナ/グエ",
-    nameEn: "Tina / Gue",
+    id: "グエ" as WikiId,
+    name: "グエ",
+    nameEn: "Gue",
     category: "キャラクター",
     subCategory: "Gigapolis",
     description:
-      "E400年以降、Gigapolis地下街最深部を実効支配。エヴァトロン支配期（E400〜E475）において、表の支配者エヴァトロンとは別に地下世界の真の権力者として暗躍。TinaとGueの二つの名で呼ばれることから、正体に関する諸説が存在する。地下経済の掌握と独自の情報ネットワークを駆使して、エヴァトロン崩壊後もその影響力を維持し続けている。",
+      "グウェナエル・ル・ゴフ（C012）。原典の人物台帳では、E400以降のGigapolis地下街に所属する人物として登録されている。旧Wikiではティナ（C013）と共同項目になっていたが、原典では別の人物ID・正式姓名・誕生日を持つ。旧共同項目の地下経済・支配に関する記述は個人への帰属が未確認であるため、両者に重複して割り当てない。",
     descriptionEn:
-      "Effectively ruling the deepest part of Gigapolis Underground since E400. During the Evatron Dominion period (E400-E475), he operated in the shadows as the true power of the underworld, separate from the surface ruler Evatron. Known by two names, Tina and Gue, leading to various theories about his true identity. By mastering the underground economy and utilizing a unique information network, he has maintained his influence even after Evatron's collapse.",
+      "Gwenaëlle Le Goff (C012), registered in the source character directory as associated with the Gigapolis Underground from E400 onward. The old joint Wiki entry conflated Gue with Tina (C013); the source assigns distinct IDs, formal names and birthdays. The former joint entry's claims about underground rule and economic influence have not been attributed to either individual.",
     era: "E400〜現在",
     affiliation: "Gigapolis地下街",
     tier: "Tier 1",

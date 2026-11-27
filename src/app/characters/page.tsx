@@ -163,7 +163,7 @@ export default function CharactersPage() {
           {/* All characters: present position, linked to their Wiki pages */}
           <div className="mb-12">
             <h2 className="mb-1 bg-gradient-to-r from-cyan-200 via-sky-200 to-violet-200 bg-clip-text text-2xl font-semibold text-transparent">{tl("全キャラクターの現在地", "Every character, right now", lang)}</h2>
-            <p className="mb-4 text-xs text-edu-muted">{tl("クリックでWikiの人物ページへ。バーは健康・資産・名声の今の値。", "Click to open the Wiki page. Bars show current health, wealth and reputation.", lang)}</p>
+            <p className="mb-4 text-xs text-edu-muted">{tl("クリックでWikiへ。全人物の健康・資産・名声を表示。原典現代未確認の人物は仮定値。", "Open the Wiki page. All characters have modeled values; unconfirmed identities are conditional.", lang)}</p>
             <CharacterDirectory rows={directory} error={directoryError} lang={lang} scrollable />
           </div>
           {/* Tier Table */}

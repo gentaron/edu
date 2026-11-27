@@ -9,7 +9,7 @@ import { characterMatch, fetchCharacterJSON } from "../_components/character-sea
 import type { DirectoryRow } from "../_components/character-directory"
 import { describe, histogram, kde, pearson, spearman, ols, corrCI, cohenD, etaSquared, gini, theil, lorenz, topShare, palma, robustZ, slog, sorted, quantileSorted, ranks, type Describe } from "./stats"
 
-interface Row { aliases?: string[]; id: string; cid: string; name: string; nameEn: string; formal: string; formalEn: string; region: string; regionEn: string; macro: string; role: string; roleEn: string; h: number; w: number; wi: number; a: number; assets: number; debt: number; care: number; pressure: number; opportunity: number; expression: number }
+interface Row { status?: string; aliases?: string[]; id: string; cid: string; name: string; nameEn: string; formal: string; formalEn: string; region: string; regionEn: string; macro: string; role: string; roleEn: string; h: number; w: number; wi: number; a: number; assets: number; debt: number; care: number; pressure: number; opportunity: number; expression: number }
 interface VarDef { key: string; ja: string; en: string; get: (r: Row) => number; fmt: (v: number) => string }
 
 const N10M = 10_000_000
@@ -287,7 +287,7 @@ export default function AnalyticsStudio() {
           <div>
             <p className="text-[11px] uppercase tracking-[.35em] text-cyan-200/70">E16 · Population Intelligence</p>
             <h1 className="mt-2 bg-gradient-to-r from-cyan-200 via-white to-violet-200 bg-clip-text text-3xl font-semibold text-transparent sm:text-5xl">{t("人口分析スタジオ", "Population Analytics Studio")}</h1>
-            <p className="mt-2 max-w-2xl text-sm text-edu-muted">{t("同時代の全人口の「今」を、分布・偏差・相関・地域・職務・格差・外れ値から多角的に読む。", "Read today's whole contemporary population through distributions, deviations, correlations, regions, roles, inequality and outliers.")}</p>
+            <p className="mt-2 max-w-2xl text-sm text-edu-muted">{t("全登録人物のモデル値を分析。原典で現代対象とされない人物も現代環境を仮定して計算するため、実際のE528人口とは異なります。", "Analyze all registered characters. Non-current source identities use conditional values in today's environment; this is not a literal E528 census.")}</p>
           </div>
           <div className="text-right text-[11px] text-edu-muted tabular-nums">
             {data ? <>E528 · {t("標準日", "day")} {data.day + 1}<br />N = {rows.length.toLocaleString()}</> : t("計算中…", "Computing…")}
@@ -315,6 +315,7 @@ export default function AnalyticsStudio() {
               </div>
             )}
           </div>
+          {focusRow && focusRow.status !== "current" && <p className="mt-2 text-xs text-edu-muted">{t("原典現代未確認：現在環境を仮定したモデル値", "Conditional model values, not confirmed current in canon")}</p>}
           {focusRow && (
             <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
               {VARS.map((v) => {

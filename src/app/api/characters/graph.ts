@@ -8,29 +8,46 @@ import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import { computeNow, phaseAt, type Person, type State } from "@/app/wiki/state/living-model.mjs"
 import registry from "@/app/wiki/state/registry.json"
 import identity from "@/app/wiki/state/identity.json"
+import supplemental from "@/app/wiki/state/wiki-supplemental.json"
 
 interface IdentityPerson { call: string; first: string; nickname: string; last: string; firstEn: string; nicknameEn: string; lastEn: string; aliases: string[] }
 interface IdentityFile { source: string; people: Record<string, IdentityPerson>; wiki: Record<string, { ids: string[]; method: string; note?: string }> }
 const ID = identity as IdentityFile
 
 export const IDENTITY_SOURCE = ID.source
-export const roster: Person[] = registry.people
-const personById = new Map(roster.map((p) => [p.id, p]))
-export const active = roster.filter((p) => p.status === "current")
-const activeIndex = new Map(active.map((p, i) => [p.id, i]))
 const characterEntries = ALL_ENTRIES.filter((e) => e.category === "キャラクター")
 const entryById = new Map(ALL_ENTRIES.map((e) => [e.id as string, e]))
-
-/** Registry ID → owning Wiki entry, and Wiki entry → registry IDs (one entry may describe a duo). */
 export const ownerOf = new Map<string, string>()
 export const membersOf = new Map<string, string[]>()
 for (const [wikiId, link] of Object.entries(ID.wiki)) {
   if (!entryById.has(wikiId)) continue
+  if (link.ids.length !== 1) throw new Error("Non-individual character mapping: " + wikiId)
   membersOf.set(wikiId, link.ids)
-  for (const c of link.ids) ownerOf.set(c, wikiId)
+  for (const c of link.ids) {
+    if (ownerOf.has(c)) throw new Error("Duplicate character mapping: " + c)
+    ownerOf.set(c, wikiId)
+  }
 }
-/** Canonical page ID for any registry or Wiki ID. */
-export const pageOf = (id: string) => ownerOf.get(id) ?? id
+const extraIds: Record<string, string> = supplemental.ids
+const extra: Person[] = []
+for (const e of characterEntries) {
+  if (membersOf.has(e.id)) continue
+  const id = extraIds[e.id]
+  if (!id) throw new Error("Wiki character needs a stable local ID: " + e.id)
+  ownerOf.set(id, e.id)
+  membersOf.set(e.id, [id])
+  extra.push({ id, name: e.name, nameEn: e.nameEn ?? "", formal: e.name, formalEn: e.nameEn ?? "", region: e.subCategory ?? "", regionEn: e.subCategory ?? "", role: e.affiliation ?? "", roleEn: "", identity: "", identityEn: "", status: "wiki-only" })
+}
+export const roster: Person[] = [...registry.people.map(p => {
+  const e = entryById.get(ownerOf.get(p.id) ?? "")
+  return { ...p, region: p.region || e?.subCategory || "", regionEn: p.regionEn || e?.subCategory || "", role: p.role || e?.affiliation || "" }
+}), ...extra]
+const personById = new Map(roster.map(p => [p.id, p]))
+// All identities are modeled, but source-unconfirmed and Wiki-only people are explicitly conditional.
+export const active = roster
+export const confirmedCount = roster.filter(p => p.status === "current").length
+const activeIndex = new Map(active.map((p, i) => [p.id, i]))
+export const pageOf = (id: string) => id === "Tina/Gue" ? "グエ" : ownerOf.get(id) ?? id
 
 export interface PageRef { id: string; name: string; nameEn: string }
 const registryPages: PageRef[] = roster.filter((p) => !ownerOf.has(p.id)).map((p) => ({ id: p.id, name: p.name || p.formal, nameEn: p.nameEn || p.formalEn }))
