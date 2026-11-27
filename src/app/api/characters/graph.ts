@@ -5,7 +5,7 @@
  * - Links: unambiguous name mentions in Wiki text, backlinks, and nearest neighbours in the current state.
  */
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
-import { simulate, type Person, type State } from "@/app/wiki/state/living-model.mjs"
+import { computeNow, phaseAt, type Person, type State } from "@/app/wiki/state/living-model.mjs"
 import registry from "@/app/wiki/state/registry.json"
 import identity from "@/app/wiki/state/identity.json"
 
@@ -14,7 +14,6 @@ interface IdentityFile { source: string; people: Record<string, IdentityPerson>;
 const ID = identity as IdentityFile
 
 export const IDENTITY_SOURCE = ID.source
-export const ANCHOR = Date.UTC(2026, 10, 27)
 export const roster: Person[] = registry.people
 const personById = new Map(roster.map((p) => [p.id, p]))
 export const active = roster.filter((p) => p.status === "current")
@@ -99,11 +98,12 @@ export function links() {
 export const ref = (id: string): PageRef => pageById.get(id) ?? { id, name: entryById.get(id)?.name ?? id, nameEn: entryById.get(id)?.nameEn ?? "" }
 
 // ── Current state (today only), cached per day ──────────────────────────
-export const today = () => Math.max(0, Math.min(365, Math.floor((Date.now() - ANCHOR) / 86_400_000)))
+/** Present only: the state is solved for today's environment, no time evolution. Cached per UTC day. */
+export const today = () => phaseAt(new Date()).day
 let cache: { day: number; current: State[] } | null = null
 export function currentStates() {
   const day = today()
-  if (cache?.day !== day) cache = { day, current: simulate(active, day).current }
+  if (cache?.day !== day) cache = { day, current: computeNow(active, new Date()).states }
   return cache
 }
 export const stateOf = (cid: string): State | undefined => {

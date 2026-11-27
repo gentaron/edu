@@ -11,7 +11,7 @@ export interface Member {
   person: RegistryPerson
   nickname: string
   nicknameEn: string
-  state: (Axis & { assets: number; debt: number; care: number; pressure: number; opportunity: number }) | null
+  state: (Axis & { assets: number; debt: number; care: number; pressure: number; opportunity: number; triad: number; triadField: number[] }) | null
   percentile: Axis | null
 }
 export interface CharacterDetail {
@@ -138,6 +138,15 @@ export function CharacterStatePanel({ result, lang }: { result: DetailResult; la
                       <div key={k} className="rounded-2xl border border-white/5 bg-black/20 p-3"><dt className="text-[10px] text-edu-muted">{k}</dt><dd className="mt-1 truncate text-sm tabular-nums text-edu-text">{v} n</dd></div>
                     ))}
                   </dl>
+                  <div className="rounded-2xl border border-white/5 bg-black/20 p-3 text-[11px]">
+                    <p className="text-edu-muted">{tl("三点相互作用（健康×資産×名声）の各軸への寄与", "Three-way interaction (health × wealth × reputation): push on each axis", lang)}</p>
+                    <div className="mt-1.5 grid grid-cols-3 gap-2 tabular-nums">
+                      {[tl("健康", "Health", lang), tl("資産", "Wealth", lang), tl("名声", "Reputation", lang)].map((k, i) => {
+                        const v = m.state!.triadField[i] ?? 0
+                        return <span key={k} className={v >= 0 ? "text-cyan-300" : "text-pink-300"}>{k} {v >= 0 ? "+" : ""}{v.toFixed(3)}</span>
+                      })}
+                    </div>
+                  </div>
                 </div>
                 <Radar v={m.state} lang={lang} />
               </div>
@@ -148,7 +157,7 @@ export function CharacterStatePanel({ result, lang }: { result: DetailResult; la
         ))}
       </div>
       <div className="relative mt-6 flex flex-wrap items-center justify-between gap-2 text-[10px] text-edu-muted">
-        <span>{tl(`同時代${d.cohort.toLocaleString()}人の合成モデルによる今日の値。白線は全体の中央値。`, `Today's value from a synthetic model of ${d.cohort.toLocaleString()} contemporaries. White tick = cohort median.`, lang)}</span>
+        <span>{tl(`今日の環境で同時代${d.cohort.toLocaleString()}人が釣り合う状態（時間を進める計算はしない）。白線は全体の中央値。`, `Today's self-consistent state of ${d.cohort.toLocaleString()} contemporaries (no time stepping). White tick = cohort median.`, lang)}</span>
         <Link href="/wiki/analytics" className="text-cyan-300 hover:text-cyan-200">{tl("人口分析で見る →", "Open population analytics →", lang)}</Link>
       </div>
     </section>

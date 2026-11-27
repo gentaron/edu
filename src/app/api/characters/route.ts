@@ -73,7 +73,7 @@ export async function GET(req: NextRequest) {
     return {
       person: p,
       nickname: n?.nickname ?? "", nicknameEn: n?.nicknameEn ?? "",
-      state: s ? { h: s.h, w: s.w, a: s.a, assets: s.assets, debt: s.debt, care: s.care, pressure: s.pressure, opportunity: s.opportunity } : null,
+      state: s ? { h: s.h, w: s.w, a: s.a, assets: s.assets, debt: s.debt, care: s.care, pressure: s.pressure, opportunity: s.opportunity, triad: s.triad, triadField: s.triadField } : null,
       percentile: s ? { h: below(sorted.h, s.h), w: below(sorted.w, s.w), a: below(sorted.a, s.a) } : null,
     }
   })

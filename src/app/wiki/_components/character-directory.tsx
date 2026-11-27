@@ -25,7 +25,7 @@ function Mini({ s }: { s: DirectoryRow["state"] }) {
 }
 
 /** Searchable, sortable directory of every character (one card per person). */
-export function CharacterDirectory({ rows, lang }: { rows: DirectoryRow[] | null; lang: Lang }) {
+export function CharacterDirectory({ rows, lang, scrollable = false }: { rows: DirectoryRow[] | null; lang: Lang; scrollable?: boolean }) {
   const [q, setQ] = useState("")
   const [zone, setZone] = useState("all")
   const [sort, setSort] = useState<Sort>("name")
@@ -77,6 +77,7 @@ export function CharacterDirectory({ rows, lang }: { rows: DirectoryRow[] | null
           <span className="ml-auto text-[11px] tabular-nums text-edu-muted">{rows ? list.length.toLocaleString() : "…"} {tl("人", "people", lang)}</span>
         </div>
       </div>
+      <div className={scrollable ? "max-h-[70vh] overflow-y-auto overscroll-contain rounded-2xl pr-1" : ""}>
       {!rows ? (
         <div className="grid gap-3 sm:grid-cols-2">{Array.from({ length: 8 }, (_, i) => <div key={i} className="h-20 animate-pulse rounded-2xl bg-white/[0.04]" />)}</div>
       ) : (
@@ -95,6 +96,7 @@ export function CharacterDirectory({ rows, lang }: { rows: DirectoryRow[] | null
         </div>
       )}
       <div ref={sentinel} className="h-8" />
+      </div>
     </div>
   )
 }
