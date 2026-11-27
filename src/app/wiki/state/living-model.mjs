@@ -44,7 +44,7 @@ export function simulate(people,day,scenario="baseline",seed=5282026){
   // A fixed burn-in is shared; real UTC days select a reproducible simulated day.
   for(let t=-180;t<=steps;t++){
     const env=zoneList.map(z=>environment(z,t));
-    if(t>=0&&(t%7===0||t===steps)){snapshot(t,env)}
+    if(t>=-28&&(t%7===0||t===steps)){snapshot(t,env)}
     if(t===steps)break;
     let residual=[0,0,0];
     const next=states.map((s,i)=>{

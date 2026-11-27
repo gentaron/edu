@@ -32,20 +32,23 @@ export default function LivingWiki() {
   const t = (jp: string, english: string) => en ? english : jp
   const [day,setDay] = useState(0)
   const [now,setNow] = useState(0)
+  const [follow,setFollow] = useState(true)
   const [selected,setSelected] = useState("C002")
   const [query,setQuery] = useState("")
   const [scenario,setScenario] = useState("baseline")
   const [page,setPage] = useState(0)
   useEffect(()=>{
-    const update=()=>{const d=Math.max(0,Math.min(365,Math.floor((Date.now()-anchor)/86400000)));setNow(d)}
+    const params=new URLSearchParams(window.location.search)
+    const id=params.get("person"),q=params.get("q")
+    if(id && roster.some(p=>p.id===id)){setSelected(id)}
+    else if(q){setQuery(q);const matches=roster.filter(p=>[p.name,p.nameEn,p.formal,p.formalEn].some(v=>v.toLowerCase()===q.toLowerCase()));if(matches.length===1){setSelected(matches[0]!.id)}}
+  },[])
+  useEffect(()=>{
+    const update=()=>{const d=Math.max(0,Math.min(365,Math.floor((Date.now()-anchor)/86400000)));setNow(d);if(follow){setDay(d)}}
     update()
-    const d=Math.max(0,Math.min(365,Math.floor((Date.now()-anchor)/86400000)))
-    setDay(d)
-    const id = new URLSearchParams(window.location.search).get("person")
-    if(id && roster.some(p=>p.id===id))setSelected(id)
     const timer=window.setInterval(update,60000)
     return ()=>window.clearInterval(timer)
-  },[])
+  },[follow])
   const model=useMemo(()=>simulate(active,day,scenario),[day,scenario])
   const p=roster.find(r=>r.id===selected)
   const i=active.findIndex(r=>r.id===selected)
@@ -59,12 +62,13 @@ export default function LivingWiki() {
       <Link href="/wiki" className="text-xs text-edu-accent">← {t("百科事典","Encyclopedia")}</Link>
       <header><p className="text-xs text-edu-muted tracking-widest">E16 / LIVING STATE OBSERVATORY</p><h1 className="text-2xl sm:text-4xl font-bold mt-2">{t("三相動態観測所","Triadic State Observatory")}</h1><p className="text-sm text-edu-muted mt-2">{t("E528の再現可能な合成シミュレーション。実測・既存の固定能力値・原典の資産額ではありません。","Reproducible synthetic E528 simulation, not measurements, legacy ability scores or historical wealth.")}</p></header>
       <section className="edu-card p-4 space-y-3">
-        <div className="flex flex-wrap gap-3 items-center"><strong>E{528+Math.floor(day/366)} / {t("標準日","standard day")} {day+1}</strong><span className="text-xs text-edu-muted">{day===now&&scenario==="baseline"?t("現在モデル状態","Current model state"):t("比較シナリオ","Scenario / historical comparison")}</span><button className="rounded border border-edu-border px-3 py-1 text-sm" onClick={()=>{setDay(now);setScenario("baseline")}}>{t("現在に戻る","Return to current")}</button></div>
-        <label className="block text-xs">{t("時間軸（E528・行政暦）","Timeline (E528 administrative calendar)")}: {day+1}<input type="range" min="0" max="365" value={day} onChange={e=>setDay(Number(e.target.value))} className="w-full"/></label>
+        <div className="flex flex-wrap gap-3 items-center"><strong>E{528+Math.floor(day/366)} / {t("標準日","standard day")} {day+1}</strong><span className="text-xs text-edu-muted">{day===now&&scenario==="baseline"?t("現在モデル状態","Current model state"):t("比較シナリオ","Scenario / historical comparison")}</span><button className="rounded border border-edu-border px-3 py-1 text-sm" onClick={()=>{setDay(now);setFollow(true);setScenario("baseline")}}>{t("現在に戻る","Return to current")}</button></div>
+        <label className="block text-xs">{t("時間軸（E528・行政暦）","Timeline (E528 administrative calendar)")}: {day+1}<input type="range" min="0" max="365" value={day} onChange={e=>{setFollow(false);setDay(Number(e.target.value))}} className="w-full"/></label>
         <label className="text-xs">{t("外部環境","External environment")} <select value={scenario} onChange={e=>setScenario(e.target.value)} className="bg-edu-surface border border-edu-border rounded p-2"><option value="baseline">{t("基準","Baseline")}</option><option value="reform">{t("医療・機会改善","Access reform")}</option><option value="crisis">{t("資源危機","Resource crisis")}</option></select></label>
         <p className="text-xs text-edu-muted">{t("2026-11-27 UTCをE528第1日に対応。現実の経過日を反映し、E528末で停止。シナリオは反事実の再計算です。","2026-11-27 UTC maps to E528 day 1; elapsed days advance the model, capped at year-end. Scenarios are counterfactual recalculations.")}</p>
       </section>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">{[[t("参照人物","Registry"),roster.length.toLocaleString()],[t("現代モデル対象","Current cohort"),active.length.toLocaleString()],[t("純資産中央値 n","Median net wealth n"),money(model.summary.median)],[t("上位1% 正資産比","Top 1% positive wealth share"),pct(model.summary.topShare)],[t("健康平均","Mean health"),index(model.summary.meanH)],[t("権威・名声平均","Mean authority"),index(model.summary.meanA)],[t("債務超過率","Negative net worth"),pct(model.summary.negative)]].map(([l,v])=><div key={l} className="edu-card p-3"><p className="text-xs text-edu-muted">{l}</p><p className="text-lg font-semibold tabular-nums">{v}</p></div>)}</div>
+      <p className="text-xs text-edu-muted">{t("時系列の起点はE528初日の28日前（初期化期間）。週次サンプルと選択日の値。","Time series starts 28 days before E528 day 1 (burn-in). Weekly samples plus the selected day.")}</p>
       <Trend title={t("集団の状態推移","Population trajectories")} series={[model.history.map(x=>x.meanH),model.history.map(x=>wealthIndex(x.median)),model.history.map(x=>x.meanA)]} labels={[t("健康","Health"),t("資産指数","Wealth index"),t("権威・名声","Authority / reputation")]}/>
       <Trend title={t("格差の推移","Inequality over time")} series={[model.history.map(x=>x.topShare),model.history.map(x=>x.negative)]} labels={[t("上位1%","Top 1%"),t("債務超過","Negative wealth")]}/>
       <section className="grid md:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)] gap-4">
