@@ -4,6 +4,14 @@ on:
   pull_request:
     paths:
       - "src/app/api/**"
+      - "src/app/wiki/**"
+      - ".github/workflows/api-test.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/app/api/**"
+      - "src/app/wiki/**"
+      - ".github/workflows/api-test.yml"
   schedule:
     - cron: "0 6 * * 1"  # Weekly Monday 6am UTC
 
@@ -41,11 +49,13 @@ jobs:
             "GET /api" \
             "GET /api/game" \
             "GET /api/export?format=html&category=all" \
-            "GET /api/tournament/bound"; do
-            METHOD=$(echo $test | cut -d' ' -f1)
-            PATH=$(echo $test | cut -d' ' -f2)
-            STATUS=$(curl -s -o /dev/null -w '%{http_code}' -X $METHOD "http://localhost:3000$PATH")
-            if [ "$STATUS" -ge 400 ]; then
+            "GET /api/tournament/bound" \
+            "GET /api/characters" \
+            "GET /api/characters?view=population" \
+            "GET /api/characters?id=C002"; do
+            read -r METHOD API_PATH <<< "$test"
+            STATUS=$(curl --silent --show-error --max-time 30 -o /dev/null -w '%{http_code}' -X "$METHOD" "http://localhost:3000$API_PATH")
+            if [[ "$STATUS" != 2[0-9][0-9] ]]; then
               echo "FAIL: $test -> $STATUS"
               exit 1
             fi
@@ -53,9 +63,9 @@ jobs:
           done
 
           # POST tests
-          STATUS=$(curl -s -o /dev/null -w '%{http_code}' -X POST "http://localhost:3000/api/wiki/related" \
+          STATUS=$(curl --silent --show-error --max-time 30 -o /dev/null -w '%{http_code}' -X POST "http://localhost:3000/api/wiki/related" \
             -H "Content-Type: application/json" -d '{"entryId":"Diana","limit":5}')
-          if [ "$STATUS" -ge 400 ]; then echo "FAIL: POST /api/wiki/related -> $STATUS"; exit 1; fi
+          if [[ "$STATUS" != 2[0-9][0-9] ]]; then echo "FAIL: POST /api/wiki/related -> $STATUS"; exit 1; fi
           echo "PASS: POST /api/wiki/related -> $STATUS"
 
       - name: Test Results Summary
