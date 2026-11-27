@@ -1,8 +1,30 @@
 import { describe, expect, it } from "vitest"
-import { simulate, couplingEffects } from "./living-model.mjs"
+import { simulate, couplingEffects, vertex, observables, transitionResidual } from "./living-model.mjs"
 import registry from "./registry.json"
 const people=registry.people.filter(p=>p.status==="current").slice(0,40)
 describe("living state",()=>{
+  it("cubic term factors and vanishes on neutral planes",()=>{
+    expect(vertex(.5,3,.8).cubic).toBe(0)
+    expect(vertex(.8,0,.8).cubic).toBe(0)
+    expect(vertex(.8,3,.5).cubic).toBe(0)
+    expect(vertex(.8,3,.8).cubic).toBeGreaterThan(0)
+  })
+  it("information contracts under dropping the authority bit",()=>{
+    const o=observables(simulate(people,14).current)
+    expect(o.klFine+1e-12).toBeGreaterThanOrEqual(o.klCoarse)
+    expect(o.counts.reduce((a,b)=>a+b,0)).toBe(people.length)
+    expect(o.totalCorrelation).toBeGreaterThanOrEqual(0)
+  })
+  it("detects exact deterministic Markov closure",()=>{
+    const identity=Array.from({length:8},(_,i)=>Array.from({length:8},(_,j)=>i===j?10:0))
+    expect(transitionResidual(identity,identity).residual).toBe(0)
+  })
+  it("shared predictor and diagnostics stay finite",()=>{
+    const a=simulate(people,28)
+    expect(a.learned?.every(Number.isFinite)).toBe(true)
+    expect(a.history.every(h=>Number.isFinite(h.predictionLoss))).toBe(true)
+    expect(a.transition?.residual).not.toBeNull()
+  })
   it("is repeatable and bounded",()=>{const a=simulate(people,28);expect(a).toEqual(simulate(people,28));expect(a.current.length).toBe(people.length);for(const s of a.current){expect(s.h).toBeGreaterThanOrEqual(0);expect(s.h).toBeLessThanOrEqual(1);expect(s.a).toBeGreaterThanOrEqual(0);expect(s.a).toBeLessThanOrEqual(1);expect(s.assets-s.debt).toBeCloseTo(s.w,8)}})
   it("shows a trajectory even on day zero",()=>{expect(simulate(people,0).history.length).toBeGreaterThan(1)})
   it("changes with time and environment",()=>{expect(simulate(people,7).summary).not.toEqual(simulate(people,28).summary);expect(simulate(people,28,"crisis").summary).not.toEqual(simulate(people,28).summary)})

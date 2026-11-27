@@ -15,6 +15,48 @@ export function couplingEffects(s){
     wealthToAuthority:100*.018*Math.tanh(s.w/5)
   };
 }
+/** Real-valued effective triadic interaction. No quantum amplitude is inferred. */
+export function vertex(h,w,a){
+  const x=2*h-1,y=Math.tanh(w/5),z=2*a-1;
+  // V=g xyz + lambda/4 sum(q^4); trace(M^3)/6=xyz for symmetric off-diagonal M.
+  const g=.018,lambda=.008;
+  return {cubic:g*x*y*z,potential:g*x*y*z+lambda*(x**4+y**4+z**4)/4,
+    dh:-g*y*z/2, dw:-g*x*z, da:-g*x*y/2,
+    dampH:-lambda*x**3/2,dampW:-lambda*y**3,dampA:-lambda*z**3/2};
+}
+const entropy=p=>-p.reduce((s,v)=>s+(v>0?v*Math.log(v):0),0);
+const relative=(p,q)=>p.reduce((s,v,i)=>s+(v>0?v*Math.log(v/q[i]):0),0);
+const normalized=c=>{const sum=c.reduce((a,b)=>a+b,0);return c.map(v=>sum?v/sum:0)};
+const octant=s=>4*Number(s.h>=.5)+2*Number(s.w>=0)+Number(s.a>=.5);
+
+/** Equal-population-weight empirical observables. KL uses a uniform reference, not thermal entropy. */
+export function observables(states){
+  const n=states.length;
+  if(!n)return {connected3:0,entropy:0,totalCorrelation:0,klFine:0,klCoarse:0,informationLoss:0,counts:Array(8).fill(0)};
+  const mean=[0,0,0],counts=Array(8).fill(0);
+  for(const s of states){mean[0]+=s.h/n;mean[1]+=Math.tanh(s.w/5)/n;mean[2]+=s.a/n;counts[octant(s)]++}
+  let connected3=0;
+  for(const s of states)connected3+=(s.h-mean[0])*(Math.tanh(s.w/5)-mean[1])*(s.a-mean[2])/n;
+  const p=normalized(counts),marginals=[4,2,1].map(bit=>[p.reduce((v,x,i)=>v+((i&bit)?x:0),0),0].map((v,i,arr)=>i?1-arr[0]:v));
+  const coarse=Array.from({length:4},(_,i)=>p[2*i]+p[2*i+1]);
+  const h=entropy(p),klFine=relative(p,Array(8).fill(1/8)),klCoarse=relative(coarse,Array(4).fill(1/4));
+  return {connected3,entropy:h,totalCorrelation:Math.max(0,marginals.reduce((v,q)=>v+entropy(q),0)-h),klFine,klCoarse,informationLoss:Math.max(0,klFine-klCoarse),counts};
+}
+
+/** Empirical one-step vs two-step transition diagnostic, not a Markov assumption or proof. */
+export function transitionResidual(one,two){
+  const row=p=>p.map(normalized);
+  const p=row(one),q=row(two);let total=0,weight=0;
+  for(let i=0;i<8;i++){
+    const n=two[i].reduce((a,b)=>a+b,0);
+    if(!n||!one[i].some(v=>v>0))continue;
+    const pred=Array.from({length:8},(_,j)=>p[i].reduce((v,x,k)=>v+x*p[k][j],0));
+    if(Math.abs(pred.reduce((a,b)=>a+b,0)-1)>1e-9)continue;
+    total+=n*.5*pred.reduce((v,x,j)=>v+Math.abs(x-q[i][j]),0);weight+=n;
+  }
+  return {residual:weight?total/weight:null,samples:weight};
+}
+
 export function simulate(people,day,scenario="baseline",seed=5282026){
   const N=people.length,limit=365,steps=Math.max(0,Math.min(limit,Math.floor(day))),history=[],snapshots=[];
   let rng=seed>>>0;
@@ -61,12 +103,14 @@ export function simulate(people,day,scenario="baseline",seed=5282026){
   // All agents start in the same macrostate. Individual differences emerge from interactions.
   let states=people.map(()=>({h:.65,w:1,a:.3,assets:1,debt:0,expression:.5}));
   const graph=people.map((_,i)=>Array.from({length:6},()=>{const local=members[zoneIndex[i]];return random()<.8?local[Math.floor(random()*local.length)]:Math.floor(random()*N)}));
-  let learned=[.2,.2,.2],samples=0;
+  let learned=[.2,.2,.2],samples=0, predictionLoss=0;
+  let prior=null,prior2=null;
+  const one=Array.from({length:8},()=>Array(8).fill(0)),two=Array.from({length:8},()=>Array(8).fill(0));
   const snapshot=(t,env)=>{
     const current=states.map((s,i)=>({h:s.h,w:s.w,a:s.a,assets:s.assets,debt:s.debt,expression:s.expression,care:env[zoneIndex[i]].care,pressure:env[zoneIndex[i]].pressure,opportunity:env[zoneIndex[i]].opportunity,alleles:genomes[i].map(x=>x.join("")).join(" / ")}));
     const sorted=current.map(s=>s.w).sort((a,b)=>a-b),positive=sorted.filter(x=>x>0),total=positive.reduce((a,b)=>a+b,0);
     const summary={median:(sorted[Math.floor((N-1)/2)]+sorted[Math.floor(N/2)])/2,topShare:total?positive.slice(-Math.max(1,Math.ceil(N*.01))).reduce((a,b)=>a+b,0)/total:0,negative:sorted.filter(w=>w<0).length/N,meanH:current.reduce((a,s)=>a+s.h,0)/N,meanA:current.reduce((a,s)=>a+s.a,0)/N};
-    history.push({day:t,...summary});snapshots.push({day:t,current,summary});
+    history.push({day:t,...summary,...observables(current),predictionLoss});snapshots.push({day:t,current,summary});
   };
   // A fixed burn-in is shared; real UTC days select a reproducible simulated day.
   for(let t=-180;t<=steps;t++){
@@ -75,35 +119,46 @@ export function simulate(people,day,scenario="baseline",seed=5282026){
       for(const i of local){health+=states[i].h;wealth+=states[i].w;authority+=states[i].a}
       return environment(z,t,{health:health/local.length,wealth:wealth/local.length,authority:authority/local.length});
     });
+    if(t>=-28){const bins=states.map(octant);if(prior)for(let i=0;i<N;i++)one[prior[i]][bins[i]]++;if(prior2)for(let i=0;i<N;i++)two[prior2[i]][bins[i]]++;prior2=prior;prior=bins;}
     if(t>=-28&&(t%7===0||t===steps)){snapshot(t,env)}
     if(t===steps)break;
-    let residual=[0,0,0];
+    let gradient=[0,0,0],loss=0;
     const next=states.map((s,i)=>{
       const e=env[zoneIndex[i]],neighbors=graph[i];
       let mh=0,mw=0,ma=0,den=0;
-      for(const j of neighbors){const v=states[j],weight=Math.exp(clip(learned[0]*v.h+learned[1]*Math.tanh(v.w/5)+learned[2]*v.a,-4,4));mh+=weight*v.h;mw+=weight*Math.tanh(v.w/5);ma+=weight*v.a;den+=weight}
+      const messages=[];
+      for(const j of neighbors){const v=states[j],f=[v.h,Math.tanh(v.w/5),v.a],weight=Math.exp(learned[0]*f[0]+learned[1]*f[1]+learned[2]*f[2]);messages.push({f,weight});mh+=weight*f[0];mw+=weight*f[1];ma+=weight*f[2];den+=weight}
       mh/=den;mw/=den;ma/=den;
+      const tri=vertex(s.h,s.w,s.a);
       const gene=genomes[i].reduce((v,p)=>v+p.reduce((a,b)=>a+b,0),0)/12;
       const locus0=(genomes[i][0][0]+genomes[i][1][0])/2;
       const interaction=2*(locus0-.5)*(2*e.pressure-1);
       const expression=sigmoid(interaction+.4*(gene-.5)+1.5*(e.care-e.pressure)+.7*(s.h-.5));
-      const health=clip(s.h+.055*(e.care-s.h)+.022*Math.tanh(s.w/4)+.018*(mh-s.h)+.01*s.a+.02*(expression-.5)-.018*e.pressure+.025*noise(),.01,.99);
+      const health=clip(s.h+.055*(e.care-s.h)+.022*Math.tanh(s.w/4)+.018*(mh-s.h)+.01*s.a+.02*(expression-.5)-.018*e.pressure+tri.dh+tri.dampH+.025*noise(),.01,.99);
       // Cash flow in annual essential-basket units; institution/market is the external reservoir.
       const income=wage(s.h,s.a,e.opportunity);
       const cost=expense(s.h,e.pressure);
       const multiplicative=clip(.003*(s.a+.6*e.opportunity)+.012*noise(),-.08,.08)*Math.max(0,s.w);
       const opportunityShock=random()<.004*e.opportunity?Math.exp(3.1*random())*.75:0;
       const adverseShock=random()<.009*(1+e.pressure)?Math.exp(2.0*random())*.45:0;
-      const wealth=clip(s.w+income-cost+multiplicative+opportunityShock-adverseShock+.0015*(mw-Math.tanh(s.w/5))-.0005*Math.max(0,s.debt),-100,1e7);
+      const wealth=clip(s.w+income-cost+multiplicative+opportunityShock-adverseShock+.0015*(mw-Math.tanh(s.w/5))-.0005*Math.max(0,s.debt)+tri.dw+tri.dampW,-100,1e7);
       const liability=clip(Math.max(0,-wealth)+.96*Math.max(0,s.debt-Math.max(0,-s.w))+.001*(wealth>0?wealth:0),0,1e7);
-      const authority=clip(s.a+.035*(ma-s.a)+.022*(s.h-.5)+.018*Math.tanh(s.w/5)-.012*e.pressure+.018*noise(),.001,.999);
-      residual[0]+=(health-s.h)*mh;residual[1]+=(Math.tanh(wealth/5)-Math.tanh(s.w/5))*mw;residual[2]+=(authority-s.a)*ma;
+      const authority=clip(s.a+.035*(ma-s.a)+.022*(s.h-.5)+.018*Math.tanh(s.w/5)-.012*e.pressure+tri.da+tri.dampA+.018*noise(),.001,.999);
+      // Shared auxiliary one-step predictor, squared error, exact softmax gradient.
+      // Stop-gradient target: the realized next state of the simulator.
+      const mean=[mh,mw,ma],x=[s.h,Math.tanh(s.w/5),s.a],target=[health,Math.tanh(wealth/5),authority],alpha=.15;
+      const errors=mean.map((v,k)=>x[k]+alpha*(v-x[k])-target[k]);
+      loss+=errors.reduce((v,e)=>v+e*e,0)/3;
+      for(const msg of messages){
+        const dot=errors.reduce((v,e,k)=>v+e*(msg.f[k]-mean[k]),0);
+        for(let k=0;k<3;k++)gradient[k]+=(2*alpha/3)*dot*(msg.weight/den)*(msg.f[k]-mean[k]);
+      }
       return {h:health,w:wealth,a:authority,assets:wealth+liability,debt:liability,expression};
     });
     // Shared online adaptation of graph attention; no per-person learned/fixed coefficients.
-    learned=learned.map((x,k)=>clip(x+.04*residual[k]/N,-1.5,1.5));samples++;
+    learned=learned.map((x,k)=>clip(x-.4*gradient[k]/N,-1.5,1.5));predictionLoss=loss/N;samples++;
     states=next;
   }
   const last=snapshots[snapshots.length-1];
-  return {day:steps,history,snapshots,current:last.current,summary:last.summary,ancestry,learned,samples};
+  return {day:steps,history,snapshots,current:last.current,summary:last.summary,ancestry,learned,samples,diagnostics:observables(last.current),transition:transitionResidual(one,two)};
 }
