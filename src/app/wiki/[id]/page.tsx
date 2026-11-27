@@ -9,6 +9,7 @@ import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import { getStoriesForEntry } from "@/domains/stories/stories.meta"
 import WikiDescription from "./_components/wiki-description"
 import { CharacterLinks, CharacterStatePanel, useCharacterDetail } from "./_components/character-state"
+import { CharacterPortrait } from "../_components/character-portrait"
 import { RevealSection } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { type Lang, tl, tlCategory, tlTier } from "@/lib/lang"
@@ -73,6 +74,7 @@ export default function WikiEntryPage() {
               <span className="wiki-badge">{tl("キャラクター", "Character", lang)}</span>
               <span className="wiki-badge">{p.id}</span>
             </div>
+            {m.portrait && <div className="mb-6 flex justify-center"><CharacterPortrait key={p.id} portrait={m.portrait} name={p.name} size={256} className="h-40 w-40 sm:h-64 sm:w-64" /></div>}
             <CharacterStatePanel result={detail} lang={lang} />
             {facts.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
@@ -156,6 +158,7 @@ export default function WikiEntryPage() {
             </RevealSection>
           )}
 
+          {!entry.image && entry.category === "キャラクター" && detail.kind === "ok" && detail.data.people[0]?.portrait && <div className="mb-6 flex justify-center"><CharacterPortrait key={detail.data.people[0].person.id} portrait={detail.data.people[0].portrait} name={entry.name} size={256} className="h-40 w-40 sm:h-64 sm:w-64" /></div>}
           {entry.category === "キャラクター" && <CharacterStatePanel result={detail} lang={lang} />}
 
           {/* Category badges */}

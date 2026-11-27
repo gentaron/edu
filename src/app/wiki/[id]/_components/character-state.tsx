@@ -4,12 +4,14 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { tl, type Lang } from "@/lib/lang"
 import { characterKey, fetchCharacterJSON } from "../../_components/character-search"
+import type { Portrait } from "../../_components/portrait-design"
 
 interface Axis { h: number; w: number; a: number }
 export interface RegistryPerson { id: string; name: string; nameEn: string; formal: string; formalEn: string; region: string; regionEn: string; role: string; roleEn: string; identity: string; identityEn: string; status: string }
 export interface PageRef { id: string; name: string; nameEn: string; distance?: number; sameRegion?: boolean }
 export interface Member {
   person: RegistryPerson
+  portrait?: Portrait
   nickname: string
   nicknameEn: string
   state: (Axis & { assets: number; debt: number; care: number; pressure: number; opportunity: number; triad: number; triadField: number[] }) | null
@@ -20,6 +22,7 @@ export interface CharacterDetail {
   day: number
   cohort: number
   confirmedCount?: number
+  snapshot?: boolean
   total: number
   source: string
   median: Axis
@@ -35,7 +38,7 @@ export function useCharacterDetail(id: string): DetailResult {
     let alive = true
     if (!id) { setResult({ kind: "none" }); return }
     setResult({ kind: "loading" })
-    fetchCharacterJSON<Partial<CharacterDetail> & { redirect?: string }>("/api/characters/detail/" + characterKey(id), d => typeof d.redirect === "string" || (Array.isArray(d.people) && !!d.links && !!d.median && d.id === id))
+    fetchCharacterJSON<Partial<CharacterDetail> & { redirect?: string }>("/api/characters/detail/" + characterKey(id), d => typeof d.redirect === "string" || (Array.isArray(d.people) && d.people.length === 1 && d.people.every(m => !!m.state && [m.state.h, m.state.w, m.state.a].every(Number.isFinite)) && !!d.links && !!d.median && d.id === id))
       .then((d) => {
         if (!alive) return
         if (d.redirect) setResult({ kind: "redirect", to: d.redirect })
@@ -109,7 +112,7 @@ function Radar({ v, lang }: { v: Axis; lang: Lang }) {
 export function CharacterStatePanel({ result, lang }: { result: DetailResult; lang: Lang }) {
   if (result.kind === "loading") return <div className="mb-8 h-56 animate-pulse rounded-3xl border border-white/10 bg-white/[0.03]" />
   if (result.kind === "error") return <section className="edu-card mb-8 p-5" role="alert">{tl("現在値を取得できませんでした。", "Could not load current values.", lang)} <button className="ml-2 underline" onClick={() => window.location.reload()}>{tl("再読み込み", "Retry", lang)}</button></section>
-  if (result.kind === "none" || (result.kind === "ok" && result.data.people.length === 0)) return <section className="edu-card mb-8 p-5 text-sm text-edu-muted">{tl("現在地：原典の人物IDが未対応のため数値未確定。", "Current position: no confirmed registry identity.", lang)}</section>
+  if (result.kind === "none" || (result.kind === "ok" && result.data.people.length === 0)) return <section className="edu-card mb-8 p-5 text-sm text-edu-muted">{tl("人物データの取得に失敗しました。再読み込みしてください。", "Character data unavailable. Reload to retry.", lang)}</section>
   if (result.kind !== "ok") return null
   const d = result.data
   return (
@@ -123,6 +126,7 @@ export function CharacterStatePanel({ result, lang }: { result: DetailResult; la
         </h2>
         <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] tabular-nums text-edu-muted">E528 · {tl("標準日", "day", lang)} {d.day + 1}</span>
       </div>
+      {d.snapshot && <p className="mb-3 text-xs text-edu-muted">{tl("公開ビルド時の計算スナップショット（ライブ取得失敗時）", "Build-time computed snapshot (live API unavailable)", lang)}</p>}
       <div className="relative space-y-8">
         {d.people.map((m) => (
           <div key={m.person.id}>
@@ -155,7 +159,7 @@ export function CharacterStatePanel({ result, lang }: { result: DetailResult; la
                 <Radar v={m.state} lang={lang} />
               </div>
             ) : (
-              <p className="text-sm text-edu-muted">{tl("E528時点の存命・同一性が原典で未確定のため、現在値は表示しません。", "E528 survival or identity is unresolved in canon, so no current value is shown.", lang)}</p>
+              <p className="text-sm text-edu-muted">{tl("計算結果の取得エラー。再読み込みしてください。", "Computed values unavailable. Reload to retry.", lang)}</p>
             )}
           </div>
         ))}

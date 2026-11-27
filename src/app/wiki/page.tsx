@@ -19,6 +19,7 @@ import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import type { WikiEntry } from "@/types/wiki"
 import { asWikiId } from "@/platform/schemas/branded"
 import { fetchCharacterJSON, characterMatch } from "./_components/character-search"
+import { CharacterPortrait } from "./_components/character-portrait"
 import { CharacterDirectory, Mini, type DirectoryRow } from "./_components/character-directory"
 import { type Lang, tl, tlTier } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
@@ -96,7 +97,7 @@ function WikiPage() {
   const needRegistry = isSearching || categoryParam === "キャラクター"
   useEffect(() => {
     if (!needRegistry || directory || directoryError) return
-    fetchCharacterJSON<{ rows: DirectoryRow[] }>("/api/characters/directory", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.id === "string" && "state" in r))
+    fetchCharacterJSON<{ rows: DirectoryRow[] }>("/api/characters/directory", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.id === "string" && !!r.state && [r.state.h,r.state.wi,r.state.a].every(Number.isFinite)))
       .then((d) => setDirectory(d.rows))
       .catch(() => setDirectoryError(true))
   }, [needRegistry, directory, directoryError])
@@ -242,7 +243,8 @@ function WikiPage() {
                     href={`/wiki/${encodeURIComponent(entry.id)}`}
                     className={`block edu-card p-3 border-l-[3px] ${BORDER_COLORS[entry.category] || "border-l-edu-border"} hover:border-edu-accent transition-colors`}
                   >
-                    <div className="flex items-center gap-2 mb-0.5">
+                    <div className="flex flex-wrap items-center gap-2 mb-0.5">
+                      {entry.category === "キャラクター" && directoryById.get(entry.id)?.portrait && <CharacterPortrait key={entry.id} portrait={directoryById.get(entry.id)!.portrait!} name={entry.name} size={40} className="h-10 w-10" />}
                       <span className="text-xs font-medium text-edu-text">
                         {lang === "en" && entry.nameEn ? entry.nameEn : entry.name}
                       </span>

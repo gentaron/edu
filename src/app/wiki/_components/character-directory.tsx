@@ -5,15 +5,17 @@ import Link from "next/link"
 import { Search, BarChart3 } from "lucide-react"
 import { tl, type Lang } from "@/lib/lang"
 import { characterMatch } from "./character-search"
+import { CharacterPortrait } from "./character-portrait"
+import type { Portrait } from "./portrait-design"
 
-export interface DirectoryRow { status?: string; aliases?: string[]; stateMembers?: { cid: string; name: string; state: { h: number; wi: number; a: number } | null }[]; id: string; name: string; nameEn: string; region: string; regionEn: string; role: string; roleEn: string; wiki: boolean; state: { h: number; wi: number; a: number } | null }
+export interface DirectoryRow { cid?: string; portrait?: Portrait; status?: string; aliases?: string[]; stateMembers?: { cid: string; name: string; state: { h: number; wi: number; a: number } | null }[]; id: string; name: string; nameEn: string; region: string; regionEn: string; role: string; roleEn: string; wiki: boolean; state: { h: number; wi: number; a: number } | null }
 
 const macro = (region: string) => { const r = region.replace(/\s*\(.*\)\s*$/, ""); return (/^Gigapolis/i.test(r) ? "Gigapolis" : /^Crescent/i.test(r) ? "Crescent" : /^Granbell/i.test(r) ? "Granbell" : /AURALIS/i.test(r) ? "AURALIS" : r ? "Other" : "—") }
 const SORTS = ["name", "h", "wi", "a"] as const
 type Sort = (typeof SORTS)[number]
 
 export function Mini({ s, lang }: { s: DirectoryRow["state"]; lang: Lang }) {
-  if (!s) return <span className="text-[10px] text-edu-muted">{tl("現在値未確定", "Unresolved", lang)}</span>
+  if (!s) return <span className="text-[10px] text-edu-muted">{tl("数値取得エラー", "State unavailable", lang)}</span>
   return <div className="grid grid-cols-3 gap-2 text-center tabular-nums">
     {[[tl("健康","Health",lang), s.h, "#22d3ee"], [tl("資産","Wealth",lang), s.wi, "#f59e0b"], [tl("名声","Authority",lang), s.a, "#a78bfa"]].map(([label,v,c]) => <div key={String(label)}><p className="text-[9px] text-edu-muted">{label}</p><p className="text-xs font-semibold" style={{color:String(c)}}>{(Number(v)*100).toFixed(1)}</p><div className="mt-1 h-1 w-full rounded bg-white/10"><div className="h-full rounded" style={{width:(Number(v)*100)+"%",background:String(c)}} /></div></div>)}
   </div>
@@ -80,6 +82,7 @@ export function CharacterDirectory({ rows, lang, scrollable = false, error = fal
           {list.slice(0, limit).map((r) => (
             <Link key={r.id} href={"/wiki/" + encodeURIComponent(r.id)}
               className="group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-white/[0.07] bg-gradient-to-br from-white/[0.05] to-transparent p-4 transition duration-300 hover:-translate-y-0.5 hover:border-cyan-300/40 hover:shadow-[0_16px_48px_-16px_rgba(34,211,238,.35)]">
+              {r.portrait && <CharacterPortrait key={r.id} portrait={r.portrait} name={r.name} size={48} className="h-12 w-12" />}
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-edu-text group-hover:text-cyan-100">{lang === "en" && r.nameEn ? r.nameEn : r.name}</p>
                 <p className="mt-0.5 truncate text-[11px] text-edu-muted">{[lang === "en" ? r.regionEn : r.region, lang === "en" ? r.roleEn : r.role].filter(Boolean).join(" · ") || r.id}</p>

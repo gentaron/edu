@@ -84,3 +84,6 @@ test-results/*.png
 public/rag/corpus.json
 prisma/dev.db
 edu/
+
+# Generated model snapshots and original vector portraits
+/public/character-assets/

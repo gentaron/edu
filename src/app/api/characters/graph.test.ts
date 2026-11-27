@@ -2,7 +2,8 @@
 import { describe, expect, it } from "vitest"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import identity from "@/app/wiki/state/identity.json"
-import { pages, pageOf, ownerOf, membersOf, roster, stateOf, mentionsIn, links } from "./graph"
+import { drawPortrait, presentationFor } from "@/app/wiki/_components/portrait-design"
+import { pages, pageOf, ownerOf, membersOf, roster, stateOf, portraitFor, portraitPresentation, mentionsIn, links } from "./graph"
 
 const norm = (s: string) => s.replace(/[\s・·\-‐－=＝_（）()／/「」"'.,，、]/g, "").toLowerCase()
 
@@ -26,6 +27,14 @@ describe("character identity graph", () => {
       expect(state, p.id).toBeDefined()
       expect([state!.h, state!.w, state!.a].every(Number.isFinite), p.id).toBe(true)
     }
+  })
+  it("generates a stable unique portrait for every character", () => {
+    const faces = roster.map(p => drawPortrait(p.id, portraitPresentation(p.id)))
+    expect(new Set(faces).size).toBe(roster.length)
+    expect(roster.every(p => portraitFor(p.id).fallback.endsWith(".svg"))).toBe(true)
+    expect(drawPortrait("C281", "masculine")).toBe(drawPortrait("C281", "masculine"))
+    expect(presentationFor("Transgender woman")).toBe("feminine")
+    expect(presentationFor("Pansexual")).toBe("unspecified")
   })
   it("links every Wiki character whose name matches an edutext alias", () => {
     const alias = new Map<string, Set<string>>()

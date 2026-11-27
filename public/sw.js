@@ -1,9 +1,9 @@
 // EDU Service Worker — Offline Support
 // Strategy: Stale-While-Revalidate for content, Cache-First for static assets
 
-const CACHE_NAME = 'edu-v2';
-const STATIC_CACHE = 'edu-static-v2';
-const DATA_CACHE = 'edu-data-v2';
+const CACHE_NAME = 'edu-v3';
+const STATIC_CACHE = 'edu-static-v3';
+const DATA_CACHE = 'edu-data-v3';
 
 // Static assets to pre-cache
 const STATIC_ASSETS = [
@@ -58,7 +58,7 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
   // Live APIs and non-GET requests must never use stale page caches.
-  if (event.request.method !== "GET" || (url.origin === self.location.origin && url.pathname.startsWith("/api/"))) return;
+  if (event.request.method !== "GET" || (url.origin === self.location.origin && (url.pathname.startsWith("/api/") || url.pathname.startsWith("/character-assets/v1/data/")))) return;
 
   // Binary data: Cache-First
   if (url.pathname.startsWith('/data/')) {

@@ -55,7 +55,7 @@ export default function CharactersPage() {
   const [directory, setDirectory] = useState<DirectoryRow[] | null>(null)
   const [directoryError, setDirectoryError] = useState(false)
   useEffect(() => {
-    fetchCharacterJSON<{ rows: DirectoryRow[] }>("/api/characters/directory", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.id === "string" && "state" in r)).then((d) => setDirectory(d.rows)).catch(() => setDirectoryError(true))
+    fetchCharacterJSON<{ rows: DirectoryRow[] }>("/api/characters/directory", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.id === "string" && !!r.state && [r.state.h,r.state.wi,r.state.a].every(Number.isFinite))).then((d) => setDirectory(d.rows)).catch(() => setDirectoryError(true))
   }, [])
 
   const srCards = ALL_CARDS.filter((c) => c.rarity === "SR").sort(

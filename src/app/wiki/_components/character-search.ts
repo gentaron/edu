@@ -13,10 +13,19 @@ export function characterMatch(query: string, fields: (string | undefined)[]): n
   return score
 }
 export const characterKey = (id: string) => Array.from(new TextEncoder().encode(id), b => b.toString(16).padStart(2, "0")).join("")
+import { ASSET_ROOT } from "./portrait-design"
 export async function fetchCharacterJSON<T>(path: string, validate: (value: T) => boolean): Promise<T> {
-  const res = await fetch(path, { cache: "no-store" })
-  if (!res.ok) throw new Error("HTTP " + res.status)
-  const data = await res.json() as T
-  if (!data || !validate(data)) throw new Error("Unexpected character API response")
-  return data
+  const read = async (url: string) => {
+    const res = await fetch(url, { cache: "no-store" })
+    if (!res.ok) throw new Error("HTTP " + res.status)
+    const data = await res.json() as T & { schema?: number }
+    if (!data || data.schema !== 3 || !validate(data)) throw new Error("Unexpected or outdated character data")
+    return data
+  }
+  try { return await read(path) }
+  catch {
+    const key = path.replace(/^\/api\/characters\//, "")
+    const data = await read(ASSET_ROOT + "/data/" + key + ".json")
+    return { ...data, snapshot: true }
+  }
 }

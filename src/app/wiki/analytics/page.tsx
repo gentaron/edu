@@ -7,9 +7,11 @@ import { ArrowLeft, Search, X } from "lucide-react"
 import { useLang } from "@/lib/use-lang"
 import { characterMatch, fetchCharacterJSON } from "../_components/character-search"
 import type { DirectoryRow } from "../_components/character-directory"
+import { CharacterPortrait } from "../_components/character-portrait"
+import type { Portrait } from "../_components/portrait-design"
 import { describe, histogram, kde, pearson, spearman, ols, corrCI, cohenD, etaSquared, gini, theil, lorenz, topShare, palma, robustZ, slog, sorted, quantileSorted, ranks, type Describe } from "./stats"
 
-interface Row { status?: string; aliases?: string[]; id: string; cid: string; name: string; nameEn: string; formal: string; formalEn: string; region: string; regionEn: string; macro: string; role: string; roleEn: string; h: number; w: number; wi: number; a: number; assets: number; debt: number; care: number; pressure: number; opportunity: number; expression: number }
+interface Row { portrait?: Portrait; status?: string; aliases?: string[]; id: string; cid: string; name: string; nameEn: string; formal: string; formalEn: string; region: string; regionEn: string; macro: string; role: string; roleEn: string; h: number; w: number; wi: number; a: number; assets: number; debt: number; care: number; pressure: number; opportunity: number; expression: number }
 interface VarDef { key: string; ja: string; en: string; get: (r: Row) => number; fmt: (v: number) => string }
 
 const N10M = 10_000_000
@@ -221,7 +223,7 @@ export default function AnalyticsStudio() {
   const en = lang === "en"
   const t = (ja: string, e: string) => (en ? e : ja)
   const router = useRouter()
-  const [data, setData] = useState<{ day: number; source: string; rows: Row[] } | null>(null)
+  const [data, setData] = useState<{ day: number; source: string; rows: Row[]; snapshot?: boolean } | null>(null)
   const [error, setError] = useState(false)
   const [directory, setDirectory] = useState<DirectoryRow[]>([])
   const [tab, setTab] = useState<"dist" | "dev" | "corr" | "ineq" | "out">("dist")
@@ -234,8 +236,8 @@ export default function AnalyticsStudio() {
   const [focus, setFocus] = useState<string | null>(null)
 
   useEffect(() => {
-    fetchCharacterJSON<{ rows: DirectoryRow[] }>("/api/characters/directory", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.id === "string" && "state" in r)).then(d => setDirectory(d.rows)).catch(() => {})
-    fetchCharacterJSON<{ day: number; source: string; rows: Row[] }>("/api/characters/population", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.cid === "string" && Number.isFinite(r.h) && Number.isFinite(r.w) && Number.isFinite(r.a))).then(setData).catch(() => setError(true))
+    fetchCharacterJSON<{ rows: DirectoryRow[] }>("/api/characters/directory", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.id === "string" && !!r.state && [r.state.h,r.state.wi,r.state.a].every(Number.isFinite))).then(d => setDirectory(d.rows)).catch(() => {})
+    fetchCharacterJSON<{ day: number; source: string; rows: Row[]; snapshot?: boolean }>("/api/characters/population", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.cid === "string" && Number.isFinite(r.h) && Number.isFinite(r.w) && Number.isFinite(r.a))).then(setData).catch(() => setError(true))
   }, [])
   const rows = data?.rows ?? []
   const focusIdx = focus ? rows.findIndex((r) => r.cid === focus) : -1
@@ -290,7 +292,7 @@ export default function AnalyticsStudio() {
             <p className="mt-2 max-w-2xl text-sm text-edu-muted">{t("全登録人物のモデル値を分析。原典で現代対象とされない人物も現代環境を仮定して計算するため、実際のE528人口とは異なります。", "Analyze all registered characters. Non-current source identities use conditional values in today's environment; this is not a literal E528 census.")}</p>
           </div>
           <div className="text-right text-[11px] text-edu-muted tabular-nums">
-            {data ? <>E528 · {t("標準日", "day")} {data.day + 1}<br />N = {rows.length.toLocaleString()}</> : t("計算中…", "Computing…")}
+            {data ? <>{data.snapshot && <>{t("公開時の計算値","Build snapshot")} · </>}E528 · {t("標準日", "day")} {data.day + 1}<br />N = {rows.length.toLocaleString()}</> : t("計算中…", "Computing…")}
           </div>
         </header>
 
@@ -310,6 +312,7 @@ export default function AnalyticsStudio() {
             </div>
             {focusRow && (
               <div className="flex items-center gap-2 rounded-2xl border border-emerald-300/30 bg-emerald-300/10 px-3 py-1.5 text-sm">
+                {focusRow.portrait && <CharacterPortrait key={focusRow.cid} portrait={focusRow.portrait} name={focusRow.name} size={36} className="h-9 w-9" />}
                 <Link href={"/wiki/" + encodeURIComponent(focusRow.id)} className="text-emerald-100 hover:underline">{en && focusRow.nameEn ? focusRow.nameEn : focusRow.name}</Link>
                 <button type="button" aria-label={t("解除", "Clear")} onClick={() => setFocus(null)}><X className="h-4 w-4 text-emerald-200" /></button>
               </div>

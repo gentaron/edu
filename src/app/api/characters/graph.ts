@@ -9,6 +9,7 @@ import { computeNow, phaseAt, type Person, type State } from "@/app/wiki/state/l
 import registry from "@/app/wiki/state/registry.json"
 import identity from "@/app/wiki/state/identity.json"
 import supplemental from "@/app/wiki/state/wiki-supplemental.json"
+import { portraitPath, presentationFor, type Portrait, type Presentation } from "@/app/wiki/_components/portrait-design"
 
 interface IdentityPerson { call: string; first: string; nickname: string; last: string; firstEn: string; nicknameEn: string; lastEn: string; aliases: string[] }
 interface IdentityFile { source: string; people: Record<string, IdentityPerson>; wiki: Record<string, { ids: string[]; method: string; note?: string }> }
@@ -128,5 +129,20 @@ export const stateOf = (cid: string): State | undefined => {
   return i === undefined ? undefined : currentStates().current[i]
 }
 export const person = (cid: string) => personById.get(cid)
+export const portraitFor = (cid: string): Portrait => {
+  const fallback = portraitPath(cid)
+  const image = entryById.get(pageOf(cid))?.image
+  return { src: image || fallback, fallback, generated: !image }
+}
+export const portraitPresentation = (cid: string): Presentation => {
+  const p = person(cid)
+  if (!p) return "unspecified"
+  const explicit = presentationFor(p.identityEn || p.identity)
+  if (explicit !== "unspecified") return explicit
+  // Core characters with established gender in the stories, not inferred from names.
+  if (["C001","C002","C003","C004","C005","C006","C007","C012","C013","C014","C015"].includes(cid)) return "feminine"
+  if (["C008","C009"].includes(cid)) return "masculine"
+  return "unspecified"
+}
 export const nickname = (cid: string) => ID.people[cid]
 export const macroRegion = (region: string) => { const r = region.replace(/\s*\(.*\)\s*$/, ""); return (/^Gigapolis/i.test(r) ? "Gigapolis" : /^Crescent/i.test(r) ? "Crescent" : /^Granbell/i.test(r) ? "Granbell" : /AURALIS/i.test(r) ? "AURALIS" : r || "Unspecified") }
