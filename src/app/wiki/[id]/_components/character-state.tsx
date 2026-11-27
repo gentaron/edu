@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { tl, type Lang } from "@/lib/lang"
+import { characterKey, fetchCharacterJSON } from "../../_components/character-search"
 
 interface Axis { h: number; w: number; a: number }
 export interface RegistryPerson { id: string; name: string; nameEn: string; formal: string; formalEn: string; region: string; regionEn: string; role: string; roleEn: string; identity: string; identityEn: string; status: string }
@@ -24,7 +25,7 @@ export interface CharacterDetail {
   people: Member[]
   links: { mentions: PageRef[]; backlinks: PageRef[]; similar: PageRef[] }
 }
-export type DetailResult = { kind: "loading" } | { kind: "none" } | { kind: "redirect"; to: string } | { kind: "ok"; data: CharacterDetail }
+export type DetailResult = { kind: "loading" } | { kind: "none" } | { kind: "error" } | { kind: "redirect"; to: string } | { kind: "ok"; data: CharacterDetail }
 
 /** Fetches the current state and link graph of one character page. */
 export function useCharacterDetail(id: string): DetailResult {
@@ -33,15 +34,14 @@ export function useCharacterDetail(id: string): DetailResult {
     let alive = true
     if (!id) { setResult({ kind: "none" }); return }
     setResult({ kind: "loading" })
-    fetch("/api/characters?id=" + encodeURIComponent(id))
-      .then((r) => r.json() as Promise<Partial<CharacterDetail> & { redirect?: string }>)
+    fetchCharacterJSON<Partial<CharacterDetail> & { redirect?: string }>("/api/characters/detail/" + characterKey(id), d => typeof d.redirect === "string" || (Array.isArray(d.people) && !!d.links && !!d.median && d.id === id))
       .then((d) => {
         if (!alive) return
         if (d.redirect) setResult({ kind: "redirect", to: d.redirect })
         else if (d.people && d.people.length + (d.links?.backlinks.length ?? 0) + (d.links?.mentions.length ?? 0) > 0) setResult({ kind: "ok", data: d as CharacterDetail })
         else setResult({ kind: "none" })
       })
-      .catch(() => { if (alive) setResult({ kind: "none" }) })
+      .catch(() => { if (alive) setResult({ kind: "error" }) })
     return () => { alive = false }
   }, [id])
   return result
@@ -107,7 +107,9 @@ function Radar({ v, lang }: { v: Axis; lang: Lang }) {
 /** Glass panel with the current position of each person on the page (duo entries show both). */
 export function CharacterStatePanel({ result, lang }: { result: DetailResult; lang: Lang }) {
   if (result.kind === "loading") return <div className="mb-8 h-56 animate-pulse rounded-3xl border border-white/10 bg-white/[0.03]" />
-  if (result.kind !== "ok" || result.data.people.length === 0) return null
+  if (result.kind === "error") return <section className="edu-card mb-8 p-5" role="alert">{tl("現在値を取得できませんでした。", "Could not load current values.", lang)} <button className="ml-2 underline" onClick={() => window.location.reload()}>{tl("再読み込み", "Retry", lang)}</button></section>
+  if (result.kind === "none" || (result.kind === "ok" && result.data.people.length === 0)) return <section className="edu-card mb-8 p-5 text-sm text-edu-muted">{tl("現在地：原典の人物IDが未対応のため数値未確定。", "Current position: no confirmed registry identity.", lang)}</section>
+  if (result.kind !== "ok") return null
   const d = result.data
   return (
     <section className="relative mb-8 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.06] to-white/[0.015] p-5 shadow-[0_20px_80px_-20px_rgba(56,189,248,.25)] backdrop-blur-xl sm:p-7">

@@ -18,7 +18,8 @@ import {
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import type { WikiEntry } from "@/types/wiki"
 import { asWikiId } from "@/platform/schemas/branded"
-import { CharacterDirectory, type DirectoryRow } from "./_components/character-directory"
+import { fetchCharacterJSON, characterMatch } from "./_components/character-search"
+import { CharacterDirectory, Mini, type DirectoryRow } from "./_components/character-directory"
 import { type Lang, tl, tlTier } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
 
@@ -91,17 +92,18 @@ function WikiPage() {
   const isSearching = search.trim().length > 0
   const showCategory = !isSearching && categoryParam
   const [directory, setDirectory] = useState<DirectoryRow[] | null>(null)
+  const [directoryError, setDirectoryError] = useState(false)
   const needRegistry = isSearching || categoryParam === "キャラクター"
   useEffect(() => {
-    if (!needRegistry || directory) return
-    fetch("/api/characters")
-      .then((r) => r.json() as Promise<{ rows: DirectoryRow[] }>)
+    if (!needRegistry || directory || directoryError) return
+    fetchCharacterJSON<{ rows: DirectoryRow[] }>("/api/characters/directory", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.id === "string" && "state" in r))
       .then((d) => setDirectory(d.rows))
-      .catch(() => setDirectory([]))
-  }, [needRegistry, directory])
+      .catch(() => setDirectoryError(true))
+  }, [needRegistry, directory, directoryError])
   const registry = useMemo(() => (directory ? directory.filter((r) => !r.wiki).map(registryEntry) : null), [directory])
   const entries = useMemo(() => [...ALL_ENTRIES, ...(registry ?? [])], [registry])
 
+  const directoryById = useMemo(() => new Map((directory ?? []).map(r => [r.id, r])), [directory])
   const searchResults = useMemo(() => {
     if (!isSearching) {
       return []
@@ -109,12 +111,12 @@ function WikiPage() {
     const q = search.toLowerCase().trim()
     return entries.filter(
       (e) =>
-        e.name.toLowerCase().includes(q) ||
+        characterMatch(q, [e.id, e.name, e.nameEn, ...(directoryById.get(e.id)?.aliases ?? [])]) >= 0 ||
         (e.nameEn && e.nameEn.toLowerCase().includes(q)) ||
         e.description.toLowerCase().includes(q) ||
         (e.descriptionEn && e.descriptionEn.toLowerCase().includes(q))
     )
-  }, [search, isSearching, entries])
+  }, [search, isSearching, entries, directoryById])
 
   const categoryEntries = useMemo(() => {
     if (!showCategory || !categoryParam) {
@@ -244,6 +246,7 @@ function WikiPage() {
                       <span className="text-xs font-medium text-edu-text">
                         {lang === "en" && entry.nameEn ? entry.nameEn : entry.name}
                       </span>
+                      {entry.category === "キャラクター" && directoryById.has(entry.id) && <Mini s={directoryById.get(entry.id)!.state} lang={lang} />}
                       {entry.nameEn && lang !== "en" && (
                         <span className="text-[10px] text-edu-muted">{entry.nameEn}</span>
                       )}
@@ -279,7 +282,7 @@ function WikiPage() {
             </Link>
             <h2 className="mb-1 bg-gradient-to-r from-cyan-200 via-sky-200 to-violet-200 bg-clip-text text-2xl font-semibold text-transparent">{tl("キャラクター名鑑", "Character directory", lang)}</h2>
             <p className="mb-4 text-xs text-edu-muted">{tl("1人1ページ。姓名・愛称はedutextの登録に基づく。バーは健康・資産・名声の現在地。", "One page per person. Names follow edutext. Bars show current health, wealth and reputation.", lang)}</p>
-            <CharacterDirectory rows={directory} lang={lang} />
+            <CharacterDirectory rows={directory} error={directoryError} lang={lang} />
           </div>
         ) : showCategory && activeCategoryConfig ? (
           /* Category detail view */

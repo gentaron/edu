@@ -5,9 +5,10 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Search, X } from "lucide-react"
 import { useLang } from "@/lib/use-lang"
+import { characterMatch, fetchCharacterJSON } from "../_components/character-search"
 import { describe, histogram, kde, pearson, spearman, ols, corrCI, cohenD, etaSquared, gini, theil, lorenz, topShare, palma, robustZ, slog, sorted, quantileSorted, ranks, type Describe } from "./stats"
 
-interface Row { id: string; cid: string; name: string; nameEn: string; formal: string; formalEn: string; region: string; regionEn: string; macro: string; role: string; roleEn: string; h: number; w: number; wi: number; a: number; assets: number; debt: number; care: number; pressure: number; opportunity: number; expression: number }
+interface Row { aliases?: string[]; id: string; cid: string; name: string; nameEn: string; formal: string; formalEn: string; region: string; regionEn: string; macro: string; role: string; roleEn: string; h: number; w: number; wi: number; a: number; assets: number; debt: number; care: number; pressure: number; opportunity: number; expression: number }
 interface VarDef { key: string; ja: string; en: string; get: (r: Row) => number; fmt: (v: number) => string }
 
 const N10M = 10_000_000
@@ -231,7 +232,7 @@ export default function AnalyticsStudio() {
   const [focus, setFocus] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch("/api/characters?view=population").then((r) => r.json()).then(setData).catch(() => setError(true))
+    fetchCharacterJSON<{ day: number; source: string; rows: Row[] }>("/api/characters/population", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.cid === "string" && Number.isFinite(r.h) && Number.isFinite(r.w) && Number.isFinite(r.a))).then(setData).catch(() => setError(true))
   }, [])
   const rows = data?.rows ?? []
   const focusIdx = focus ? rows.findIndex((r) => r.cid === focus) : -1
@@ -249,11 +250,10 @@ export default function AnalyticsStudio() {
   const labelsOf = useMemo(() => rows.map(g), [rows, g])
   const groupNames = useMemo(() => [...new Set(labelsOf)].sort((a, b) => a.localeCompare(b, "ja")), [labelsOf])
   const matches = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    return q ? rows.filter((r) => [r.name, r.nameEn, r.formal, r.formalEn, r.cid, r.id].some((s) => s.toLowerCase().includes(q))).slice(0, 8) : []
+    return rows.map(r => ({ r, score: characterMatch(query, [r.name, r.nameEn, r.formal, r.formalEn, r.cid, r.id, ...(r.aliases ?? [])]) })).filter(x => x.score >= 0).sort((a,b) => b.score - a.score).slice(0, 12).map(x => x.r)
   }, [rows, query])
 
-  if (error) return <main className="min-h-screen bg-edu-bg px-4 pt-24 text-center text-edu-muted">{t("データを読み込めませんでした。", "Could not load data.")}</main>
+  if (error) return <main className="min-h-screen bg-edu-bg px-4 pt-24 text-center text-edu-muted">{t("人物データの取得に失敗しました。", "Could not load character data.")} <button className="ml-2 underline" onClick={() => window.location.reload()}>{t("再読み込み", "Retry")}</button></main>
 
   const focusRow = mark !== undefined ? rows[mark] : undefined
   const xs1 = transformed(v1), d1 = describe(xs1)
@@ -284,12 +284,13 @@ export default function AnalyticsStudio() {
         {/* Spotlight */}
         <Glass className="!p-4">
           <div className="flex flex-wrap items-center gap-3">
-            <div className="relative min-w-[240px] flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-edu-muted" />
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={t("人物をスポットライト（名前・ID）", "Spotlight a person (name or ID)")}
+            <div className="relative min-w-0 basis-full flex-1">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-edu-muted" />
+              <input value={query} aria-label={t("人物検索", "Search people")} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && matches[0]) { e.preventDefault(); setFocus(matches[0].cid); setQuery("") } if (e.key === "Escape") setQuery("") }} placeholder={t("人物をスポットライト（名前・ID）", "Spotlight a person (name or ID)")}
                 className="w-full rounded-2xl border border-white/10 bg-black/30 py-2.5 pl-10 pr-3 text-sm focus:border-emerald-300/50 focus:outline-none focus:ring-4 focus:ring-emerald-300/10" />
+              {query.trim() && matches.length === 0 && <p className="mt-2 px-2 text-xs text-edu-muted">{data ? t("該当する現代の人物がいません。別名・IDでも検索できます。", "No contemporary matches. Try an alias or ID.") : t("人物データを読み込み中…", "Loading characters…")}</p>}
               {matches.length > 0 && (
-                <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0b1020]/95 shadow-2xl backdrop-blur-xl">
+                <div className="relative mt-2 max-h-72 w-full overflow-y-auto rounded-2xl border border-white/10 bg-[#0b1020]/95 shadow-2xl">
                   {matches.map((r) => <button key={r.cid} type="button" onClick={() => { setFocus(r.cid); setQuery("") }} className="block w-full px-4 py-2 text-left text-sm hover:bg-white/5">{en && r.nameEn ? r.nameEn : r.name} <span className="text-xs text-edu-muted">{r.cid} · {r.macro}</span></button>)}
                 </div>
               )}

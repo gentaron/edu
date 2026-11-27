@@ -4,28 +4,23 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { Search, BarChart3 } from "lucide-react"
 import { tl, type Lang } from "@/lib/lang"
+import { characterMatch } from "./character-search"
 
-export interface DirectoryRow { id: string; name: string; nameEn: string; region: string; regionEn: string; role: string; roleEn: string; wiki: boolean; state: { h: number; wi: number; a: number } | null }
+export interface DirectoryRow { aliases?: string[]; stateMembers?: { cid: string; name: string; state: { h: number; wi: number; a: number } | null }[]; id: string; name: string; nameEn: string; region: string; regionEn: string; role: string; roleEn: string; wiki: boolean; state: { h: number; wi: number; a: number } | null }
 
 const macro = (region: string) => { const r = region.replace(/\s*\(.*\)\s*$/, ""); return (/^Gigapolis/i.test(r) ? "Gigapolis" : /^Crescent/i.test(r) ? "Crescent" : /^Granbell/i.test(r) ? "Granbell" : /AURALIS/i.test(r) ? "AURALIS" : r ? "Other" : "—") }
 const SORTS = ["name", "h", "wi", "a"] as const
 type Sort = (typeof SORTS)[number]
 
-function Mini({ s }: { s: DirectoryRow["state"] }) {
-  if (!s) return <span className="text-[10px] text-edu-muted">—</span>
-  return (
-    <div className="flex h-8 items-end gap-1" aria-hidden>
-      {[["#22d3ee", s.h], ["#f59e0b", s.wi], ["#a78bfa", s.a]].map(([c, v], i) => (
-        <span key={i} className="relative h-full w-1.5 overflow-hidden rounded-full bg-white/10">
-          <span className="absolute inset-x-0 bottom-0 rounded-full" style={{ height: Math.max(6, Number(v) * 100).toFixed(1) + "%", background: String(c), boxShadow: `0 0 10px ${c}66` }} />
-        </span>
-      ))}
-    </div>
-  )
+export function Mini({ s, lang }: { s: DirectoryRow["state"]; lang: Lang }) {
+  if (!s) return <span className="text-[10px] text-edu-muted">{tl("現在値未確定", "Unresolved", lang)}</span>
+  return <div className="grid grid-cols-3 gap-2 text-center tabular-nums">
+    {[[tl("健康","Health",lang), s.h, "#22d3ee"], [tl("資産","Wealth",lang), s.wi, "#f59e0b"], [tl("名声","Authority",lang), s.a, "#a78bfa"]].map(([label,v,c]) => <div key={String(label)}><p className="text-[9px] text-edu-muted">{label}</p><p className="text-xs font-semibold" style={{color:String(c)}}>{(Number(v)*100).toFixed(1)}</p><div className="mt-1 h-1 w-full rounded bg-white/10"><div className="h-full rounded" style={{width:(Number(v)*100)+"%",background:String(c)}} /></div></div>)}
+  </div>
 }
 
 /** Searchable, sortable directory of every character (one card per person). */
-export function CharacterDirectory({ rows, lang, scrollable = false }: { rows: DirectoryRow[] | null; lang: Lang; scrollable?: boolean }) {
+export function CharacterDirectory({ rows, lang, scrollable = false, error = false }: { rows: DirectoryRow[] | null; lang: Lang; scrollable?: boolean; error?: boolean }) {
   const [q, setQ] = useState("")
   const [zone, setZone] = useState("all")
   const [sort, setSort] = useState<Sort>("name")
@@ -34,7 +29,7 @@ export function CharacterDirectory({ rows, lang, scrollable = false }: { rows: D
   const zones = useMemo(() => ["all", ...new Set((rows ?? []).map((r) => macro(r.regionEn)))], [rows])
   const list = useMemo(() => {
     const needle = q.trim().toLowerCase()
-    const out = (rows ?? []).filter((r) => (zone === "all" || macro(r.regionEn) === zone) && (!needle || [r.id, r.name, r.nameEn, r.region, r.regionEn, r.role, r.roleEn].some((v) => v.toLowerCase().includes(needle))))
+    const out = (rows ?? []).filter((r) => (zone === "all" || macro(r.regionEn) === zone) && (!needle || characterMatch(needle, [r.id, r.name, r.nameEn, r.region, r.regionEn, r.role, r.roleEn, ...(r.aliases ?? [])]) >= 0))
     return sort === "name" ? out : [...out].sort((a, b) => (b.state?.[sort] ?? -1) - (a.state?.[sort] ?? -1))
   }, [rows, q, zone, sort])
   useEffect(() => setLimit(60), [q, zone, sort])
@@ -78,7 +73,7 @@ export function CharacterDirectory({ rows, lang, scrollable = false }: { rows: D
         </div>
       </div>
       <div className={scrollable ? "max-h-[70vh] overflow-y-auto overscroll-contain rounded-2xl pr-1" : ""}>
-      {!rows ? (
+      {error ? <p role="alert" className="p-4 text-sm text-edu-muted">{tl("人物一覧を取得できませんでした。", "Could not load characters.", lang)} <button className="underline" onClick={() => window.location.reload()}>{tl("再読み込み", "Retry", lang)}</button></p> : !rows ? (
         <div className="grid gap-3 sm:grid-cols-2">{Array.from({ length: 8 }, (_, i) => <div key={i} className="h-20 animate-pulse rounded-2xl bg-white/[0.04]" />)}</div>
       ) : (
         <div className="grid gap-3 sm:grid-cols-2">
@@ -90,11 +85,12 @@ export function CharacterDirectory({ rows, lang, scrollable = false }: { rows: D
                 <p className="mt-0.5 truncate text-[11px] text-edu-muted">{[lang === "en" ? r.regionEn : r.region, lang === "en" ? r.roleEn : r.role].filter(Boolean).join(" · ") || r.id}</p>
               </div>
               {r.wiki && <span className="rounded-full border border-amber-300/30 px-2 py-0.5 text-[9px] text-amber-200">Wiki</span>}
-              <Mini s={r.state} />
+              <div className="shrink-0 space-y-1">{r.stateMembers && r.stateMembers.length > 1 ? r.stateMembers.map(m => <div key={m.cid}><p className="text-[9px] text-edu-muted">{m.name}</p><Mini s={m.state} lang={lang} /></div>) : <Mini s={r.state} lang={lang} />}</div>
             </Link>
           ))}
         </div>
       )}
+      {rows && !error && list.length === 0 && <p className="p-4 text-sm text-edu-muted">{tl("該当する人物がいません。", "No matching characters.", lang)}</p>}
       <div ref={sentinel} className="h-8" />
       </div>
     </div>

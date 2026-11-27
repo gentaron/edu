@@ -51,8 +51,9 @@ jobs:
             "GET /api/export?format=html&category=all" \
             "GET /api/tournament/bound" \
             "GET /api/characters" \
-            "GET /api/characters?view=population" \
-            "GET /api/characters?id=C002"; do
+            "GET /api/characters/directory" \
+            "GET /api/characters/population" \
+            "GET /api/characters/detail/43303032"; do
             read -r METHOD API_PATH <<< "$test"
             STATUS=$(curl --silent --show-error --max-time 30 -o /dev/null -w '%{http_code}' -X "$METHOD" "http://localhost:3000$API_PATH")
             if [[ "$STATUS" != 2[0-9][0-9] ]]; then
@@ -61,6 +62,9 @@ jobs:
             fi
             echo "PASS: $test -> $STATUS"
           done
+
+          # Verify payload shape, not just a 200 from the wrong cached response.
+          bun -e 'const base="http://localhost:3000/api/characters"; const read=async p=>{const r=await fetch(base+p); if(!r.ok) throw Error(p); return r.json()}; const d=await read("/directory"); const p=await read("/population"); if(!d.rows?.some(x=>x.state && Number.isFinite(x.state.h)) || !p.rows?.some(x=>x.cid==="C002" && Number.isFinite(x.h))) throw Error("Invalid directory or population"); const alias=await read("/detail/43303032"); if(typeof alias.redirect!=="string") throw Error("Invalid redirect"); const key=Buffer.from(alias.redirect).toString("hex"); const detail=await read("/detail/"+key); if(!detail.people?.some(x=>x.person.id==="C002" && Number.isFinite(x.state?.h))) throw Error("Missing Wiki character values")'
 
           # POST tests
           STATUS=$(curl --silent --show-error --max-time 30 -o /dev/null -w '%{http_code}' -X POST "http://localhost:3000/api/wiki/related" \

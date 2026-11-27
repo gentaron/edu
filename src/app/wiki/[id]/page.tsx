@@ -55,8 +55,8 @@ export default function WikiEntryPage() {
     fetchAiRelated()
   }, [fetchAiRelated])
 
-  if (!entry && (detail.kind === "loading" || detail.kind === "redirect")) {
-    return <div className="min-h-screen bg-edu-bg" />
+  if (!entry && (detail.kind === "loading" || detail.kind === "redirect" || detail.kind === "error")) {
+    return <main className="min-h-screen bg-edu-bg px-4 pt-24"><CharacterStatePanel result={detail} lang={lang} /></main>
   }
 
   if (!entry && detail.kind === "ok" && detail.data.people[0]) {

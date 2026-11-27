@@ -10,6 +10,7 @@ import { PageHeader } from "@/platform/page-header"
 import { ALL_CARDS } from "@/domains/cards/cards.data"
 import type { GameCard } from "@/types"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
+import { fetchCharacterJSON } from "@/app/wiki/_components/character-search"
 import { CharacterDirectory, type DirectoryRow } from "@/app/wiki/_components/character-directory"
 
 /* Build a lookup from card display name → wiki entry id */
@@ -52,8 +53,9 @@ export default function CharactersPage() {
   const { lang } = useLang()
   // Every character's present position (same data and pages as the Wiki).
   const [directory, setDirectory] = useState<DirectoryRow[] | null>(null)
+  const [directoryError, setDirectoryError] = useState(false)
   useEffect(() => {
-    fetch("/api/characters").then((r) => r.json() as Promise<{ rows: DirectoryRow[] }>).then((d) => setDirectory(d.rows)).catch(() => setDirectory([]))
+    fetchCharacterJSON<{ rows: DirectoryRow[] }>("/api/characters/directory", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.id === "string" && "state" in r)).then((d) => setDirectory(d.rows)).catch(() => setDirectoryError(true))
   }, [])
 
   const srCards = ALL_CARDS.filter((c) => c.rarity === "SR").sort(
@@ -162,7 +164,7 @@ export default function CharactersPage() {
           <div className="mb-12">
             <h2 className="mb-1 bg-gradient-to-r from-cyan-200 via-sky-200 to-violet-200 bg-clip-text text-2xl font-semibold text-transparent">{tl("全キャラクターの現在地", "Every character, right now", lang)}</h2>
             <p className="mb-4 text-xs text-edu-muted">{tl("クリックでWikiの人物ページへ。バーは健康・資産・名声の今の値。", "Click to open the Wiki page. Bars show current health, wealth and reputation.", lang)}</p>
-            <CharacterDirectory rows={directory} lang={lang} scrollable />
+            <CharacterDirectory rows={directory} error={directoryError} lang={lang} scrollable />
           </div>
           {/* Tier Table */}
           <div className="space-y-6">
