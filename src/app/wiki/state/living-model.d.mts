@@ -4,3 +4,6 @@ export interface Summary { median: number; topShare: number; negative: number; m
 export interface Snapshot { day: number; current: State[]; summary: Summary }
 export interface Result { day: number; history: (Summary & { day: number })[]; snapshots: Snapshot[]; current: State[]; summary: Summary; ancestry?: number[][]; learned?: number[]; samples?: number }
 export function simulate(people: Person[], day: number, scenario?: string, seed?: number): Result;
+
+export interface CouplingEffects { wealthToHealth: number; authorityToHealth: number; healthToWealth: number; authorityToWealth: number; healthToAuthority: number; wealthToAuthority: number }
+export function couplingEffects(s: State): CouplingEffects;
