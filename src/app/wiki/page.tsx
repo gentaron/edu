@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo, Suspense } from "react"
+import React, { useState, useMemo, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import {
@@ -16,6 +16,9 @@ import {
   Download,
 } from "lucide-react"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
+import type { WikiEntry } from "@/types/wiki"
+import { asWikiId } from "@/platform/schemas/branded"
+import { CharacterDirectory, type DirectoryRow } from "./_components/character-directory"
 import { type Lang, tl, tlTier } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
 
@@ -51,6 +54,17 @@ const BORDER_COLORS: Record<Category, string> = {
   歴史: "border-l-orange-400",
 }
 
+/** Registry characters without a hand-written entry (one page per person, names from edutext). */
+const registryEntry = (p: DirectoryRow): WikiEntry => ({
+  id: asWikiId(p.id),
+  name: p.name,
+  nameEn: p.nameEn || undefined,
+  category: "キャラクター",
+  subCategory: p.region || undefined,
+  description: [p.region, p.role].filter(Boolean).join(" / "),
+  descriptionEn: [p.regionEn, p.roleEn].filter(Boolean).join(" / "),
+})
+
 function WikiLoading() {
   return (
     <main className="min-h-screen bg-edu-bg pt-14 sm:pt-16 pb-16 sm:pb-20">
@@ -76,27 +90,38 @@ function WikiPage() {
 
   const isSearching = search.trim().length > 0
   const showCategory = !isSearching && categoryParam
+  const [directory, setDirectory] = useState<DirectoryRow[] | null>(null)
+  const needRegistry = isSearching || categoryParam === "キャラクター"
+  useEffect(() => {
+    if (!needRegistry || directory) return
+    fetch("/api/characters")
+      .then((r) => r.json() as Promise<{ rows: DirectoryRow[] }>)
+      .then((d) => setDirectory(d.rows))
+      .catch(() => setDirectory([]))
+  }, [needRegistry, directory])
+  const registry = useMemo(() => (directory ? directory.filter((r) => !r.wiki).map(registryEntry) : null), [directory])
+  const entries = useMemo(() => [...ALL_ENTRIES, ...(registry ?? [])], [registry])
 
   const searchResults = useMemo(() => {
     if (!isSearching) {
       return []
     }
     const q = search.toLowerCase().trim()
-    return ALL_ENTRIES.filter(
+    return entries.filter(
       (e) =>
         e.name.toLowerCase().includes(q) ||
         (e.nameEn && e.nameEn.toLowerCase().includes(q)) ||
         e.description.toLowerCase().includes(q) ||
         (e.descriptionEn && e.descriptionEn.toLowerCase().includes(q))
     )
-  }, [search, isSearching])
+  }, [search, isSearching, entries])
 
   const categoryEntries = useMemo(() => {
     if (!showCategory || !categoryParam) {
       return []
     }
-    return ALL_ENTRIES.filter((e) => e.category === categoryParam)
-  }, [showCategory, categoryParam])
+    return entries.filter((e) => e.category === categoryParam)
+  }, [showCategory, categoryParam, entries])
 
   const grouped = useMemo(() => {
     const map: Partial<Record<Category, typeof ALL_ENTRIES>> = {}
@@ -183,10 +208,18 @@ function WikiPage() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4">
-        <Link href="/wiki/state" className="block edu-card p-4 mb-5 border border-edu-border hover:border-edu-accent">
-          <span className="text-sm font-bold text-edu-text">{tl("三相動態観測所", "Triadic State Observatory", lang)}</span>
-          <p className="text-xs text-edu-muted mt-1">{tl("全人物台帳・健康・資産・権威名声の現在状態と推移", "Character registry and dynamic health, wealth, authority trends", lang)}</p>
-        </Link>
+        {!isSearching && !showCategory && (
+          <Link href="/wiki?category=キャラクター" className="block edu-card p-4 mb-5 border border-edu-border hover:border-edu-accent">
+            <span className="text-sm font-bold text-edu-text">{tl("キャラクター名鑑", "Character directory", lang)}</span>
+            <p className="text-xs text-edu-muted mt-1">{tl("全員の健康・資産・権威名声の現在地", "Current health, wealth and authority of everyone", lang)}</p>
+          </Link>
+        )}
+        {!isSearching && !showCategory && (
+          <Link href="/wiki/analytics" className="relative block overflow-hidden rounded-2xl border border-cyan-300/20 bg-gradient-to-br from-cyan-400/10 via-sky-500/5 to-violet-500/10 p-4 mb-5 hover:border-cyan-300/50">
+            <span className="text-sm font-bold text-edu-text">{tl("人口分析スタジオ", "Population analytics studio", lang)}</span>
+            <p className="text-xs text-edu-muted mt-1">{tl("分布・偏差・相関・地域比較・格差を多角的に", "Distributions, deviations, correlations, regional comparison and inequality", lang)}</p>
+          </Link>
+        )}
         {/* Search results */}
         {isSearching ? (
           <div>
@@ -237,6 +270,16 @@ function WikiPage() {
                 ))}
               </div>
             )}
+          </div>
+        ) : showCategory && categoryParam === "キャラクター" ? (
+          <div>
+            <Link href="/wiki" className="inline-flex items-center gap-1 text-xs text-edu-muted hover:text-edu-accent transition-colors mb-4">
+              <ChevronRight className="w-3 h-3 rotate-180" />
+              {tl("カテゴリ一覧に戻る", "Back to categories", lang)}
+            </Link>
+            <h2 className="mb-1 bg-gradient-to-r from-cyan-200 via-sky-200 to-violet-200 bg-clip-text text-2xl font-semibold text-transparent">{tl("キャラクター名鑑", "Character directory", lang)}</h2>
+            <p className="mb-4 text-xs text-edu-muted">{tl("1人1ページ。姓名・愛称はedutextの登録に基づく。バーは健康・資産・名声の現在地。", "One page per person. Names follow edutext. Bars show current health, wealth and reputation.", lang)}</p>
+            <CharacterDirectory rows={directory} lang={lang} />
           </div>
         ) : showCategory && activeCategoryConfig ? (
           /* Category detail view */

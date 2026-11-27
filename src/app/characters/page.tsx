@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Crown, Swords, Shield, Users } from "lucide-react"
 import { type Lang, tl } from "@/lib/lang"
@@ -9,6 +10,7 @@ import { PageHeader } from "@/platform/page-header"
 import { ALL_CARDS } from "@/domains/cards/cards.data"
 import type { GameCard } from "@/types"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
+import { CharacterDirectory, type DirectoryRow } from "@/app/wiki/_components/character-directory"
 
 /* Build a lookup from card display name → wiki entry id */
 const nameToWikiId = new Map<string, string>()
@@ -48,6 +50,11 @@ const IRIS_RANKING = [
 
 export default function CharactersPage() {
   const { lang } = useLang()
+  // Every character's present position (same data and pages as the Wiki).
+  const [directory, setDirectory] = useState<DirectoryRow[] | null>(null)
+  useEffect(() => {
+    fetch("/api/characters").then((r) => r.json() as Promise<{ rows: DirectoryRow[] }>).then((d) => setDirectory(d.rows)).catch(() => setDirectory([]))
+  }, [])
 
   const srCards = ALL_CARDS.filter((c) => c.rarity === "SR").sort(
     (a, b) =>
@@ -151,6 +158,12 @@ export default function CharactersPage() {
 
       <section className="pb-20">
         <div className="max-w-5xl mx-auto px-4">
+          {/* All characters: present position, linked to their Wiki pages */}
+          <div className="mb-12">
+            <h2 className="mb-1 bg-gradient-to-r from-cyan-200 via-sky-200 to-violet-200 bg-clip-text text-2xl font-semibold text-transparent">{tl("全キャラクターの現在地", "Every character, right now", lang)}</h2>
+            <p className="mb-4 text-xs text-edu-muted">{tl("クリックでWikiの人物ページへ。バーは健康・資産・名声の今の値。", "Click to open the Wiki page. Bars show current health, wealth and reputation.", lang)}</p>
+            <CharacterDirectory rows={directory} lang={lang} scrollable />
+          </div>
           {/* Tier Table */}
           <div className="space-y-6">
             {tierSections.map((tier) => (
