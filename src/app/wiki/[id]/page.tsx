@@ -8,6 +8,7 @@ import { ArrowLeft, User, Scroll, BookOpen, Crown, Sparkles } from "lucide-react
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
 import { getStoriesForEntry } from "@/domains/stories/stories.meta"
 import WikiDescription from "./_components/wiki-description"
+import { CharacterStateCard, useCharacterState } from "./_components/character-state"
 import { RevealSection } from "@/platform/reveal-section"
 import { PageHeader } from "@/platform/page-header"
 import { type Lang, tl, tlCategory, tlTier } from "@/lib/lang"
@@ -18,6 +19,8 @@ export default function WikiEntryPage() {
   const decodedId = decodeURIComponent(params.id || "")
   const entry = ALL_ENTRIES.find((e) => e.id === decodedId)
   const { lang } = useLang()
+  // Every character (hand-written entry or registry person such as C002) gets its current position.
+  const charState = useCharacterState(!entry || entry.category === "キャラクター" ? decodedId : "", entry?.name, entry?.nameEn)
 
   const [aiRelatedIds, setAiRelatedIds] = useState<string[] | null>(null)
   const [aiLoading, setAiLoading] = useState(false)
@@ -46,6 +49,43 @@ export default function WikiEntryPage() {
   useEffect(() => {
     fetchAiRelated()
   }, [fetchAiRelated])
+
+  if (!entry && charState === undefined) {
+    return <div className="min-h-screen bg-edu-bg" />
+  }
+
+  if (!entry && charState?.person) {
+    const p = charState.person
+    const en = lang === "en"
+    const facts = [[tl("正式名", "Full name", lang), en ? p.formalEn : p.formal], [tl("居住・所属", "Region", lang), en ? p.regionEn : p.region], [tl("役割", "Role", lang), en ? p.roleEn : p.role], [tl("人物像", "Identity", lang), en ? p.identityEn : p.identity]].filter(([, v]) => v)
+    return (
+      <div className="min-h-screen bg-edu-bg">
+        <PageHeader icon={<User className="w-5 h-5" />} title={en ? p.nameEn || p.name : p.name} subtitle={en ? p.name : p.nameEn} wikiHref="/wiki" extra={undefined} />
+        <main className="px-4 pb-16">
+          <div className="max-w-3xl mx-auto">
+            <div className="flex justify-center gap-2 mb-6 flex-wrap">
+              <span className="wiki-badge">{tl("キャラクター", "Character", lang)}</span>
+              <span className="wiki-badge">{p.id}</span>
+            </div>
+            <CharacterStateCard data={charState} lang={lang} />
+            {facts.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                {facts.map(([k, v]) => (
+                  <div key={k} className="edu-card p-4">
+                    <p className="text-[10px] text-edu-muted mb-1.5 uppercase tracking-widest">{k}</p>
+                    <p className="text-sm text-edu-text">{v}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+            <Link href="/wiki?category=キャラクター" className="text-sm text-edu-muted hover:text-edu-accent inline-flex items-center gap-1">
+              <ArrowLeft className="w-4 h-4" /> {tl("キャラクター一覧へ", "All characters", lang)}
+            </Link>
+          </div>
+        </main>
+      </div>
+    )
+  }
 
   if (!entry) {
     return (
@@ -91,7 +131,6 @@ export default function WikiEntryPage() {
 
       <main className="px-4 pb-16">
         <div className="max-w-3xl mx-auto">
-          {entry.category === "キャラクター" && <Link href={"/wiki/state?q="+encodeURIComponent(entry.name)} className="block edu-card p-3 mb-5 text-sm text-edu-accent">{tl("現在状態・三指標の観測所（姓名で検索）", "Current state observatory (search by name)", lang)}</Link>}
           {/* Portrait */}
           {entry.image && (
             <RevealSection className="flex justify-center mb-8 sm:mb-10">
@@ -108,6 +147,8 @@ export default function WikiEntryPage() {
               </div>
             </RevealSection>
           )}
+
+          {entry.category === "キャラクター" && <CharacterStateCard data={charState} lang={lang} />}
 
           {/* Category badges */}
           <RevealSection className="text-center mb-8 sm:mb-10" delay={100}>

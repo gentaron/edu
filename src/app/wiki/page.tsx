@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo, Suspense } from "react"
+import React, { useState, useMemo, useEffect, Suspense } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import {
@@ -16,6 +16,8 @@ import {
   Download,
 } from "lucide-react"
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
+import type { WikiEntry } from "@/types/wiki"
+import { asWikiId } from "@/platform/schemas/branded"
 import { type Lang, tl, tlTier } from "@/lib/lang"
 import { useLang } from "@/lib/use-lang"
 
@@ -51,6 +53,19 @@ const BORDER_COLORS: Record<Category, string> = {
   歴史: "border-l-orange-400",
 }
 
+interface RegistryRow { id: string; name: string; nameEn: string; formal: string; formalEn: string; region: string; regionEn: string; role: string; roleEn: string; status: string; wikiId: string | null }
+
+/** Registry characters (about 1,900 people) shown alongside hand-written entries; each links to its current-state page. */
+const registryEntry = (p: RegistryRow): WikiEntry => ({
+  id: asWikiId(p.id),
+  name: p.name || p.formal,
+  nameEn: p.nameEn || p.formalEn || undefined,
+  category: "キャラクター",
+  subCategory: p.region || undefined,
+  description: [p.formal, p.region, p.role].filter(Boolean).join(" / "),
+  descriptionEn: [p.formalEn, p.regionEn, p.roleEn].filter(Boolean).join(" / "),
+})
+
 function WikiLoading() {
   return (
     <main className="min-h-screen bg-edu-bg pt-14 sm:pt-16 pb-16 sm:pb-20">
@@ -76,27 +91,37 @@ function WikiPage() {
 
   const isSearching = search.trim().length > 0
   const showCategory = !isSearching && categoryParam
+  const [registry, setRegistry] = useState<WikiEntry[] | null>(null)
+  const needRegistry = isSearching || categoryParam === "キャラクター"
+  useEffect(() => {
+    if (!needRegistry || registry) return
+    fetch("/api/characters")
+      .then((r) => r.json() as Promise<{ people: RegistryRow[] }>)
+      .then((d) => setRegistry(d.people.filter((p) => !p.wikiId).map(registryEntry)))
+      .catch(() => setRegistry([]))
+  }, [needRegistry, registry])
+  const entries = useMemo(() => [...ALL_ENTRIES, ...(registry ?? [])], [registry])
 
   const searchResults = useMemo(() => {
     if (!isSearching) {
       return []
     }
     const q = search.toLowerCase().trim()
-    return ALL_ENTRIES.filter(
+    return entries.filter(
       (e) =>
         e.name.toLowerCase().includes(q) ||
         (e.nameEn && e.nameEn.toLowerCase().includes(q)) ||
         e.description.toLowerCase().includes(q) ||
         (e.descriptionEn && e.descriptionEn.toLowerCase().includes(q))
     )
-  }, [search, isSearching])
+  }, [search, isSearching, entries])
 
   const categoryEntries = useMemo(() => {
     if (!showCategory || !categoryParam) {
       return []
     }
-    return ALL_ENTRIES.filter((e) => e.category === categoryParam)
-  }, [showCategory, categoryParam])
+    return entries.filter((e) => e.category === categoryParam)
+  }, [showCategory, categoryParam, entries])
 
   const grouped = useMemo(() => {
     const map: Partial<Record<Category, typeof ALL_ENTRIES>> = {}
@@ -183,10 +208,12 @@ function WikiPage() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4">
-        <Link href="/wiki/state" className="block edu-card p-4 mb-5 border border-edu-border hover:border-edu-accent">
-          <span className="text-sm font-bold text-edu-text">{tl("三相動態観測所", "Triadic State Observatory", lang)}</span>
-          <p className="text-xs text-edu-muted mt-1">{tl("全人物台帳・健康・資産・権威名声の現在状態と推移", "Character registry and dynamic health, wealth, authority trends", lang)}</p>
-        </Link>
+        {!isSearching && !showCategory && (
+          <Link href="/wiki?category=キャラクター" className="block edu-card p-4 mb-5 border border-edu-border hover:border-edu-accent">
+            <span className="text-sm font-bold text-edu-text">{tl("全キャラクター一覧", "All characters", lang)}</span>
+            <p className="text-xs text-edu-muted mt-1">{tl("約1,900人それぞれのページに、健康・資産・権威名声の現在地グラフ", "Every character page shows the current health, wealth and authority position", lang)}</p>
+          </Link>
+        )}
         {/* Search results */}
         {isSearching ? (
           <div>
