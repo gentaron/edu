@@ -5,7 +5,7 @@
  * - Links: unambiguous name mentions in Wiki text, backlinks, and nearest neighbours in the current state.
  */
 import { ALL_ENTRIES } from "@/domains/wiki/wiki.data"
-import { computeNow, phaseAt, type Person, type State } from "@/app/wiki/state/living-model.mjs"
+import { computeNow, phaseAt, type Convergence, type Person, type State } from "@/app/wiki/state/living-model.mjs"
 import registry from "@/app/wiki/state/registry.json"
 import identity from "@/app/wiki/state/identity.json"
 import supplemental from "@/app/wiki/state/wiki-supplemental.json"
@@ -118,10 +118,14 @@ export const ref = (id: string): PageRef => pageById.get(id) ?? { id, name: entr
 // ── Current state (today only), cached per day ──────────────────────────
 /** Present only: the state is solved for today's environment, no time evolution. Cached per UTC day. */
 export const today = () => phaseAt(new Date()).day
-let cache: { day: number; current: State[] } | null = null
+let cache: { day: number; current: State[]; modelVersion: number; convergence: Convergence } | null = null
 export function currentStates() {
-  const day = today()
-  if (cache?.day !== day) cache = { day, current: computeNow(active, new Date()).states }
+  const instant = new Date()
+  const day = phaseAt(instant).day
+  if (cache?.day !== day) {
+    const result = computeNow(active, instant)
+    cache = { day, current: result.states, modelVersion: result.version, convergence: result.convergence }
+  }
   return cache
 }
 export const stateOf = (cid: string): State | undefined => {

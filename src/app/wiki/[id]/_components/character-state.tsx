@@ -14,7 +14,7 @@ export interface Member {
   portrait?: Portrait
   nickname: string
   nicknameEn: string
-  state: (Axis & { assets: number; debt: number; care: number; pressure: number; opportunity: number; triad: number; triadField: number[] }) | null
+  state: (Axis & { assets: number; debt: number; care: number; pressure: number; opportunity: number; triad: number; triadField: number[]; triangleCount?: number; cycle?: { people: PageRef[]; links: number[]; product: number } | null }) | null
   percentile: Axis | null
 }
 export interface CharacterDetail {
@@ -23,6 +23,8 @@ export interface CharacterDetail {
   cohort: number
   confirmedCount?: number
   snapshot?: boolean
+  modelVersion?: number
+  convergence?: { iterations: number; residual: number; converged: boolean }
   total: number
   source: string
   median: Axis
@@ -108,6 +110,48 @@ function Radar({ v, lang }: { v: Axis; lang: Lang }) {
   )
 }
 
+function RelationalVertex({ state, lang }: { state: NonNullable<Member["state"]>; lang: Lang }) {
+  const signed = (v: number) => (v > 0 ? "+" : "") + v.toPrecision(3)
+  const cycle = state.cycle
+  return (
+    <details className="rounded-2xl border border-white/10 bg-black/20 p-3 text-xs" open>
+      <summary className="cursor-pointer text-sm font-medium text-edu-text">
+        {tl("人物間の三点相互作用", "Three-point interaction between people", lang)}
+      </summary>
+      <p className="mt-2 leading-relaxed text-edu-muted">
+        <span className="font-mono text-cyan-200">Tr(Φ³) = Σᵢⱼₖ Φᵢⱼ Φⱼₖ Φₖᵢ</span>
+        {" · "}{tl("Φᵢⱼ はモデル上の人物間の結合。三者の関係が閉じたときに項が立ちます。", "Φᵢⱼ is a modeled tie. A term arises when three ties form a closed loop.", lang)}
+      </p>
+      <p className="mt-2 tabular-nums text-edu-text">
+        {tl("参加する三角形", "Triangles containing this person", lang)} {state.triangleCount?.toLocaleString()}
+        {" · "}{tl("規格化した局所寄与", "Normalized local contribution", lang)} {signed(state.triad)}
+      </p>
+      {cycle && <div className="mt-3">
+        <p className="text-edu-muted">{tl("絶対寄与が最大の閉路", "Largest-magnitude loop", lang)}</p>
+        <ol className="mt-1 flex flex-wrap gap-x-2 gap-y-1">
+          {cycle.people.map((p, i) => (
+            <li key={p.id} className="min-w-0 break-words">
+              <Link className="text-cyan-300 underline-offset-2 hover:underline" href={"/wiki/" + encodeURIComponent(p.id)}>{lang === "en" && p.nameEn ? p.nameEn : p.name}</Link>
+              <span className="ml-2 whitespace-nowrap tabular-nums text-edu-muted">→ {signed(cycle.links[i]!)}</span>
+            </li>
+          ))}
+          <li className="text-edu-muted">{tl("↩ 始点", "↩ start", lang)}</li>
+        </ol>
+        <p className="mt-1 tabular-nums text-edu-muted">{tl("三辺の積", "Product of three ties", lang)} {signed(cycle.product)}</p>
+      </div>}
+      <p className="mt-3 text-edu-muted">{tl("三次項の勾配（固定点方程式への入力）", "Cubic gradient (input to the fixed-point equation)", lang)}</p>
+      <dl className="mt-1 grid grid-cols-3 gap-2 tabular-nums">
+        {AXES.map((axis, i) => (
+          <div key={axis.key}>
+            <dt className="text-edu-muted">{lang === "en" ? axis.en : axis.ja}</dt>
+            <dd className="text-cyan-200">{signed(state.triadField[i]!)}</dd>
+          </div>
+        ))}
+      </dl>
+    </details>
+  )
+}
+
 /** Glass panel with the current position of each person on the page (duo entries show both). */
 export function CharacterStatePanel({ result, lang }: { result: DetailResult; lang: Lang }) {
   if (result.kind === "loading") return <div className="mb-8 h-56 animate-pulse rounded-3xl border border-white/10 bg-white/[0.03]" />
@@ -126,6 +170,9 @@ export function CharacterStatePanel({ result, lang }: { result: DetailResult; la
         </h2>
         <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] tabular-nums text-edu-muted">E528 · {tl("標準日", "day", lang)} {d.day + 1}</span>
       </div>
+      {d.convergence && !d.convergence.converged && <p role="status" className="mb-3 text-xs text-amber-200">
+        {tl(`反復が収束許容値に未達。近似値を表示（残差 ${d.convergence.residual.toExponential(2)}）。`, `The solver returned an approximation (residual ${d.convergence.residual.toExponential(2)}).`, lang)}
+      </p>}
       {d.snapshot && <p className="mb-3 text-xs text-edu-muted">{tl("公開ビルド時の計算スナップショット（ライブ取得失敗時）", "Build-time computed snapshot (live API unavailable)", lang)}</p>}
       <div className="relative space-y-8">
         {d.people.map((m) => (
@@ -146,15 +193,9 @@ export function CharacterStatePanel({ result, lang }: { result: DetailResult; la
                       <div key={k} className="rounded-2xl border border-white/5 bg-black/20 p-3"><dt className="text-[10px] text-edu-muted">{k}</dt><dd className="mt-1 truncate text-sm tabular-nums text-edu-text">{v} n</dd></div>
                     ))}
                   </dl>
-                  <div className="rounded-2xl border border-white/5 bg-black/20 p-3 text-[11px]">
-                    <p className="text-edu-muted">{tl("三点相互作用（健康×資産×名声）の各軸への寄与", "Three-way interaction (health × wealth × reputation): push on each axis", lang)}</p>
-                    <div className="mt-1.5 grid grid-cols-3 gap-2 tabular-nums">
-                      {[tl("健康", "Health", lang), tl("資産", "Wealth", lang), tl("名声", "Reputation", lang)].map((k, i) => {
-                        const v = m.state!.triadField[i] ?? 0
-                        return <span key={k} className={v >= 0 ? "text-cyan-300" : "text-pink-300"}>{k} {v >= 0 ? "+" : ""}{v.toFixed(3)}</span>
-                      })}
-                    </div>
-                  </div>
+                  {d.modelVersion === 6 && m.state.triangleCount != null && (
+                    <RelationalVertex state={m.state} lang={lang} />
+                  )}
                 </div>
                 <Radar v={m.state} lang={lang} />
               </div>
