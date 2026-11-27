@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { ArrowLeft, Search, X } from "lucide-react"
 import { useLang } from "@/lib/use-lang"
 import { characterMatch, fetchCharacterJSON } from "../_components/character-search"
+import type { DirectoryRow } from "../_components/character-directory"
 import { describe, histogram, kde, pearson, spearman, ols, corrCI, cohenD, etaSquared, gini, theil, lorenz, topShare, palma, robustZ, slog, sorted, quantileSorted, ranks, type Describe } from "./stats"
 
 interface Row { aliases?: string[]; id: string; cid: string; name: string; nameEn: string; formal: string; formalEn: string; region: string; regionEn: string; macro: string; role: string; roleEn: string; h: number; w: number; wi: number; a: number; assets: number; debt: number; care: number; pressure: number; opportunity: number; expression: number }
@@ -222,6 +223,7 @@ export default function AnalyticsStudio() {
   const router = useRouter()
   const [data, setData] = useState<{ day: number; source: string; rows: Row[] } | null>(null)
   const [error, setError] = useState(false)
+  const [directory, setDirectory] = useState<DirectoryRow[]>([])
   const [tab, setTab] = useState<"dist" | "dev" | "corr" | "ineq" | "out">("dist")
   const [v1, setV1] = useState("h"), [vx, setVx] = useState("wi"), [vy, setVy] = useState("a")
   const [group, setGroup] = useState<GroupKey>("macro")
@@ -232,6 +234,7 @@ export default function AnalyticsStudio() {
   const [focus, setFocus] = useState<string | null>(null)
 
   useEffect(() => {
+    fetchCharacterJSON<{ rows: DirectoryRow[] }>("/api/characters/directory", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.id === "string" && "state" in r)).then(d => setDirectory(d.rows)).catch(() => {})
     fetchCharacterJSON<{ day: number; source: string; rows: Row[] }>("/api/characters/population", d => Array.isArray(d.rows) && d.rows.every(r => typeof r.cid === "string" && Number.isFinite(r.h) && Number.isFinite(r.w) && Number.isFinite(r.a))).then(setData).catch(() => setError(true))
   }, [])
   const rows = data?.rows ?? []
@@ -250,8 +253,18 @@ export default function AnalyticsStudio() {
   const labelsOf = useMemo(() => rows.map(g), [rows, g])
   const groupNames = useMemo(() => [...new Set(labelsOf)].sort((a, b) => a.localeCompare(b, "ja")), [labelsOf])
   const matches = useMemo(() => {
-    return rows.map(r => ({ r, score: characterMatch(query, [r.name, r.nameEn, r.formal, r.formalEn, r.cid, r.id, ...(r.aliases ?? [])]) })).filter(x => x.score >= 0).sort((a,b) => b.score - a.score).slice(0, 12).map(x => x.r)
-  }, [rows, query])
+    const activePages = new Set(rows.map(r => r.id))
+    const candidates: { id: string; cid: string | null; name: string; nameEn: string; macro: string; fields: (string | undefined)[] }[] = [
+      ...rows.map(r => ({ id: r.id, cid: r.cid, name: r.name, nameEn: r.nameEn, macro: r.macro, fields: [r.name, r.nameEn, r.formal, r.formalEn, r.cid, r.id, ...(r.aliases ?? [])] })),
+      ...directory.filter(r => !activePages.has(r.id)).map(r => ({ id: r.id, cid: null, name: r.name, nameEn: r.nameEn, macro: r.regionEn, fields: [r.id, r.name, r.nameEn, ...(r.aliases ?? [])] })),
+    ]
+    return candidates.map(r => ({ r, score: characterMatch(query, r.fields) })).filter(x => x.score >= 0).sort((a,b) => b.score - a.score).slice(0, 12).map(x => x.r)
+  }, [rows, directory, query])
+  const pickMatch = (r: (typeof matches)[number]) => {
+    if (r.cid) setFocus(r.cid)
+    else router.push("/wiki/" + encodeURIComponent(r.id))
+    setQuery("")
+  }
 
   if (error) return <main className="min-h-screen bg-edu-bg px-4 pt-24 text-center text-edu-muted">{t("人物データの取得に失敗しました。", "Could not load character data.")} <button className="ml-2 underline" onClick={() => window.location.reload()}>{t("再読み込み", "Retry")}</button></main>
 
@@ -286,12 +299,12 @@ export default function AnalyticsStudio() {
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative min-w-0 basis-full flex-1">
               <Search className="absolute left-3 top-3 h-4 w-4 text-edu-muted" />
-              <input value={query} aria-label={t("人物検索", "Search people")} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && matches[0]) { e.preventDefault(); setFocus(matches[0].cid); setQuery("") } if (e.key === "Escape") setQuery("") }} placeholder={t("人物をスポットライト（名前・ID）", "Spotlight a person (name or ID)")}
+              <input value={query} aria-label={t("人物検索", "Search people")} onChange={(e) => setQuery(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && matches[0]) { e.preventDefault(); pickMatch(matches[0]) } if (e.key === "Escape") setQuery("") }} placeholder={t("人物をスポットライト（名前・ID）", "Spotlight a person (name or ID)")}
                 className="w-full rounded-2xl border border-white/10 bg-black/30 py-2.5 pl-10 pr-3 text-sm focus:border-emerald-300/50 focus:outline-none focus:ring-4 focus:ring-emerald-300/10" />
-              {query.trim() && matches.length === 0 && <p className="mt-2 px-2 text-xs text-edu-muted">{data ? t("該当する現代の人物がいません。別名・IDでも検索できます。", "No contemporary matches. Try an alias or ID.") : t("人物データを読み込み中…", "Loading characters…")}</p>}
+              {query.trim() && matches.length === 0 && <p className="mt-2 px-2 text-xs text-edu-muted">{data ? t("該当する人物がいません。別名・IDでも検索できます。", "No matches. Try an alias or ID.") : t("人物データを読み込み中…", "Loading characters…")}</p>}
               {matches.length > 0 && (
                 <div className="relative mt-2 max-h-72 w-full overflow-y-auto rounded-2xl border border-white/10 bg-[#0b1020]/95 shadow-2xl">
-                  {matches.map((r) => <button key={r.cid} type="button" onClick={() => { setFocus(r.cid); setQuery("") }} className="block w-full px-4 py-2 text-left text-sm hover:bg-white/5">{en && r.nameEn ? r.nameEn : r.name} <span className="text-xs text-edu-muted">{r.cid} · {r.macro}</span></button>)}
+                  {matches.map((r) => <button key={r.cid ?? r.id} type="button" onClick={() => pickMatch(r)} className="block w-full px-4 py-2 text-left text-sm hover:bg-white/5">{en && r.nameEn ? r.nameEn : r.name} <span className="text-xs text-edu-muted">{r.cid ?? t("現在値なし・Wikiへ", "No current values · Wiki")} · {r.macro}</span></button>)}
                 </div>
               )}
             </div>

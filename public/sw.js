@@ -36,7 +36,7 @@ const DATA_ASSETS = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
+      return Promise.allSettled(STATIC_ASSETS.map(asset => cache.add(asset)));
     }).then(() => self.skipWaiting())
   );
 });
@@ -80,7 +80,10 @@ self.addEventListener('fetch', (event) => {
 
   // HTML navigations prefer the network so deployments replace old JS references.
   if (url.origin === self.location.origin && event.request.mode === "navigate") {
-    event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
+    event.respondWith(fetch(event.request).then(response => {
+      if (response.ok) { const copy = response.clone(); event.waitUntil(caches.open(STATIC_CACHE).then(cache => cache.put(event.request, copy))); }
+      return response;
+    }).catch(() => caches.match(event.request)));
     return;
   }
 

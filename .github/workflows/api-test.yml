@@ -18,7 +18,9 @@ on:
 jobs:
   api-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
+    env:
+      DATABASE_URL: "file:${{ github.workspace }}/prisma/test.db"
     steps:
       - uses: actions/checkout@v4
 
@@ -29,21 +31,28 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Initialize isolated test database
+        run: bunx prisma db push --skip-generate
+
       - name: Build
         run: bun run build
-        env:
-          DATABASE_URL: "file:./test.db"
 
       - name: Start server
         run: bun run start &
         env:
           PORT: 3000
-          DATABASE_URL: "file:./test.db"
 
       - name: Wait for server
         run: npx wait-on http://localhost:3000/api --timeout 30000
 
+      - name: Verify character data and Wiki detail
+        run: |
+          # Verify payload shape, not just a 200 from the wrong cached response.
+          bun -e 'const base="http://localhost:3000/api/characters"; const read=async p=>{const r=await fetch(base+p); if(!r.ok) throw Error(p); return r.json()}; const d=await read("/directory"); const p=await read("/population"); if(!d.rows?.some(x=>x.state && Number.isFinite(x.state.h)) || !p.rows?.some(x=>x.cid==="C002" && Number.isFinite(x.h))) throw Error("Invalid directory or population"); const alias=await read("/detail/43303032"); if(typeof alias.redirect!=="string") throw Error("Invalid redirect"); const key=Buffer.from(alias.redirect).toString("hex"); const detail=await read("/detail/"+key); if(!detail.people?.some(x=>x.person.id==="C002" && Number.isFinite(x.state?.h))) throw Error("Missing Wiki character values")'
+          echo "PASS: character directory, population and Wiki payloads"
+
       - name: Run API tests
+        if: always()
         run: |
           for test in \
             "GET /api" \
@@ -62,9 +71,6 @@ jobs:
             fi
             echo "PASS: $test -> $STATUS"
           done
-
-          # Verify payload shape, not just a 200 from the wrong cached response.
-          bun -e 'const base="http://localhost:3000/api/characters"; const read=async p=>{const r=await fetch(base+p); if(!r.ok) throw Error(p); return r.json()}; const d=await read("/directory"); const p=await read("/population"); if(!d.rows?.some(x=>x.state && Number.isFinite(x.state.h)) || !p.rows?.some(x=>x.cid==="C002" && Number.isFinite(x.h))) throw Error("Invalid directory or population"); const alias=await read("/detail/43303032"); if(typeof alias.redirect!=="string") throw Error("Invalid redirect"); const key=Buffer.from(alias.redirect).toString("hex"); const detail=await read("/detail/"+key); if(!detail.people?.some(x=>x.person.id==="C002" && Number.isFinite(x.state?.h))) throw Error("Missing Wiki character values")'
 
           # POST tests
           STATUS=$(curl --silent --show-error --max-time 30 -o /dev/null -w '%{http_code}' -X POST "http://localhost:3000/api/wiki/related" \
