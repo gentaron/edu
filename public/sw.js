@@ -2,7 +2,7 @@
 // Strategy: Stale-While-Revalidate for content, Cache-First for static assets
 
 const CACHE_NAME = 'edu-v3';
-const STATIC_CACHE = 'edu-static-v3';
+const STATIC_CACHE = 'edu-static-v4';
 const DATA_CACHE = 'edu-data-v3';
 
 // Static assets to pre-cache
